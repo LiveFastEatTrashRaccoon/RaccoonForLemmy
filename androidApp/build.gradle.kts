@@ -47,4 +47,6 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.material3.windowsize)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
 }
