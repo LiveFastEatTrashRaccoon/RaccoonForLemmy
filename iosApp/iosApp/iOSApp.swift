@@ -4,12 +4,16 @@ import SwiftUI
 struct iOSApp: App {
 
     init() {
+        // HelperKt.initKoin()
         HelperKt.doInitKoin()
     }
 
 	var body: some Scene {
 		WindowGroup {
-			ContentView()
+			ZStack {
+                Color.white.ignoresSafeArea(.all) // status bar color
+                ContentView()
+            }.preferredColorScheme(.light)
 		}
 	}
 }

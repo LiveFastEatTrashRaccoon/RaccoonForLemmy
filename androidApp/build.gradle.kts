@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose)
 }
 
 android {
@@ -17,7 +18,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.8"
+        kotlinCompilerExtensionVersion = "1.4.6"
     }
     packagingOptions {
         resources {
@@ -40,12 +41,9 @@ android {
 
 dependencies {
     implementation(projects.shared)
-    implementation(libs.compose.ui)
-    implementation(libs.compose.tooling)
-    implementation(libs.compose.preview)
-    implementation(libs.compose.foundation)
-    implementation(libs.material3)
-    implementation(libs.material3.windowsize)
+    implementation(compose.runtime)
+    implementation(compose.foundation)
+    implementation(compose.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
