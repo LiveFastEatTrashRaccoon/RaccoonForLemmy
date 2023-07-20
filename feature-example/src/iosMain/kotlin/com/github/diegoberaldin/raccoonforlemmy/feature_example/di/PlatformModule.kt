@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_example.di
 
 import com.github.diegoberaldin.raccoonforlemmy.feature_example.IOSPlatform
+import com.github.diegoberaldin.raccoonforlemmy.feature_example.Platform
 import org.koin.core.module.Module
 import org.koin.dsl.module
 

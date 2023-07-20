@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.ui.theme
+package com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme

@@ -29,7 +29,7 @@ kotlin {
             baseName = "feature-settings"
         }
     }
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -44,6 +44,9 @@ kotlin {
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab)
+
+                implementation(projects.coreAppearance)
+                implementation(projects.corePreferences)
             }
         }
         val commonTest by getting {

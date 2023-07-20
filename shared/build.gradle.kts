@@ -54,6 +54,8 @@ kotlin {
                 implementation(libs.voyager.tab)
 
                 implementation(projects.coreUtils)
+                implementation(projects.coreAppearance)
+                implementation(projects.corePreferences)
 
                 api(projects.featureHome)
                 api(projects.featureInbox)

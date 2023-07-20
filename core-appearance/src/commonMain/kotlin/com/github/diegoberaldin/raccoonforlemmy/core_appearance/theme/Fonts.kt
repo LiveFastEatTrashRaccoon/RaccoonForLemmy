@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.ui.theme
+package com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

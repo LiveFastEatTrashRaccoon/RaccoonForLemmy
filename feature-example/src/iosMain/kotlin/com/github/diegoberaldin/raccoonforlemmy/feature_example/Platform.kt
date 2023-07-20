@@ -1,7 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_example
 
-import org.koin.core.module.Module
-import org.koin.dsl.module
 import platform.UIKit.UIDevice
 
 class IOSPlatform : Platform {
@@ -9,3 +7,5 @@ class IOSPlatform : Platform {
         UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
 }
 
+
+actual fun getPlatform(): Platform = IOSPlatform()
