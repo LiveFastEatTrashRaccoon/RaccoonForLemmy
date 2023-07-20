@@ -1,13 +1,13 @@
 {
   "name": "shared",
   "version": "1.0.0",
-  "homepage": "Shared Module homepage",
+  "homepage": "Link to the Shared Module homepage",
   "source": {
     "http": ""
   },
   "authors": "",
   "license": "",
-  "summary": "Shared Module",
+  "summary": "Some description for the Shared Module",
   "vendored_frameworks": "build/cocoapods/framework/shared.framework",
   "libraries": "c++",
   "platforms": {

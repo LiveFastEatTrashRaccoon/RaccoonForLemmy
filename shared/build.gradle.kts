@@ -16,8 +16,8 @@ kotlin {
 
     cocoapods {
         version = "1.0.0"
-        summary = "Shared Module"
-        homepage = "Shared Module homepage"
+        summary = "Some description for the Shared Module"
+        homepage = "Link to the Shared Module homepage"
         ios.deploymentTarget = "14.1"
         podfile = project.file("../iosApp/Podfile")
         framework {
@@ -41,8 +41,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libs.koin.core)
-                api(libs.koin.test)
+                implementation(libs.koin.core)
+                implementation(libs.koin.test)
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -52,8 +52,14 @@ kotlin {
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab)
-                implementation(libs.voyager.koin)
-                implementation(libs.voyager.androidx)
+
+                implementation(projects.coreUtils)
+
+                api(projects.featureHome)
+                api(projects.featureInbox)
+                api(projects.featureSearch)
+                api(projects.featureProfile)
+                api(projects.featureSettings)
             }
         }
         val commonTest by getting {

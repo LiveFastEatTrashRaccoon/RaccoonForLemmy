@@ -40,11 +40,12 @@ android {
 }
 
 dependencies {
-    implementation(projects.shared)
     implementation(compose.runtime)
     implementation(compose.foundation)
     implementation(compose.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+
+    implementation(projects.shared)
 }
