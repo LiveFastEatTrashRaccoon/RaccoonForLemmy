@@ -50,6 +50,10 @@ kotlin {
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
+                implementation(libs.voyager.navigator)
+                implementation(libs.voyager.tab)
+                implementation(libs.voyager.koin)
+                implementation(libs.voyager.androidx)
             }
         }
         val commonTest by getting {

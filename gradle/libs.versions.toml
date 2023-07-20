@@ -4,6 +4,7 @@ android_gradle = "7.4.2"
 compose = "1.4.3"
 koin = "3.2.0"
 kotlin = "1.8.20"
+voyager = "1.0.0-rc05"
 
 [libraries]
 
@@ -12,6 +13,13 @@ androidx_activity_compose = { module = "androidx.activity:activity-compose", ver
 koin_core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin_test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin_android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+
+voyager_navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager_bottomsheet = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
+voyager_tab = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
+voyager_transition = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+voyager_koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
+voyager_androidx = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 
 [plugins]
 
