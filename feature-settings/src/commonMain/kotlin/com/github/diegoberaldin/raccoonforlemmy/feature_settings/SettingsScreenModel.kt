@@ -3,13 +3,10 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_settings
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.repository.ThemeRepository
+import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.TemporaryKeyStore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -17,29 +14,31 @@ import kotlinx.coroutines.launch
 class SettingsScreenModel(
     private val themeRepository: ThemeRepository,
     private val keyStore: TemporaryKeyStore,
-) : ScreenModel {
-    private val _uiState = MutableStateFlow(SettingsScreenUiState())
-    val uiState = _uiState.asStateFlow()
+    private val mvi: DefaultMviModel<SettingsScreenMviModel.Intent, SettingsScreenMviModel.UiState, SettingsScreenMviModel.Effect>,
+) : ScreenModel,
+    MviModel<SettingsScreenMviModel.Intent, SettingsScreenMviModel.UiState, SettingsScreenMviModel.Effect> by mvi {
 
-    val scope = CoroutineScope(SupervisorJob())
-
-    init {
-
+    override fun onStarted() {
+        mvi.onStarted()
         themeRepository.state.onEach {
             val isDarkTheme = when (themeRepository.state.value) {
                 ThemeState.Dark -> true
                 else -> false
             }
-            _uiState.getAndUpdate { it.copy(darkTheme = isDarkTheme) }
-        }.launchIn(scope)// TODO: is this running forever?
+            mvi.updateState { it.copy(darkTheme = isDarkTheme) }
+        }.launchIn(mvi.scope)
     }
 
-    fun setDarkTheme(value: Boolean) {
+    override fun reduce(intent: SettingsScreenMviModel.Intent) {
+        when (intent) {
+            is SettingsScreenMviModel.Intent.EnableDarkMode -> setDarkTheme(intent.value)
+        }
+    }
+
+    private fun setDarkTheme(value: Boolean) {
         themeRepository.changeTheme(if (value) ThemeState.Dark else ThemeState.Light)
-        scope.launch {
+        mvi.scope.launch {
             keyStore.save(KeyStoreKeys.EnableDarkTheme, value)
         }
     }
 }
-
-expect fun getSettingsScreenModel(): SettingsScreenModel

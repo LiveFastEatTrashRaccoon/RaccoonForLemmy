@@ -6,9 +6,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -16,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
-import com.github.diegoberaldin.raccoonforlemmy.resources.getLanguageRepository
 import dev.icerock.moko.resources.compose.stringResource
 
 object HomeTab : Tab {
@@ -40,6 +37,8 @@ object HomeTab : Tab {
     @Composable
     override fun Content() {
         val model = rememberScreenModel { getHomeScreenModel() }
+        model.bindToLifecycle(key)
+
         Column(modifier = Modifier.padding(4.dp)) {
             Text(
                 text = "Posts content"

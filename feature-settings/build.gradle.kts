@@ -46,7 +46,7 @@ kotlin {
 
                 implementation(projects.coreAppearance)
                 implementation(projects.corePreferences)
-
+                implementation(projects.coreArchitecture)
                 implementation(projects.resources)
             }
         }

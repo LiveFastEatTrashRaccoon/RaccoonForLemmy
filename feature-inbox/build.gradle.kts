@@ -45,6 +45,7 @@ kotlin {
                 implementation(libs.voyager.tab)
 
                 implementation(projects.resources)
+                implementation(projects.coreArchitecture)
             }
         }
         val commonTest by getting {

@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
-import com.github.diegoberaldin.raccoonforlemmy.resources.getLanguageRepository
 import dev.icerock.moko.resources.compose.stringResource
 
 object SettingsTab : Tab {
@@ -43,6 +43,8 @@ object SettingsTab : Tab {
     @Composable
     override fun Content() {
         val model = rememberScreenModel { getSettingsScreenModel() }
+        model.bindToLifecycle(key)
+
         val uiState by model.uiState.collectAsState()
 
         Column(modifier = Modifier.padding(4.dp)) {
@@ -56,7 +58,7 @@ object SettingsTab : Tab {
                 Checkbox(
                     checked = uiState.darkTheme,
                     onCheckedChange = {
-                        model.setDarkTheme(it)
+                        model.reduce(SettingsScreenMviModel.Intent.EnableDarkMode(it))
                     }
                 )
             }

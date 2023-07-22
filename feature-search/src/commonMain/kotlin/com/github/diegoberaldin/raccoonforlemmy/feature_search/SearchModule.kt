@@ -1,8 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_search
 
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.module
+import org.koin.core.module.Module
 
-val searchTabModule = module {
-    factoryOf(::SearchScreenModel)
-}
+expect val searchTabModule: Module
+
+expect fun getSearchScreenModel(): SearchScreenModel
+
+

@@ -1,8 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_settings
 
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.module
+import org.koin.core.module.Module
 
-val settingsTabModule = module {
-    factoryOf(::SettingsScreenModel)
-}
+expect val settingsTabModule: Module
+
+expect fun getSettingsScreenModel(): SettingsScreenModel

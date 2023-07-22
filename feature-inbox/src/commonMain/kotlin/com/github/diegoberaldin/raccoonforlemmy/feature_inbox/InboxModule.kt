@@ -1,8 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_inbox
 
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.module
+import org.koin.core.module.Module
 
-val inboxTabModule = module {
-    factoryOf(::InboxScreenModel)
-}
+expect val inboxTabModule: Module
+
+expect fun getInboxScreenModel(): InboxScreenModel

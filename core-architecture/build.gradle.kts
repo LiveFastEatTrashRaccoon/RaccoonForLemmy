@@ -23,29 +23,18 @@ kotlin {
     cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
-        version = "1.0.0"
+        version = "1.0"
         ios.deploymentTarget = "14.1"
         framework {
-            baseName = "feature-profile"
+            baseName = "core-architecture"
         }
     }
     
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.koin.core)
-
                 implementation(compose.runtime)
                 implementation(compose.foundation)
-                implementation(compose.material3)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
-
-                implementation(libs.voyager.navigator)
-                implementation(libs.voyager.tab)
-
-                implementation(projects.resources)
-                implementation(projects.coreArchitecture)
             }
         }
         val commonTest by getting {
@@ -57,7 +46,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.feature_profile"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.core_architecture"
     compileSdk = 33
     defaultConfig {
         minSdk = 26

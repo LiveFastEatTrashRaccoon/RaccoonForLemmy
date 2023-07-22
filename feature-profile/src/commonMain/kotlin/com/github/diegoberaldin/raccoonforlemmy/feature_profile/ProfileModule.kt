@@ -1,8 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_profile
 
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.module
+import org.koin.core.module.Module
 
-val profileTabModule = module {
-    factoryOf(::ProfileScreenModel)
-}
+expect val profileTabModule: Module
+
+expect fun getProfileScreenModel(): ProfileScreenModel

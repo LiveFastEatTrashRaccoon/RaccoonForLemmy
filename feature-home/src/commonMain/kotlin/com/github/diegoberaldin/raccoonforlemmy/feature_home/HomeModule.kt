@@ -1,8 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_home
 
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.module
+import org.koin.core.module.Module
 
-val homeTabModule = module {
-    factoryOf(::HomeScreenModel)
-}
+expect val homeTabModule: Module
+
+expect fun getHomeScreenModel(): HomeScreenModel
