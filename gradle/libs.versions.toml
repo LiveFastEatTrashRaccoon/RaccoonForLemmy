@@ -5,6 +5,7 @@ android_gradle = "7.4.2"
 compose = "1.4.3"
 koin = "3.2.0"
 kotlin = "1.8.20"
+moko_resources = "0.23.0"
 voyager = "1.0.0-rc05"
 
 [libraries]
@@ -15,6 +16,11 @@ androidx_datastore = { module = "androidx.datastore:datastore-preferences-core",
 koin_core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin_test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin_android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+
+moko_gradle = { module = "dev.icerock.moko:resources-generator", version.ref = "moko.resources" }
+moko_resources = { module = "dev.icerock.moko:resources", version.ref = "moko.resources" }
+moko_resources_compose = { module = "dev.icerock.moko:resources-compose", version.ref = "moko.resources" }
+moko_resources_test = { module = "dev.icerock.moko:resources-test", version.ref = "moko.resources" }
 
 voyager_navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager_bottomsheet = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
@@ -31,3 +37,4 @@ kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin_multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.compose", version = "1.4.1" }
 native_cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+moko_resources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "moko.resources" }

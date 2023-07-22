@@ -34,7 +34,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.koin.core)
-                implementation(libs.koin.test)
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -47,6 +46,8 @@ kotlin {
 
                 implementation(projects.coreAppearance)
                 implementation(projects.corePreferences)
+
+                implementation(projects.resources)
             }
         }
         val commonTest by getting {
@@ -58,7 +59,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.racoonforlemmy.feature_settings"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.feature_settings"
     compileSdk = 33
     defaultConfig {
         minSdk = 26

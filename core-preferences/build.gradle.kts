@@ -33,7 +33,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.koin.core)
-                implementation(libs.koin.test)
                 implementation(libs.androidx.datastore)
             }
         }

@@ -13,13 +13,15 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 
 object ProfileTab : Tab {
 
     override val options: TabOptions
         @Composable
         get() {
-            val title = "Profile"
+            val title = stringResource(MR.strings.navigation_profile)
             val icon = rememberVectorPainter(Icons.Default.Person)
 
             return remember {

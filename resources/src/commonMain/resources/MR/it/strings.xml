@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="lang">it</string>
+
+    <string name="navigation_home">Post</string>
+    <string name="navigation_inbox">Inbox</string>
+    <string name="navigation_profile">Profilo</string>
+    <string name="navigation_search">Ricerca</string>
+    <string name="navigation_settings">Impostazioni</string>
+
+    <string name="settings_dark_theme">Tema scuro</string>
+</resources>

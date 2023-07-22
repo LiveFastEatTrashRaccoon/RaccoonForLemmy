@@ -6,8 +6,15 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform).apply(false)
     alias(libs.plugins.compose).apply(false)
     alias(libs.plugins.native.cocoapods).apply(false)
+    alias(libs.plugins.moko.resources).apply(false)
 }
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
+}
+
+buildscript {
+    dependencies {
+        classpath(libs.moko.gradle)
+    }
 }

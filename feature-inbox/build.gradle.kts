@@ -34,7 +34,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.koin.core)
-                implementation(libs.koin.test)
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -44,6 +43,8 @@ kotlin {
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab)
+
+                implementation(projects.resources)
             }
         }
         val commonTest by getting {

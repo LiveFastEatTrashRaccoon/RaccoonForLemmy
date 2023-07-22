@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose)
     alias(libs.plugins.native.cocoapods)
+    alias(libs.plugins.moko.resources)
 }
 
 kotlin {
@@ -42,7 +43,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.koin.core)
-                implementation(libs.koin.test)
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -57,6 +57,7 @@ kotlin {
                 implementation(projects.coreAppearance)
                 implementation(projects.corePreferences)
 
+                api(projects.resources)
                 api(projects.featureHome)
                 api(projects.featureInbox)
                 api(projects.featureSearch)
