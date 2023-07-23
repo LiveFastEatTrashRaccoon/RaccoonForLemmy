@@ -29,7 +29,7 @@ kotlin {
             baseName = "feature-home"
         }
     }
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -38,6 +38,7 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
@@ -45,7 +46,10 @@ kotlin {
                 implementation(libs.voyager.tab)
 
                 implementation(projects.resources)
+                implementation(projects.coreAppearance)
                 implementation(projects.coreArchitecture)
+                implementation(projects.domainPost.data)
+                implementation(projects.domainPost.repository)
             }
         }
         val commonTest by getting {

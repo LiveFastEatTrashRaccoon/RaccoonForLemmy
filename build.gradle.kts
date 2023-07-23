@@ -7,6 +7,9 @@ plugins {
     alias(libs.plugins.compose).apply(false)
     alias(libs.plugins.native.cocoapods).apply(false)
     alias(libs.plugins.moko.resources).apply(false)
+    alias(libs.plugins.ksp).apply(false)
+    alias(libs.plugins.ktorfit).apply(false)
+    alias(libs.plugins.kotlinx.serialization).apply(false)
 }
 
 tasks.register("clean", Delete::class) {

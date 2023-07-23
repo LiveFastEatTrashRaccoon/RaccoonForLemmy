@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 
 @Composable
 internal fun RowScope.TabNavigationItem(tab: Tab) {
@@ -27,7 +28,7 @@ internal fun RowScope.TabNavigationItem(tab: Tab) {
             .onClick {
                 tabNavigator.current = tab
             }
-            .padding(top = 10.dp)
+            .padding(top = Spacing.xxs)
             .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

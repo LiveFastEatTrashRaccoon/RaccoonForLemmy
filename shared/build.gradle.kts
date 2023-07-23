@@ -56,6 +56,7 @@ kotlin {
                 implementation(projects.coreUtils)
                 implementation(projects.coreAppearance)
                 implementation(projects.corePreferences)
+                implementation(projects.coreApi)
 
                 api(projects.resources)
                 api(projects.featureHome)

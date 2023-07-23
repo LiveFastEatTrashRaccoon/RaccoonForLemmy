@@ -14,7 +14,7 @@ class MainApplication : Application() {
             androidContext(this@MainApplication)
             androidLogger()
             modules(
-                sharedHelperModule
+                sharedHelperModule,
             )
         }
     }

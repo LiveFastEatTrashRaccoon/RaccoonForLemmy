@@ -46,6 +46,7 @@ kotlin {
 
                 implementation(projects.resources)
                 implementation(projects.coreArchitecture)
+                implementation(projects.coreAppearance)
             }
         }
         val commonTest by getting {

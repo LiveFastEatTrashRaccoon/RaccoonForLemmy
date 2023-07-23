@@ -1,14 +1,17 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_home
 
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature_home.repository.postsRepositoryModule
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.dsl.module
 
 actual val homeTabModule = module {
+    includes(postsRepositoryModule)
     factory {
         HomeScreenModel(
-            mvi = DefaultMviModel(HomeScreenMviModel.UiState())
+            mvi = DefaultMviModel(HomeScreenMviModel.UiState()),
+            postsRepository = get(),
         )
     }
 }
