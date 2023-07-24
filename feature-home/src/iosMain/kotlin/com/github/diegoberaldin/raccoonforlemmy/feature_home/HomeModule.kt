@@ -1,7 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_home
 
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature_home.repository.postsRepositoryModule
+import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.postsRepositoryModule
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.dsl.module

@@ -8,8 +8,15 @@ class PostsRepository(
     private val postService: PostService,
 ) {
 
-    suspend fun getPosts(): List<PostModel> {
-        val response = postService.getPosts()
+    companion object {
+        const val DEFAULT_PAGE_SIZE = 15
+    }
+
+    suspend fun getPosts(page: Int, limit: Int = DEFAULT_PAGE_SIZE): List<PostModel> {
+        val response = postService.getPosts(
+            page = page,
+            limit = limit
+        )
         val dto = response.body()?.posts ?: emptyList()
         return dto.map { it.toModel() }
     }

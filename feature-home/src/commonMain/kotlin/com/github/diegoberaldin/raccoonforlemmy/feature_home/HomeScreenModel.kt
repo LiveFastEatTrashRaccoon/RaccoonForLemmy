@@ -4,6 +4,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.PostsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 
 class HomeScreenModel(
@@ -12,15 +14,41 @@ class HomeScreenModel(
 ) : ScreenModel,
     MviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect> by mvi {
 
-    override fun onStarted() {
-        mvi.onStarted()
-        mvi.scope.launch {
+    private var currentPage: Int = 1
+
+    override fun reduce(intent: HomeScreenMviModel.Intent) {
+        when (intent) {
+
+            HomeScreenMviModel.Intent.LoadNextPage -> loadNextPage()
+            HomeScreenMviModel.Intent.Refresh -> refresh()
+        }
+    }
+
+    private fun refresh() {
+        currentPage = 1
+        mvi.updateState { it.copy(canFetchMore = true) }
+        loadNextPage()
+    }
+
+    private fun loadNextPage() {
+        if (!mvi.uiState.value.canFetchMore || mvi.uiState.value.loading) {
+            return
+        }
+
+        mvi.scope.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
-            val postList = postsRepository.getPosts()
+            println("Fetching page: $currentPage")
+            val postList = postsRepository.getPosts(
+                page = currentPage,
+            )
+            currentPage++
+            val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE
+            println("Can fetch more: $canFetchMore")
             mvi.updateState {
                 it.copy(
-                    posts = postList,
-                    loading = false
+                    posts = it.posts + postList,
+                    loading = false,
+                    canFetchMore = canFetchMore,
                 )
             }
         }
