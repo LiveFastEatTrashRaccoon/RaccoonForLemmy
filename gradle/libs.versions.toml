@@ -3,12 +3,14 @@ androidx_activity_compose = "1.7.2"
 androidx_datastore = "1.1.0-dev01"
 android_gradle = "7.4.2"
 compose = "1.4.3"
+compose_imageloader = "1.6.0"
 koin = "3.2.0"
 kotlin = "1.8.20"
 ksp = "1.8.20-1.0.11"
 ktor = "2.3.2"
 ktorfit_gradle = "1.0.0"
 ktorfit_lib = "1.4.3"
+markdown = "0.4.1"
 moko_resources = "0.23.0"
 voyager = "1.0.0-rc05"
 
@@ -16,6 +18,9 @@ voyager = "1.0.0-rc05"
 
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "androidx.activity.compose" }
 androidx_datastore = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx.datastore" }
+
+compose_imageloader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "compose.imageloader" }
+markdown = { module = "org.jetbrains:markdown", version.ref = "markdown" }
 
 koin_core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin_test = { module = "io.insert-koin:koin-test", version.ref = "koin" }

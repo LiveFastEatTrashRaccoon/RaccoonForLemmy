@@ -25,6 +25,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core_md.compose.Markdown
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -53,7 +54,7 @@ object HomeTab : Tab {
         val uiState by model.uiState.collectAsState()
         Column(modifier = Modifier.padding(Spacing.xs)) {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs)
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs)
             ) {
                 items(uiState.posts) { post ->
                     Card(
@@ -71,10 +72,7 @@ object HomeTab : Tab {
                             )
                             val body = post.text
                             if (body.isNotEmpty()) {
-                                Text(
-                                    text = body,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                )
+                                Markdown(content = body)
                             }
                         }
                     }
