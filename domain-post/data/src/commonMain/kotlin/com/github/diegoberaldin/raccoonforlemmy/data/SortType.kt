@@ -1,0 +1,20 @@
+package com.github.diegoberaldin.raccoonforlemmy.data
+
+sealed interface SortType {
+    object Active : SortType
+    object Hot : SortType
+    object New : SortType
+    object MostComments : SortType
+    object NewComments : SortType
+
+    sealed interface Top : SortType {
+        object PastHour : Top
+        object Past6Hours : Top
+        object Past12Hours : Top
+        object Day : Top
+        object Week : Top
+        object Month : Top
+        object Year : Top
+    }
+}
+

@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_home
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -11,6 +12,7 @@ import kotlinx.coroutines.launch
 class HomeScreenModel(
     private val mvi: DefaultMviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect>,
     private val postsRepository: PostsRepository,
+    private val apiConfigRepository: ApiConfigurationRepository,
 ) : ScreenModel,
     MviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect> by mvi {
 
@@ -24,6 +26,12 @@ class HomeScreenModel(
         }
     }
 
+    override fun onStarted() {
+        mvi.onStarted()
+        mvi.updateState { it.copy(instance = apiConfigRepository.getInstance()) }
+        refresh()
+    }
+
     private fun refresh() {
         currentPage = 1
         mvi.updateState { it.copy(canFetchMore = true) }
@@ -31,19 +39,22 @@ class HomeScreenModel(
     }
 
     private fun loadNextPage() {
-        if (!mvi.uiState.value.canFetchMore || mvi.uiState.value.loading) {
+        val currentState = mvi.uiState.value
+        if (!currentState.canFetchMore || currentState.loading) {
             return
         }
 
         mvi.scope.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
-            println("Fetching page: $currentPage")
+            val type = currentState.listingType
+            val sort = currentState.sortType
             val postList = postsRepository.getPosts(
                 page = currentPage,
+                type = type,
+                sort = sort,
             )
             currentPage++
             val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE
-            println("Can fetch more: $canFetchMore")
             mvi.updateState {
                 it.copy(
                     posts = it.posts + postList,

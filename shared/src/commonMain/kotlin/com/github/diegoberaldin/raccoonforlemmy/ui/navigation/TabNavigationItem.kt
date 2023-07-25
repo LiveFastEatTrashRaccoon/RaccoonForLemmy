@@ -1,8 +1,11 @@
 package com.github.diegoberaldin.raccoonforlemmy.ui.navigation
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -23,30 +26,36 @@ import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 @Composable
 internal fun RowScope.TabNavigationItem(tab: Tab) {
     val tabNavigator = LocalTabNavigator.current
-    Column(
+    Box(
         modifier = Modifier.weight(1f)
+            .fillMaxHeight()
             .onClick {
                 tabNavigator.current = tab
             }
-            .padding(top = Spacing.xxs)
-            .fillMaxHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .padding(top = Spacing.s),
+        contentAlignment = Alignment.Center
     ) {
-        val color = if (tabNavigator.current == tab) {
-            MaterialTheme.colorScheme.primary
-        } else {
-            MaterialTheme.colorScheme.outline
+        Column(
+            modifier = Modifier.fillMaxSize(0.9f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+        ) {
+            val color = if (tabNavigator.current == tab) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.outline
+            }
+            Icon(
+                modifier = Modifier.size(36.dp),
+                painter = tab.options.icon ?: rememberVectorPainter(Icons.Default.Home),
+                contentDescription = null,
+                tint = color,
+            )
+            Text(
+                text = tab.options.title,
+                style = MaterialTheme.typography.labelSmall,
+                color = color,
+            )
         }
-        Icon(
-            modifier = Modifier.size(30.dp),
-            painter = tab.options.icon ?: rememberVectorPainter(Icons.Default.Home),
-            contentDescription = null,
-            tint = color,
-        )
-        Text(
-            text = tab.options.title,
-            style = MaterialTheme.typography.labelSmall,
-            color = color,
-        )
     }
 }

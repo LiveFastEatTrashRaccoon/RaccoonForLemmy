@@ -11,5 +11,10 @@
     <string name="language_en" translatable="false">English</string>
     <string name="language_it" translatable="false">Italiano</string>
 
+    <string name="home_listing_type_all">All</string>
+    <string name="home_listing_type_local">Local</string>
+    <string name="home_listing_type_subscribed">Subscribed</string>
+    <string name="home_instance_via">via %1$s</string>
+
     <string name="settings_dark_theme">Dark theme</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_home
 
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.data.SortType
 
 interface HomeScreenMviModel :
     MviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect> {
@@ -14,6 +16,9 @@ interface HomeScreenMviModel :
     data class UiState(
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,
+        val instance: String = "",
+        val listingType: ListingType = ListingType.Local,
+        val sortType: SortType = SortType.Active,
         val posts: List<PostModel> = emptyList(),
     )
 

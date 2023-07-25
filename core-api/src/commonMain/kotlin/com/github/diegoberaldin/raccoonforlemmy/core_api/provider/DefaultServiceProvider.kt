@@ -4,6 +4,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core_api.service.PostService
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -14,14 +16,18 @@ internal class DefaultServiceProvider : ServiceProvider {
         private const val VERSION = "v3"
     }
 
-    var currentInstance: String = DEFAULT_INSTANCE
+    override var currentInstance: String = DEFAULT_INSTANCE
         private set
 
     override lateinit var postService: PostService
         private set
 
     private val baseUrl: String get() = "https://$currentInstance/api/$VERSION/"
-    private val client = HttpClient() {
+    private val client = HttpClient {
+        install(Logging) {
+            logger = defaultLogger
+            level = LogLevel.ALL
+        }
         install(ContentNegotiation) {
             json(Json { isLenient = true; ignoreUnknownKeys = true })
         }

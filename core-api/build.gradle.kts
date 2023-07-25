@@ -40,6 +40,7 @@ kotlin {
                 implementation(libs.ktor.serialization)
                 implementation(libs.ktor.contentnegotiation)
                 implementation(libs.ktor.json)
+                implementation(libs.ktor.logging)
             }
         }
         val commonTest by getting {

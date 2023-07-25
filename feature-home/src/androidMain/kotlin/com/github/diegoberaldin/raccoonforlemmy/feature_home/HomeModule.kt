@@ -11,6 +11,7 @@ actual val homeTabModule = module {
         HomeScreenModel(
             mvi = DefaultMviModel(HomeScreenMviModel.UiState()),
             postsRepository = get(),
+            apiConfigRepository = get(),
         )
     }
 }

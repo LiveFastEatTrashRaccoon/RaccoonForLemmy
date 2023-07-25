@@ -5,4 +5,5 @@ import org.koin.dsl.module
 
 val postsRepositoryModule = module {
     singleOf(::PostsRepository)
+    singleOf(::ApiConfigurationRepository)
 }

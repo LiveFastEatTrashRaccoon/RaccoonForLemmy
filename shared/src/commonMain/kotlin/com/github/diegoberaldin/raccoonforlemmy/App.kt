@@ -62,13 +62,10 @@ fun App() {
         TabNavigator(HomeTab) {
             Scaffold(
                 content = {
-
                     CurrentTab()
                 },
                 bottomBar = {
-                    BottomAppBar(
-                        modifier = Modifier.height(52.dp)
-                    ) {
+                    BottomAppBar {
                         TabNavigationItem(HomeTab)
                         TabNavigationItem(SearchTab)
                         TabNavigationItem(ProfileTab)
