@@ -14,6 +14,7 @@ interface HomeScreenMviModel :
     }
 
     data class UiState(
+        val refreshing: Boolean = false,
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,
         val instance: String = "",

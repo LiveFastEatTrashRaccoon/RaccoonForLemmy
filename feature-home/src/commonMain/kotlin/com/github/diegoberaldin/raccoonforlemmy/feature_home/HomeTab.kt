@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.HeatPump
@@ -20,6 +22,9 @@ import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Radar
 import androidx.compose.material.icons.filled.Rocket
 import androidx.compose.material.icons.filled.SpaceDashboard
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -64,7 +69,7 @@ object HomeTab : Tab {
             }
         }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
         val model = rememberScreenModel { getHomeScreenModel() }
@@ -106,47 +111,60 @@ object HomeTab : Tab {
                 }
             }
         ) {
-            LazyColumn(
-                modifier = Modifier.padding(it),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xs)
+            val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
+                model.reduce(HomeScreenMviModel.Intent.Refresh)
+            })
+            Box(
+                modifier = Modifier.padding(it).pullRefresh(pullRefreshState),
             ) {
-                items(uiState.posts) { post ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceVariant,
-                                shape = RoundedCornerShape(CornerSize.m)
-                            ).padding(Spacing.s)
-                    ) {
-                        Column {
-                            Text(
-                                text = post.title,
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                            val body = post.text
-                            if (body.isNotEmpty()) {
-                                Markdown(content = body)
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xs)
+                ) {
+                    items(uiState.posts) { post ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                    shape = RoundedCornerShape(CornerSize.m)
+                                ).padding(Spacing.s)
+                        ) {
+                            Column {
+                                Text(
+                                    text = post.title,
+                                    style = MaterialTheme.typography.titleMedium,
+                                )
+                                val body = post.text
+                                if (body.isNotEmpty()) {
+                                    Markdown(content = body)
+                                }
+                            }
+                        }
+                    }
+                    item {
+                        if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                            model.reduce(HomeScreenMviModel.Intent.LoadNextPage)
+                        }
+                        if (uiState.loading && !uiState.refreshing) {
+                            Box(
+                                modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(25.dp),
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
                             }
                         }
                     }
                 }
-                item {
-                    if (!uiState.loading && uiState.canFetchMore) {
-                        model.reduce(HomeScreenMviModel.Intent.LoadNextPage)
-                    }
-                    if (uiState.loading) {
-                        Box(
-                            modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(25.dp),
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-                    }
-                }
+
+                PullRefreshIndicator(
+                    uiState.refreshing,
+                    state = pullRefreshState,
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
             }
         }
     }

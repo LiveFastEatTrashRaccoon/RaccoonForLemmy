@@ -34,7 +34,7 @@ class HomeScreenModel(
 
     private fun refresh() {
         currentPage = 1
-        mvi.updateState { it.copy(canFetchMore = true) }
+        mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
         loadNextPage()
     }
 
@@ -48,6 +48,7 @@ class HomeScreenModel(
             mvi.updateState { it.copy(loading = true) }
             val type = currentState.listingType
             val sort = currentState.sortType
+            val refreshing = currentState.refreshing
             val postList = postsRepository.getPosts(
                 page = currentPage,
                 type = type,
@@ -57,9 +58,10 @@ class HomeScreenModel(
             val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {
                 it.copy(
-                    posts = it.posts + postList,
+                    posts = if (refreshing) postList else it.posts + postList,
                     loading = false,
                     canFetchMore = canFetchMore,
+                    refreshing = false,
                 )
             }
         }
