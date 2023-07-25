@@ -1,7 +1,10 @@
 package com.github.diegoberaldin.raccoonforlemmy
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.height
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -9,10 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.AppTheme
@@ -32,7 +34,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun App() {
     val keyStore = remember { getTemporaryKeyStore() }
@@ -42,11 +44,11 @@ fun App() {
     }
 
     val defaultLocale = stringResource(MR.strings.lang)
-    val lang = runBlocking {
+    val langCode = runBlocking {
         keyStore.get(KeyStoreKeys.Locale, defaultLocale)
     }
     val languageRepository = remember { getLanguageRepository() }
-    languageRepository.changeLanguage(lang)
+    languageRepository.changeLanguage(langCode)
 
     val scope = rememberCoroutineScope()
     languageRepository.currentLanguage.onEach { lang ->
@@ -59,21 +61,43 @@ fun App() {
         val lang by languageRepository.currentLanguage.collectAsState()
         LaunchedEffect(lang) {}
 
-        TabNavigator(HomeTab) {
-            Scaffold(
-                content = {
-                    CurrentTab()
-                },
-                bottomBar = {
-                    BottomAppBar {
-                        TabNavigationItem(HomeTab)
-                        TabNavigationItem(SearchTab)
-                        TabNavigationItem(ProfileTab)
-                        TabNavigationItem(InboxTab)
-                        TabNavigationItem(SettingsTab)
+        val bottomSheetContent = remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
+        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        LaunchedEffect(HomeTab) {
+            HomeTab.bottomSheetFlow.onEach { content ->
+                when {
+                    content != null -> {
+                        bottomSheetContent.value = content
+                        bottomSheetState.show()
                     }
+
+                    else -> bottomSheetState.hide()
                 }
-            )
+            }.launchIn(this)
+        }
+
+        ModalBottomSheetLayout(
+            sheetState = bottomSheetState,
+            sheetContent = {
+                bottomSheetContent.value?.also { it() }
+            }
+        ) {
+            TabNavigator(HomeTab) {
+                Scaffold(
+                    content = {
+                        CurrentTab()
+                    },
+                    bottomBar = {
+                        BottomAppBar {
+                            TabNavigationItem(tab = HomeTab)
+                            TabNavigationItem(SearchTab)
+                            TabNavigationItem(ProfileTab)
+                            TabNavigationItem(InboxTab)
+                            TabNavigationItem(SettingsTab)
+                        }
+                    }
+                )
+            }
         }
     }
 }

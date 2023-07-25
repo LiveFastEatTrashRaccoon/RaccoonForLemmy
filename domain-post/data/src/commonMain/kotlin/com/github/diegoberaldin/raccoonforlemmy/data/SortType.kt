@@ -6,8 +6,8 @@ sealed interface SortType {
     object New : SortType
     object MostComments : SortType
     object NewComments : SortType
-
     sealed interface Top : SortType {
+        object Generic : Top
         object PastHour : Top
         object Past6Hours : Top
         object Past12Hours : Top

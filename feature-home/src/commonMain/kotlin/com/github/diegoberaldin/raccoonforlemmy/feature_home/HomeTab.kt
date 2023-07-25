@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,11 +17,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.HeatPump
-import androidx.compose.material.icons.filled.Message
-import androidx.compose.material.icons.filled.Radar
-import androidx.compose.material.icons.filled.Rocket
 import androidx.compose.material.icons.filled.SpaceDashboard
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -43,16 +39,21 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core_md.compose.Markdown
-import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
-import com.github.diegoberaldin.raccoonforlemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.feature_home.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 
 object HomeTab : Tab {
+
+    private val bottomSheetChannel = Channel<(@Composable () -> Unit)?>()
+    val bottomSheetFlow = bottomSheetChannel.receiveAsFlow()
 
     override val options: TabOptions
         @Composable
@@ -74,13 +75,13 @@ object HomeTab : Tab {
     override fun Content() {
         val model = rememberScreenModel { getHomeScreenModel() }
         model.bindToLifecycle(key)
-
         val uiState by model.uiState.collectAsState()
+
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
             topBar = {
                 Row(
-                    modifier = Modifier.padding(Spacing.s),
+                    modifier = Modifier.height(64.dp).padding(Spacing.s),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(
@@ -97,14 +98,15 @@ object HomeTab : Tab {
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     Image(
-                        imageVector = when (uiState.sortType) {
-                            SortType.Active -> Icons.Default.Rocket
-                            SortType.Hot -> Icons.Default.HeatPump
-                            SortType.MostComments -> Icons.Default.Message
-                            SortType.New -> Icons.Default.Radar
-                            SortType.NewComments -> Icons.Default.Message
-                            else -> Icons.Default.AutoAwesome
+                        modifier = Modifier.onClick {
+                            bottomSheetChannel.trySend @Composable {
+                                SortBottomSheet { type ->
+                                    model.reduce(HomeScreenMviModel.Intent.ChangeSort(type))
+                                    bottomSheetChannel.trySend(null)
+                                }
+                            }
                         },
+                        imageVector = uiState.sortType.toIcon(),
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
                     )
@@ -168,11 +170,4 @@ object HomeTab : Tab {
             }
         }
     }
-}
-
-@Composable
-fun ListingType.toReadableName(): String = when (this) {
-    ListingType.All -> stringResource(MR.strings.home_listing_type_all)
-    ListingType.Local -> stringResource(MR.strings.home_listing_type_local)
-    ListingType.Subscribed -> stringResource(MR.strings.home_listing_type_subscribed)
 }

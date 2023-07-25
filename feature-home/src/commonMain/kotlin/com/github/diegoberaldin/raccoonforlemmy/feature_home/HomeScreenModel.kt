@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_home
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +21,9 @@ class HomeScreenModel(
 
     override fun reduce(intent: HomeScreenMviModel.Intent) {
         when (intent) {
-
             HomeScreenMviModel.Intent.LoadNextPage -> loadNextPage()
             HomeScreenMviModel.Intent.Refresh -> refresh()
+            is HomeScreenMviModel.Intent.ChangeSort -> applySortType(intent.value)
         }
     }
 
@@ -65,5 +66,10 @@ class HomeScreenModel(
                 )
             }
         }
+    }
+
+    private fun applySortType(value: SortType) {
+        mvi.updateState { it.copy(sortType = value) }
+        refresh()
     }
 }

@@ -11,6 +11,7 @@ interface HomeScreenMviModel :
     sealed interface Intent {
         object Refresh : Intent
         object LoadNextPage : Intent
+        data class ChangeSort(val value: SortType) : Intent
     }
 
     data class UiState(

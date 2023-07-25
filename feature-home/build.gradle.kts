@@ -49,6 +49,7 @@ kotlin {
                 implementation(projects.resources)
                 implementation(projects.coreAppearance)
                 implementation(projects.coreArchitecture)
+                implementation(projects.coreUtils)
                 implementation(projects.coreMd)
                 implementation(projects.domainPost.data)
                 implementation(projects.domainPost.repository)

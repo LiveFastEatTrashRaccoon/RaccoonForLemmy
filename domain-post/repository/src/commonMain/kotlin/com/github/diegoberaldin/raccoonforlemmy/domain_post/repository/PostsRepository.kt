@@ -45,7 +45,6 @@ private fun ListingType.toDto() = when (this) {
 }
 
 private fun SortType.toDto() = when (this) {
-    SortType.Active -> DtoSortType.Active
     SortType.Hot -> DtoSortType.Hot
     SortType.MostComments -> DtoSortType.MostComments
     SortType.New -> DtoSortType.New
@@ -57,4 +56,5 @@ private fun SortType.toDto() = when (this) {
     SortType.Top.PastHour -> DtoSortType.TopHour
     SortType.Top.Week -> DtoSortType.TopWeek
     SortType.Top.Year -> DtoSortType.TopYear
+    else -> DtoSortType.Active
 }
