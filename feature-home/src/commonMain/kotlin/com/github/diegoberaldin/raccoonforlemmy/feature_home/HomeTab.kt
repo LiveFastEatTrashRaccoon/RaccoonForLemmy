@@ -134,9 +134,11 @@ object HomeTab : Tab {
                 }
 
                 PullRefreshIndicator(
-                    uiState.refreshing,
+                    refreshing = uiState.refreshing,
                     state = pullRefreshState,
-                    modifier = Modifier.align(Alignment.TopCenter)
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    backgroundColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }
