@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_home
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.PostsRepository
@@ -24,6 +25,7 @@ class HomeScreenModel(
             HomeScreenMviModel.Intent.LoadNextPage -> loadNextPage()
             HomeScreenMviModel.Intent.Refresh -> refresh()
             is HomeScreenMviModel.Intent.ChangeSort -> applySortType(intent.value)
+            is HomeScreenMviModel.Intent.ChangeListing -> applyListingType(intent.value)
         }
     }
 
@@ -70,6 +72,11 @@ class HomeScreenModel(
 
     private fun applySortType(value: SortType) {
         mvi.updateState { it.copy(sortType = value) }
+        refresh()
+    }
+
+    private fun applyListingType(value: ListingType) {
+        mvi.updateState { it.copy(listingType = value) }
         refresh()
     }
 }

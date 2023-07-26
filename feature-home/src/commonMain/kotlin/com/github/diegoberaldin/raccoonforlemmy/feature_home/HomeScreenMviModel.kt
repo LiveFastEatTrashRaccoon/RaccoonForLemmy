@@ -12,6 +12,7 @@ interface HomeScreenMviModel :
         object Refresh : Intent
         object LoadNextPage : Intent
         data class ChangeSort(val value: SortType) : Intent
+        data class ChangeListing(val value: ListingType) : Intent
     }
 
     data class UiState(

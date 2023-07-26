@@ -2,13 +2,14 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_home
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddComment
-import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.filled.CardMembership
+import androidx.compose.material.icons.filled.Domain
 import androidx.compose.material.icons.filled.Fireplace
-import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.MilitaryTech
 import androidx.compose.material.icons.filled.Newspaper
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Rocket
 import androidx.compose.runtime.Composable
@@ -16,6 +17,13 @@ import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+
+
+internal fun ListingType.toIcon() = when (this) {
+    ListingType.Local -> Icons.Default.Domain
+    ListingType.Subscribed -> Icons.Default.Newspaper
+    else -> Icons.Default.Public
+}
 
 @Composable
 internal fun ListingType.toReadableName(): String = when (this) {
@@ -47,5 +55,5 @@ internal fun SortType.toReadableName(): String = when (this) {
     SortType.Top.PastHour -> stringResource(MR.strings.home_sort_type_top_hour)
     SortType.Top.Week -> stringResource(MR.strings.home_sort_type_top_week)
     SortType.Top.Year -> stringResource(MR.strings.home_sort_type_top_year)
-    else ->  stringResource(MR.strings.home_sort_type_top)
+    else -> stringResource(MR.strings.home_sort_type_top)
 }

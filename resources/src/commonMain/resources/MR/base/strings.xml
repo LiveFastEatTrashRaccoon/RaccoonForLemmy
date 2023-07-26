@@ -15,6 +15,7 @@
     <string name="home_listing_type_local">Local</string>
     <string name="home_listing_type_subscribed">Subscribed</string>
     <string name="home_sort_title">Sort by</string>
+    <string name="home_listing_title">Feeds</string>
     <string name="home_sort_type_active">Active</string>
     <string name="home_sort_type_hot">Hot</string>
     <string name="home_sort_type_most_comments">Most comments</string>

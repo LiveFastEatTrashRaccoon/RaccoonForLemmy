@@ -44,6 +44,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core_md.compose.Markdown
+import com.github.diegoberaldin.raccoonforlemmy.feature_home.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -80,37 +81,7 @@ object HomeTab : Tab {
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
             topBar = {
-                Row(
-                    modifier = Modifier.height(64.dp).padding(Spacing.s),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxxs)
-                    ) {
-                        Text(
-                            text = uiState.listingType.toReadableName(),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = stringResource(MR.strings.home_instance_via, uiState.instance),
-                            style = MaterialTheme.typography.titleSmall
-                        )
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    Image(
-                        modifier = Modifier.onClick {
-                            bottomSheetChannel.trySend @Composable {
-                                SortBottomSheet { type ->
-                                    model.reduce(HomeScreenMviModel.Intent.ChangeSort(type))
-                                    bottomSheetChannel.trySend(null)
-                                }
-                            }
-                        },
-                        imageVector = uiState.sortType.toIcon(),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
-                    )
-                }
+                PostsTopBar(model, uiState)
             }
         ) {
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
@@ -168,6 +139,67 @@ object HomeTab : Tab {
                     modifier = Modifier.align(Alignment.TopCenter)
                 )
             }
+        }
+    }
+
+    @Composable
+    private fun PostsTopBar(
+        model: HomeScreenModel,
+        uiState: HomeScreenMviModel.UiState,
+    ) {
+        Row(
+            modifier = Modifier.height(64.dp).padding(Spacing.s),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Row(
+                modifier = Modifier.onClick {
+                    bottomSheetChannel.trySend @Composable {
+                        ListingTypeBottomSheet { type ->
+                            model.reduce(HomeScreenMviModel.Intent.ChangeListing(type))
+                            bottomSheetChannel.trySend(null)
+                        }
+                    }
+                },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Spacing.m),
+            ) {
+                Image(
+                    imageVector = uiState.listingType.toIcon(),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxxs)
+                ) {
+                    Text(
+                        text = uiState.listingType.toReadableName(),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = stringResource(
+                            MR.strings.home_instance_via,
+                            uiState.instance
+                        ),
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Image(
+                modifier = Modifier.onClick {
+                    bottomSheetChannel.trySend @Composable {
+                        SortBottomSheet { type ->
+                            model.reduce(HomeScreenMviModel.Intent.ChangeSort(type))
+                            bottomSheetChannel.trySend(null)
+                        }
+                    }
+                },
+                imageVector = uiState.sortType.toIcon(),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+            )
         }
     }
 }
