@@ -3,7 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_search
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -23,7 +23,7 @@ object SearchTab : Tab {
         @Composable
         get() {
             val title = stringResource(MR.strings.navigation_search)
-            val icon = rememberVectorPainter(Icons.Default.Search)
+            val icon = rememberVectorPainter(Icons.Default.Explore)
 
             return remember {
                 TabOptions(

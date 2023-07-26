@@ -6,3 +6,4 @@ typealias CommunityId = Int
 typealias LanguageId = Int
 typealias InstanceId = Int
 typealias CommentId = Int
+typealias SiteId = Int

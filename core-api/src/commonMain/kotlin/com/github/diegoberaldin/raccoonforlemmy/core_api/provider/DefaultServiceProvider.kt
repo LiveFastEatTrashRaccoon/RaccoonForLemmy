@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core_api.provider
 
+import com.github.diegoberaldin.raccoonforlemmy.core_api.service.CommunityService
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.PostService
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
@@ -12,7 +13,7 @@ import kotlinx.serialization.json.Json
 internal class DefaultServiceProvider : ServiceProvider {
 
     companion object {
-        private const val DEFAULT_INSTANCE = "enterprise.lemmy.ml"
+        private const val DEFAULT_INSTANCE = "lemmy.world"
         private const val VERSION = "v3"
     }
 
@@ -20,6 +21,9 @@ internal class DefaultServiceProvider : ServiceProvider {
         private set
 
     override lateinit var postService: PostService
+        private set
+
+    override lateinit var communityService: CommunityService
         private set
 
     private val baseUrl: String get() = "https://$currentInstance/api/$VERSION/"
@@ -49,5 +53,6 @@ internal class DefaultServiceProvider : ServiceProvider {
             .httpClient(client)
             .build()
         postService = ktorfit.create()
+        communityService = ktorfit.create()
     }
 }

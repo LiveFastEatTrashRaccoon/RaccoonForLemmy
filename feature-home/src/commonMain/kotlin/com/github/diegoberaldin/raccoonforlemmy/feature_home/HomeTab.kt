@@ -1,49 +1,36 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_home
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SpaceDashboard
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
-import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
-import com.github.diegoberaldin.raccoonforlemmy.core_md.compose.Markdown
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -81,7 +68,27 @@ object HomeTab : Tab {
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
             topBar = {
-                PostsTopBar(model, uiState)
+                PostsTopBar(
+                    currentInstance = uiState.instance,
+                    listingType = uiState.listingType,
+                    sortType = uiState.sortType,
+                    onSelectListingType = {
+                        bottomSheetChannel.trySend @Composable {
+                            ListingTypeBottomSheet { type ->
+                                model.reduce(HomeScreenMviModel.Intent.ChangeListing(type))
+                                bottomSheetChannel.trySend(null)
+                            }
+                        }
+                    },
+                    onSelectSortType = {
+                        bottomSheetChannel.trySend @Composable {
+                            SortBottomSheet { type ->
+                                model.reduce(HomeScreenMviModel.Intent.ChangeSort(type))
+                                bottomSheetChannel.trySend(null)
+                            }
+                        }
+                    },
+                )
             }
         ) {
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
@@ -95,25 +102,7 @@ object HomeTab : Tab {
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs)
                 ) {
                     items(uiState.posts) { post ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    color = MaterialTheme.colorScheme.surfaceVariant,
-                                    shape = RoundedCornerShape(CornerSize.m)
-                                ).padding(Spacing.s)
-                        ) {
-                            Column {
-                                Text(
-                                    text = post.title,
-                                    style = MaterialTheme.typography.titleMedium,
-                                )
-                                val body = post.text
-                                if (body.isNotEmpty()) {
-                                    Markdown(content = body)
-                                }
-                            }
-                        }
+                        PostCard(post)
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
@@ -141,67 +130,6 @@ object HomeTab : Tab {
                     contentColor = MaterialTheme.colorScheme.onSurface,
                 )
             }
-        }
-    }
-
-    @Composable
-    private fun PostsTopBar(
-        model: HomeScreenModel,
-        uiState: HomeScreenMviModel.UiState,
-    ) {
-        Row(
-            modifier = Modifier.height(64.dp).padding(Spacing.s),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Row(
-                modifier = Modifier.onClick {
-                    bottomSheetChannel.trySend @Composable {
-                        ListingTypeBottomSheet { type ->
-                            model.reduce(HomeScreenMviModel.Intent.ChangeListing(type))
-                            bottomSheetChannel.trySend(null)
-                        }
-                    }
-                },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Spacing.m),
-            ) {
-                Image(
-                    imageVector = uiState.listingType.toIcon(),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
-                )
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xxxs)
-                ) {
-                    Text(
-                        text = uiState.listingType.toReadableName(),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = stringResource(
-                            MR.strings.home_instance_via,
-                            uiState.instance
-                        ),
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Image(
-                modifier = Modifier.onClick {
-                    bottomSheetChannel.trySend @Composable {
-                        SortBottomSheet { type ->
-                            model.reduce(HomeScreenMviModel.Intent.ChangeSort(type))
-                            bottomSheetChannel.trySend(null)
-                        }
-                    }
-                },
-                imageVector = uiState.sortType.toIcon(),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
-            )
         }
     }
 }

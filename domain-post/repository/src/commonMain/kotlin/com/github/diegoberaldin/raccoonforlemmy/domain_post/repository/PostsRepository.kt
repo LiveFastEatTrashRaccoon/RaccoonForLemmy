@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.domain_post.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.PostView
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.PostService
+import com.github.diegoberaldin.raccoonforlemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.data.SortType
@@ -34,8 +35,13 @@ class PostsRepository(
 }
 
 private fun PostView.toModel() = PostModel(
-    title = this.post.name,
-    text = this.post.body.orEmpty(),
+    id = post.id,
+    title = post.name,
+    text = post.body.orEmpty(),
+    score = counts.score,
+    comments = counts.comments,
+    thumbnailUrl = post.thumbnailUrl.orEmpty(),
+    community = CommunityModel(id = post.communityId)
 )
 
 private fun ListingType.toDto() = when (this) {

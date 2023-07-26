@@ -12,4 +12,8 @@ val coreApiModule = module {
         val provider: ServiceProvider = get()
         provider.postService
     }
+    single {
+        val provider: ServiceProvider = get()
+        provider.communityService
+    }
 }
