@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_home
+package com.github.diegoberaldin.raccoonforlemmy.feature_home.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
@@ -6,7 +6,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.ApiConfigurationRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -15,7 +14,6 @@ import kotlinx.coroutines.launch
 class HomeScreenModel(
     private val mvi: DefaultMviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect>,
     private val postsRepository: PostsRepository,
-    private val communityRepository: CommunityRepository,
     private val apiConfigRepository: ApiConfigurationRepository,
 ) : ScreenModel,
     MviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect> by mvi {
@@ -58,21 +56,7 @@ class HomeScreenModel(
                 page = currentPage,
                 type = type,
                 sort = sort,
-            ).map {
-                val community = it.community
-                if (community?.id != null) {
-                    val remoteCommunity = communityRepository.getCommunity(community.id)
-                    it.copy(
-                        community = it.community?.copy(
-                            name = remoteCommunity?.name.orEmpty(),
-                            icon = remoteCommunity?.icon,
-                            host = remoteCommunity?.host.orEmpty(),
-                        )
-                    )
-                } else {
-                    it
-                }
-            }
+            )
             currentPage++
             val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {

@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_home
+package com.github.diegoberaldin.raccoonforlemmy.feature_home.viewmodel
 
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.data.ListingType

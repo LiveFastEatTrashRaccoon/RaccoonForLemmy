@@ -2,12 +2,11 @@ package com.github.diegoberaldin.raccoonforlemmy.domain_post.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.PostView
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.PostService
-import com.github.diegoberaldin.raccoonforlemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.data.SortType
-import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.ListingType as DtoListingType
-import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.SortType as DtoSortType
+import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.utils.toDto
+import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.utils.toModel
 
 class PostsRepository(
     private val postService: PostService,
@@ -41,26 +40,6 @@ private fun PostView.toModel() = PostModel(
     score = counts.score,
     comments = counts.comments,
     thumbnailUrl = post.thumbnailUrl.orEmpty(),
-    community = CommunityModel(id = post.communityId)
+    community = community.toModel(),
+    creator = creator.toModel(),
 )
-
-private fun ListingType.toDto() = when (this) {
-    ListingType.All -> DtoListingType.All
-    ListingType.Subscribed -> DtoListingType.Subscribed
-    ListingType.Local -> DtoListingType.Local
-}
-
-private fun SortType.toDto() = when (this) {
-    SortType.Hot -> DtoSortType.Hot
-    SortType.MostComments -> DtoSortType.MostComments
-    SortType.New -> DtoSortType.New
-    SortType.NewComments -> DtoSortType.NewComments
-    SortType.Top.Day -> DtoSortType.TopDay
-    SortType.Top.Month -> DtoSortType.TopMonth
-    SortType.Top.Past12Hours -> DtoSortType.TopTwelveHour
-    SortType.Top.Past6Hours -> DtoSortType.TopSixHour
-    SortType.Top.PastHour -> DtoSortType.TopHour
-    SortType.Top.Week -> DtoSortType.TopWeek
-    SortType.Top.Year -> DtoSortType.TopYear
-    else -> DtoSortType.Active
-}

@@ -20,7 +20,7 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.AppTheme
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.di.getTemporaryKeyStore
-import com.github.diegoberaldin.raccoonforlemmy.feature_home.HomeTab
+import com.github.diegoberaldin.raccoonforlemmy.feature_home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature_inbox.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.ProfileTab
 import com.github.diegoberaldin.raccoonforlemmy.feature_search.SearchTab

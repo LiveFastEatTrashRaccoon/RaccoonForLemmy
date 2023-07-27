@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.domain_post.repository
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.CommunityView
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.CommunityService
 import com.github.diegoberaldin.raccoonforlemmy.data.CommunityModel
+import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.utils.toModel
 
 class CommunityRepository(
     private val communityService: CommunityService,
@@ -14,8 +15,4 @@ class CommunityRepository(
     }
 }
 
-private fun CommunityView.toModel() = CommunityModel(
-    name = community.name,
-    icon = community.icon,
-    host = extractHost(community.actorId),
-)
+private fun CommunityView.toModel() = community.toModel()

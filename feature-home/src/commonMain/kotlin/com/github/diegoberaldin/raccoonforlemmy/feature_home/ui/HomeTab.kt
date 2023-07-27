@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_home
+package com.github.diegoberaldin.raccoonforlemmy.feature_home.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +31,8 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.feature_home.viewmodel.HomeScreenMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature_home.di.getHomeScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR

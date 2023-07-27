@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_home
+package com.github.diegoberaldin.raccoonforlemmy.feature_home.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +18,8 @@ import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.feature_home.toIcon
+import com.github.diegoberaldin.raccoonforlemmy.feature_home.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
