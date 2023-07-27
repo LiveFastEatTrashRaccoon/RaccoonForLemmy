@@ -8,10 +8,12 @@ interface SettingsScreenMviModel :
 
     sealed interface Intent {
         data class ChangeTheme(val value: ThemeState) : Intent
+        data class ChangeLanguage(val value: String) : Intent
     }
 
     data class UiState(
         val currentTheme: ThemeState = ThemeState.Light,
+        val lang: String = "",
     )
 
     sealed interface Effect

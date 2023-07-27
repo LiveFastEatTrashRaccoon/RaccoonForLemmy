@@ -3,10 +3,34 @@
     <string name="lang">it</string>
 
     <string name="navigation_home">Post</string>
-    <string name="navigation_inbox">Inbox</string>
+    <string name="navigation_inbox">In arrivo</string>
     <string name="navigation_profile">Profilo</string>
     <string name="navigation_search">Ricerca</string>
     <string name="navigation_settings">Impostazioni</string>
 
-    <string name="settings_dark_theme">Tema scuro</string>
+    <string name="home_listing_type_all">Tutti</string>
+    <string name="home_listing_type_local">Locali</string>
+    <string name="home_listing_type_subscribed">Iscrizioni</string>
+    <string name="home_sort_title">Ordinamento</string>
+    <string name="home_listing_title">Tipo di feed</string>
+    <string name="home_sort_type_active">Attivi</string>
+    <string name="home_sort_type_hot">Popolari</string>
+    <string name="home_sort_type_most_comments">Più commentati</string>
+    <string name="home_sort_type_new">Recenti</string>
+    <string name="home_sort_type_new_comments">Commenti recenti</string>
+    <string name="home_sort_type_top">Top…</string>
+    <string name="home_sort_type_top_day">Top giorno</string>
+    <string name="home_sort_type_top_month">Top mese</string>
+    <string name="home_sort_type_top_12_hours">Top ultime 12h</string>
+    <string name="home_sort_type_top_6_hours">Top ultime 6h</string>
+    <string name="home_sort_type_top_hour">Top ultima ora</string>
+    <string name="home_sort_type_top_week">Top settimana</string>
+    <string name="home_sort_type_top_year">Top anno</string>
+    <string name="home_instance_via">via %1$s</string>
+
+    <string name="settings_ui_theme">Tema interfaccia</string>
+    <string name="settings_theme_dark">Scuro</string>
+    <string name="settings_theme_light">Chiaro</string>
+    <string name="settings_theme_black">Scuro (AMOLED)</string>
+    <string name="settings_language">Lingua</string>
 </resources>

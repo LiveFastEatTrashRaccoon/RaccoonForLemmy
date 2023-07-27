@@ -35,4 +35,5 @@
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_black">Pure black</string>
+    <string name="settings_language">Language</string>
 </resources>

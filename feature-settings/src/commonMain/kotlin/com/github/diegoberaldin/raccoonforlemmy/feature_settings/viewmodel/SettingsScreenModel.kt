@@ -8,12 +8,14 @@ import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.TemporaryKeyStore
+import com.github.diegoberaldin.raccoonforlemmy.resources.LanguageRepository
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class SettingsScreenModel(
     private val themeRepository: ThemeRepository,
+    private val languageRepository: LanguageRepository,
     private val keyStore: TemporaryKeyStore,
     private val mvi: DefaultMviModel<SettingsScreenMviModel.Intent, SettingsScreenMviModel.UiState, SettingsScreenMviModel.Effect>,
 ) : ScreenModel,
@@ -22,13 +24,21 @@ class SettingsScreenModel(
     override fun onStarted() {
         mvi.onStarted()
         themeRepository.state.onEach { currentTheme ->
-            mvi.updateState { it.copy(currentTheme = currentTheme) }
+            mvi.updateState {
+                it.copy(currentTheme = currentTheme)
+            }
+        }.launchIn(mvi.scope)
+        languageRepository.currentLanguage.onEach { lang ->
+            mvi.updateState {
+                it.copy(lang = lang)
+            }
         }.launchIn(mvi.scope)
     }
 
     override fun reduce(intent: SettingsScreenMviModel.Intent) {
         when (intent) {
             is SettingsScreenMviModel.Intent.ChangeTheme -> applyTheme(intent.value)
+            is SettingsScreenMviModel.Intent.ChangeLanguage -> changeLanguage(intent.value)
         }
     }
 
@@ -36,6 +46,13 @@ class SettingsScreenModel(
         themeRepository.changeTheme(value)
         mvi.scope.launch {
             keyStore.save(KeyStoreKeys.UITheme, value.toInt())
+        }
+    }
+
+    private fun changeLanguage(value: String) {
+        languageRepository.changeLanguage(value)
+        mvi.scope.launch {
+            keyStore.save(KeyStoreKeys.Locale, value)
         }
     }
 }

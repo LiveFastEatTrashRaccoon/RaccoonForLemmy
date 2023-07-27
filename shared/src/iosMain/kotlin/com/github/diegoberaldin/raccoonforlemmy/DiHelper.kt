@@ -8,7 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.feature_inbox.inboxTabModule
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.profileTabModule
 import com.github.diegoberaldin.raccoonforlemmy.feature_search.searchTabModule
 import com.github.diegoberaldin.raccoonforlemmy.feature_settings.di.settingsTabModule
-import com.github.diegoberaldin.raccoonforlemmy.resources.localizationModule
+import com.github.diegoberaldin.raccoonforlemmy.resources.di.localizationModule
 import org.koin.core.context.startKoin
 
 fun initKoin() {

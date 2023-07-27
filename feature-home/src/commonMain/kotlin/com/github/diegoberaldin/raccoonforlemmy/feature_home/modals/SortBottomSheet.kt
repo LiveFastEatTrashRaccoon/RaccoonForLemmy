@@ -30,7 +30,12 @@ fun SortBottomSheet(
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-            .padding(Spacing.s),
+            .padding(
+                top = Spacing.s,
+                start = Spacing.s,
+                end = Spacing.s,
+                bottom = Spacing.m,
+            ),
         verticalArrangement = Arrangement.spacedBy(Spacing.s)
     ) {
         Text(

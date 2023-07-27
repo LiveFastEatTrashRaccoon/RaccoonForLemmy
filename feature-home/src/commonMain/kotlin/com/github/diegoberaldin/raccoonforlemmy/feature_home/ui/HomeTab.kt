@@ -31,12 +31,14 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
-import com.github.diegoberaldin.raccoonforlemmy.feature_home.viewmodel.HomeScreenMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.di.getHomeScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.modals.SortBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.feature_home.viewmodel.HomeScreenMviModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
-import dev.icerock.moko.resources.compose.stringResource
+import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
+import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
+import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 
@@ -48,10 +50,11 @@ object HomeTab : Tab {
     override val options: TabOptions
         @Composable
         get() {
-            val title = stringResource(MR.strings.navigation_home)
             val icon = rememberVectorPainter(Icons.Default.SpaceDashboard)
-
-            return remember {
+            val languageRepository = remember { getLanguageRepository() }
+            val lang by languageRepository.currentLanguage.collectAsState()
+            return remember(lang) {
+                val title = staticString(MR.strings.navigation_home.desc())
                 TabOptions(
                     index = 0u,
                     title = title,

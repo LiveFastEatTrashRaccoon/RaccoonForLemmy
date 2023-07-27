@@ -27,10 +27,11 @@ import com.github.diegoberaldin.raccoonforlemmy.feature_profile.ProfileTab
 import com.github.diegoberaldin.raccoonforlemmy.feature_search.SearchTab
 import com.github.diegoberaldin.raccoonforlemmy.feature_settings.ui.SettingsTab
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
-import com.github.diegoberaldin.raccoonforlemmy.resources.getLanguageRepository
+import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.ui.navigation.TabNavigationItem
 import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.StringDesc
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -50,7 +51,10 @@ fun App() {
         keyStore.get(KeyStoreKeys.Locale, defaultLocale)
     }
     val languageRepository = remember { getLanguageRepository() }
-    languageRepository.changeLanguage(langCode)
+    LaunchedEffect(Unit) {
+        delay(100)
+        languageRepository.changeLanguage(langCode)
+    }
 
     val scope = rememberCoroutineScope()
     languageRepository.currentLanguage.onEach { lang ->
@@ -65,29 +69,26 @@ fun App() {
 
         val bottomSheetContent = remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
         val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-        LaunchedEffect(HomeTab) {
-            HomeTab.bottomSheetFlow.debounce(250).onEach { content ->
-                when {
-                    content != null -> {
-                        bottomSheetContent.value = content
-                        bottomSheetState.show()
-                    }
 
-                    else -> bottomSheetState.hide()
+        suspend fun handleBottomSheet(content: (@Composable () -> Unit)?) {
+            when {
+                content != null -> {
+                    bottomSheetContent.value = content
+                    bottomSheetState.show()
                 }
-            }.launchIn(this)
+
+                else -> bottomSheetState.hide()
+            }
         }
 
+        LaunchedEffect(HomeTab) {
+            HomeTab.bottomSheetFlow.debounce(250).onEach { content ->
+                handleBottomSheet(content)
+            }.launchIn(this)
+        }
         LaunchedEffect(SettingsTab) {
             SettingsTab.bottomSheetFlow.debounce(250).onEach { content ->
-                when {
-                    content != null -> {
-                        bottomSheetContent.value = content
-                        bottomSheetState.show()
-                    }
-
-                    else -> bottomSheetState.hide()
-                }
+                handleBottomSheet(content)
             }.launchIn(this)
         }
 
@@ -104,7 +105,7 @@ fun App() {
                     },
                     bottomBar = {
                         BottomAppBar {
-                            TabNavigationItem(tab = HomeTab)
+                            TabNavigationItem(HomeTab)
                             TabNavigationItem(SearchTab)
                             TabNavigationItem(ProfileTab)
                             TabNavigationItem(InboxTab)
