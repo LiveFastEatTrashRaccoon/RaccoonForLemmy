@@ -1,7 +1,8 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_settings
+package com.github.diegoberaldin.raccoonforlemmy.feature_settings.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core_appearance.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
@@ -20,25 +21,21 @@ class SettingsScreenModel(
 
     override fun onStarted() {
         mvi.onStarted()
-        themeRepository.state.onEach {
-            val isDarkTheme = when (themeRepository.state.value) {
-                ThemeState.Dark -> true
-                else -> false
-            }
-            mvi.updateState { it.copy(darkTheme = isDarkTheme) }
+        themeRepository.state.onEach { currentTheme ->
+            mvi.updateState { it.copy(currentTheme = currentTheme) }
         }.launchIn(mvi.scope)
     }
 
     override fun reduce(intent: SettingsScreenMviModel.Intent) {
         when (intent) {
-            is SettingsScreenMviModel.Intent.EnableDarkMode -> setDarkTheme(intent.value)
+            is SettingsScreenMviModel.Intent.ChangeTheme -> applyTheme(intent.value)
         }
     }
 
-    private fun setDarkTheme(value: Boolean) {
-        themeRepository.changeTheme(if (value) ThemeState.Dark else ThemeState.Light)
+    private fun applyTheme(value: ThemeState) {
+        themeRepository.changeTheme(value)
         mvi.scope.launch {
-            keyStore.save(KeyStoreKeys.EnableDarkTheme, value)
+            keyStore.save(KeyStoreKeys.UITheme, value.toInt())
         }
     }
 }

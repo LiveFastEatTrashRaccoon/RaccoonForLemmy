@@ -1,6 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core_preferences
 
 object KeyStoreKeys {
-    const val EnableDarkTheme = "enableDarkTheme"
+    const val UITheme = "uiTheme"
     const val Locale = "locale"
 }

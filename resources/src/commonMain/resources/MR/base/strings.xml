@@ -31,5 +31,8 @@
     <string name="home_sort_type_top_year">Top year</string>
     <string name="home_instance_via">via %1$s</string>
 
-    <string name="settings_dark_theme">Dark theme</string>
+    <string name="settings_ui_theme">UI theme</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_black">Pure black</string>
 </resources>

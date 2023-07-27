@@ -38,6 +38,7 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
@@ -47,6 +48,7 @@ kotlin {
                 implementation(projects.coreAppearance)
                 implementation(projects.corePreferences)
                 implementation(projects.coreArchitecture)
+                implementation(projects.coreUtils)
                 implementation(projects.resources)
             }
         }

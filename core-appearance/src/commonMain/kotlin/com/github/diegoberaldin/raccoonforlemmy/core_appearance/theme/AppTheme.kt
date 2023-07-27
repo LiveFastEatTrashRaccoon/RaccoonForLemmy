@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -11,24 +10,19 @@ import com.github.diegoberaldin.raccoonforlemmy.core_appearance.di.getThemeRepos
 
 @Composable
 fun AppTheme(
-    darkTheme: Boolean,
+    theme: ThemeState,
     content: @Composable () -> Unit,
 ) {
     val repository = remember {
         val res = getThemeRepository()
-        res.changeTheme(
-            if (darkTheme) {
-                ThemeState.Dark
-            } else {
-                ThemeState.Light
-            }
-        )
+        res.changeTheme(theme)
         res
     }
 
     val themeState by repository.state.collectAsState()
     val colorScheme = when (themeState) {
         ThemeState.Dark -> DarkColors
+        ThemeState.Black -> BlackColors
         else -> LightColors
     }
 
