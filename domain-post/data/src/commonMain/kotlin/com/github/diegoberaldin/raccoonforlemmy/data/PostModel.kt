@@ -8,4 +8,5 @@ data class PostModel(
     val comments: Int = 0,
     val thumbnailUrl: String? = null,
     val community: CommunityModel? = null,
+    val author: UserModel? = null,
 )

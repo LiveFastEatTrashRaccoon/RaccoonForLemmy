@@ -66,6 +66,7 @@ class HomeScreenModel(
                         community = it.community?.copy(
                             name = remoteCommunity?.name.orEmpty(),
                             icon = remoteCommunity?.icon,
+                            host = remoteCommunity?.host.orEmpty(),
                         )
                     )
                 } else {

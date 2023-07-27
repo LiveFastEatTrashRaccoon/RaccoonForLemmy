@@ -55,7 +55,8 @@ fun PostCard(
 
             val communityName = post.community?.name.orEmpty()
             val communityIcon = post.community?.icon.orEmpty()
-            val iconSize = 21.dp
+            val communityHost = post.community?.host.orEmpty()
+            val iconSize = 20.dp
             if (communityName.isNotEmpty()) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -68,11 +69,16 @@ fun PostCard(
                                 .clip(RoundedCornerShape(iconSize / 2)),
                             painter = painter,
                             contentDescription = null,
-                            contentScale = ContentScale.FillWidth,
+                            contentScale = ContentScale.FillBounds,
                         )
                     }
                     Text(
-                        text = communityName,
+                        text = buildString {
+                            append(communityName)
+                            if (communityHost.isNotEmpty()) {
+                                append("@$communityHost")
+                            }
+                        },
                         style = MaterialTheme.typography.titleSmall,
                     )
                 }
@@ -120,6 +126,7 @@ fun PostCard(
                     colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface)
                 )
                 Text(
+                    modifier = Modifier.padding(end = Spacing.s),
                     text = "${post.comments}"
                 )
             }

@@ -17,4 +17,5 @@ class CommunityRepository(
 private fun CommunityView.toModel() = CommunityModel(
     name = community.name,
     icon = community.icon,
+    host = extractHost(community.actorId),
 )
