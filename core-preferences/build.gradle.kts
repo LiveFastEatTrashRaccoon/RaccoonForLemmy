@@ -28,12 +28,18 @@ kotlin {
             baseName = "core-preferences"
         }
     }
-    
+
     sourceSets {
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.multiplatform.settings)
+                implementation(libs.androidx.security.crypto)
+            }
+        }
         val commonMain by getting {
             dependencies {
                 implementation(libs.koin.core)
-                implementation(libs.androidx.datastore)
+                implementation(libs.multiplatform.settings)
             }
         }
         val commonTest by getting {

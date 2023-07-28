@@ -1,6 +1,6 @@
 [versions]
 androidx_activity_compose = "1.7.2"
-androidx_datastore = "1.1.0-dev01"
+androidx_crypto = "1.0.0"
 android_gradle = "7.4.2"
 compose = "1.4.3"
 compose_imageloader = "1.6.0"
@@ -12,15 +12,17 @@ ktorfit_gradle = "1.0.0"
 ktorfit_lib = "1.4.3"
 markdown = "0.4.1"
 moko_resources = "0.23.0"
+multiplatform_settings = "1.0.0"
 voyager = "1.0.0-rc05"
 
 [libraries]
 
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "androidx.activity.compose" }
-androidx_datastore = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx.datastore" }
+androidx_security_crypto = { module = "androidx.security:security-crypto", version.ref = "androidx.crypto" }
 
 compose_imageloader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "compose.imageloader" }
 markdown = { module = "org.jetbrains:markdown", version.ref = "markdown" }
+multiplatform_settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform.settings" }
 
 koin_core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin_test = { module = "io.insert-koin:koin-test", version.ref = "koin" }

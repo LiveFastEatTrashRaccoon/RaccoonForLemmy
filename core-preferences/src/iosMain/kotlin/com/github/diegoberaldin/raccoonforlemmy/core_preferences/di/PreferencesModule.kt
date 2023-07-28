@@ -1,20 +1,26 @@
 package com.github.diegoberaldin.raccoonforlemmy.core_preferences.di
 
-import com.github.diegoberaldin.raccoonforlemmy.core_preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.DefaultTemporaryKeyStore
+import com.github.diegoberaldin.raccoonforlemmy.core_preferences.TemporaryKeyStore
+import com.russhwolf.settings.KeychainSettings
+import com.russhwolf.settings.Settings
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 actual val corePreferencesModule = module {
-    singleOf<TemporaryKeyStore>(::DefaultTemporaryKeyStore)
+    single<Settings> {
+        KeychainSettings(service = "secret_shared_prefs")
+    }
+    single<TemporaryKeyStore> {
+        DefaultTemporaryKeyStore(settings = get())
+    }
 }
 
 actual fun getTemporaryKeyStore(): TemporaryKeyStore {
-    return TemporaryKeyStoreHelper.keyStore
+    return TemporaryKeyStoreHelper.temporaryKeyStore
 }
 
 object TemporaryKeyStoreHelper : KoinComponent {
-    val keyStore: TemporaryKeyStore by inject()
+    val temporaryKeyStore: TemporaryKeyStore by inject()
 }
