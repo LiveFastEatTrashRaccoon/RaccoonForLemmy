@@ -36,11 +36,12 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.koin.core)
-                implementation(libs.ktorfit.lib)
+                api(libs.ktorfit.lib)
                 implementation(libs.ktor.serialization)
                 implementation(libs.ktor.contentnegotiation)
                 implementation(libs.ktor.json)
                 implementation(libs.ktor.logging)
+                implementation(projects.coreUtils)
             }
         }
         val commonTest by getting {

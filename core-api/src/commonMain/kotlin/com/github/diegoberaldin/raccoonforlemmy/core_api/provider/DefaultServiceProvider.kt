@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core_api.provider
 
+import com.github.diegoberaldin.raccoonforlemmy.core_api.service.AuthService
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.CommunityService
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.PostService
 import de.jensklingenberg.ktorfit.Ktorfit
@@ -24,6 +25,9 @@ internal class DefaultServiceProvider : ServiceProvider {
         private set
 
     override lateinit var communityService: CommunityService
+        private set
+
+    override lateinit var authService: AuthService
         private set
 
     private val baseUrl: String get() = "https://$currentInstance/api/$VERSION/"
@@ -54,5 +58,6 @@ internal class DefaultServiceProvider : ServiceProvider {
             .build()
         postService = ktorfit.create()
         communityService = ktorfit.create()
+        authService = ktorfit.create()
     }
 }

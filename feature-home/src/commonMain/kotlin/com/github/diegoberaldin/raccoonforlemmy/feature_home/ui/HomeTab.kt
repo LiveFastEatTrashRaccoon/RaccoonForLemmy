@@ -79,7 +79,9 @@ object HomeTab : Tab {
                     sortType = uiState.sortType,
                     onSelectListingType = {
                         bottomSheetChannel.trySend @Composable {
-                            ListingTypeBottomSheet { type ->
+                            ListingTypeBottomSheet(
+                                isLogged = uiState.isLogged
+                            ) { type ->
                                 model.reduce(HomeScreenMviModel.Intent.ChangeListing(type))
                                 bottomSheetChannel.trySend(null)
                             }

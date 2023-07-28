@@ -20,6 +20,7 @@ interface HomeScreenMviModel :
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,
         val instance: String = "",
+        val isLogged: Boolean = false,
         val listingType: ListingType = ListingType.Local,
         val sortType: SortType = SortType.Active,
         val posts: List<PostModel> = emptyList(),

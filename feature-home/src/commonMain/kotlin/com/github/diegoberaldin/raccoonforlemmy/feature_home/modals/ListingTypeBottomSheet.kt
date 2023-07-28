@@ -25,6 +25,7 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun ListingTypeBottomSheet(
+    isLogged: Boolean = false,
     onDismiss: (ListingType) -> Unit,
 ) {
     Column(
@@ -44,11 +45,13 @@ fun ListingTypeBottomSheet(
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground,
         )
-        val values = listOf(
-            ListingType.Subscribed,
-            ListingType.Local,
-            ListingType.All,
-        )
+        val values = buildList {
+            if (isLogged) {
+                this += ListingType.Subscribed
+            }
+            this += ListingType.All
+            this += ListingType.Local
+        }
         Column(
             modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(Spacing.xxxs)

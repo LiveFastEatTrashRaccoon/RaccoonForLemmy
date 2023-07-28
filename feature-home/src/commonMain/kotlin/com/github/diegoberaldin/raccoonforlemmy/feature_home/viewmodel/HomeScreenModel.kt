@@ -5,16 +5,21 @@ import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.data.SortType
-import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.ApiConfigurationRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.ApiConfigurationRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class HomeScreenModel(
     private val mvi: DefaultMviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect>,
     private val postsRepository: PostsRepository,
     private val apiConfigRepository: ApiConfigurationRepository,
+    private val identityRepository: IdentityRepository,
 ) : ScreenModel,
     MviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect> by mvi {
 
@@ -31,7 +36,16 @@ class HomeScreenModel(
 
     override fun onStarted() {
         mvi.onStarted()
-        mvi.updateState { it.copy(instance = apiConfigRepository.getInstance()) }
+        mvi.updateState {
+            it.copy(
+                instance = apiConfigRepository.getInstance()
+            )
+        }
+        identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->
+            mvi.updateState {
+                it.copy(isLogged = isLogged)
+            }
+        }.launchIn(mvi.scope)
         refresh()
     }
 

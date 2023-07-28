@@ -12,8 +12,8 @@ import com.seiko.imageloader.rememberImagePainter
 
 @Composable
 internal fun PostCardImage(post: PostModel) {
-    val imageUrl = post.thumbnailUrl
-    if (!imageUrl.isNullOrEmpty()) {
+    val imageUrl = post.thumbnailUrl.orEmpty()
+    if (imageUrl.isNotEmpty()) {
         val painter = rememberImagePainter(imageUrl)
         Image(
             modifier = Modifier.fillMaxWidth().heightIn(min = 200.dp),

@@ -23,10 +23,10 @@ kotlin {
     cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
-        version = "1.0.0"
+        version = "1.0"
         ios.deploymentTarget = "14.1"
         framework {
-            baseName = "feature-home"
+            baseName = "domain-identity"
         }
     }
 
@@ -34,27 +34,10 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.koin.core)
-
-                implementation(compose.runtime)
                 implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.material)
-                implementation(compose.materialIconsExtended)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
-
-                implementation(libs.voyager.navigator)
-                implementation(libs.voyager.tab)
-                implementation(libs.compose.imageloader)
-
-                implementation(projects.resources)
-                implementation(projects.coreAppearance)
-                implementation(projects.coreArchitecture)
+                implementation(projects.corePreferences)
+                implementation(projects.coreApi)
                 implementation(projects.coreUtils)
-                implementation(projects.coreMd)
-                implementation(projects.domainIdentity)
-                implementation(projects.domainPost.data)
-                implementation(projects.domainPost.repository)
             }
         }
         val commonTest by getting {
@@ -66,7 +49,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.feature_home"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.domain_identity"
     compileSdk = 33
     defaultConfig {
         minSdk = 26
