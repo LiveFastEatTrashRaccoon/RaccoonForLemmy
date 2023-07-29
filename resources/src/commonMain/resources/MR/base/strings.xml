@@ -11,6 +11,11 @@
     <string name="language_en" translatable="false">English</string>
     <string name="language_it" translatable="false">Italiano</string>
 
+    <string name="message_generic_error">Generic error</string>
+    <string name="message_missing_field">Missing field</string>
+
+    <string name="button_confirm">Confirm</string>
+
     <string name="home_listing_type_all">All</string>
     <string name="home_listing_type_local">Local</string>
     <string name="home_listing_type_subscribed">Subscribed</string>
@@ -30,6 +35,16 @@
     <string name="home_sort_type_top_week">Top week</string>
     <string name="home_sort_type_top_year">Top year</string>
     <string name="home_instance_via">via %1$s</string>
+
+    <string name="profile_not_logged_message">You are currently not logged in.\nPlease add an
+        account to continue.
+    </string>
+    <string name="profile_button_login">Login</string>
+    <string name="login_field_instance_name">Instance name</string>
+    <string name="login_field_user_name">Username (or email)</string>
+    <string name="login_field_password">Password</string>
+    <string name="login_field_token">TOTP 2FA token</string>
+    <string name="login_field_label_optional">(optional)</string>
 
     <string name="settings_ui_theme">UI theme</string>
     <string name="settings_theme_dark">Dark</string>

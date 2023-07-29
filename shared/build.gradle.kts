@@ -53,6 +53,7 @@ kotlin {
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab)
+                implementation(libs.voyager.bottomsheet)
 
                 implementation(projects.coreUtils)
                 implementation(projects.coreAppearance)

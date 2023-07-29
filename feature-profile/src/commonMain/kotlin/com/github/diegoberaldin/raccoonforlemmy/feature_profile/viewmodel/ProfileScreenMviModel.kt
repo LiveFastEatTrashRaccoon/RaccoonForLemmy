@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_profile
+package com.github.diegoberaldin.raccoonforlemmy.feature_profile.viewmodel
 
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 
@@ -7,7 +7,7 @@ interface ProfileScreenMviModel :
 
     sealed interface Intent
 
-    data class UiState(val loading: Boolean = false)
+    data class UiState(val isLogged: Boolean = false)
 
     sealed interface Effect
 }

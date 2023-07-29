@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
@@ -39,13 +40,8 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
 import dev.icerock.moko.resources.desc.desc
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 
 object HomeTab : Tab {
-
-    private val bottomSheetChannel = Channel<(@Composable () -> Unit)?>()
-    val bottomSheetFlow = bottomSheetChannel.receiveAsFlow()
 
     override val options: TabOptions
         @Composable
@@ -69,6 +65,7 @@ object HomeTab : Tab {
         val model = rememberScreenModel { getHomeScreenModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
@@ -78,22 +75,14 @@ object HomeTab : Tab {
                     listingType = uiState.listingType,
                     sortType = uiState.sortType,
                     onSelectListingType = {
-                        bottomSheetChannel.trySend @Composable {
-                            ListingTypeBottomSheet(
-                                isLogged = uiState.isLogged
-                            ) { type ->
-                                model.reduce(HomeScreenMviModel.Intent.ChangeListing(type))
-                                bottomSheetChannel.trySend(null)
-                            }
-                        }
+                        bottomSheetNavigator.show(ListingTypeBottomSheet(isLogged = uiState.isLogged) {
+                            model.reduce(HomeScreenMviModel.Intent.ChangeListing(it))
+                        })
                     },
                     onSelectSortType = {
-                        bottomSheetChannel.trySend @Composable {
-                            SortBottomSheet { type ->
-                                model.reduce(HomeScreenMviModel.Intent.ChangeSort(type))
-                                bottomSheetChannel.trySend(null)
-                            }
-                        }
+                        bottomSheetNavigator.show(SortBottomSheet {
+                            model.reduce(HomeScreenMviModel.Intent.ChangeSort(it))
+                        })
                     },
                 )
             }

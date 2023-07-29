@@ -45,6 +45,7 @@ kotlin {
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab)
+                implementation(libs.voyager.bottomsheet)
                 implementation(libs.compose.imageloader)
 
                 implementation(projects.resources)

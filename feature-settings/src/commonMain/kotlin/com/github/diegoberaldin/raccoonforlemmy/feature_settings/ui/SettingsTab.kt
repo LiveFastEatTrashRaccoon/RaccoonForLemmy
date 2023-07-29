@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
@@ -29,13 +30,8 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
 import dev.icerock.moko.resources.desc.desc
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 
 object SettingsTab : Tab {
-
-    private val bottomSheetChannel = Channel<(@Composable () -> Unit)?>()
-    val bottomSheetFlow = bottomSheetChannel.receiveAsFlow()
 
     override val options: TabOptions
         @Composable get() {
@@ -57,8 +53,8 @@ object SettingsTab : Tab {
     override fun Content() {
         val model = rememberScreenModel { getSettingsScreenModel() }
         model.bindToLifecycle(key)
-
         val uiState by model.uiState.collectAsState()
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
@@ -71,7 +67,7 @@ object SettingsTab : Tab {
                 TopAppBar(title = {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleLarge
                     )
                 })
             },
@@ -82,20 +78,16 @@ object SettingsTab : Tab {
                 SettingsContent(
                     uiState = uiState,
                     onSelectTheme = {
-                        bottomSheetChannel.trySend {
-                            ThemeBottomSheet { newValue ->
-                                model.reduce(SettingsScreenMviModel.Intent.ChangeTheme(newValue))
-                                bottomSheetChannel.trySend(null)
-                            }
-                        }
+                        bottomSheetNavigator.show(ThemeBottomSheet { newValue ->
+                            model.reduce(SettingsScreenMviModel.Intent.ChangeTheme(newValue))
+                        })
                     },
                     onSelectLanguage = {
-                        bottomSheetChannel.trySend {
+                        bottomSheetNavigator.show(
                             LanguageBottomSheet { newValue ->
                                 model.reduce(SettingsScreenMviModel.Intent.ChangeLanguage(newValue))
-                                bottomSheetChannel.trySend(null)
                             }
-                        }
+                        )
                     })
             }
         }

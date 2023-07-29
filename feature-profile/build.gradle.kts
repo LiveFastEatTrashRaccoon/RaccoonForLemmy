@@ -43,10 +43,13 @@ kotlin {
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab)
+                implementation(libs.voyager.bottomsheet)
 
                 implementation(projects.resources)
                 implementation(projects.coreArchitecture)
                 implementation(projects.coreAppearance)
+                implementation(projects.coreUtils)
+                implementation(projects.domainIdentity)
             }
         }
         val commonTest by getting {

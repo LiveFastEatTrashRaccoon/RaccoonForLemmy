@@ -5,7 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core_appearance.di.coreAppearanc
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.di.coreIdentityModule
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.di.corePreferencesModule
 import com.github.diegoberaldin.raccoonforlemmy.feature_inbox.inboxTabModule
-import com.github.diegoberaldin.raccoonforlemmy.feature_profile.profileTabModule
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.di.profileTabModule
 import com.github.diegoberaldin.raccoonforlemmy.feature_search.searchTabModule
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.di.homeTabModule
 import com.github.diegoberaldin.raccoonforlemmy.feature_settings.di.settingsTabModule
