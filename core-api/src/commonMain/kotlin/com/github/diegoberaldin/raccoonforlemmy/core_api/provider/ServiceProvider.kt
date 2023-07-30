@@ -7,9 +7,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core_api.service.PostService
 interface ServiceProvider {
 
     val currentInstance: String
-    val postService: PostService
-    val communityService: CommunityService
-    val authService: AuthService
+    val post: PostService
+    val community: CommunityService
+    val auth: AuthService
 
     fun changeInstance(value: String)
 }

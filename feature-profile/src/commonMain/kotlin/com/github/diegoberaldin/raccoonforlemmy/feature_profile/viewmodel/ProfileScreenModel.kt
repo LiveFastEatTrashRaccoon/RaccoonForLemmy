@@ -20,4 +20,10 @@ class ProfileScreenModel(
             mvi.updateState { it.copy(isLogged = isLogged) }
         }.launchIn(mvi.scope)
     }
+
+    override fun reduce(intent: ProfileScreenMviModel.Intent) {
+        when (intent) {
+            ProfileScreenMviModel.Intent.Logout -> identityRepository.clearToken()
+        }
+    }
 }

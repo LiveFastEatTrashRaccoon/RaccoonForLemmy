@@ -8,16 +8,4 @@ val coreApiModule = module {
     single<ServiceProvider> {
         DefaultServiceProvider()
     }
-    single {
-        val provider: ServiceProvider = get()
-        provider.postService
-    }
-    single {
-        val provider: ServiceProvider = get()
-        provider.communityService
-    }
-    single {
-        val provider: ServiceProvider = get()
-        provider.authService
-    }
 }

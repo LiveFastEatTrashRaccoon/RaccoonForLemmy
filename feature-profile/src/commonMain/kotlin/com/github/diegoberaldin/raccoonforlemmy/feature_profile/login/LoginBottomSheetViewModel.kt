@@ -109,6 +109,8 @@ class LoginBottomSheetViewModel(
                     val message = it.message ?: "Generic error"
                     mvi.emitEffect(LoginBottomSheetMviModel.Effect.LoginError(message))
                 }
+            } else {
+                mvi.emitEffect(LoginBottomSheetMviModel.Effect.LoginSuccess)
             }
         }
     }

@@ -24,6 +24,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.di.getProfileScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.login.LoginBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.viewmodel.ProfileScreenMviModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
@@ -80,6 +81,10 @@ object ProfileTab : Tab {
                             bottomSheetNavigator.show(LoginBottomSheet())
                         }
                     )
+                } else {
+                    ProfileLoggedContent {
+                        model.reduce(ProfileScreenMviModel.Intent.Logout)
+                    }
                 }
             }
         }

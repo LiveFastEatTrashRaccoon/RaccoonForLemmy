@@ -2,10 +2,10 @@ package com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.LoginForm
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.LoginResponse
-import com.github.diegoberaldin.raccoonforlemmy.core_api.service.AuthService
+import com.github.diegoberaldin.raccoonforlemmy.core_api.provider.ServiceProvider
 
 internal class DefaultAuthRepository(
-    private val authService: AuthService,
+    private val services: ServiceProvider,
 ) : AuthRepository {
     override suspend fun login(
         username: String,
@@ -17,7 +17,7 @@ internal class DefaultAuthRepository(
             password = password,
             totp2faToken = totp2faToken,
         )
-        val response = authService.login(data)
+        val response = services.auth.login(data)
         if (!response.isSuccessful) {
             // TODO: better API error handling
             val error = response.errorBody().toString()

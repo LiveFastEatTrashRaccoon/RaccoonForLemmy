@@ -5,7 +5,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 interface ProfileScreenMviModel :
     MviModel<ProfileScreenMviModel.Intent, ProfileScreenMviModel.UiState, ProfileScreenMviModel.Effect> {
 
-    sealed interface Intent
+    sealed interface Intent {
+        object Logout : Intent
+    }
 
     data class UiState(val isLogged: Boolean = false)
 

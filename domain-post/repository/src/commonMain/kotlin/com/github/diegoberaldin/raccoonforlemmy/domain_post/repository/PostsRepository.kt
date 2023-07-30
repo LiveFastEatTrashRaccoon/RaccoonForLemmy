@@ -1,7 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain_post.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.PostView
-import com.github.diegoberaldin.raccoonforlemmy.core_api.service.PostService
+import com.github.diegoberaldin.raccoonforlemmy.core_api.provider.ServiceProvider
 import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.data.SortType
@@ -9,7 +9,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.utils.toD
 import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.utils.toModel
 
 class PostsRepository(
-    private val postService: PostService,
+    private val services: ServiceProvider,
 ) {
 
     companion object {
@@ -22,7 +22,7 @@ class PostsRepository(
         type: ListingType = ListingType.Local,
         sort: SortType = SortType.Active,
     ): List<PostModel> {
-        val response = postService.getPosts(
+        val response = services.post.getPosts(
             page = page,
             limit = limit,
             type = type.toDto(),

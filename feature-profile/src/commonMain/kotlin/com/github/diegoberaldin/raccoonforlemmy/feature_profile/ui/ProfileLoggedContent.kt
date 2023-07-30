@@ -16,24 +16,21 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-internal fun ProfileNotLoggedContent(
-    onLogin: () -> Unit,
+internal fun ProfileLoggedContent(
+    onLogout: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.m),
         verticalArrangement = Arrangement.spacedBy(Spacing.xs)
     ) {
-        Text(
-            text = stringResource(MR.strings.profile_not_logged_message),
-        )
         Spacer(modifier = Modifier.height(Spacing.l))
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
-                onLogin()
+                onLogout()
             },
         ) {
-            Text(stringResource(MR.strings.profile_button_login))
+            Text(stringResource(MR.strings.profile_button_logout))
         }
     }
 }

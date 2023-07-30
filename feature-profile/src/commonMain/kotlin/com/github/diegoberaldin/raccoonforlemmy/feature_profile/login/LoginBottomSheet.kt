@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_profile.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,18 +32,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
+import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.di.getLoginBottomSheetViewModel
@@ -75,7 +84,7 @@ class LoginBottomSheet : Screen {
                         snackbarHostState.showSnackbar(
                             message = "Successfully logged in! \uD83C\uDF89\uD83C\uDF89\uD83C\uDF89"
                         )
-                        delay(3.seconds)
+                        delay(2.5.seconds)
                         bottomSheetNavigator.hide()
                     }
                 }
@@ -128,8 +137,8 @@ class LoginBottomSheet : Screen {
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next,
                     ),
-                    onValueChange = {
-                        model.reduce(LoginBottomSheetMviModel.Intent.SetInstanceName(it))
+                    onValueChange = { value ->
+                        model.reduce(LoginBottomSheetMviModel.Intent.SetInstanceName(value))
                     },
                 )
                 if (uiState.instanceNameError != null) {
@@ -155,8 +164,8 @@ class LoginBottomSheet : Screen {
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next,
                     ),
-                    onValueChange = {
-                        model.reduce(LoginBottomSheetMviModel.Intent.SetUsername(it))
+                    onValueChange = { value ->
+                        model.reduce(LoginBottomSheetMviModel.Intent.SetUsername(value))
                     },
                 )
                 if (uiState.usernameError != null) {
@@ -164,6 +173,9 @@ class LoginBottomSheet : Screen {
                         text = uiState.usernameError?.localized().orEmpty(),
                         color = MaterialTheme.colorScheme.error,
                     )
+                }
+                var transformation: VisualTransformation by remember {
+                    mutableStateOf(PasswordVisualTransformation())
                 }
                 TextField(
                     modifier = Modifier.focusRequester(passwordFocusRequester),
@@ -182,10 +194,28 @@ class LoginBottomSheet : Screen {
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Next,
                     ),
-                    onValueChange = {
-                        model.reduce(LoginBottomSheetMviModel.Intent.SetPassword(it))
+                    onValueChange = { value ->
+                        model.reduce(LoginBottomSheetMviModel.Intent.SetPassword(value))
                     },
-                    visualTransformation = PasswordVisualTransformation(),
+                    visualTransformation = transformation,
+                    trailingIcon = {
+                        Image(
+                            modifier = Modifier.onClick {
+                                transformation = if (transformation == VisualTransformation.None) {
+                                    PasswordVisualTransformation()
+                                } else {
+                                    VisualTransformation.None
+                                }
+                            },
+                            imageVector = if (transformation == VisualTransformation.None) {
+                                Icons.Default.VisibilityOff
+                            } else {
+                                Icons.Default.Visibility
+                            },
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface)
+                        )
+                    }
                 )
                 if (uiState.passwordError != null) {
                     Text(
@@ -213,8 +243,8 @@ class LoginBottomSheet : Screen {
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Done,
                     ),
-                    onValueChange = {
-                        model.reduce(LoginBottomSheetMviModel.Intent.SetTotp2faToken(it))
+                    onValueChange = { value ->
+                        model.reduce(LoginBottomSheetMviModel.Intent.SetTotp2faToken(value))
                     },
                     visualTransformation = PasswordVisualTransformation(),
                 )
