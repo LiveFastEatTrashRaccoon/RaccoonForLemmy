@@ -3,7 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_profile.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,6 +22,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.domain_identity.di.getApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.di.getProfileScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.login.LoginBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.viewmodel.ProfileScreenMviModel
@@ -33,17 +34,14 @@ import dev.icerock.moko.resources.desc.desc
 object ProfileTab : Tab {
 
     override val options: TabOptions
-        @Composable
-        get() {
-            val icon = rememberVectorPainter(Icons.Default.Person)
-            val languageRepository = remember { getLanguageRepository() }
-            val lang by languageRepository.currentLanguage.collectAsState()
-            return remember(lang) {
-                val title = staticString(MR.strings.navigation_profile.desc())
+        @Composable get() {
+            val icon = rememberVectorPainter(Icons.Default.AccountCircle)
+            val apiConfigurationRepository = remember { getApiConfigurationRepository() }
+            val instance by apiConfigurationRepository.instance.collectAsState("")
+
+            return remember(instance) {
                 TabOptions(
-                    index = 0u,
-                    title = title,
-                    icon = icon
+                    index = 0u, title = instance, icon = icon
                 )
             }
         }
@@ -65,8 +63,7 @@ object ProfileTab : Tab {
                 }
                 TopAppBar(title = {
                     Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleLarge
+                        text = title, style = MaterialTheme.typography.titleLarge
                     )
                 })
             },
@@ -75,20 +72,15 @@ object ProfileTab : Tab {
             Box(
                 modifier = Modifier.padding(it),
             ) {
-                if (!uiState.isLogged) {
-                    ProfileNotLoggedContent(
-                        onLogin = {
-                            bottomSheetNavigator.show(LoginBottomSheet())
-                        }
-                    )
+                val user = uiState.currentUser
+                if (user == null) {
+                    ProfileNotLoggedContent(onLogin = {
+                        bottomSheetNavigator.show(LoginBottomSheet())
+                    })
                 } else {
-                    ProfileLoggedContent(
-                        user = uiState.currentUser,
-                        counters = uiState.currentCounters,
-                        onLogout = {
-                            model.reduce(ProfileScreenMviModel.Intent.Logout)
-                        }
-                    )
+                    ProfileLoggedContent(user = user, onLogout = {
+                        model.reduce(ProfileScreenMviModel.Intent.Logout)
+                    })
                 }
             }
         }

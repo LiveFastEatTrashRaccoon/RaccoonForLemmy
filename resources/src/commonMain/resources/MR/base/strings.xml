@@ -41,6 +41,10 @@
     </string>
     <string name="profile_button_login">Login</string>
     <string name="profile_button_logout">Logout</string>
+    <string name="profile_post_score">Post score</string>
+    <string name="profile_comment_score">Comment score</string>
+    <string name="profile_account_age">Account age</string>
+
     <string name="login_field_instance_name">Instance name</string>
     <string name="login_field_user_name">Username (or email)</string>
     <string name="login_field_password">Password</string>

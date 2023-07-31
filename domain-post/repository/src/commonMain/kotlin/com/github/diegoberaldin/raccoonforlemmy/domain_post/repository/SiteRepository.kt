@@ -13,7 +13,8 @@ class SiteRepository(
         )
         return response.body()?.myUser?.let {
             val user = it.localUserView.person
-            user.toModel()
+            val counts = it.localUserView.counts
+            user.toModel().copy(score = counts.toModel())
         }
     }
 }

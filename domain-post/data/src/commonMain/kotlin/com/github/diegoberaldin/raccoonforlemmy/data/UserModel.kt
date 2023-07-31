@@ -5,11 +5,11 @@ data class UserModel(
     val name: String = "",
     val avatar: String? = null,
     val host: String = "",
+    val score: UserScoreModel? = null,
+    val accountAge: String = "",
 )
 
-data class UserCounterModel(
-    val postCount: Int = 0,
+data class UserScoreModel(
     val postScore: Int = 0,
-    val commentCount: Int = 0,
     val commentScore: Int = 0,
 )

@@ -21,12 +21,10 @@ class ProfileScreenModel(
     override fun onStarted() {
         mvi.onStarted()
         identityRepository.authToken.onEach { token ->
-            val isLogged = !token.isNullOrEmpty()
-            mvi.updateState { it.copy(isLogged = isLogged) }
             if (token == null) {
                 mvi.updateState { it.copy(currentUser = null) }
             } else {
-                updateUserAndCounters(token)
+                updateUser(token)
             }
         }.launchIn(mvi.scope)
     }
@@ -37,7 +35,7 @@ class ProfileScreenModel(
         }
     }
 
-    private fun updateUserAndCounters(token: String) {
+    private fun updateUser(token: String) {
         mvi.scope.launch(Dispatchers.IO) {
             val user = siteRepository.getCurrentUser(
                 auth = token

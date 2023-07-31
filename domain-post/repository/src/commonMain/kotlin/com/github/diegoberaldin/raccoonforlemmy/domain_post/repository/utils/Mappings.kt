@@ -5,6 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.ListingType.All
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.ListingType.Local
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.ListingType.Subscribed
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.Person
+import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.PersonAggregates
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.SortType.Active
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.SortType.Hot
 import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.SortType.MostComments
@@ -21,6 +22,7 @@ import com.github.diegoberaldin.raccoonforlemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.data.UserModel
+import com.github.diegoberaldin.raccoonforlemmy.data.UserScoreModel
 
 internal fun ListingType.toDto() = when (this) {
     ListingType.All -> All
@@ -46,17 +48,22 @@ internal fun SortType.toDto() = when (this) {
 internal fun Community.toModel() = CommunityModel(
     name = name,
     icon = icon,
-    host = extractHost(actorId),
+    host = actorId.toHost(),
 )
 
+internal fun PersonAggregates.toModel() = UserScoreModel(
+    postScore = postScore,
+    commentScore = commentScore,
+)
 
 internal fun Person.toModel() = UserModel(
     name = name,
     avatar = avatar,
-    host = extractHost(actorId)
+    host = actorId.toHost(),
+    accountAge = published,
 )
 
-internal fun extractHost(value: String) = value.replace("https://", "").let {
+internal fun String.toHost(): String = this.replace("https://", "").let {
     val i = it.indexOf("/")
     it.substring(0, i)
 }
