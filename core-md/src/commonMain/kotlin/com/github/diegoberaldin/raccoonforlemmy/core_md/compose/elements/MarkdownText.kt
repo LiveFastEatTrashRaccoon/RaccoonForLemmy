@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core_md.compose.elements
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.InlineTextContent
@@ -22,7 +21,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core_md.compose.LocalMarkdownTyp
 import com.github.diegoberaldin.raccoonforlemmy.core_md.compose.LocalReferenceLinkHandler
 import com.github.diegoberaldin.raccoonforlemmy.core_md.utils.TAG_IMAGE_URL
 import com.github.diegoberaldin.raccoonforlemmy.core_md.utils.TAG_URL
-import com.seiko.imageloader.rememberImagePainter
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 
 @Composable
 internal fun MarkdownText(
@@ -67,10 +67,10 @@ internal fun MarkdownText(
                     PlaceholderVerticalAlign.Bottom
                 ) // TODO, identify flexible scaling!
             ) { link ->
-                val painter = rememberImagePainter(link)
-                Image(
-                    painter = painter,
-                    contentDescription = "Image", // TODO
+                val painterResource = asyncPainterResource(data = link)
+                KamelImage(
+                    resource = painterResource,
+                    contentDescription = null,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth()
                 )

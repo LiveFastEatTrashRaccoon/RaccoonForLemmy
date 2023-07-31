@@ -13,7 +13,7 @@ kotlin {
     android {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
@@ -40,7 +40,7 @@ kotlin {
                 implementation(compose.material3)
 
                 api(libs.markdown)
-                implementation(libs.compose.imageloader)
+                implementation(libs.kamel)
             }
         }
         val commonTest by getting {

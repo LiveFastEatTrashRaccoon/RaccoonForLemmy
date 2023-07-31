@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_home.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -15,7 +14,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.data.PostModel
-import com.seiko.imageloader.rememberImagePainter
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 
 @Composable
 internal fun PostCardSubtitle(post: PostModel) {
@@ -33,11 +33,11 @@ internal fun PostCardSubtitle(post: PostModel) {
         ) {
             if (communityName.isNotEmpty()) {
                 if (communityIcon.isNotEmpty()) {
-                    val painter = rememberImagePainter(communityIcon)
-                    Image(
+                    val painterResource = asyncPainterResource(data = communityIcon)
+                    KamelImage(
                         modifier = Modifier.size(iconSize)
                             .clip(RoundedCornerShape(iconSize / 2)),
-                        painter = painter,
+                        resource = painterResource,
                         contentDescription = null,
                         contentScale = ContentScale.FillBounds,
                     )
@@ -60,11 +60,11 @@ internal fun PostCardSubtitle(post: PostModel) {
                     )
                 }
                 if (creatorAvatar.isNotEmpty()) {
-                    val painter = rememberImagePainter(creatorAvatar)
-                    Image(
+                    val painterResource = asyncPainterResource(data = creatorAvatar)
+                    KamelImage(
                         modifier = Modifier.size(iconSize)
                             .clip(RoundedCornerShape(iconSize / 2)),
-                        painter = painter,
+                        resource = painterResource,
                         contentDescription = null,
                         contentScale = ContentScale.FillBounds,
                     )

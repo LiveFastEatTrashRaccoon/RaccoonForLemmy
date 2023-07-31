@@ -12,7 +12,7 @@ kotlin {
     android {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
@@ -45,7 +45,9 @@ kotlin {
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab)
                 implementation(libs.voyager.bottomsheet)
-                implementation(libs.compose.imageloader)
+                implementation(libs.kamel)
+                implementation(libs.ktor.cio)
+                implementation(libs.kamel)
 
                 implementation(projects.resources)
                 implementation(projects.coreArchitecture)
