@@ -10,7 +10,6 @@ import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import org.koin.java.KoinJavaComponent.inject
 
 actual val corePreferencesModule = module {
     singleOf(::SharedPreferencesProvider)
@@ -24,11 +23,6 @@ actual val corePreferencesModule = module {
     single<TemporaryKeyStore> {
         DefaultTemporaryKeyStore(settings = get())
     }
-}
-
-actual fun getTemporaryKeyStore(): TemporaryKeyStore {
-    val res by inject<TemporaryKeyStore>(TemporaryKeyStore::class.java)
-    return res
 }
 
 private class SharedPreferencesProvider(

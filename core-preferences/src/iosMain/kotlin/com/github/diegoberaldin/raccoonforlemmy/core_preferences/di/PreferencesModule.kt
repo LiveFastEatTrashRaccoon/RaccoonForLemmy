@@ -17,10 +17,6 @@ actual val corePreferencesModule = module {
     }
 }
 
-actual fun getTemporaryKeyStore(): TemporaryKeyStore {
-    return TemporaryKeyStoreHelper.temporaryKeyStore
-}
-
 object TemporaryKeyStoreHelper : KoinComponent {
     val temporaryKeyStore: TemporaryKeyStore by inject()
 }

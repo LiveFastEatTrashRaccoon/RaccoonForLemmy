@@ -1,11 +1,24 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_profile.di
 
+import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.login.LoginBottomSheetMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.login.LoginBottomSheetViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.viewmodel.ProfileScreenModel
-import org.koin.core.module.Module
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.viewmodel.ProfileScreenMviModel
+import org.koin.dsl.module
 
-expect val profileTabModule: Module
-
-expect fun getProfileScreenModel(): ProfileScreenModel
-
-expect fun getLoginBottomSheetViewModel(): LoginBottomSheetViewModel
+val profileTabModule = module {
+    factory {
+        ProfileScreenModel(
+            mvi = DefaultMviModel(ProfileScreenMviModel.UiState()),
+            identityRepository = get(),
+            siteRepository = get(),
+        )
+    }
+    factory {
+        LoginBottomSheetViewModel(
+            mvi = DefaultMviModel(LoginBottomSheetMviModel.UiState()),
+            loginUseCase = get(),
+        )
+    }
+}

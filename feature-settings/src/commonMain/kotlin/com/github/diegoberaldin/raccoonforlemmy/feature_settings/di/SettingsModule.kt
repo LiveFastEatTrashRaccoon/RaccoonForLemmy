@@ -1,8 +1,19 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_settings.di
 
+import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_settings.viewmodel.SettingsScreenModel
-import org.koin.core.module.Module
+import com.github.diegoberaldin.raccoonforlemmy.feature_settings.viewmodel.SettingsScreenMviModel
+import org.koin.dsl.module
 
-expect val settingsTabModule: Module
-
-expect fun getSettingsScreenModel(): SettingsScreenModel
+val settingsTabModule = module {
+    factory {
+        SettingsScreenModel(
+            mvi = DefaultMviModel(
+                SettingsScreenMviModel.UiState()
+            ),
+            keyStore = get(),
+            themeRepository = get(),
+            languageRepository = get()
+        )
+    }
+}
