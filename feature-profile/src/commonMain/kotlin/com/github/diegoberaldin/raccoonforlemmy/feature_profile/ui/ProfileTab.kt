@@ -82,9 +82,13 @@ object ProfileTab : Tab {
                         }
                     )
                 } else {
-                    ProfileLoggedContent {
-                        model.reduce(ProfileScreenMviModel.Intent.Logout)
-                    }
+                    ProfileLoggedContent(
+                        user = uiState.currentUser,
+                        counters = uiState.currentCounters,
+                        onLogout = {
+                            model.reduce(ProfileScreenMviModel.Intent.Logout)
+                        }
+                    )
                 }
             }
         }

@@ -45,7 +45,7 @@ class SettingsScreenModel(
     private fun applyTheme(value: ThemeState) {
         themeRepository.changeTheme(value)
         mvi.scope.launch {
-            keyStore.save(KeyStoreKeys.UITheme, value.toInt())
+            keyStore.save(KeyStoreKeys.UiTheme, value.toInt())
         }
     }
 

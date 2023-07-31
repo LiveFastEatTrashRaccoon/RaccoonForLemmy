@@ -27,7 +27,7 @@ interface TemporaryKeyStore {
      * @param default Default value
      * @return value saved in the keystore or the default one
      */
-    fun get(key: String, default: Boolean): Boolean
+    operator fun get(key: String, default: Boolean): Boolean
 
     /**
      * Save a string value in the keystore under a given key.
@@ -61,7 +61,7 @@ interface TemporaryKeyStore {
      * @param default Default value
      * @return value saved in the keystore or the default one
      */
-    fun get(key: String, default: Int): Int
+    operator fun get(key: String, default: Int): Int
 
     /**
      * Save a floating point value in the keystore under a given key.
@@ -78,7 +78,7 @@ interface TemporaryKeyStore {
      * @param default Default value
      * @return value saved in the keystore or the default one
      */
-    fun get(key: String, default: Float): Float
+    operator fun get(key: String, default: Float): Float
 
     /**
      * Save a floating point (double precision) value in the keystore under a given key.
@@ -95,5 +95,5 @@ interface TemporaryKeyStore {
      * @param default Default value
      * @return value saved in the keystore or the default one
      */
-    fun get(key: String, default: Double): Double
+    operator fun get(key: String, default: Double): Double
 }

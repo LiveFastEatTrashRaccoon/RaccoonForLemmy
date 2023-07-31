@@ -17,12 +17,14 @@ class PostsRepository(
     }
 
     suspend fun getPosts(
+        auth: String? = null,
         page: Int,
         limit: Int = DEFAULT_PAGE_SIZE,
         type: ListingType = ListingType.Local,
         sort: SortType = SortType.Active,
     ): List<PostModel> {
         val response = services.post.getPosts(
+            auth = auth,
             page = page,
             limit = limit,
             type = type.toDto(),

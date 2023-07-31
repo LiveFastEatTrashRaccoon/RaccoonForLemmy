@@ -45,12 +45,15 @@ kotlin {
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab)
                 implementation(libs.voyager.bottomsheet)
+                implementation(libs.compose.imageloader)
 
                 implementation(projects.resources)
                 implementation(projects.coreArchitecture)
                 implementation(projects.coreAppearance)
                 implementation(projects.coreUtils)
                 implementation(projects.domainIdentity)
+                implementation(projects.domainPost.data)
+                implementation(projects.domainPost.repository)
             }
         }
         val commonTest by getting {

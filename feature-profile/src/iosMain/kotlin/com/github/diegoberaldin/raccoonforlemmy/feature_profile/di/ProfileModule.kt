@@ -14,6 +14,7 @@ actual val profileTabModule = module {
         ProfileScreenModel(
             mvi = DefaultMviModel(ProfileScreenMviModel.UiState()),
             identityRepository = get(),
+            siteRepository = get(),
         )
     }
     factory {

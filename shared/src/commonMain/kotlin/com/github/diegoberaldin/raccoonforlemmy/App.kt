@@ -18,6 +18,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core_appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.AppTheme
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.di.getTemporaryKeyStore
+import com.github.diegoberaldin.raccoonforlemmy.domain_identity.di.getApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature_inbox.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.ui.ProfileTab
@@ -31,31 +32,35 @@ import dev.icerock.moko.resources.desc.StringDesc
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun App() {
     val keyStore = remember { getTemporaryKeyStore() }
     val systemDarkTheme = isSystemInDarkTheme()
-    val currentTheme = runBlocking {
-        keyStore.get(KeyStoreKeys.UITheme, if (systemDarkTheme) 1 else 0)
-    }.let { ThemeState.fromInt(it) }
+    val currentTheme = keyStore[KeyStoreKeys.UiTheme, if (systemDarkTheme) 1 else 0]
+        .let { ThemeState.fromInt(it) }
 
     val defaultLocale = stringResource(MR.strings.lang)
-    val langCode = runBlocking {
-        keyStore.get(KeyStoreKeys.Locale, defaultLocale)
-    }
+    val langCode = keyStore[KeyStoreKeys.Locale, defaultLocale]
     val languageRepository = remember { getLanguageRepository() }
     LaunchedEffect(Unit) {
         delay(100)
         languageRepository.changeLanguage(langCode)
     }
-
     val scope = rememberCoroutineScope()
     languageRepository.currentLanguage.onEach { lang ->
         StringDesc.localeType = StringDesc.LocaleType.Custom(lang)
     }.launchIn(scope)
+
+    val lastInstance = keyStore[KeyStoreKeys.LastIntance, ""]
+    val apiConfigurationRepository = remember { getApiConfigurationRepository() }
+    if (lastInstance.isEmpty()) {
+        val instance = apiConfigurationRepository.getInstance()
+        keyStore.save(KeyStoreKeys.LastIntance, instance)
+    } else {
+        apiConfigurationRepository.changeInstance(lastInstance)
+    }
 
     AppTheme(
         theme = currentTheme

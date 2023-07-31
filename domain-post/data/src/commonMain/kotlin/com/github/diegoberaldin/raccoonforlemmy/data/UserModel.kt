@@ -6,3 +6,10 @@ data class UserModel(
     val avatar: String? = null,
     val host: String = "",
 )
+
+data class UserCounterModel(
+    val postCount: Int = 0,
+    val postScore: Int = 0,
+    val commentCount: Int = 0,
+    val commentScore: Int = 0,
+)

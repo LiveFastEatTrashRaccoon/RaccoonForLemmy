@@ -9,8 +9,14 @@ class CommunityRepository(
     private val services: ServiceProvider,
 ) {
 
-    suspend fun getCommunity(id: Int): CommunityModel? {
-        val response = services.community.getCommunity(id = id).body()
+    suspend fun getCommunity(
+        auth: String? = null,
+        id: Int,
+    ): CommunityModel? {
+        val response = services.community.getCommunity(
+            auth = auth,
+            id = id,
+        ).body()
         return response?.communityView?.toModel()
     }
 }

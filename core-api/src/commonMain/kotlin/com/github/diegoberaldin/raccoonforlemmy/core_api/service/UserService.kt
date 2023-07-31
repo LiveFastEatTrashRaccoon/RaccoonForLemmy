@@ -15,7 +15,7 @@ interface UserService {
         @Query("person_id") personId: Int? = null,
         @Query("page") page: Int? = null,
         @Query("limit") limit: Int? = null,
-        @Query("sort") sort: SortType,
+        @Query("sort") sort: SortType = SortType.Active,
         @Query("username") username: String? = null,
         @Query("saved_only") savedOnly: Boolean? = null,
     ): Response<GetPersonDetailsResponse>

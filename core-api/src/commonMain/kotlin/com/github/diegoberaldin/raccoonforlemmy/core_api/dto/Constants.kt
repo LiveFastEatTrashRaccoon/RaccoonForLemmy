@@ -7,3 +7,6 @@ typealias LanguageId = Int
 typealias InstanceId = Int
 typealias CommentId = Int
 typealias SiteId = Int
+typealias LocalSiteId = Int
+typealias LocalUserId = Int
+typealias CustomEmojiId = Int

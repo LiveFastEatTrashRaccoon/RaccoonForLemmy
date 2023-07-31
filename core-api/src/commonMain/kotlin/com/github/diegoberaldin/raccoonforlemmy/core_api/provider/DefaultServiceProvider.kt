@@ -3,6 +3,8 @@ package com.github.diegoberaldin.raccoonforlemmy.core_api.provider
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.AuthService
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.CommunityService
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.PostService
+import com.github.diegoberaldin.raccoonforlemmy.core_api.service.SiteService
+import com.github.diegoberaldin.raccoonforlemmy.core_api.service.UserService
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -22,13 +24,19 @@ internal class DefaultServiceProvider : ServiceProvider {
     override var currentInstance: String = DEFAULT_INSTANCE
         private set
 
+    override lateinit var auth: AuthService
+        private set
+
     override lateinit var post: PostService
         private set
 
     override lateinit var community: CommunityService
         private set
 
-    override lateinit var auth: AuthService
+    override lateinit var user: UserService
+        private set
+
+    override lateinit var site: SiteService
         private set
 
     private val baseUrl: String get() = "https://$currentInstance/api/$VERSION/"
@@ -62,8 +70,10 @@ internal class DefaultServiceProvider : ServiceProvider {
             .baseUrl(baseUrl)
             .httpClient(client)
             .build()
+        auth = ktorfit.create()
         post = ktorfit.create()
         community = ktorfit.create()
-        auth = ktorfit.create()
+        user = ktorfit.create()
+        site = ktorfit.create()
     }
 }

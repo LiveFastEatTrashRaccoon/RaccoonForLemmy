@@ -63,10 +63,12 @@ class HomeScreenModel(
 
         mvi.scope.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
+            val auth = identityRepository.authToken.value
             val type = currentState.listingType
             val sort = currentState.sortType
             val refreshing = currentState.refreshing
             val postList = postsRepository.getPosts(
+                auth = auth,
                 page = currentPage,
                 type = type,
                 sort = sort,
