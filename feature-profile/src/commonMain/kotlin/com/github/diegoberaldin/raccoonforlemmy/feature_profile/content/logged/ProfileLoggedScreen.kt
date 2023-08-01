@@ -2,10 +2,8 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -17,6 +15,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.UserModel
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.comments.ProfileCommentsScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.posts.ProfilePostsScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.di.getProfileLoggedViewModel
 
@@ -36,11 +35,11 @@ internal class ProfileLoggedScreen(
             val uiState by model.uiState.collectAsState()
 
             ProfileLoggedHeader(user = user)
+
             ProfileLoggedCounters(user = user)
 
-            Spacer(modifier = Modifier.height(Spacing.s))
-
             SectionSelector(
+                modifier = Modifier.padding(vertical = Spacing.xs),
                 currentSection = uiState.currentTab,
                 onSectionSelected = {
                     model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
@@ -55,6 +54,10 @@ internal class ProfileLoggedScreen(
                 }
 
                 ProfileLoggedSection.COMMENTS -> {
+                    ProfileCommentsScreen(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        user = user,
+                    ).Content()
                 }
 
                 ProfileLoggedSection.SAVED -> {

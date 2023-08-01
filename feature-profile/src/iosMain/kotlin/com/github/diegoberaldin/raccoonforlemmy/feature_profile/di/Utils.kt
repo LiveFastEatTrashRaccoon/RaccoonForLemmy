@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_profile.di
 
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.ProfileLoggedViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.comments.ProfileCommentsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.posts.ProfilePostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.login.LoginBottomSheetViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.viewmodel.ProfileScreenModel
@@ -19,6 +20,9 @@ actual fun getProfileLoggedViewModel(): ProfileLoggedViewModel =
 actual fun getProfilePostsViewModel(user: UserModel): ProfilePostsViewModel =
     ProfileScreenModelHelper.getPostsModel(user)
 
+actual fun getProfileCommentsViewModel(user: UserModel): ProfileCommentsViewModel =
+    ProfileScreenModelHelper.getCommentsModel(user)
+
 object ProfileScreenModelHelper : KoinComponent {
     val profileModel: ProfileScreenModel by inject()
     val loginModel: LoginBottomSheetViewModel by inject()
@@ -26,6 +30,13 @@ object ProfileScreenModelHelper : KoinComponent {
 
     fun getPostsModel(user: UserModel): ProfilePostsViewModel {
         val res: ProfilePostsViewModel by inject(
+            parameters = { parametersOf(user) },
+        )
+        return res
+    }
+
+    fun getCommentsModel(user: UserModel): ProfileCommentsViewModel {
+        val res: ProfileCommentsViewModel by inject(
             parameters = { parametersOf(user) },
         )
         return res

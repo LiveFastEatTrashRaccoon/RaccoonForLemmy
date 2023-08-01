@@ -24,12 +24,16 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun SectionSelector(
+    modifier: Modifier = Modifier,
     currentSection: ProfileLoggedSection,
     onSectionSelected: (ProfileLoggedSection) -> Unit,
 ) {
     val highlightColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
     Row(
-        modifier = Modifier.height(25.dp).padding(horizontal = Spacing.m).fillMaxWidth()
+        modifier = modifier
+            .height(34.dp)
+            .padding(horizontal = Spacing.m)
+            .fillMaxWidth()
             .border(
                 color = highlightColor,
                 width = 1.dp,

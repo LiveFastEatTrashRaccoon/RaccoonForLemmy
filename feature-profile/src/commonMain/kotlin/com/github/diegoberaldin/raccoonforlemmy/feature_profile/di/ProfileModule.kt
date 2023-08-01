@@ -3,6 +3,8 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_profile.di
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.ProfileLoggedMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.ProfileLoggedViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.comments.ProfileCommentsMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.comments.ProfileCommentsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.posts.ProfilePostsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.posts.ProfilePostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.login.LoginBottomSheetMviModel
@@ -33,6 +35,14 @@ val profileTabModule = module {
     factory { params ->
         ProfilePostsViewModel(
             mvi = DefaultMviModel(ProfilePostsMviModel.UiState()),
+            user = params[0],
+            identityRepository = get(),
+            userRepository = get(),
+        )
+    }
+    factory { params ->
+        ProfileCommentsViewModel(
+            mvi = DefaultMviModel(ProfileCommentsMviModel.UiState()),
             user = params[0],
             identityRepository = get(),
             userRepository = get(),

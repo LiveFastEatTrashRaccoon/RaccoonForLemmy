@@ -74,7 +74,9 @@ internal fun PostView.toModel() = PostModel(
 )
 
 internal fun CommentView.toModel() = CommentModel(
+    id = comment.id,
     text = comment.content,
+    community = community.toModel(),
 )
 
 internal fun Community.toModel() = CommunityModel(
