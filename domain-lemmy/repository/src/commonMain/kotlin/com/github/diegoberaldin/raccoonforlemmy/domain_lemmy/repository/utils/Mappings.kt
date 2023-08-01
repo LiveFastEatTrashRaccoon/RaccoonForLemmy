@@ -71,6 +71,8 @@ internal fun PostView.toModel() = PostModel(
     thumbnailUrl = post.thumbnailUrl.orEmpty(),
     community = community.toModel(),
     creator = creator.toModel(),
+    saved = saved,
+    myVote = myVote ?: 0,
 )
 
 internal fun CommentView.toModel() = CommentModel(

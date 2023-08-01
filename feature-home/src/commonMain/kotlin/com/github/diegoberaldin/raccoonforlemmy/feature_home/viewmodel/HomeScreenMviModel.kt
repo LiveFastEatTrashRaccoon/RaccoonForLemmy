@@ -13,6 +13,9 @@ interface HomeScreenMviModel :
         object LoadNextPage : Intent
         data class ChangeSort(val value: SortType) : Intent
         data class ChangeListing(val value: ListingType) : Intent
+        data class UpVotePost(val value: Boolean, val post: PostModel) : Intent
+        data class DownVotePost(val value: Boolean, val post: PostModel) : Intent
+        data class SavePost(val value: Boolean, val post: PostModel) : Intent
     }
 
     data class UiState(

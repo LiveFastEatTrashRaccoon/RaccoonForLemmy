@@ -9,4 +9,6 @@ data class PostModel(
     val thumbnailUrl: String? = null,
     val community: CommunityModel? = null,
     val creator: UserModel? = null,
+    val saved: Boolean = false,
+    val myVote: Int = 0,
 )

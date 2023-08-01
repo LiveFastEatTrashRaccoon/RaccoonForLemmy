@@ -17,6 +17,10 @@ import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
 @Composable
 fun PostCard(
     post: PostModel,
+    onUpVote: (Boolean) -> Unit = {},
+    onDownVote: (Boolean) -> Unit = {},
+    onSave: (Boolean) -> Unit = {},
+    onReply: () -> Unit = {},
 ) {
     Card(
         modifier = Modifier
@@ -36,7 +40,13 @@ fun PostCard(
             PostCardSubtitle(post)
             PostCardImage(post)
             PostCardBody(post)
-            PostCardFooter(post)
+            PostCardFooter(
+                post = post,
+                onUpVote = onUpVote,
+                onDownVote = onDownVote,
+                onSave = onSave,
+                onReply = onReply,
+            )
         }
     }
 }

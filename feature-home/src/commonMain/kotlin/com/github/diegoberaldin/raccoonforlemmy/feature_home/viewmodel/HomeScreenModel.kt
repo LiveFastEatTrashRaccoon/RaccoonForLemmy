@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,9 @@ class HomeScreenModel(
             HomeScreenMviModel.Intent.Refresh -> refresh()
             is HomeScreenMviModel.Intent.ChangeSort -> applySortType(intent.value)
             is HomeScreenMviModel.Intent.ChangeListing -> applyListingType(intent.value)
+            is HomeScreenMviModel.Intent.DownVotePost -> downVote(intent.post, intent.value)
+            is HomeScreenMviModel.Intent.SavePost -> save(intent.post, intent.value)
+            is HomeScreenMviModel.Intent.UpVotePost -> upVote(intent.post, intent.value)
         }
     }
 
@@ -99,5 +103,95 @@ class HomeScreenModel(
     private fun applyListingType(value: ListingType) {
         mvi.updateState { it.copy(listingType = value) }
         refresh()
+    }
+
+    private fun upVote(post: PostModel, value: Boolean) {
+        mvi.scope.launch(Dispatchers.IO) {
+            val auth = identityRepository.authToken.value.orEmpty()
+            if (value) {
+                postsRepository.upVote(
+                    post = post,
+                    auth = auth,
+                )
+            } else {
+                postsRepository.undoUpVote(
+                    post = post,
+                    auth = auth,
+                )
+            }
+            mvi.updateState {
+                it.copy(
+                    posts = it.posts.map { p ->
+                        if (p.id == post.id) {
+                            p.copy(
+                                myVote = if (value) 1 else 0,
+                                score = if (value) p.score + 1 else p.score - 1,
+                            )
+                        } else {
+                            p
+                        }
+                    },
+                )
+            }
+        }
+    }
+
+    private fun downVote(post: PostModel, value: Boolean) {
+        mvi.scope.launch(Dispatchers.IO) {
+            val auth = identityRepository.authToken.value.orEmpty()
+            if (value) {
+                postsRepository.downVote(
+                    post = post,
+                    auth = auth,
+                )
+            } else {
+                postsRepository.undoDownVote(
+                    post = post,
+                    auth = auth,
+                )
+            }
+            mvi.updateState {
+                it.copy(
+                    posts = it.posts.map { p ->
+                        if (p.id == post.id) {
+                            p.copy(
+                                myVote = if (value) -1 else 0,
+                                score = if (value) p.score - 1 else p.score + 1,
+                            )
+                        } else {
+                            p
+                        }
+                    },
+                )
+            }
+        }
+    }
+
+    private fun save(post: PostModel, value: Boolean) {
+        mvi.scope.launch(Dispatchers.IO) {
+            val auth = identityRepository.authToken.value.orEmpty()
+            if (value) {
+                postsRepository.save(
+                    post = post,
+                    auth = auth,
+                )
+            } else {
+                postsRepository.undoSave(
+                    post = post,
+                    auth = auth,
+                )
+            }
+            mvi.updateState {
+                it.copy(
+                    posts = it.posts.map { p ->
+                        if (p.id == post.id) {
+                            p.copy(saved = value)
+                        } else {
+                            p
+                        }
+                    },
+                )
+            }
+        }
     }
 }

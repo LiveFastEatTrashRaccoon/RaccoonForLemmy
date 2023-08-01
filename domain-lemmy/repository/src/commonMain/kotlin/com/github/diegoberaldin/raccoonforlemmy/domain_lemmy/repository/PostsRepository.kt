@@ -1,5 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository
 
+import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.CreatePostLikeForm
+import com.github.diegoberaldin.raccoonforlemmy.core_api.dto.SavePostForm
 import com.github.diegoberaldin.raccoonforlemmy.core_api.provider.ServiceProvider
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
@@ -31,5 +33,59 @@ class PostsRepository(
         )
         val dto = response.body()?.posts ?: emptyList()
         return dto.map { it.toModel() }
+    }
+
+    suspend fun upVote(post: PostModel, auth: String) {
+        val data = CreatePostLikeForm(
+            postId = post.id,
+            score = 1,
+            auth = auth,
+        )
+        services.post.likePost(data)
+    }
+
+    suspend fun undoUpVote(post: PostModel, auth: String) {
+        val data = CreatePostLikeForm(
+            postId = post.id,
+            score = 0,
+            auth = auth,
+        )
+        services.post.likePost(data)
+    }
+
+    suspend fun downVote(post: PostModel, auth: String) {
+        val data = CreatePostLikeForm(
+            postId = post.id,
+            score = -1,
+            auth = auth,
+        )
+        services.post.likePost(data)
+    }
+
+    suspend fun undoDownVote(post: PostModel, auth: String) {
+        val data = CreatePostLikeForm(
+            postId = post.id,
+            score = 0,
+            auth = auth,
+        )
+        services.post.likePost(data)
+    }
+
+    suspend fun save(post: PostModel, auth: String) {
+        val data = SavePostForm(
+            postId = post.id,
+            save = true,
+            auth = auth,
+        )
+        services.post.savePost(data)
+    }
+
+    suspend fun undoSave(post: PostModel, auth: String) {
+        val data = SavePostForm(
+            postId = post.id,
+            save = false,
+            auth = auth,
+        )
+        services.post.savePost(data)
     }
 }

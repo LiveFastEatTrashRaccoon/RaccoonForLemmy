@@ -90,19 +90,30 @@ object HomeTab : Tab {
                     },
                 )
             },
-        ) {
+        ) { padding ->
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                 model.reduce(HomeScreenMviModel.Intent.Refresh)
             })
             Box(
-                modifier = Modifier.padding(it).pullRefresh(pullRefreshState),
+                modifier = Modifier.padding(padding).pullRefresh(pullRefreshState),
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     items(uiState.posts) { post ->
-                        PostCard(post)
+                        PostCard(
+                            post = post,
+                            onUpVote = {
+                                model.reduce(HomeScreenMviModel.Intent.UpVotePost(it, post))
+                            },
+                            onDownVote = {
+                                model.reduce(HomeScreenMviModel.Intent.DownVotePost(it, post))
+                            },
+                            onSave = {
+                                model.reduce(HomeScreenMviModel.Intent.SavePost(it, post))
+                            },
+                        )
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
