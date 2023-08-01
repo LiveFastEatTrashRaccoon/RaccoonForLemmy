@@ -3,11 +3,11 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_home.viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
-import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
-import com.github.diegoberaldin.raccoonforlemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.IdentityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.PostsRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.launchIn

@@ -5,7 +5,7 @@
     <string name="navigation_home">Posts</string>
     <string name="navigation_inbox">Inbox</string>
     <string name="navigation_profile">Profile</string>
-    <string name="navigation_search">Search</string>
+    <string name="navigation_search">Explore</string>
     <string name="navigation_settings">Settings</string>
 
     <string name="language_en" translatable="false">English</string>
@@ -47,6 +47,9 @@
     <string name="profile_year_short">y</string>
     <string name="profile_month_short">m</string>
     <string name="profile_day_short">d</string>
+    <string name="profile_section_posts">Posts</string>
+    <string name="profile_section_comments">Comments</string>
+    <string name="profile_section_saved">Saved</string>
 
     <string name="login_field_instance_name">Instance name</string>
     <string name="login_field_user_name">Username (or email)</string>

@@ -19,7 +19,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
-import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.feature_home.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR

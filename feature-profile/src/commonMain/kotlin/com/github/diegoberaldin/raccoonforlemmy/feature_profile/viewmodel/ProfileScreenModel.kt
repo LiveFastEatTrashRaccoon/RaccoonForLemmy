@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.IdentityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain_post.repository.SiteRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.launchIn

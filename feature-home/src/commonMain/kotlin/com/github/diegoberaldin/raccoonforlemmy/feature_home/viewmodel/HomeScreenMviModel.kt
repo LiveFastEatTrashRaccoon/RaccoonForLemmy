@@ -1,9 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_home.viewmodel
 
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
-import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
-import com.github.diegoberaldin.raccoonforlemmy.data.PostModel
-import com.github.diegoberaldin.raccoonforlemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.SortType
 
 interface HomeScreenMviModel :
     MviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect> {

@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
-import com.github.diegoberaldin.raccoonforlemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
 
 @Composable
 fun PostCard(

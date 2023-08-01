@@ -13,7 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
-import com.github.diegoberaldin.raccoonforlemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 

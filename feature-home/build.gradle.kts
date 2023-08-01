@@ -54,8 +54,8 @@ kotlin {
                 implementation(projects.coreUtils)
                 implementation(projects.coreMd)
                 implementation(projects.domainIdentity)
-                implementation(projects.domainPost.data)
-                implementation(projects.domainPost.repository)
+                implementation(projects.domainLemmy.data)
+                implementation(projects.domainLemmy.repository)
             }
         }
         val commonTest by getting {

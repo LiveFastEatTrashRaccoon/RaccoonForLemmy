@@ -3,18 +3,16 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_home
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddComment
 import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.CardMembership
 import androidx.compose.material.icons.filled.Domain
 import androidx.compose.material.icons.filled.Fireplace
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.MilitaryTech
 import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Rocket
 import androidx.compose.runtime.Composable
-import com.github.diegoberaldin.raccoonforlemmy.data.ListingType
-import com.github.diegoberaldin.raccoonforlemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 

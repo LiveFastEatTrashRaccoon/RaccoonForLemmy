@@ -27,6 +27,8 @@ import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.di.getApiConfigurationRepository
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.ProfileLoggedScreen
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.notlogged.ProfileNotLoggedContent
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.di.getProfileScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.login.LoginBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.viewmodel.ProfileScreenMviModel
@@ -95,13 +97,15 @@ object ProfileTab : Tab {
             ) {
                 val user = uiState.currentUser
                 if (user == null) {
-                    ProfileNotLoggedContent(onLogin = {
-                        bottomSheetNavigator.show(LoginBottomSheet())
-                    })
+                    ProfileNotLoggedContent(
+                        onLogin = {
+                            bottomSheetNavigator.show(LoginBottomSheet())
+                        },
+                    ).Content()
                 } else {
-                    ProfileLoggedContent(
+                    ProfileLoggedScreen(
                         user = user,
-                    )
+                    ).Content()
                 }
             }
         }
