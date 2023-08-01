@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,7 +33,6 @@ import io.kamel.image.asyncPainterResource
 @Composable
 internal fun ProfileLoggedContent(
     user: UserModel,
-    onLogout: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.m),
@@ -44,16 +42,22 @@ internal fun ProfileLoggedContent(
         val avatar = user.avatar.orEmpty()
         if (avatar.isNotEmpty()) {
             val painterResource = asyncPainterResource(data = avatar)
-            KamelImage(modifier = Modifier.size(100.dp).clip(RoundedCornerShape(CornerSize.m)),
+            KamelImage(
+                modifier = Modifier.size(100.dp).clip(RoundedCornerShape(CornerSize.m)),
                 resource = painterResource,
                 contentDescription = null,
                 onLoading = {
                     CircularProgressIndicator()
-                })
+                },
+            )
         }
-        val name = user.name.orEmpty()
         Text(
-            text = name, style = MaterialTheme.typography.headlineMedium
+            text = user.name,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        Text(
+            text = user.host,
+            style = MaterialTheme.typography.titleMedium,
         )
         Row(
             modifier = Modifier.padding(horizontal = Spacing.m).fillMaxWidth(),
@@ -104,9 +108,11 @@ internal fun ProfileLoggedContent(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 Text(
-                    text = DateTime.getFormattedDate(
+                    text = DateTime.getPrettyDate(
                         iso8601Timestamp = user.accountAge + "Z",
-                        format = "dd.MM.yy"
+                        yearLabel = stringResource(MR.strings.profile_year_short),
+                        monthLabel = stringResource(MR.strings.profile_month_short),
+                        dayLabel = stringResource(MR.strings.profile_day_short),
                     ),
                     style = MaterialTheme.typography.headlineSmall,
                 )
@@ -117,13 +123,6 @@ internal fun ProfileLoggedContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(Spacing.l))
-        Button(
-            onClick = {
-                onLogout()
-            },
-        ) {
-            Text(stringResource(MR.strings.profile_button_logout))
-        }
+        Spacer(modifier = Modifier.height(Spacing.s))
     }
 }

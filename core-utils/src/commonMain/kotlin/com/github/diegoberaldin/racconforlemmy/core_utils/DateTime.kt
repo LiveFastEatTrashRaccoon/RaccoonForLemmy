@@ -5,4 +5,11 @@ expect object DateTime {
         iso8601Timestamp: String,
         format: String,
     ): String
+
+    fun getPrettyDate(
+        iso8601Timestamp: String,
+        yearLabel: String,
+        monthLabel: String,
+        dayLabel: String,
+    ): String
 }

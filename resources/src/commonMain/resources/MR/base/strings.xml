@@ -44,6 +44,9 @@
     <string name="profile_post_score">Post score</string>
     <string name="profile_comment_score">Comment score</string>
     <string name="profile_account_age">Account age</string>
+    <string name="profile_year_short">y</string>
+    <string name="profile_month_short">m</string>
+    <string name="profile_day_short">d</string>
 
     <string name="login_field_instance_name">Instance name</string>
     <string name="login_field_user_name">Username (or email)</string>

@@ -21,7 +21,7 @@ internal fun ProfileNotLoggedContent(
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.m),
-        verticalArrangement = Arrangement.spacedBy(Spacing.xs)
+        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
         Text(
             text = stringResource(MR.strings.profile_not_logged_message),

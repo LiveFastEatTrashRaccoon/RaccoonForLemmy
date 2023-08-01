@@ -8,6 +8,11 @@
     <string name="navigation_search">Ricerca</string>
     <string name="navigation_settings">Impostazioni</string>
 
+    <string name="message_generic_error">Errore generico</string>
+    <string name="message_missing_field">Campo obbligatorio</string>
+
+    <string name="button_confirm">Conferma</string>
+
     <string name="home_listing_type_all">Tutti</string>
     <string name="home_listing_type_local">Locali</string>
     <string name="home_listing_type_subscribed">Iscrizioni</string>
@@ -27,6 +32,24 @@
     <string name="home_sort_type_top_week">Top settimana</string>
     <string name="home_sort_type_top_year">Top anno</string>
     <string name="home_instance_via">via %1$s</string>
+
+    <string name="profile_not_logged_message">Login non effettuato.\nAggiungi un account per
+        continuare.
+    </string>
+    <string name="profile_button_login">Login</string>
+    <string name="profile_button_logout">Logout</string>
+    <string name="profile_post_score">Punti post</string>
+    <string name="profile_comment_score">Punti commento</string>
+    <string name="profile_account_age">Età account</string>
+    <string name="profile_year_short">a</string>
+    <string name="profile_month_short">m</string>
+    <string name="profile_day_short">g</string>
+
+    <string name="login_field_instance_name">Nome istanza</string>
+    <string name="login_field_user_name">Nome utente (o email)</string>
+    <string name="login_field_password">Password</string>
+    <string name="login_field_token">TOTP 2FA token</string>
+    <string name="login_field_label_optional">(opzionale)</string>
 
     <string name="settings_ui_theme">Tema interfaccia</string>
     <string name="settings_theme_dark">Scuro</string>

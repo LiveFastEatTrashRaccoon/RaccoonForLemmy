@@ -1,9 +1,11 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_profile.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -15,11 +17,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.di.getApiConfigurationRepository
@@ -41,7 +45,9 @@ object ProfileTab : Tab {
 
             return remember(instance) {
                 TabOptions(
-                    index = 0u, title = instance, icon = icon
+                    index = 0u,
+                    title = instance,
+                    icon = icon,
                 )
             }
         }
@@ -61,11 +67,26 @@ object ProfileTab : Tab {
                 val title by remember(lang) {
                     mutableStateOf(staticString(MR.strings.navigation_profile.desc()))
                 }
-                TopAppBar(title = {
-                    Text(
-                        text = title, style = MaterialTheme.typography.titleLarge
-                    )
-                })
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                    },
+                    actions = {
+                        if (uiState.currentUser != null) {
+                            Image(
+                                modifier = Modifier.onClick {
+                                    model.reduce(ProfileScreenMviModel.Intent.Logout)
+                                },
+                                imageVector = Icons.Default.Logout,
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                            )
+                        }
+                    },
+                )
             },
         ) {
             val bottomSheetNavigator = LocalBottomSheetNavigator.current
@@ -78,9 +99,9 @@ object ProfileTab : Tab {
                         bottomSheetNavigator.show(LoginBottomSheet())
                     })
                 } else {
-                    ProfileLoggedContent(user = user, onLogout = {
-                        model.reduce(ProfileScreenMviModel.Intent.Logout)
-                    })
+                    ProfileLoggedContent(
+                        user = user,
+                    )
                 }
             }
         }
