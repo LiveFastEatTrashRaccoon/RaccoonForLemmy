@@ -24,10 +24,13 @@ actual fun getProfileLoggedViewModel(): ProfileLoggedViewModel {
     return res
 }
 
-actual fun getProfilePostsViewModel(user: UserModel): ProfilePostsViewModel {
+actual fun getProfilePostsViewModel(
+    user: UserModel,
+    savedOnly: Boolean,
+): ProfilePostsViewModel {
     val res: ProfilePostsViewModel by inject(
         clazz = ProfilePostsViewModel::class.java,
-        parameters = { parametersOf(user) },
+        parameters = { parametersOf(user, savedOnly) },
     )
     return res
 }

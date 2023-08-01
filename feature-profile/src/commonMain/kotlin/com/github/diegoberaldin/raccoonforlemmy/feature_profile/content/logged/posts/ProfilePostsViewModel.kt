@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 class ProfilePostsViewModel(
     private val mvi: DefaultMviModel<ProfilePostsMviModel.Intent, ProfilePostsMviModel.UiState, ProfilePostsMviModel.Effect>,
     private val user: UserModel,
+    private val savedOnly: Boolean = false,
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
 ) : ScreenModel,
@@ -51,6 +52,7 @@ class ProfilePostsViewModel(
             val postList = userRepository.getUserPosts(
                 auth = auth,
                 id = user.id,
+                savedOnly = savedOnly,
                 page = currentPage,
             )
             currentPage++

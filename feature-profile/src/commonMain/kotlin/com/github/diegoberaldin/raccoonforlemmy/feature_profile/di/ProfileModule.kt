@@ -36,6 +36,7 @@ val profileTabModule = module {
         ProfilePostsViewModel(
             mvi = DefaultMviModel(ProfilePostsMviModel.UiState()),
             user = params[0],
+            savedOnly = params[1],
             identityRepository = get(),
             userRepository = get(),
         )

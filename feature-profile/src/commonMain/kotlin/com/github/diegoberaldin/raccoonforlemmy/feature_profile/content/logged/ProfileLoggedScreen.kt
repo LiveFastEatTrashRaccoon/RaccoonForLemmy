@@ -17,6 +17,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.comments.ProfileCommentsScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.posts.ProfilePostsScreen
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.saved.ProfileSavedScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.di.getProfileLoggedViewModel
 
 internal class ProfileLoggedScreen(
@@ -61,6 +62,10 @@ internal class ProfileLoggedScreen(
                 }
 
                 ProfileLoggedSection.SAVED -> {
+                    ProfileSavedScreen(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        user = user,
+                    ).Content()
                 }
             }
         }

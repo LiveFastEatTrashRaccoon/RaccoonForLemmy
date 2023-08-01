@@ -17,8 +17,11 @@ actual fun getLoginBottomSheetViewModel() = ProfileScreenModelHelper.loginModel
 actual fun getProfileLoggedViewModel(): ProfileLoggedViewModel =
     ProfileScreenModelHelper.loggedModel
 
-actual fun getProfilePostsViewModel(user: UserModel): ProfilePostsViewModel =
-    ProfileScreenModelHelper.getPostsModel(user)
+actual fun getProfilePostsViewModel(
+    user: UserModel,
+    savedOnly: Boolean,
+): ProfilePostsViewModel =
+    ProfileScreenModelHelper.getPostsModel(user = user, savedOnly = savedOnly)
 
 actual fun getProfileCommentsViewModel(user: UserModel): ProfileCommentsViewModel =
     ProfileScreenModelHelper.getCommentsModel(user)
@@ -28,9 +31,9 @@ object ProfileScreenModelHelper : KoinComponent {
     val loginModel: LoginBottomSheetViewModel by inject()
     val loggedModel: ProfileLoggedViewModel by inject()
 
-    fun getPostsModel(user: UserModel): ProfilePostsViewModel {
+    fun getPostsModel(user: UserModel, savedOnly: Boolean): ProfilePostsViewModel {
         val res: ProfilePostsViewModel by inject(
-            parameters = { parametersOf(user) },
+            parameters = { parametersOf(user, savedOnly) },
         )
         return res
     }

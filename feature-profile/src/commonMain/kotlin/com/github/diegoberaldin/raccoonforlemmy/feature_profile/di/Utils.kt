@@ -13,6 +13,9 @@ expect fun getLoginBottomSheetViewModel(): LoginBottomSheetViewModel
 
 expect fun getProfileLoggedViewModel(): ProfileLoggedViewModel
 
-expect fun getProfilePostsViewModel(user: UserModel): ProfilePostsViewModel
+expect fun getProfilePostsViewModel(
+    user: UserModel,
+    savedOnly: Boolean = false,
+): ProfilePostsViewModel
 
 expect fun getProfileCommentsViewModel(user: UserModel): ProfileCommentsViewModel

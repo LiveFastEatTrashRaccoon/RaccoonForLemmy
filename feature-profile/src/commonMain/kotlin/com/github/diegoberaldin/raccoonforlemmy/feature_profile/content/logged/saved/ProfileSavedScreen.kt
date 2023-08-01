@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.posts
+package com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.saved
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,9 +25,11 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.UserModel
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.posts.ProfilePostCard
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.posts.ProfilePostsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.di.getProfilePostsViewModel
 
-internal class ProfilePostsScreen(
+internal class ProfileSavedScreen(
     private val modifier: Modifier = Modifier,
     private val user: UserModel,
 ) : Screen {
@@ -37,6 +39,7 @@ internal class ProfilePostsScreen(
         val model = rememberScreenModel {
             getProfilePostsViewModel(
                 user = user,
+                savedOnly = true,
             )
         }
         model.bindToLifecycle(key)
