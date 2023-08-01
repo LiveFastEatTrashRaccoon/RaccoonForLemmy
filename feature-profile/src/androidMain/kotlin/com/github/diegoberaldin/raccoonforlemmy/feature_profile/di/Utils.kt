@@ -1,8 +1,11 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature_profile.di
 
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.ProfileLoggedViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.posts.ProfilePostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.login.LoginBottomSheetViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.viewmodel.ProfileScreenModel
+import org.koin.core.parameter.parametersOf
 import org.koin.java.KoinJavaComponent.inject
 
 actual fun getProfileScreenModel(): ProfileScreenModel {
@@ -17,5 +20,13 @@ actual fun getLoginBottomSheetViewModel(): LoginBottomSheetViewModel {
 
 actual fun getProfileLoggedViewModel(): ProfileLoggedViewModel {
     val res: ProfileLoggedViewModel by inject(ProfileLoggedViewModel::class.java)
+    return res
+}
+
+actual fun getProfilePostsViewModel(user: UserModel): ProfilePostsViewModel {
+    val res: ProfilePostsViewModel by inject(
+        clazz = ProfilePostsViewModel::class.java,
+        parameters = { parametersOf(user) },
+    )
     return res
 }

@@ -41,6 +41,7 @@ kotlin {
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
                 implementation(compose.materialIconsExtended)
+                implementation(compose.material)
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab)
@@ -53,6 +54,7 @@ kotlin {
                 implementation(projects.coreArchitecture)
                 implementation(projects.coreAppearance)
                 implementation(projects.coreUtils)
+                implementation(projects.coreMd)
                 implementation(projects.domainIdentity)
                 implementation(projects.domainLemmy.data)
                 implementation(projects.domainLemmy.repository)

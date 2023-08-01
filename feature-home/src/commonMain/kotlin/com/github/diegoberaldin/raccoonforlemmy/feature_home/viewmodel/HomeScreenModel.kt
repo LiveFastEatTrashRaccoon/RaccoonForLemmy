@@ -3,10 +3,10 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_home.viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
-import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
-import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.IdentityRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -38,7 +38,7 @@ class HomeScreenModel(
         mvi.onStarted()
         mvi.updateState {
             it.copy(
-                instance = apiConfigRepository.getInstance()
+                instance = apiConfigRepository.getInstance(),
             )
         }
         identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->

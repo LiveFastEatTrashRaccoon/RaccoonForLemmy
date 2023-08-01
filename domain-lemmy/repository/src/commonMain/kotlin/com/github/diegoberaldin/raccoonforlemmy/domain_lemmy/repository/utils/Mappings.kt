@@ -50,6 +50,7 @@ internal fun SortType.toDto() = when (this) {
 }
 
 internal fun Person.toModel() = UserModel(
+    id = id,
     name = name,
     avatar = avatar,
     host = actorId.toHost(),
@@ -77,6 +78,7 @@ internal fun CommentView.toModel() = CommentModel(
 )
 
 internal fun Community.toModel() = CommunityModel(
+    id = id,
     name = name,
     icon = icon,
     host = actorId.toHost(),

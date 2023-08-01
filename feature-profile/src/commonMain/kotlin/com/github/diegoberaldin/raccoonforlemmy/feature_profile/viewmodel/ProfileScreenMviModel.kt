@@ -11,6 +11,7 @@ interface ProfileScreenMviModel :
     }
 
     data class UiState(
+        val initial: Boolean = true,
         val currentUser: UserModel? = null,
     )
 

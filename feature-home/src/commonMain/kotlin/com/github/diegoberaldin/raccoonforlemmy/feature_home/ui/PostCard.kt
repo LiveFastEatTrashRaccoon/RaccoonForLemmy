@@ -23,14 +23,14 @@ fun PostCard(
             .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(CornerSize.m)
+                shape = RoundedCornerShape(CornerSize.m),
             ).padding(
                 vertical = Spacing.lHalf,
                 horizontal = Spacing.s,
-            )
+            ),
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(Spacing.s)
+            verticalArrangement = Arrangement.spacedBy(Spacing.s),
         ) {
             PostCardTitle(post)
             PostCardSubtitle(post)

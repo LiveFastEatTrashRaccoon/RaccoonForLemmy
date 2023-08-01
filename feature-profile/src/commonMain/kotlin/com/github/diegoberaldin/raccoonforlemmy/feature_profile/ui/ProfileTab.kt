@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -94,18 +95,21 @@ object ProfileTab : Tab {
             val bottomSheetNavigator = LocalBottomSheetNavigator.current
             Box(
                 modifier = Modifier.padding(it),
+                contentAlignment = Alignment.Center,
             ) {
-                val user = uiState.currentUser
-                if (user == null) {
-                    ProfileNotLoggedContent(
-                        onLogin = {
-                            bottomSheetNavigator.show(LoginBottomSheet())
-                        },
-                    ).Content()
-                } else {
-                    ProfileLoggedScreen(
-                        user = user,
-                    ).Content()
+                if (!uiState.initial) {
+                    val user = uiState.currentUser
+                    if (user == null) {
+                        ProfileNotLoggedContent(
+                            onLogin = {
+                                bottomSheetNavigator.show(LoginBottomSheet())
+                            },
+                        ).Content()
+                    } else {
+                        ProfileLoggedScreen(
+                            user = user,
+                        ).Content()
+                    }
                 }
             }
         }

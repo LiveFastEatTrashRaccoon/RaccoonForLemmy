@@ -54,7 +54,7 @@ object HomeTab : Tab {
                 TabOptions(
                     index = 0u,
                     title = title,
-                    icon = icon
+                    icon = icon,
                 )
             }
         }
@@ -75,17 +75,21 @@ object HomeTab : Tab {
                     listingType = uiState.listingType,
                     sortType = uiState.sortType,
                     onSelectListingType = {
-                        bottomSheetNavigator.show(ListingTypeBottomSheet(isLogged = uiState.isLogged) {
-                            model.reduce(HomeScreenMviModel.Intent.ChangeListing(it))
-                        })
+                        bottomSheetNavigator.show(
+                            ListingTypeBottomSheet(isLogged = uiState.isLogged) {
+                                model.reduce(HomeScreenMviModel.Intent.ChangeListing(it))
+                            },
+                        )
                     },
                     onSelectSortType = {
-                        bottomSheetNavigator.show(SortBottomSheet {
-                            model.reduce(HomeScreenMviModel.Intent.ChangeSort(it))
-                        })
+                        bottomSheetNavigator.show(
+                            SortBottomSheet {
+                                model.reduce(HomeScreenMviModel.Intent.ChangeSort(it))
+                            },
+                        )
                     },
                 )
-            }
+            },
         ) {
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                 model.reduce(HomeScreenMviModel.Intent.Refresh)
@@ -95,7 +99,7 @@ object HomeTab : Tab {
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xs)
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     items(uiState.posts) { post ->
                         PostCard(post)

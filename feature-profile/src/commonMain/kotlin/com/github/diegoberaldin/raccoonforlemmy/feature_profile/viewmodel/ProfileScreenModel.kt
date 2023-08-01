@@ -22,11 +22,21 @@ class ProfileScreenModel(
         mvi.onStarted()
         identityRepository.authToken.onEach { token ->
             if (token == null) {
-                mvi.updateState { it.copy(currentUser = null) }
+                mvi.updateState {
+                    it.copy(
+                        initial = false,
+                        currentUser = null,
+                    )
+                }
             } else {
                 updateUser(token)
             }
         }.launchIn(mvi.scope)
+    }
+
+    override fun onDisposed() {
+        mvi.onDisposed()
+        mvi.updateState { it.copy(initial = true) }
     }
 
     override fun reduce(intent: ProfileScreenMviModel.Intent) {
@@ -38,10 +48,11 @@ class ProfileScreenModel(
     private fun updateUser(token: String) {
         mvi.scope.launch(Dispatchers.IO) {
             val user = siteRepository.getCurrentUser(
-                auth = token
+                auth = token,
             )
             mvi.updateState {
                 it.copy(
+                    initial = false,
                     currentUser = user,
                 )
             }
