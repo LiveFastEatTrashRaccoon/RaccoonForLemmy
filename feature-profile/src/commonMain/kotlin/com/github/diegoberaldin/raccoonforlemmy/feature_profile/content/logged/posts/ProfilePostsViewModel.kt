@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.IdentityRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.PostsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.UserRepository
@@ -54,6 +55,7 @@ class ProfilePostsViewModel(
                 id = user.id,
                 savedOnly = savedOnly,
                 page = currentPage,
+                sort = SortType.New,
             )
             currentPage++
             val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE

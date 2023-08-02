@@ -26,7 +26,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
 
 @Composable
-internal fun PostCardFooter(
+fun PostCardFooter(
     post: PostModel,
     onUpVote: (Boolean) -> Unit,
     onDownVote: (Boolean) -> Unit,
@@ -37,7 +37,7 @@ internal fun PostCardFooter(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
     ) {
-        val buttonModifier = Modifier.size(42.dp).padding(8.dp)
+        val buttonModifier = Modifier.size(32.dp).padding(4.dp)
         Image(
             modifier = buttonModifier.onClick(onReply),
             imageVector = Icons.Default.Chat,

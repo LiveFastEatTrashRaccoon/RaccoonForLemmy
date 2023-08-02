@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core_commonui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -13,29 +14,37 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
-import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.CommunityModel
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.UserModel
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
-internal fun PostCardSubtitle(post: PostModel) {
-    val communityName = post.community?.name.orEmpty()
-    val communityIcon = post.community?.icon.orEmpty()
-    val communityHost = post.community?.host.orEmpty()
-    val creatorName = post.creator?.name.orEmpty()
-    val creatorAvatar = post.creator?.avatar.orEmpty()
-    val creatorHost = post.creator?.host.orEmpty()
+fun PostCardSubtitle(
+    community: CommunityModel? = null,
+    creator: UserModel? = null,
+    modifier: Modifier = Modifier,
+) {
+    val communityName = community?.name.orEmpty()
+    val communityIcon = community?.icon.orEmpty()
+    val communityHost = community?.host.orEmpty()
+    val creatorName = creator?.name.orEmpty()
+    val creatorAvatar = creator?.avatar.orEmpty()
+    val creatorHost = creator?.host.orEmpty()
     val iconSize = 16.dp
     if (communityName.isNotEmpty() || creatorName.isNotEmpty()) {
         Row(
+            modifier = modifier.padding(vertical = Spacing.xxs),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
+            horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             if (communityName.isNotEmpty()) {
                 if (communityIcon.isNotEmpty()) {
                     val painterResource = asyncPainterResource(data = communityIcon)
                     KamelImage(
-                        modifier = Modifier.size(iconSize)
+                        modifier = Modifier
+                            .padding(Spacing.xxxs)
+                            .size(iconSize)
                             .clip(RoundedCornerShape(iconSize / 2)),
                         resource = painterResource,
                         contentDescription = null,
@@ -62,7 +71,9 @@ internal fun PostCardSubtitle(post: PostModel) {
                 if (creatorAvatar.isNotEmpty()) {
                     val painterResource = asyncPainterResource(data = creatorAvatar)
                     KamelImage(
-                        modifier = Modifier.size(iconSize)
+                        modifier = Modifier
+                            .padding(Spacing.xxxs)
+                            .size(iconSize)
                             .clip(RoundedCornerShape(iconSize / 2)),
                         resource = painterResource,
                         contentDescription = null,

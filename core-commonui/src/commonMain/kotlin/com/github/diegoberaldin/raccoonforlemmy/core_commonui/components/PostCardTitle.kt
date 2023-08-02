@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
 
 @Composable
-internal fun PostCardTitle(post: PostModel) {
+fun PostCardTitle(post: PostModel) {
     Text(
         text = post.title,
         style = MaterialTheme.typography.titleMedium,

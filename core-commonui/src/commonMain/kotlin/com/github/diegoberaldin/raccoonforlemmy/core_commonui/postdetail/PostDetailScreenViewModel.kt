@@ -1,35 +1,36 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.comments
+package com.github.diegoberaldin.raccoonforlemmy.core_commonui.postdetail
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core_preferences.KeyStoreKeys
+import com.github.diegoberaldin.raccoonforlemmy.core_preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.IdentityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.SortType
-import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.UserModel
-import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.PostsRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.UserRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.toSortType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.CommentRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 
-class ProfileCommentsViewModel(
-    private val mvi: DefaultMviModel<ProfileCommentsMviModel.Intent, ProfileCommentsMviModel.UiState, ProfileCommentsMviModel.Effect>,
-    private val user: UserModel,
+class PostDetailScreenViewModel(
+    private val mvi: DefaultMviModel<PostDetailScreenMviModel.Intent, PostDetailScreenMviModel.UiState, PostDetailScreenMviModel.Effect>,
+    private val post: PostModel,
     private val identityRepository: IdentityRepository,
-    private val userRepository: UserRepository,
-) : ScreenModel,
-    MviModel<ProfileCommentsMviModel.Intent, ProfileCommentsMviModel.UiState, ProfileCommentsMviModel.Effect> by mvi {
-
+    private val commentRepository: CommentRepository,
+    private val keyStore: TemporaryKeyStore,
+) : MviModel<PostDetailScreenMviModel.Intent, PostDetailScreenMviModel.UiState, PostDetailScreenMviModel.Effect> by mvi,
+    ScreenModel {
     private var currentPage: Int = 1
     override fun onStarted() {
         mvi.onStarted()
         refresh()
     }
 
-    override fun reduce(intent: ProfileCommentsMviModel.Intent) {
+    override fun reduce(intent: PostDetailScreenMviModel.Intent) {
         when (intent) {
-            ProfileCommentsMviModel.Intent.LoadNextPage -> loadNextPage()
-            ProfileCommentsMviModel.Intent.Refresh -> refresh()
+            PostDetailScreenMviModel.Intent.LoadNextPage -> loadNextPage()
+            PostDetailScreenMviModel.Intent.Refresh -> refresh()
         }
     }
 
@@ -49,14 +50,15 @@ class ProfileCommentsViewModel(
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
-            val commentList = userRepository.getUserComments(
+            val sort = keyStore[KeyStoreKeys.DefaultCommentSortType, 3].toSortType()
+            val commentList = commentRepository.getComments(
                 auth = auth,
-                id = user.id,
+                postId = post.id,
                 page = currentPage,
-                sort = SortType.New,
+                sort = sort,
             )
             currentPage++
-            val canFetchMore = commentList.size >= PostsRepository.DEFAULT_PAGE_SIZE
+            val canFetchMore = commentList.size >= CommentRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {
                 val newcomments = if (refreshing) {
                     commentList

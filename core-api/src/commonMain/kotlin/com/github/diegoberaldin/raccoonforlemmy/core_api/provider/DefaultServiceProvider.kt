@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core_api.provider
 
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.AuthService
+import com.github.diegoberaldin.raccoonforlemmy.core_api.service.CommentService
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.CommunityService
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.PostService
 import com.github.diegoberaldin.raccoonforlemmy.core_api.service.SiteService
@@ -39,6 +40,9 @@ internal class DefaultServiceProvider : ServiceProvider {
     override lateinit var site: SiteService
         private set
 
+    override lateinit var comment: CommentService
+        private set
+
     private val baseUrl: String get() = "https://$currentInstance/api/$VERSION/"
     private val client = HttpClient {
         defaultRequest {
@@ -54,7 +58,6 @@ internal class DefaultServiceProvider : ServiceProvider {
             json(Json { isLenient = true; ignoreUnknownKeys = true })
         }
     }
-
 
     init {
         reinitialize()
@@ -75,5 +78,6 @@ internal class DefaultServiceProvider : ServiceProvider {
         community = ktorfit.create()
         user = ktorfit.create()
         site = ktorfit.create()
+        comment = ktorfit.create()
     }
 }

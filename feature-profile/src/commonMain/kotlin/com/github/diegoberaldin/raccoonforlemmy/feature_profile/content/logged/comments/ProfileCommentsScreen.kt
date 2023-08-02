@@ -24,6 +24,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core_commonui.components.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature_profile.di.getProfileCommentsViewModel
 
@@ -49,7 +50,7 @@ internal class ProfileCommentsScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 items(uiState.comments) { comment ->
-                    ProfileCommentCard(comment)
+                    CommentCard(comment)
                 }
                 item {
                     if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {

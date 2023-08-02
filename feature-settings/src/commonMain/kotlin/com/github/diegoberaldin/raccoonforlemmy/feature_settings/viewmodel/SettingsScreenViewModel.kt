@@ -44,7 +44,7 @@ class SettingsScreenViewModel(
 
         val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
         val postSortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
-        val commentSortType = keyStore[KeyStoreKeys.DefaultCommentSortType, 0].toSortType()
+        val commentSortType = keyStore[KeyStoreKeys.DefaultCommentSortType, 3].toSortType()
         mvi.updateState {
             it.copy(
                 defaultListingType = listingType,

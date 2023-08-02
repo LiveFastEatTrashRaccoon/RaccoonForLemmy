@@ -14,7 +14,7 @@ class PostsRepository(
 ) {
 
     companion object {
-        const val DEFAULT_PAGE_SIZE = 15
+        const val DEFAULT_PAGE_SIZE = 20
     }
 
     suspend fun getPosts(

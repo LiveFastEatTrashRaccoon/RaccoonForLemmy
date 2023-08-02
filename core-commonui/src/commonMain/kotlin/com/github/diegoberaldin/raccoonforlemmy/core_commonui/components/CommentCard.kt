@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.comments
+package com.github.diegoberaldin.raccoonforlemmy.core_commonui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +25,7 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
-fun ProfileCommentCard(
+fun CommentCard(
     comment: CommentModel,
 ) {
     Card(

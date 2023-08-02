@@ -11,7 +11,7 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
-internal fun PostCardImage(post: PostModel) {
+fun PostCardImage(post: PostModel) {
     val imageUrl = post.thumbnailUrl.orEmpty()
     if (imageUrl.isNotEmpty()) {
         val painterResource = asyncPainterResource(data = imageUrl)

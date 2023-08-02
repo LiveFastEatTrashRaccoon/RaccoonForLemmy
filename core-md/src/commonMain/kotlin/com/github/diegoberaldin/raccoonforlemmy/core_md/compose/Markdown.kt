@@ -58,7 +58,7 @@ fun Markdown(
     typography: MarkdownTypography = markdownTypography(),
     padding: MarkdownPadding = markdownPadding(),
     modifier: Modifier = Modifier.fillMaxSize(),
-    flavour: MarkdownFlavourDescriptor = GFMFlavourDescriptor()
+    flavour: MarkdownFlavourDescriptor = GFMFlavourDescriptor(),
 ) {
     CompositionLocalProvider(
         LocalReferenceLinkHandler provides ReferenceLinkHandlerImpl(),
@@ -107,9 +107,12 @@ private fun ASTNode.handleElement(content: String): Boolean {
 
         IMAGE -> MarkdownImage(content, this)
         LINK_DEFINITION -> {
-            val linkLabel = findChildOfType(MarkdownElementTypes.LINK_LABEL)?.getTextInNode(content)?.toString()
+            val linkLabel =
+                findChildOfType(MarkdownElementTypes.LINK_LABEL)?.getTextInNode(content)?.toString()
             if (linkLabel != null) {
-                val destination = findChildOfType(MarkdownElementTypes.LINK_DESTINATION)?.getTextInNode(content)?.toString()
+                val destination =
+                    findChildOfType(MarkdownElementTypes.LINK_DESTINATION)?.getTextInNode(content)
+                        ?.toString()
                 LocalReferenceLinkHandler.current.store(linkLabel, destination)
             }
         }

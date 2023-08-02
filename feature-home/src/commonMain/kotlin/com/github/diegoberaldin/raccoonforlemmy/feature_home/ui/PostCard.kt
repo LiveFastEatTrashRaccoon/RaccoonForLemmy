@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_profile.content.logged.posts
+package com.github.diegoberaldin.raccoonforlemmy.feature_home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,17 +20,23 @@ import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_commonui.components.PostCardBody
+import com.github.diegoberaldin.raccoonforlemmy.core_commonui.components.PostCardFooter
 import com.github.diegoberaldin.raccoonforlemmy.core_commonui.components.PostCardImage
 import com.github.diegoberaldin.raccoonforlemmy.core_commonui.components.PostCardSubtitle
+import com.github.diegoberaldin.raccoonforlemmy.core_commonui.components.PostCardTitle
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
 
 @Composable
-fun ProfilePostCard(
+fun PostCard(
+    modifier: Modifier = Modifier,
     post: PostModel,
+    onUpVote: (Boolean) -> Unit = {},
+    onDownVote: (Boolean) -> Unit = {},
+    onSave: (Boolean) -> Unit = {},
+    onReply: () -> Unit = {},
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(CornerSize.m),
@@ -43,18 +48,15 @@ fun ProfilePostCard(
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
-            Text(
-                text = post.title,
-                style = MaterialTheme.typography.titleMedium,
-            )
+            PostCardTitle(post)
             PostCardSubtitle(
                 community = post.community,
+                creator = post.creator,
             )
             PostCardImage(post)
-
             Box {
                 PostCardBody(
-                    modifier = Modifier.heightIn(max = 200.dp).padding(Spacing.xs),
+                    modifier = Modifier.heightIn(max = 200.dp).padding(bottom = Spacing.xs),
                     post = post,
                 )
                 Box(
@@ -72,6 +74,13 @@ fun ProfilePostCard(
                         ),
                 )
             }
+            PostCardFooter(
+                post = post,
+                onUpVote = onUpVote,
+                onDownVote = onDownVote,
+                onSave = onSave,
+                onReply = onReply,
+            )
         }
     }
 }

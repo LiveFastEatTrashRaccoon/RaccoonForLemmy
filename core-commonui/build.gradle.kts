@@ -35,18 +35,25 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
+                implementation(compose.material)
                 implementation(compose.material3)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
                 implementation(compose.materialIconsExtended)
 
+                implementation(libs.koin.core)
+                implementation(libs.voyager.navigator)
                 implementation(libs.voyager.bottomsheet)
                 implementation(libs.kamel)
 
                 implementation(projects.coreUtils)
                 implementation(projects.coreAppearance)
+                implementation(projects.coreArchitecture)
+                implementation(projects.corePreferences)
                 implementation(projects.coreMd)
                 implementation(projects.domainLemmy.data)
+                implementation(projects.domainLemmy.repository)
+                implementation(projects.domainIdentity)
                 implementation(projects.resources)
             }
         }

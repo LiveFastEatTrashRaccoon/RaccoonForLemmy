@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.di
 
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.PostsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.SiteRepository
@@ -12,4 +13,5 @@ val postsRepositoryModule = module {
     singleOf(::CommunityRepository)
     singleOf(::UserRepository)
     singleOf(::SiteRepository)
+    singleOf(::CommentRepository)
 }
