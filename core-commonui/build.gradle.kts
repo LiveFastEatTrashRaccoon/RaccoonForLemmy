@@ -23,24 +23,30 @@ kotlin {
     cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
-        version = "1.0.0"
+        version = "1.0"
         ios.deploymentTarget = "14.1"
         framework {
-            baseName = "core-appearance"
+            baseName = "core-commonui"
         }
     }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.koin.core)
-
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
                 implementation(compose.materialIconsExtended)
+
+                implementation(libs.voyager.bottomsheet)
+                implementation(libs.kamel)
+
+                implementation(projects.coreUtils)
+                implementation(projects.coreAppearance)
+                implementation(projects.coreMd)
+                implementation(projects.domainLemmy.data)
                 implementation(projects.resources)
             }
         }
@@ -53,7 +59,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.core_appearance"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.core_commonui"
     compileSdk = 33
     defaultConfig {
         minSdk = 26

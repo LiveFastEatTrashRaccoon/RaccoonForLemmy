@@ -14,7 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import com.github.diegoberaldin.raccoonforlemmy.core_appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core_appearance.data.toThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.AppTheme
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core_preferences.di.getTemporaryKeyStore
@@ -39,7 +39,7 @@ fun App() {
     val keyStore = remember { getTemporaryKeyStore() }
     val systemDarkTheme = isSystemInDarkTheme()
     val currentTheme = keyStore[KeyStoreKeys.UiTheme, if (systemDarkTheme) 1 else 0]
-        .let { ThemeState.fromInt(it) }
+        .let { it.toThemeState() }
 
     val defaultLocale = stringResource(MR.strings.lang)
     val langCode = keyStore[KeyStoreKeys.Locale, defaultLocale]
@@ -63,7 +63,7 @@ fun App() {
     }
 
     AppTheme(
-        theme = currentTheme
+        theme = currentTheme,
     ) {
         val lang by languageRepository.currentLanguage.collectAsState()
         LaunchedEffect(lang) {}
@@ -82,7 +82,7 @@ fun App() {
                             TabNavigationItem(InboxTab)
                             TabNavigationItem(SettingsTab)
                         }
-                    }
+                    },
                 )
             }
         }

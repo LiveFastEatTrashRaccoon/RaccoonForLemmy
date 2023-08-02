@@ -18,8 +18,8 @@ import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.SortType
-import com.github.diegoberaldin.raccoonforlemmy.feature_home.toIcon
-import com.github.diegoberaldin.raccoonforlemmy.feature_home.toReadableName
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.toIcon
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -45,21 +45,21 @@ internal fun PostsTopBar(
             Image(
                 imageVector = listingType.toIcon(),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
             )
             Column(
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs)
+                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
             ) {
                 Text(
                     text = listingType.toReadableName(),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
                     text = stringResource(
                         MR.strings.home_instance_via,
                         currentInstance,
                     ),
-                    style = MaterialTheme.typography.titleSmall
+                    style = MaterialTheme.typography.titleSmall,
                 )
             }
         }
@@ -72,7 +72,7 @@ internal fun PostsTopBar(
             },
             imageVector = sortType.toIcon(),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
         )
     }
 }

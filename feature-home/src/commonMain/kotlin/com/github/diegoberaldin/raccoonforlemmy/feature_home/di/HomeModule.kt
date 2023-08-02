@@ -14,6 +14,7 @@ val homeTabModule = module {
             postsRepository = get(),
             apiConfigRepository = get(),
             identityRepository = get(),
+            keyStore = get(),
         )
     }
 }

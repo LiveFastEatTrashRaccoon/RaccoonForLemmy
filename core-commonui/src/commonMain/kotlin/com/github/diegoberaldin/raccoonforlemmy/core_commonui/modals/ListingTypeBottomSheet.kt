@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_home.modals
+package com.github.diegoberaldin.raccoonforlemmy.core_commonui.modals
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,8 +20,8 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
-import com.github.diegoberaldin.raccoonforlemmy.feature_home.toIcon
-import com.github.diegoberaldin.raccoonforlemmy.feature_home.toReadableName
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.toIcon
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -41,7 +41,7 @@ class ListingTypeBottomSheet(
                     end = Spacing.s,
                     bottom = Spacing.m,
                 ),
-            verticalArrangement = Arrangement.spacedBy(Spacing.s)
+            verticalArrangement = Arrangement.spacedBy(Spacing.s),
         ) {
             Text(
                 modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
@@ -58,12 +58,15 @@ class ListingTypeBottomSheet(
             }
             Column(
                 modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs)
+                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
             ) {
                 for (value in values) {
-                    Row(modifier = Modifier.padding(Spacing.s).onClick {
-                        onSelected(value)
-                    }) {
+                    Row(
+                        modifier = Modifier.padding(Spacing.s).onClick {
+                            onSelected(value)
+                            navigator.hide()
+                        },
+                    ) {
                         Text(
                             text = value.toReadableName(),
                             style = MaterialTheme.typography.bodyMedium,
@@ -73,7 +76,7 @@ class ListingTypeBottomSheet(
                         Image(
                             imageVector = value.toIcon(),
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )
                     }
                 }

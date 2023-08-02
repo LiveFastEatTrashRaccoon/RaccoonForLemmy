@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature_home.ui
+package com.github.diegoberaldin.raccoonforlemmy.core_commonui.components
 
 import androidx.compose.runtime.Composable
 import com.github.diegoberaldin.raccoonforlemmy.core_md.compose.Markdown

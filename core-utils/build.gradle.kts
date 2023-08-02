@@ -29,17 +29,18 @@ kotlin {
             baseName = "core-utils"
         }
     }
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.koin.core)
-
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
+                implementation(libs.koin.core)
+                implementation(projects.resources)
             }
         }
         val commonTest by getting {

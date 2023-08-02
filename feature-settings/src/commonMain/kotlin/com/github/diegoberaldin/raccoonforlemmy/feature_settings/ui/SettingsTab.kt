@@ -22,9 +22,11 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core_commonui.modals.LanguageBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core_commonui.modals.ListingTypeBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core_commonui.modals.SortBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core_commonui.modals.ThemeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.feature_settings.di.getSettingsScreenModel
-import com.github.diegoberaldin.raccoonforlemmy.feature_settings.modals.LanguageBottomSheet
-import com.github.diegoberaldin.raccoonforlemmy.feature_settings.modals.ThemeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.feature_settings.viewmodel.SettingsScreenMviModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
@@ -43,7 +45,7 @@ object SettingsTab : Tab {
                 TabOptions(
                     index = 4u,
                     title = title,
-                    icon = icon
+                    icon = icon,
                 )
             }
         }
@@ -67,7 +69,7 @@ object SettingsTab : Tab {
                 TopAppBar(title = {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 })
             },
@@ -78,17 +80,55 @@ object SettingsTab : Tab {
                 SettingsContent(
                     uiState = uiState,
                     onSelectTheme = {
-                        bottomSheetNavigator.show(ThemeBottomSheet { newValue ->
-                            model.reduce(SettingsScreenMviModel.Intent.ChangeTheme(newValue))
-                        })
+                        bottomSheetNavigator.show(
+                            ThemeBottomSheet { newValue ->
+                                model.reduce(SettingsScreenMviModel.Intent.ChangeTheme(newValue))
+                            },
+                        )
                     },
                     onSelectLanguage = {
                         bottomSheetNavigator.show(
                             LanguageBottomSheet { newValue ->
                                 model.reduce(SettingsScreenMviModel.Intent.ChangeLanguage(newValue))
-                            }
+                            },
                         )
-                    })
+                    },
+                    onSelectListingType = {
+                        bottomSheetNavigator.show(
+                            ListingTypeBottomSheet(
+                                isLogged = uiState.isLogged,
+                            ) { newValue ->
+                                model.reduce(
+                                    SettingsScreenMviModel.Intent.ChangeDefaultListingType(
+                                        newValue,
+                                    ),
+                                )
+                            },
+                        )
+                    },
+                    onSelectPostSortType = {
+                        bottomSheetNavigator.show(
+                            SortBottomSheet { newValue ->
+                                model.reduce(
+                                    SettingsScreenMviModel.Intent.ChangeDefaultPostSortType(
+                                        newValue,
+                                    ),
+                                )
+                            },
+                        )
+                    },
+                    onSelectCommentSortType = {
+                        bottomSheetNavigator.show(
+                            SortBottomSheet { newValue ->
+                                model.reduce(
+                                    SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType(
+                                        newValue,
+                                    ),
+                                )
+                            },
+                        )
+                    },
+                )
             }
         }
     }

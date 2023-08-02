@@ -50,7 +50,10 @@ kotlin {
                 implementation(projects.corePreferences)
                 implementation(projects.coreArchitecture)
                 implementation(projects.coreUtils)
+                implementation(projects.coreCommonui)
                 implementation(projects.resources)
+                implementation(projects.domainLemmy.data)
+                implementation(projects.domainIdentity)
             }
         }
         val commonTest by getting {

@@ -3,11 +3,15 @@ package com.github.diegoberaldin.raccoonforlemmy.feature_home.viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core_architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core_preferences.KeyStoreKeys
+import com.github.diegoberaldin.raccoonforlemmy.core_preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.toListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -21,6 +25,7 @@ class HomeScreenModel(
     private val postsRepository: PostsRepository,
     private val apiConfigRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
+    private val keyStore: TemporaryKeyStore,
 ) : ScreenModel,
     MviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect> by mvi {
 
@@ -40,9 +45,13 @@ class HomeScreenModel(
 
     override fun onStarted() {
         mvi.onStarted()
+        val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
+        val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
         mvi.updateState {
             it.copy(
                 instance = apiConfigRepository.getInstance(),
+                listingType = listingType,
+                sortType = sortType,
             )
         }
         identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->
@@ -125,7 +134,12 @@ class HomeScreenModel(
                         if (p.id == post.id) {
                             p.copy(
                                 myVote = if (value) 1 else 0,
-                                score = if (value) p.score + 1 else p.score - 1,
+                                score = when {
+                                    value && post.myVote < 0 -> p.score + 2
+                                    value -> p.score + 1
+                                    !value -> p.score - 1
+                                    else -> p.score
+                                },
                             )
                         } else {
                             p
@@ -156,7 +170,12 @@ class HomeScreenModel(
                         if (p.id == post.id) {
                             p.copy(
                                 myVote = if (value) -1 else 0,
-                                score = if (value) p.score - 1 else p.score + 1,
+                                score = when {
+                                    value && post.myVote > 0 -> p.score - 2
+                                    value -> p.score - 1
+                                    !value -> p.score + 1
+                                    else -> p.score
+                                },
                             )
                         } else {
                             p
