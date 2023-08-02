@@ -48,7 +48,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.domain_lemmy.data"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data"
     compileSdk = 33
     defaultConfig {
         minSdk = 26

@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.native.cocoapods)
 }
 
-
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
     targetHierarchy.default()
@@ -52,7 +51,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.core_md"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.markdown"
     compileSdk = 33
     defaultConfig {
         minSdk = 26

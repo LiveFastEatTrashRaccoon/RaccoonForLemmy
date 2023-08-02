@@ -20,8 +20,8 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
-import com.github.diegoberaldin.racconforlemmy.core_utils.onClick
-import com.github.diegoberaldin.raccoonforlemmy.core_appearance.theme.Spacing
+import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 
 @Composable
 internal fun RowScope.TabNavigationItem(tab: Tab) {
@@ -33,7 +33,7 @@ internal fun RowScope.TabNavigationItem(tab: Tab) {
                 tabNavigator.current = tab
             }
             .padding(top = Spacing.s),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Column(
             modifier = Modifier.fillMaxSize(0.9f),

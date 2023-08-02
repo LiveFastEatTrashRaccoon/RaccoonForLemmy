@@ -29,7 +29,7 @@ kotlin {
             baseName = "feature-inbox"
         }
     }
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -59,7 +59,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.feature_inbox"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.feature.inbox"
     compileSdk = 33
     defaultConfig {
         minSdk = 26

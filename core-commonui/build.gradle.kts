@@ -66,7 +66,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.core_commonui"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.commonui"
     compileSdk = 33
     defaultConfig {
         minSdk = 26

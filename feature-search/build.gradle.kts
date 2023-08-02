@@ -59,7 +59,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.feature_search"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.feature.search"
     compileSdk = 33
     defaultConfig {
         minSdk = 26

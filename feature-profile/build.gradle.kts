@@ -29,7 +29,7 @@ kotlin {
             baseName = "feature-profile"
         }
     }
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -70,7 +70,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.feature_profile"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.feature.profile"
     compileSdk = 33
     defaultConfig {
         minSdk = 26

@@ -29,7 +29,7 @@ kotlin {
             baseName = "core-architecture"
         }
     }
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -46,7 +46,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.core_architecture"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.architecture"
     compileSdk = 33
     defaultConfig {
         minSdk = 26

@@ -53,7 +53,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.core_api"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.api"
     compileSdk = 33
     defaultConfig {
         minSdk = 26
@@ -64,18 +64,18 @@ dependencies {
     val ktorfitVersion = libs.versions.ktorfit.lib.get()
     add(
         "kspCommonMainMetadata",
-        "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion"
+        "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion",
     )
     add(
         "kspAndroid",
-        "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion"
+        "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion",
     )
     add(
         "kspIosX64",
-        "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion"
+        "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion",
     )
     add(
         "kspIosSimulatorArm64",
-        "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion"
+        "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion",
     )
 }
