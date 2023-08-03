@@ -5,10 +5,10 @@ A Kotlin Multiplatform Mobile client for Lemmy.
 <table>
   <tr>
     <td>
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/a583a454-c407-4bf2-b047-965160d9e957" width="310" />
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/da834566-6741-4218-99da-ba56b59b7f50" width="310" />
     </td>
     <td>
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/4e425cbb-f98c-43c7-9786-a2bd9d5ce2c7" width="310" />
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/348b6773-b434-4d11-8c41-868e9aafeb5c" width="310" />
     </td>
   </tr>
 </table>
