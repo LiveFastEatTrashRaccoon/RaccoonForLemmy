@@ -1,24 +1,24 @@
 Pod::Spec.new do |spec|
-    spec.name                     = 'core_utils'
-    spec.version                  = '1.0.0'
+    spec.name                     = 'core_notifications'
+    spec.version                  = '1.0'
     spec.homepage                 = 'Link to the Shared Module homepage'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
     spec.summary                  = 'Some description for the Shared Module'
-    spec.vendored_frameworks      = 'build/cocoapods/framework/core-utils.framework'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/core-notifications.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'
                 
                 
     spec.pod_target_xcconfig = {
-        'KOTLIN_PROJECT_PATH' => ':core-utils',
-        'PRODUCT_MODULE_NAME' => 'core-utils',
+        'KOTLIN_PROJECT_PATH' => ':core-notifications',
+        'PRODUCT_MODULE_NAME' => 'core-notifications',
     }
                 
     spec.script_phases = [
         {
-            :name => 'Build core_utils',
+            :name => 'Build core_notifications',
             :execution_position => :before_compile,
             :shell_path => '/bin/sh',
             :script => <<-SCRIPT

@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.home.viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
@@ -15,6 +16,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -26,6 +28,7 @@ class HomeScreenModel(
     private val apiConfigRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
     private val keyStore: TemporaryKeyStore,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect> by mvi {
 
@@ -54,11 +57,30 @@ class HomeScreenModel(
                 sortType = sortType,
             )
         }
-        identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->
-            mvi.updateState {
-                it.copy(isLogged = isLogged)
-            }
-        }.launchIn(mvi.scope)
+
+        mvi.scope.launch {
+            identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->
+                mvi.updateState {
+                    it.copy(isLogged = isLogged)
+                }
+            }.launchIn(this)
+            notificationCenter.events.filterIsInstance<NotificationCenter.Event.PostUpdate>()
+                .onEach { evt ->
+                    val newPost = evt.post
+                    mvi.updateState {
+                        it.copy(
+                            posts = it.posts.map { p ->
+                                if (p.id == newPost.id) {
+                                    newPost
+                                } else {
+                                    p
+                                }
+                            },
+                        )
+                    }
+                }.launchIn(this)
+        }
+
         refresh()
     }
 

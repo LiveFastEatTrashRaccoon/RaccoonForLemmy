@@ -59,6 +59,7 @@ kotlin {
                 implementation(projects.coreAppearance)
                 implementation(projects.corePreferences)
                 implementation(projects.coreApi)
+                implementation(projects.coreNotifications)
                 implementation(projects.domainIdentity)
 
                 api(projects.resources)

@@ -48,15 +48,18 @@ kotlin {
                 implementation(libs.voyager.bottomsheet)
                 implementation(libs.kamel)
 
-                implementation(projects.resources)
                 implementation(projects.coreAppearance)
                 implementation(projects.coreArchitecture)
                 implementation(projects.corePreferences)
                 implementation(projects.coreUtils)
                 implementation(projects.coreCommonui)
+                implementation(projects.coreNotifications)
+
                 implementation(projects.domainIdentity)
                 implementation(projects.domainLemmy.data)
                 implementation(projects.domainLemmy.repository)
+
+                implementation(projects.resources)
             }
         }
         val commonTest by getting {

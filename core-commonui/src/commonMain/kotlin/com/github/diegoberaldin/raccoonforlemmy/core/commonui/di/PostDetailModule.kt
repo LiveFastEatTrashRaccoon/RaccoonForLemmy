@@ -14,6 +14,7 @@ val postDetailModule = module {
             postsRepository = get(),
             commentRepository = get(),
             keyStore = get(),
+            notificationCenter = get(),
         )
     }
 }

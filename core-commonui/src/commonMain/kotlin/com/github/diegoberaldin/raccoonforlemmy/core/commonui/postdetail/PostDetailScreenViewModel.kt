@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -22,6 +23,7 @@ class PostDetailScreenViewModel(
     private val postsRepository: PostsRepository,
     private val commentRepository: CommentRepository,
     private val keyStore: TemporaryKeyStore,
+    private val notificationCenter: NotificationCenter,
 ) : MviModel<PostDetailScreenMviModel.Intent, PostDetailScreenMviModel.UiState, PostDetailScreenMviModel.Effect> by mvi,
     ScreenModel {
     private var currentPage: Int = 1
@@ -117,6 +119,7 @@ class PostDetailScreenViewModel(
                 voted = value,
             )
             mvi.updateState { it.copy(post = newPost) }
+            notificationCenter.send(NotificationCenter.Event.PostUpdate(newPost))
         }
     }
 
@@ -129,6 +132,7 @@ class PostDetailScreenViewModel(
                 downVoted = value,
             )
             mvi.updateState { it.copy(post = newPost) }
+            notificationCenter.send(NotificationCenter.Event.PostUpdate(newPost))
         }
     }
 
@@ -141,6 +145,7 @@ class PostDetailScreenViewModel(
                 saved = value,
             )
             mvi.updateState { it.copy(post = newPost) }
+            notificationCenter.send(NotificationCenter.Event.PostUpdate(newPost))
         }
     }
 
@@ -163,6 +168,7 @@ class PostDetailScreenViewModel(
                     },
                 )
             }
+            notificationCenter.send(NotificationCenter.Event.CommentUpdate(newComment))
         }
     }
 
@@ -185,6 +191,7 @@ class PostDetailScreenViewModel(
                     },
                 )
             }
+            notificationCenter.send(NotificationCenter.Event.CommentUpdate(newComment))
         }
     }
 
@@ -207,6 +214,7 @@ class PostDetailScreenViewModel(
                     },
                 )
             }
+            notificationCenter.send(NotificationCenter.Event.CommentUpdate(newComment))
         }
     }
 }

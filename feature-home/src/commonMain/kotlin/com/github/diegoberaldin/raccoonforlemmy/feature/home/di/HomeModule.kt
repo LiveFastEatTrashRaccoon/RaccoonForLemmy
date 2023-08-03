@@ -19,6 +19,7 @@ val homeTabModule = module {
             apiConfigRepository = get(),
             identityRepository = get(),
             keyStore = get(),
+            notificationCenter = get(),
         )
     }
 }

@@ -51,9 +51,12 @@ kotlin {
                 implementation(projects.coreArchitecture)
                 implementation(projects.corePreferences)
                 implementation(projects.coreMd)
+                implementation(projects.coreNotifications)
+
                 implementation(projects.domainLemmy.data)
                 implementation(projects.domainLemmy.repository)
                 implementation(projects.domainIdentity)
+
                 implementation(projects.resources)
             }
         }
