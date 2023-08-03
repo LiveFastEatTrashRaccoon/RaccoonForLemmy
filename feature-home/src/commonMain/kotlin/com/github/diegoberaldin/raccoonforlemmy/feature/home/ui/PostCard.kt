@@ -30,10 +30,10 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 fun PostCard(
     modifier: Modifier = Modifier,
     post: PostModel,
-    onUpVote: (Boolean) -> Unit = {},
-    onDownVote: (Boolean) -> Unit = {},
-    onSave: (Boolean) -> Unit = {},
-    onReply: () -> Unit = {},
+    onUpVote: ((Boolean) -> Unit)? = null,
+    onDownVote: ((Boolean) -> Unit)? = null,
+    onSave: ((Boolean) -> Unit)? = null,
+    onReply: (() -> Unit)? = null,
 ) {
     Card(
         modifier = modifier
@@ -57,7 +57,7 @@ fun PostCard(
             Box {
                 PostCardBody(
                     modifier = Modifier.heightIn(max = 200.dp).padding(bottom = Spacing.xs),
-                    post = post,
+                    text = post.text,
                 )
                 Box(
                     modifier = Modifier
@@ -75,7 +75,11 @@ fun PostCard(
                 )
             }
             PostCardFooter(
-                post = post,
+                comments = post.comments,
+                score = post.score,
+                upVoted = post.myVote > 0,
+                downVoted = post.myVote < 0,
+                saved = post.saved,
                 onUpVote = onUpVote,
                 onDownVote = onDownVote,
                 onSave = onSave,

@@ -79,6 +79,10 @@ internal fun CommentView.toModel() = CommentModel(
     id = comment.id,
     text = comment.content,
     community = community.toModel(),
+    creator = creator.toModel(),
+    score = counts.score,
+    saved = saved,
+    myVote = myVote ?: 0,
 )
 
 internal fun Community.toModel() = CommunityModel(

@@ -33,7 +33,6 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardFooter
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardImage
@@ -70,6 +69,7 @@ class PostDetailScreen(
                 )
             },
         ) { padding ->
+            val post = uiState.post
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                 model.reduce(PostDetailScreenMviModel.Intent.Refresh)
             })
@@ -88,26 +88,53 @@ class PostDetailScreen(
                         )
                         PostCardImage(post)
                         PostCardBody(
-                            post = post,
+                            text = post.text,
                         )
                         PostCardFooter(
-                            post = post,
+                            comments = post.comments,
+                            score = post.score,
+                            upVoted = post.myVote > 0,
+                            downVoted = post.myVote < 0,
+                            saved = post.saved,
                             onUpVote = {
-                                // TODO
+                                model.reduce(PostDetailScreenMviModel.Intent.UpVotePost(it, post))
                             },
                             onDownVote = {
-                                // TODO
+                                model.reduce(PostDetailScreenMviModel.Intent.DownVotePost(it, post))
                             },
                             onSave = {
-                                // TODO
-                            },
-                            onReply = {
-                                // TODO
+                                model.reduce(PostDetailScreenMviModel.Intent.SavePost(it, post))
                             },
                         )
                     }
                     items(uiState.comments) { comment ->
-                        CommentCard(comment)
+                        CommentCard(
+                            comment = comment,
+                            onUpVote = {
+                                model.reduce(
+                                    PostDetailScreenMviModel.Intent.UpVoteComment(
+                                        it,
+                                        comment,
+                                    ),
+                                )
+                            },
+                            onDownVote = {
+                                model.reduce(
+                                    PostDetailScreenMviModel.Intent.DownVoteComment(
+                                        it,
+                                        comment,
+                                    ),
+                                )
+                            },
+                            onSave = {
+                                model.reduce(
+                                    PostDetailScreenMviModel.Intent.SaveComment(
+                                        it,
+                                        comment,
+                                    ),
+                                )
+                            },
+                        )
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {

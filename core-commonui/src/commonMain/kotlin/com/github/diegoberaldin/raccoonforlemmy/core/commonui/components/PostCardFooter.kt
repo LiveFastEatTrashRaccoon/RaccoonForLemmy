@@ -23,64 +23,69 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 
 @Composable
 fun PostCardFooter(
-    post: PostModel,
-    onUpVote: (Boolean) -> Unit,
-    onDownVote: (Boolean) -> Unit,
-    onSave: (Boolean) -> Unit,
-    onReply: () -> Unit,
+    comments: Int? = null,
+    score: Int,
+    saved: Boolean = false,
+    upVoted: Boolean = false,
+    downVoted: Boolean = false,
+    onUpVote: ((Boolean) -> Unit)? = null,
+    onDownVote: ((Boolean) -> Unit)? = null,
+    onSave: ((Boolean) -> Unit)? = null,
+    onReply: (() -> Unit)? = null,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
     ) {
         val buttonModifier = Modifier.size(32.dp).padding(4.dp)
-        Image(
-            modifier = buttonModifier.onClick(onReply),
-            imageVector = Icons.Default.Chat,
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface),
-        )
-        Text(
-            modifier = Modifier.padding(end = Spacing.s),
-            text = "${post.comments}",
-        )
+        if (comments != null) {
+            Image(
+                modifier = buttonModifier.onClick {
+                    onReply?.invoke()
+                },
+                imageVector = Icons.Default.Chat,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface),
+            )
+            Text(
+                modifier = Modifier.padding(end = Spacing.s),
+                text = "$comments",
+            )
+        }
         Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = buttonModifier.onClick {
-                onSave(!post.saved)
+                onSave?.invoke(!saved)
             },
-            imageVector = if (!post.saved) {
+            imageVector = if (!saved) {
                 Icons.Default.BookmarkBorder
             } else {
                 Icons.Default.Bookmark
             },
             contentDescription = null,
             colorFilter = ColorFilter.tint(
-                color = if (post.saved) {
+                color = if (saved) {
                     MaterialTheme.colorScheme.secondary
                 } else {
                     MaterialTheme.colorScheme.onSurface
                 },
             ),
         )
-        val upvoted = post.myVote > 0
-        val downvoted = post.myVote < 0
         Image(
             modifier = buttonModifier.onClick {
-                onUpVote(!upvoted)
+                onUpVote?.invoke(!upVoted)
             },
-            imageVector = if (upvoted) {
+            imageVector = if (upVoted) {
                 Icons.Filled.ThumbUp
             } else {
                 Icons.Outlined.ThumbUp
             },
             contentDescription = null,
             colorFilter = ColorFilter.tint(
-                color = if (upvoted) {
+                color = if (upVoted) {
                     MaterialTheme.colorScheme.secondary
                 } else {
                     MaterialTheme.colorScheme.onSurface
@@ -88,20 +93,20 @@ fun PostCardFooter(
             ),
         )
         Text(
-            text = "${post.score}",
+            text = "$score",
         )
         Image(
             modifier = buttonModifier.onClick {
-                onDownVote(!downvoted)
+                onDownVote?.invoke(!downVoted)
             },
-            imageVector = if (downvoted) {
+            imageVector = if (downVoted) {
                 Icons.Filled.ThumbDown
             } else {
                 Icons.Outlined.ThumbDown
             },
             contentDescription = null,
             colorFilter = ColorFilter.tint(
-                color = if (downvoted) {
+                color = if (downVoted) {
                     MaterialTheme.colorScheme.secondary
                 } else {
                     MaterialTheme.colorScheme.onSurface

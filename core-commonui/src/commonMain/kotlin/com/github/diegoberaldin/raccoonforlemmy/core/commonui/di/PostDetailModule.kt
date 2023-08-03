@@ -11,6 +11,7 @@ val postDetailModule = module {
             mvi = DefaultMviModel(PostDetailScreenMviModel.UiState()),
             post = params[0],
             identityRepository = get(),
+            postsRepository = get(),
             commentRepository = get(),
             keyStore = get(),
         )

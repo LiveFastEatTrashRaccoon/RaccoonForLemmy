@@ -117,30 +117,16 @@ class HomeScreenModel(
     private fun upVote(post: PostModel, value: Boolean) {
         mvi.scope.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value.orEmpty()
-            if (value) {
-                postsRepository.upVote(
-                    post = post,
-                    auth = auth,
-                )
-            } else {
-                postsRepository.undoUpVote(
-                    post = post,
-                    auth = auth,
-                )
-            }
+            val newPost = postsRepository.upVote(
+                post = post,
+                auth = auth,
+                voted = value,
+            )
             mvi.updateState {
                 it.copy(
                     posts = it.posts.map { p ->
                         if (p.id == post.id) {
-                            p.copy(
-                                myVote = if (value) 1 else 0,
-                                score = when {
-                                    value && post.myVote < 0 -> p.score + 2
-                                    value -> p.score + 1
-                                    !value -> p.score - 1
-                                    else -> p.score
-                                },
-                            )
+                            newPost
                         } else {
                             p
                         }
@@ -153,30 +139,16 @@ class HomeScreenModel(
     private fun downVote(post: PostModel, value: Boolean) {
         mvi.scope.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value.orEmpty()
-            if (value) {
-                postsRepository.downVote(
-                    post = post,
-                    auth = auth,
-                )
-            } else {
-                postsRepository.undoDownVote(
-                    post = post,
-                    auth = auth,
-                )
-            }
+            val newPost = postsRepository.downVote(
+                post = post,
+                auth = auth,
+                downVoted = value,
+            )
             mvi.updateState {
                 it.copy(
                     posts = it.posts.map { p ->
                         if (p.id == post.id) {
-                            p.copy(
-                                myVote = if (value) -1 else 0,
-                                score = when {
-                                    value && post.myVote > 0 -> p.score - 2
-                                    value -> p.score - 1
-                                    !value -> p.score + 1
-                                    else -> p.score
-                                },
-                            )
+                            newPost
                         } else {
                             p
                         }
@@ -189,22 +161,16 @@ class HomeScreenModel(
     private fun save(post: PostModel, value: Boolean) {
         mvi.scope.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value.orEmpty()
-            if (value) {
-                postsRepository.save(
-                    post = post,
-                    auth = auth,
-                )
-            } else {
-                postsRepository.undoSave(
-                    post = post,
-                    auth = auth,
-                )
-            }
+            val newPost = postsRepository.save(
+                post = post,
+                auth = auth,
+                saved = value,
+            )
             mvi.updateState {
                 it.copy(
                     posts = it.posts.map { p ->
                         if (p.id == post.id) {
-                            p.copy(saved = value)
+                            newPost
                         } else {
                             p
                         }

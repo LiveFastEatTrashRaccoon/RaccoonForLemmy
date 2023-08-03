@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardFooter
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -55,7 +56,7 @@ fun ProfilePostCard(
             Box {
                 PostCardBody(
                     modifier = Modifier.heightIn(max = 200.dp).padding(Spacing.xs),
-                    post = post,
+                    text = post.text,
                 )
                 Box(
                     modifier = Modifier
@@ -72,6 +73,13 @@ fun ProfilePostCard(
                         ),
                 )
             }
+            PostCardFooter(
+                comments = post.comments,
+                score = post.score,
+                saved = post.saved,
+                upVoted = post.myVote > 0,
+                downVoted = post.myVote < 0,
+            )
         }
     }
 }

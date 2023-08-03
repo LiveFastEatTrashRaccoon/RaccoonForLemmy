@@ -21,19 +21,19 @@ import de.jensklingenberg.ktorfit.http.Query
 interface PostService {
 
     @GET("post/list")
-    suspend fun getPosts(
+    suspend fun getAll(
         @Query("auth") auth: String? = null,
         @Query("limit") limit: Int? = null,
         @Query("sort") sort: SortType? = null,
         @Query("comment_id") commentId: Int? = null,
         @Query("page") page: Int? = null,
-        @Query("type_") type: com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType? = null,
+        @Query("type_") type: ListingType? = null,
         @Query("community_name") communityName: String? = null,
         @Query("saved_only") savedOnly: Boolean? = null,
     ): Response<GetPostsResponse>
 
     @GET("post")
-    suspend fun getPost(
+    suspend fun get(
         @Query("auth") auth: String? = null,
         @Query("id") id: Int? = null,
         @Query("comment_id") commentId: Int? = null,
@@ -41,21 +41,21 @@ interface PostService {
 
     @PUT("post/save")
     @Headers("Content-Type: application/json")
-    suspend fun savePost(@Body form: SavePostForm): Response<PostResponse>
+    suspend fun save(@Body form: SavePostForm): Response<PostResponse>
 
     @POST("post/like")
     @Headers("Content-Type: application/json")
-    suspend fun likePost(@Body form: CreatePostLikeForm): Response<PostResponse>
+    suspend fun like(@Body form: CreatePostLikeForm): Response<PostResponse>
 
     @POST("post")
     @Headers("Content-Type: application/json")
-    suspend fun createPost(@Body form: CreatePostForm): Response<PostResponse>
+    suspend fun create(@Body form: CreatePostForm): Response<PostResponse>
 
     @PUT("post")
     @Headers("Content-Type: application/json")
-    suspend fun editPost(@Body form: EditPostForm): Response<PostResponse>
+    suspend fun edit(@Body form: EditPostForm): Response<PostResponse>
 
     @POST("post/delete")
     @Headers("Content-Type: application/json")
-    suspend fun deletePost(@Body form: DeletePostForm): Response<PostResponse>
+    suspend fun delete(@Body form: DeletePostForm): Response<PostResponse>
 }

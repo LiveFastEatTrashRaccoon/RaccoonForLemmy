@@ -24,7 +24,7 @@ class PostsRepository(
         type: ListingType = ListingType.Local,
         sort: SortType = SortType.Active,
     ): List<PostModel> {
-        val response = services.post.getPosts(
+        val response = services.post.getAll(
             auth = auth,
             page = page,
             limit = limit,
@@ -35,57 +35,49 @@ class PostsRepository(
         return dto.map { it.toModel() }
     }
 
-    suspend fun upVote(post: PostModel, auth: String) {
+    suspend fun upVote(post: PostModel, auth: String, voted: Boolean): PostModel {
         val data = CreatePostLikeForm(
             postId = post.id,
-            score = 1,
+            score = if (voted) 1 else 0,
             auth = auth,
         )
-        services.post.likePost(data)
+        services.post.like(data)
+        return post.copy(
+            myVote = if (voted) 1 else 0,
+            score = when {
+                voted && post.myVote < 0 -> post.score + 2
+                voted -> post.score + 1
+                !voted -> post.score - 1
+                else -> post.score
+            },
+        )
     }
 
-    suspend fun undoUpVote(post: PostModel, auth: String) {
+    suspend fun downVote(post: PostModel, auth: String, downVoted: Boolean): PostModel {
         val data = CreatePostLikeForm(
             postId = post.id,
-            score = 0,
+            score = if (downVoted) -1 else 0,
             auth = auth,
         )
-        services.post.likePost(data)
-    }
-
-    suspend fun downVote(post: PostModel, auth: String) {
-        val data = CreatePostLikeForm(
-            postId = post.id,
-            score = -1,
-            auth = auth,
+        services.post.like(data)
+        return post.copy(
+            myVote = if (downVoted) -1 else 0,
+            score = when {
+                downVoted && post.myVote > 0 -> post.score - 2
+                downVoted -> post.score - 1
+                !downVoted -> post.score + 1
+                else -> post.score
+            },
         )
-        services.post.likePost(data)
     }
 
-    suspend fun undoDownVote(post: PostModel, auth: String) {
-        val data = CreatePostLikeForm(
-            postId = post.id,
-            score = 0,
-            auth = auth,
-        )
-        services.post.likePost(data)
-    }
-
-    suspend fun save(post: PostModel, auth: String) {
+    suspend fun save(post: PostModel, auth: String, saved: Boolean): PostModel {
         val data = SavePostForm(
             postId = post.id,
-            save = true,
+            save = saved,
             auth = auth,
         )
-        services.post.savePost(data)
-    }
-
-    suspend fun undoSave(post: PostModel, auth: String) {
-        val data = SavePostForm(
-            postId = post.id,
-            save = false,
-            auth = auth,
-        )
-        services.post.savePost(data)
+        services.post.save(data)
+        return post.copy(saved = saved)
     }
 }
