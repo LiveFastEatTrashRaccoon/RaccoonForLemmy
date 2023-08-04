@@ -91,6 +91,7 @@ internal fun Community.toModel() = CommunityModel(
     name = name,
     title = title,
     icon = icon,
+    banner = banner,
     host = actorId.toHost(),
 )
 
@@ -99,6 +100,7 @@ internal fun CommunityFollowerView.toModel() = CommunityModel(
     name = community.name,
     title = community.title,
     icon = community.icon,
+    banner = community.banner,
     host = community.actorId.toHost(),
 )
 

@@ -23,9 +23,11 @@ class PostsRepository(
         limit: Int = DEFAULT_PAGE_SIZE,
         type: ListingType = ListingType.Local,
         sort: SortType = SortType.Active,
+        communityId: Int? = null,
     ): List<PostModel> {
         val response = services.post.getAll(
             auth = auth,
+            communityId = communityId,
             page = page,
             limit = limit,
             type = type.toDto(),

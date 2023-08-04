@@ -36,10 +36,13 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getSearchScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.viewmodel.SearchScreenMviModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -71,6 +74,7 @@ object SearchTab : Tab {
         val model = rememberScreenModel { getSearchScreenModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         Column(
             modifier = Modifier.padding(Spacing.xxs),
@@ -133,7 +137,13 @@ object SearchTab : Tab {
                 ) {
                     items(uiState.communities) { community ->
                         CommunityItem(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().onClick {
+                                bottomSheetNavigator.show(
+                                    CommunityDetailScreen(
+                                        community = community,
+                                    ),
+                                )
+                            },
                             community = community,
                         )
                     }

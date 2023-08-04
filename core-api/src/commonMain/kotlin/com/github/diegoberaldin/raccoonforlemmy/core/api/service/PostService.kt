@@ -25,9 +25,9 @@ interface PostService {
         @Query("auth") auth: String? = null,
         @Query("limit") limit: Int? = null,
         @Query("sort") sort: SortType? = null,
-        @Query("comment_id") commentId: Int? = null,
         @Query("page") page: Int? = null,
         @Query("type_") type: ListingType? = null,
+        @Query("community_id") communityId: Int? = null,
         @Query("community_name") communityName: String? = null,
         @Query("saved_only") savedOnly: Boolean? = null,
     ): Response<GetPostsResponse>

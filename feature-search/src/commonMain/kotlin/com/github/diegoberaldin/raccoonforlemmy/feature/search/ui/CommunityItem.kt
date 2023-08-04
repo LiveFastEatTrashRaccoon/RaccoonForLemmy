@@ -51,13 +51,15 @@ internal fun CommunityItem(
         } else {
             Box(
                 modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
-                    .background(MaterialTheme.colorScheme.primary)
-                    .clip(RoundedCornerShape(iconSize / 2)),
+                    .background(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(iconSize / 2),
+                    ),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = community.name.firstOrNull()?.toString().orEmpty(),
-                    style = MaterialTheme.typography.headlineMedium,
+                    text = community.name.firstOrNull()?.toString().orEmpty().uppercase(),
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
