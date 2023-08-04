@@ -30,6 +30,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
@@ -105,6 +106,16 @@ class PostListScreen : Screen {
                                 )
                             },
                             post = post,
+                            onOpenCommunity = { community ->
+                                navigator.push(
+                                    CommunityDetailScreen(
+                                        community = community,
+                                        onBack = {
+                                            navigator.pop()
+                                        },
+                                    ),
+                                )
+                            },
                             onUpVote = {
                                 model.reduce(HomeScreenMviModel.Intent.UpVotePost(it, post))
                             },

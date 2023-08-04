@@ -24,12 +24,14 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardTitle
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 
 @Composable
 fun PostCard(
     modifier: Modifier = Modifier,
     post: PostModel,
+    onOpenCommunity: ((CommunityModel) -> Unit)? = null,
     onUpVote: ((Boolean) -> Unit)? = null,
     onDownVote: ((Boolean) -> Unit)? = null,
     onSave: ((Boolean) -> Unit)? = null,
@@ -52,6 +54,7 @@ fun PostCard(
             PostCardSubtitle(
                 community = post.community,
                 creator = post.creator,
+                onOpenCommunity = onOpenCommunity,
             )
             PostCardImage(post)
             Box {

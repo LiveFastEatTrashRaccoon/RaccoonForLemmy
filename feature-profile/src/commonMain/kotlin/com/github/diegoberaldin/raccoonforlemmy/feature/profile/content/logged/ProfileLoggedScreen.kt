@@ -27,7 +27,7 @@ internal class ProfileLoggedScreen(
     @Composable
     override fun Content() {
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.m),
+            modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.xxxs),
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -40,7 +40,7 @@ internal class ProfileLoggedScreen(
             ProfileLoggedCounters(user = user)
 
             SectionSelector(
-                modifier = Modifier.padding(vertical = Spacing.xs),
+                modifier = Modifier.padding(vertical = Spacing.xxs),
                 currentSection = uiState.currentTab,
                 onSectionSelected = {
                     model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))

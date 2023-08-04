@@ -24,11 +24,13 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardFooter
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 
 @Composable
 fun ProfilePostCard(
     post: PostModel,
+    onOpenCommunity: ((CommunityModel) -> Unit)? = null,
 ) {
     Card(
         modifier = Modifier
@@ -50,6 +52,7 @@ fun ProfilePostCard(
             )
             PostCardSubtitle(
                 community = post.community,
+                onOpenCommunity = onOpenCommunity,
             )
             PostCardImage(post)
 

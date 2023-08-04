@@ -29,9 +29,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardFooter
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardImage
@@ -50,6 +53,8 @@ class PostDetailScreen(
         val model = rememberScreenModel { getPostDetailScreenViewModel(post) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val navigator = LocalNavigator.currentOrThrow
+
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
             topBar = {
@@ -84,6 +89,16 @@ class PostDetailScreen(
                         PostCardSubtitle(
                             community = post.community,
                             creator = post.creator,
+                            onOpenCommunity = { community ->
+                                navigator.push(
+                                    CommunityDetailScreen(
+                                        community = community,
+                                        onBack = {
+                                            navigator.pop()
+                                        },
+                                    ),
+                                )
+                            },
                         )
                         PostCardImage(post)
                         PostCardBody(

@@ -20,6 +20,7 @@ class ProfileScreenModel(
 
     override fun onStarted() {
         mvi.onStarted()
+
         identityRepository.authToken.onEach { token ->
             if (token == null) {
                 mvi.updateState {
@@ -32,11 +33,6 @@ class ProfileScreenModel(
                 updateUser(token)
             }
         }.launchIn(mvi.scope)
-    }
-
-    override fun onDisposed() {
-        mvi.onDisposed()
-        mvi.updateState { it.copy(initial = true) }
     }
 
     override fun reduce(intent: ProfileScreenMviModel.Intent) {

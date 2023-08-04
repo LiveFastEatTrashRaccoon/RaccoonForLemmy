@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -24,6 +25,7 @@ fun PostCardSubtitle(
     community: CommunityModel? = null,
     creator: UserModel? = null,
     modifier: Modifier = Modifier,
+    onOpenCommunity: ((CommunityModel) -> Unit)? = null,
 ) {
     val communityName = community?.name.orEmpty()
     val communityIcon = community?.icon.orEmpty()
@@ -39,27 +41,35 @@ fun PostCardSubtitle(
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             if (communityName.isNotEmpty()) {
-                if (communityIcon.isNotEmpty()) {
-                    val painterResource = asyncPainterResource(data = communityIcon)
-                    KamelImage(
-                        modifier = Modifier
-                            .padding(Spacing.xxxs)
-                            .size(iconSize)
-                            .clip(RoundedCornerShape(iconSize / 2)),
-                        resource = painterResource,
-                        contentDescription = null,
-                        contentScale = ContentScale.FillBounds,
-                    )
-                }
-                Text(
-                    text = buildString {
-                        append(communityName)
-                        if (communityHost.isNotEmpty()) {
-                            append("@$communityHost")
+                Row(
+                    modifier = Modifier.onClick {
+                        if (community != null) {
+                            onOpenCommunity?.invoke(community)
                         }
                     },
-                    style = MaterialTheme.typography.bodySmall,
-                )
+                ) {
+                    if (communityIcon.isNotEmpty()) {
+                        val painterResource = asyncPainterResource(data = communityIcon)
+                        KamelImage(
+                            modifier = Modifier
+                                .padding(Spacing.xxxs)
+                                .size(iconSize)
+                                .clip(RoundedCornerShape(iconSize / 2)),
+                            resource = painterResource,
+                            contentDescription = null,
+                            contentScale = ContentScale.FillBounds,
+                        )
+                    }
+                    Text(
+                        text = buildString {
+                            append(communityName)
+                            if (communityHost.isNotEmpty()) {
+                                append("@$communityHost")
+                            }
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
             if (creatorName.isNotEmpty()) {
                 if (communityName.isNotEmpty()) {

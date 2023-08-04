@@ -22,8 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfilePostsViewModel
 
@@ -41,6 +44,7 @@ internal class ProfilePostsScreen(
         }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val navigator = LocalNavigator.currentOrThrow
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
             model.reduce(ProfilePostsMviModel.Intent.Refresh)
@@ -53,7 +57,19 @@ internal class ProfilePostsScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 items(uiState.posts) { post ->
-                    ProfilePostCard(post)
+                    ProfilePostCard(
+                        post = post,
+                        onOpenCommunity = { community ->
+                            navigator.push(
+                                CommunityDetailScreen(
+                                    community = community,
+                                    onBack = {
+                                        navigator.pop()
+                                    },
+                                ),
+                            )
+                        },
+                    )
                 }
                 item {
                     if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
