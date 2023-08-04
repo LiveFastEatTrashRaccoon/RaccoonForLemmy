@@ -36,7 +36,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -49,6 +50,7 @@ import io.kamel.image.asyncPainterResource
 
 class CommunityDetailScreen(
     private val community: CommunityModel,
+    private val onBack: () -> Unit,
 ) : Screen {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
@@ -56,11 +58,12 @@ class CommunityDetailScreen(
         val model = rememberScreenModel { getCommunityDetailScreenViewModel(community) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
-            topBar = {
+            topBar =
+            {
                 val communityName = community.name
                 val communityHost = community.host
                 TopAppBar(
@@ -78,7 +81,7 @@ class CommunityDetailScreen(
                     navigationIcon = {
                         Image(
                             modifier = Modifier.onClick {
-                                bottomSheetNavigator.hide()
+                                onBack()
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -171,7 +174,14 @@ class CommunityDetailScreen(
                     items(uiState.posts) { post ->
                         PostCard(
                             modifier = Modifier.onClick {
-                                bottomSheetNavigator.show(PostDetailScreen(post))
+                                navigator.push(
+                                    PostDetailScreen(
+                                        post = post,
+                                        onBack = {
+                                            navigator.pop()
+                                        },
+                                    ),
+                                )
                             },
                             post = post,
                             onUpVote = {

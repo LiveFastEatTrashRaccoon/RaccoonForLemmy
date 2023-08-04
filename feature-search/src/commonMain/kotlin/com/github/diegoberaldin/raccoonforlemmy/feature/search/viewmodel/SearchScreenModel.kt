@@ -39,7 +39,9 @@ class SearchScreenModel(
             }.launchIn(this)
         }
 
-        refresh()
+        if (mvi.uiState.value.communities.isEmpty()) {
+            refresh()
+        }
     }
 
     override fun reduce(intent: SearchScreenMviModel.Intent) {

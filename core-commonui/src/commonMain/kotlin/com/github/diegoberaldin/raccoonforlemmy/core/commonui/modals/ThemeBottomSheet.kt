@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toIcon
@@ -27,11 +26,11 @@ import dev.icerock.moko.resources.compose.stringResource
 
 class ThemeBottomSheet(
     private val onSelected: (ThemeState) -> Unit,
+    private val onHide: () -> Unit,
 ) : Screen {
 
     @Composable
     override fun Content() {
-        val navigator = LocalBottomSheetNavigator.current
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -62,7 +61,7 @@ class ThemeBottomSheet(
                     Row(
                         modifier = Modifier.padding(Spacing.s).onClick {
                             onSelected(value)
-                            navigator.hide()
+                            onHide()
                         },
                     ) {
                         Text(

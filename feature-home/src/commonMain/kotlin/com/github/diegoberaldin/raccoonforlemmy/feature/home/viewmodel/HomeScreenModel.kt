@@ -46,6 +46,10 @@ class HomeScreenModel(
         }
     }
 
+    override fun onDisposed() {
+        mvi.onDisposed()
+    }
+
     override fun onStarted() {
         mvi.onStarted()
         val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
@@ -81,7 +85,9 @@ class HomeScreenModel(
                 }.launchIn(this)
         }
 
-        refresh()
+        if (mvi.uiState.value.posts.isEmpty()) {
+            refresh()
+        }
     }
 
     private fun refresh() {

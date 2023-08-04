@@ -102,7 +102,13 @@ object ProfileTab : Tab {
                     if (user == null) {
                         ProfileNotLoggedContent(
                             onLogin = {
-                                bottomSheetNavigator.show(LoginBottomSheet())
+                                bottomSheetNavigator.show(
+                                    LoginBottomSheet(
+                                        onHide = {
+                                            bottomSheetNavigator.hide()
+                                        },
+                                    ),
+                                )
                             },
                         ).Content()
                     } else {

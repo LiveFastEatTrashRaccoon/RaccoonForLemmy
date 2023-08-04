@@ -27,7 +27,10 @@ class CommunityDetailScreenViewModel(
     override fun onStarted() {
         mvi.onStarted()
         mvi.updateState { it.copy(community = community) }
-        refresh()
+
+        if (mvi.uiState.value.posts.isEmpty()) {
+            refresh()
+        }
     }
 
     override fun reduce(intent: CommunityDetailScreenMviModel.Intent) {

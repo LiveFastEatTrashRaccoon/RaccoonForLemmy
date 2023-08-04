@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
@@ -43,6 +42,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 
 class PostDetailScreen(
     private val post: PostModel,
+    private val onBack: () -> Unit,
 ) : Screen {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
@@ -50,7 +50,6 @@ class PostDetailScreen(
         val model = rememberScreenModel { getPostDetailScreenViewModel(post) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val navigator = LocalBottomSheetNavigator.current
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
             topBar = {
@@ -59,7 +58,7 @@ class PostDetailScreen(
                     navigationIcon = {
                         Image(
                             modifier = Modifier.onClick {
-                                navigator.hide()
+                                onBack()
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,

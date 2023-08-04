@@ -81,51 +81,79 @@ object SettingsTab : Tab {
                     uiState = uiState,
                     onSelectTheme = {
                         bottomSheetNavigator.show(
-                            ThemeBottomSheet { newValue ->
-                                model.reduce(SettingsScreenMviModel.Intent.ChangeTheme(newValue))
-                            },
+                            ThemeBottomSheet(
+                                onSelected = { newValue ->
+                                    model.reduce(SettingsScreenMviModel.Intent.ChangeTheme(newValue))
+                                },
+                                onHide = {
+                                    bottomSheetNavigator.hide()
+                                },
+                            ),
                         )
                     },
                     onSelectLanguage = {
                         bottomSheetNavigator.show(
-                            LanguageBottomSheet { newValue ->
-                                model.reduce(SettingsScreenMviModel.Intent.ChangeLanguage(newValue))
-                            },
+                            LanguageBottomSheet(
+                                onSelected = { newValue ->
+                                    model.reduce(
+                                        SettingsScreenMviModel.Intent.ChangeLanguage(
+                                            newValue,
+                                        ),
+                                    )
+                                },
+                                onHide = {
+                                    bottomSheetNavigator.hide()
+                                },
+                            ),
                         )
                     },
                     onSelectListingType = {
                         bottomSheetNavigator.show(
                             ListingTypeBottomSheet(
                                 isLogged = uiState.isLogged,
-                            ) { newValue ->
-                                model.reduce(
-                                    SettingsScreenMviModel.Intent.ChangeDefaultListingType(
-                                        newValue,
-                                    ),
-                                )
-                            },
+                                onSelected = { newValue ->
+                                    model.reduce(
+                                        SettingsScreenMviModel.Intent.ChangeDefaultListingType(
+                                            newValue,
+                                        ),
+                                    )
+                                },
+                                onHide = {
+                                    bottomSheetNavigator.hide()
+                                },
+                            ),
                         )
                     },
                     onSelectPostSortType = {
                         bottomSheetNavigator.show(
-                            SortBottomSheet { newValue ->
-                                model.reduce(
-                                    SettingsScreenMviModel.Intent.ChangeDefaultPostSortType(
-                                        newValue,
-                                    ),
-                                )
-                            },
+                            SortBottomSheet(
+                                onSelected = { newValue ->
+                                    model.reduce(
+                                        SettingsScreenMviModel.Intent.ChangeDefaultPostSortType(
+                                            newValue,
+                                        ),
+                                    )
+                                },
+                                onHide = {
+                                    bottomSheetNavigator.hide()
+                                },
+                            ),
                         )
                     },
                     onSelectCommentSortType = {
                         bottomSheetNavigator.show(
-                            SortBottomSheet { newValue ->
-                                model.reduce(
-                                    SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType(
-                                        newValue,
-                                    ),
-                                )
-                            },
+                            SortBottomSheet(
+                                onSelected = { newValue ->
+                                    model.reduce(
+                                        SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType(
+                                            newValue,
+                                        ),
+                                    )
+                                },
+                                onHide = {
+                                    bottomSheetNavigator.hide()
+                                },
+                            ),
                         )
                     },
                 )

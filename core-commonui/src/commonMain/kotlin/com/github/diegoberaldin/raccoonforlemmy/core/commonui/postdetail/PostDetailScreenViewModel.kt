@@ -30,7 +30,10 @@ class PostDetailScreenViewModel(
     override fun onStarted() {
         mvi.onStarted()
         mvi.updateState { it.copy(post = post) }
-        refresh()
+
+        if (mvi.uiState.value.comments.isEmpty()) {
+            refresh()
+        }
     }
 
     override fun reduce(intent: PostDetailScreenMviModel.Intent) {

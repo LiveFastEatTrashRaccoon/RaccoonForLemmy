@@ -47,7 +47,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
@@ -55,19 +54,18 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getLoginBotto
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.localized
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlin.time.Duration.Companion.seconds
 
-class LoginBottomSheet : Screen {
+class LoginBottomSheet(
+    private val onHide: () -> Unit,
+) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val model = rememberScreenModel { getLoginBottomSheetViewModel() }
         model.bindToLifecycle(key)
 
-        val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
 
@@ -84,8 +82,7 @@ class LoginBottomSheet : Screen {
                         snackbarHostState.showSnackbar(
                             message = "Successfully logged in! \uD83C\uDF89\uD83C\uDF89\uD83C\uDF89",
                         )
-                        delay(2.5.seconds)
-                        bottomSheetNavigator.hide()
+                        onHide()
                     }
                 }
             }.launchIn(this)

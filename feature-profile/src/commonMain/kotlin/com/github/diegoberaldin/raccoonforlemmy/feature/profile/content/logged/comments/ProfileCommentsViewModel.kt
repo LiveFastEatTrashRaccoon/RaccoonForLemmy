@@ -23,7 +23,10 @@ class ProfileCommentsViewModel(
     private var currentPage: Int = 1
     override fun onStarted() {
         mvi.onStarted()
-        refresh()
+
+        if (mvi.uiState.value.comments.isEmpty()) {
+            refresh()
+        }
     }
 
     override fun reduce(intent: ProfileCommentsMviModel.Intent) {
