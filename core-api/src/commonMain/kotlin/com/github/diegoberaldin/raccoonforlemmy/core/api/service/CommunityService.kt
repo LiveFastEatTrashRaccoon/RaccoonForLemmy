@@ -14,15 +14,15 @@ import de.jensklingenberg.ktorfit.http.Query
 interface CommunityService {
 
     @GET("community")
-    suspend fun getCommunity(
+    suspend fun get(
         @Query("auth") auth: String? = null,
         @Query("id") id: Int? = null,
         @Query("name") name: String? = null,
     ): Response<GetCommunityResponse>
 
     @POST("community/follow")
-    suspend fun followCommunity(@Body form: FollowCommunityForm): Response<CommunityResponse>
+    suspend fun follow(@Body form: FollowCommunityForm): Response<CommunityResponse>
 
     @POST("community/block")
-    suspend fun blockCommunity(@Body form: BlockCommunityForm): Response<BlockCommunityResponse>
+    suspend fun block(@Body form: BlockCommunityForm): Response<BlockCommunityResponse>
 }

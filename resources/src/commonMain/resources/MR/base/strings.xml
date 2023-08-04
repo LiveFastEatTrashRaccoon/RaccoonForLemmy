@@ -15,6 +15,7 @@
     <string name="message_missing_field">Missing field</string>
 
     <string name="button_confirm">Confirm</string>
+    <string name="button_search">Search</string>
 
     <string name="home_listing_type_all">All</string>
     <string name="home_listing_type_local">Local</string>
@@ -35,6 +36,9 @@
     <string name="home_sort_type_top_week">Top week</string>
     <string name="home_sort_type_top_year">Top year</string>
     <string name="home_instance_via">via %1$s</string>
+
+    <string name="explore_search_placeholder">Search for communities</string>
+    <string name="explore_subscribed_only">Subscribed only</string>
 
     <string name="profile_not_logged_message">You are currently not logged in.\nPlease add an
         account to continue.

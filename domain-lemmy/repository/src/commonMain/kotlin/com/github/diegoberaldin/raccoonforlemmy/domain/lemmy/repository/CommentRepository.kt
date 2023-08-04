@@ -16,7 +16,7 @@ class CommentRepository(
         const val DEFAULT_PAGE_SIZE = 20
     }
 
-    suspend fun getComments(
+    suspend fun getAll(
         postId: Int,
         auth: String? = null,
         page: Int,

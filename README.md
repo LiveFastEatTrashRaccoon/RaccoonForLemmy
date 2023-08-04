@@ -1,4 +1,5 @@
 # Raccon for Lemmy
+
 A Kotlin Multiplatform Mobile client for Lemmy.
 
 <div align="center">
@@ -14,21 +15,29 @@ A Kotlin Multiplatform Mobile client for Lemmy.
 </table>
 </div>
 
-This is mostly an exercise to play around with KMM and Compose Multiplatform and implement a Lemmy client.
+This is mostly an exercise to play around with KMM and Compose Multiplatform and implement a Lemmy
+client.
 
-The project is still at an early stage and not ready for production, expect things to change and even major changes to the source code.
+The project is still at an early stage and not ready for production, expect things to change and
+even major changes to the source code.
 
 Libraries used:
 
-- Koin for dependency injection
-- Voyager for screen navigation
-- Ktor with Ktorfit for networking in conjunction with kotlinx-serialization for JSON marshalling
-- Moko resources for resource management
-- Kamel for lazy image loading
-- Multiplatform settings for encrypted preferences
-- Markdown by Jetbrains for markdown parsing
+- [Koin](https://github.com/InsertKoinIO/koin) for dependency injection
+- [Voyager](https://github.com/adrielcafe/voyager) for screen navigation
+- [Ktor](https://github.com/ktorio/ktor) with [Ktorfit](https://github.com/Foso/Ktorfit) for
+  networking in conjunction with kotlinx-serialization for JSON marshalling
+- [Moko resources](https://github.com/icerockdev/moko-resources) for resource management
+- [Kamel](https://github.com/Kamel-Media/Kamel) for lazy image loading
+- [Multiplatform settings](https://github.com/russhwolf/multiplatform-settings) for encrypted
+  preferences
+- [Markdown](https://github.com/JetBrains/markdown) for markdown parsing
 - ... more to come (e.g. SQLdelight for persistence)
 
-Credits: 
-- the `core-api` module is heavily inspired by [Jerboa for Lemmy](https://github.com/dessalines/jerboa)
-- the `core-md` module is copied from [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer)
+Credits:
+
+- the `core-api` module is heavily inspired
+  by [Jerboa for Lemmy](https://github.com/dessalines/jerboa)
+- the `core-md` module is copied
+  from [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer)
+- the UI is vaguely inspired by the [Thunder](https://github.com/thunder-app/thunder) app

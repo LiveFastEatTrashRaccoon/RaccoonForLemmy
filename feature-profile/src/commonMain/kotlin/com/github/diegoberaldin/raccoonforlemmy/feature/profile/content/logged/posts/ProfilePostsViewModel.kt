@@ -50,7 +50,7 @@ class ProfilePostsViewModel(
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
-            val postList = userRepository.getUserPosts(
+            val postList = userRepository.getPosts(
                 auth = auth,
                 id = user.id,
                 savedOnly = savedOnly,

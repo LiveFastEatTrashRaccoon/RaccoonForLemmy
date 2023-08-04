@@ -86,7 +86,7 @@ class PostDetailScreenViewModel(
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
             val sort = keyStore[KeyStoreKeys.DefaultCommentSortType, 3].toSortType()
-            val commentList = commentRepository.getComments(
+            val commentList = commentRepository.getAll(
                 auth = auth,
                 postId = post.id,
                 page = currentPage,

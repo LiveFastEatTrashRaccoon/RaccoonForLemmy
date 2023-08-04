@@ -17,7 +17,7 @@ class PostsRepository(
         const val DEFAULT_PAGE_SIZE = 20
     }
 
-    suspend fun getPosts(
+    suspend fun getAll(
         auth: String? = null,
         page: Int,
         limit: Int = DEFAULT_PAGE_SIZE,

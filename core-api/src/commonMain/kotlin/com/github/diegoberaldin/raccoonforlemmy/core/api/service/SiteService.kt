@@ -7,7 +7,7 @@ import de.jensklingenberg.ktorfit.http.Query
 
 interface SiteService {
     @GET("site")
-    suspend fun getSite(
+    suspend fun get(
         @Query("auth") auth: String? = null,
     ): Response<GetSiteResponse>
 }

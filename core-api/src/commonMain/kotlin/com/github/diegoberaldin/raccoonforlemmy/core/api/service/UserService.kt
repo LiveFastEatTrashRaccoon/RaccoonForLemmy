@@ -9,7 +9,7 @@ import de.jensklingenberg.ktorfit.http.Query
 interface UserService {
 
     @GET("user")
-    suspend fun getPersonDetails(
+    suspend fun getDetails(
         @Query("auth") auth: String? = null,
         @Query("community_id") communityId: Int? = null,
         @Query("person_id") personId: Int? = null,

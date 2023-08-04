@@ -8,7 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.identity.di.coreIdentityM
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.homeTabModule
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.inboxTabModule
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.profileTabModule
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.searchTabModule
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.searchTabModule
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.di.settingsTabModule
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.localizationModule
 import org.koin.dsl.module

@@ -8,7 +8,7 @@ class SiteRepository(
     private val serviceProvider: ServiceProvider,
 ) {
     suspend fun getCurrentUser(auth: String): UserModel? {
-        val response = serviceProvider.site.getSite(
+        val response = serviceProvider.site.get(
             auth = auth,
         )
         return response.body()?.myUser?.let {

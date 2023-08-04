@@ -12,6 +12,7 @@
     <string name="message_missing_field">Campo obbligatorio</string>
 
     <string name="button_confirm">Conferma</string>
+    <string name="button_search">Cerca</string>
 
     <string name="home_listing_type_all">Tutti</string>
     <string name="home_listing_type_local">Locali</string>
@@ -32,6 +33,9 @@
     <string name="home_sort_type_top_week">Top settimana</string>
     <string name="home_sort_type_top_year">Top anno</string>
     <string name="home_instance_via">via %1$s</string>
+
+    <string name="explore_search_placeholder">Cerca comunità</string>
+    <string name="explore_subscribed_only">Solo sottoscrizioni</string>
 
     <string name="profile_not_logged_message">Login non effettuato.\nAggiungi un account per
         continuare.

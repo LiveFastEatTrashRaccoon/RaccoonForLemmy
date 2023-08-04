@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils
 
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.Community
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommunityFollowerView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType.All
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType.Local
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType.Subscribed
@@ -88,8 +89,17 @@ internal fun CommentView.toModel() = CommentModel(
 internal fun Community.toModel() = CommunityModel(
     id = id,
     name = name,
+    title = title,
     icon = icon,
     host = actorId.toHost(),
+)
+
+internal fun CommunityFollowerView.toModel() = CommunityModel(
+    id = community.id,
+    name = community.name,
+    title = community.title,
+    icon = community.icon,
+    host = community.actorId.toHost(),
 )
 
 internal fun String.toHost(): String = this.replace("https://", "").let {

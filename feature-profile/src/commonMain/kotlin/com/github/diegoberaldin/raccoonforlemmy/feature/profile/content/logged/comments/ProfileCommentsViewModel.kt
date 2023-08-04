@@ -49,7 +49,7 @@ class ProfileCommentsViewModel(
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
-            val commentList = userRepository.getUserComments(
+            val commentList = userRepository.getComments(
                 auth = auth,
                 id = user.id,
                 page = currentPage,

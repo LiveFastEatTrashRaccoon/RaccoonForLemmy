@@ -13,11 +13,11 @@ class UserRepository(
     private val serviceProvider: ServiceProvider,
 ) {
 
-    suspend fun getUser(
+    suspend fun get(
         id: Int,
         auth: String? = null,
     ): UserModel? {
-        val response = serviceProvider.user.getPersonDetails(
+        val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
         )
@@ -31,7 +31,7 @@ class UserRepository(
         )
     }
 
-    suspend fun getUserPosts(
+    suspend fun getPosts(
         id: Int,
         auth: String? = null,
         page: Int,
@@ -39,7 +39,7 @@ class UserRepository(
         sort: SortType = SortType.Active,
         savedOnly: Boolean = false,
     ): List<PostModel> {
-        val response = serviceProvider.user.getPersonDetails(
+        val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
             page = page,
@@ -51,14 +51,14 @@ class UserRepository(
         return dto.posts.map { it.toModel() }
     }
 
-    suspend fun getUserComments(
+    suspend fun getComments(
         id: Int,
         auth: String? = null,
         page: Int,
         limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
     ): List<CommentModel> {
-        val response = serviceProvider.user.getPersonDetails(
+        val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
             page = page,

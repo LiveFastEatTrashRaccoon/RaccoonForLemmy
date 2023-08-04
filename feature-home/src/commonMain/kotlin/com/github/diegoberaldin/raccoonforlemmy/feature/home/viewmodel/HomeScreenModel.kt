@@ -102,7 +102,7 @@ class HomeScreenModel(
             val type = currentState.listingType
             val sort = currentState.sortType
             val refreshing = currentState.refreshing
-            val postList = postsRepository.getPosts(
+            val postList = postsRepository.getAll(
                 auth = auth,
                 page = currentPage,
                 type = type,
