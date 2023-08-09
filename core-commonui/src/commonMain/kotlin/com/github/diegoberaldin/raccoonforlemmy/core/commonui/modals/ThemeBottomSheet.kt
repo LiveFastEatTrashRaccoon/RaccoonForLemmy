@@ -59,14 +59,17 @@ class ThemeBottomSheet(
             ) {
                 for (value in values) {
                     Row(
-                        modifier = Modifier.padding(Spacing.s).onClick {
+                        modifier = Modifier.padding(
+                            horizontal = Spacing.s,
+                            vertical = Spacing.m,
+                        ).onClick {
                             onSelected(value)
                             onHide()
                         },
                     ) {
                         Text(
                             text = value.toReadableName(),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onBackground,
                         )
                         Spacer(modifier = Modifier.weight(1f))

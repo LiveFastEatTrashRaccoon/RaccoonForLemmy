@@ -44,10 +44,10 @@ internal fun SectionSelector(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
+                .padding(bottom = Spacing.xxs)
                 .onClick {
                     onSectionSelected(ProfileLoggedSection.POSTS)
                 }
-                .padding(bottom = Spacing.xxs)
                 .let {
                     if (currentSection == ProfileLoggedSection.POSTS) {
                         it.background(
@@ -77,10 +77,10 @@ internal fun SectionSelector(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
+                .padding(bottom = Spacing.xxs)
                 .onClick {
                     onSectionSelected(ProfileLoggedSection.COMMENTS)
                 }
-                .padding(bottom = Spacing.xxs)
                 .let {
                     if (currentSection == ProfileLoggedSection.COMMENTS) {
                         it.background(
@@ -105,10 +105,10 @@ internal fun SectionSelector(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
+                .padding(bottom = Spacing.xxs)
                 .onClick {
                     onSectionSelected(ProfileLoggedSection.SAVED)
                 }
-                .padding(bottom = Spacing.xxs)
                 .let {
                     if (currentSection == ProfileLoggedSection.SAVED) {
                         it.background(

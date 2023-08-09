@@ -15,9 +15,7 @@ class ProfileLoggedViewModel(
     override fun reduce(intent: ProfileLoggedMviModel.Intent) {
         when (intent) {
             is ProfileLoggedMviModel.Intent.SelectTab -> mvi.updateState {
-                it.copy(
-                    currentTab = intent.value,
-                )
+                it.copy(currentTab = intent.value)
             }
         }
     }

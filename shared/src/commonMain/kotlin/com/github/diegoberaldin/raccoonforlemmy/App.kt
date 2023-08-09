@@ -1,8 +1,10 @@
 package com.github.diegoberaldin.raccoonforlemmy
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.BottomAppBar
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -11,9 +13,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
@@ -38,8 +42,8 @@ import kotlinx.coroutines.flow.onEach
 fun App() {
     val keyStore = remember { getTemporaryKeyStore() }
     val systemDarkTheme = isSystemInDarkTheme()
-    val currentTheme = keyStore[KeyStoreKeys.UiTheme, if (systemDarkTheme) 1 else 0]
-        .let { it.toThemeState() }
+    val currentTheme =
+        keyStore[KeyStoreKeys.UiTheme, if (systemDarkTheme) 1 else 0].let { it.toThemeState() }
 
     val defaultLocale = stringResource(MR.strings.lang)
     val langCode = keyStore[KeyStoreKeys.Locale, defaultLocale]
@@ -75,7 +79,14 @@ fun App() {
                         CurrentTab()
                     },
                     bottomBar = {
-                        BottomAppBar {
+                        BottomAppBar(
+                            contentPadding = PaddingValues(0.dp),
+                            backgroundColor = if (currentTheme == ThemeState.Light) {
+                                MaterialTheme.colors.surface
+                            } else {
+                                MaterialTheme.colors.onSurface
+                            },
+                        ) {
                             TabNavigationItem(HomeTab)
                             TabNavigationItem(SearchTab)
                             TabNavigationItem(ProfileTab)

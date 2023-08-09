@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -31,14 +33,13 @@ internal fun RowScope.TabNavigationItem(tab: Tab) {
             .fillMaxHeight()
             .onClick {
                 tabNavigator.current = tab
-            }
-            .padding(top = Spacing.s),
+            },
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(0.9f),
+            modifier = Modifier.padding(vertical = Spacing.xs),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+            verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
         ) {
             val color = if (tabNavigator.current == tab) {
                 MaterialTheme.colorScheme.primary
@@ -52,10 +53,12 @@ internal fun RowScope.TabNavigationItem(tab: Tab) {
                 tint = color,
             )
             Text(
+                modifier = Modifier,
                 text = tab.options.title,
                 style = MaterialTheme.typography.labelSmall,
                 color = color,
             )
+            Spacer(modifier = Modifier.height(Spacing.xxxs))
         }
     }
 }

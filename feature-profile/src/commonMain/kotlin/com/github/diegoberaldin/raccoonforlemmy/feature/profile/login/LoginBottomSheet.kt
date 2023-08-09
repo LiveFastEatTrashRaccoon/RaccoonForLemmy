@@ -132,6 +132,7 @@ class LoginBottomSheet(
                     ),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
+                        autoCorrect = false,
                         imeAction = ImeAction.Next,
                     ),
                     onValueChange = { value ->
@@ -159,6 +160,7 @@ class LoginBottomSheet(
                     ),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
+                        autoCorrect = false,
                         imeAction = ImeAction.Next,
                     ),
                     onValueChange = { value ->

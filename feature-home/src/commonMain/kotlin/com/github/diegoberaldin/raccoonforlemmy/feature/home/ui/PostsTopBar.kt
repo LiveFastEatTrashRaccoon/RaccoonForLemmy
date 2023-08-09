@@ -32,7 +32,9 @@ internal fun PostsTopBar(
     onSelectSortType: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.height(64.dp).padding(Spacing.s),
+        modifier = Modifier.height(50.dp).padding(
+            horizontal = Spacing.s,
+        ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(

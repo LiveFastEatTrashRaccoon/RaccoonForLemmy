@@ -37,10 +37,11 @@ fun PostCardFooter(
     onReply: (() -> Unit)? = null,
 ) {
     Row(
+        modifier = Modifier.padding(horizontal = Spacing.xs),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
     ) {
-        val buttonModifier = Modifier.size(32.dp).padding(4.dp)
+        val buttonModifier = Modifier.size(28.dp).padding(4.dp)
         if (comments != null) {
             Image(
                 modifier = buttonModifier.onClick {
