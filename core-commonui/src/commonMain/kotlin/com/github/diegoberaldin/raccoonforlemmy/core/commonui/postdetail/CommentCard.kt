@@ -20,9 +20,9 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 @Composable
 fun CommentCard(
     comment: CommentModel,
-    onUpVote: ((Boolean) -> Unit)? = null,
-    onDownVote: ((Boolean) -> Unit)? = null,
-    onSave: ((Boolean) -> Unit)? = null,
+    onUpVote: (() -> Unit)? = null,
+    onDownVote: (() -> Unit)? = null,
+    onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
 ) {
     Card(

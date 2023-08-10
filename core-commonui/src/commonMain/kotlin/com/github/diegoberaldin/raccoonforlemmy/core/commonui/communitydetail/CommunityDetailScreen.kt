@@ -1,23 +1,33 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
+import androidx.compose.material.Icon
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ThumbDown
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -25,15 +35,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -98,8 +116,11 @@ class CommunityDetailScreen(
             Box(
                 modifier = Modifier.pullRefresh(pullRefreshState),
             ) {
+                var width by remember { mutableStateOf(0f) }
                 LazyColumn(
-                    modifier = Modifier.padding(padding),
+                    modifier = Modifier.padding(padding).onGloballyPositioned {
+                        width = it.size.toSize().width
+                    },
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     item {
@@ -171,44 +192,128 @@ class CommunityDetailScreen(
                             }
                         }
                     }
-                    items(uiState.posts) { post ->
-                        PostCard(
-                            modifier = Modifier.onClick {
-                                navigator.push(
-                                    PostDetailScreen(
-                                        post = post,
-                                        onBack = {
-                                            navigator.pop()
-                                        },
-                                    ),
-                                )
-                            },
-                            post = post,
-                            onUpVote = {
-                                model.reduce(
-                                    CommunityDetailMviModel.Intent.UpVotePost(
-                                        it,
-                                        post,
-                                    ),
-                                )
-                            },
-                            onDownVote = {
-                                model.reduce(
-                                    CommunityDetailMviModel.Intent.DownVotePost(
-                                        it,
-                                        post,
-                                    ),
-                                )
-                            },
-                            onSave = {
-                                model.reduce(
-                                    CommunityDetailMviModel.Intent.SavePost(
-                                        it,
-                                        post,
-                                    ),
-                                )
+                    items(uiState.posts, key = { it.id.toString() + it.myVote }) { post ->
+                        val dismissState = rememberDismissState(
+                            confirmStateChange = {
+                                when (it) {
+                                    DismissValue.DismissedToEnd -> {
+                                        model.reduce(
+                                            CommunityDetailMviModel.Intent.DownVotePost(
+                                                post = post,
+                                            ),
+                                        )
+                                    }
+
+                                    DismissValue.DismissedToStart -> {
+                                        model.reduce(
+                                            CommunityDetailMviModel.Intent.UpVotePost(
+                                                post = post,
+                                            ),
+                                        )
+                                    }
+
+                                    else -> Unit
+                                }
+                                false
                             },
                         )
+                        var willDismissDirection: DismissDirection? by remember {
+                            mutableStateOf(null)
+                        }
+                        val threshold = 0.15f
+                        LaunchedEffect(Unit) {
+                            snapshotFlow { dismissState.offset.value }.collect {
+                                willDismissDirection = when {
+                                    it > width * threshold -> DismissDirection.StartToEnd
+                                    it < -width * threshold -> DismissDirection.EndToStart
+                                    else -> null
+                                }
+                            }
+                        }
+                        LaunchedEffect(willDismissDirection) {
+                            if (willDismissDirection != null) {
+                                model.reduce(CommunityDetailMviModel.Intent.HapticIndication)
+                            }
+                        }
+                        SwipeToDismiss(
+                            state = dismissState,
+                            directions = setOf(
+                                DismissDirection.StartToEnd,
+                                DismissDirection.EndToStart,
+                            ),
+                            dismissThresholds = {
+                                FractionalThreshold(threshold)
+                            },
+                            background = {
+                                val direction =
+                                    dismissState.dismissDirection ?: return@SwipeToDismiss
+                                val color by animateColorAsState(
+                                    when (dismissState.targetValue) {
+                                        DismissValue.Default -> Color.Transparent
+                                        DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.secondary
+                                        DismissValue.DismissedToStart,
+                                        -> MaterialTheme.colorScheme.secondary
+                                    },
+                                )
+                                val alignment = when (direction) {
+                                    DismissDirection.StartToEnd -> Alignment.CenterStart
+                                    DismissDirection.EndToStart -> Alignment.CenterEnd
+                                }
+                                val icon = when (direction) {
+                                    DismissDirection.StartToEnd -> Icons.Default.ThumbDown
+                                    DismissDirection.EndToStart -> Icons.Default.ThumbUp
+                                }
+
+                                Box(
+                                    Modifier.fillMaxSize().background(color)
+                                        .padding(horizontal = 20.dp),
+                                    contentAlignment = alignment,
+                                ) {
+                                    Icon(
+                                        imageVector = icon,
+                                        contentDescription = null,
+                                    )
+                                }
+                            },
+                        ) {
+                            PostCard(
+                                modifier = Modifier.onClick {
+                                    navigator.push(
+                                        PostDetailScreen(
+                                            post = post,
+                                            onBack = {
+                                                navigator.pop()
+                                            },
+                                        ),
+                                    )
+                                },
+                                post = post,
+                                onUpVote = {
+                                    model.reduce(
+                                        CommunityDetailMviModel.Intent.UpVotePost(
+                                            post = post,
+                                            feedback = true,
+                                        ),
+                                    )
+                                },
+                                onDownVote = {
+                                    model.reduce(
+                                        CommunityDetailMviModel.Intent.DownVotePost(
+                                            post = post,
+                                            feedback = true,
+                                        ),
+                                    )
+                                },
+                                onSave = {
+                                    model.reduce(
+                                        CommunityDetailMviModel.Intent.SavePost(
+                                            post = post,
+                                            feedback = true,
+                                        ),
+                                    )
+                                },
+                            )
+                        }
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {

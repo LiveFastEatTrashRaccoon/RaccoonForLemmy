@@ -40,20 +40,22 @@ class CommunityDetailViewModel(
             CommunityDetailMviModel.Intent.LoadNextPage -> loadNextPage()
             CommunityDetailMviModel.Intent.Refresh -> refresh()
 
-            is CommunityDetailMviModel.Intent.DownVotePost -> downVotePost(
-                intent.post,
-                intent.value,
+            is CommunityDetailMviModel.Intent.DownVotePost -> toggleDownVotePost(
+                post = intent.post,
+                feedback = intent.feedback,
             )
 
-            is CommunityDetailMviModel.Intent.SavePost -> savePost(
-                intent.post,
-                intent.value,
+            is CommunityDetailMviModel.Intent.SavePost -> toggleSavePost(
+                post = intent.post,
+                feedback = intent.feedback,
             )
 
-            is CommunityDetailMviModel.Intent.UpVotePost -> upVotePost(
-                intent.post,
-                intent.value,
+            is CommunityDetailMviModel.Intent.UpVotePost -> toggleUpVotePost(
+                post = intent.post,
+                feedback = intent.feedback,
             )
+
+            CommunityDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
         }
     }
 
@@ -98,9 +100,18 @@ class CommunityDetailViewModel(
         }
     }
 
-    private fun upVotePost(post: PostModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newPost = postsRepository.asUpVoted(post, value)
+    private fun toggleUpVotePost(
+        post: PostModel,
+        feedback: Boolean,
+    ) {
+        val newValue = post.myVote <= 0
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newPost = postsRepository.asUpVoted(
+            post = post,
+            voted = newValue,
+        )
         mvi.updateState {
             it.copy(
                 posts = it.posts.map { p ->
@@ -118,7 +129,7 @@ class CommunityDetailViewModel(
                 postsRepository.upVote(
                     auth = auth,
                     post = post,
-                    voted = value,
+                    voted = newValue,
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
@@ -137,9 +148,18 @@ class CommunityDetailViewModel(
         }
     }
 
-    private fun downVotePost(post: PostModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newPost = postsRepository.asDownVoted(post, value)
+    private fun toggleDownVotePost(
+        post: PostModel,
+        feedback: Boolean,
+    ) {
+        val newValue = post.myVote >= 0
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newPost = postsRepository.asDownVoted(
+            post = post,
+            downVoted = newValue,
+        )
         mvi.updateState {
             it.copy(
                 posts = it.posts.map { p ->
@@ -157,7 +177,7 @@ class CommunityDetailViewModel(
                 postsRepository.downVote(
                     auth = auth,
                     post = post,
-                    downVoted = value,
+                    downVoted = newValue,
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
@@ -176,9 +196,18 @@ class CommunityDetailViewModel(
         }
     }
 
-    private fun savePost(post: PostModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newPost = postsRepository.asSaved(post, value)
+    private fun toggleSavePost(
+        post: PostModel,
+        feedback: Boolean,
+    ) {
+        val newValue = !post.saved
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newPost = postsRepository.asSaved(
+            post = post,
+            saved = newValue,
+        )
         mvi.updateState {
             it.copy(
                 posts = it.posts.map { p ->
@@ -196,7 +225,7 @@ class CommunityDetailViewModel(
                 postsRepository.save(
                     auth = auth,
                     post = post,
-                    saved = value,
+                    saved = newValue,
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()

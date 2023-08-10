@@ -32,9 +32,9 @@ fun PostCard(
     modifier: Modifier = Modifier,
     post: PostModel,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
-    onUpVote: ((Boolean) -> Unit)? = null,
-    onDownVote: ((Boolean) -> Unit)? = null,
-    onSave: ((Boolean) -> Unit)? = null,
+    onUpVote: (() -> Unit)? = null,
+    onDownVote: (() -> Unit)? = null,
+    onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
 ) {
     Card(

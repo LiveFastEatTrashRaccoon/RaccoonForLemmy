@@ -31,9 +31,9 @@ fun PostCardFooter(
     saved: Boolean = false,
     upVoted: Boolean = false,
     downVoted: Boolean = false,
-    onUpVote: ((Boolean) -> Unit)? = null,
-    onDownVote: ((Boolean) -> Unit)? = null,
-    onSave: ((Boolean) -> Unit)? = null,
+    onUpVote: (() -> Unit)? = null,
+    onDownVote: (() -> Unit)? = null,
+    onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
 ) {
     Row(
@@ -59,7 +59,7 @@ fun PostCardFooter(
         Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = buttonModifier.onClick {
-                onSave?.invoke(!saved)
+                onSave?.invoke()
             },
             imageVector = if (!saved) {
                 Icons.Default.BookmarkBorder
@@ -77,7 +77,7 @@ fun PostCardFooter(
         )
         Image(
             modifier = buttonModifier.onClick {
-                onUpVote?.invoke(!upVoted)
+                onUpVote?.invoke()
             },
             imageVector = if (upVoted) {
                 Icons.Filled.ThumbUp
@@ -98,7 +98,7 @@ fun PostCardFooter(
         )
         Image(
             modifier = buttonModifier.onClick {
-                onDownVote?.invoke(!downVoted)
+                onDownVote?.invoke()
             },
             imageVector = if (downVoted) {
                 Icons.Filled.ThumbDown

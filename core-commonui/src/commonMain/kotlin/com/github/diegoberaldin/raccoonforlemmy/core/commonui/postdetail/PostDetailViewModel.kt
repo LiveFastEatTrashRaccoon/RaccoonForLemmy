@@ -42,35 +42,37 @@ class PostDetailViewModel(
         when (intent) {
             PostDetailMviModel.Intent.LoadNextPage -> loadNextPage()
             PostDetailMviModel.Intent.Refresh -> refresh()
-            is PostDetailMviModel.Intent.DownVoteComment -> downVoteComment(
-                intent.comment,
-                intent.value,
+            is PostDetailMviModel.Intent.DownVoteComment -> toggleDownVoteComment(
+                comment = intent.comment,
+                feedback = intent.feedback,
             )
 
-            is PostDetailMviModel.Intent.DownVotePost -> downVotePost(
-                intent.post,
-                intent.value,
+            is PostDetailMviModel.Intent.DownVotePost -> toggleDownVotePost(
+                post = intent.post,
+                feedback = intent.feedback,
             )
 
-            is PostDetailMviModel.Intent.SaveComment -> saveComment(
-                intent.comment,
-                intent.value,
+            is PostDetailMviModel.Intent.SaveComment -> toggleSaveComment(
+                comment = intent.comment,
+                feedback = intent.feedback,
             )
 
-            is PostDetailMviModel.Intent.SavePost -> savePost(
-                intent.post,
-                intent.value,
+            is PostDetailMviModel.Intent.SavePost -> toggleSavePost(
+                post = intent.post,
+                feedback = intent.feedback,
             )
 
-            is PostDetailMviModel.Intent.UpVoteComment -> upVoteComment(
-                intent.comment,
-                intent.value,
+            is PostDetailMviModel.Intent.UpVoteComment -> toggleUpVoteComment(
+                comment = intent.comment,
+                feedback = intent.feedback,
             )
 
-            is PostDetailMviModel.Intent.UpVotePost -> upVotePost(
-                intent.post,
-                intent.value,
+            is PostDetailMviModel.Intent.UpVotePost -> toggleUpVotePost(
+                post = intent.post,
+                feedback = intent.feedback,
             )
+
+            PostDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
         }
     }
 
@@ -115,9 +117,18 @@ class PostDetailViewModel(
         }
     }
 
-    private fun upVotePost(post: PostModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newPost = postsRepository.asUpVoted(post, value)
+    private fun toggleUpVotePost(
+        post: PostModel,
+        feedback: Boolean,
+    ) {
+        val newValue = post.myVote <= 0
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newPost = postsRepository.asUpVoted(
+            post = post,
+            voted = newValue,
+        )
         mvi.updateState { it.copy(post = newPost) }
         mvi.scope.launch(Dispatchers.IO) {
             try {
@@ -125,7 +136,7 @@ class PostDetailViewModel(
                 postsRepository.upVote(
                     auth = auth,
                     post = post,
-                    voted = value,
+                    voted = newValue,
                 )
                 notificationCenter.send(NotificationCenter.Event.PostUpdate(newPost))
             } catch (e: Throwable) {
@@ -135,9 +146,18 @@ class PostDetailViewModel(
         }
     }
 
-    private fun downVotePost(post: PostModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newPost = postsRepository.asDownVoted(post, value)
+    private fun toggleDownVotePost(
+        post: PostModel,
+        feedback: Boolean,
+    ) {
+        val newValue = post.myVote >= 0
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newPost = postsRepository.asDownVoted(
+            post = post,
+            downVoted = newValue,
+        )
         mvi.updateState { it.copy(post = newPost) }
 
         mvi.scope.launch(Dispatchers.IO) {
@@ -146,7 +166,7 @@ class PostDetailViewModel(
                 postsRepository.downVote(
                     auth = auth,
                     post = post,
-                    downVoted = value,
+                    downVoted = newValue,
                 )
                 notificationCenter.send(NotificationCenter.Event.PostUpdate(newPost))
             } catch (e: Throwable) {
@@ -156,9 +176,18 @@ class PostDetailViewModel(
         }
     }
 
-    private fun savePost(post: PostModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newPost = postsRepository.asSaved(post, value)
+    private fun toggleSavePost(
+        post: PostModel,
+        feedback: Boolean,
+    ) {
+        val newValue = !post.saved
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newPost = postsRepository.asSaved(
+            post = post,
+            saved = newValue,
+        )
         mvi.updateState { it.copy(post = newPost) }
         mvi.scope.launch(Dispatchers.IO) {
             try {
@@ -166,7 +195,7 @@ class PostDetailViewModel(
                 postsRepository.save(
                     auth = auth,
                     post = post,
-                    saved = value,
+                    saved = newValue,
                 )
                 notificationCenter.send(NotificationCenter.Event.PostUpdate(newPost))
             } catch (e: Throwable) {
@@ -176,9 +205,18 @@ class PostDetailViewModel(
         }
     }
 
-    private fun upVoteComment(comment: CommentModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newComment = commentRepository.asUpVoted(comment, value)
+    private fun toggleUpVoteComment(
+        comment: CommentModel,
+        feedback: Boolean,
+    ) {
+        val newValue = comment.myVote <= 0
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newComment = commentRepository.asUpVoted(
+            comment = comment,
+            voted = newValue,
+        )
         mvi.updateState {
             it.copy(
                 comments = it.comments.map { c ->
@@ -196,7 +234,7 @@ class PostDetailViewModel(
                 commentRepository.upVote(
                     auth = auth,
                     comment = comment,
-                    voted = value,
+                    voted = newValue,
                 )
                 notificationCenter.send(NotificationCenter.Event.CommentUpdate(newComment))
             } catch (e: Throwable) {
@@ -216,9 +254,15 @@ class PostDetailViewModel(
         }
     }
 
-    private fun downVoteComment(comment: CommentModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newComment = commentRepository.asDownVoted(comment, value)
+    private fun toggleDownVoteComment(
+        comment: CommentModel,
+        feedback: Boolean,
+    ) {
+        val newValue = comment.myVote >= 0
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newComment = commentRepository.asDownVoted(comment, newValue)
         mvi.updateState {
             it.copy(
                 comments = it.comments.map { c ->
@@ -236,7 +280,7 @@ class PostDetailViewModel(
                 commentRepository.downVote(
                     auth = auth,
                     comment = comment,
-                    downVoted = value,
+                    downVoted = newValue,
                 )
                 notificationCenter.send(NotificationCenter.Event.CommentUpdate(newComment))
             } catch (e: Throwable) {
@@ -256,9 +300,18 @@ class PostDetailViewModel(
         }
     }
 
-    private fun saveComment(comment: CommentModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newComment = commentRepository.asSaved(comment, value)
+    private fun toggleSaveComment(
+        comment: CommentModel,
+        feedback: Boolean,
+    ) {
+        val newValue = !comment.saved
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newComment = commentRepository.asSaved(
+            comment = comment,
+            saved = newValue,
+        )
         mvi.updateState {
             it.copy(
                 comments = it.comments.map { c ->
@@ -276,7 +329,7 @@ class PostDetailViewModel(
                 commentRepository.save(
                     auth = auth,
                     comment = comment,
-                    saved = value,
+                    saved = newValue,
                 )
                 notificationCenter.send(NotificationCenter.Event.CommentUpdate(newComment))
             } catch (e: Throwable) {

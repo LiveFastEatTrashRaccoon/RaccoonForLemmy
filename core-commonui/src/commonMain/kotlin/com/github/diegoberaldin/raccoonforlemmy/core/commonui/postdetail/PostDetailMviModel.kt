@@ -10,12 +10,15 @@ interface PostDetailMviModel :
     sealed interface Intent {
         object Refresh : Intent
         object LoadNextPage : Intent
-        data class UpVotePost(val value: Boolean, val post: PostModel) : Intent
-        data class DownVotePost(val value: Boolean, val post: PostModel) : Intent
-        data class SavePost(val value: Boolean, val post: PostModel) : Intent
-        data class UpVoteComment(val value: Boolean, val comment: CommentModel) : Intent
-        data class DownVoteComment(val value: Boolean, val comment: CommentModel) : Intent
-        data class SaveComment(val value: Boolean, val comment: CommentModel) : Intent
+        data class UpVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
+        data class DownVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
+        data class SavePost(val post: PostModel, val feedback: Boolean = false) : Intent
+        data class UpVoteComment(val comment: CommentModel, val feedback: Boolean = false) : Intent
+        data class DownVoteComment(val comment: CommentModel, val feedback: Boolean = false) :
+            Intent
+
+        data class SaveComment(val comment: CommentModel, val feedback: Boolean = false) : Intent
+        object HapticIndication : Intent
     }
 
     data class UiState(

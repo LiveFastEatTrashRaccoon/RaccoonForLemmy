@@ -42,9 +42,22 @@ class PostListViewModel(
             PostListMviModel.Intent.Refresh -> refresh()
             is PostListMviModel.Intent.ChangeSort -> applySortType(intent.value)
             is PostListMviModel.Intent.ChangeListing -> applyListingType(intent.value)
-            is PostListMviModel.Intent.DownVotePost -> downVote(intent.post, intent.value)
-            is PostListMviModel.Intent.SavePost -> save(intent.post, intent.value)
-            is PostListMviModel.Intent.UpVotePost -> upVote(intent.post, intent.value)
+            is PostListMviModel.Intent.DownVotePost -> toggleDownVote(
+                post = intent.post,
+                feedback = intent.feedback,
+            )
+
+            is PostListMviModel.Intent.SavePost -> toggleSave(
+                post = intent.post,
+                feedback = intent.feedback,
+            )
+
+            is PostListMviModel.Intent.UpVotePost -> toggleUpVote(
+                post = intent.post,
+                feedback = intent.feedback,
+            )
+
+            PostListMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
         }
     }
 
@@ -144,9 +157,15 @@ class PostListViewModel(
         refresh()
     }
 
-    private fun upVote(post: PostModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newPost = postsRepository.asUpVoted(post, value)
+    private fun toggleUpVote(post: PostModel, feedback: Boolean) {
+        val newVote = post.myVote <= 0
+        val newPost = postsRepository.asUpVoted(
+            post = post,
+            voted = newVote,
+        )
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
         mvi.updateState {
             it.copy(
                 posts = it.posts.map { p ->
@@ -164,7 +183,7 @@ class PostListViewModel(
                 postsRepository.upVote(
                     post = post,
                     auth = auth,
-                    voted = value,
+                    voted = newVote,
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
@@ -183,9 +202,15 @@ class PostListViewModel(
         }
     }
 
-    private fun downVote(post: PostModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newPost = postsRepository.asDownVoted(post, value)
+    private fun toggleDownVote(post: PostModel, feedback: Boolean) {
+        val newValue = post.myVote >= 0
+        val newPost = postsRepository.asDownVoted(
+            post = post,
+            downVoted = newValue,
+        )
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
         mvi.updateState {
             it.copy(
                 posts = it.posts.map { p ->
@@ -203,7 +228,7 @@ class PostListViewModel(
                 postsRepository.downVote(
                     post = post,
                     auth = auth,
-                    downVoted = value,
+                    downVoted = newValue,
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
@@ -222,9 +247,15 @@ class PostListViewModel(
         }
     }
 
-    private fun save(post: PostModel, value: Boolean) {
-        hapticFeedback.vibrate()
-        val newPost = postsRepository.asSaved(post, value)
+    private fun toggleSave(post: PostModel, feedback: Boolean) {
+        val newValue = !post.saved
+        val newPost = postsRepository.asSaved(
+            post = post,
+            saved = newValue,
+        )
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
         mvi.updateState {
             it.copy(
                 posts = it.posts.map { p ->
@@ -242,7 +273,7 @@ class PostListViewModel(
                 postsRepository.save(
                     post = post,
                     auth = auth,
-                    saved = value,
+                    saved = newValue,
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
