@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -24,6 +25,7 @@ class PostDetailViewModel(
     private val commentRepository: CommentRepository,
     private val keyStore: TemporaryKeyStore,
     private val notificationCenter: NotificationCenter,
+    private val hapticFeedback: HapticFeedback,
 ) : MviModel<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect> by mvi,
     ScreenModel {
     private var currentPage: Int = 1
@@ -114,6 +116,7 @@ class PostDetailViewModel(
     }
 
     private fun upVotePost(post: PostModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newPost = postsRepository.asUpVoted(post, value)
         mvi.updateState { it.copy(post = newPost) }
         mvi.scope.launch(Dispatchers.IO) {
@@ -133,6 +136,7 @@ class PostDetailViewModel(
     }
 
     private fun downVotePost(post: PostModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newPost = postsRepository.asDownVoted(post, value)
         mvi.updateState { it.copy(post = newPost) }
 
@@ -153,6 +157,7 @@ class PostDetailViewModel(
     }
 
     private fun savePost(post: PostModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newPost = postsRepository.asSaved(post, value)
         mvi.updateState { it.copy(post = newPost) }
         mvi.scope.launch(Dispatchers.IO) {
@@ -172,6 +177,7 @@ class PostDetailViewModel(
     }
 
     private fun upVoteComment(comment: CommentModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newComment = commentRepository.asUpVoted(comment, value)
         mvi.updateState {
             it.copy(
@@ -211,6 +217,7 @@ class PostDetailViewModel(
     }
 
     private fun downVoteComment(comment: CommentModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newComment = commentRepository.asDownVoted(comment, value)
         mvi.updateState {
             it.copy(
@@ -250,6 +257,7 @@ class PostDetailViewModel(
     }
 
     private fun saveComment(comment: CommentModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newComment = commentRepository.asSaved(comment, value)
         mvi.updateState {
             it.copy(

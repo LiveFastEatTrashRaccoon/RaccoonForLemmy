@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
@@ -21,6 +22,7 @@ class CommunityDetailViewModel(
     private val identityRepository: IdentityRepository,
     private val postsRepository: PostsRepository,
     private val keyStore: TemporaryKeyStore,
+    private val hapticFeedback: HapticFeedback,
 ) : MviModel<CommunityDetailMviModel.Intent, CommunityDetailMviModel.UiState, CommunityDetailMviModel.Effect> by mvi,
     ScreenModel {
     private var currentPage: Int = 1
@@ -97,6 +99,7 @@ class CommunityDetailViewModel(
     }
 
     private fun upVotePost(post: PostModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newPost = postsRepository.asUpVoted(post, value)
         mvi.updateState {
             it.copy(
@@ -135,6 +138,7 @@ class CommunityDetailViewModel(
     }
 
     private fun downVotePost(post: PostModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newPost = postsRepository.asDownVoted(post, value)
         mvi.updateState {
             it.copy(
@@ -173,6 +177,7 @@ class CommunityDetailViewModel(
     }
 
     private fun savePost(post: PostModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newPost = postsRepository.asSaved(post, value)
         mvi.updateState {
             it.copy(

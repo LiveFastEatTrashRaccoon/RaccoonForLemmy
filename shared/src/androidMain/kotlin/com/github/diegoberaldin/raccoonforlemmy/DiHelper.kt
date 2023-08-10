@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy
 
+import com.github.diegoberaldin.racconforlemmy.core.utils.hapticFeedbackModule
 import com.github.diegoberaldin.raccoonforlemmy.core.api.di.coreApiModule
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.coreAppearanceModule
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.coreNotificationModule
@@ -20,6 +21,7 @@ val sharedHelperModule = module {
         coreApiModule,
         coreIdentityModule,
         coreNotificationModule,
+        hapticFeedbackModule,
         localizationModule,
         homeTabModule,
         inboxTabModule,

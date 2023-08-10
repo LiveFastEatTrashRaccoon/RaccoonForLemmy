@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -29,6 +30,7 @@ class PostListViewModel(
     private val identityRepository: IdentityRepository,
     private val keyStore: TemporaryKeyStore,
     private val notificationCenter: NotificationCenter,
+    private val hapticFeedback: HapticFeedback,
 ) : ScreenModel,
     MviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect> by mvi {
 
@@ -143,6 +145,7 @@ class PostListViewModel(
     }
 
     private fun upVote(post: PostModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newPost = postsRepository.asUpVoted(post, value)
         mvi.updateState {
             it.copy(
@@ -181,6 +184,7 @@ class PostListViewModel(
     }
 
     private fun downVote(post: PostModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newPost = postsRepository.asDownVoted(post, value)
         mvi.updateState {
             it.copy(
@@ -219,6 +223,7 @@ class PostListViewModel(
     }
 
     private fun save(post: PostModel, value: Boolean) {
+        hapticFeedback.vibrate()
         val newPost = postsRepository.asSaved(post, value)
         mvi.updateState {
             it.copy(
