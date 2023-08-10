@@ -36,49 +36,52 @@ class CommentRepository(
         return dto.map { it.toModel() }
     }
 
-    suspend fun upVote(comment: CommentModel, auth: String, voted: Boolean): CommentModel {
+    fun asUpVoted(comment: CommentModel, voted: Boolean) = comment.copy(
+        myVote = if (voted) 1 else 0,
+        score = when {
+            voted && comment.myVote < 0 -> comment.score + 2
+            voted -> comment.score + 1
+            !voted -> comment.score - 1
+            else -> comment.score
+        },
+    )
+
+    suspend fun upVote(comment: CommentModel, auth: String, voted: Boolean) {
         val data = CreateCommentLikeForm(
             commentId = comment.id,
             score = if (voted) 1 else 0,
             auth = auth,
         )
         services.comment.like(data)
-        return comment.copy(
-            myVote = if (voted) 1 else 0,
-            score = when {
-                voted && comment.myVote < 0 -> comment.score + 2
-                voted -> comment.score + 1
-                !voted -> comment.score - 1
-                else -> comment.score
-            },
-        )
     }
 
-    suspend fun downVote(comment: CommentModel, auth: String, downVoted: Boolean): CommentModel {
+    fun asDownVoted(comment: CommentModel, downVoted: Boolean) = comment.copy(
+        myVote = if (downVoted) -1 else 0,
+        score = when {
+            downVoted && comment.myVote > 0 -> comment.score - 2
+            downVoted -> comment.score - 1
+            !downVoted -> comment.score + 1
+            else -> comment.score
+        },
+    )
+
+    suspend fun downVote(comment: CommentModel, auth: String, downVoted: Boolean) {
         val data = CreateCommentLikeForm(
             commentId = comment.id,
             score = if (downVoted) -1 else 0,
             auth = auth,
         )
         services.comment.like(data)
-        return comment.copy(
-            myVote = if (downVoted) -1 else 0,
-            score = when {
-                downVoted && comment.myVote > 0 -> comment.score - 2
-                downVoted -> comment.score - 1
-                !downVoted -> comment.score + 1
-                else -> comment.score
-            },
-        )
     }
 
-    suspend fun save(comment: CommentModel, auth: String, saved: Boolean): CommentModel {
+    fun asSaved(comment: CommentModel, saved: Boolean) = comment.copy(saved = saved)
+
+    suspend fun save(comment: CommentModel, auth: String, saved: Boolean) {
         val data = SaveCommentForm(
             commentId = comment.id,
             save = saved,
             auth = auth,
         )
         services.comment.save(data)
-        return comment.copy(saved = saved)
     }
 }

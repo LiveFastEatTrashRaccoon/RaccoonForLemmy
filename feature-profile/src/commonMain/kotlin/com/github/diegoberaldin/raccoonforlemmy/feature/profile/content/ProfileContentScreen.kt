@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui
+package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -28,7 +28,6 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.P
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.notlogged.ProfileNotLoggedContent
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheet
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.viewmodel.ProfileScreenMviModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
@@ -61,7 +60,7 @@ internal class ProfileContentScreen : Screen {
                         if (uiState.currentUser != null) {
                             Image(
                                 modifier = Modifier.onClick {
-                                    model.reduce(ProfileScreenMviModel.Intent.Logout)
+                                    model.reduce(ProfileContentMviModel.Intent.Logout)
                                 },
                                 imageVector = Icons.Default.Logout,
                                 contentDescription = null,

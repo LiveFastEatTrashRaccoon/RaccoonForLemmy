@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.search.viewmodel
+package com.github.diegoberaldin.raccoonforlemmy.feature.search.communitylist
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
@@ -14,13 +14,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class SearchScreenModel(
-    private val mvi: DefaultMviModel<SearchScreenMviModel.Intent, SearchScreenMviModel.UiState, SearchScreenMviModel.Effect>,
+class CommunityListViewModel(
+    private val mvi: DefaultMviModel<CommunityListMviModel.Intent, CommunityListMviModel.UiState, CommunityListMviModel.Effect>,
     private val apiConfigRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
 ) : ScreenModel,
-    MviModel<SearchScreenMviModel.Intent, SearchScreenMviModel.UiState, SearchScreenMviModel.Effect> by mvi {
+    MviModel<CommunityListMviModel.Intent, CommunityListMviModel.UiState, CommunityListMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1
 
@@ -44,13 +44,13 @@ class SearchScreenModel(
         }
     }
 
-    override fun reduce(intent: SearchScreenMviModel.Intent) {
+    override fun reduce(intent: CommunityListMviModel.Intent) {
         when (intent) {
-            SearchScreenMviModel.Intent.LoadNextPage -> loadNextPage()
-            SearchScreenMviModel.Intent.Refresh -> refresh()
-            SearchScreenMviModel.Intent.SearchFired -> refresh()
-            is SearchScreenMviModel.Intent.SetSearch -> setSearch(intent.value)
-            is SearchScreenMviModel.Intent.SetSubscribedOnly -> applySubscribedOnly(intent.value)
+            CommunityListMviModel.Intent.LoadNextPage -> loadNextPage()
+            CommunityListMviModel.Intent.Refresh -> refresh()
+            CommunityListMviModel.Intent.SearchFired -> refresh()
+            is CommunityListMviModel.Intent.SetSearch -> setSearch(intent.value)
+            is CommunityListMviModel.Intent.SetSubscribedOnly -> applySubscribedOnly(intent.value)
         }
     }
 

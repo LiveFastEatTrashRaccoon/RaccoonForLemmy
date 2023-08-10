@@ -9,14 +9,14 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.p
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheetMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheetViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.viewmodel.ProfileScreenModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.viewmodel.ProfileScreenMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.ProfileContentViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.ProfileContentMviModel
 import org.koin.dsl.module
 
 val profileTabModule = module {
     factory {
-        ProfileScreenModel(
-            mvi = DefaultMviModel(ProfileScreenMviModel.UiState()),
+        ProfileContentViewModel(
+            mvi = DefaultMviModel(ProfileContentMviModel.UiState()),
             identityRepository = get(),
             siteRepository = get(),
         )

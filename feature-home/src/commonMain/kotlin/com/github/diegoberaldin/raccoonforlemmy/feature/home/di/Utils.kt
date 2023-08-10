@@ -1,5 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.home.di
 
-import com.github.diegoberaldin.raccoonforlemmy.feature.home.viewmodel.HomeScreenModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist.PostListViewModel
 
-expect fun getHomeScreenModel(): HomeScreenModel
+expect fun getHomeScreenModel(): PostListViewModel

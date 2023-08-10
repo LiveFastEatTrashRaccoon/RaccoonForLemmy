@@ -93,7 +93,7 @@ class CommunityDetailScreen(
         ) { padding ->
             val community = uiState.community
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
-                model.reduce(CommunityDetailScreenMviModel.Intent.Refresh)
+                model.reduce(CommunityDetailMviModel.Intent.Refresh)
             })
             Box(
                 modifier = Modifier.pullRefresh(pullRefreshState),
@@ -186,7 +186,7 @@ class CommunityDetailScreen(
                             post = post,
                             onUpVote = {
                                 model.reduce(
-                                    CommunityDetailScreenMviModel.Intent.UpVotePost(
+                                    CommunityDetailMviModel.Intent.UpVotePost(
                                         it,
                                         post,
                                     ),
@@ -194,7 +194,7 @@ class CommunityDetailScreen(
                             },
                             onDownVote = {
                                 model.reduce(
-                                    CommunityDetailScreenMviModel.Intent.DownVotePost(
+                                    CommunityDetailMviModel.Intent.DownVotePost(
                                         it,
                                         post,
                                     ),
@@ -202,7 +202,7 @@ class CommunityDetailScreen(
                             },
                             onSave = {
                                 model.reduce(
-                                    CommunityDetailScreenMviModel.Intent.SavePost(
+                                    CommunityDetailMviModel.Intent.SavePost(
                                         it,
                                         post,
                                     ),
@@ -212,7 +212,7 @@ class CommunityDetailScreen(
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                            model.reduce(CommunityDetailScreenMviModel.Intent.LoadNextPage)
+                            model.reduce(CommunityDetailMviModel.Intent.LoadNextPage)
                         }
                         if (uiState.loading && !uiState.refreshing) {
                             Box(

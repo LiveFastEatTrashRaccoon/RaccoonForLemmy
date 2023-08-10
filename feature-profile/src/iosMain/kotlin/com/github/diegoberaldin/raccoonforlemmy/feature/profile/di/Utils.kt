@@ -5,7 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.P
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.comments.ProfileCommentsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheetViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.viewmodel.ProfileScreenModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.ProfileContentViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
@@ -27,7 +27,7 @@ actual fun getProfileCommentsViewModel(user: UserModel): ProfileCommentsViewMode
     ProfileScreenModelHelper.getCommentsModel(user)
 
 object ProfileScreenModelHelper : KoinComponent {
-    val profileModel: ProfileScreenModel by inject()
+    val profileModel: ProfileContentViewModel by inject()
     val loginModel: LoginBottomSheetViewModel by inject()
     val loggedModel: ProfileLoggedViewModel by inject()
 

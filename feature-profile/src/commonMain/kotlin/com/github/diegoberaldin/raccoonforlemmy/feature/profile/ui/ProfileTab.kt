@@ -11,6 +11,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.ProfileContentScreen
 
 object ProfileTab : Tab {
 

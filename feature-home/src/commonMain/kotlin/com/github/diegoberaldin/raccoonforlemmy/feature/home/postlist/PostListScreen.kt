@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.home.ui
+package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,7 +36,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getHomeScreenModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.home.viewmodel.HomeScreenMviModel
 
 class PostListScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -60,7 +59,7 @@ class PostListScreen : Screen {
                             ListingTypeBottomSheet(
                                 isLogged = uiState.isLogged,
                                 onSelected = {
-                                    model.reduce(HomeScreenMviModel.Intent.ChangeListing(it))
+                                    model.reduce(PostListMviModel.Intent.ChangeListing(it))
                                 },
                                 onHide = {
                                     bottomSheetNavigator.hide()
@@ -72,7 +71,7 @@ class PostListScreen : Screen {
                         bottomSheetNavigator.show(
                             SortBottomSheet(
                                 onSelected = {
-                                    model.reduce(HomeScreenMviModel.Intent.ChangeSort(it))
+                                    model.reduce(PostListMviModel.Intent.ChangeSort(it))
                                 },
                                 onHide = {
                                     bottomSheetNavigator.hide()
@@ -84,7 +83,7 @@ class PostListScreen : Screen {
             },
         ) { padding ->
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
-                model.reduce(HomeScreenMviModel.Intent.Refresh)
+                model.reduce(PostListMviModel.Intent.Refresh)
             })
             Box(
                 modifier = Modifier.padding(padding).pullRefresh(pullRefreshState),
@@ -117,19 +116,19 @@ class PostListScreen : Screen {
                                 )
                             },
                             onUpVote = {
-                                model.reduce(HomeScreenMviModel.Intent.UpVotePost(it, post))
+                                model.reduce(PostListMviModel.Intent.UpVotePost(it, post))
                             },
                             onDownVote = {
-                                model.reduce(HomeScreenMviModel.Intent.DownVotePost(it, post))
+                                model.reduce(PostListMviModel.Intent.DownVotePost(it, post))
                             },
                             onSave = {
-                                model.reduce(HomeScreenMviModel.Intent.SavePost(it, post))
+                                model.reduce(PostListMviModel.Intent.SavePost(it, post))
                             },
                         )
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                            model.reduce(HomeScreenMviModel.Intent.LoadNextPage)
+                            model.reduce(PostListMviModel.Intent.LoadNextPage)
                         }
                         if (uiState.loading && !uiState.refreshing) {
                             Box(

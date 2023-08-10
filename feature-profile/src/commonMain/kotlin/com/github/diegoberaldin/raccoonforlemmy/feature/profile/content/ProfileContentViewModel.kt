@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.profile.viewmodel
+package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
@@ -11,12 +11,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ProfileScreenModel(
-    private val mvi: DefaultMviModel<ProfileScreenMviModel.Intent, ProfileScreenMviModel.UiState, ProfileScreenMviModel.Effect>,
+class ProfileContentViewModel(
+    private val mvi: DefaultMviModel<ProfileContentMviModel.Intent, ProfileContentMviModel.UiState, ProfileContentMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
 ) : ScreenModel,
-    MviModel<ProfileScreenMviModel.Intent, ProfileScreenMviModel.UiState, ProfileScreenMviModel.Effect> by mvi {
+    MviModel<ProfileContentMviModel.Intent, ProfileContentMviModel.UiState, ProfileContentMviModel.Effect> by mvi {
 
     override fun onStarted() {
         mvi.onStarted()
@@ -35,9 +35,9 @@ class ProfileScreenModel(
         }.launchIn(mvi.scope)
     }
 
-    override fun reduce(intent: ProfileScreenMviModel.Intent) {
+    override fun reduce(intent: ProfileContentMviModel.Intent) {
         when (intent) {
-            ProfileScreenMviModel.Intent.Logout -> identityRepository.clearToken()
+            ProfileContentMviModel.Intent.Logout -> identityRepository.clearToken()
         }
     }
 

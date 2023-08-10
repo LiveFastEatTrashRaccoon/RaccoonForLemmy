@@ -1,11 +1,11 @@
-package com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 
-interface CommunityDetailScreenMviModel :
-    MviModel<CommunityDetailScreenMviModel.Intent, CommunityDetailScreenMviModel.UiState, CommunityDetailScreenMviModel.Effect> {
+interface PostDetailMviModel :
+    MviModel<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect> {
 
     sealed interface Intent {
         object Refresh : Intent
@@ -13,14 +13,17 @@ interface CommunityDetailScreenMviModel :
         data class UpVotePost(val value: Boolean, val post: PostModel) : Intent
         data class DownVotePost(val value: Boolean, val post: PostModel) : Intent
         data class SavePost(val value: Boolean, val post: PostModel) : Intent
+        data class UpVoteComment(val value: Boolean, val comment: CommentModel) : Intent
+        data class DownVoteComment(val value: Boolean, val comment: CommentModel) : Intent
+        data class SaveComment(val value: Boolean, val comment: CommentModel) : Intent
     }
 
     data class UiState(
-        val community: CommunityModel = CommunityModel(),
+        val post: PostModel = PostModel(),
         val refreshing: Boolean = false,
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,
-        val posts: List<PostModel> = emptyList(),
+        val comments: List<CommentModel> = emptyList(),
     )
 
     sealed interface Effect

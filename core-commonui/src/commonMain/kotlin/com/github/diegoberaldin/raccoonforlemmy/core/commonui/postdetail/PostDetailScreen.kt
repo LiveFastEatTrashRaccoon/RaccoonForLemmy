@@ -75,7 +75,7 @@ class PostDetailScreen(
         ) { padding ->
             val post = uiState.post
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
-                model.reduce(PostDetailScreenMviModel.Intent.Refresh)
+                model.reduce(PostDetailMviModel.Intent.Refresh)
             })
             Box(
                 modifier = Modifier.pullRefresh(pullRefreshState),
@@ -111,13 +111,13 @@ class PostDetailScreen(
                             downVoted = post.myVote < 0,
                             saved = post.saved,
                             onUpVote = {
-                                model.reduce(PostDetailScreenMviModel.Intent.UpVotePost(it, post))
+                                model.reduce(PostDetailMviModel.Intent.UpVotePost(it, post))
                             },
                             onDownVote = {
-                                model.reduce(PostDetailScreenMviModel.Intent.DownVotePost(it, post))
+                                model.reduce(PostDetailMviModel.Intent.DownVotePost(it, post))
                             },
                             onSave = {
-                                model.reduce(PostDetailScreenMviModel.Intent.SavePost(it, post))
+                                model.reduce(PostDetailMviModel.Intent.SavePost(it, post))
                             },
                         )
                     }
@@ -126,7 +126,7 @@ class PostDetailScreen(
                             comment = comment,
                             onUpVote = {
                                 model.reduce(
-                                    PostDetailScreenMviModel.Intent.UpVoteComment(
+                                    PostDetailMviModel.Intent.UpVoteComment(
                                         it,
                                         comment,
                                     ),
@@ -134,7 +134,7 @@ class PostDetailScreen(
                             },
                             onDownVote = {
                                 model.reduce(
-                                    PostDetailScreenMviModel.Intent.DownVoteComment(
+                                    PostDetailMviModel.Intent.DownVoteComment(
                                         it,
                                         comment,
                                     ),
@@ -142,7 +142,7 @@ class PostDetailScreen(
                             },
                             onSave = {
                                 model.reduce(
-                                    PostDetailScreenMviModel.Intent.SaveComment(
+                                    PostDetailMviModel.Intent.SaveComment(
                                         it,
                                         comment,
                                     ),
@@ -152,7 +152,7 @@ class PostDetailScreen(
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                            model.reduce(PostDetailScreenMviModel.Intent.LoadNextPage)
+                            model.reduce(PostDetailMviModel.Intent.LoadNextPage)
                         }
                         if (uiState.loading && !uiState.refreshing) {
                             Box(

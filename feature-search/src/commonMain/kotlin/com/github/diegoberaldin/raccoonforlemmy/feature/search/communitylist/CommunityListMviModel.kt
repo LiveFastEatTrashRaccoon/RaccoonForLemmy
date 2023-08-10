@@ -1,10 +1,10 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.search.viewmodel
+package com.github.diegoberaldin.raccoonforlemmy.feature.search.communitylist
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 
-interface SearchScreenMviModel :
-    MviModel<SearchScreenMviModel.Intent, SearchScreenMviModel.UiState, SearchScreenMviModel.Effect> {
+interface CommunityListMviModel :
+    MviModel<CommunityListMviModel.Intent, CommunityListMviModel.UiState, CommunityListMviModel.Effect> {
     sealed interface Intent {
         object Refresh : Intent
         object LoadNextPage : Intent

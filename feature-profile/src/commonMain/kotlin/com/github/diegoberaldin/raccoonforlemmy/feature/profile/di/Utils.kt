@@ -5,9 +5,9 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.P
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.comments.ProfileCommentsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheetViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.viewmodel.ProfileScreenModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.ProfileContentViewModel
 
-expect fun getProfileScreenModel(): ProfileScreenModel
+expect fun getProfileScreenModel(): ProfileContentViewModel
 
 expect fun getLoginBottomSheetViewModel(): LoginBottomSheetViewModel
 

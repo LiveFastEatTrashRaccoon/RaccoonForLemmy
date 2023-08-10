@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.home.viewmodel
+package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
@@ -22,27 +22,27 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class HomeScreenModel(
-    private val mvi: DefaultMviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect>,
+class PostListViewModel(
+    private val mvi: DefaultMviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect>,
     private val postsRepository: PostsRepository,
     private val apiConfigRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
     private val keyStore: TemporaryKeyStore,
     private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
-    MviModel<HomeScreenMviModel.Intent, HomeScreenMviModel.UiState, HomeScreenMviModel.Effect> by mvi {
+    MviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1
 
-    override fun reduce(intent: HomeScreenMviModel.Intent) {
+    override fun reduce(intent: PostListMviModel.Intent) {
         when (intent) {
-            HomeScreenMviModel.Intent.LoadNextPage -> loadNextPage()
-            HomeScreenMviModel.Intent.Refresh -> refresh()
-            is HomeScreenMviModel.Intent.ChangeSort -> applySortType(intent.value)
-            is HomeScreenMviModel.Intent.ChangeListing -> applyListingType(intent.value)
-            is HomeScreenMviModel.Intent.DownVotePost -> downVote(intent.post, intent.value)
-            is HomeScreenMviModel.Intent.SavePost -> save(intent.post, intent.value)
-            is HomeScreenMviModel.Intent.UpVotePost -> upVote(intent.post, intent.value)
+            PostListMviModel.Intent.LoadNextPage -> loadNextPage()
+            PostListMviModel.Intent.Refresh -> refresh()
+            is PostListMviModel.Intent.ChangeSort -> applySortType(intent.value)
+            is PostListMviModel.Intent.ChangeListing -> applyListingType(intent.value)
+            is PostListMviModel.Intent.DownVotePost -> downVote(intent.post, intent.value)
+            is PostListMviModel.Intent.SavePost -> save(intent.post, intent.value)
+            is PostListMviModel.Intent.UpVotePost -> upVote(intent.post, intent.value)
         }
     }
 
@@ -143,67 +143,115 @@ class HomeScreenModel(
     }
 
     private fun upVote(post: PostModel, value: Boolean) {
-        mvi.scope.launch(Dispatchers.IO) {
-            val auth = identityRepository.authToken.value.orEmpty()
-            val newPost = postsRepository.upVote(
-                post = post,
-                auth = auth,
-                voted = value,
+        val newPost = postsRepository.asUpVoted(post, value)
+        mvi.updateState {
+            it.copy(
+                posts = it.posts.map { p ->
+                    if (p.id == post.id) {
+                        newPost
+                    } else {
+                        p
+                    }
+                },
             )
-            mvi.updateState {
-                it.copy(
-                    posts = it.posts.map { p ->
-                        if (p.id == post.id) {
-                            newPost
-                        } else {
-                            p
-                        }
-                    },
+        }
+        mvi.scope.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                postsRepository.upVote(
+                    post = post,
+                    auth = auth,
+                    voted = value,
                 )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                post
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
             }
         }
     }
 
     private fun downVote(post: PostModel, value: Boolean) {
-        mvi.scope.launch(Dispatchers.IO) {
-            val auth = identityRepository.authToken.value.orEmpty()
-            val newPost = postsRepository.downVote(
-                post = post,
-                auth = auth,
-                downVoted = value,
+        val newPost = postsRepository.asDownVoted(post, value)
+        mvi.updateState {
+            it.copy(
+                posts = it.posts.map { p ->
+                    if (p.id == post.id) {
+                        newPost
+                    } else {
+                        p
+                    }
+                },
             )
-            mvi.updateState {
-                it.copy(
-                    posts = it.posts.map { p ->
-                        if (p.id == post.id) {
-                            newPost
-                        } else {
-                            p
-                        }
-                    },
+        }
+        mvi.scope.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                postsRepository.downVote(
+                    post = post,
+                    auth = auth,
+                    downVoted = value,
                 )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                post
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
             }
         }
     }
 
     private fun save(post: PostModel, value: Boolean) {
-        mvi.scope.launch(Dispatchers.IO) {
-            val auth = identityRepository.authToken.value.orEmpty()
-            val newPost = postsRepository.save(
-                post = post,
-                auth = auth,
-                saved = value,
+        val newPost = postsRepository.asSaved(post, value)
+        mvi.updateState {
+            it.copy(
+                posts = it.posts.map { p ->
+                    if (p.id == post.id) {
+                        newPost
+                    } else {
+                        p
+                    }
+                },
             )
-            mvi.updateState {
-                it.copy(
-                    posts = it.posts.map { p ->
-                        if (p.id == post.id) {
-                            newPost
-                        } else {
-                            p
-                        }
-                    },
+        }
+        mvi.scope.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                postsRepository.save(
+                    post = post,
+                    auth = auth,
+                    saved = value,
                 )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                post
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
             }
         }
     }

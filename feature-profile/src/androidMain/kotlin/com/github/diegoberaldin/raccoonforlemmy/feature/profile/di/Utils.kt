@@ -5,12 +5,12 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.P
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.comments.ProfileCommentsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheetViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.viewmodel.ProfileScreenModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.ProfileContentViewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.java.KoinJavaComponent.inject
 
-actual fun getProfileScreenModel(): ProfileScreenModel {
-    val res: ProfileScreenModel by inject(ProfileScreenModel::class.java)
+actual fun getProfileScreenModel(): ProfileContentViewModel {
+    val res: ProfileContentViewModel by inject(ProfileContentViewModel::class.java)
     return res
 }
 

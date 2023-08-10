@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.home.ui
+package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

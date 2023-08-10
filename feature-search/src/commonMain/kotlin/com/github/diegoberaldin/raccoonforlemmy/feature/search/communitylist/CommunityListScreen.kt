@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.search.ui
+package com.github.diegoberaldin.raccoonforlemmy.feature.search.communitylist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,7 +40,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getSearchScreenModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.viewmodel.SearchScreenMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.CommunityItem
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -71,7 +71,7 @@ class CommunityListScreen : Screen {
                     keyboardType = KeyboardType.Text,
                 ),
                 onValueChange = { value ->
-                    model.reduce(SearchScreenMviModel.Intent.SetSearch(value))
+                    model.reduce(CommunityListMviModel.Intent.SetSearch(value))
                 },
             )
             Row(
@@ -82,7 +82,7 @@ class CommunityListScreen : Screen {
                     Checkbox(
                         checked = uiState.subscribedOnly,
                         onCheckedChange = {
-                            model.reduce(SearchScreenMviModel.Intent.SetSubscribedOnly(it))
+                            model.reduce(CommunityListMviModel.Intent.SetSubscribedOnly(it))
                         },
                         colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary),
                     )
@@ -93,7 +93,7 @@ class CommunityListScreen : Screen {
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Button(onClick = {
-                    model.reduce(SearchScreenMviModel.Intent.SearchFired)
+                    model.reduce(CommunityListMviModel.Intent.SearchFired)
                 }) {
                     Text(
                         text = stringResource(MR.strings.button_search),
@@ -103,7 +103,7 @@ class CommunityListScreen : Screen {
             }
 
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
-                model.reduce(SearchScreenMviModel.Intent.Refresh)
+                model.reduce(CommunityListMviModel.Intent.Refresh)
             })
             Box(
                 modifier = Modifier.padding(Spacing.xxs).pullRefresh(pullRefreshState),
@@ -129,7 +129,7 @@ class CommunityListScreen : Screen {
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                            model.reduce(SearchScreenMviModel.Intent.LoadNextPage)
+                            model.reduce(CommunityListMviModel.Intent.LoadNextPage)
                         }
                         if (uiState.loading && !uiState.refreshing) {
                             Box(

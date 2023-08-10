@@ -1,9 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.di
 
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.viewmodel.SearchScreenModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.communitylist.CommunityListViewModel
 import org.koin.java.KoinJavaComponent.inject
 
-actual fun getSearchScreenModel(): SearchScreenModel {
-    val res: SearchScreenModel by inject(SearchScreenModel::class.java)
+actual fun getSearchScreenModel(): CommunityListViewModel {
+    val res: CommunityListViewModel by inject(CommunityListViewModel::class.java)
     return res
 }

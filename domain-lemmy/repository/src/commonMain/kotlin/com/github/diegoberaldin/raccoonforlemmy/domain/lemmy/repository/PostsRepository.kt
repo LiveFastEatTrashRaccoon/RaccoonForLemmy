@@ -37,49 +37,52 @@ class PostsRepository(
         return dto.map { it.toModel() }
     }
 
-    suspend fun upVote(post: PostModel, auth: String, voted: Boolean): PostModel {
+    fun asUpVoted(post: PostModel, voted: Boolean) = post.copy(
+        myVote = if (voted) 1 else 0,
+        score = when {
+            voted && post.myVote < 0 -> post.score + 2
+            voted -> post.score + 1
+            !voted -> post.score - 1
+            else -> post.score
+        },
+    )
+
+    suspend fun upVote(post: PostModel, auth: String, voted: Boolean) {
         val data = CreatePostLikeForm(
             postId = post.id,
             score = if (voted) 1 else 0,
             auth = auth,
         )
         services.post.like(data)
-        return post.copy(
-            myVote = if (voted) 1 else 0,
-            score = when {
-                voted && post.myVote < 0 -> post.score + 2
-                voted -> post.score + 1
-                !voted -> post.score - 1
-                else -> post.score
-            },
-        )
     }
 
-    suspend fun downVote(post: PostModel, auth: String, downVoted: Boolean): PostModel {
+    fun asDownVoted(post: PostModel, downVoted: Boolean) = post.copy(
+        myVote = if (downVoted) -1 else 0,
+        score = when {
+            downVoted && post.myVote > 0 -> post.score - 2
+            downVoted -> post.score - 1
+            !downVoted -> post.score + 1
+            else -> post.score
+        },
+    )
+
+    suspend fun downVote(post: PostModel, auth: String, downVoted: Boolean) {
         val data = CreatePostLikeForm(
             postId = post.id,
             score = if (downVoted) -1 else 0,
             auth = auth,
         )
         services.post.like(data)
-        return post.copy(
-            myVote = if (downVoted) -1 else 0,
-            score = when {
-                downVoted && post.myVote > 0 -> post.score - 2
-                downVoted -> post.score - 1
-                !downVoted -> post.score + 1
-                else -> post.score
-            },
-        )
     }
 
-    suspend fun save(post: PostModel, auth: String, saved: Boolean): PostModel {
+    fun asSaved(post: PostModel, saved: Boolean): PostModel = post.copy(saved = saved)
+
+    suspend fun save(post: PostModel, auth: String, saved: Boolean) {
         val data = SavePostForm(
             postId = post.id,
             save = saved,
             auth = auth,
         )
         services.post.save(data)
-        return post.copy(saved = saved)
     }
 }
