@@ -54,6 +54,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.Po
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getHomeScreenModel
 
 class PostListScreen : Screen {
@@ -214,6 +215,16 @@ class PostListScreen : Screen {
                                     navigator.push(
                                         CommunityDetailScreen(
                                             community = community,
+                                            onBack = {
+                                                navigator.pop()
+                                            },
+                                        ),
+                                    )
+                                },
+                                onOpenCreator = { user ->
+                                    navigator.push(
+                                        UserDetailScreen(
+                                            user = user,
                                             onBack = {
                                                 navigator.pop()
                                             },

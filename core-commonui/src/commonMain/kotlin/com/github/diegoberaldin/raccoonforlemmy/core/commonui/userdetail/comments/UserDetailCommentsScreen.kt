@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.comments
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,37 +25,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserCommentsViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.CommentCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.SectionSelector
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedSection
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.SectionSelector
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfilePostsViewModel
 
-internal class ProfilePostsScreen(
+internal class UserDetailCommentsScreen(
     private val modifier: Modifier = Modifier,
     private val user: UserModel,
-    private val onSectionSelected: (ProfileLoggedSection) -> Unit,
+    private val onSectionSelected: (UserDetailSection) -> Unit,
 ) : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel {
-            getProfilePostsViewModel(
-                user = user,
-            )
-        }
+        val model = rememberScreenModel(
+            user.id.toString(),
+        ) { getUserCommentsViewModel(user) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val navigator = LocalNavigator.currentOrThrow
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
-            model.reduce(ProfilePostsMviModel.Intent.Refresh)
+            model.reduce(UserCommentsMviModel.Intent.Refresh)
         })
         Box(
             modifier = modifier.pullRefresh(pullRefreshState),
@@ -69,27 +64,41 @@ internal class ProfilePostsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
-                        UserHeader(user = user)
-                        UserCounters(user = user)
+                        UserHeader(user = uiState.user)
+                        UserCounters(user = uiState.user)
                         Spacer(modifier = Modifier.height(Spacing.xxs))
                         SectionSelector(
-                            currentSection = ProfileLoggedSection.POSTS,
+                            currentSection = UserDetailSection.COMMENTS,
                             onSectionSelected = {
                                 onSectionSelected(it)
                             },
                         )
                     }
                 }
-                items(uiState.posts) { post ->
-                    ProfilePostCard(
-                        post = post,
-                        onOpenCommunity = { community ->
-                            navigator.push(
-                                CommunityDetailScreen(
-                                    community = community,
-                                    onBack = {
-                                        navigator.pop()
-                                    },
+                items(uiState.comments, key = { it.id.toString() + it.myVote }) { comment ->
+                    CommentCard(
+                        comment = comment,
+                        onSave = {
+                            model.reduce(
+                                UserCommentsMviModel.Intent.SaveComment(
+                                    comment = comment,
+                                    feedback = true,
+                                ),
+                            )
+                        },
+                        onUpVote = {
+                            model.reduce(
+                                UserCommentsMviModel.Intent.UpVoteComment(
+                                    comment = comment,
+                                    feedback = true,
+                                ),
+                            )
+                        },
+                        onDownVote = {
+                            model.reduce(
+                                UserCommentsMviModel.Intent.DownVoteComment(
+                                    comment = comment,
+                                    feedback = true,
                                 ),
                             )
                         },
@@ -97,7 +106,7 @@ internal class ProfilePostsScreen(
                 }
                 item {
                     if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                        model.reduce(ProfilePostsMviModel.Intent.LoadNextPage)
+                        model.reduce(UserCommentsMviModel.Intent.LoadNextPage)
                     }
                     if (uiState.loading && !uiState.refreshing) {
                         Box(

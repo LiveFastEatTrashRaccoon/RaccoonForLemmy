@@ -59,6 +59,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardTitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailScreenViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 
 class PostDetailScreen(
@@ -114,6 +115,16 @@ class PostDetailScreen(
                                 navigator.push(
                                     CommunityDetailScreen(
                                         community = community,
+                                        onBack = {
+                                            navigator.pop()
+                                        },
+                                    ),
+                                )
+                            },
+                            onOpenCreator = { user ->
+                                navigator.push(
+                                    UserDetailScreen(
+                                        user = user,
                                         onBack = {
                                             navigator.pop()
                                         },

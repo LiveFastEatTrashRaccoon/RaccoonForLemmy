@@ -5,6 +5,12 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.Co
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.comments.UserCommentsMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.comments.UserCommentsViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.posts.UserPostsMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.posts.UserPostsViewModel
 import org.koin.dsl.module
 
 val commonUiModule = module {
@@ -27,6 +33,31 @@ val commonUiModule = module {
             identityRepository = get(),
             postsRepository = get(),
             keyStore = get(),
+            hapticFeedback = get(),
+        )
+    }
+    factory {
+        UserDetailViewModel(
+            mvi = DefaultMviModel(UserDetailMviModel.UiState()),
+        )
+    }
+    factory {
+        UserPostsViewModel(
+            mvi = DefaultMviModel(UserPostsMviModel.UiState()),
+            user = it[0],
+            identityRepository = get(),
+            userRepository = get(),
+            postsRepository = get(),
+            hapticFeedback = get(),
+        )
+    }
+    factory {
+        UserCommentsViewModel(
+            mvi = DefaultMviModel(UserCommentsMviModel.UiState()),
+            user = it[0],
+            identityRepository = get(),
+            userRepository = get(),
+            commentRepository = get(),
             hapticFeedback = get(),
         )
     }

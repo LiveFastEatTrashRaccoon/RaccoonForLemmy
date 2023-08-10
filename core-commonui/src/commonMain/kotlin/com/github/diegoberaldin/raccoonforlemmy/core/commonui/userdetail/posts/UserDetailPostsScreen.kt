@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.posts
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,23 +30,26 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserPostsViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.SectionSelector
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedSection
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.SectionSelector
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfilePostsViewModel
 
-internal class ProfilePostsScreen(
+internal class UserDetailPostsScreen(
     private val modifier: Modifier = Modifier,
     private val user: UserModel,
-    private val onSectionSelected: (ProfileLoggedSection) -> Unit,
+    private val onSectionSelected: (UserDetailSection) -> Unit,
 ) : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel {
-            getProfilePostsViewModel(
+        val model = rememberScreenModel(
+            user.id.toString(),
+        ) {
+            getUserPostsViewModel(
                 user = user,
             )
         }
@@ -55,7 +58,7 @@ internal class ProfilePostsScreen(
         val navigator = LocalNavigator.currentOrThrow
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
-            model.reduce(ProfilePostsMviModel.Intent.Refresh)
+            model.reduce(UserPostsMviModel.Intent.Refresh)
         })
         Box(
             modifier = modifier.pullRefresh(pullRefreshState),
@@ -69,20 +72,44 @@ internal class ProfilePostsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
-                        UserHeader(user = user)
-                        UserCounters(user = user)
+                        UserHeader(user = uiState.user)
+                        UserCounters(user = uiState.user)
                         Spacer(modifier = Modifier.height(Spacing.xxs))
                         SectionSelector(
-                            currentSection = ProfileLoggedSection.POSTS,
+                            currentSection = UserDetailSection.POSTS,
                             onSectionSelected = {
                                 onSectionSelected(it)
                             },
                         )
                     }
                 }
-                items(uiState.posts) { post ->
-                    ProfilePostCard(
+                items(uiState.posts, key = { it.id.toString() + it.myVote }) { post ->
+                    PostCard(
                         post = post,
+                        onUpVote = {
+                            model.reduce(
+                                UserPostsMviModel.Intent.UpVotePost(
+                                    post = post,
+                                    feedback = true,
+                                ),
+                            )
+                        },
+                        onDownVote = {
+                            model.reduce(
+                                UserPostsMviModel.Intent.DownVotePost(
+                                    post = post,
+                                    feedback = true,
+                                ),
+                            )
+                        },
+                        onSave = {
+                            model.reduce(
+                                UserPostsMviModel.Intent.SavePost(
+                                    post = post,
+                                    feedback = true,
+                                ),
+                            )
+                        },
                         onOpenCommunity = { community ->
                             navigator.push(
                                 CommunityDetailScreen(
@@ -97,7 +124,7 @@ internal class ProfilePostsScreen(
                 }
                 item {
                     if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                        model.reduce(ProfilePostsMviModel.Intent.LoadNextPage)
+                        model.reduce(UserPostsMviModel.Intent.LoadNextPage)
                     }
                     if (uiState.loading && !uiState.refreshing) {
                         Box(

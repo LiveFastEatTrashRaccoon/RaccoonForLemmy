@@ -30,9 +30,9 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedCounters
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedHeader
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedSection
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostCard
@@ -72,8 +72,8 @@ internal class ProfileSavedScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
-                        ProfileLoggedHeader(user = user)
-                        ProfileLoggedCounters(user = user)
+                        UserHeader(user = user)
+                        UserCounters(user = user)
                         Spacer(modifier = Modifier.height(Spacing.xxs))
                         SectionSelector(
                             currentSection = ProfileLoggedSection.SAVED,

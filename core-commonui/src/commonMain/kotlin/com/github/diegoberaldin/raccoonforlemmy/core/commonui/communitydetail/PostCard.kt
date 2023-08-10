@@ -26,26 +26,27 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardTitle
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
 @Composable
 fun PostCard(
     modifier: Modifier = Modifier,
     post: PostModel,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
+    onOpenCreator: ((UserModel) -> Unit)? = null,
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
 ) {
     Card(
-        modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(CornerSize.m),
-            ).padding(
-                vertical = Spacing.lHalf,
-                horizontal = Spacing.s,
-            ),
+        modifier = modifier.background(
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            shape = RoundedCornerShape(CornerSize.m),
+        ).padding(
+            vertical = Spacing.lHalf,
+            horizontal = Spacing.s,
+        ),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
@@ -55,6 +56,7 @@ fun PostCard(
                 community = post.community,
                 creator = post.creator,
                 onOpenCommunity = onOpenCommunity,
+                onOpenCreator = onOpenCreator,
             )
             PostCardImage(post)
             Box {
@@ -63,11 +65,8 @@ fun PostCard(
                     text = post.text,
                 )
                 Box(
-                    modifier = Modifier
-                        .height(Spacing.s)
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .background(
+                    modifier = Modifier.height(Spacing.s).fillMaxWidth()
+                        .align(Alignment.BottomCenter).background(
                             brush = Brush.verticalGradient(
                                 colors = listOf(
                                     Color.Transparent,

@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,10 +23,11 @@ import io.kamel.image.asyncPainterResource
 
 @Composable
 fun PostCardSubtitle(
+    modifier: Modifier = Modifier,
     community: CommunityModel? = null,
     creator: UserModel? = null,
-    modifier: Modifier = Modifier,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
+    onOpenCreator: ((UserModel) -> Unit)? = null,
 ) {
     val communityName = community?.name.orEmpty()
     val communityIcon = community?.icon.orEmpty()
@@ -36,17 +38,19 @@ fun PostCardSubtitle(
     val iconSize = 16.dp
     if (communityName.isNotEmpty() || creatorName.isNotEmpty()) {
         Row(
-            modifier = modifier.padding(vertical = Spacing.xxs),
+            modifier = modifier.padding(vertical = Spacing.xs),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             if (communityName.isNotEmpty()) {
                 Row(
-                    modifier = Modifier.onClick {
-                        if (community != null) {
-                            onOpenCommunity?.invoke(community)
-                        }
-                    },
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .onClick {
+                            if (community != null) {
+                                onOpenCommunity?.invoke(community)
+                            }
+                        },
                 ) {
                     if (communityIcon.isNotEmpty()) {
                         val painterResource = asyncPainterResource(data = communityIcon)
@@ -72,23 +76,33 @@ fun PostCardSubtitle(
                 }
             }
             if (creatorName.isNotEmpty()) {
-                if (communityName.isNotEmpty()) {
-                    Text(
-                        text = "•",
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
-                if (creatorAvatar.isNotEmpty()) {
-                    val painterResource = asyncPainterResource(data = creatorAvatar)
-                    KamelImage(
-                        modifier = Modifier
-                            .padding(Spacing.xxxs)
-                            .size(iconSize)
-                            .clip(RoundedCornerShape(iconSize / 2)),
-                        resource = painterResource,
-                        contentDescription = null,
-                        contentScale = ContentScale.FillBounds,
-                    )
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .onClick {
+                            if (creator != null) {
+                                onOpenCreator?.invoke(creator)
+                            }
+                        },
+                ) {
+                    if (communityName.isNotEmpty()) {
+                        Text(
+                            text = "•",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                    if (creatorAvatar.isNotEmpty()) {
+                        val painterResource = asyncPainterResource(data = creatorAvatar)
+                        KamelImage(
+                            modifier = Modifier
+                                .padding(Spacing.xxxs)
+                                .size(iconSize)
+                                .clip(RoundedCornerShape(iconSize / 2)),
+                            resource = painterResource,
+                            contentDescription = null,
+                            contentScale = ContentScale.FillBounds,
+                        )
+                    }
                 }
                 Text(
                     text = buildString {

@@ -62,6 +62,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityDetailScreenViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -281,6 +282,16 @@ class CommunityDetailScreen(
                                     navigator.push(
                                         PostDetailScreen(
                                             post = post,
+                                            onBack = {
+                                                navigator.pop()
+                                            },
+                                        ),
+                                    )
+                                },
+                                onOpenCreator = { user ->
+                                    navigator.push(
+                                        UserDetailScreen(
+                                            user = user,
                                             onBack = {
                                                 navigator.pop()
                                             },

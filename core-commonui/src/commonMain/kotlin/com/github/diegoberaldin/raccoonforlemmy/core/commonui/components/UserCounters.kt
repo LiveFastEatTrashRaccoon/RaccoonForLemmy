@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,27 +8,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.DateTime
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 @Composable
-internal fun ProfileLoggedCounters(
+fun UserCounters(
     user: UserModel,
 ) {
     Row(
@@ -80,12 +74,28 @@ internal fun ProfileLoggedCounters(
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             Text(
-                text = DateTime.getPrettyDate(
-                    iso8601Timestamp = user.accountAge + "Z",
-                    yearLabel = stringResource(MR.strings.profile_year_short),
-                    monthLabel = stringResource(MR.strings.profile_month_short),
-                    dayLabel = stringResource(MR.strings.profile_day_short),
-                ),
+                text = user.accountAge.let {
+                    when {
+                        it.isEmpty() -> it
+                        !it.endsWith("Z") -> {
+                            DateTime.getPrettyDate(
+                                iso8601Timestamp = user.accountAge + "Z",
+                                yearLabel = stringResource(MR.strings.profile_year_short),
+                                monthLabel = stringResource(MR.strings.profile_month_short),
+                                dayLabel = stringResource(MR.strings.profile_day_short),
+                            )
+                        }
+
+                        else -> {
+                            DateTime.getPrettyDate(
+                                iso8601Timestamp = it,
+                                yearLabel = stringResource(MR.strings.profile_year_short),
+                                monthLabel = stringResource(MR.strings.profile_month_short),
+                                dayLabel = stringResource(MR.strings.profile_day_short),
+                            )
+                        }
+                    }
+                },
                 style = MaterialTheme.typography.headlineSmall,
             )
             Text(
@@ -94,32 +104,4 @@ internal fun ProfileLoggedCounters(
             )
         }
     }
-}
-
-@Composable
-internal fun ProfileLoggedHeader(
-    user: UserModel,
-) {
-    val avatar = user.avatar.orEmpty()
-    if (avatar.isNotEmpty()) {
-        val painterResource = asyncPainterResource(data = avatar)
-        val profileImageSize = 100.dp
-        KamelImage(
-            modifier = Modifier.size(profileImageSize)
-                .clip(RoundedCornerShape(profileImageSize / 2)),
-            resource = painterResource,
-            contentDescription = null,
-            onLoading = {
-                CircularProgressIndicator()
-            },
-        )
-    }
-    Text(
-        text = user.name,
-        style = MaterialTheme.typography.headlineSmall,
-    )
-    Text(
-        text = user.host,
-        style = MaterialTheme.typography.titleMedium,
-    )
 }
