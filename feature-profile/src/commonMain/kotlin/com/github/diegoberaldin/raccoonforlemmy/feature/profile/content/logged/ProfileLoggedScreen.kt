@@ -35,22 +35,14 @@ internal class ProfileLoggedScreen(
             model.bindToLifecycle(key)
             val uiState by model.uiState.collectAsState()
 
-            ProfileLoggedHeader(user = user)
-
-            ProfileLoggedCounters(user = user)
-
-            SectionSelector(
-                modifier = Modifier.padding(vertical = Spacing.xxs),
-                currentSection = uiState.currentTab,
-                onSectionSelected = {
-                    model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
-                },
-            )
             when (uiState.currentTab) {
                 ProfileLoggedSection.POSTS -> {
                     ProfilePostsScreen(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         user = user,
+                        onSectionSelected = {
+                            model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
+                        },
                     ).Content()
                 }
 
@@ -58,6 +50,9 @@ internal class ProfileLoggedScreen(
                     ProfileCommentsScreen(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         user = user,
+                        onSectionSelected = {
+                            model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
+                        },
                     ).Content()
                 }
 
@@ -65,6 +60,9 @@ internal class ProfileLoggedScreen(
                     ProfileSavedScreen(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         user = user,
+                        onSectionSelected = {
+                            model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
+                        },
                     ).Content()
                 }
             }

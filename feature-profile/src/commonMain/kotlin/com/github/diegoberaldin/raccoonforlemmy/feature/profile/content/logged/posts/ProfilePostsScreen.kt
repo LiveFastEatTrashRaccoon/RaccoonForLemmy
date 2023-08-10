@@ -2,8 +2,11 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,11 +31,16 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedCounters
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedHeader
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedSection
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfilePostsViewModel
 
 internal class ProfilePostsScreen(
     private val modifier: Modifier = Modifier,
     private val user: UserModel,
+    private val onSectionSelected: (ProfileLoggedSection) -> Unit,
 ) : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -56,6 +64,22 @@ internal class ProfilePostsScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
+                item {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                    ) {
+                        ProfileLoggedHeader(user = user)
+                        ProfileLoggedCounters(user = user)
+                        Spacer(modifier = Modifier.height(Spacing.xxs))
+                        SectionSelector(
+                            currentSection = ProfileLoggedSection.POSTS,
+                            onSectionSelected = {
+                                onSectionSelected(it)
+                            },
+                        )
+                    }
+                }
                 items(uiState.posts) { post ->
                     ProfilePostCard(
                         post = post,
