@@ -28,6 +28,7 @@ class UserRepository(
             avatar = dto.personView.person.avatar,
             host = dto.personView.person.actorId.toHost(),
             score = dto.personView.counts.toModel(),
+            accountAge = dto.personView.person.published,
         )
     }
 

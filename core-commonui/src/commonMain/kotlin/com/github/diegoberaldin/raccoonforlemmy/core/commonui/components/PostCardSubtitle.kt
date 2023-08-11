@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,78 +43,86 @@ fun PostCardSubtitle(
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             if (communityName.isNotEmpty()) {
-                Row(
+                Surface(
                     modifier = Modifier
                         .onClick {
                             if (community != null) {
                                 onOpenCommunity?.invoke(community)
                             }
                         },
-                    horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
-                    if (communityIcon.isNotEmpty()) {
-                        val painterResource = asyncPainterResource(data = communityIcon)
-                        KamelImage(
-                            modifier = Modifier
-                                .padding(Spacing.xxxs)
-                                .size(iconSize)
-                                .clip(RoundedCornerShape(iconSize / 2)),
-                            resource = painterResource,
-                            contentDescription = null,
-                            contentScale = ContentScale.FillBounds,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                    ) {
+                        if (communityIcon.isNotEmpty()) {
+                            val painterResource = asyncPainterResource(data = communityIcon)
+                            KamelImage(
+                                modifier = Modifier
+                                    .padding(Spacing.xxxs)
+                                    .size(iconSize)
+                                    .clip(RoundedCornerShape(iconSize / 2)),
+                                resource = painterResource,
+                                contentDescription = null,
+                                contentScale = ContentScale.FillBounds,
+                            )
+                        }
+                        Text(
+                            modifier = Modifier.padding(vertical = Spacing.xs),
+                            text = buildString {
+                                append(communityName)
+                                if (communityHost.isNotEmpty()) {
+                                    append("@$communityHost")
+                                }
+                            },
+                            style = MaterialTheme.typography.bodySmall,
                         )
                     }
-                    Text(
-                        modifier = Modifier.padding(vertical = Spacing.xs),
-                        text = buildString {
-                            append(communityName)
-                            if (communityHost.isNotEmpty()) {
-                                append("@$communityHost")
-                            }
-                        },
-                        style = MaterialTheme.typography.bodySmall,
-                    )
                 }
             }
             if (creatorName.isNotEmpty()) {
-                Row(
+                Surface(
                     modifier = Modifier
                         .onClick {
                             if (creator != null) {
                                 onOpenCreator?.invoke(creator)
                             }
                         },
-                    horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
-                    if (communityName.isNotEmpty()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                    ) {
+                        if (communityName.isNotEmpty()) {
+                            Text(
+                                text = "•",
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                        if (creatorAvatar.isNotEmpty()) {
+                            val painterResource = asyncPainterResource(data = creatorAvatar)
+                            KamelImage(
+                                modifier = Modifier
+                                    .padding(Spacing.xxxs)
+                                    .size(iconSize)
+                                    .clip(RoundedCornerShape(iconSize / 2)),
+                                resource = painterResource,
+                                contentDescription = null,
+                                contentScale = ContentScale.FillBounds,
+                            )
+                        }
                         Text(
-                            text = "•",
+                            modifier = Modifier.padding(vertical = Spacing.xs),
+                            text = buildString {
+                                append(creatorName)
+                                if (creatorHost.isNotEmpty() && communityHost != creatorHost) {
+                                    append("@$creatorHost")
+                                }
+                            },
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
-                    if (creatorAvatar.isNotEmpty()) {
-                        val painterResource = asyncPainterResource(data = creatorAvatar)
-                        KamelImage(
-                            modifier = Modifier
-                                .padding(Spacing.xxxs)
-                                .size(iconSize)
-                                .clip(RoundedCornerShape(iconSize / 2)),
-                            resource = painterResource,
-                            contentDescription = null,
-                            contentScale = ContentScale.FillBounds,
-                        )
-                    }
                 }
-                Text(
-                    modifier = Modifier.padding(vertical = Spacing.xs),
-                    text = buildString {
-                        append(creatorName)
-                        if (creatorHost.isNotEmpty() && communityHost != creatorHost) {
-                            append("@$creatorHost")
-                        }
-                    },
-                    style = MaterialTheme.typography.bodySmall,
-                )
             }
         }
     }

@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.DateTime
+import com.github.diegoberaldin.racconforlemmy.core.utils.getPrettyNumber
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -36,7 +37,10 @@ fun UserCounters(
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             Text(
-                text = (user.score?.postScore ?: 0).toString(),
+                text = (user.score?.postScore ?: 0).getPrettyNumber(
+                    millionLabel = stringResource(MR.strings.profile_million_short),
+                    thousandLabel = stringResource(MR.strings.profile_thousand_short),
+                ),
                 style = MaterialTheme.typography.headlineSmall,
             )
             Text(
@@ -55,7 +59,10 @@ fun UserCounters(
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             Text(
-                text = (user.score?.commentScore ?: 0).toString(),
+                text = (user.score?.commentScore ?: 0).getPrettyNumber(
+                    millionLabel = stringResource(MR.strings.profile_million_short),
+                    thousandLabel = stringResource(MR.strings.profile_thousand_short),
+                ),
                 style = MaterialTheme.typography.headlineSmall,
             )
             Text(

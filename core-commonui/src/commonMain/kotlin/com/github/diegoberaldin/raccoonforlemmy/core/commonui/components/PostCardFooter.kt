@@ -1,19 +1,19 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.outlined.ArrowCircleDown
-import androidx.compose.material.icons.outlined.ArrowCircleUp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -76,18 +76,28 @@ fun PostCardFooter(
             ),
         )
         Image(
-            modifier = buttonModifier.onClick {
-                onUpVote?.invoke()
-            },
+            modifier = buttonModifier
+                .let {
+                    if (upVoted) {
+                        it.background(
+                            color = MaterialTheme.colorScheme.onSurface,
+                            shape = CircleShape,
+                        )
+                    } else {
+                        it
+                    }
+                }.onClick {
+                    onUpVote?.invoke()
+                },
             imageVector = if (upVoted) {
-                Icons.Filled.ArrowCircleUp
+                Icons.Default.ArrowCircleUp
             } else {
-                Icons.Outlined.ArrowCircleUp
+                Icons.Default.ArrowCircleUp
             },
             contentDescription = null,
             colorFilter = ColorFilter.tint(
                 color = if (upVoted) {
-                    MaterialTheme.colorScheme.secondary
+                    MaterialTheme.colorScheme.surface
                 } else {
                     MaterialTheme.colorScheme.onSurface
                 },
@@ -97,18 +107,29 @@ fun PostCardFooter(
             text = "$score",
         )
         Image(
-            modifier = buttonModifier.onClick {
-                onDownVote?.invoke()
-            },
+            modifier = buttonModifier
+                .let {
+                    if (downVoted) {
+                        it.background(
+                            color = MaterialTheme.colorScheme.onSurface,
+                            shape = CircleShape,
+                        )
+                    } else {
+                        it
+                    }
+                }
+                .onClick {
+                    onDownVote?.invoke()
+                },
             imageVector = if (downVoted) {
-                Icons.Filled.ArrowCircleDown
+                Icons.Default.ArrowCircleDown
             } else {
-                Icons.Outlined.ArrowCircleDown
+                Icons.Default.ArrowCircleDown
             },
             contentDescription = null,
             colorFilter = ColorFilter.tint(
                 color = if (downVoted) {
-                    MaterialTheme.colorScheme.secondary
+                    MaterialTheme.colorScheme.surface
                 } else {
                     MaterialTheme.colorScheme.onSurface
                 },

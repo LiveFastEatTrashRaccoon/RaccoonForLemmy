@@ -51,6 +51,8 @@
     <string name="profile_year_short">y</string>
     <string name="profile_month_short">m</string>
     <string name="profile_day_short">d</string>
+    <string name="profile_thousand_short">k</string>
+    <string name="profile_million_short">m</string>
     <string name="profile_section_posts">Posts</string>
     <string name="profile_section_comments">Comments</string>
     <string name="profile_section_saved">Saved</string>

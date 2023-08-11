@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -239,15 +240,45 @@ class PostDetailScreen(
                                     DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
                                     DismissDirection.EndToStart -> Icons.Default.ArrowCircleUp
                                 }
+                                val (iconModifier, iconTint) = when {
+                                    direction == DismissDirection.StartToEnd && post.myVote < 0 -> {
+                                        Modifier.background(
+                                            color = Color.Transparent,
+                                            shape = CircleShape,
+                                        ) to MaterialTheme.colorScheme.onSecondary
+                                    }
 
+                                    direction == DismissDirection.StartToEnd -> {
+                                        Modifier.background(
+                                            color = MaterialTheme.colorScheme.onSecondary,
+                                            shape = CircleShape,
+                                        ) to MaterialTheme.colorScheme.secondary
+                                    }
+
+                                    direction == DismissDirection.EndToStart && post.myVote > 0 -> {
+                                        Modifier.background(
+                                            color = Color.Transparent,
+                                            shape = CircleShape,
+                                        ) to MaterialTheme.colorScheme.onSecondary
+                                    }
+
+                                    else -> {
+                                        Modifier.background(
+                                            color = MaterialTheme.colorScheme.onSecondary,
+                                            shape = CircleShape,
+                                        ) to MaterialTheme.colorScheme.secondary
+                                    }
+                                }
                                 Box(
                                     Modifier.fillMaxSize().background(color)
                                         .padding(horizontal = 20.dp),
                                     contentAlignment = alignment,
                                 ) {
                                     Icon(
+                                        modifier = iconModifier,
                                         imageVector = icon,
                                         contentDescription = null,
+                                        tint = iconTint,
                                     )
                                 }
                             },

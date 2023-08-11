@@ -48,6 +48,8 @@
     <string name="profile_year_short">a</string>
     <string name="profile_month_short">m</string>
     <string name="profile_day_short">g</string>
+    <string name="profile_thousand_short">k</string>
+    <string name="profile_million_short">m</string>
     <string name="profile_section_posts">Post</string>
     <string name="profile_section_comments">Commenti</string>
     <string name="profile_section_saved">Salvati</string>
