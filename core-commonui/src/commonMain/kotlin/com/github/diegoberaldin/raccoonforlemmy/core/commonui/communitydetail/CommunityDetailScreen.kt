@@ -22,8 +22,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ThumbDown
-import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material.icons.filled.ArrowCircleDown
+import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -261,8 +261,8 @@ class CommunityDetailScreen(
                                     DismissDirection.EndToStart -> Alignment.CenterEnd
                                 }
                                 val icon = when (direction) {
-                                    DismissDirection.StartToEnd -> Icons.Default.ThumbDown
-                                    DismissDirection.EndToStart -> Icons.Default.ThumbUp
+                                    DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
+                                    DismissDirection.EndToStart -> Icons.Default.ArrowCircleUp
                                 }
 
                                 Box(

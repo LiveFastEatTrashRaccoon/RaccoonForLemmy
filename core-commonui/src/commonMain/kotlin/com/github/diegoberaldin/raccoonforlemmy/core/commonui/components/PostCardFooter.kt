@@ -7,13 +7,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowCircleDown
+import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.ThumbDown
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.outlined.ThumbDown
-import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material.icons.outlined.ArrowCircleDown
+import androidx.compose.material.icons.outlined.ArrowCircleUp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -80,9 +80,9 @@ fun PostCardFooter(
                 onUpVote?.invoke()
             },
             imageVector = if (upVoted) {
-                Icons.Filled.ThumbUp
+                Icons.Filled.ArrowCircleUp
             } else {
-                Icons.Outlined.ThumbUp
+                Icons.Outlined.ArrowCircleUp
             },
             contentDescription = null,
             colorFilter = ColorFilter.tint(
@@ -101,9 +101,9 @@ fun PostCardFooter(
                 onDownVote?.invoke()
             },
             imageVector = if (downVoted) {
-                Icons.Filled.ThumbDown
+                Icons.Filled.ArrowCircleDown
             } else {
-                Icons.Outlined.ThumbDown
+                Icons.Outlined.ArrowCircleDown
             },
             contentDescription = null,
             colorFilter = ColorFilter.tint(

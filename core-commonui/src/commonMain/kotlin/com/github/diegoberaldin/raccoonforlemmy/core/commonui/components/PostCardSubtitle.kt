@@ -2,7 +2,6 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,12 +44,12 @@ fun PostCardSubtitle(
             if (communityName.isNotEmpty()) {
                 Row(
                     modifier = Modifier
-                        .fillMaxHeight()
                         .onClick {
                             if (community != null) {
                                 onOpenCommunity?.invoke(community)
                             }
                         },
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     if (communityIcon.isNotEmpty()) {
                         val painterResource = asyncPainterResource(data = communityIcon)
@@ -65,6 +64,7 @@ fun PostCardSubtitle(
                         )
                     }
                     Text(
+                        modifier = Modifier.padding(vertical = Spacing.xs),
                         text = buildString {
                             append(communityName)
                             if (communityHost.isNotEmpty()) {
@@ -78,12 +78,12 @@ fun PostCardSubtitle(
             if (creatorName.isNotEmpty()) {
                 Row(
                     modifier = Modifier
-                        .fillMaxHeight()
                         .onClick {
                             if (creator != null) {
                                 onOpenCreator?.invoke(creator)
                             }
                         },
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     if (communityName.isNotEmpty()) {
                         Text(
@@ -105,6 +105,7 @@ fun PostCardSubtitle(
                     }
                 }
                 Text(
+                    modifier = Modifier.padding(vertical = Spacing.xs),
                     text = buildString {
                         append(creatorName)
                         if (creatorHost.isNotEmpty() && communityHost != creatorHost) {

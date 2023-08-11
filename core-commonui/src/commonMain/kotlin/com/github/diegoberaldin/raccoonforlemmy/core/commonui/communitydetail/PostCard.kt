@@ -54,7 +54,7 @@ fun PostCard(
             PostCardTitle(post)
             PostCardSubtitle(
                 community = post.community,
-                creator = post.creator,
+                creator = post.creator?.copy(avatar = null),
                 onOpenCommunity = onOpenCommunity,
                 onOpenCreator = onOpenCreator,
             )
