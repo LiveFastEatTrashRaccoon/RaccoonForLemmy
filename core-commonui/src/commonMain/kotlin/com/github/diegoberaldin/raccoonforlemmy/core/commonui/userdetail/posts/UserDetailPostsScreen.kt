@@ -40,6 +40,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -47,6 +48,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
@@ -96,8 +98,11 @@ internal class UserDetailPostsScreen(
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         UserHeader(user = uiState.user)
-                        UserCounters(user = uiState.user)
-                        Spacer(modifier = Modifier.height(Spacing.xxs))
+                        UserCounters(
+                            modifier = Modifier.graphicsLayer(translationY = -Spacing.m.toLocalPixel()),
+                            user = uiState.user,
+                        )
+                        Spacer(modifier = Modifier.height(Spacing.s))
                         SectionSelector(
                             currentSection = UserDetailSection.POSTS,
                             onSectionSelected = {

@@ -22,9 +22,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
@@ -62,8 +64,11 @@ internal class ProfileCommentsScreen(
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         UserHeader(user = user)
-                        UserCounters(user = user)
-                        Spacer(modifier = Modifier.height(Spacing.xxs))
+                        UserCounters(
+                            modifier = Modifier.graphicsLayer(translationY = -Spacing.m.toLocalPixel()),
+                            user = user,
+                        )
+                        Spacer(modifier = Modifier.height(Spacing.s))
                         SectionSelector(
                             currentSection = ProfileLoggedSection.COMMENTS,
                             onSectionSelected = {

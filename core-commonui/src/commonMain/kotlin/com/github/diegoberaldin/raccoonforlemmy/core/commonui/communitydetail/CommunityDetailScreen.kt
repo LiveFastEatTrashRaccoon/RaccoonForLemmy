@@ -129,7 +129,7 @@ class CommunityDetailScreen(
                         val communityIcon = community.icon.orEmpty()
                         val communityTitle = community.title
 
-                        val iconSize = 50.dp
+                        val iconSize = 80.dp
                         Box(
                             modifier = Modifier.fillMaxWidth(),
                         ) {

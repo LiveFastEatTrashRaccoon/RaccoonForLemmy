@@ -3,10 +3,8 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,11 +20,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
@@ -73,8 +73,10 @@ internal class ProfileSavedScreen(
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         UserHeader(user = user)
-                        UserCounters(user = user)
-                        Spacer(modifier = Modifier.height(Spacing.xxs))
+                        UserCounters(
+                            modifier = Modifier.graphicsLayer(translationY = -Spacing.m.toLocalPixel()),
+                            user = user,
+                        )
                         SectionSelector(
                             currentSection = ProfileLoggedSection.SAVED,
                             onSectionSelected = {

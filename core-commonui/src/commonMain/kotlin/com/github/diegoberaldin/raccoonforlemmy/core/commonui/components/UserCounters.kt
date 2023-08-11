@@ -24,10 +24,11 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun UserCounters(
+    modifier: Modifier = Modifier,
     user: UserModel,
 ) {
     Row(
-        modifier = Modifier.padding(horizontal = Spacing.m).fillMaxWidth(),
+        modifier = modifier.padding(horizontal = Spacing.m).fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
     ) {
