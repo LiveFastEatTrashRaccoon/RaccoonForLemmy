@@ -255,7 +255,8 @@ class LoginBottomSheet(
                     },
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(Spacing.m),
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         if (uiState.loading) {
                             CircularProgressIndicator(
@@ -266,6 +267,7 @@ class LoginBottomSheet(
                         Text(stringResource(MR.strings.button_confirm))
                     }
                 }
+                Spacer(modifier = Modifier.height(Spacing.m))
             }
         }
     }

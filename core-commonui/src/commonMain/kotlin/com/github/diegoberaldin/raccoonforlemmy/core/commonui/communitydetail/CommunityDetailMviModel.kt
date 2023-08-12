@@ -16,6 +16,8 @@ interface CommunityDetailMviModel :
         data class DownVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
         data class SavePost(val post: PostModel, val feedback: Boolean = false) : Intent
         object HapticIndication : Intent
+        object Subscribe : Intent
+        object Unsubscribe : Intent
     }
 
     data class UiState(

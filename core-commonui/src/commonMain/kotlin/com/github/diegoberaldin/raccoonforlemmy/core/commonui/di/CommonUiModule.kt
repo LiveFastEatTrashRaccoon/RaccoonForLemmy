@@ -31,6 +31,7 @@ val commonUiModule = module {
             mvi = DefaultMviModel(CommunityDetailMviModel.UiState()),
             community = params[0],
             identityRepository = get(),
+            communityRepository = get(),
             postsRepository = get(),
             keyStore = get(),
             hapticFeedback = get(),

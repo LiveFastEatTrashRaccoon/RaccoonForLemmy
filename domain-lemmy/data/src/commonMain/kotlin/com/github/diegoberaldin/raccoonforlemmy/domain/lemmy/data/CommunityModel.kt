@@ -7,4 +7,5 @@ data class CommunityModel(
     val host: String = "",
     val icon: String? = null,
     val banner: String? = null,
+    val subscribed: Boolean? = null,
 )

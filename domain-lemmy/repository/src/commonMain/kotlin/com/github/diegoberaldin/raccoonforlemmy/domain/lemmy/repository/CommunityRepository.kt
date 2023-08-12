@@ -1,7 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommunityView
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.FollowCommunityForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SearchType
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SubscribedType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toModel
@@ -49,6 +51,38 @@ class CommunityRepository(
         ).body()
         return response?.communityView?.toModel()
     }
+
+    suspend fun subscribe(
+        auth: String? = null,
+        id: Int,
+    ): CommunityModel? {
+        val data = FollowCommunityForm(
+            auth = auth.orEmpty(),
+            communityId = id,
+            follow = true,
+        )
+        val response = services.community.follow(data)
+        return response.body()?.communityView?.toModel()
+    }
+
+    suspend fun unsubscribe(
+        auth: String? = null,
+        id: Int,
+    ): CommunityModel? {
+        val data = FollowCommunityForm(
+            auth = auth.orEmpty(),
+            communityId = id,
+            follow = false,
+        )
+        val response = services.community.follow(data)
+        return response.body()?.communityView?.toModel()
+    }
 }
 
-private fun CommunityView.toModel() = community.toModel()
+private fun CommunityView.toModel() = community.toModel().copy(
+    subscribed = when (subscribed) {
+        SubscribedType.Subscribed -> true
+        SubscribedType.NotSubscribed -> false
+        else -> null
+    },
+)

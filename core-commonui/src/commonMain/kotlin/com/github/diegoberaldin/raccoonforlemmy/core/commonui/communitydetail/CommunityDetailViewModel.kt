@@ -12,6 +12,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -21,6 +22,7 @@ class CommunityDetailViewModel(
     private val mvi: DefaultMviModel<CommunityDetailMviModel.Intent, CommunityDetailMviModel.UiState, CommunityDetailMviModel.Effect>,
     private val community: CommunityModel,
     private val identityRepository: IdentityRepository,
+    private val communityRepository: CommunityRepository,
     private val postsRepository: PostsRepository,
     private val keyStore: TemporaryKeyStore,
     private val hapticFeedback: HapticFeedback,
@@ -65,12 +67,23 @@ class CommunityDetailViewModel(
 
             CommunityDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             is CommunityDetailMviModel.Intent.ChangeSort -> applySortType(intent.value)
+            CommunityDetailMviModel.Intent.Subscribe -> subscribe()
+            CommunityDetailMviModel.Intent.Unsubscribe -> unsubscribe()
         }
     }
 
     private fun refresh() {
         currentPage = 1
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
+        mvi.scope.launch(Dispatchers.IO) {
+            val community = communityRepository.get(
+                auth = identityRepository.authToken.value,
+                id = community.id,
+            )
+            if (community != null) {
+                mvi.updateState { it.copy(community = community) }
+            }
+        }
         loadNextPage()
     }
 
@@ -255,6 +268,32 @@ class CommunityDetailViewModel(
                         },
                     )
                 }
+            }
+        }
+    }
+
+    private fun subscribe() {
+        hapticFeedback.vibrate()
+        mvi.scope.launch(Dispatchers.IO) {
+            val community = communityRepository.subscribe(
+                auth = identityRepository.authToken.value,
+                id = community.id,
+            )
+            if (community != null) {
+                mvi.updateState { it.copy(community = community) }
+            }
+        }
+    }
+
+    private fun unsubscribe() {
+        hapticFeedback.vibrate()
+        mvi.scope.launch(Dispatchers.IO) {
+            val community = communityRepository.unsubscribe(
+                auth = identityRepository.authToken.value,
+                id = community.id,
+            )
+            if (community != null) {
+                mvi.updateState { it.copy(community = community) }
             }
         }
     }

@@ -72,4 +72,8 @@
     <string name="settings_default_listing_type">Default list type</string>
     <string name="settings_default_post_sort_type">Default post sort type</string>
     <string name="settings_default_comment_sort_type">Default comment sort type</string>
+
+    <string name="community_button_subscribe">Subscribe</string>
+    <string name="community_button_subscribed">Subscribed</string>
+    <string name="community_button_pending">Pending</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,13 +23,18 @@ import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberDismissState
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -68,6 +74,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -86,8 +94,7 @@ class CommunityDetailScreen(
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
-            topBar =
-            {
+            topBar = {
                 val communityName = community.name
                 val communityHost = community.host
                 TopAppBar(
@@ -157,66 +164,93 @@ class CommunityDetailScreen(
                         val communityTitle = community.title
 
                         val iconSize = 80.dp
-                        Box(
-                            modifier = Modifier.fillMaxWidth(),
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
+                            val banner = community.banner.orEmpty()
+                            if (banner.isNotEmpty()) {
+                                val painterResource = asyncPainterResource(banner)
+                                KamelImage(
+                                    modifier = Modifier.fillMaxWidth().aspectRatio(2.25f),
+                                    resource = painterResource,
+                                    contentScale = ContentScale.FillBounds,
+                                    contentDescription = null,
+                                )
+                            } else {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().aspectRatio(2.5f),
+                                )
+                            }
                             Column(
+                                modifier = Modifier.graphicsLayer(translationY = -(iconSize / 2).toLocalPixel()),
                                 horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                             ) {
-                                val banner = community.banner.orEmpty()
-                                if (banner.isNotEmpty()) {
-                                    val painterResource = asyncPainterResource(banner)
+                                if (communityIcon.isNotEmpty()) {
+                                    val painterResource =
+                                        asyncPainterResource(data = communityIcon)
                                     KamelImage(
-                                        modifier = Modifier.fillMaxWidth().aspectRatio(2.25f),
+                                        modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
+                                            .clip(RoundedCornerShape(iconSize / 2)),
                                         resource = painterResource,
-                                        contentScale = ContentScale.FillBounds,
                                         contentDescription = null,
+                                        contentScale = ContentScale.FillBounds,
                                     )
                                 } else {
                                     Box(
-                                        modifier = Modifier.fillMaxWidth().aspectRatio(2.5f),
-                                    )
-                                }
-                                Column(
-                                    modifier = Modifier.graphicsLayer(translationY = -(iconSize / 2).toLocalPixel()),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                                ) {
-                                    if (communityIcon.isNotEmpty()) {
-                                        val painterResource =
-                                            asyncPainterResource(data = communityIcon)
-                                        KamelImage(
-                                            modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
-                                                .clip(RoundedCornerShape(iconSize / 2)),
-                                            resource = painterResource,
-                                            contentDescription = null,
-                                            contentScale = ContentScale.FillBounds,
+                                        modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
+                                            .background(
+                                                color = MaterialTheme.colorScheme.primary,
+                                                shape = RoundedCornerShape(iconSize / 2),
+                                            ),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        Text(
+                                            text = community.name.firstOrNull()?.toString()
+                                                .orEmpty().uppercase(),
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            color = MaterialTheme.colorScheme.onPrimary,
                                         )
-                                    } else {
-                                        Box(
-                                            modifier = Modifier.padding(Spacing.xxxs)
-                                                .size(iconSize)
-                                                .background(
-                                                    color = MaterialTheme.colorScheme.primary,
-                                                    shape = RoundedCornerShape(iconSize / 2),
-                                                ),
-                                            contentAlignment = Alignment.Center,
-                                        ) {
-                                            Text(
-                                                text = community.name.firstOrNull()?.toString()
-                                                    .orEmpty()
-                                                    .uppercase(),
-                                                style = MaterialTheme.typography.bodyLarge,
-                                                color = MaterialTheme.colorScheme.onPrimary,
-                                            )
-                                        }
                                     }
-                                    Text(
-                                        text = buildString {
-                                            append(communityTitle)
-                                        },
-                                        style = MaterialTheme.typography.headlineSmall,
-                                    )
+                                }
+                                Text(
+                                    text = buildString {
+                                        append(communityTitle)
+                                    },
+                                    style = MaterialTheme.typography.headlineSmall,
+                                )
+                                Button(
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(top = Spacing.m),
+                                    onClick = {
+                                        when (community.subscribed) {
+                                            true -> model.reduce(CommunityDetailMviModel.Intent.Unsubscribe)
+                                            false -> model.reduce(CommunityDetailMviModel.Intent.Subscribe)
+                                            else -> Unit
+                                        }
+                                    },
+                                ) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Image(
+                                            imageVector = when (community.subscribed) {
+                                                true -> Icons.Default.Check
+                                                false -> Icons.Default.AddCircle
+                                                else -> Icons.Default.MoreHoriz
+                                            },
+                                            contentDescription = null,
+                                        )
+                                        Text(
+                                            text = when (community.subscribed) {
+                                                true -> stringResource(MR.strings.community_button_subscribed)
+                                                false -> stringResource(MR.strings.community_button_subscribe)
+                                                else -> stringResource(MR.strings.community_button_pending)
+                                            },
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -322,8 +356,7 @@ class CommunityDetailScreen(
                                     }
                                 }
                                 Box(
-                                    Modifier.fillMaxSize()
-                                        .background(color)
+                                    Modifier.fillMaxSize().background(color)
                                         .padding(horizontal = 20.dp),
                                     contentAlignment = alignment,
                                 ) {

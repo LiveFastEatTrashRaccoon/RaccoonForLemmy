@@ -8,6 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetCommunityRespons
 import de.jensklingenberg.ktorfit.Response
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Query
 
@@ -21,8 +22,10 @@ interface CommunityService {
     ): Response<GetCommunityResponse>
 
     @POST("community/follow")
+    @Headers("Content-Type: application/json")
     suspend fun follow(@Body form: FollowCommunityForm): Response<CommunityResponse>
 
     @POST("community/block")
+    @Headers("Content-Type: application/json")
     suspend fun block(@Body form: BlockCommunityForm): Response<BlockCommunityResponse>
 }
