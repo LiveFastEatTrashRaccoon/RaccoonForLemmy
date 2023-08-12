@@ -10,6 +10,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeySto
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
@@ -29,9 +30,16 @@ class PostDetailViewModel(
 ) : MviModel<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect> by mvi,
     ScreenModel {
     private var currentPage: Int = 1
+
     override fun onStarted() {
         mvi.onStarted()
-        mvi.updateState { it.copy(post = post) }
+        val sortType = keyStore[KeyStoreKeys.DefaultCommentSortType, 3].toSortType()
+        mvi.updateState {
+            it.copy(
+                sortType = sortType,
+                post = post,
+            )
+        }
 
         if (mvi.uiState.value.comments.isEmpty()) {
             refresh()
@@ -73,6 +81,7 @@ class PostDetailViewModel(
             )
 
             PostDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            is PostDetailMviModel.Intent.ChangeSort -> applySortType(intent.value)
         }
     }
 
@@ -85,6 +94,7 @@ class PostDetailViewModel(
     private fun loadNextPage() {
         val currentState = mvi.uiState.value
         if (!currentState.canFetchMore || currentState.loading) {
+            mvi.updateState { it.copy(refreshing = false) }
             return
         }
 
@@ -92,7 +102,7 @@ class PostDetailViewModel(
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
-            val sort = keyStore[KeyStoreKeys.DefaultCommentSortType, 3].toSortType()
+            val sort = currentState.sortType
             val commentList = commentRepository.getAll(
                 auth = auth,
                 postId = post.id,
@@ -115,6 +125,11 @@ class PostDetailViewModel(
                 )
             }
         }
+    }
+
+    private fun applySortType(value: SortType) {
+        mvi.updateState { it.copy(sortType = value) }
+        refresh()
     }
 
     private fun toggleUpVotePost(

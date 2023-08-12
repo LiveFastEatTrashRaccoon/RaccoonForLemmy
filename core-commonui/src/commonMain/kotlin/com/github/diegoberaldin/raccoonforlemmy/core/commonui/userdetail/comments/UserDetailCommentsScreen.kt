@@ -53,12 +53,18 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserComments
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 internal class UserDetailCommentsScreen(
     private val modifier: Modifier = Modifier,
     private val user: UserModel,
     private val onSectionSelected: (UserDetailSection) -> Unit,
+    private val parentModel: UserDetailViewModel,
 ) : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -68,6 +74,12 @@ internal class UserDetailCommentsScreen(
         ) { getUserCommentsViewModel(user) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+
+        LaunchedEffect(parentModel) {
+            parentModel.uiState.map { it.sortType }.distinctUntilChanged().onEach { sortType ->
+                model.reduce(UserCommentsMviModel.Intent.ChangeSort(sortType))
+            }.launchIn(this)
+        }
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
             model.reduce(UserCommentsMviModel.Intent.Refresh)

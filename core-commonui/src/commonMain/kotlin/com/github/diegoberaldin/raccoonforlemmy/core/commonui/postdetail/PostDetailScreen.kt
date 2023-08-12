@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -60,8 +61,11 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardTitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailScreenViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 
 class PostDetailScreen(
     private val post: PostModel,
@@ -74,12 +78,38 @@ class PostDetailScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
             topBar = {
                 TopAppBar(
                     title = {},
+                    actions = {
+                        Image(
+                            modifier = Modifier.onClick {
+                                bottomSheetNavigator.show(
+                                    SortBottomSheet(
+                                        values = listOf(
+                                            SortType.Hot,
+                                            SortType.Top.Generic,
+                                            SortType.New,
+                                            SortType.Old,
+                                        ),
+                                        onSelected = {
+                                            model.reduce(PostDetailMviModel.Intent.ChangeSort(it))
+                                        },
+                                        onHide = {
+                                            bottomSheetNavigator.hide()
+                                        },
+                                    ),
+                                )
+                            },
+                            imageVector = uiState.sortType.toIcon(),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                        )
+                    },
                     navigationIcon = {
                         Image(
                             modifier = Modifier.onClick {

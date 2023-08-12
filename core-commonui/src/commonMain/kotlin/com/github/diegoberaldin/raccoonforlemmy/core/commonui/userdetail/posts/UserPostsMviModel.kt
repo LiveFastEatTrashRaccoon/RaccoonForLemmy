@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.posts
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
 interface UserPostsMviModel :
@@ -10,6 +11,7 @@ interface UserPostsMviModel :
     sealed interface Intent {
         object Refresh : Intent
         object LoadNextPage : Intent
+        data class ChangeSort(val value: SortType) : Intent
         data class UpVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
         data class DownVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
         data class SavePost(val post: PostModel, val feedback: Boolean = false) : Intent
@@ -22,6 +24,7 @@ interface UserPostsMviModel :
         val canFetchMore: Boolean = true,
         val posts: List<PostModel> = emptyList(),
         val user: UserModel = UserModel(),
+        val sortType: SortType = SortType.Active,
     )
 
     sealed interface Effect

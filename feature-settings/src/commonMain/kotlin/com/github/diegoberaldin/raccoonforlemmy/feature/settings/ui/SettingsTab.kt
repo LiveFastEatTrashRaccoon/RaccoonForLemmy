@@ -26,6 +26,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.LanguageBot
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ThemeBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.di.getSettingsScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.viewmodel.SettingsScreenMviModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -143,6 +144,12 @@ object SettingsTab : Tab {
                     onSelectCommentSortType = {
                         bottomSheetNavigator.show(
                             SortBottomSheet(
+                                values = listOf(
+                                    SortType.Hot,
+                                    SortType.Top.Generic,
+                                    SortType.New,
+                                    SortType.Old,
+                                ),
                                 onSelected = { newValue ->
                                     model.reduce(
                                         SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType(

@@ -25,6 +25,15 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
 class SortBottomSheet(
+    private val values: List<SortType> = listOf(
+        SortType.Active,
+        SortType.Hot,
+        SortType.New,
+        SortType.NewComments,
+        SortType.MostComments,
+        SortType.Top.Generic,
+        SortType.Old,
+    ),
     private val expandTop: Boolean = false,
     private val onSelected: (SortType) -> Unit,
     private val onHide: () -> Unit,
@@ -48,14 +57,6 @@ class SortBottomSheet(
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
             )
-            val values = listOf(
-                SortType.Active,
-                SortType.Hot,
-                SortType.New,
-                SortType.NewComments,
-                SortType.MostComments,
-                SortType.Top.Generic,
-            )
             Column(
                 modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
@@ -70,8 +71,14 @@ class SortBottomSheet(
                             onHide()
                         },
                     ) {
+                        val name = buildString {
+                            append(value.toReadableName())
+                            if (value == SortType.Top.Generic && expandTop) {
+                                append("…")
+                            }
+                        }
                         Text(
-                            text = value.toReadableName(),
+                            text = name,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onBackground,
                         )

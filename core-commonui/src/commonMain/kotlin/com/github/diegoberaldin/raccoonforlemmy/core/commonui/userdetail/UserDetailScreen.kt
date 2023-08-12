@@ -17,18 +17,22 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserDetailScreenViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.comments.UserDetailCommentsScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.posts.UserDetailPostsScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 
 class UserDetailScreen(
     private val user: UserModel,
@@ -38,6 +42,11 @@ class UserDetailScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
+        val model = rememberScreenModel(user.id.toString()) { getUserDetailScreenViewModel(user) }
+        model.bindToLifecycle(key)
+        val uiState by model.uiState.collectAsState()
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
+
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
             topBar =
@@ -54,6 +63,25 @@ class UserDetailScreen(
                                     append("@$communityHost")
                                 }
                             },
+                        )
+                    },
+                    actions = {
+                        Image(
+                            modifier = Modifier.onClick {
+                                bottomSheetNavigator.show(
+                                    SortBottomSheet(
+                                        onSelected = {
+                                            model.reduce(UserDetailMviModel.Intent.ChangeSort(it))
+                                        },
+                                        onHide = {
+                                            bottomSheetNavigator.hide()
+                                        },
+                                    ),
+                                )
+                            },
+                            imageVector = uiState.sortType.toIcon(),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )
                     },
                     navigationIcon = {
@@ -74,16 +102,12 @@ class UserDetailScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val model =
-                    rememberScreenModel(user.id.toString()) { getUserDetailScreenViewModel(user) }
-                model.bindToLifecycle(key)
-                val uiState by model.uiState.collectAsState()
-
                 when (uiState.currentTab) {
                     UserDetailSection.POSTS -> {
                         UserDetailPostsScreen(
                             modifier = Modifier.weight(1f).fillMaxWidth(),
                             user = user,
+                            parentModel = model,
                             onSectionSelected = {
                                 model.reduce(UserDetailMviModel.Intent.SelectTab(it))
                             },
@@ -94,6 +118,7 @@ class UserDetailScreen(
                         UserDetailCommentsScreen(
                             modifier = Modifier.weight(1f).fillMaxWidth(),
                             user = user,
+                            parentModel = model,
                             onSectionSelected = {
                                 model.reduce(UserDetailMviModel.Intent.SelectTab(it))
                             },

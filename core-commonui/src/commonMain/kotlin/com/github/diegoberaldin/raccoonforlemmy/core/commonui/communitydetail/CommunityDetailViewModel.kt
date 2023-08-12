@@ -9,6 +9,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeySto
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
@@ -28,7 +29,14 @@ class CommunityDetailViewModel(
     private var currentPage: Int = 1
     override fun onStarted() {
         mvi.onStarted()
-        mvi.updateState { it.copy(community = community) }
+
+        val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
+        mvi.updateState {
+            it.copy(
+                community = community,
+                sortType = sortType,
+            )
+        }
 
         if (mvi.uiState.value.posts.isEmpty()) {
             refresh()
@@ -56,6 +64,7 @@ class CommunityDetailViewModel(
             )
 
             CommunityDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            is CommunityDetailMviModel.Intent.ChangeSort -> applySortType(intent.value)
         }
     }
 
@@ -65,9 +74,15 @@ class CommunityDetailViewModel(
         loadNextPage()
     }
 
+    private fun applySortType(value: SortType) {
+        mvi.updateState { it.copy(sortType = value) }
+        refresh()
+    }
+
     private fun loadNextPage() {
         val currentState = mvi.uiState.value
         if (!currentState.canFetchMore || currentState.loading) {
+            mvi.updateState { it.copy(refreshing = false) }
             return
         }
 
@@ -75,7 +90,7 @@ class CommunityDetailViewModel(
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
-            val sort = keyStore[KeyStoreKeys.DefaultCommentSortType, 3].toSortType()
+            val sort = currentState.sortType
             val commentList = postsRepository.getAll(
                 auth = auth,
                 communityId = community.id,

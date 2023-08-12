@@ -14,6 +14,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.Hot
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.MostComments
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.New
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.NewComments
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.Old
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.Top
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.TopDay
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.TopHour
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.TopMonth
@@ -47,6 +49,8 @@ internal fun SortType.toDto() = when (this) {
     SortType.Top.PastHour -> TopHour
     SortType.Top.Week -> TopWeek
     SortType.Top.Year -> TopYear
+    SortType.Top.Generic -> Top
+    SortType.Old -> Old
     else -> Active
 }
 

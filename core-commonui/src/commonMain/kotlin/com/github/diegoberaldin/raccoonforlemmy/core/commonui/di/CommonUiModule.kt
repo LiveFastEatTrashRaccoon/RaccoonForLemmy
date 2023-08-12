@@ -39,6 +39,7 @@ val commonUiModule = module {
     factory {
         UserDetailViewModel(
             mvi = DefaultMviModel(UserDetailMviModel.UiState()),
+            keyStore = get(),
         )
     }
     factory {

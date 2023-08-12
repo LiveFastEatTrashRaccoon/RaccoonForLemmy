@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 
 interface PostDetailMviModel :
     MviModel<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect> {
@@ -10,6 +11,7 @@ interface PostDetailMviModel :
     sealed interface Intent {
         object Refresh : Intent
         object LoadNextPage : Intent
+        data class ChangeSort(val value: SortType) : Intent
         data class UpVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
         data class DownVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
         data class SavePost(val post: PostModel, val feedback: Boolean = false) : Intent
@@ -26,6 +28,7 @@ interface PostDetailMviModel :
         val refreshing: Boolean = false,
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,
+        val sortType: SortType = SortType.New,
         val comments: List<CommentModel> = emptyList(),
     )
 

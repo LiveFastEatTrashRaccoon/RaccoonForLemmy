@@ -22,7 +22,7 @@ class CommentRepository(
         page: Int,
         limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
         type: ListingType = ListingType.All,
-        sort: SortType = SortType.Active,
+        sort: SortType = SortType.New,
     ): List<CommentModel> {
         val response = services.comment.getAll(
             auth = auth,

@@ -27,7 +27,7 @@
     <string name="home_sort_type_most_comments">Most comments</string>
     <string name="home_sort_type_new">New</string>
     <string name="home_sort_type_new_comments">New comments</string>
-    <string name="home_sort_type_top">Top…</string>
+    <string name="home_sort_type_top">Top</string>
     <string name="home_sort_type_top_day">Top day</string>
     <string name="home_sort_type_top_month">Top month</string>
     <string name="home_sort_type_top_12_hours">Top 12 hours</string>
@@ -35,6 +35,7 @@
     <string name="home_sort_type_top_hour">Top hour</string>
     <string name="home_sort_type_top_week">Top week</string>
     <string name="home_sort_type_top_year">Top year</string>
+    <string name="home_sort_type_old">Old</string>
     <string name="home_instance_via">via %1$s</string>
 
     <string name="explore_search_placeholder">Search for communities</string>

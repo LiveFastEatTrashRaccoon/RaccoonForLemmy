@@ -58,12 +58,18 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHea
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserPostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 internal class UserDetailPostsScreen(
     private val modifier: Modifier = Modifier,
     private val user: UserModel,
     private val onSectionSelected: (UserDetailSection) -> Unit,
+    private val parentModel: UserDetailViewModel,
 ) : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -78,6 +84,12 @@ internal class UserDetailPostsScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
+
+        LaunchedEffect(parentModel) {
+            parentModel.uiState.map { it.sortType }.distinctUntilChanged().onEach { sortType ->
+                model.reduce(UserPostsMviModel.Intent.ChangeSort(sortType))
+            }.launchIn(this)
+        }
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
             model.reduce(UserPostsMviModel.Intent.Refresh)

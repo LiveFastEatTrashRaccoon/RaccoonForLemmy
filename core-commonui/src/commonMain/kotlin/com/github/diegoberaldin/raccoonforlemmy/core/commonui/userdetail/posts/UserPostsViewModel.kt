@@ -57,6 +57,7 @@ class UserPostsViewModel(
             )
 
             UserPostsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            is UserPostsMviModel.Intent.ChangeSort -> applySortType(intent.value)
         }
     }
 
@@ -69,6 +70,7 @@ class UserPostsViewModel(
     private fun loadNextPage() {
         val currentState = mvi.uiState.value
         if (!currentState.canFetchMore || currentState.loading) {
+            mvi.updateState { it.copy(refreshing = false) }
             return
         }
 
@@ -80,7 +82,7 @@ class UserPostsViewModel(
                 auth = auth,
                 id = user.id,
                 page = currentPage,
-                sort = SortType.New,
+                sort = currentState.sortType,
             )
             currentPage++
             val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE
@@ -98,6 +100,11 @@ class UserPostsViewModel(
                 )
             }
         }
+    }
+
+    private fun applySortType(value: SortType) {
+        mvi.updateState { it.copy(sortType = value) }
+        refresh()
     }
 
     private fun toggleUpVote(post: PostModel, feedback: Boolean) {

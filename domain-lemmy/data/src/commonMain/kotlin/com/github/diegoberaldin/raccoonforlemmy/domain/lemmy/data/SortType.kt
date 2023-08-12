@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Fireplace
 import androidx.compose.material.icons.filled.MilitaryTech
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Rocket
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.runtime.Composable
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -17,6 +18,7 @@ sealed interface SortType {
     object New : SortType
     object MostComments : SortType
     object NewComments : SortType
+    object Old : SortType
     sealed interface Top : SortType {
         object Generic : Top
         object PastHour : Top
@@ -42,6 +44,7 @@ fun SortType.toInt() = when (this) {
     SortType.Top.PastHour -> 10
     SortType.Top.Week -> 11
     SortType.Top.Year -> 12
+    SortType.Old -> 13
     else -> 0
 }
 
@@ -58,6 +61,7 @@ fun Int.toSortType() = when (this) {
     10 -> SortType.Top.PastHour
     11 -> SortType.Top.Week
     12 -> SortType.Top.Year
+    13 -> SortType.Old
     else -> SortType.Active
 }
 
@@ -67,6 +71,7 @@ fun SortType.toIcon() = when (this) {
     SortType.MostComments -> Icons.Default.Reviews
     SortType.New -> Icons.Default.Bolt
     SortType.NewComments -> Icons.Default.AddComment
+    SortType.Old -> Icons.Default.Timer
     else -> Icons.Default.MilitaryTech
 }
 
@@ -84,5 +89,6 @@ fun SortType.toReadableName(): String = when (this) {
     SortType.Top.PastHour -> stringResource(MR.strings.home_sort_type_top_hour)
     SortType.Top.Week -> stringResource(MR.strings.home_sort_type_top_week)
     SortType.Top.Year -> stringResource(MR.strings.home_sort_type_top_year)
+    SortType.Old -> stringResource(MR.strings.home_sort_type_old)
     else -> stringResource(MR.strings.home_sort_type_top)
 }

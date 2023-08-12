@@ -57,6 +57,8 @@ class UserCommentsViewModel(
                 comment = intent.comment,
                 feedback = intent.feedback,
             )
+
+            is UserCommentsMviModel.Intent.ChangeSort -> applySortType(intent.value)
         }
     }
 
@@ -69,6 +71,7 @@ class UserCommentsViewModel(
     private fun loadNextPage() {
         val currentState = mvi.uiState.value
         if (!currentState.canFetchMore || currentState.loading) {
+            mvi.updateState { it.copy(refreshing = false) }
             return
         }
 
@@ -80,7 +83,7 @@ class UserCommentsViewModel(
                 auth = auth,
                 id = user.id,
                 page = currentPage,
-                sort = SortType.New,
+                sort = currentState.sortType,
             )
             currentPage++
             val canFetchMore = commentList.size >= PostsRepository.DEFAULT_PAGE_SIZE
@@ -98,6 +101,11 @@ class UserCommentsViewModel(
                 )
             }
         }
+    }
+
+    private fun applySortType(value: SortType) {
+        mvi.updateState { it.copy(sortType = value) }
+        refresh()
     }
 
     private fun toggleUpVoteComment(

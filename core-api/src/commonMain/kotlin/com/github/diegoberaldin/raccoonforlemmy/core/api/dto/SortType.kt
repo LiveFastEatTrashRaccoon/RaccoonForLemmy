@@ -30,6 +30,9 @@ enum class SortType {
     @SerialName("TopAll")
     TopAll,
 
+    @SerialName("Top")
+    Top,
+
     @SerialName("MostComments")
     MostComments,
 

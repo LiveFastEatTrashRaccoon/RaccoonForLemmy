@@ -56,15 +56,18 @@ import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityDetailScreenViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -79,6 +82,7 @@ class CommunityDetailScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
@@ -96,6 +100,29 @@ class CommunityDetailScreen(
                                     append("@$communityHost")
                                 }
                             },
+                        )
+                    },
+                    actions = {
+                        Image(
+                            modifier = Modifier.onClick {
+                                bottomSheetNavigator.show(
+                                    SortBottomSheet(
+                                        onSelected = {
+                                            model.reduce(
+                                                CommunityDetailMviModel.Intent.ChangeSort(
+                                                    it,
+                                                ),
+                                            )
+                                        },
+                                        onHide = {
+                                            bottomSheetNavigator.hide()
+                                        },
+                                    ),
+                                )
+                            },
+                            imageVector = uiState.sortType.toIcon(),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )
                     },
                     navigationIcon = {
