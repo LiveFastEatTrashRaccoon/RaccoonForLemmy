@@ -28,7 +28,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -68,6 +68,7 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityDetailScreenViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
@@ -167,19 +168,35 @@ class CommunityDetailScreen(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            val banner = community.banner.orEmpty()
-                            if (banner.isNotEmpty()) {
-                                val painterResource = asyncPainterResource(banner)
-                                KamelImage(
-                                    modifier = Modifier.fillMaxWidth().aspectRatio(2.25f),
-                                    resource = painterResource,
-                                    contentScale = ContentScale.FillBounds,
+                            Box {
+                                Icon(
+                                    modifier = Modifier
+                                        .padding(Spacing.m)
+                                        .align(Alignment.TopEnd).onClick {
+                                            bottomSheetNavigator.show(
+                                                CommunityInfoScreen(
+                                                    community = uiState.community,
+                                                ),
+                                            )
+                                        },
+                                    imageVector = Icons.Default.Info,
                                     contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
                                 )
-                            } else {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth().aspectRatio(2.5f),
-                                )
+                                val banner = community.banner.orEmpty()
+                                if (banner.isNotEmpty()) {
+                                    val painterResource = asyncPainterResource(banner)
+                                    KamelImage(
+                                        modifier = Modifier.fillMaxWidth().aspectRatio(2.25f),
+                                        resource = painterResource,
+                                        contentScale = ContentScale.FillBounds,
+                                        contentDescription = null,
+                                    )
+                                } else {
+                                    Box(
+                                        modifier = Modifier.fillMaxWidth().aspectRatio(2.5f),
+                                    )
+                                }
                             }
                             Column(
                                 modifier = Modifier.graphicsLayer(translationY = -(iconSize / 2).toLocalPixel()),
@@ -242,6 +259,7 @@ class CommunityDetailScreen(
                                                 else -> Icons.Default.MoreHoriz
                                             },
                                             contentDescription = null,
+                                            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary),
                                         )
                                         Text(
                                             text = when (community.subscribed) {

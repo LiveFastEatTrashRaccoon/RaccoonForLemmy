@@ -94,6 +94,7 @@ internal fun Community.toModel() = CommunityModel(
     id = id,
     name = name,
     title = title,
+    description = description.orEmpty(),
     icon = icon,
     banner = banner,
     host = actorId.toHost(),
