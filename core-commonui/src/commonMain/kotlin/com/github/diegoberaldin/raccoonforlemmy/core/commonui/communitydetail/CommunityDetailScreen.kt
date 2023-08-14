@@ -169,20 +169,6 @@ class CommunityDetailScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Box {
-                                Icon(
-                                    modifier = Modifier
-                                        .padding(Spacing.m)
-                                        .align(Alignment.TopEnd).onClick {
-                                            bottomSheetNavigator.show(
-                                                CommunityInfoScreen(
-                                                    community = uiState.community,
-                                                ),
-                                            )
-                                        },
-                                    imageVector = Icons.Default.Info,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
                                 val banner = community.banner.orEmpty()
                                 if (banner.isNotEmpty()) {
                                     val painterResource = asyncPainterResource(banner)
@@ -197,6 +183,23 @@ class CommunityDetailScreen(
                                         modifier = Modifier.fillMaxWidth().aspectRatio(2.5f),
                                     )
                                 }
+                                Icon(
+                                    modifier = Modifier
+                                        .padding(
+                                            top = Spacing.s,
+                                            end = Spacing.s,
+                                        )
+                                        .align(Alignment.TopEnd).onClick {
+                                            bottomSheetNavigator.show(
+                                                CommunityInfoScreen(
+                                                    community = uiState.community,
+                                                ),
+                                            )
+                                        },
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.secondary,
+                                )
                             }
                             Column(
                                 modifier = Modifier.graphicsLayer(translationY = -(iconSize / 2).toLocalPixel()),

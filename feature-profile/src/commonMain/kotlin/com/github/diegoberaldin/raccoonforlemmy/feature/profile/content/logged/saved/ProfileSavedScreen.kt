@@ -30,14 +30,16 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedSection
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostCard
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfilePostsViewModel
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 
 internal class ProfileSavedScreen(
     private val modifier: Modifier = Modifier,
@@ -78,9 +80,19 @@ internal class ProfileSavedScreen(
                             user = user,
                         )
                         SectionSelector(
-                            currentSection = ProfileLoggedSection.SAVED,
+                            titles = listOf(
+                                stringResource(MR.strings.profile_section_posts),
+                                stringResource(MR.strings.profile_section_comments),
+                                stringResource(MR.strings.profile_section_saved),
+                            ),
+                            currentSection = 2,
                             onSectionSelected = {
-                                onSectionSelected(it)
+                                val section = when (it) {
+                                    0 -> ProfileLoggedSection.POSTS
+                                    1 -> ProfileLoggedSection.COMMENTS
+                                    else -> ProfileLoggedSection.SAVED
+                                }
+                                onSectionSelected(section)
                             },
                         )
                     }

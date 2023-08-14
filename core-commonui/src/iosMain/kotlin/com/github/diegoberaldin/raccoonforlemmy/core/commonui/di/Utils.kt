@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
@@ -17,6 +18,9 @@ actual fun getPostDetailScreenViewModel(post: PostModel): PostDetailViewModel =
 
 actual fun getCommunityDetailScreenViewModel(community: CommunityModel): CommunityDetailViewModel =
     PostDetailScreenViewModelHelper.getCommunityDetailModel(community)
+
+actual fun getCommunityInfoScreenViewModel(community: CommunityModel): CommunityInfoViewModel =
+    PostDetailScreenViewModelHelper.getCommunityInfoModel(community)
 
 actual fun getUserDetailScreenViewModel(user: UserModel): UserDetailViewModel =
     PostDetailScreenViewModelHelper.getUserDetailModel(user)
@@ -38,6 +42,13 @@ object PostDetailScreenViewModelHelper : KoinComponent {
 
     fun getCommunityDetailModel(community: CommunityModel): CommunityDetailViewModel {
         val model: CommunityDetailViewModel by inject(
+            parameters = { parametersOf(community) },
+        )
+        return model
+    }
+
+    fun getCommunityInfoModel(community: CommunityModel): CommunityInfoViewModel {
+        val model: CommunityInfoViewModel by inject(
             parameters = { parametersOf(community) },
         )
         return model

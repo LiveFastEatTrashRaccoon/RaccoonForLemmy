@@ -53,13 +53,15 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.PostCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserPostsViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -116,9 +118,17 @@ internal class UserDetailPostsScreen(
                         )
                         Spacer(modifier = Modifier.height(Spacing.s))
                         SectionSelector(
-                            currentSection = UserDetailSection.POSTS,
+                            titles = listOf(
+                                stringResource(MR.strings.profile_section_posts),
+                                stringResource(MR.strings.profile_section_comments),
+                            ),
+                            currentSection = 0,
                             onSectionSelected = {
-                                onSectionSelected(it)
+                                val section = when (it) {
+                                    0 -> UserDetailSection.POSTS
+                                    else -> UserDetailSection.COMMENTS
+                                }
+                                onSectionSelected(section)
                             },
                         )
                     }

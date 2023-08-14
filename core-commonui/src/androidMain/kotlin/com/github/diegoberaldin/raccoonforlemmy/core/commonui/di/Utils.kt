@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
@@ -22,6 +23,14 @@ actual fun getPostDetailScreenViewModel(post: PostModel): PostDetailViewModel {
 actual fun getCommunityDetailScreenViewModel(community: CommunityModel): CommunityDetailViewModel {
     val res: CommunityDetailViewModel by inject(
         clazz = CommunityDetailViewModel::class.java,
+        parameters = { parametersOf(community) },
+    )
+    return res
+}
+
+actual fun getCommunityInfoScreenViewModel(community: CommunityModel): CommunityInfoViewModel {
+    val res: CommunityInfoViewModel by inject(
+        clazz = CommunityInfoViewModel::class.java,
         parameters = { parametersOf(community) },
     )
     return res

@@ -1,6 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
@@ -35,6 +37,12 @@ val commonUiModule = module {
             postsRepository = get(),
             keyStore = get(),
             hapticFeedback = get(),
+        )
+    }
+    factory { params ->
+        CommunityInfoViewModel(
+            mvi = DefaultMviModel(CommunityInfoMviModel.UiState()),
+            community = params[0],
         )
     }
     factory {

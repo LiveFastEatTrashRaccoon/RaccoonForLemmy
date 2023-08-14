@@ -47,14 +47,16 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserCommentsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.CommentCard
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -105,9 +107,17 @@ internal class UserDetailCommentsScreen(
                             user = uiState.user,
                         )
                         SectionSelector(
-                            currentSection = UserDetailSection.COMMENTS,
+                            titles = listOf(
+                                stringResource(MR.strings.profile_section_posts),
+                                stringResource(MR.strings.profile_section_comments),
+                            ),
+                            currentSection = 1,
                             onSectionSelected = {
-                                onSectionSelected(it)
+                                val section = when (it) {
+                                    0 -> UserDetailSection.POSTS
+                                    else -> UserDetailSection.COMMENTS
+                                }
+                                onSectionSelected(section)
                             },
                         )
                     }
