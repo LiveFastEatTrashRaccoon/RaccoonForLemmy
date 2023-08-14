@@ -28,8 +28,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -69,6 +70,7 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Dropdown
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityDetailScreenViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
@@ -168,7 +170,15 @@ class CommunityDetailScreen(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            Box {
+                            var width by remember { mutableStateOf(0.dp) }
+                            var height by remember { mutableStateOf(0.dp) }
+                            var optionsExpanded by remember { mutableStateOf(false) }
+                            Box(
+                                modifier = Modifier.onGloballyPositioned {
+                                    width = it.size.width.dp
+                                    height = it.size.height.dp
+                                },
+                            ) {
                                 val banner = community.banner.orEmpty()
                                 if (banner.isNotEmpty()) {
                                     val painterResource = asyncPainterResource(banner)
@@ -189,17 +199,49 @@ class CommunityDetailScreen(
                                             top = Spacing.s,
                                             end = Spacing.s,
                                         )
-                                        .align(Alignment.TopEnd).onClick {
+                                        .background(
+                                            color = MaterialTheme.colorScheme.primary,
+                                            shape = CircleShape,
+                                        )
+                                        .padding(Spacing.s)
+                                        .align(Alignment.TopEnd)
+                                        .onClick {
+                                            optionsExpanded = true
+                                        },
+                                    imageVector = Icons.Rounded.MoreVert,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onPrimary,
+                                )
+                                Dropdown(
+                                    expanded = optionsExpanded,
+                                    onDismiss = {
+                                        optionsExpanded = false
+                                    },
+                                    offset = DpOffset(
+                                        x = width - Spacing.m,
+                                        y = -height,
+                                    ),
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(
+                                            horizontal = Spacing.m,
+                                            vertical = Spacing.xs,
+                                        ).onClick {
+                                            optionsExpanded = false
                                             bottomSheetNavigator.show(
-                                                CommunityInfoScreen(
-                                                    community = uiState.community,
-                                                ),
+                                                CommunityInfoScreen(community),
                                             )
                                         },
-                                    imageVector = Icons.Default.Info,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.secondary,
-                                )
+                                        text = stringResource(MR.strings.community_detail_info),
+                                    )
+                                    Text(
+                                        modifier = Modifier.padding(
+                                            horizontal = Spacing.m,
+                                            vertical = Spacing.xs,
+                                        ),
+                                        text = stringResource(MR.strings.community_detail_instance_info),
+                                    )
+                                }
                             }
                             Column(
                                 modifier = Modifier.graphicsLayer(translationY = -(iconSize / 2).toLocalPixel()),

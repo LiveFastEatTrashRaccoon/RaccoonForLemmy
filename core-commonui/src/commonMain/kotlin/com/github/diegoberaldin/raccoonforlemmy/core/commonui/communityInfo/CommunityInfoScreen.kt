@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,6 +35,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 class CommunityInfoScreen(
     private val community: CommunityModel,
 ) : Screen {
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val model = rememberScreenModel { getCommunityInfoScreenViewModel(community) }
@@ -49,42 +54,51 @@ class CommunityInfoScreen(
                 .fillMaxHeight(0.9f)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
-                modifier = Modifier.align(Alignment.CenterHorizontally).width(60.dp).height(1.dp)
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+                    .width(60.dp)
+                    .height(1.dp)
                     .background(
                         color = MaterialTheme.colorScheme.onSurface,
                         shape = RoundedCornerShape(1.dp),
                     ),
             )
-            Text(
-                modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
-                text = buildString {
-                    append(uiState.community.name)
-                    if (uiState.community.host.isNotEmpty()) {
-                        append("@${uiState.community.host}")
+
+            Scaffold(
+                topBar = {
+                    Row {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = buildString {
+                                append(uiState.community.name)
+                                if (uiState.community.host.isNotEmpty()) {
+                                    append("@${uiState.community.host}")
+                                }
+                            },
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                 },
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxSize()
-                    .padding(
-                        vertical = Spacing.m,
-                        horizontal = Spacing.m,
-                    ),
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = uiState.community.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
+            ) { paddingValues ->
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(top = Spacing.m),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = uiState.community.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                }
             }
         }
     }

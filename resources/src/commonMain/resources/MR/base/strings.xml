@@ -76,6 +76,7 @@
     <string name="community_button_subscribe">Subscribe</string>
     <string name="community_button_subscribed">Subscribed</string>
     <string name="community_button_pending">Pending</string>
-    <string name="community_info_section_info">Info</string>
-    <string name="community_info_section_communities">Communities</string>
+
+    <string name="community_detail_info">Community info</string>
+    <string name="community_detail_instance_info">Instance info</string>
 </resources>
