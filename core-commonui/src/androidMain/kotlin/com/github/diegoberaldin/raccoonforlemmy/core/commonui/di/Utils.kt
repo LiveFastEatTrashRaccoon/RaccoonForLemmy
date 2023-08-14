@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.comments.UserCommentsViewModel
@@ -12,7 +13,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import org.koin.core.parameter.parametersOf
 import org.koin.java.KoinJavaComponent.inject
 
-actual fun getPostDetailScreenViewModel(post: PostModel): PostDetailViewModel {
+actual fun getPostDetailViewModel(post: PostModel): PostDetailViewModel {
     val res: PostDetailViewModel by inject(
         clazz = PostDetailViewModel::class.java,
         parameters = { parametersOf(post) },
@@ -20,7 +21,7 @@ actual fun getPostDetailScreenViewModel(post: PostModel): PostDetailViewModel {
     return res
 }
 
-actual fun getCommunityDetailScreenViewModel(community: CommunityModel): CommunityDetailViewModel {
+actual fun getCommunityDetailViewModel(community: CommunityModel): CommunityDetailViewModel {
     val res: CommunityDetailViewModel by inject(
         clazz = CommunityDetailViewModel::class.java,
         parameters = { parametersOf(community) },
@@ -28,7 +29,7 @@ actual fun getCommunityDetailScreenViewModel(community: CommunityModel): Communi
     return res
 }
 
-actual fun getCommunityInfoScreenViewModel(community: CommunityModel): CommunityInfoViewModel {
+actual fun getCommunityInfoViewModel(community: CommunityModel): CommunityInfoViewModel {
     val res: CommunityInfoViewModel by inject(
         clazz = CommunityInfoViewModel::class.java,
         parameters = { parametersOf(community) },
@@ -36,7 +37,15 @@ actual fun getCommunityInfoScreenViewModel(community: CommunityModel): Community
     return res
 }
 
-actual fun getUserDetailScreenViewModel(user: UserModel): UserDetailViewModel {
+actual fun getInstanceInfoViewModel(url: String): InstanceInfoViewModel {
+    val res: InstanceInfoViewModel by inject(
+        clazz = InstanceInfoViewModel::class.java,
+        parameters = { parametersOf(url) },
+    )
+    return res
+}
+
+actual fun getUserDetailViewModel(user: UserModel): UserDetailViewModel {
     val res: UserDetailViewModel by inject(
         clazz = UserDetailViewModel::class.java,
         parameters = { parametersOf(user) },

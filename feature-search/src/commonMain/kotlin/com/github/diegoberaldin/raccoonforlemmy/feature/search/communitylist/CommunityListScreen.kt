@@ -40,7 +40,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getSearchScreenModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.CommunityItem
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityItem
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 

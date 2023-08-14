@@ -97,6 +97,7 @@ internal fun Community.toModel() = CommunityModel(
     description = description.orEmpty(),
     icon = icon,
     banner = banner,
+    instanceUrl = actorId.communityToInstanceUrl(),
     host = actorId.toHost(),
 )
 
@@ -110,6 +111,17 @@ internal fun CommunityFollowerView.toModel() = CommunityModel(
 )
 
 internal fun String.toHost(): String = this.replace("https://", "").let {
-    val i = it.indexOf("/")
-    it.substring(0, i)
+    val index = it.indexOf("/")
+    if (index < 0) {
+        return this
+    }
+    it.substring(0, index)
+}
+
+private fun String.communityToInstanceUrl(): String {
+    val index = this.indexOf("/c/")
+    if (index < 0) {
+        return this
+    }
+    return this.substring(0, index)
 }

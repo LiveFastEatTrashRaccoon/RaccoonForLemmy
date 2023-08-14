@@ -60,7 +60,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardTitle
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailScreenViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -74,7 +74,7 @@ class PostDetailScreen(
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel { getPostDetailScreenViewModel(post) }
+        val model = rememberScreenModel { getPostDetailViewModel(post) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow

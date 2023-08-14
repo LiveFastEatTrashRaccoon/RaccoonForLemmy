@@ -71,7 +71,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Dropdown
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityDetailScreenViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
@@ -89,7 +90,7 @@ class CommunityDetailScreen(
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel { getCommunityDetailScreenViewModel(community) }
+        val model = rememberScreenModel { getCommunityDetailViewModel(community) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
@@ -238,7 +239,12 @@ class CommunityDetailScreen(
                                         modifier = Modifier.padding(
                                             horizontal = Spacing.m,
                                             vertical = Spacing.xs,
-                                        ),
+                                        ).onClick {
+                                            optionsExpanded = false
+                                            bottomSheetNavigator.show(
+                                                InstanceInfoScreen(community.instanceUrl),
+                                            )
+                                        },
                                         text = stringResource(MR.strings.community_detail_instance_info),
                                     )
                                 }

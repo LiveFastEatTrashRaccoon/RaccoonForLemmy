@@ -6,10 +6,13 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SearchType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SubscribedType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toModel
 
 class CommunityRepository(
     private val services: ServiceProvider,
+    private val customServices: ServiceProvider,
 ) {
 
     companion object {
@@ -28,6 +31,25 @@ class CommunityRepository(
             page = page,
             limit = limit,
             type = SearchType.Communities,
+        ).body()
+        return response?.communities?.map {
+            it.toModel()
+        }.orEmpty()
+    }
+
+    suspend fun getAllInInstance(
+        instance: String = "",
+        auth: String? = null,
+        page: Int,
+        limit: Int = DEFAULT_PAGE_SIZE,
+        sort: SortType = SortType.Active,
+    ): List<CommunityModel> {
+        customServices.changeInstance(instance)
+        val response = customServices.community.getAll(
+            auth = auth,
+            page = page,
+            limit = limit,
+            sort = sort.toDto(),
         ).body()
         return response?.communities?.map {
             it.toModel()

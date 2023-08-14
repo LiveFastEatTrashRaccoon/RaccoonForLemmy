@@ -29,7 +29,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityInfoScreenViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 
 class CommunityInfoScreen(
@@ -38,7 +38,7 @@ class CommunityInfoScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel { getCommunityInfoScreenViewModel(community) }
+        val model = rememberScreenModel { getCommunityInfoViewModel(community) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
 

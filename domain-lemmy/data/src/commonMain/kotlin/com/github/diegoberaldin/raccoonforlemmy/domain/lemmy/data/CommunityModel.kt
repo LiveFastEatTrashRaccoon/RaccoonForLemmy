@@ -9,4 +9,5 @@ data class CommunityModel(
     val icon: String? = null,
     val banner: String? = null,
     val subscribed: Boolean? = null,
+    val instanceUrl: String = "",
 )

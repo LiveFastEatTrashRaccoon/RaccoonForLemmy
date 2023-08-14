@@ -6,11 +6,17 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRep
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val postsRepositoryModule = module {
+val repositoryModule = module {
     singleOf(::PostsRepository)
-    singleOf(::CommunityRepository)
+    single {
+        CommunityRepository(
+            services = get(),
+            customServices = get(named("custom")),
+        )
+    }
     singleOf(::UserRepository)
     singleOf(::SiteRepository)
     singleOf(::CommentRepository)

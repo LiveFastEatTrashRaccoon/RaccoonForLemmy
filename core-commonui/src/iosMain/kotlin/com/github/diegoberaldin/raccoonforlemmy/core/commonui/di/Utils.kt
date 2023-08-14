@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.comments.UserCommentsViewModel
@@ -13,16 +14,19 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
-actual fun getPostDetailScreenViewModel(post: PostModel): PostDetailViewModel =
+actual fun getPostDetailViewModel(post: PostModel): PostDetailViewModel =
     PostDetailScreenViewModelHelper.getPostDetailModel(post)
 
-actual fun getCommunityDetailScreenViewModel(community: CommunityModel): CommunityDetailViewModel =
+actual fun getCommunityDetailViewModel(community: CommunityModel): CommunityDetailViewModel =
     PostDetailScreenViewModelHelper.getCommunityDetailModel(community)
 
-actual fun getCommunityInfoScreenViewModel(community: CommunityModel): CommunityInfoViewModel =
+actual fun getCommunityInfoViewModel(community: CommunityModel): CommunityInfoViewModel =
     PostDetailScreenViewModelHelper.getCommunityInfoModel(community)
 
-actual fun getUserDetailScreenViewModel(user: UserModel): UserDetailViewModel =
+actual fun getInstanceInfoViewModel(url: String): InstanceInfoViewModel =
+    PostDetailScreenViewModelHelper.getInstanceInfoModel(url)
+
+actual fun getUserDetailViewModel(user: UserModel): UserDetailViewModel =
     PostDetailScreenViewModelHelper.getUserDetailModel(user)
 
 actual fun getUserPostsViewModel(user: UserModel): UserPostsViewModel =
@@ -50,6 +54,13 @@ object PostDetailScreenViewModelHelper : KoinComponent {
     fun getCommunityInfoModel(community: CommunityModel): CommunityInfoViewModel {
         val model: CommunityInfoViewModel by inject(
             parameters = { parametersOf(community) },
+        )
+        return model
+    }
+
+    fun getInstanceInfoModel(url: String): InstanceInfoViewModel {
+        val model: InstanceInfoViewModel by inject(
+            parameters = { parametersOf(url) },
         )
         return model
     }

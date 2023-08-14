@@ -5,6 +5,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.BlockCommunityRespo
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommunityResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.FollowCommunityForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetCommunityResponse
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListCommunitiesResponse
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType
 import de.jensklingenberg.ktorfit.Response
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
@@ -20,6 +22,15 @@ interface CommunityService {
         @Query("id") id: Int? = null,
         @Query("name") name: String? = null,
     ): Response<GetCommunityResponse>
+
+    @GET("community/list")
+    suspend fun getAll(
+        @Query("auth") auth: String? = null,
+        @Query("page") page: Int? = null,
+        @Query("limit") limit: Int? = null,
+        @Query("show_nsfw") showNsfw: Boolean = true,
+        @Query("sort") sort: SortType = SortType.Active,
+    ): Response<ListCommunitiesResponse>
 
     @POST("community/follow")
     @Headers("Content-Type: application/json")
