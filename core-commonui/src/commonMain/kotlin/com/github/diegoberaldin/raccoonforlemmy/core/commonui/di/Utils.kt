@@ -17,6 +17,7 @@ expect fun getPostDetailViewModel(
 
 expect fun getCommunityDetailViewModel(
     community: CommunityModel,
+    otherInstance: String = "",
 ): CommunityDetailViewModel
 
 expect fun getCommunityInfoViewModel(

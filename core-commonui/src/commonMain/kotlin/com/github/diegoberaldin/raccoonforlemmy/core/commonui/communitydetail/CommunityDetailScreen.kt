@@ -85,18 +85,23 @@ import io.kamel.image.asyncPainterResource
 
 class CommunityDetailScreen(
     private val community: CommunityModel,
+    private val otherInstance: String = "",
     private val onBack: () -> Unit,
 ) : Screen {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel(community.id.toString()) {
-            getCommunityDetailViewModel(community)
+        val model = rememberScreenModel(community.id.toString() + otherInstance) {
+            getCommunityDetailViewModel(
+                community = community,
+                otherInstance = otherInstance,
+            )
         }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val isOnOtherInstance = otherInstance.isNotEmpty()
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
@@ -376,10 +381,14 @@ class CommunityDetailScreen(
                         }
                         SwipeToDismiss(
                             state = dismissState,
-                            directions = setOf(
-                                DismissDirection.StartToEnd,
-                                DismissDirection.EndToStart,
-                            ),
+                            directions = if (isOnOtherInstance) {
+                                emptySet()
+                            } else {
+                                setOf(
+                                    DismissDirection.StartToEnd,
+                                    DismissDirection.EndToStart,
+                                )
+                            },
                             dismissThresholds = {
                                 FractionalThreshold(threshold)
                             },
@@ -467,29 +476,41 @@ class CommunityDetailScreen(
                                     )
                                 },
                                 post = post,
-                                onUpVote = {
-                                    model.reduce(
-                                        CommunityDetailMviModel.Intent.UpVotePost(
-                                            post = post,
-                                            feedback = true,
-                                        ),
-                                    )
+                                onUpVote = if (isOnOtherInstance) {
+                                    null
+                                } else {
+                                    {
+                                        model.reduce(
+                                            CommunityDetailMviModel.Intent.UpVotePost(
+                                                post = post,
+                                                feedback = true,
+                                            ),
+                                        )
+                                    }
                                 },
-                                onDownVote = {
-                                    model.reduce(
-                                        CommunityDetailMviModel.Intent.DownVotePost(
-                                            post = post,
-                                            feedback = true,
-                                        ),
-                                    )
+                                onDownVote = if (isOnOtherInstance) {
+                                    null
+                                } else {
+                                    {
+                                        model.reduce(
+                                            CommunityDetailMviModel.Intent.DownVotePost(
+                                                post = post,
+                                                feedback = true,
+                                            ),
+                                        )
+                                    }
                                 },
-                                onSave = {
-                                    model.reduce(
-                                        CommunityDetailMviModel.Intent.SavePost(
-                                            post = post,
-                                            feedback = true,
-                                        ),
-                                    )
+                                onSave = if (isOnOtherInstance) {
+                                    null
+                                } else {
+                                    {
+                                        model.reduce(
+                                            CommunityDetailMviModel.Intent.SavePost(
+                                                post = post,
+                                                feedback = true,
+                                            ),
+                                        )
+                                    }
                                 },
                             )
                         }

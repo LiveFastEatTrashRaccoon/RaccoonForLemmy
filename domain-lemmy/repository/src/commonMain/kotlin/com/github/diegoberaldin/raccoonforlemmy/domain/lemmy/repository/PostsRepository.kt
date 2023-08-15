@@ -11,6 +11,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.to
 
 class PostsRepository(
     private val services: ServiceProvider,
+    private val customServices: ServiceProvider,
 ) {
 
     companion object {
@@ -27,6 +28,26 @@ class PostsRepository(
     ): List<PostModel> {
         val response = services.post.getAll(
             auth = auth,
+            communityId = communityId,
+            page = page,
+            limit = limit,
+            type = type.toDto(),
+            sort = sort.toDto(),
+        )
+        val dto = response.body()?.posts ?: emptyList()
+        return dto.map { it.toModel() }
+    }
+
+    suspend fun getAllInInstance(
+        instance: String = "",
+        page: Int,
+        limit: Int = DEFAULT_PAGE_SIZE,
+        type: ListingType = ListingType.Local,
+        sort: SortType = SortType.Active,
+        communityId: Int? = null,
+    ): List<PostModel> {
+        customServices.changeInstance(instance)
+        val response = customServices.post.getAll(
             communityId = communityId,
             page = page,
             limit = limit,

@@ -17,8 +17,11 @@ import org.koin.core.parameter.parametersOf
 actual fun getPostDetailViewModel(post: PostModel): PostDetailViewModel =
     PostDetailScreenViewModelHelper.getPostDetailModel(post)
 
-actual fun getCommunityDetailViewModel(community: CommunityModel): CommunityDetailViewModel =
-    PostDetailScreenViewModelHelper.getCommunityDetailModel(community)
+actual fun getCommunityDetailViewModel(
+    community: CommunityModel,
+    otherInstance: String,
+): CommunityDetailViewModel =
+    PostDetailScreenViewModelHelper.getCommunityDetailModel(community, otherInstance)
 
 actual fun getCommunityInfoViewModel(community: CommunityModel): CommunityInfoViewModel =
     PostDetailScreenViewModelHelper.getCommunityInfoModel(community)
@@ -44,9 +47,12 @@ object PostDetailScreenViewModelHelper : KoinComponent {
         return model
     }
 
-    fun getCommunityDetailModel(community: CommunityModel): CommunityDetailViewModel {
+    fun getCommunityDetailModel(
+        community: CommunityModel,
+        otherInstance: String,
+    ): CommunityDetailViewModel {
         val model: CommunityDetailViewModel by inject(
-            parameters = { parametersOf(community) },
+            parameters = { parametersOf(community, otherInstance) },
         )
         return model
     }

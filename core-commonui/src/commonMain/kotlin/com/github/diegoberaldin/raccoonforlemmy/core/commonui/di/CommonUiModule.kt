@@ -34,6 +34,7 @@ val commonUiModule = module {
         CommunityDetailViewModel(
             mvi = DefaultMviModel(CommunityDetailMviModel.UiState()),
             community = params[0],
+            otherInstance = params[1],
             identityRepository = get(),
             communityRepository = get(),
             postsRepository = get(),

@@ -21,10 +21,13 @@ actual fun getPostDetailViewModel(post: PostModel): PostDetailViewModel {
     return res
 }
 
-actual fun getCommunityDetailViewModel(community: CommunityModel): CommunityDetailViewModel {
+actual fun getCommunityDetailViewModel(
+    community: CommunityModel,
+    otherInstance: String,
+): CommunityDetailViewModel {
     val res: CommunityDetailViewModel by inject(
         clazz = CommunityDetailViewModel::class.java,
-        parameters = { parametersOf(community) },
+        parameters = { parametersOf(community, otherInstance) },
     )
     return res
 }

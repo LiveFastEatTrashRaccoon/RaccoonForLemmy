@@ -58,6 +58,7 @@ class InstanceInfoScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
+        val instanceName = url.replace("https://", "")
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
@@ -74,7 +75,6 @@ class InstanceInfoScreen(
                         )
                     },
                     title = {
-                        val instanceName = url.replace("https://", "")
                         Text(
                             text = stringResource(MR.strings.instance_detail_title, instanceName),
                             style = MaterialTheme.typography.bodyLarge,
@@ -130,6 +130,7 @@ class InstanceInfoScreen(
                                 navigator.push(
                                     CommunityDetailScreen(
                                         community = it,
+                                        otherInstance = instanceName,
                                         onBack = {
                                             navigator.pop()
                                         },

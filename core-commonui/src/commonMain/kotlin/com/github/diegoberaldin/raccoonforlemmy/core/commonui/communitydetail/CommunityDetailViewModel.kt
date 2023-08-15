@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 class CommunityDetailViewModel(
     private val mvi: DefaultMviModel<CommunityDetailMviModel.Intent, CommunityDetailMviModel.UiState, CommunityDetailMviModel.Effect>,
     private val community: CommunityModel,
+    private val otherInstance: String,
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
     private val postsRepository: PostsRepository,
@@ -104,19 +105,28 @@ class CommunityDetailViewModel(
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
             val sort = currentState.sortType
-            val commentList = postsRepository.getAll(
-                auth = auth,
-                communityId = community.id,
-                page = currentPage,
-                sort = sort,
-            )
+            val itemList = if (otherInstance.isNotEmpty()) {
+                postsRepository.getAllInInstance(
+                    instance = otherInstance,
+                    communityId = community.id,
+                    page = currentPage,
+                    sort = sort,
+                )
+            } else {
+                postsRepository.getAll(
+                    auth = auth,
+                    communityId = community.id,
+                    page = currentPage,
+                    sort = sort,
+                )
+            }
             currentPage++
-            val canFetchMore = commentList.size >= CommentRepository.DEFAULT_PAGE_SIZE
+            val canFetchMore = itemList.size >= CommentRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {
                 val newItems = if (refreshing) {
-                    commentList
+                    itemList
                 } else {
-                    it.posts + commentList
+                    it.posts + itemList
                 }
                 it.copy(
                     posts = newItems,

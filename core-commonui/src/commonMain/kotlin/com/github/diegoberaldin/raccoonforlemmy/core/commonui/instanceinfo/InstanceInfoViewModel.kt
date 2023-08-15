@@ -65,18 +65,19 @@ class InstanceInfoViewModel(
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
+            val instance = url.replace("https://", "")
             val itemList = communityRepository.getAllInInstance(
                 auth = auth,
-                instance = url.replace("https://", ""),
+                instance = instance,
                 page = currentPage,
             )
             currentPage++
             val canFetchMore = itemList.size >= CommentRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {
                 val newItems = if (refreshing) {
-                    itemList
+                    itemList.filter { e -> e.instanceUrl == url }
                 } else {
-                    it.communities + itemList
+                    it.communities + itemList.filter { e -> e.instanceUrl == url }
                 }
                 it.copy(
                     communities = newItems,

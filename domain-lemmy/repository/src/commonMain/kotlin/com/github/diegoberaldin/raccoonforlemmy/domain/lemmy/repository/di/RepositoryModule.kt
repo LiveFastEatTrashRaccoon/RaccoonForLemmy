@@ -10,7 +10,12 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    singleOf(::PostsRepository)
+    single {
+        PostsRepository(
+            services = get(),
+            customServices = get(named("custom")),
+        )
+    }
     single {
         CommunityRepository(
             services = get(),
