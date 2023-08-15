@@ -299,38 +299,40 @@ class CommunityDetailScreen(
                                     },
                                     style = MaterialTheme.typography.headlineSmall,
                                 )
-                                Button(
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally)
-                                        .padding(top = Spacing.m),
-                                    onClick = {
-                                        when (community.subscribed) {
-                                            true -> model.reduce(CommunityDetailMviModel.Intent.Unsubscribe)
-                                            false -> model.reduce(CommunityDetailMviModel.Intent.Subscribe)
-                                            else -> Unit
-                                        }
-                                    },
-                                ) {
-                                    Row(
-                                        horizontalArrangement = Arrangement.spacedBy(Spacing.s),
-                                        verticalAlignment = Alignment.CenterVertically,
+                                if (!isOnOtherInstance) {
+                                    Button(
+                                        modifier = Modifier
+                                            .align(Alignment.CenterHorizontally)
+                                            .padding(top = Spacing.m),
+                                        onClick = {
+                                            when (community.subscribed) {
+                                                true -> model.reduce(CommunityDetailMviModel.Intent.Unsubscribe)
+                                                false -> model.reduce(CommunityDetailMviModel.Intent.Subscribe)
+                                                else -> Unit
+                                            }
+                                        },
                                     ) {
-                                        Image(
-                                            imageVector = when (community.subscribed) {
-                                                true -> Icons.Default.Check
-                                                false -> Icons.Default.AddCircle
-                                                else -> Icons.Default.MoreHoriz
-                                            },
-                                            contentDescription = null,
-                                            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary),
-                                        )
-                                        Text(
-                                            text = when (community.subscribed) {
-                                                true -> stringResource(MR.strings.community_button_subscribed)
-                                                false -> stringResource(MR.strings.community_button_subscribe)
-                                                else -> stringResource(MR.strings.community_button_pending)
-                                            },
-                                        )
+                                        Row(
+                                            horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Image(
+                                                imageVector = when (community.subscribed) {
+                                                    true -> Icons.Default.Check
+                                                    false -> Icons.Default.AddCircle
+                                                    else -> Icons.Default.MoreHoriz
+                                                },
+                                                contentDescription = null,
+                                                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary),
+                                            )
+                                            Text(
+                                                text = when (community.subscribed) {
+                                                    true -> stringResource(MR.strings.community_button_subscribed)
+                                                    false -> stringResource(MR.strings.community_button_subscribe)
+                                                    else -> stringResource(MR.strings.community_button_pending)
+                                                },
+                                            )
+                                        }
                                     }
                                 }
                             }

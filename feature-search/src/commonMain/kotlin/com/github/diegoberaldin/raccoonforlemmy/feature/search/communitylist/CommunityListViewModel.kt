@@ -85,7 +85,11 @@ class CommunityListViewModel(
                 val items = communityRepository.getSubscribed(
                     auth = auth,
                 ).filter {
-                    it.name.contains(searchText)
+                    if (searchText.isNotBlank()) {
+                        it.name.contains(searchText)
+                    } else {
+                        true
+                    }
                 }
                 currentPage++
                 mvi.updateState {
