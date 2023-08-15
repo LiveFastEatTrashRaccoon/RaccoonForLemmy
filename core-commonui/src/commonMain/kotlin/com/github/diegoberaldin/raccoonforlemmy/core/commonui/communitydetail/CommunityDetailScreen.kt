@@ -90,7 +90,9 @@ class CommunityDetailScreen(
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel { getCommunityDetailViewModel(community) }
+        val model = rememberScreenModel(community.id.toString()) {
+            getCommunityDetailViewModel(community)
+        }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
@@ -241,8 +243,13 @@ class CommunityDetailScreen(
                                             vertical = Spacing.xs,
                                         ).onClick {
                                             optionsExpanded = false
-                                            bottomSheetNavigator.show(
-                                                InstanceInfoScreen(community.instanceUrl),
+                                            navigator.push(
+                                                InstanceInfoScreen(
+                                                    url = community.instanceUrl,
+                                                    onBack = {
+                                                        navigator.pop()
+                                                    },
+                                                ),
                                             )
                                         },
                                         text = stringResource(MR.strings.community_detail_instance_info),

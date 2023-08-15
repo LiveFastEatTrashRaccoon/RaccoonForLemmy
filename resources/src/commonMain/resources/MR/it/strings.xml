@@ -70,4 +70,9 @@
     <string name="community_button_subscribe">Iscriviti</string>
     <string name="community_button_subscribed">Iscritto</string>
     <string name="community_button_pending">In corso</string>
+
+    <string name="community_detail_info">Info comunità</string>
+    <string name="community_detail_instance_info">Dettagli istanza</string>
+    <string name="instance_detail_title">Istanza: %1$s</string>
+    <string name="instance_detail_communities">Comunità:</string>
 </resources>
