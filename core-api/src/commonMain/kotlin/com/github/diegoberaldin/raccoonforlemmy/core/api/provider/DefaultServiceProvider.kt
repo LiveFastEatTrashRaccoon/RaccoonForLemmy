@@ -9,6 +9,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.service.SiteService
 import com.github.diegoberaldin.raccoonforlemmy.core.api.service.UserService
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -53,6 +54,9 @@ internal class DefaultServiceProvider : ServiceProvider {
             url {
                 host = currentInstance
             }
+        }
+        install(HttpTimeout) {
+            requestTimeoutMillis = 600_000
         }
         install(Logging) {
             logger = defaultLogger
