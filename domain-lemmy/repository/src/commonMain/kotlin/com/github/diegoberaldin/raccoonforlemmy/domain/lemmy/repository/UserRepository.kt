@@ -2,10 +2,11 @@ package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toDto
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toCommentDto
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toHost
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toModel
 
@@ -46,7 +47,7 @@ class UserRepository(
             personId = id,
             page = page,
             limit = limit,
-            sort = sort.toDto(),
+            sort = sort.toCommentDto(),
             savedOnly = savedOnly,
         )
         val dto = response.body() ?: return emptyList()
@@ -65,9 +66,27 @@ class UserRepository(
             personId = id,
             page = page,
             limit = limit,
-            sort = sort.toDto(),
+            sort = sort.toCommentDto(),
         )
         val dto = response.body() ?: return emptyList()
         return dto.comments.map { it.toModel() }
+    }
+
+    suspend fun getMentions(
+        auth: String? = null,
+        page: Int,
+        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        sort: SortType = SortType.Active,
+        unreadOnly: Boolean = true,
+    ): List<PersonMentionModel> {
+        val response = serviceProvider.user.getMentions(
+            auth = auth,
+            limit = limit,
+            sort = sort.toCommentDto(),
+            page = page,
+            unreadOnly = unreadOnly,
+        )
+        val dto = response.body() ?: return emptyList()
+        return dto.mentions.map { it.toModel() }
     }
 }

@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvide
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toCommentDto
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toModel
 
@@ -30,7 +31,7 @@ class CommentRepository(
             page = page,
             limit = limit,
             type = type.toDto(),
-            sort = sort.toDto(),
+            sort = sort.toCommentDto(),
         )
         val dto = response.body()?.comments ?: emptyList()
         return dto.map { it.toModel() }

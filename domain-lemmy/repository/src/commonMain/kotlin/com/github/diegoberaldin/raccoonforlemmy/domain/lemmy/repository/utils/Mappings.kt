@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils
 
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentSortType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.Community
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommunityFollowerView
@@ -8,6 +9,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType.Local
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType.Subscribed
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.Person
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.PersonAggregates
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.PersonMentionView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.PostView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.Active
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.Hot
@@ -26,6 +28,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.TopYear
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -52,6 +55,14 @@ internal fun SortType.toDto() = when (this) {
     SortType.Top.Generic -> Top
     SortType.Old -> Old
     else -> Active
+}
+
+internal fun SortType.toCommentDto(): CommentSortType = when (this) {
+    SortType.Hot -> CommentSortType.Hot
+    SortType.New -> CommentSortType.New
+    SortType.Top.Generic -> CommentSortType.Top
+    SortType.Old -> CommentSortType.Old
+    else -> CommentSortType.New
 }
 
 internal fun Person.toModel() = UserModel(
@@ -108,6 +119,19 @@ internal fun CommunityFollowerView.toModel() = CommunityModel(
     icon = community.icon,
     banner = community.banner,
     host = community.actorId.toHost(),
+)
+
+internal fun PersonMentionView.toModel() = PersonMentionModel(
+    post = PostModel(
+        id = post.id,
+        title = post.name,
+        text = post.body.orEmpty(),
+    ),
+    comment = CommentModel(
+        id = comment.id,
+        text = comment.content,
+        community = community.toModel(),
+    ),
 )
 
 internal fun String.toHost(): String = this.replace("https://", "").let {

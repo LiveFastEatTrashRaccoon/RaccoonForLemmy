@@ -10,3 +10,4 @@ typealias SiteId = Int
 typealias LocalSiteId = Int
 typealias LocalUserId = Int
 typealias CustomEmojiId = Int
+typealias PersonMentionId = Int
