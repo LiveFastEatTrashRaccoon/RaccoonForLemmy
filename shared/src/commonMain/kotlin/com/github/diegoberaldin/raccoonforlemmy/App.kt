@@ -4,7 +4,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -19,7 +18,11 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_surface
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_dark_surface
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_light_surface
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.getTemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
@@ -42,8 +45,9 @@ import kotlinx.coroutines.flow.onEach
 fun App() {
     val keyStore = remember { getTemporaryKeyStore() }
     val systemDarkTheme = isSystemInDarkTheme()
-    val currentTheme =
-        keyStore[KeyStoreKeys.UiTheme, if (systemDarkTheme) 1 else 0].let { it.toThemeState() }
+    val currentTheme = keyStore[KeyStoreKeys.UiTheme, if (systemDarkTheme) 1 else 0].let {
+        it.toThemeState()
+    }
 
     val defaultLocale = stringResource(MR.strings.lang)
     val langCode = keyStore[KeyStoreKeys.Locale, defaultLocale]
@@ -79,12 +83,22 @@ fun App() {
                         CurrentTab()
                     },
                     bottomBar = {
+                        val themeRepository = remember { getThemeRepository() }
+                        val themeState by themeRepository.state.collectAsState()
                         BottomAppBar(
                             contentPadding = PaddingValues(0.dp),
-                            backgroundColor = if (currentTheme == ThemeState.Light) {
-                                MaterialTheme.colors.surface
-                            } else {
-                                MaterialTheme.colors.onSurface
+                            backgroundColor = when (themeState) {
+                                ThemeState.Light -> {
+                                    md_theme_light_surface
+                                }
+
+                                ThemeState.Dark -> {
+                                    md_theme_dark_surface
+                                }
+
+                                else -> {
+                                    md_theme_black_surface
+                                }
                             },
                         ) {
                             TabNavigationItem(HomeTab)

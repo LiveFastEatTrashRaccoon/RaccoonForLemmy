@@ -44,6 +44,7 @@ fun PostCardSubtitle(
         ) {
             if (communityName.isNotEmpty()) {
                 Surface(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     modifier = Modifier
                         .onClick {
                             if (community != null) {
@@ -82,6 +83,7 @@ fun PostCardSubtitle(
             }
             if (creatorName.isNotEmpty()) {
                 Surface(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     modifier = Modifier
                         .onClick {
                             if (creator != null) {
