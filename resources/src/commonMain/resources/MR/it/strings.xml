@@ -3,7 +3,7 @@
     <string name="lang">it</string>
 
     <string name="navigation_home">Post</string>
-    <string name="navigation_inbox">In arrivo</string>
+    <string name="navigation_inbox">Inbox</string>
     <string name="navigation_profile">Profilo</string>
     <string name="navigation_search">Esplora</string>
     <string name="navigation_settings">Impostazioni</string>
@@ -75,4 +75,11 @@
     <string name="community_detail_instance_info">Dettagli istanza</string>
     <string name="instance_detail_title">Istanza: %1$s</string>
     <string name="instance_detail_communities">Comunità:</string>
+
+    <string name="inbox_section_replies">Risposte</string>
+    <string name="inbox_section_mentions">Menzioni</string>
+    <string name="inbox_section_messages">Messaggi</string>
+    <string name="inbox_listing_type_title">Tipo inbox</string>
+    <string name="inbox_listing_type_all">Tutti</string>
+    <string name="inbox_listing_type_unread">Non letti</string>
 </resources>

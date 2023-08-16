@@ -5,16 +5,19 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
@@ -41,15 +44,18 @@ fun SectionSelector(
             ),
     ) {
         titles.forEachIndexed { i, title ->
-            Box(
+            Surface(
+                color = Color.Transparent,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
                     .padding(bottom = Spacing.xxs)
                     .onClick {
                         onSectionSelected(i)
-                    }
-                    .let {
+                    },
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize().let {
                         if (currentSection == i) {
                             it.background(
                                 color = highlightColor,
@@ -73,13 +79,14 @@ fun SectionSelector(
                             it
                         }
                     },
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
             if (i < titles.lastIndex) {
                 Box(

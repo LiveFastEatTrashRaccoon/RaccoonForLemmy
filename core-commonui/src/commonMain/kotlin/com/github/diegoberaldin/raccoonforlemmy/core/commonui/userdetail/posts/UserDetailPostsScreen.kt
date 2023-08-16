@@ -302,6 +302,9 @@ internal class UserDetailPostsScreen(
                         }
                     }
                 }
+                item {
+                    Spacer(modifier = Modifier.height(Spacing.xxl))
+                }
             }
 
             PullRefreshIndicator(

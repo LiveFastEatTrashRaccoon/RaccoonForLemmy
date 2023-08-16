@@ -35,7 +35,6 @@ class UserCommentsViewModel(
                 mvi.updateState { it.copy(user = user) }
             }
         }
-        refresh()
     }
 
     override fun reduce(intent: UserCommentsMviModel.Intent) {

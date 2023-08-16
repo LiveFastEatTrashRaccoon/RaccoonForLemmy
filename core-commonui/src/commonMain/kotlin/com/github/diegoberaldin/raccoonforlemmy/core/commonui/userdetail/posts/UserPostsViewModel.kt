@@ -34,7 +34,6 @@ class UserPostsViewModel(
                 mvi.updateState { it.copy(user = user) }
             }
         }
-        refresh()
     }
 
     override fun reduce(intent: UserPostsMviModel.Intent) {

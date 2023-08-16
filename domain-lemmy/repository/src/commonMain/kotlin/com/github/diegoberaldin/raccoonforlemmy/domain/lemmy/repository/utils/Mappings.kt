@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils
 
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentReplyView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentSortType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.Community
@@ -122,6 +123,7 @@ internal fun CommunityFollowerView.toModel() = CommunityModel(
 )
 
 internal fun PersonMentionView.toModel() = PersonMentionModel(
+    id = personMention.id,
     post = PostModel(
         id = post.id,
         title = post.name,
@@ -132,6 +134,30 @@ internal fun PersonMentionView.toModel() = PersonMentionModel(
         text = comment.content,
         community = community.toModel(),
     ),
+    creator = creator.toModel(),
+    community = community.toModel(),
+    score = counts.score,
+    myVote = myVote ?: 0,
+    saved = saved,
+)
+
+internal fun CommentReplyView.toModel() = PersonMentionModel(
+    id = commentReply.id,
+    post = PostModel(
+        id = post.id,
+        title = post.name,
+        text = post.body.orEmpty(),
+    ),
+    comment = CommentModel(
+        id = comment.id,
+        text = comment.content,
+        community = community.toModel(),
+    ),
+    creator = creator.toModel(),
+    community = community.toModel(),
+    score = counts.score,
+    myVote = myVote ?: 0,
+    saved = saved,
 )
 
 internal fun String.toHost(): String = this.replace("https://", "").let {

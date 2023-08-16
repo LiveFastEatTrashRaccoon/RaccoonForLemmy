@@ -89,4 +89,22 @@ class UserRepository(
         val dto = response.body() ?: return emptyList()
         return dto.mentions.map { it.toModel() }
     }
+
+    suspend fun getReplies(
+        auth: String? = null,
+        page: Int,
+        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        sort: SortType = SortType.Active,
+        unreadOnly: Boolean = true,
+    ): List<PersonMentionModel> {
+        val response = serviceProvider.user.getReplies(
+            auth = auth,
+            limit = limit,
+            sort = sort.toCommentDto(),
+            page = page,
+            unreadOnly = unreadOnly,
+        )
+        val dto = response.body() ?: return emptyList()
+        return dto.replies.map { it.toModel() }
+    }
 }
