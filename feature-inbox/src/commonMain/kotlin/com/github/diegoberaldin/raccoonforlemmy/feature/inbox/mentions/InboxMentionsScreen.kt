@@ -81,6 +81,7 @@ class InboxMentionsScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 items(uiState.mentions, key = { it.id }) { mention ->
+                    // TODO: review
                     Card(
                         modifier = Modifier.background(
                             color = MaterialTheme.colorScheme.surfaceVariant,

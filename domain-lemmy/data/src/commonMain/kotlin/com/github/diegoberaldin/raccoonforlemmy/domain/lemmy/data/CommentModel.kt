@@ -8,4 +8,5 @@ data class CommentModel(
     val score: Int = 0,
     val myVote: Int = 0,
     val saved: Boolean = false,
+    val publishDate: String? = null,
 )

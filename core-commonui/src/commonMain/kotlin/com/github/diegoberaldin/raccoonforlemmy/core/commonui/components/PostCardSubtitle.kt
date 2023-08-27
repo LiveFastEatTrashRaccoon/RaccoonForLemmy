@@ -82,6 +82,12 @@ fun PostCardSubtitle(
                 }
             }
             if (creatorName.isNotEmpty()) {
+                if (communityName.isNotEmpty()) {
+                    Text(
+                        text = "•",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
                 Surface(
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     modifier = Modifier
@@ -95,12 +101,6 @@ fun PostCardSubtitle(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
-                        if (communityName.isNotEmpty()) {
-                            Text(
-                                text = "•",
-                                style = MaterialTheme.typography.bodySmall,
-                            )
-                        }
                         if (creatorAvatar.isNotEmpty()) {
                             val painterResource = asyncPainterResource(data = creatorAvatar)
                             KamelImage(

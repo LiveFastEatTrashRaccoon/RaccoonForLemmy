@@ -11,5 +11,8 @@ expect object DateTime {
         yearLabel: String,
         monthLabel: String,
         dayLabel: String,
+        hourLabel: String,
+        minuteLabel: String,
+        secondLabel: String,
     ): String
 }

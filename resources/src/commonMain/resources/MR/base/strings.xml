@@ -37,6 +37,9 @@
     <string name="home_sort_type_top_year">Top year</string>
     <string name="home_sort_type_old">Old</string>
     <string name="home_instance_via">via %1$s</string>
+    <string name="post_hour_short">h</string>
+    <string name="post_minute_short">m</string>
+    <string name="post_second_short">s</string>
 
     <string name="explore_search_placeholder">Search for communities</string>
     <string name="explore_subscribed_only">Subscribed only</string>
@@ -88,4 +91,6 @@
     <string name="inbox_listing_type_title">Inbox type</string>
     <string name="inbox_listing_type_all">All</string>
     <string name="inbox_listing_type_unread">Unread</string>
+    <string name="inbox_item_reply_post">replied to your post in</string>
+    <string name="inbox_item_reply_comment">replied to your comment in</string>
 </resources>

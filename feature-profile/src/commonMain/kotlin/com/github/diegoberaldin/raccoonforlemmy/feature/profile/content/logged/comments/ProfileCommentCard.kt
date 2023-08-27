@@ -46,6 +46,7 @@ fun ProfileCommentCard(
                 saved = comment.saved,
                 upVoted = comment.myVote > 0,
                 downVoted = comment.myVote < 0,
+                date = comment.publishDate,
             )
         }
     }

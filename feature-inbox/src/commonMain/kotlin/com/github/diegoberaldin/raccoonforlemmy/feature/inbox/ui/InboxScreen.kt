@@ -88,7 +88,7 @@ class InboxScreen : Screen {
         ) { paddingValues ->
             Column(
                 modifier = Modifier.padding(paddingValues),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
                 SectionSelector(
                     titles = listOf(

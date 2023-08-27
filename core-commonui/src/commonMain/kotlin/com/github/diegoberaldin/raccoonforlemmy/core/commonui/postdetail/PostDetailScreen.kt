@@ -175,6 +175,7 @@ class PostDetailScreen(
                             upVoted = post.myVote > 0,
                             downVoted = post.myVote < 0,
                             saved = post.saved,
+                            date = post.publishDate,
                             onUpVote = {
                                 model.reduce(
                                     PostDetailMviModel.Intent.UpVotePost(

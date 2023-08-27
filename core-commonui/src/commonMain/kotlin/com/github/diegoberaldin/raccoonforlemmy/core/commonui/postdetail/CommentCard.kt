@@ -52,6 +52,7 @@ fun CommentCard(
                 onDownVote = onDownVote,
                 onSave = onSave,
                 onReply = onReply,
+                date = comment.publishDate,
             )
         }
     }

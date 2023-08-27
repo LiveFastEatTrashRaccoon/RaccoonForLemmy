@@ -11,4 +11,5 @@ data class PostModel(
     val creator: UserModel? = null,
     val saved: Boolean = false,
     val myVote: Int = 0,
+    val publishDate: String? = null,
 )

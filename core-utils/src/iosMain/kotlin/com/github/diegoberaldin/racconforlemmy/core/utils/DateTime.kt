@@ -3,7 +3,10 @@ package com.github.diegoberaldin.racconforlemmy.core.utils
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarIdentifierGregorian
 import platform.Foundation.NSCalendarUnitDay
+import platform.Foundation.NSCalendarUnitHour
+import platform.Foundation.NSCalendarUnitMinute
 import platform.Foundation.NSCalendarUnitMonth
+import platform.Foundation.NSCalendarUnitSecond
 import platform.Foundation.NSCalendarUnitYear
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateFormatter
@@ -33,12 +36,16 @@ actual object DateTime {
         yearLabel: String,
         monthLabel: String,
         dayLabel: String,
+        hourLabel: String,
+        minuteLabel: String,
+        secondLabel: String,
     ): String {
         val date = getDateFromIso8601Timestamp(iso8601Timestamp) ?: return ""
         val now = NSDate()
         val calendar = NSCalendar(calendarIdentifier = NSCalendarIdentifierGregorian)
         val delta = calendar.components(
-            unitFlags = NSCalendarUnitDay.or(NSCalendarUnitMonth).or(NSCalendarUnitYear),
+            unitFlags = NSCalendarUnitSecond.or(NSCalendarUnitMinute).or(NSCalendarUnitHour)
+                .or(NSCalendarUnitDay).or(NSCalendarUnitMonth).or(NSCalendarUnitYear),
             fromDate = date,
             toDate = now,
             options = 0,
@@ -61,8 +68,20 @@ actual object DateTime {
                 }
             }
 
-            else -> buildString {
+            delta.day >= 1 -> buildString {
                 append("${delta.day}$dayLabel")
+            }
+
+            delta.hour >= 1 -> buildString {
+                append(" ${delta.hour}$hourLabel")
+            }
+
+            delta.minute >= 1 -> buildString {
+                append(" ${delta.minute}$minuteLabel")
+            }
+
+            else -> buildString {
+                append(" ${delta.second}$secondLabel")
             }
         }
     }

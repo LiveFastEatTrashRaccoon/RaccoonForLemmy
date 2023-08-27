@@ -1,9 +1,9 @@
 package com.github.diegoberaldin.racconforlemmy.core.utils
 
-import java.time.LocalDateTime
 import java.time.Period
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.GregorianCalendar
 
 actual object DateTime {
     actual fun getFormattedDate(
@@ -20,30 +20,54 @@ actual object DateTime {
         yearLabel: String,
         monthLabel: String,
         dayLabel: String,
+        hourLabel: String,
+        minuteLabel: String,
+        secondLabel: String,
     ): String {
-        val now = LocalDateTime.now().toLocalDate()
-        val date = getDateFromIso8601Timestamp(iso8601Timestamp).toLocalDate()
-        val delta = Period.between(date, now)
+        val now = GregorianCalendar().toZonedDateTime()
+        val date = getDateFromIso8601Timestamp(iso8601Timestamp)
+        val delta = Period.between(date.toLocalDate(), now.toLocalDate())
+        val years = delta.years
+        val months = delta.months
+        val days = delta.days
+        val nowSeconds = now.toEpochSecond()
+        val dateSeconds = date.toEpochSecond()
+        val diffSeconds = (nowSeconds - dateSeconds)
+        val hours = (diffSeconds % 86400) / 3600
+        val minutes = (diffSeconds % 3600) / 60
+        val seconds = diffSeconds % 60
         return when {
-            delta.years >= 1 -> buildString {
-                append("${delta.years}$yearLabel")
-                if (delta.months >= 1) {
-                    append(" ${delta.months}$monthLabel")
+            years >= 1 -> buildString {
+                append("${years}$yearLabel")
+                if (months >= 1) {
+                    append(" ${months}$monthLabel")
                 }
-                if (delta.days >= 1) {
-                    append(" ${delta.days}$dayLabel")
+                if (days >= 1) {
+                    append(" ${days}$dayLabel")
                 }
             }
 
-            delta.months >= 1 -> buildString {
-                append("${delta.months}$monthLabel")
-                if (delta.days >= 1) {
-                    append(" ${delta.days}$dayLabel")
+            months >= 1 -> buildString {
+                append("${months}$monthLabel")
+                if (days >= 1) {
+                    append(" ${days}$dayLabel")
                 }
+            }
+
+            days >= 1 -> buildString {
+                append("${days}$dayLabel")
+            }
+
+            hours >= 1 -> buildString {
+                append(" ${hours}$hourLabel")
+            }
+
+            minutes >= 1 -> buildString {
+                append(" ${minutes}$minuteLabel")
             }
 
             else -> buildString {
-                append("${delta.days}$dayLabel")
+                append(" ${seconds}$secondLabel")
             }
         }
     }

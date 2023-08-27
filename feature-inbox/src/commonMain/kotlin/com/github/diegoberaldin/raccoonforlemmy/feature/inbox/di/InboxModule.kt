@@ -20,6 +20,7 @@ val inboxTabModule = module {
             mvi = DefaultMviModel(InboxRepliesMviModel.UiState()),
             userRepository = get(),
             identityRepository = get(),
+            siteRepository = get(),
         )
     }
     factory {

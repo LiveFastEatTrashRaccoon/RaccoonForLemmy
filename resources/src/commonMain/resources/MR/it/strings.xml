@@ -34,6 +34,9 @@
     <string name="home_sort_type_top_year">Top anno</string>
     <string name="home_sort_type_old">Vecchi</string>
     <string name="home_instance_via">via %1$s</string>
+    <string name="post_hour_short">h</string>
+    <string name="post_minute_short">m</string>
+    <string name="post_second_short">s</string>
 
     <string name="explore_search_placeholder">Cerca comunità</string>
     <string name="explore_subscribed_only">Solo sottoscrizioni</string>

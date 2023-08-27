@@ -9,4 +9,6 @@ data class PersonMentionModel(
     val score: Int,
     val myVote: Int,
     val saved: Boolean,
+    val isOwnPost: Boolean = false,
+    val publishDate: String? = null,
 )

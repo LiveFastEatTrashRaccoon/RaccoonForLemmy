@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -15,6 +16,7 @@ class InboxRepliesViewModel(
     private val mvi: DefaultMviModel<InboxRepliesMviModel.Intent, InboxRepliesMviModel.UiState, InboxRepliesMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
+    private val siteRepository: SiteRepository,
 ) : ScreenModel,
     MviModel<InboxRepliesMviModel.Intent, InboxRepliesMviModel.UiState, InboxRepliesMviModel.Effect> by mvi {
 
@@ -49,6 +51,7 @@ class InboxRepliesViewModel(
         mvi.scope.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
+            val currentUser = siteRepository.getCurrentUser(auth.orEmpty())
             val refreshing = currentState.refreshing
             val unreadOnly = currentState.unreadOnly
             val itemList = userRepository.getReplies(
@@ -56,7 +59,11 @@ class InboxRepliesViewModel(
                 page = currentPage,
                 unreadOnly = unreadOnly,
                 sort = SortType.New,
-            )
+            ).map {
+                val isOwnPost = it.post.creator?.id == currentUser?.id
+                it.copy(isOwnPost = isOwnPost)
+            }
+
             currentPage++
             val canFetchMore = itemList.size >= CommentRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {

@@ -82,6 +82,7 @@ fun ProfilePostCard(
                 saved = post.saved,
                 upVoted = post.myVote > 0,
                 downVoted = post.myVote < 0,
+                date = post.publishDate,
             )
         }
     }

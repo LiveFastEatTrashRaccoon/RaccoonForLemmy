@@ -14,6 +14,8 @@ import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.filled.HourglassBottom
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,12 +23,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
+import com.github.diegoberaldin.racconforlemmy.core.utils.DateTime
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun PostCardFooter(
     comments: Int? = null,
+    date: String? = null,
     score: Int,
     saved: Boolean = false,
     upVoted: Boolean = false,
@@ -54,6 +60,44 @@ fun PostCardFooter(
             Text(
                 modifier = Modifier.padding(end = Spacing.s),
                 text = "$comments",
+            )
+        }
+        if (date != null) {
+            Icon(
+                modifier = buttonModifier,
+                imageVector = Icons.Default.HourglassBottom,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+            )
+            Text(
+                text = date.let {
+                    when {
+                        it.isEmpty() -> it
+                        !it.endsWith("Z") -> {
+                            DateTime.getPrettyDate(
+                                iso8601Timestamp = it + "Z",
+                                yearLabel = stringResource(MR.strings.profile_year_short),
+                                monthLabel = stringResource(MR.strings.profile_month_short),
+                                dayLabel = stringResource(MR.strings.profile_day_short),
+                                hourLabel = stringResource(MR.strings.post_hour_short),
+                                minuteLabel = stringResource(MR.strings.post_minute_short),
+                                secondLabel = stringResource(MR.strings.post_second_short),
+                            )
+                        }
+
+                        else -> {
+                            DateTime.getPrettyDate(
+                                iso8601Timestamp = it,
+                                yearLabel = stringResource(MR.strings.profile_year_short),
+                                monthLabel = stringResource(MR.strings.profile_month_short),
+                                dayLabel = stringResource(MR.strings.profile_day_short),
+                                hourLabel = stringResource(MR.strings.post_hour_short),
+                                minuteLabel = stringResource(MR.strings.post_minute_short),
+                                secondLabel = stringResource(MR.strings.post_second_short),
+                            )
+                        }
+                    }
+                },
             )
         }
         Spacer(modifier = Modifier.weight(1f))

@@ -70,7 +70,7 @@ fun PostCard(
                             brush = Brush.verticalGradient(
                                 colors = listOf(
                                     Color.Transparent,
-                                    MaterialTheme.colorScheme.surface,
+                                    MaterialTheme.colorScheme.surfaceVariant,
                                 ),
                             ),
                         ),
@@ -86,6 +86,7 @@ fun PostCard(
                 onDownVote = onDownVote,
                 onSave = onSave,
                 onReply = onReply,
+                date = post.publishDate,
             )
         }
     }

@@ -37,12 +37,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxReplySubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardFooter
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxRepliesViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -82,33 +80,33 @@ class InboxRepliesScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 items(uiState.mentions, key = { it.id }) { mention ->
+                    // TODO: open post on click
                     Card(
                         modifier = Modifier.background(
                             color = MaterialTheme.colorScheme.surfaceVariant,
                             shape = RoundedCornerShape(CornerSize.m),
                         ).padding(
-                            vertical = Spacing.lHalf,
+                            vertical = Spacing.s,
                             horizontal = Spacing.s,
                         ),
                     ) {
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                            verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
                         ) {
-                            PostCardSubtitle(
-                                community = mention.community,
-                                creator = mention.creator?.copy(avatar = null),
-                            )
-                            PostCardBody(
-                                text = mention.post.text,
+                            InboxReplyHeader(
+                                mention = mention,
                             )
                             PostCardBody(
                                 text = mention.comment.text,
                             )
-                            PostCardFooter(
+                            InboxReplySubtitle(
+                                creator = mention.creator,
+                                community = mention.community,
+                                date = mention.publishDate,
                                 score = mention.score,
                                 upVoted = mention.myVote > 0,
                                 downVoted = mention.myVote < 0,
-                                saved = mention.saved,
+                                // TODO: callbacks
                             )
                         }
                     }
