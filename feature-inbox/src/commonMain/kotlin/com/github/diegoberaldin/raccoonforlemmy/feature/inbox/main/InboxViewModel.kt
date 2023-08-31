@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui
+package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel

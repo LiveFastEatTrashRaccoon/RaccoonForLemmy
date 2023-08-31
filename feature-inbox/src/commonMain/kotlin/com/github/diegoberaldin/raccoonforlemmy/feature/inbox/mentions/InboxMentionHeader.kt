@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies
+package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -15,13 +15,17 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun InboxReplyHeader(mention: PersonMentionModel) {
+fun InboxMentionHeader(mention: PersonMentionModel) {
     val header = buildAnnotatedString {
         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
             append(mention.creator.name)
         }
         append(" ")
-        append(stringResource(MR.strings.inbox_item_mention))
+        if (mention.isOwnPost) {
+            append(stringResource(MR.strings.inbox_item_reply_post))
+        } else {
+            append(stringResource(MR.strings.inbox_item_reply_comment))
+        }
         append(" ")
         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
             append(mention.post.title)

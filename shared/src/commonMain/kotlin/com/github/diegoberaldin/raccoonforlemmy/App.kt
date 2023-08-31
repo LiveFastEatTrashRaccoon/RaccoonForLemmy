@@ -27,7 +27,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.getTemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.InboxTab
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.SearchTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab

@@ -93,4 +93,5 @@
     <string name="inbox_listing_type_unread">Unread</string>
     <string name="inbox_item_reply_post">replied to your post in</string>
     <string name="inbox_item_reply_comment">replied to your comment in</string>
+    <string name="inbox_item_mention">mentioned you in</string>
 </resources>

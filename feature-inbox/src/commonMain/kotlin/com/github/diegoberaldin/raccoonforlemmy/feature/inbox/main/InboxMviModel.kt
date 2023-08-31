@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui
+package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 

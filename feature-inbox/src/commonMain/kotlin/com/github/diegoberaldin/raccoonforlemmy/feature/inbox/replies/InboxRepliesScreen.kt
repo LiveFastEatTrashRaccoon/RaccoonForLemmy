@@ -34,13 +34,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxReplySubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxRepliesViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -56,6 +60,8 @@ class InboxRepliesScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val parentUiState by parentModel.uiState.collectAsState()
+        val navigator = LocalNavigator.currentOrThrow
+
         LaunchedEffect(parentModel) {
             parentModel.uiState.map { it.unreadOnly }.distinctUntilChanged().onEach {
                 model.reduce(InboxRepliesMviModel.Intent.ChangeUnreadOnly(unread = it))
@@ -106,7 +112,26 @@ class InboxRepliesScreen(
                                 score = mention.score,
                                 upVoted = mention.myVote > 0,
                                 downVoted = mention.myVote < 0,
-                                // TODO: callbacks
+                                onOpenCreator = { user ->
+                                    navigator.push(
+                                        UserDetailScreen(
+                                            user = user,
+                                            onBack = {
+                                                navigator.pop()
+                                            },
+                                        ),
+                                    )
+                                },
+                                onOpenCommunity = { community ->
+                                    navigator.push(
+                                        CommunityDetailScreen(
+                                            community = community,
+                                            onBack = {
+                                                navigator.pop()
+                                            },
+                                        ),
+                                    )
+                                },
                             )
                         }
                     }

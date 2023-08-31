@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.inbox
+package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -14,7 +14,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxScreen
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxScreen
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString

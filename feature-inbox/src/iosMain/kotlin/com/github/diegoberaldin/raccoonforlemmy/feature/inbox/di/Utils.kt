@@ -2,7 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di
 
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

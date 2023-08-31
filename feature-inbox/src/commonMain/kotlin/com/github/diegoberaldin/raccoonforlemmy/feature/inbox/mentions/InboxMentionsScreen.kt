@@ -34,14 +34,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxReplySubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardFooter
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxMentionsViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -57,6 +60,8 @@ class InboxMentionsScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val parentUiState by parentModel.uiState.collectAsState()
+        val navigator = LocalNavigator.currentOrThrow
+
         LaunchedEffect(parentModel) {
             parentModel.uiState.map { it.unreadOnly }.distinctUntilChanged().onEach {
                 model.reduce(InboxMentionsMviModel.Intent.ChangeUnreadOnly(unread = it))
@@ -81,34 +86,52 @@ class InboxMentionsScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 items(uiState.mentions, key = { it.id }) { mention ->
-                    // TODO: review
+                    // TODO: open post on click
                     Card(
                         modifier = Modifier.background(
                             color = MaterialTheme.colorScheme.surfaceVariant,
                             shape = RoundedCornerShape(CornerSize.m),
                         ).padding(
-                            vertical = Spacing.lHalf,
+                            vertical = Spacing.s,
                             horizontal = Spacing.s,
                         ),
                     ) {
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                            verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
                         ) {
-                            PostCardSubtitle(
-                                community = mention.community,
-                                creator = mention.creator?.copy(avatar = null),
-                            )
-                            PostCardBody(
-                                text = mention.post.text,
+                            InboxMentionHeader(
+                                mention = mention,
                             )
                             PostCardBody(
                                 text = mention.comment.text,
                             )
-                            PostCardFooter(
+                            InboxReplySubtitle(
+                                creator = mention.creator,
+                                community = mention.community,
+                                date = mention.publishDate,
                                 score = mention.score,
                                 upVoted = mention.myVote > 0,
                                 downVoted = mention.myVote < 0,
-                                saved = mention.saved,
+                                onOpenCreator = { user ->
+                                    navigator.push(
+                                        UserDetailScreen(
+                                            user = user,
+                                            onBack = {
+                                                navigator.pop()
+                                            },
+                                        ),
+                                    )
+                                },
+                                onOpenCommunity = { community ->
+                                    navigator.push(
+                                        CommunityDetailScreen(
+                                            community = community,
+                                            onBack = {
+                                                navigator.pop()
+                                            },
+                                        ),
+                                    )
+                                },
                             )
                         }
                     }

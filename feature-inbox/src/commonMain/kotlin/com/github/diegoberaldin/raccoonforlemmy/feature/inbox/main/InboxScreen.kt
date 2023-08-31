@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui
+package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

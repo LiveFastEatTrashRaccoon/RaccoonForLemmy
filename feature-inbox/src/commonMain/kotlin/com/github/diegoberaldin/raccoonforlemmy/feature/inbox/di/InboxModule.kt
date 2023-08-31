@@ -5,8 +5,8 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMent
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
 import org.koin.dsl.module
 
 val inboxTabModule = module {
