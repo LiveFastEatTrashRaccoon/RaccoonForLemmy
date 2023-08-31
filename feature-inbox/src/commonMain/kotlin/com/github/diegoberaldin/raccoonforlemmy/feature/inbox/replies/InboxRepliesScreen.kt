@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,11 +13,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
+import androidx.compose.material.Icon
+import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MarkChatRead
+import androidx.compose.material.icons.filled.MarkChatUnread
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -27,8 +38,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -87,52 +100,145 @@ class InboxRepliesScreen(
             ) {
                 items(uiState.mentions, key = { it.id }) { mention ->
                     // TODO: open post on click
-                    Card(
-                        modifier = Modifier.background(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
-                            shape = RoundedCornerShape(CornerSize.m),
-                        ).padding(
-                            vertical = Spacing.s,
-                            horizontal = Spacing.s,
+                    val dismissState = rememberDismissState(
+                        confirmStateChange = {
+                            when (it) {
+                                DismissValue.DismissedToEnd -> {
+                                    model.reduce(
+                                        InboxRepliesMviModel.Intent.MarkMentionAsRead(
+                                            read = false,
+                                            mentionId = mention.id,
+                                        ),
+                                    )
+                                }
+
+                                DismissValue.DismissedToStart -> {
+                                    model.reduce(
+                                        InboxRepliesMviModel.Intent.MarkMentionAsRead(
+                                            read = true,
+                                            mentionId = mention.id,
+                                        ),
+                                    )
+                                }
+
+                                else -> Unit
+                            }
+                            false
+                        },
+                    )
+                    var willDismissDirection: DismissDirection? by remember {
+                        mutableStateOf(null)
+                    }
+                    val threshold = 0.15f
+                    LaunchedEffect(Unit) {
+                        snapshotFlow { dismissState.offset.value }.collect {
+                            willDismissDirection = when {
+                                it > width * threshold -> DismissDirection.StartToEnd
+                                it < -width * threshold -> DismissDirection.EndToStart
+                                else -> null
+                            }
+                        }
+                    }
+                    LaunchedEffect(willDismissDirection) {
+                        if (willDismissDirection != null) {
+                            model.reduce(InboxRepliesMviModel.Intent.HapticIndication)
+                        }
+                    }
+                    SwipeToDismiss(
+                        state = dismissState,
+                        directions = setOf(
+                            DismissDirection.StartToEnd,
+                            DismissDirection.EndToStart,
                         ),
+                        dismissThresholds = {
+                            FractionalThreshold(threshold)
+                        },
+                        background = {
+                            val direction =
+                                dismissState.dismissDirection ?: return@SwipeToDismiss
+                            val color by animateColorAsState(
+                                when (dismissState.targetValue) {
+                                    DismissValue.Default -> Color.Transparent
+                                    DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.secondary
+                                    DismissValue.DismissedToStart,
+                                    -> MaterialTheme.colorScheme.secondary
+                                },
+                            )
+                            val alignment = when (direction) {
+                                DismissDirection.StartToEnd -> Alignment.CenterStart
+                                DismissDirection.EndToStart -> Alignment.CenterEnd
+                            }
+                            val icon = when (direction) {
+                                DismissDirection.StartToEnd -> Icons.Default.MarkChatUnread
+                                DismissDirection.EndToStart -> Icons.Default.MarkChatRead
+                            }
+                            val iconModifier = Modifier.background(
+                                color = MaterialTheme.colorScheme.onSecondary,
+                                shape = CircleShape,
+                            )
+                            val iconTint = MaterialTheme.colorScheme.secondary
+
+                            Box(
+                                Modifier.fillMaxSize().background(color)
+                                    .padding(horizontal = 20.dp),
+                                contentAlignment = alignment,
+                            ) {
+                                Icon(
+                                    modifier = iconModifier,
+                                    imageVector = icon,
+                                    contentDescription = null,
+                                    tint = iconTint,
+                                )
+                            }
+                        },
                     ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                        Card(
+                            modifier = Modifier.background(
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                shape = RoundedCornerShape(CornerSize.m),
+                            ).padding(
+                                vertical = Spacing.s,
+                                horizontal = Spacing.s,
+                            ),
                         ) {
-                            InboxReplyHeader(
-                                mention = mention,
-                            )
-                            PostCardBody(
-                                text = mention.comment.text,
-                            )
-                            InboxReplySubtitle(
-                                creator = mention.creator,
-                                community = mention.community,
-                                date = mention.publishDate,
-                                score = mention.score,
-                                upVoted = mention.myVote > 0,
-                                downVoted = mention.myVote < 0,
-                                onOpenCreator = { user ->
-                                    navigator.push(
-                                        UserDetailScreen(
-                                            user = user,
-                                            onBack = {
-                                                navigator.pop()
-                                            },
-                                        ),
-                                    )
-                                },
-                                onOpenCommunity = { community ->
-                                    navigator.push(
-                                        CommunityDetailScreen(
-                                            community = community,
-                                            onBack = {
-                                                navigator.pop()
-                                            },
-                                        ),
-                                    )
-                                },
-                            )
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                            ) {
+                                InboxReplyHeader(
+                                    mention = mention,
+                                )
+                                PostCardBody(
+                                    text = mention.comment.text,
+                                )
+                                InboxReplySubtitle(
+                                    creator = mention.creator,
+                                    community = mention.community,
+                                    date = mention.publishDate,
+                                    score = mention.score,
+                                    upVoted = mention.myVote > 0,
+                                    downVoted = mention.myVote < 0,
+                                    onOpenCreator = { user ->
+                                        navigator.push(
+                                            UserDetailScreen(
+                                                user = user,
+                                                onBack = {
+                                                    navigator.pop()
+                                                },
+                                            ),
+                                        )
+                                    },
+                                    onOpenCommunity = { community ->
+                                        navigator.push(
+                                            CommunityDetailScreen(
+                                                community = community,
+                                                onBack = {
+                                                    navigator.pop()
+                                                },
+                                            ),
+                                        )
+                                    },
+                                )
+                            }
                         }
                     }
                 }

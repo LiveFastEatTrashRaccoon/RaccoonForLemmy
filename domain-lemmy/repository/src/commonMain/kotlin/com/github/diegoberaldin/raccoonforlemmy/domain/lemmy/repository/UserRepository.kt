@@ -1,5 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository
 
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkAllAsReadForm
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkPersonMentionAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
@@ -106,5 +108,21 @@ class UserRepository(
         )
         val dto = response.body() ?: return emptyList()
         return dto.replies.map { it.toModel() }
+    }
+
+    suspend fun readAll(
+        auth: String? = null,
+    ) {
+        val data = MarkAllAsReadForm(auth.orEmpty())
+        serviceProvider.user.markAllAsRead(data)
+    }
+
+    suspend fun setRead(read: Boolean, mentionId: Int, auth: String? = null) {
+        val data = MarkPersonMentionAsReadForm(
+            mentionId = mentionId,
+            read = read,
+            auth = auth.orEmpty(),
+        )
+        serviceProvider.user.markPersonMentionAsRead(data)
     }
 }

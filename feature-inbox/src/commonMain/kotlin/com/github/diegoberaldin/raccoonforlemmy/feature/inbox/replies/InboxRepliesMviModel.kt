@@ -10,6 +10,8 @@ interface InboxRepliesMviModel :
         object Refresh : Intent
         object LoadNextPage : Intent
         data class ChangeUnreadOnly(val unread: Boolean) : Intent
+        data class MarkMentionAsRead(val read: Boolean, val mentionId: Int) : Intent
+        object HapticIndication : Intent
     }
 
     data class UiState(
