@@ -13,6 +13,8 @@ val inboxTabModule = module {
     factory {
         InboxViewModel(
             mvi = DefaultMviModel(InboxMviModel.UiState()),
+            identityRepository = get(),
+            userRepository = get(),
         )
     }
     factory {

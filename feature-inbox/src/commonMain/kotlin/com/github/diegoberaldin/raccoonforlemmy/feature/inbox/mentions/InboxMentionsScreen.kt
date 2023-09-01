@@ -44,6 +44,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxRe
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxMentionsViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -70,6 +71,14 @@ class InboxMentionsScreen(
             if (uiState.unreadOnly != parentUiState.unreadOnly) {
                 model.reduce(InboxMentionsMviModel.Intent.ChangeUnreadOnly(parentUiState.unreadOnly))
             }
+
+            parentModel.effects.onEach {
+                when (it) {
+                    InboxMviModel.Effect.Refresh -> {
+                        model.reduce(InboxMentionsMviModel.Intent.Refresh)
+                    }
+                }
+            }.launchIn(this)
         }
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {

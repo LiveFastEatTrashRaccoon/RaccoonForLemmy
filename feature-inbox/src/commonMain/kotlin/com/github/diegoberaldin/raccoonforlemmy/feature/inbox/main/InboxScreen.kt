@@ -1,19 +1,24 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
@@ -30,6 +35,8 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageReposito
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
 import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.desc
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class InboxScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -82,6 +89,16 @@ class InboxScreen : Screen {
                                 style = MaterialTheme.typography.titleSmall,
                             )
                         }
+                    },
+                    actions = {
+                        Image(
+                            modifier = Modifier.onClick {
+                                model.reduce(InboxMviModel.Intent.ReadAll)
+                            },
+                            imageVector = Icons.Default.DoneAll,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                        )
                     },
                 )
             },
