@@ -36,12 +36,14 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxReplySubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxMentionsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
@@ -103,7 +105,16 @@ class InboxMentionsScreen(
                         ).padding(
                             vertical = Spacing.s,
                             horizontal = Spacing.s,
-                        ),
+                        ).onClick {
+                            navigator.push(
+                                PostDetailScreen(
+                                    post = mention.post,
+                                    onBack = {
+                                        navigator.pop()
+                                    },
+                                ),
+                            )
+                        },
                     ) {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
