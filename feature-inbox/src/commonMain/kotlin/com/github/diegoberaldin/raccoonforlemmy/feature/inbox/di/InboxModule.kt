@@ -31,6 +31,7 @@ val inboxTabModule = module {
             mvi = DefaultMviModel(InboxMentionsMviModel.UiState()),
             userRepository = get(),
             identityRepository = get(),
+            hapticFeedback = get(),
         )
     }
 }

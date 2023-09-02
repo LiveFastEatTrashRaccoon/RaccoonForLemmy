@@ -12,7 +12,7 @@ object DefaultNotificationCenter : NotificationCenter {
     override val events = MutableSharedFlow<NotificationCenter.Event>()
 
     override fun send(event: NotificationCenter.Event) {
-        scope.launch {
+        scope.launch(Dispatchers.Main) {
             events.emit(event)
         }
     }

@@ -94,7 +94,7 @@ class InboxRepliesViewModel(
 
     private fun markAsRead(read: Boolean, mentionId: Int) {
         val auth = identityRepository.authToken.value
-        mvi.scope.launch {
+        mvi.scope.launch(Dispatchers.IO) {
             userRepository.setRead(
                 read = read,
                 mentionId = mentionId,

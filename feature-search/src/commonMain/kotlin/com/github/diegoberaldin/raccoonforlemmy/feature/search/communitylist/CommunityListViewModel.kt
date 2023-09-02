@@ -31,7 +31,7 @@ class CommunityListViewModel(
                 instance = apiConfigRepository.getInstance(),
             )
         }
-        mvi.scope.launch {
+        mvi.scope.launch(Dispatchers.Main) {
             identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->
                 mvi.updateState {
                     it.copy(isLogged = isLogged)

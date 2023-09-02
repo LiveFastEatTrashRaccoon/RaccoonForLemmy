@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -15,6 +16,7 @@ class InboxMentionsViewModel(
     private val mvi: DefaultMviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
+    private val hapticFeedback: HapticFeedback,
 ) : ScreenModel,
     MviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect> by mvi {
 
@@ -25,6 +27,11 @@ class InboxMentionsViewModel(
             InboxMentionsMviModel.Intent.LoadNextPage -> loadNextPage()
             InboxMentionsMviModel.Intent.Refresh -> refresh()
             is InboxMentionsMviModel.Intent.ChangeUnreadOnly -> changeUnreadOnly(intent.unread)
+            is InboxMentionsMviModel.Intent.MarkMentionAsRead -> {
+                markAsRead(read = intent.read, mentionId = intent.mentionId)
+            }
+
+            InboxMentionsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
         }
     }
 
@@ -72,6 +79,18 @@ class InboxMentionsViewModel(
                     refreshing = false,
                 )
             }
+        }
+    }
+
+    private fun markAsRead(read: Boolean, mentionId: Int) {
+        val auth = identityRepository.authToken.value
+        mvi.scope.launch(Dispatchers.IO) {
+            userRepository.setRead(
+                read = read,
+                mentionId = mentionId,
+                auth = auth,
+            )
+            refresh()
         }
     }
 }

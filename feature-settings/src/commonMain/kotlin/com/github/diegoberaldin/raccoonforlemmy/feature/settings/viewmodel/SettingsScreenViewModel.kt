@@ -15,6 +15,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.resources.LanguageRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -30,7 +32,7 @@ class SettingsScreenViewModel(
 
     override fun onStarted() {
         mvi.onStarted()
-        mvi.scope.launch {
+        mvi.scope.launch(Dispatchers.Main) {
             themeRepository.state.onEach { currentTheme ->
                 mvi.updateState { it.copy(currentTheme = currentTheme) }
             }.launchIn(this)
@@ -74,35 +76,35 @@ class SettingsScreenViewModel(
 
     private fun applyTheme(value: ThemeState) {
         themeRepository.changeTheme(value)
-        mvi.scope.launch {
+        mvi.scope.launch(Dispatchers.Main) {
             keyStore.save(KeyStoreKeys.UiTheme, value.toInt())
         }
     }
 
     private fun changeLanguage(value: String) {
         languageRepository.changeLanguage(value)
-        mvi.scope.launch {
+        mvi.scope.launch(Dispatchers.Main) {
             keyStore.save(KeyStoreKeys.Locale, value)
         }
     }
 
     private fun changeDefaultListingType(value: ListingType) {
         mvi.updateState { it.copy(defaultListingType = value) }
-        mvi.scope.launch {
+        mvi.scope.launch(Dispatchers.Main) {
             keyStore.save(KeyStoreKeys.DefaultListingType, value.toInt())
         }
     }
 
     private fun changeDefaultPostSortType(value: SortType) {
         mvi.updateState { it.copy(defaultPostSortType = value) }
-        mvi.scope.launch {
+        mvi.scope.launch(Dispatchers.Main) {
             keyStore.save(KeyStoreKeys.DefaultPostSortType, value.toInt())
         }
     }
 
     private fun changeDefaultCommentSortType(value: SortType) {
         mvi.updateState { it.copy(defaultCommentSortType = value) }
-        mvi.scope.launch {
+        mvi.scope.launch(Dispatchers.Main) {
             keyStore.save(KeyStoreKeys.DefaultCommentSortType, value.toInt())
         }
     }

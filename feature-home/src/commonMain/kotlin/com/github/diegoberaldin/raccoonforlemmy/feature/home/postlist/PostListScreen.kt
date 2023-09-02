@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,34 +15,24 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
-import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -54,6 +43,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.PostCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
@@ -111,80 +101,31 @@ class PostListScreen : Screen {
             Box(
                 modifier = Modifier.padding(padding).pullRefresh(pullRefreshState),
             ) {
-                var width by remember { mutableStateOf(0f) }
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().onGloballyPositioned {
-                        width = it.size.toSize().width
-                    },
+                    modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     items(uiState.posts, key = { it.id.toString() + it.myVote }) { post ->
-                        val dismissState = rememberDismissState(
-                            confirmStateChange = {
-                                when (it) {
-                                    DismissValue.DismissedToEnd -> {
-                                        model.reduce(
-                                            PostListMviModel.Intent.DownVotePost(
-                                                post = post,
-                                            ),
-                                        )
-                                    }
-
-                                    DismissValue.DismissedToStart -> {
-                                        model.reduce(
-                                            PostListMviModel.Intent.UpVotePost(
-                                                post = post,
-                                            ),
-                                        )
-                                    }
-
-                                    else -> Unit
-                                }
-                                false
-                            },
-                        )
-                        var willDismissDirection: DismissDirection? by remember {
-                            mutableStateOf(null)
-                        }
-                        val threshold = 0.15f
-                        LaunchedEffect(Unit) {
-                            snapshotFlow { dismissState.offset.value }.collect {
-                                willDismissDirection = when {
-                                    it > width * threshold -> DismissDirection.StartToEnd
-                                    it < -width * threshold -> DismissDirection.EndToStart
-                                    else -> null
-                                }
-                            }
-                        }
-                        LaunchedEffect(willDismissDirection) {
-                            if (willDismissDirection != null) {
+                        val activeColor = MaterialTheme.colorScheme.secondary
+                        SwipeableCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            onGestureBegin = {
                                 model.reduce(PostListMviModel.Intent.HapticIndication)
-                            }
-                        }
-                        SwipeToDismiss(
-                            state = dismissState,
-                            directions = setOf(
-                                DismissDirection.StartToEnd,
-                                DismissDirection.EndToStart,
-                            ),
-                            dismissThresholds = {
-                                FractionalThreshold(threshold)
                             },
-                            background = {
-                                val direction =
-                                    dismissState.dismissDirection ?: return@SwipeToDismiss
-                                val color by animateColorAsState(
-                                    when (dismissState.targetValue) {
-                                        DismissValue.Default -> Color.Transparent
-                                        DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.secondary
-                                        DismissValue.DismissedToStart,
-                                        -> MaterialTheme.colorScheme.secondary
-                                    },
-                                )
-                                val alignment = when (direction) {
-                                    DismissDirection.StartToEnd -> Alignment.CenterStart
-                                    DismissDirection.EndToStart -> Alignment.CenterEnd
+                            onDismissToStart = {
+                                model.reduce(PostListMviModel.Intent.UpVotePost(post))
+                            },
+                            onDismissToEnd = {
+                                model.reduce(PostListMviModel.Intent.DownVotePost(post))
+                            },
+                            backgroundColor = {
+                                when (it) {
+                                    DismissValue.DismissedToEnd -> activeColor
+                                    DismissValue.DismissedToStart -> activeColor
+                                    else -> Color.Transparent
                                 }
+                            },
+                            swipeContent = { direction ->
                                 val icon = when (direction) {
                                     DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
                                     DismissDirection.EndToStart -> Icons.Default.ArrowCircleUp
@@ -218,78 +159,73 @@ class PostListScreen : Screen {
                                         ) to MaterialTheme.colorScheme.secondary
                                     }
                                 }
-                                Box(
-                                    Modifier.fillMaxSize().background(color)
-                                        .padding(horizontal = 20.dp),
-                                    contentAlignment = alignment,
-                                ) {
-                                    Icon(
-                                        modifier = iconModifier,
-                                        imageVector = icon,
-                                        contentDescription = null,
-                                        tint = iconTint,
-                                    )
-                                }
+                                Icon(
+                                    modifier = iconModifier,
+                                    imageVector = icon,
+                                    contentDescription = null,
+                                    tint = iconTint,
+                                )
                             },
-                        ) {
-                            PostCard(
-                                modifier = Modifier.onClick {
-                                    navigator.push(
-                                        PostDetailScreen(
-                                            post = post,
-                                            onBack = {
-                                                navigator.pop()
-                                            },
-                                        ),
-                                    )
-                                },
-                                post = post,
-                                onOpenCommunity = { community ->
-                                    navigator.push(
-                                        CommunityDetailScreen(
-                                            community = community,
-                                            onBack = {
-                                                navigator.pop()
-                                            },
-                                        ),
-                                    )
-                                },
-                                onOpenCreator = { user ->
-                                    navigator.push(
-                                        UserDetailScreen(
-                                            user = user,
-                                            onBack = {
-                                                navigator.pop()
-                                            },
-                                        ),
-                                    )
-                                },
-                                onUpVote = {
-                                    model.reduce(
-                                        PostListMviModel.Intent.UpVotePost(
-                                            post = post,
-                                            feedback = true,
-                                        ),
-                                    )
-                                },
-                                onDownVote = {
-                                    model.reduce(
-                                        PostListMviModel.Intent.DownVotePost(
-                                            post = post,
-                                            feedback = true,
-                                        ),
-                                    )
-                                },
-                                onSave = {
-                                    model.reduce(
-                                        PostListMviModel.Intent.SavePost(
-                                            post = post,
-                                            feedback = true,
-                                        ),
-                                    )
-                                },
-                            )
-                        }
+                            content = {
+                                PostCard(
+                                    modifier = Modifier.onClick {
+                                        navigator.push(
+                                            PostDetailScreen(
+                                                post = post,
+                                                onBack = {
+                                                    navigator.pop()
+                                                },
+                                            ),
+                                        )
+                                    },
+                                    post = post,
+                                    onOpenCommunity = { community ->
+                                        navigator.push(
+                                            CommunityDetailScreen(
+                                                community = community,
+                                                onBack = {
+                                                    navigator.pop()
+                                                },
+                                            ),
+                                        )
+                                    },
+                                    onOpenCreator = { user ->
+                                        navigator.push(
+                                            UserDetailScreen(
+                                                user = user,
+                                                onBack = {
+                                                    navigator.pop()
+                                                },
+                                            ),
+                                        )
+                                    },
+                                    onUpVote = {
+                                        model.reduce(
+                                            PostListMviModel.Intent.UpVotePost(
+                                                post = post,
+                                                feedback = true,
+                                            ),
+                                        )
+                                    },
+                                    onDownVote = {
+                                        model.reduce(
+                                            PostListMviModel.Intent.DownVotePost(
+                                                post = post,
+                                                feedback = true,
+                                            ),
+                                        )
+                                    },
+                                    onSave = {
+                                        model.reduce(
+                                            PostListMviModel.Intent.SavePost(
+                                                post = post,
+                                                feedback = true,
+                                            ),
+                                        )
+                                    },
+                                )
+                            },
+                        )
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
