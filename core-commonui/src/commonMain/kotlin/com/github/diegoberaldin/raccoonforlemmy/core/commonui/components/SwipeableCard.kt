@@ -34,8 +34,8 @@ fun SwipeableCard(
         DismissDirection.EndToStart,
     ),
     content: @Composable () -> Unit,
-    swipeContent: (@Composable (DismissDirection) -> Unit),
-    backgroundColor: (DismissValue) -> Color,
+    swipeContent: @Composable (DismissDirection) -> Unit,
+    backgroundColor: @Composable (DismissValue) -> Color,
     onGestureBegin: (() -> Unit) = {},
     onDismissToEnd: (() -> Unit) = {},
     onDismissToStart: (() -> Unit) = {},
@@ -95,8 +95,7 @@ fun SwipeableCard(
                 DismissDirection.EndToStart -> Alignment.CenterEnd
             }
             Box(
-                Modifier.fillMaxSize().background(bgColor)
-                    .padding(horizontal = 20.dp),
+                Modifier.fillMaxSize().background(bgColor).padding(horizontal = 20.dp),
                 contentAlignment = alignment,
             ) {
                 swipeContent(direction)

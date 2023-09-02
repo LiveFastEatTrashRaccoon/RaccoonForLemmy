@@ -189,13 +189,12 @@ class PostDetailScreen(
                         )
                     }
                     items(uiState.comments, key = { it.id.toString() + it.myVote }) { comment ->
-                        val activeColor = MaterialTheme.colorScheme.secondary
                         SwipeableCard(
                             modifier = Modifier.fillMaxWidth(),
                             backgroundColor = {
                                 when (it) {
-                                    DismissValue.DismissedToEnd -> activeColor
-                                    DismissValue.DismissedToStart -> activeColor
+                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
+                                    DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
                                     DismissValue.Default -> Color.Transparent
                                 }
                             },
@@ -226,14 +225,14 @@ class PostDetailScreen(
                                         Modifier.background(
                                             color = Color.Transparent,
                                             shape = CircleShape,
-                                        ) to MaterialTheme.colorScheme.onSecondary
+                                        ) to MaterialTheme.colorScheme.onTertiary
                                     }
 
                                     direction == DismissDirection.StartToEnd -> {
                                         Modifier.background(
-                                            color = MaterialTheme.colorScheme.onSecondary,
+                                            color = MaterialTheme.colorScheme.onTertiary,
                                             shape = CircleShape,
-                                        ) to MaterialTheme.colorScheme.secondary
+                                        ) to MaterialTheme.colorScheme.tertiary
                                     }
 
                                     direction == DismissDirection.EndToStart && post.myVote > 0 -> {

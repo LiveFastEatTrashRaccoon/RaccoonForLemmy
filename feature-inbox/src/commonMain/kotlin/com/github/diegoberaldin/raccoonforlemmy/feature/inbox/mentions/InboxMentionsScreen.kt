@@ -92,13 +92,12 @@ class InboxMentionsScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 items(uiState.mentions, key = { it.id }) { mention ->
-                    val activeColor = MaterialTheme.colorScheme.secondary
                     SwipeableCard(
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = {
                             when (it) {
-                                DismissValue.DismissedToEnd -> activeColor
-                                DismissValue.DismissedToStart -> activeColor
+                                DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
+                                DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
                                 else -> Color.Transparent
                             }
                         },
@@ -126,13 +125,24 @@ class InboxMentionsScreen(
                                 DismissDirection.StartToEnd -> Icons.Default.MarkChatUnread
                                 DismissDirection.EndToStart -> Icons.Default.MarkChatRead
                             }
-                            val iconModifier = Modifier.background(
-                                color = MaterialTheme.colorScheme.onSecondary,
-                                shape = CircleShape,
-                            )
-                            val iconTint = MaterialTheme.colorScheme.secondary
+                            val (iconModifier, iconTint) = when (direction) {
+                                DismissDirection.StartToEnd -> {
+                                    Modifier.background(
+                                        color = MaterialTheme.colorScheme.onTertiary,
+                                        shape = CircleShape,
+                                    ) to MaterialTheme.colorScheme.tertiary
+                                }
+
+                                else -> {
+                                    Modifier.background(
+                                        color = MaterialTheme.colorScheme.onSecondary,
+                                        shape = CircleShape,
+                                    ) to MaterialTheme.colorScheme.secondary
+                                }
+                            }
+
                             Icon(
-                                modifier = iconModifier,
+                                modifier = iconModifier.padding(Spacing.xs),
                                 imageVector = icon,
                                 contentDescription = null,
                                 tint = iconTint,
