@@ -12,7 +12,6 @@
     <string name="message_missing_field">Campo obbligatorio</string>
 
     <string name="button_confirm">Conferma</string>
-    <string name="button_search">Cerca</string>
 
     <string name="home_listing_type_all">Tutti</string>
     <string name="home_listing_type_local">Locali</string>

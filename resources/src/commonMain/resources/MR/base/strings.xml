@@ -15,7 +15,6 @@
     <string name="message_missing_field">Missing field</string>
 
     <string name="button_confirm">Confirm</string>
-    <string name="button_search">Search</string>
 
     <string name="home_listing_type_all">All</string>
     <string name="home_listing_type_local">Local</string>

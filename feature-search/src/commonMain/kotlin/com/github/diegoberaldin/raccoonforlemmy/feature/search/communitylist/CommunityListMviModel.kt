@@ -9,7 +9,6 @@ interface CommunityListMviModel :
     sealed interface Intent {
         object Refresh : Intent
         object LoadNextPage : Intent
-        object SearchFired : Intent
         data class SetSearch(val value: String) : Intent
         data class SetListingType(val value: ListingType) : Intent
     }

@@ -10,6 +10,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.Communit
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -24,6 +26,7 @@ class CommunityListViewModel(
     MviModel<CommunityListMviModel.Intent, CommunityListMviModel.UiState, CommunityListMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1
+    private var debounceJob: Job? = null
 
     override fun onStarted() {
         mvi.onStarted()
@@ -41,68 +44,83 @@ class CommunityListViewModel(
         }
 
         if (mvi.uiState.value.communities.isEmpty()) {
-            refresh()
+            mvi.scope.launch(Dispatchers.IO) {
+                refresh()
+            }
         }
     }
 
     override fun reduce(intent: CommunityListMviModel.Intent) {
         when (intent) {
-            CommunityListMviModel.Intent.LoadNextPage -> loadNextPage()
-            CommunityListMviModel.Intent.Refresh -> refresh()
-            CommunityListMviModel.Intent.SearchFired -> refresh()
+            CommunityListMviModel.Intent.LoadNextPage -> {
+                mvi.scope.launch(Dispatchers.IO) {
+                    loadNextPage()
+                }
+            }
+
+            CommunityListMviModel.Intent.Refresh -> {
+                mvi.scope.launch(Dispatchers.IO) {
+                    refresh()
+                }
+            }
+
             is CommunityListMviModel.Intent.SetSearch -> setSearch(intent.value)
             is CommunityListMviModel.Intent.SetListingType -> changeListingType(intent.value)
         }
     }
 
     private fun setSearch(value: String) {
+        debounceJob?.cancel()
         mvi.updateState { it.copy(searchText = value) }
+        debounceJob = mvi.scope.launch(Dispatchers.IO) {
+            delay(1_000)
+            refresh()
+        }
     }
 
     private fun changeListingType(value: ListingType) {
         mvi.updateState { it.copy(listingType = value) }
-        refresh()
+        mvi.scope.launch(Dispatchers.IO) {
+            refresh()
+        }
     }
 
-    private fun refresh() {
+    private suspend fun refresh() {
         currentPage = 1
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
         loadNextPage()
     }
 
-    private fun loadNextPage() {
+    private suspend fun loadNextPage() {
         val currentState = mvi.uiState.value
         if (!currentState.canFetchMore || currentState.loading) {
             return
         }
-
-        mvi.scope.launch(Dispatchers.IO) {
-            mvi.updateState { it.copy(loading = true) }
-            val searchText = mvi.uiState.value.searchText
-            val auth = identityRepository.authToken.value
-            val refreshing = currentState.refreshing
-            val listingType = currentState.listingType
-            val items = communityRepository.getAll(
-                query = searchText,
-                auth = auth,
-                page = currentPage,
-                listingType = listingType,
-            )
-            currentPage++
-            val canFetchMore = items.size >= PostsRepository.DEFAULT_PAGE_SIZE
-            mvi.updateState {
-                val newItems = if (refreshing) {
-                    items
-                } else {
-                    it.communities + items
-                }
-                it.copy(
-                    communities = newItems,
-                    loading = false,
-                    canFetchMore = canFetchMore,
-                    refreshing = false,
-                )
+        mvi.updateState { it.copy(loading = true) }
+        val searchText = mvi.uiState.value.searchText
+        val auth = identityRepository.authToken.value
+        val refreshing = currentState.refreshing
+        val listingType = currentState.listingType
+        val items = communityRepository.getAll(
+            query = searchText,
+            auth = auth,
+            page = currentPage,
+            listingType = listingType,
+        )
+        currentPage++
+        val canFetchMore = items.size >= PostsRepository.DEFAULT_PAGE_SIZE
+        mvi.updateState {
+            val newItems = if (refreshing) {
+                items
+            } else {
+                it.communities + items
             }
+            it.copy(
+                communities = newItems,
+                loading = false,
+                canFetchMore = canFetchMore,
+                refreshing = false,
+            )
         }
     }
 }

@@ -143,20 +143,6 @@ class CommunityListScreen : Screen {
                         )
                     },
                 )
-                Row(
-                    modifier = Modifier.padding(horizontal = Spacing.xxs),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Spacer(modifier = Modifier.weight(1f))
-                    Button(onClick = {
-                        model.reduce(CommunityListMviModel.Intent.SearchFired)
-                    }) {
-                        Text(
-                            text = stringResource(MR.strings.button_search),
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                    }
-                }
 
                 val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                     model.reduce(CommunityListMviModel.Intent.Refresh)
