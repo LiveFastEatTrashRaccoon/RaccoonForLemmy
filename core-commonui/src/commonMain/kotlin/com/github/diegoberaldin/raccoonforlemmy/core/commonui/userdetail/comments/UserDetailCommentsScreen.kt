@@ -112,7 +112,7 @@ internal class UserDetailCommentsScreen(
                         )
                     }
                 }
-                items(uiState.comments, key = { "${it.id}+${it.myVote}" }) { comment ->
+                items(uiState.comments) { comment ->
                     SwipeableCard(
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = {

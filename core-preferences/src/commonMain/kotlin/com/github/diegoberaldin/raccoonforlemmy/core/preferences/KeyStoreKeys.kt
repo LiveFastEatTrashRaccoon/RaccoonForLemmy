@@ -9,4 +9,6 @@ object KeyStoreKeys {
     const val DefaultListingType = "defaultListingType"
     const val DefaultPostSortType = "defaultPostSortType"
     const val DefaultCommentSortType = "defaultCommentSortType"
+    const val IncludeNsfw = "includeNsfw"
+    const val BlurNsfw = "blurNsfw"
 }

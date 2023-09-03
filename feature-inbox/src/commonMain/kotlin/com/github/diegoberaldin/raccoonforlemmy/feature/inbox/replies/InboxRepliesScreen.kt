@@ -91,7 +91,7 @@ class InboxRepliesScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
-                items(uiState.mentions, key = { it.id }) { mention ->
+                items(uiState.mentions) { mention ->
                     SwipeableCard(
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = {

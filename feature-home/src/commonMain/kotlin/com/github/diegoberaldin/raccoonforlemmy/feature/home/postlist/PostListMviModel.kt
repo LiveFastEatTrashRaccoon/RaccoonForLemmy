@@ -28,6 +28,7 @@ interface PostListMviModel :
         val listingType: ListingType = ListingType.Local,
         val sortType: SortType = SortType.Active,
         val posts: List<PostModel> = emptyList(),
+        val blurNsfw: Boolean = true,
     )
 
     sealed interface Effect

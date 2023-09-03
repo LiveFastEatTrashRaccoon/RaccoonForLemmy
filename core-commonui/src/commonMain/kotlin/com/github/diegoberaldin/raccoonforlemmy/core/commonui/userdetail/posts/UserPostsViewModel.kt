@@ -4,6 +4,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
@@ -21,6 +23,7 @@ class UserPostsViewModel(
     private val userRepository: UserRepository,
     private val postsRepository: PostsRepository,
     private val hapticFeedback: HapticFeedback,
+    private val keyStore: TemporaryKeyStore,
 ) : ScreenModel,
     MviModel<UserPostsMviModel.Intent, UserPostsMviModel.UiState, UserPostsMviModel.Effect> by mvi {
 
@@ -31,7 +34,12 @@ class UserPostsViewModel(
         mvi.scope.launch(Dispatchers.IO) {
             val user = userRepository.get(user.id)
             if (user != null) {
-                mvi.updateState { it.copy(user = user) }
+                mvi.updateState {
+                    it.copy(
+                        user = user,
+                        blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
+                    )
+                }
             }
         }
     }

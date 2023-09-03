@@ -3,6 +3,8 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.search.communitylist
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -22,6 +24,7 @@ class CommunityListViewModel(
     private val apiConfigRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
+    private val keyStore: TemporaryKeyStore,
 ) : ScreenModel,
     MviModel<CommunityListMviModel.Intent, CommunityListMviModel.UiState, CommunityListMviModel.Effect> by mvi {
 
@@ -102,6 +105,7 @@ class CommunityListViewModel(
         val refreshing = currentState.refreshing
         val listingType = currentState.listingType
         val sortType = currentState.sortType
+        val inclueNsfw = keyStore[KeyStoreKeys.IncludeNsfw, true]
         val items = communityRepository.getAll(
             query = searchText,
             auth = auth,
@@ -116,6 +120,12 @@ class CommunityListViewModel(
                 items
             } else {
                 it.communities + items
+            }.filter { community ->
+                if (inclueNsfw) {
+                    true
+                } else {
+                    !community.nsfw
+                }
             }
             it.copy(
                 communities = newItems,

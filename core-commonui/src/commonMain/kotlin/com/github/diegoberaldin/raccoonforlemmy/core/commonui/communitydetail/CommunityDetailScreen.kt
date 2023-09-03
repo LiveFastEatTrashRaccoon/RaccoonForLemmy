@@ -331,7 +331,7 @@ class CommunityDetailScreen(
                             }
                         }
                     }
-                    items(uiState.posts, key = { "${it.id}+${it.myVote}" }) { post ->
+                    items(uiState.posts) { post ->
                         SwipeableCard(
                             modifier = Modifier.fillMaxWidth(),
                             directions = if (isOnOtherInstance) {
@@ -432,7 +432,7 @@ class CommunityDetailScreen(
                                     post = post,
                                     blurNsfw = when {
                                         community.nsfw -> false
-                                        else -> true
+                                        else -> uiState.blurNsfw
                                     },
                                     onUpVote = if (isOnOtherInstance) {
                                         null

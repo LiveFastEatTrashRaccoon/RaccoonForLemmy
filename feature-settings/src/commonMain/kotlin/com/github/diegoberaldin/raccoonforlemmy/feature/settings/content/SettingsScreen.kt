@@ -209,6 +209,21 @@ class SettingsScreen : Screen {
                             )
                         },
                     )
+                    // TODO!
+                    SettingsSwitchRow(
+                        title = "Include NSFW contents",
+                        value = uiState.includeNsfw,
+                        onValueChanged = { value ->
+                            model.reduce(SettingsScreenMviModel.Intent.ChangeIncludeNsfw(value))
+                        }
+                    )
+                    SettingsSwitchRow(
+                        title = "Blur NSFW",
+                        value = uiState.blurNsfw,
+                        onValueChanged = { value ->
+                            model.reduce(SettingsScreenMviModel.Intent.ChangeBlurNsfw(value))
+                        }
+                    )
                 }
             }
         }

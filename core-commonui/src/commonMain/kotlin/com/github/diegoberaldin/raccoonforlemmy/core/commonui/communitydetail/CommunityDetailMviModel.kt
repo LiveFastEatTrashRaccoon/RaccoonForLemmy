@@ -27,6 +27,7 @@ interface CommunityDetailMviModel :
         val canFetchMore: Boolean = true,
         val sortType: SortType = SortType.Active,
         val posts: List<PostModel> = emptyList(),
+        val blurNsfw: Boolean = true,
     )
 
     sealed interface Effect

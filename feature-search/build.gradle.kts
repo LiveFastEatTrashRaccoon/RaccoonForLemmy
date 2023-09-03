@@ -51,6 +51,7 @@ kotlin {
                 implementation(projects.coreArchitecture)
                 implementation(projects.coreAppearance)
                 implementation(projects.coreUtils)
+                implementation(projects.corePreferences)
                 implementation(projects.coreCommonui)
 
                 implementation(projects.domainIdentity)

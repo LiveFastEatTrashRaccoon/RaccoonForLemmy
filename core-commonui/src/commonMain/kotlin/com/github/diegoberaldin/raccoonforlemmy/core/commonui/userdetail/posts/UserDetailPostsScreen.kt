@@ -121,7 +121,7 @@ internal class UserDetailPostsScreen(
                         )
                     }
                 }
-                items(uiState.posts, key = { "${it.id}+${it.myVote}" }) { post ->
+                items(uiState.posts) { post ->
                     SwipeableCard(
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = {
@@ -193,7 +193,7 @@ internal class UserDetailPostsScreen(
                         content = {
                             PostCard(
                                 post = post,
-                                blurNsfw = true,
+                                blurNsfw = uiState.blurNsfw,
                                 onUpVote = {
                                     model.reduce(
                                         UserPostsMviModel.Intent.UpVotePost(

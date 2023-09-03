@@ -105,7 +105,7 @@ class PostListScreen : Screen {
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
-                    items(uiState.posts, key = { "${it.id}+${it.myVote}" }) { post ->
+                    items(uiState.posts) { post ->
                         SwipeableCard(
                             modifier = Modifier.fillMaxWidth(),
                             onGestureBegin = {
@@ -178,7 +178,7 @@ class PostListScreen : Screen {
                                         )
                                     },
                                     post = post,
-                                    blurNsfw = true,
+                                    blurNsfw = uiState.blurNsfw,
                                     onOpenCommunity = { community ->
                                         navigator.push(
                                             CommunityDetailScreen(

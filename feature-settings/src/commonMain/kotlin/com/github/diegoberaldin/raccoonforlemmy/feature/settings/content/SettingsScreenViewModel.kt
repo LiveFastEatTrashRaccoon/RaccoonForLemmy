@@ -55,6 +55,8 @@ class SettingsScreenViewModel(
                 defaultListingType = listingType,
                 defaultPostSortType = postSortType,
                 defaultCommentSortType = commentSortType,
+                includeNsfw = keyStore[KeyStoreKeys.IncludeNsfw, true],
+                blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
             )
         }
     }
@@ -75,6 +77,9 @@ class SettingsScreenViewModel(
             is SettingsScreenMviModel.Intent.ChangeDefaultPostSortType -> changeDefaultPostSortType(
                 intent.value,
             )
+
+            is SettingsScreenMviModel.Intent.ChangeBlurNsfw -> changeBlurNsfw(intent.value)
+            is SettingsScreenMviModel.Intent.ChangeIncludeNsfw -> changeIncludeNsfw(intent.value)
         }
     }
 
@@ -117,6 +122,20 @@ class SettingsScreenViewModel(
         mvi.updateState { it.copy(defaultCommentSortType = value) }
         mvi.scope.launch(Dispatchers.Main) {
             keyStore.save(KeyStoreKeys.DefaultCommentSortType, value.toInt())
+        }
+    }
+
+    private fun changeIncludeNsfw(value: Boolean) {
+        mvi.updateState { it.copy(includeNsfw = value) }
+        mvi.scope.launch(Dispatchers.Main) {
+            keyStore.save(KeyStoreKeys.IncludeNsfw, value)
+        }
+    }
+
+    private fun changeBlurNsfw(value: Boolean) {
+        mvi.updateState { it.copy(blurNsfw = value) }
+        mvi.scope.launch(Dispatchers.Main) {
+            keyStore.save(KeyStoreKeys.BlurNsfw, value)
         }
     }
 }

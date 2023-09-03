@@ -74,6 +74,7 @@ class PostListViewModel(
                 instance = apiConfigRepository.getInstance(),
                 listingType = listingType,
                 sortType = sortType,
+                blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
             )
         }
 
@@ -123,6 +124,7 @@ class PostListViewModel(
             val type = currentState.listingType
             val sort = currentState.sortType
             val refreshing = currentState.refreshing
+            val includeNsfw = keyStore[KeyStoreKeys.IncludeNsfw, true]
             val postList = postsRepository.getAll(
                 auth = auth,
                 page = currentPage,
@@ -136,6 +138,12 @@ class PostListViewModel(
                     postList
                 } else {
                     it.posts + postList
+                }.filter { post ->
+                    if (includeNsfw) {
+                        true
+                    } else {
+                        !post.nsfw
+                    }
                 }
                 it.copy(
                     posts = newPosts,

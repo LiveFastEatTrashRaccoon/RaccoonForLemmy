@@ -129,7 +129,7 @@ class InstanceInfoScreen(
                             )
                         }
                     }
-                    items(uiState.communities, key = { it.id }) {
+                    items(uiState.communities) {
                         val themeRepository = remember { getThemeRepository() }
                         val fontScale by themeRepository.contentFontScale.collectAsState()
                         CompositionLocalProvider(

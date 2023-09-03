@@ -38,6 +38,7 @@ class CommunityDetailViewModel(
             it.copy(
                 community = community,
                 sortType = sortType,
+                blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
             )
         }
 

@@ -62,6 +62,7 @@ val commonUiModule = module {
             userRepository = get(),
             postsRepository = get(),
             hapticFeedback = get(),
+            keyStore = get(),
         )
     }
     factory {

@@ -16,6 +16,8 @@ interface SettingsScreenMviModel :
         data class ChangeDefaultListingType(val value: ListingType) : Intent
         data class ChangeDefaultPostSortType(val value: SortType) : Intent
         data class ChangeDefaultCommentSortType(val value: SortType) : Intent
+        data class ChangeIncludeNsfw(val value: Boolean) : Intent
+        data class ChangeBlurNsfw(val value: Boolean) : Intent
     }
 
     data class UiState(
@@ -26,6 +28,8 @@ interface SettingsScreenMviModel :
         val defaultListingType: ListingType = ListingType.Local,
         val defaultPostSortType: SortType = SortType.Active,
         val defaultCommentSortType: SortType = SortType.New,
+        val includeNsfw: Boolean = true,
+        val blurNsfw: Boolean = true,
     )
 
     sealed interface Effect
