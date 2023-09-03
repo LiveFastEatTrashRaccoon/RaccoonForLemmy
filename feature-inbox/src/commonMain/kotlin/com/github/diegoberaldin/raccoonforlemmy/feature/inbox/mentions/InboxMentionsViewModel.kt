@@ -85,7 +85,7 @@ class InboxMentionsViewModel(
     private fun markAsRead(read: Boolean, mentionId: Int) {
         val auth = identityRepository.authToken.value
         mvi.scope.launch(Dispatchers.IO) {
-            userRepository.setRead(
+            userRepository.setMentionRead(
                 read = read,
                 mentionId = mentionId,
                 auth = auth,

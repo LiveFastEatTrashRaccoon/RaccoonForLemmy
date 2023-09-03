@@ -1,10 +1,12 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.api.service
 
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentReplyResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentSortType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetPersonDetailsResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetPersonMentionsResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetRepliesResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkAllAsReadForm
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkCommentReplyAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkPersonMentionAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.PersonMentionResponse
 import de.jensklingenberg.ktorfit.Response
@@ -53,4 +55,8 @@ interface UserService {
     @POST("user/mention/mark_as_read")
     @Headers("Content-Type: application/json")
     suspend fun markPersonMentionAsRead(@Body form: MarkPersonMentionAsReadForm): Response<PersonMentionResponse>
+
+    @POST("comment/mark_as_read")
+    @Headers("Content-Type: application/json")
+    suspend fun markCommentReplyAsRead(@Body form: MarkCommentReplyAsReadForm): Response<CommentReplyResponse>
 }

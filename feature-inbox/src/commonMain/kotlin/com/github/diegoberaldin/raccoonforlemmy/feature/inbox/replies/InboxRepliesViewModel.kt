@@ -33,7 +33,7 @@ class InboxRepliesViewModel(
             }
 
             is InboxRepliesMviModel.Intent.MarkMentionAsRead -> {
-                markAsRead(read = intent.read, mentionId = intent.mentionId)
+                markAsRead(read = intent.read, replyId = intent.mentionId)
             }
 
             InboxRepliesMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
@@ -92,12 +92,12 @@ class InboxRepliesViewModel(
         }
     }
 
-    private fun markAsRead(read: Boolean, mentionId: Int) {
+    private fun markAsRead(read: Boolean, replyId: Int) {
         val auth = identityRepository.authToken.value
         mvi.scope.launch(Dispatchers.IO) {
-            userRepository.setRead(
+            userRepository.setReplyRead(
                 read = read,
-                mentionId = mentionId,
+                replyId = replyId,
                 auth = auth,
             )
             refresh()
