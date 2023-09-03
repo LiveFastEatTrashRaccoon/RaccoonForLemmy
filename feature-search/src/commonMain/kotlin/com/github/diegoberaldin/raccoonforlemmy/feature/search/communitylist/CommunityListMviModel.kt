@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.search.communitylist
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 
 interface CommunityListMviModel :
     MviModel<CommunityListMviModel.Intent, CommunityListMviModel.UiState, CommunityListMviModel.Effect> {
@@ -10,7 +11,7 @@ interface CommunityListMviModel :
         object LoadNextPage : Intent
         object SearchFired : Intent
         data class SetSearch(val value: String) : Intent
-        data class SetSubscribedOnly(val value: Boolean) : Intent
+        data class SetListingType(val value: ListingType) : Intent
     }
 
     data class UiState(
@@ -20,7 +21,7 @@ interface CommunityListMviModel :
         val isLogged: Boolean = false,
         val instance: String = "",
         val searchText: String = "",
-        val subscribedOnly: Boolean = true,
+        val listingType: ListingType = ListingType.All,
         val communities: List<CommunityModel> = emptyList(),
     )
 

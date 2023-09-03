@@ -39,7 +39,6 @@
     <string name="post_second_short">s</string>
 
     <string name="explore_search_placeholder">Cerca comunità</string>
-    <string name="explore_subscribed_only">Solo sottoscrizioni</string>
 
     <string name="profile_not_logged_message">Login non effettuato.\nAggiungi un account per
         continuare.
@@ -77,7 +76,7 @@
     <string name="community_detail_info">Info comunità</string>
     <string name="community_detail_instance_info">Dettagli istanza</string>
     <string name="instance_detail_title">Istanza: %1$s</string>
-    <string name="instance_detail_communities">Comunità:</string>
+    <string name="instance_detail_communities">Comunità</string>
 
     <string name="inbox_section_replies">Risposte</string>
     <string name="inbox_section_mentions">Menzioni</string>

@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SearchType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SubscribedType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toModel
@@ -24,6 +25,7 @@ class CommunityRepository(
         auth: String? = null,
         page: Int,
         limit: Int = DEFAULT_PAGE_SIZE,
+        listingType: ListingType = ListingType.All,
     ): List<CommunityModel> {
         val response = services.search.search(
             q = query,
@@ -31,6 +33,7 @@ class CommunityRepository(
             page = page,
             limit = limit,
             type = SearchType.Communities,
+            listingType = listingType.toDto(),
         ).body()
         return response?.communities?.map {
             it.toModel()

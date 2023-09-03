@@ -42,7 +42,6 @@
     <string name="post_second_short">s</string>
 
     <string name="explore_search_placeholder">Search for communities</string>
-    <string name="explore_subscribed_only">Subscribed only</string>
 
     <string name="profile_not_logged_message">You are currently not logged in.\nPlease add an
         account to continue.
@@ -83,7 +82,7 @@
     <string name="community_detail_info">Community info</string>
     <string name="community_detail_instance_info">Instance details</string>
     <string name="instance_detail_title">Instance: %1$s</string>
-    <string name="instance_detail_communities">Communities:</string>
+    <string name="instance_detail_communities">Communities</string>
 
     <string name="inbox_section_replies">Replies</string>
     <string name="inbox_section_mentions">Mentions</string>

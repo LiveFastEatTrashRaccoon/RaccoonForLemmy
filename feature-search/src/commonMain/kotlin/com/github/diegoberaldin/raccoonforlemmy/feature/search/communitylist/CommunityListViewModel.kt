@@ -5,6 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +51,7 @@ class CommunityListViewModel(
             CommunityListMviModel.Intent.Refresh -> refresh()
             CommunityListMviModel.Intent.SearchFired -> refresh()
             is CommunityListMviModel.Intent.SetSearch -> setSearch(intent.value)
-            is CommunityListMviModel.Intent.SetSubscribedOnly -> applySubscribedOnly(intent.value)
+            is CommunityListMviModel.Intent.SetListingType -> changeListingType(intent.value)
         }
     }
 
@@ -58,8 +59,8 @@ class CommunityListViewModel(
         mvi.updateState { it.copy(searchText = value) }
     }
 
-    private fun applySubscribedOnly(value: Boolean) {
-        mvi.updateState { it.copy(subscribedOnly = value) }
+    private fun changeListingType(value: ListingType) {
+        mvi.updateState { it.copy(listingType = value) }
         refresh()
     }
 
@@ -80,52 +81,27 @@ class CommunityListViewModel(
             val searchText = mvi.uiState.value.searchText
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
-            val subscribedOnly = currentState.subscribedOnly
-            if (subscribedOnly) {
-                val items = communityRepository.getSubscribed(
-                    auth = auth,
-                ).filter {
-                    if (searchText.isNotBlank()) {
-                        it.name.contains(searchText)
-                    } else {
-                        true
-                    }
+            val listingType = currentState.listingType
+            val items = communityRepository.getAll(
+                query = searchText,
+                auth = auth,
+                page = currentPage,
+                listingType = listingType,
+            )
+            currentPage++
+            val canFetchMore = items.size >= PostsRepository.DEFAULT_PAGE_SIZE
+            mvi.updateState {
+                val newItems = if (refreshing) {
+                    items
+                } else {
+                    it.communities + items
                 }
-                currentPage++
-                mvi.updateState {
-                    val newItems = if (refreshing) {
-                        items
-                    } else {
-                        it.communities + items
-                    }
-                    it.copy(
-                        communities = newItems,
-                        loading = false,
-                        canFetchMore = false,
-                        refreshing = false,
-                    )
-                }
-            } else {
-                val items = communityRepository.getAll(
-                    query = searchText,
-                    auth = auth,
-                    page = currentPage,
+                it.copy(
+                    communities = newItems,
+                    loading = false,
+                    canFetchMore = canFetchMore,
+                    refreshing = false,
                 )
-                currentPage++
-                val canFetchMore = items.size >= PostsRepository.DEFAULT_PAGE_SIZE
-                mvi.updateState {
-                    val newItems = if (refreshing) {
-                        items
-                    } else {
-                        it.communities + items
-                    }
-                    it.copy(
-                        communities = newItems,
-                        loading = false,
-                        canFetchMore = canFetchMore,
-                        refreshing = false,
-                    )
-                }
             }
         }
     }
