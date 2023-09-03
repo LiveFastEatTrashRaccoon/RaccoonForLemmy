@@ -29,12 +29,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -42,6 +46,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
@@ -126,67 +131,76 @@ class PostDetailScreen(
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     item {
-                        PostCardTitle(post)
-                        PostCardSubtitle(
-                            community = post.community,
-                            creator = post.creator?.copy(avatar = null),
-                            onOpenCommunity = { community ->
-                                navigator.push(
-                                    CommunityDetailScreen(
-                                        community = community,
-                                        onBack = {
-                                            navigator.pop()
-                                        },
-                                    ),
-                                )
-                            },
-                            onOpenCreator = { user ->
-                                navigator.push(
-                                    UserDetailScreen(
-                                        user = user,
-                                        onBack = {
-                                            navigator.pop()
-                                        },
-                                    ),
-                                )
-                            },
-                        )
-                        PostCardImage(post)
-                        PostCardBody(
-                            text = post.text,
-                        )
-                        PostCardFooter(
-                            comments = post.comments,
-                            score = post.score,
-                            upVoted = post.myVote > 0,
-                            downVoted = post.myVote < 0,
-                            saved = post.saved,
-                            date = post.publishDate,
-                            onUpVote = {
-                                model.reduce(
-                                    PostDetailMviModel.Intent.UpVotePost(
-                                        post = post,
-                                        feedback = true,
-                                    ),
-                                )
-                            },
-                            onDownVote = {
-                                model.reduce(
-                                    PostDetailMviModel.Intent.DownVotePost(
-                                        post = post,
-                                        feedback = true,
-                                    ),
-                                )
-                            },
-                            onSave = {
-                                model.reduce(
-                                    PostDetailMviModel.Intent.SavePost(
-                                        post = post,
-                                        feedback = true,
-                                    ),
-                                )
-                            },
-                        )
+                        val themeRepository = remember { getThemeRepository() }
+                        val fontScale by themeRepository.contentFontScale.collectAsState()
+                        CompositionLocalProvider(
+                            LocalDensity provides Density(
+                                density = LocalDensity.current.density,
+                                fontScale = fontScale,
+                            ),
+                        ) {
+                            PostCardTitle(post)
+                            PostCardSubtitle(
+                                community = post.community,
+                                creator = post.creator?.copy(avatar = null),
+                                onOpenCommunity = { community ->
+                                    navigator.push(
+                                        CommunityDetailScreen(
+                                            community = community,
+                                            onBack = {
+                                                navigator.pop()
+                                            },
+                                        ),
+                                    )
+                                },
+                                onOpenCreator = { user ->
+                                    navigator.push(
+                                        UserDetailScreen(
+                                            user = user,
+                                            onBack = {
+                                                navigator.pop()
+                                            },
+                                        ),
+                                    )
+                                },
+                            )
+                            PostCardImage(post)
+                            PostCardBody(
+                                text = post.text,
+                            )
+                            PostCardFooter(
+                                comments = post.comments,
+                                score = post.score,
+                                upVoted = post.myVote > 0,
+                                downVoted = post.myVote < 0,
+                                saved = post.saved,
+                                date = post.publishDate,
+                                onUpVote = {
+                                    model.reduce(
+                                        PostDetailMviModel.Intent.UpVotePost(
+                                            post = post,
+                                            feedback = true,
+                                        ),
+                                    )
+                                },
+                                onDownVote = {
+                                    model.reduce(
+                                        PostDetailMviModel.Intent.DownVotePost(
+                                            post = post,
+                                            feedback = true,
+                                        ),
+                                    )
+                                },
+                                onSave = {
+                                    model.reduce(
+                                        PostDetailMviModel.Intent.SavePost(
+                                            post = post,
+                                            feedback = true,
+                                        ),
+                                    )
+                                },
+                            )
+                        }
                     }
                     items(uiState.comments, key = { it.id.toString() + it.myVote }) { comment ->
                         SwipeableCard(

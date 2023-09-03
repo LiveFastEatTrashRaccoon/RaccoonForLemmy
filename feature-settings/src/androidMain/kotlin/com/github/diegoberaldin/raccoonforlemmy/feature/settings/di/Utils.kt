@@ -1,6 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.settings.di
 
-import com.github.diegoberaldin.raccoonforlemmy.feature.settings.viewmodel.SettingsScreenViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.content.SettingsScreenViewModel
 import org.koin.java.KoinJavaComponent
 
 actual fun getSettingsScreenModel(): SettingsScreenViewModel {

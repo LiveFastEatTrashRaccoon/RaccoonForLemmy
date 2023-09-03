@@ -1,5 +1,6 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.settings.viewmodel
+package com.github.diegoberaldin.raccoonforlemmy.feature.settings.content
 
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.FontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -10,6 +11,7 @@ interface SettingsScreenMviModel :
 
     sealed interface Intent {
         data class ChangeTheme(val value: ThemeState) : Intent
+        data class ChangeContentFontSize(val value: Float) : Intent
         data class ChangeLanguage(val value: String) : Intent
         data class ChangeDefaultListingType(val value: ListingType) : Intent
         data class ChangeDefaultPostSortType(val value: SortType) : Intent
@@ -19,6 +21,7 @@ interface SettingsScreenMviModel :
     data class UiState(
         val isLogged: Boolean = false,
         val currentTheme: ThemeState = ThemeState.Light,
+        val currentFontScale: FontScale = FontScale.Normal,
         val lang: String = "",
         val defaultListingType: ListingType = ListingType.Local,
         val defaultPostSortType: SortType = SortType.Active,

@@ -77,10 +77,12 @@ class ListingTypeBottomSheet(
                         modifier = Modifier.padding(
                             horizontal = Spacing.s,
                             vertical = Spacing.m,
-                        ).onClick {
-                            onSelected(value)
-                            onHide()
-                        },
+                        )
+                            .fillMaxWidth()
+                            .onClick {
+                                onSelected(value)
+                                onHide()
+                            },
                     ) {
                         Text(
                             text = value.toReadableName(),

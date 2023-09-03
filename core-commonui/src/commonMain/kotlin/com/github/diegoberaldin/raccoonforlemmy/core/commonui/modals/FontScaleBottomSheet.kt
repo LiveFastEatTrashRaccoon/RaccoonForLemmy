@@ -20,13 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
-import com.github.diegoberaldin.racconforlemmy.core.utils.toLanguageName
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.FontScale
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.scaleFactor
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
-class LanguageBottomSheet(
-    private val onSelected: (String) -> Unit,
+class FontScaleBottomSheet(
+    private val onSelected: (Float) -> Unit,
     private val onHide: () -> Unit,
 ) : Screen {
 
@@ -52,13 +54,18 @@ class LanguageBottomSheet(
             )
             Text(
                 modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
-                text = stringResource(MR.strings.settings_language),
+                text = stringResource(MR.strings.settings_content_font_scale),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
             )
             val values = listOf(
-                "en",
-                "it",
+                FontScale.Largest,
+                FontScale.Larger,
+                FontScale.Large,
+                FontScale.Normal,
+                FontScale.Small,
+                FontScale.Smaller,
+                FontScale.Smallest,
             )
             Column(
                 modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
@@ -72,13 +79,16 @@ class LanguageBottomSheet(
                         )
                             .fillMaxWidth()
                             .onClick {
-                                onSelected(value)
+                                onSelected(value.scaleFactor)
                                 onHide()
                             },
                     ) {
+                        val originalFontSize = MaterialTheme.typography.bodyLarge.fontSize
                         Text(
-                            text = value.toLanguageName(),
-                            style = MaterialTheme.typography.bodyLarge,
+                            text = value.toReadableName(),
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontSize = originalFontSize * value.scaleFactor,
+                            ),
                             color = MaterialTheme.colorScheme.onBackground,
                         )
                     }

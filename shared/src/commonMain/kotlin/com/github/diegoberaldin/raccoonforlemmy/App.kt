@@ -51,6 +51,7 @@ fun App() {
 
     val defaultLocale = stringResource(MR.strings.lang)
     val langCode = keyStore[KeyStoreKeys.Locale, defaultLocale]
+    val fontScale = keyStore[KeyStoreKeys.ContentFontScale, 1f]
     val languageRepository = remember { getLanguageRepository() }
     LaunchedEffect(Unit) {
         delay(100)
@@ -72,6 +73,7 @@ fun App() {
 
     AppTheme(
         theme = currentTheme,
+        contentFontScale = fontScale,
     ) {
         val lang by languageRepository.currentLanguage.collectAsState()
         LaunchedEffect(lang) {}

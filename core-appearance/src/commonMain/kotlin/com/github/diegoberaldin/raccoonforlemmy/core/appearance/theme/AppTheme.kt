@@ -11,11 +11,13 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepos
 @Composable
 fun AppTheme(
     theme: ThemeState,
+    contentFontScale: Float,
     content: @Composable () -> Unit,
 ) {
     val repository = remember {
         val res = getThemeRepository()
         res.changeTheme(theme)
+        res.changeContentFontScale(contentFontScale)
         res
     }
 
@@ -25,7 +27,6 @@ fun AppTheme(
         ThemeState.Black -> BlackColors
         else -> LightColors
     }
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = typography,

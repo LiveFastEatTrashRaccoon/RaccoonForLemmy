@@ -20,13 +20,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityInfoViewModel
@@ -92,12 +97,21 @@ class CommunityInfoScreen(
                     verticalArrangement = Arrangement.spacedBy(Spacing.s),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = uiState.community.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
+                    val themeRepository = remember { getThemeRepository() }
+                    val fontScale by themeRepository.contentFontScale.collectAsState()
+                    CompositionLocalProvider(
+                        LocalDensity provides Density(
+                            density = LocalDensity.current.density,
+                            fontScale = fontScale,
+                        ),
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = uiState.community.description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
                 }
             }
         }

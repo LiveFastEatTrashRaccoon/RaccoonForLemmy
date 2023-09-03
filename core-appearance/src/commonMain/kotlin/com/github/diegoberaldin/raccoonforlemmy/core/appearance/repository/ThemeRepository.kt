@@ -7,5 +7,9 @@ interface ThemeRepository {
 
     val state: StateFlow<ThemeState>
 
+    val contentFontScale: StateFlow<Float>
+
     fun changeTheme(value: ThemeState)
+
+    fun changeContentFontScale(value: Float)
 }

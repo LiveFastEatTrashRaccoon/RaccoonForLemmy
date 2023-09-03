@@ -1,7 +1,8 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.settings.viewmodel
+package com.github.diegoberaldin.raccoonforlemmy.feature.settings.content
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toFontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
@@ -16,7 +17,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.resources.LanguageRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -35,6 +35,9 @@ class SettingsScreenViewModel(
         mvi.scope.launch(Dispatchers.Main) {
             themeRepository.state.onEach { currentTheme ->
                 mvi.updateState { it.copy(currentTheme = currentTheme) }
+            }.launchIn(this)
+            themeRepository.contentFontScale.onEach { value ->
+                mvi.updateState { it.copy(currentFontScale = value.toFontScale()) }
             }.launchIn(this)
             languageRepository.currentLanguage.onEach { lang ->
                 mvi.updateState { it.copy(lang = lang) }
@@ -59,6 +62,7 @@ class SettingsScreenViewModel(
     override fun reduce(intent: SettingsScreenMviModel.Intent) {
         when (intent) {
             is SettingsScreenMviModel.Intent.ChangeTheme -> applyTheme(intent.value)
+            is SettingsScreenMviModel.Intent.ChangeContentFontSize -> applyContentFontScale(intent.value)
             is SettingsScreenMviModel.Intent.ChangeLanguage -> changeLanguage(intent.value)
             is SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType -> changeDefaultCommentSortType(
                 intent.value,
@@ -78,6 +82,13 @@ class SettingsScreenViewModel(
         themeRepository.changeTheme(value)
         mvi.scope.launch(Dispatchers.Main) {
             keyStore.save(KeyStoreKeys.UiTheme, value.toInt())
+        }
+    }
+
+    private fun applyContentFontScale(value: Float) {
+        themeRepository.changeContentFontScale(value)
+        mvi.scope.launch(Dispatchers.Main) {
+            keyStore.save(KeyStoreKeys.ContentFontScale, value)
         }
     }
 

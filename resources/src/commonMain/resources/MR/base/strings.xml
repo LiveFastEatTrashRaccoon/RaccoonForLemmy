@@ -70,6 +70,14 @@
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_black">Pure black</string>
     <string name="settings_language">Language</string>
+    <string name="settings_content_font_scale">Content text size</string>
+    <string name="settings_content_font_largest">Double extra large</string>
+    <string name="settings_content_font_larger">Extra large</string>
+    <string name="settings_content_font_large">Large</string>
+    <string name="settings_content_font_normal">Normal</string>
+    <string name="settings_content_font_small">Small</string>
+    <string name="settings_content_font_smaller">Extra small</string>
+    <string name="settings_content_font_smallest">Double extra small</string>
     <string name="settings_default_listing_type">Default feed type</string>
     <string name="settings_default_post_sort_type">Default post sort type</string>
     <string name="settings_default_comment_sort_type">Default comment sort type</string>

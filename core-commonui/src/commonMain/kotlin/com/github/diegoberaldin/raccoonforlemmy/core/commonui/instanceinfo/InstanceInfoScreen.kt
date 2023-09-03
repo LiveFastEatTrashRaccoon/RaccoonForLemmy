@@ -25,17 +25,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
@@ -125,20 +130,29 @@ class InstanceInfoScreen(
                         }
                     }
                     items(uiState.communities, key = { it.id }) {
-                        CommunityItem(
-                            modifier = Modifier.onClick {
-                                navigator.push(
-                                    CommunityDetailScreen(
-                                        community = it,
-                                        otherInstance = instanceName,
-                                        onBack = {
-                                            navigator.pop()
-                                        },
-                                    ),
-                                )
-                            },
-                            community = it,
-                        )
+                        val themeRepository = remember { getThemeRepository() }
+                        val fontScale by themeRepository.contentFontScale.collectAsState()
+                        CompositionLocalProvider(
+                            LocalDensity provides Density(
+                                density = LocalDensity.current.density,
+                                fontScale = fontScale,
+                            ),
+                        ) {
+                            CommunityItem(
+                                modifier = Modifier.onClick {
+                                    navigator.push(
+                                        CommunityDetailScreen(
+                                            community = it,
+                                            otherInstance = instanceName,
+                                            onBack = {
+                                                navigator.pop()
+                                            },
+                                        ),
+                                    )
+                                },
+                                community = it,
+                            )
+                        }
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {

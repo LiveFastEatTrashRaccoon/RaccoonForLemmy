@@ -62,10 +62,12 @@ class InboxTypeSheet(
                     modifier = Modifier.padding(
                         horizontal = Spacing.s,
                         vertical = Spacing.m,
-                    ).onClick {
-                        onUnreadSelected(true)
-                        onHide()
-                    },
+                    )
+                        .fillMaxWidth()
+                        .onClick {
+                            onUnreadSelected(true)
+                            onHide()
+                        },
                 ) {
                     Text(
                         text = stringResource(MR.strings.inbox_listing_type_unread),

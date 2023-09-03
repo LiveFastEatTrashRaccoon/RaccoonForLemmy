@@ -67,6 +67,17 @@
     <string name="settings_theme_light">Chiaro</string>
     <string name="settings_theme_black">Scuro (AMOLED)</string>
     <string name="settings_language">Lingua</string>
+    <string name="settings_content_font_scale">Dimensione testo contenuti</string>
+    <string name="settings_content_font_largest">Grandissimo</string>
+    <string name="settings_content_font_larger">Più grande</string>
+    <string name="settings_content_font_large">Grande</string>
+    <string name="settings_content_font_normal">Normale</string>
+    <string name="settings_content_font_small">Piccolo</string>
+    <string name="settings_content_font_smaller">Più piccolo</string>
+    <string name="settings_content_font_smallest">Piccolissimo</string>
+    <string name="settings_default_listing_type">Tipo di feed predefinito</string>
+    <string name="settings_default_post_sort_type">Ordinamento post predefinito</string>
+    <string name="settings_default_comment_sort_type">Ordinamento commenti predefinito</string>
 
     <string name="community_button_subscribe">Iscriviti</string>
     <string name="community_button_subscribed">Iscritto</string>

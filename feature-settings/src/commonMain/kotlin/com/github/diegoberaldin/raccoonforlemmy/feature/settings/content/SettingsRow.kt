@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui
+package com.github.diegoberaldin.raccoonforlemmy.feature.settings.content
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
