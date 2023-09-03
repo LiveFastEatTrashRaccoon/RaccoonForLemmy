@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.search.communitylist
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 
 interface CommunityListMviModel :
     MviModel<CommunityListMviModel.Intent, CommunityListMviModel.UiState, CommunityListMviModel.Effect> {
@@ -21,6 +22,7 @@ interface CommunityListMviModel :
         val instance: String = "",
         val searchText: String = "",
         val listingType: ListingType = ListingType.All,
+        val sortType: SortType = SortType.Active,
         val communities: List<CommunityModel> = emptyList(),
     )
 

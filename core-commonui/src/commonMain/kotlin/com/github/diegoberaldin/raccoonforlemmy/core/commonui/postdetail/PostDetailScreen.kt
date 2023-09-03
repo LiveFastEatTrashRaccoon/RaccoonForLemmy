@@ -164,7 +164,10 @@ class PostDetailScreen(
                                     )
                                 },
                             )
-                            PostCardImage(post)
+                            PostCardImage(
+                                post = post,
+                                blurNsfw = false,
+                            )
                             PostCardBody(
                                 text = post.text,
                             )
@@ -202,7 +205,7 @@ class PostDetailScreen(
                             )
                         }
                     }
-                    items(uiState.comments, key = { it.id.toString() + it.myVote }) { comment ->
+                    items(uiState.comments, key = { "${it.id}+${it.myVote}" }) { comment ->
                         SwipeableCard(
                             modifier = Modifier.fillMaxWidth(),
                             backgroundColor = {

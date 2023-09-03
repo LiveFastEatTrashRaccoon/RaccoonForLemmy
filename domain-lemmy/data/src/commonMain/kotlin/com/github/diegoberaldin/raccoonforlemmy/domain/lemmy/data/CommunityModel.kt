@@ -10,4 +10,5 @@ data class CommunityModel(
     val banner: String? = null,
     val subscribed: Boolean? = null,
     val instanceUrl: String = "",
+    val nsfw: Boolean = false,
 )

@@ -26,6 +26,7 @@ class CommunityRepository(
         page: Int,
         limit: Int = DEFAULT_PAGE_SIZE,
         listingType: ListingType = ListingType.All,
+        sortType: SortType = SortType.Active,
     ): List<CommunityModel> {
         val response = services.search.search(
             q = query,
@@ -34,6 +35,7 @@ class CommunityRepository(
             limit = limit,
             type = SearchType.Communities,
             listingType = listingType.toDto(),
+            sort = sortType.toDto(),
         ).body()
         return response?.communities?.map {
             it.toModel()
@@ -63,7 +65,7 @@ class CommunityRepository(
         auth: String? = null,
     ): List<CommunityModel> {
         val response = services.site.get(auth).body()
-        return response?.myUser?.follows?.map { it.toModel() }.orEmpty()
+        return response?.myUser?.follows?.map { it.community.toModel() }.orEmpty()
     }
 
     suspend fun get(

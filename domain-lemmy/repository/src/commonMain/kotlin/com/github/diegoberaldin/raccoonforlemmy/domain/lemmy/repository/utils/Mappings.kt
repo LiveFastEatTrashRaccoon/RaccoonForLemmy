@@ -91,6 +91,7 @@ internal fun PostView.toModel() = PostModel(
     saved = saved,
     myVote = myVote ?: 0,
     publishDate = post.published,
+    nsfw = post.nsfw,
 )
 
 internal fun CommentView.toModel() = CommentModel(
@@ -113,15 +114,7 @@ internal fun Community.toModel() = CommunityModel(
     banner = banner,
     instanceUrl = actorId.communityToInstanceUrl(),
     host = actorId.toHost(),
-)
-
-internal fun CommunityFollowerView.toModel() = CommunityModel(
-    id = community.id,
-    name = community.name,
-    title = community.title,
-    icon = community.icon,
-    banner = community.banner,
-    host = community.actorId.toHost(),
+    nsfw = nsfw,
 )
 
 internal fun PersonMentionView.toModel() = PersonMentionModel(
@@ -130,6 +123,7 @@ internal fun PersonMentionView.toModel() = PersonMentionModel(
         id = post.id,
         title = post.name,
         text = post.body.orEmpty(),
+        nsfw = post.nsfw,
     ),
     comment = CommentModel(
         id = comment.id,
@@ -152,6 +146,7 @@ internal fun CommentReplyView.toModel() = PersonMentionModel(
         text = post.body.orEmpty(),
         creator = UserModel(id = post.creatorId),
         publishDate = post.published,
+        nsfw = post.nsfw,
     ),
     comment = CommentModel(
         id = comment.id,
@@ -164,7 +159,7 @@ internal fun CommentReplyView.toModel() = PersonMentionModel(
     score = counts.score,
     myVote = myVote ?: 0,
     saved = saved,
-    publishDate = commentReply.published
+    publishDate = commentReply.published,
 )
 
 internal fun String.toHost(): String = this.replace("https://", "").let {

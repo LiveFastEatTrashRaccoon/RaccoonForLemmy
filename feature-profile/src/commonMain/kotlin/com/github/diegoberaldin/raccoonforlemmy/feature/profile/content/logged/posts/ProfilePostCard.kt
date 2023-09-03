@@ -69,7 +69,10 @@ fun ProfilePostCard(
                     community = post.community,
                     onOpenCommunity = onOpenCommunity,
                 )
-                PostCardImage(post)
+                PostCardImage(
+                    post = post,
+                    blurNsfw = false,
+                )
 
                 Box {
                     PostCardBody(

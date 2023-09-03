@@ -101,11 +101,13 @@ class CommunityListViewModel(
         val auth = identityRepository.authToken.value
         val refreshing = currentState.refreshing
         val listingType = currentState.listingType
+        val sortType = currentState.sortType
         val items = communityRepository.getAll(
             query = searchText,
             auth = auth,
             page = currentPage,
             listingType = listingType,
+            sortType = sortType,
         )
         currentPage++
         val canFetchMore = items.size >= PostsRepository.DEFAULT_PAGE_SIZE
