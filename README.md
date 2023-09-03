@@ -1,3 +1,16 @@
+<div align="center">
+  <img src="https://img.shields.io/badge/Kotlin-1.8.20-7f52ff?logo=kotlin" />
+  <img src="https://img.shields.io/badge/platform-Android,iOS-blue" />
+  <img src="https://img.shields.io/badge/Jetpack_Compose-1.4.3-3e7fea?logo=jetpackcompose" />
+  <img src="https://img.shields.io/github/license/diegoberaldin/MetaPhrase" />
+</div>
+
+<br />
+
+<div align="center">
+  <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/6785188f-9c2a-4622-ab6b-5aa116d27c31" width="250" height="auto" />
+</div>
+
 # Raccon for Lemmy
 
 A Kotlin Multiplatform Mobile client for Lemmy.
