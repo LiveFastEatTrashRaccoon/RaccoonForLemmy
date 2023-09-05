@@ -39,6 +39,9 @@ class SettingsScreenViewModel(
             themeRepository.contentFontScale.onEach { value ->
                 mvi.updateState { it.copy(currentFontScale = value.toFontScale()) }
             }.launchIn(this)
+            themeRepository.navItemTitles.onEach { value ->
+                mvi.updateState { it.copy(navBarTitlesVisible = value) }
+            }.launchIn(this)
             languageRepository.currentLanguage.onEach { lang ->
                 mvi.updateState { it.copy(lang = lang) }
             }.launchIn(this)
@@ -80,6 +83,9 @@ class SettingsScreenViewModel(
 
             is SettingsScreenMviModel.Intent.ChangeBlurNsfw -> changeBlurNsfw(intent.value)
             is SettingsScreenMviModel.Intent.ChangeIncludeNsfw -> changeIncludeNsfw(intent.value)
+            is SettingsScreenMviModel.Intent.ChangeNavBarTitlesVisible -> changeNavBarTitlesVisible(
+                intent.value
+            )
         }
     }
 
@@ -123,6 +129,11 @@ class SettingsScreenViewModel(
         mvi.scope.launch(Dispatchers.Main) {
             keyStore.save(KeyStoreKeys.DefaultCommentSortType, value.toInt())
         }
+    }
+
+    private fun changeNavBarTitlesVisible(value: Boolean) {
+        keyStore.save(KeyStoreKeys.NavItemTitlesVisible, value)
+        themeRepository.changeNavItemTitles(value)
     }
 
     private fun changeIncludeNsfw(value: Boolean) {

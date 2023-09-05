@@ -71,6 +71,12 @@ fun App() {
         apiConfigurationRepository.changeInstance(lastInstance)
     }
 
+    val themeRepository = remember { getThemeRepository() }
+    val navTitles = keyStore[KeyStoreKeys.NavItemTitlesVisible, false]
+    LaunchedEffect(Unit) {
+        themeRepository.changeNavItemTitles(navTitles)
+    }
+
     AppTheme(
         theme = currentTheme,
         contentFontScale = fontScale,
@@ -85,8 +91,8 @@ fun App() {
                         CurrentTab()
                     },
                     bottomBar = {
-                        val themeRepository = remember { getThemeRepository() }
                         val themeState by themeRepository.state.collectAsState()
+                        val titleVisible by themeRepository.navItemTitles.collectAsState()
                         BottomAppBar(
                             contentPadding = PaddingValues(0.dp),
                             backgroundColor = when (themeState) {
@@ -103,11 +109,11 @@ fun App() {
                                 }
                             },
                         ) {
-                            TabNavigationItem(HomeTab)
-                            TabNavigationItem(SearchTab)
-                            TabNavigationItem(ProfileTab)
-                            TabNavigationItem(InboxTab)
-                            TabNavigationItem(SettingsTab)
+                            TabNavigationItem(HomeTab, withText = titleVisible)
+                            TabNavigationItem(SearchTab, withText = titleVisible)
+                            TabNavigationItem(ProfileTab, withText = titleVisible)
+                            TabNavigationItem(InboxTab, withText = titleVisible)
+                            TabNavigationItem(SettingsTab, withText = titleVisible)
                         }
                     },
                 )

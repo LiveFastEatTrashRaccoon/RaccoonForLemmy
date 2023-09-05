@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,7 +25,7 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 
 @Composable
-internal fun RowScope.TabNavigationItem(tab: Tab) {
+internal fun RowScope.TabNavigationItem(tab: Tab, withText: Boolean = true) {
     val tabNavigator = LocalTabNavigator.current
     Box(
         modifier = Modifier.weight(1f)
@@ -52,13 +51,15 @@ internal fun RowScope.TabNavigationItem(tab: Tab) {
                 contentDescription = null,
                 tint = color,
             )
-            Text(
-                modifier = Modifier,
-                text = tab.options.title,
-                style = MaterialTheme.typography.labelSmall,
-                color = color,
-            )
-            Spacer(modifier = Modifier.height(Spacing.xxxs))
+            if (withText) {
+                Text(
+                    modifier = Modifier,
+                    text = tab.options.title,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = color,
+                )
+                Spacer(modifier = Modifier.height(Spacing.xxxs))
+            }
         }
     }
 }

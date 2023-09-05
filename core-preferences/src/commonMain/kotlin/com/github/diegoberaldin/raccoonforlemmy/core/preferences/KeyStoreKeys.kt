@@ -11,4 +11,5 @@ object KeyStoreKeys {
     const val DefaultCommentSortType = "defaultCommentSortType"
     const val IncludeNsfw = "includeNsfw"
     const val BlurNsfw = "blurNsfw"
+    const val NavItemTitlesVisible = "navItemTitlesVisible"
 }

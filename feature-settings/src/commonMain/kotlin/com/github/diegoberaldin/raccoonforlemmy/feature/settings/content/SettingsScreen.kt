@@ -209,16 +209,30 @@ class SettingsScreen : Screen {
                             )
                         },
                     )
-                    // TODO!
+
+                    // navigation bar titles
                     SettingsSwitchRow(
-                        title = "Include NSFW contents",
+                        title = stringResource(MR.strings.settings_navigation_bar_titles_visible),
+                        value = uiState.navBarTitlesVisible,
+                        onValueChanged = { value ->
+                            model.reduce(
+                                SettingsScreenMviModel.Intent.ChangeNavBarTitlesVisible(
+                                    value
+                                )
+                            )
+                        }
+                    )
+
+                    // NSFW options
+                    SettingsSwitchRow(
+                        title = stringResource(MR.strings.settings_include_nsfw),
                         value = uiState.includeNsfw,
                         onValueChanged = { value ->
                             model.reduce(SettingsScreenMviModel.Intent.ChangeIncludeNsfw(value))
                         }
                     )
                     SettingsSwitchRow(
-                        title = "Blur NSFW",
+                        title = stringResource(MR.strings.settings_blur_nsfw),
                         value = uiState.blurNsfw,
                         onValueChanged = { value ->
                             model.reduce(SettingsScreenMviModel.Intent.ChangeBlurNsfw(value))
