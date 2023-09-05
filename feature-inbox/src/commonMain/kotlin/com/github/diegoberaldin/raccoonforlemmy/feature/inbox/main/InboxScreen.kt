@@ -58,7 +58,7 @@ class InboxScreen : Screen {
                 TopAppBar(
                     title = {
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                         ) {
                             Text(
                                 text = title,
@@ -108,6 +108,7 @@ class InboxScreen : Screen {
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
                 SectionSelector(
+                    modifier = Modifier.padding(vertical = Spacing.s),
                     titles = listOf(
                         stringResource(MR.strings.inbox_section_replies),
                         stringResource(MR.strings.inbox_section_mentions),

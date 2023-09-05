@@ -60,7 +60,7 @@ fun PostCard(
             ),
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 PostCardTitle(post)
                 PostCardSubtitle(

@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalMarkdownColors
 import org.intellij.markdown.MarkdownTokenTypes
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.findChildOfType
@@ -23,6 +24,7 @@ internal fun MarkdownHeader(
             it.getTextInNode(content).trim().toString(),
             modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
             style = style,
+            color = LocalMarkdownColors.current.text,
         )
     }
 }

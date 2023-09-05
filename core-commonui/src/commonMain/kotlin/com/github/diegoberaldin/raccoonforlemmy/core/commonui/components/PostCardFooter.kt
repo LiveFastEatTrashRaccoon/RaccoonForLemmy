@@ -60,7 +60,8 @@ fun PostCardFooter(
             Text(
                 modifier = Modifier.padding(end = Spacing.s),
                 text = "$comments",
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         if (date != null) {
@@ -99,7 +100,8 @@ fun PostCardFooter(
                         }
                     }
                 },
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -151,7 +153,8 @@ fun PostCardFooter(
         )
         Text(
             text = "$score",
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Image(
             modifier = buttonModifier

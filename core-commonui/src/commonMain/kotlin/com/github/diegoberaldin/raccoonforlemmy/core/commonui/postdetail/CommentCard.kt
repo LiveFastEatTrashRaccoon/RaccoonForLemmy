@@ -35,7 +35,7 @@ fun CommentCard(
         ),
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(Spacing.s),
+            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             PostCardSubtitle(
                 creator = comment.creator,

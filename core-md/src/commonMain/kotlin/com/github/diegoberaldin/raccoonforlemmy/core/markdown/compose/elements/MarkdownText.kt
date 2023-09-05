@@ -17,6 +17,7 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
+import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalMarkdownColors
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalMarkdownTypography
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalReferenceLinkHandler
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.utils.TAG_IMAGE_URL
@@ -80,6 +81,7 @@ internal fun MarkdownText(
                 )
             },
         ),
+        color = LocalMarkdownColors.current.text,
         onTextLayout = { layoutResult.value = it },
     )
 }

@@ -30,6 +30,7 @@ private fun MarkdownCode(
             code,
             modifier = Modifier.horizontalScroll(rememberScrollState()).padding(8.dp),
             style = style,
+            color = LocalMarkdownColors.current.text,
         )
     }
 }

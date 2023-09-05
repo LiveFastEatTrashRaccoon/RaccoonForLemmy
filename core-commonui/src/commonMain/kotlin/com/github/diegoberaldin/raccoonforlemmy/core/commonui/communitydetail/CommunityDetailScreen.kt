@@ -258,7 +258,7 @@ class CommunityDetailScreen(
                             Column(
                                 modifier = Modifier.graphicsLayer(translationY = -(iconSize / 2).toLocalPixel()),
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                             ) {
                                 if (communityIcon.isNotEmpty()) {
                                     val painterResource =

@@ -50,11 +50,12 @@ internal fun PostsTopBar(
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
             )
             Column(
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
                 Text(
                     text = listingType.toReadableName(),
                     style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
                     text = stringResource(
@@ -62,6 +63,7 @@ internal fun PostsTopBar(
                         currentInstance,
                     ),
                     style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
         }

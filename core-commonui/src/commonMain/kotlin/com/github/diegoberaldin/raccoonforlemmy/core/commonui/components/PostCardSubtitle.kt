@@ -77,6 +77,7 @@ fun PostCardSubtitle(
                                 }
                             },
                             style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
@@ -86,6 +87,7 @@ fun PostCardSubtitle(
                     Text(
                         text = "•",
                         style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 Surface(
@@ -122,6 +124,7 @@ fun PostCardSubtitle(
                                 }
                             },
                             style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }

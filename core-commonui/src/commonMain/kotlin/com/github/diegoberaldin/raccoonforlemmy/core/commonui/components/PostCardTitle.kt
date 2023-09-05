@@ -10,5 +10,6 @@ fun PostCardTitle(post: PostModel) {
     Text(
         text = post.title,
         style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 }

@@ -110,7 +110,7 @@ class LoginBottomSheet(
             Column(
                 modifier = Modifier.padding(it).fillMaxWidth()
                     .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 val instanceFocusRequester = remember { FocusRequester() }

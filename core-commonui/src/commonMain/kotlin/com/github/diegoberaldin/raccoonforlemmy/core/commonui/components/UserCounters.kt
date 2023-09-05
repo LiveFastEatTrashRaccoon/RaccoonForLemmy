@@ -43,10 +43,12 @@ fun UserCounters(
                     thousandLabel = stringResource(MR.strings.profile_thousand_short),
                 ),
                 style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
                 text = stringResource(MR.strings.profile_post_score),
                 style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         Box(
@@ -65,10 +67,12 @@ fun UserCounters(
                     thousandLabel = stringResource(MR.strings.profile_thousand_short),
                 ),
                 style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
                 text = stringResource(MR.strings.profile_comment_score),
                 style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         Box(
@@ -111,10 +115,12 @@ fun UserCounters(
                     }
                 },
                 style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
                 text = stringResource(MR.strings.profile_account_age),
                 style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

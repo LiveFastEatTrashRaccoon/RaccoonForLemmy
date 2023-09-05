@@ -99,6 +99,7 @@ fun InboxReplySubtitle(
                                     }
                                 },
                                 style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                     }

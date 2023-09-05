@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -101,7 +100,7 @@ class CommunityListScreen : Screen {
                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                         ) {
                             Text(
                                 text = stringResource(MR.strings.instance_detail_communities),
@@ -118,7 +117,7 @@ class CommunityListScreen : Screen {
         ) { padding ->
             Column(
                 modifier = Modifier.padding(padding),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 TextField(
                     modifier = Modifier.padding(
@@ -198,6 +197,10 @@ class CommunityListScreen : Screen {
                                     )
                                 }
                             }
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier.height(Spacing.xxl))
                         }
                     }
 

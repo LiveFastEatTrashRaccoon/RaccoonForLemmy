@@ -29,11 +29,13 @@ internal fun SettingsRow(
         Text(
             text = title,
             style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground,
         )
     }
 }
@@ -50,6 +52,7 @@ internal fun SettingsSwitchRow(
         Text(
             text = title,
             style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         Spacer(modifier = Modifier.weight(1f))
         Switch(

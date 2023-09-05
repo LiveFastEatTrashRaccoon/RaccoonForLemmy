@@ -11,6 +11,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalBulletListHandler
+import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalMarkdownColors
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalMarkdownPadding
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalMarkdownTypography
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalOrderedListHandler
@@ -73,6 +74,7 @@ internal fun MarkdownOrderedList(
                     child.findChildOfType(MarkdownTokenTypes.LIST_NUMBER)?.getTextInNode(content),
                 ),
                 style = style,
+                color = LocalMarkdownColors.current.text,
             )
             val text = buildAnnotatedString {
                 pushStyle(style.toSpanStyle())
@@ -99,6 +101,7 @@ internal fun MarkdownBulletList(
                     child.findChildOfType(MarkdownTokenTypes.LIST_BULLET)?.getTextInNode(content),
                 ),
                 style = style,
+                color = LocalMarkdownColors.current.text,
             )
             val text = buildAnnotatedString {
                 pushStyle(style.toSpanStyle())
