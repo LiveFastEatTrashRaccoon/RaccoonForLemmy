@@ -17,6 +17,7 @@ interface SettingsScreenMviModel :
         data class ChangeDefaultPostSortType(val value: SortType) : Intent
         data class ChangeDefaultCommentSortType(val value: SortType) : Intent
         data class ChangeNavBarTitlesVisible(val value: Boolean) : Intent
+        data class ChangeDynamicColors(val value: Boolean) : Intent
         data class ChangeIncludeNsfw(val value: Boolean) : Intent
         data class ChangeBlurNsfw(val value: Boolean) : Intent
     }
@@ -30,6 +31,8 @@ interface SettingsScreenMviModel :
         val defaultPostSortType: SortType = SortType.Active,
         val defaultCommentSortType: SortType = SortType.New,
         val navBarTitlesVisible: Boolean = false,
+        val supportsDynamicColors: Boolean = false,
+        val dynamicColors: Boolean = false,
         val includeNsfw: Boolean = true,
         val blurNsfw: Boolean = true,
         val appVersion: String = "",

@@ -8,6 +8,7 @@ internal class DefaultThemeRepository : ThemeRepository {
     override val state = MutableStateFlow<ThemeState>(ThemeState.Light)
     override val contentFontScale = MutableStateFlow(1f)
     override val navItemTitles = MutableStateFlow(false)
+    override val dynamicColors = MutableStateFlow(false)
 
     override fun changeTheme(value: ThemeState) {
         state.value = value
@@ -19,5 +20,9 @@ internal class DefaultThemeRepository : ThemeRepository {
 
     override fun changeNavItemTitles(value: Boolean) {
         navItemTitles.value = value
+    }
+
+    override fun changeDynamicColors(value: Boolean) {
+        dynamicColors.value = value
     }
 }

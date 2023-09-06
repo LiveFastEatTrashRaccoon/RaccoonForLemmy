@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toFontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 class SettingsScreenViewModel(
     private val mvi: DefaultMviModel<SettingsScreenMviModel.Intent, SettingsScreenMviModel.UiState, SettingsScreenMviModel.Effect>,
     private val themeRepository: ThemeRepository,
+    private val colorSchemeProvider: ColorSchemeProvider,
     private val languageRepository: LanguageRepository,
     private val identityRepository: IdentityRepository,
     private val keyStore: TemporaryKeyStore,
@@ -42,6 +44,9 @@ class SettingsScreenViewModel(
             }.launchIn(this)
             themeRepository.navItemTitles.onEach { value ->
                 mvi.updateState { it.copy(navBarTitlesVisible = value) }
+            }.launchIn(this)
+            themeRepository.dynamicColors.onEach { value ->
+                mvi.updateState { it.copy(dynamicColors = value) }
             }.launchIn(this)
             languageRepository.currentLanguage.onEach { lang ->
                 mvi.updateState { it.copy(lang = lang) }
@@ -62,75 +67,83 @@ class SettingsScreenViewModel(
                 includeNsfw = keyStore[KeyStoreKeys.IncludeNsfw, true],
                 blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
                 appVersion = AppInfo.versionCode,
+                supportsDynamicColors = colorSchemeProvider.supportsDynamicColors,
             )
         }
     }
 
     override fun reduce(intent: SettingsScreenMviModel.Intent) {
         when (intent) {
-            is SettingsScreenMviModel.Intent.ChangeTheme -> applyTheme(intent.value)
-            is SettingsScreenMviModel.Intent.ChangeContentFontSize -> applyContentFontScale(intent.value)
-            is SettingsScreenMviModel.Intent.ChangeLanguage -> changeLanguage(intent.value)
-            is SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType -> changeDefaultCommentSortType(
-                intent.value,
-            )
+            is SettingsScreenMviModel.Intent.ChangeTheme -> {
+                changeTheme(intent.value)
+            }
 
-            is SettingsScreenMviModel.Intent.ChangeDefaultListingType -> changeDefaultListingType(
-                intent.value,
-            )
+            is SettingsScreenMviModel.Intent.ChangeContentFontSize -> {
+                changeContentFontScale(intent.value)
+            }
 
-            is SettingsScreenMviModel.Intent.ChangeDefaultPostSortType -> changeDefaultPostSortType(
-                intent.value,
-            )
+            is SettingsScreenMviModel.Intent.ChangeLanguage -> {
+                changeLanguage(intent.value)
+            }
 
-            is SettingsScreenMviModel.Intent.ChangeBlurNsfw -> changeBlurNsfw(intent.value)
-            is SettingsScreenMviModel.Intent.ChangeIncludeNsfw -> changeIncludeNsfw(intent.value)
-            is SettingsScreenMviModel.Intent.ChangeNavBarTitlesVisible -> changeNavBarTitlesVisible(
-                intent.value
-            )
+            is SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType -> {
+                changeDefaultCommentSortType(intent.value)
+            }
+
+            is SettingsScreenMviModel.Intent.ChangeDefaultListingType -> {
+                changeDefaultListingType(intent.value)
+            }
+
+            is SettingsScreenMviModel.Intent.ChangeDefaultPostSortType -> {
+                changeDefaultPostSortType(intent.value)
+            }
+
+            is SettingsScreenMviModel.Intent.ChangeBlurNsfw -> {
+                changeBlurNsfw(intent.value)
+            }
+
+            is SettingsScreenMviModel.Intent.ChangeIncludeNsfw -> {
+                changeIncludeNsfw(intent.value)
+            }
+
+            is SettingsScreenMviModel.Intent.ChangeNavBarTitlesVisible -> {
+                changeNavBarTitlesVisible(intent.value)
+            }
+
+            is SettingsScreenMviModel.Intent.ChangeDynamicColors -> {
+                changeDynamicColors(intent.value)
+            }
         }
     }
 
-    private fun applyTheme(value: ThemeState) {
+    private fun changeTheme(value: ThemeState) {
         themeRepository.changeTheme(value)
-        mvi.scope.launch(Dispatchers.Main) {
-            keyStore.save(KeyStoreKeys.UiTheme, value.toInt())
-        }
+        keyStore.save(KeyStoreKeys.UiTheme, value.toInt())
     }
 
-    private fun applyContentFontScale(value: Float) {
+    private fun changeContentFontScale(value: Float) {
         themeRepository.changeContentFontScale(value)
-        mvi.scope.launch(Dispatchers.Main) {
-            keyStore.save(KeyStoreKeys.ContentFontScale, value)
-        }
+        keyStore.save(KeyStoreKeys.ContentFontScale, value)
     }
 
     private fun changeLanguage(value: String) {
         languageRepository.changeLanguage(value)
-        mvi.scope.launch(Dispatchers.Main) {
-            keyStore.save(KeyStoreKeys.Locale, value)
-        }
+        keyStore.save(KeyStoreKeys.Locale, value)
     }
 
     private fun changeDefaultListingType(value: ListingType) {
         mvi.updateState { it.copy(defaultListingType = value) }
-        mvi.scope.launch(Dispatchers.Main) {
-            keyStore.save(KeyStoreKeys.DefaultListingType, value.toInt())
-        }
+        keyStore.save(KeyStoreKeys.DefaultListingType, value.toInt())
     }
 
     private fun changeDefaultPostSortType(value: SortType) {
         mvi.updateState { it.copy(defaultPostSortType = value) }
-        mvi.scope.launch(Dispatchers.Main) {
-            keyStore.save(KeyStoreKeys.DefaultPostSortType, value.toInt())
-        }
+        keyStore.save(KeyStoreKeys.DefaultPostSortType, value.toInt())
     }
 
     private fun changeDefaultCommentSortType(value: SortType) {
         mvi.updateState { it.copy(defaultCommentSortType = value) }
-        mvi.scope.launch(Dispatchers.Main) {
-            keyStore.save(KeyStoreKeys.DefaultCommentSortType, value.toInt())
-        }
+        keyStore.save(KeyStoreKeys.DefaultCommentSortType, value.toInt())
     }
 
     private fun changeNavBarTitlesVisible(value: Boolean) {
@@ -140,15 +153,16 @@ class SettingsScreenViewModel(
 
     private fun changeIncludeNsfw(value: Boolean) {
         mvi.updateState { it.copy(includeNsfw = value) }
-        mvi.scope.launch(Dispatchers.Main) {
-            keyStore.save(KeyStoreKeys.IncludeNsfw, value)
-        }
+        keyStore.save(KeyStoreKeys.IncludeNsfw, value)
     }
 
     private fun changeBlurNsfw(value: Boolean) {
         mvi.updateState { it.copy(blurNsfw = value) }
-        mvi.scope.launch(Dispatchers.Main) {
-            keyStore.save(KeyStoreKeys.BlurNsfw, value)
-        }
+        keyStore.save(KeyStoreKeys.BlurNsfw, value)
+    }
+
+    private fun changeDynamicColors(value: Boolean) {
+        themeRepository.changeDynamicColors(value)
+        keyStore.save(KeyStoreKeys.DynamicColors, value)
     }
 }

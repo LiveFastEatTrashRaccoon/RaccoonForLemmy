@@ -11,9 +11,13 @@ interface ThemeRepository {
 
     val navItemTitles: StateFlow<Boolean>
 
+    val dynamicColors: StateFlow<Boolean>
+
     fun changeTheme(value: ThemeState)
 
     fun changeContentFontScale(value: Float)
 
     fun changeNavItemTitles(value: Boolean)
+
+    fun changeDynamicColors(value: Boolean)
 }

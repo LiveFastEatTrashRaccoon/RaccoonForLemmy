@@ -73,13 +73,17 @@ fun App() {
 
     val themeRepository = remember { getThemeRepository() }
     val navTitles = keyStore[KeyStoreKeys.NavItemTitlesVisible, false]
+    val dynamicColors = keyStore[KeyStoreKeys.DynamicColors, false]
     LaunchedEffect(Unit) {
         themeRepository.changeNavItemTitles(navTitles)
+        themeRepository.changeDynamicColors(dynamicColors)
     }
+    val useDynamicColors by themeRepository.dynamicColors.collectAsState()
 
     AppTheme(
         theme = currentTheme,
         contentFontScale = fontScale,
+        useDynamicColors = useDynamicColors,
     ) {
         val lang by languageRepository.currentLanguage.collectAsState()
         LaunchedEffect(lang) {}

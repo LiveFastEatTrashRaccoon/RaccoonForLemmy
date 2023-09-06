@@ -12,4 +12,5 @@ object KeyStoreKeys {
     const val IncludeNsfw = "includeNsfw"
     const val BlurNsfw = "blurNsfw"
     const val NavItemTitlesVisible = "navItemTitlesVisible"
+    const val DynamicColors = "dynamicColors"
 }

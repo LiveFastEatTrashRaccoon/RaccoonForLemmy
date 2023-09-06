@@ -6,12 +6,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 
 @Composable
 fun AppTheme(
     theme: ThemeState,
     contentFontScale: Float,
+    useDynamicColors: Boolean,
     content: @Composable () -> Unit,
 ) {
     val repository = remember {
@@ -22,11 +24,13 @@ fun AppTheme(
     }
 
     val themeState by repository.state.collectAsState()
-    val colorScheme = when (themeState) {
-        ThemeState.Dark -> DarkColors
-        ThemeState.Black -> BlackColors
-        else -> LightColors
-    }
+
+    val colorSchemeProvider = remember { getColorSchemeProvider() }
+    val colorScheme = colorSchemeProvider.getColorScheme(
+        theme = themeState,
+        dynamic = useDynamicColors
+    )
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = typography,

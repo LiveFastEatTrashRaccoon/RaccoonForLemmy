@@ -229,6 +229,21 @@ class SettingsScreen : Screen {
                         }
                     )
 
+                    // dynamic colors
+                    if (uiState.supportsDynamicColors) {
+                        SettingsSwitchRow(
+                            title = stringResource(MR.strings.settings_dynamic_colors),
+                            value = uiState.dynamicColors,
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    SettingsScreenMviModel.Intent.ChangeDynamicColors(
+                                        value
+                                    )
+                                )
+                            }
+                        )
+                    }
+
                     // NSFW options
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_include_nsfw),

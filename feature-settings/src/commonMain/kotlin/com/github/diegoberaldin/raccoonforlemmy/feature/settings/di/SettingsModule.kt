@@ -15,6 +15,7 @@ val settingsTabModule = module {
             themeRepository = get(),
             languageRepository = get(),
             identityRepository = get(),
+            colorSchemeProvider = get(),
         )
     }
 }
