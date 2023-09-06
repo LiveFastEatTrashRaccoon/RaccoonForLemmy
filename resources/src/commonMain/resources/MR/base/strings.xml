@@ -84,6 +84,7 @@
     <string name="settings_navigation_bar_titles_visible">Show navigation bar titles</string>
     <string name="settings_include_nsfw">Include NSFW contents</string>
     <string name="settings_blur_nsfw">Blur NSFW images</string>
+    <string name="settings_app_version">App version</string>
 
     <string name="community_button_subscribe">Subscribe</string>
     <string name="community_button_subscribed">Subscribed</string>
@@ -106,4 +107,7 @@
 
     <string name="create_comment_title">New comment</string>
     <string name="create_comment_body">Comment body</string>
+    <string name="create_post_title">New post</string>
+    <string name="create_post_name">Post title</string>
+    <string name="create_post_body">Post body</string>
 </resources>

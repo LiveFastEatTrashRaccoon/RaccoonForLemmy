@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -81,7 +83,7 @@ class CreateCommentScreen(
             topBar = {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.s),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(
@@ -132,15 +134,21 @@ class CreateCommentScreen(
 
 
                 TextField(
-                    modifier = Modifier.height(300.dp).fillMaxWidth(),
+                    modifier = Modifier.heightIn(min = 300.dp, max = 500.dp).fillMaxWidth(),
                     label = {
                         Text(text = stringResource(MR.strings.create_comment_body))
                     },
+                    textStyle = MaterialTheme.typography.bodyMedium,
                     value = uiState.text,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Ascii,
                         autoCorrect = false,
-                        imeAction = ImeAction.Done,
+                        imeAction = ImeAction.Send,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onSend = {
+                            model.reduce(CreateCommentMviModel.Intent.Send)
+                        }
                     ),
                     onValueChange = { value ->
                         model.reduce(CreateCommentMviModel.Intent.SetText(value))

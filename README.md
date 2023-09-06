@@ -19,10 +19,26 @@ A Kotlin Multiplatform Mobile client for Lemmy.
 <table>
   <tr>
     <td>
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/da834566-6741-4218-99da-ba56b59b7f50" width="310" />
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/6f613ad0-931b-4133-b502-ac7df2cf0484" width="310" />
     </td>
     <td>
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/348b6773-b434-4d11-8c41-868e9aafeb5c" width="310" />
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/78caa9d4-ae02-474d-bd04-45f5935ddbe2" width="310" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/3c146016-934c-4d34-a4a2-bbaa25057cd6" width="310" />
+    </td>
+    <td>
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/008e10e1-ed07-44aa-9cb4-4b1fae49126e" width="310" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/54f932e5-7e4d-4315-bfe4-b9196771f971" width="310" />
+    </td>
+    <td>
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/7fa384ab-cf4d-4aa2-a982-bab38a5616da" width="310" />
     </td>
   </tr>
 </table>
