@@ -95,6 +95,7 @@ internal class ProfilePostsScreen(
                                 onSectionSelected(section)
                             },
                         )
+                        Spacer(modifier = Modifier.height(Spacing.m))
                     }
                 }
                 items(uiState.posts) { post ->

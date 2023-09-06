@@ -3,8 +3,10 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -79,6 +81,7 @@ internal class ProfileSavedScreen(
                             modifier = Modifier.graphicsLayer(translationY = -Spacing.m.toLocalPixel()),
                             user = user,
                         )
+                        Spacer(modifier = Modifier.height(Spacing.s))
                         SectionSelector(
                             titles = listOf(
                                 stringResource(MR.strings.profile_section_posts),
@@ -95,6 +98,7 @@ internal class ProfileSavedScreen(
                                 onSectionSelected(section)
                             },
                         )
+                        Spacer(modifier = Modifier.height(Spacing.m))
                     }
                 }
                 items(uiState.posts) { post ->

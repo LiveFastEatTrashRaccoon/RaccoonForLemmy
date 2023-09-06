@@ -212,14 +212,14 @@ class CommunityDetailScreen(
                                 if (banner.isNotEmpty()) {
                                     val painterResource = asyncPainterResource(banner)
                                     KamelImage(
-                                        modifier = Modifier.fillMaxWidth().aspectRatio(2.25f),
+                                        modifier = Modifier.fillMaxWidth().aspectRatio(2f),
                                         resource = painterResource,
                                         contentScale = ContentScale.FillBounds,
                                         contentDescription = null,
                                     )
                                 } else {
                                     Box(
-                                        modifier = Modifier.fillMaxWidth().aspectRatio(2.5f),
+                                        modifier = Modifier.fillMaxWidth().aspectRatio(2f),
                                     )
                                 }
                                 Icon(

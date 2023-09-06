@@ -88,7 +88,7 @@ fun ProfilePostCard(
                                 brush = Brush.verticalGradient(
                                     colors = listOf(
                                         Color.Transparent,
-                                        MaterialTheme.colorScheme.surface,
+                                        MaterialTheme.colorScheme.surfaceVariant,
                                     ),
                                 ),
                             ),

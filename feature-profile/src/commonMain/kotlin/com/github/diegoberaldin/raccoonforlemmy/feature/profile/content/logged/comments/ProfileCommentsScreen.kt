@@ -87,6 +87,7 @@ internal class ProfileCommentsScreen(
                                 onSectionSelected(section)
                             },
                         )
+                        Spacer(modifier = Modifier.height(Spacing.m))
                     }
                 }
                 items(uiState.comments) { comment ->
