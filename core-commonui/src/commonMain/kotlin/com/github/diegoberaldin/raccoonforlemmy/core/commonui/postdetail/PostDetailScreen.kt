@@ -4,14 +4,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -25,10 +28,13 @@ import androidx.compose.material.icons.filled.Reply
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -49,6 +55,7 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
@@ -65,6 +72,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDet
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 
 class PostDetailScreen(
     private val post: PostModel,
@@ -166,182 +175,216 @@ class PostDetailScreen(
                                 fontScale = fontScale,
                             ),
                         ) {
-                            PostCardTitle(post)
-                            PostCardSubtitle(
-                                community = post.community,
-                                creator = post.creator?.copy(avatar = null),
-                                onOpenCommunity = { community ->
-                                    navigator.push(
-                                        CommunityDetailScreen(
-                                            community = community,
-                                            onBack = {
-                                                navigator.pop()
-                                            },
-                                        ),
-                                    )
-                                },
-                                onOpenCreator = { user ->
-                                    navigator.push(
-                                        UserDetailScreen(
-                                            user = user,
-                                            onBack = {
-                                                navigator.pop()
-                                            },
-                                        ),
-                                    )
-                                },
-                            )
-                            PostCardImage(
-                                post = post,
-                                blurNsfw = false,
-                            )
-                            PostCardBody(
-                                text = post.text,
-                            )
-                            PostCardFooter(
-                                comments = post.comments,
-                                score = post.score,
-                                upVoted = post.myVote > 0,
-                                downVoted = post.myVote < 0,
-                                saved = post.saved,
-                                date = post.publishDate,
-                                onUpVote = {
-                                    model.reduce(
-                                        PostDetailMviModel.Intent.UpVotePost(
-                                            post = post,
-                                            feedback = true,
-                                        ),
-                                    )
-                                },
-                                onDownVote = {
-                                    model.reduce(
-                                        PostDetailMviModel.Intent.DownVotePost(
-                                            post = post,
-                                            feedback = true,
-                                        ),
-                                    )
-                                },
-                                onSave = {
-                                    model.reduce(
-                                        PostDetailMviModel.Intent.SavePost(
-                                            post = post,
-                                            feedback = true,
-                                        ),
-                                    )
-                                },
-                            )
-                        }
-                    }
-                    items(uiState.comments) { comment ->
-                        SwipeableCard(
-                            modifier = Modifier.fillMaxWidth(),
-                            backgroundColor = {
-                                when (it) {
-                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
-                                    DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
-                                    DismissValue.Default -> Color.Transparent
-                                }
-                            },
-                            onGestureBegin = {
-                                model.reduce(PostDetailMviModel.Intent.HapticIndication)
-                            },
-                            onDismissToStart = {
-                                model.reduce(
-                                    PostDetailMviModel.Intent.UpVoteComment(
-                                        comment = comment,
-                                    ),
+                            Card(
+                                modifier = Modifier.background(
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                    shape = RoundedCornerShape(CornerSize.m),
+                                ).padding(
+                                    vertical = Spacing.lHalf,
+                                    horizontal = Spacing.s,
+                                ),
+                            ) {
+                                PostCardTitle(post)
+                                PostCardSubtitle(
+                                    community = post.community,
+                                    creator = post.creator?.copy(avatar = null),
+                                    onOpenCommunity = { community ->
+                                        navigator.push(
+                                            CommunityDetailScreen(
+                                                community = community,
+                                                onBack = {
+                                                    navigator.pop()
+                                                },
+                                            ),
+                                        )
+                                    },
+                                    onOpenCreator = { user ->
+                                        navigator.push(
+                                            UserDetailScreen(
+                                                user = user,
+                                                onBack = {
+                                                    navigator.pop()
+                                                },
+                                            ),
+                                        )
+                                    },
                                 )
-                            },
-                            onDismissToEnd = {
-                                model.reduce(
-                                    PostDetailMviModel.Intent.DownVoteComment(
-                                        comment = comment,
-                                    ),
+                                PostCardImage(
+                                    post = post,
+                                    blurNsfw = false,
                                 )
-                            },
-                            swipeContent = { direction ->
-                                val icon = when (direction) {
-                                    DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
-                                    DismissDirection.EndToStart -> Icons.Default.ArrowCircleUp
-                                }
-                                val (iconModifier, iconTint) = when {
-                                    direction == DismissDirection.StartToEnd && post.myVote < 0 -> {
-                                        Modifier.background(
-                                            color = Color.Transparent,
-                                            shape = CircleShape,
-                                        ) to MaterialTheme.colorScheme.onTertiary
-                                    }
-
-                                    direction == DismissDirection.StartToEnd -> {
-                                        Modifier.background(
-                                            color = MaterialTheme.colorScheme.onTertiary,
-                                            shape = CircleShape,
-                                        ) to MaterialTheme.colorScheme.tertiary
-                                    }
-
-                                    direction == DismissDirection.EndToStart && post.myVote > 0 -> {
-                                        Modifier.background(
-                                            color = Color.Transparent,
-                                            shape = CircleShape,
-                                        ) to MaterialTheme.colorScheme.onSecondary
-                                    }
-
-                                    else -> {
-                                        Modifier.background(
-                                            color = MaterialTheme.colorScheme.onSecondary,
-                                            shape = CircleShape,
-                                        ) to MaterialTheme.colorScheme.secondary
-                                    }
-                                }
-                                Icon(
-                                    modifier = iconModifier,
-                                    imageVector = icon,
-                                    contentDescription = null,
-                                    tint = iconTint,
+                                PostCardBody(
+                                    text = post.text,
                                 )
-                            },
-                            content = {
-                                CommentCard(
-                                    comment = comment,
+                                PostCardFooter(
+                                    comments = post.comments,
+                                    score = post.score,
+                                    upVoted = post.myVote > 0,
+                                    downVoted = post.myVote < 0,
+                                    saved = post.saved,
+                                    date = post.publishDate,
                                     onUpVote = {
                                         model.reduce(
-                                            PostDetailMviModel.Intent.UpVoteComment(
-                                                comment = comment,
+                                            PostDetailMviModel.Intent.UpVotePost(
+                                                post = post,
                                                 feedback = true,
                                             ),
                                         )
                                     },
                                     onDownVote = {
                                         model.reduce(
-                                            PostDetailMviModel.Intent.DownVoteComment(
-                                                comment = comment,
+                                            PostDetailMviModel.Intent.DownVotePost(
+                                                post = post,
                                                 feedback = true,
                                             ),
                                         )
                                     },
                                     onSave = {
                                         model.reduce(
-                                            PostDetailMviModel.Intent.SaveComment(
-                                                comment = comment,
+                                            PostDetailMviModel.Intent.SavePost(
+                                                post = post,
                                                 feedback = true,
                                             ),
                                         )
                                     },
-                                    onReply = {
-                                        bottomSheetNavigator.show(
-                                            CreateCommentScreen(
-                                                originalPost = post,
-                                                originalComment = comment,
-                                                onCommentCreated = {
-                                                    bottomSheetNavigator.hide()
-                                                    model.reduce(PostDetailMviModel.Intent.Refresh)
-                                                }
+                                )
+                            }
+                        }
+                    }
+                    itemsIndexed(uiState.comments) { idx, comment ->
+                        Column {
+                            SwipeableCard(
+                                modifier = Modifier.fillMaxWidth(),
+                                backgroundColor = {
+                                    when (it) {
+                                        DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
+                                        DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
+                                        DismissValue.Default -> Color.Transparent
+                                    }
+                                },
+                                onGestureBegin = {
+                                    model.reduce(PostDetailMviModel.Intent.HapticIndication)
+                                },
+                                onDismissToStart = {
+                                    model.reduce(
+                                        PostDetailMviModel.Intent.UpVoteComment(
+                                            comment = comment,
+                                        ),
+                                    )
+                                },
+                                onDismissToEnd = {
+                                    model.reduce(
+                                        PostDetailMviModel.Intent.DownVoteComment(
+                                            comment = comment,
+                                        ),
+                                    )
+                                },
+                                swipeContent = { direction ->
+                                    val icon = when (direction) {
+                                        DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
+                                        DismissDirection.EndToStart -> Icons.Default.ArrowCircleUp
+                                    }
+                                    val (iconModifier, iconTint) = when {
+                                        direction == DismissDirection.StartToEnd && post.myVote < 0 -> {
+                                            Modifier.background(
+                                                color = Color.Transparent,
+                                                shape = CircleShape,
+                                            ) to MaterialTheme.colorScheme.onTertiary
+                                        }
+
+                                        direction == DismissDirection.StartToEnd -> {
+                                            Modifier.background(
+                                                color = MaterialTheme.colorScheme.onTertiary,
+                                                shape = CircleShape,
+                                            ) to MaterialTheme.colorScheme.tertiary
+                                        }
+
+                                        direction == DismissDirection.EndToStart && post.myVote > 0 -> {
+                                            Modifier.background(
+                                                color = Color.Transparent,
+                                                shape = CircleShape,
+                                            ) to MaterialTheme.colorScheme.onSecondary
+                                        }
+
+                                        else -> {
+                                            Modifier.background(
+                                                color = MaterialTheme.colorScheme.onSecondary,
+                                                shape = CircleShape,
+                                            ) to MaterialTheme.colorScheme.secondary
+                                        }
+                                    }
+                                    Icon(
+                                        modifier = iconModifier,
+                                        imageVector = icon,
+                                        contentDescription = null,
+                                        tint = iconTint,
+                                    )
+                                },
+                                content = {
+                                    CommentCard(
+                                        comment = comment,
+                                        onUpVote = {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.UpVoteComment(
+                                                    comment = comment,
+                                                    feedback = true,
+                                                ),
                                             )
+                                        },
+                                        onDownVote = {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.DownVoteComment(
+                                                    comment = comment,
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        },
+                                        onSave = {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.SaveComment(
+                                                    comment = comment,
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        },
+                                        onReply = {
+                                            bottomSheetNavigator.show(
+                                                CreateCommentScreen(
+                                                    originalPost = post,
+                                                    originalComment = comment,
+                                                    onCommentCreated = {
+                                                        bottomSheetNavigator.hide()
+                                                        model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                    }
+                                                )
+                                            )
+                                        }
+                                    )
+                                },
+                            )
+                            if ((comment.comments ?: 0) > 0
+                                && comment.depth == PostDetailViewModel.COMMENT_DEPTH
+                                && (idx < uiState.comments.lastIndex && uiState.comments[idx + 1].depth < comment.depth)
+                            ) {
+                                Row {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                    Button(
+                                        onClick = {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.FetchMoreComments(
+                                                    parentId = comment.id
+                                                )
+                                            )
+                                        }) {
+                                        Text(
+                                            text = stringResource(MR.strings.post_detail_load_more_comments),
+                                            style = MaterialTheme.typography.labelMedium,
                                         )
                                     }
-                                )
-                            },
-                        )
+                                    Spacer(modifier = Modifier.weight(1f))
+                                }
+                            }
+                        }
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
@@ -360,7 +403,7 @@ class PostDetailScreen(
                         }
                     }
                     item {
-                        Spacer(modifier = Modifier.height(Spacing.xxl))
+                        Spacer(modifier = Modifier.height(Spacing.xxxl))
                     }
                 }
 

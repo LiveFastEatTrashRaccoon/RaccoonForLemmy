@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
@@ -38,13 +39,13 @@ fun PostCardSubtitle(
     val iconSize = 16.dp
     if (communityName.isNotEmpty() || creatorName.isNotEmpty()) {
         Row(
-            modifier = modifier.padding(vertical = Spacing.xs),
+            modifier = modifier.padding(vertical = Spacing.xxxs),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             if (communityName.isNotEmpty()) {
                 Surface(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    color = Color.Transparent,
                     modifier = Modifier
                         .onClick {
                             if (community != null) {
@@ -91,7 +92,7 @@ fun PostCardSubtitle(
                     )
                 }
                 Surface(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    color = Color.Transparent,
                     modifier = Modifier
                         .onClick {
                             if (creator != null) {

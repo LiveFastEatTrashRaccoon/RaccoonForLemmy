@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
@@ -42,27 +43,30 @@ fun PostCard(
     onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
 ) {
-    Card(
-        modifier = modifier.background(
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            shape = RoundedCornerShape(CornerSize.m),
-        ).padding(
-            vertical = Spacing.lHalf,
-            horizontal = Spacing.s,
+    val themeRepository = remember { getThemeRepository() }
+    val fontScale by themeRepository.contentFontScale.collectAsState()
+    CompositionLocalProvider(
+        LocalDensity provides Density(
+            density = LocalDensity.current.density,
+            fontScale = fontScale,
         ),
     ) {
-        val themeRepository = remember { getThemeRepository() }
-        val fontScale by themeRepository.contentFontScale.collectAsState()
-        CompositionLocalProvider(
-            LocalDensity provides Density(
-                density = LocalDensity.current.density,
-                fontScale = fontScale,
+        Card(
+            modifier = modifier.background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(CornerSize.m),
+            ).padding(
+                vertical = Spacing.xxs,
+                horizontal = Spacing.s,
             ),
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
-                PostCardTitle(post)
+                PostCardTitle(
+                    modifier = Modifier.padding(top = Spacing.s),
+                    post = post
+                )
                 PostCardSubtitle(
                     community = post.community,
                     creator = post.creator?.copy(avatar = null),
@@ -70,6 +74,7 @@ fun PostCard(
                     onOpenCreator = onOpenCreator,
                 )
                 PostCardImage(
+                    modifier = Modifier.clip(RoundedCornerShape(CornerSize.xl)),
                     post = post,
                     blurNsfw = blurNsfw,
                 )
