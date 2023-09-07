@@ -45,6 +45,7 @@ class ProfileCommentsViewModel(
     private fun loadNextPage() {
         val currentState = mvi.uiState.value
         if (!currentState.canFetchMore || currentState.loading) {
+            mvi.updateState { it.copy(refreshing = false) }
             return
         }
 

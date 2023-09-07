@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
+package com.github.diegoberaldin.raccoonforlemmy.feature.search.communitylist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -24,8 +24,7 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-internal fun PostsTopBar(
-    currentInstance: String,
+internal fun CommunityTopBar(
     listingType: ListingType,
     sortType: SortType,
     onSelectListingType: () -> Unit,
@@ -51,30 +50,25 @@ internal fun PostsTopBar(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
                 Text(
-                    text = listingType.toReadableName(),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    text = stringResource(MR.strings.instance_detail_communities),
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 Text(
-                    text = stringResource(
-                        MR.strings.home_instance_via,
-                        currentInstance,
-                    ),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    text = listingType.toReadableName(),
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Image(
+                modifier = Modifier.onClick {
+                    onSelectSortType()
+                },
+                imageVector = sortType.toIcon(),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+            )
         }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Image(
-            modifier = Modifier.onClick {
-                onSelectSortType()
-            },
-            imageVector = sortType.toIcon(),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-        )
     }
 }

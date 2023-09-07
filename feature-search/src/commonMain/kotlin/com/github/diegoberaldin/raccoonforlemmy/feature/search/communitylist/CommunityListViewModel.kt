@@ -8,6 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeySto
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +70,7 @@ class CommunityListViewModel(
 
             is CommunityListMviModel.Intent.SetSearch -> setSearch(intent.value)
             is CommunityListMviModel.Intent.SetListingType -> changeListingType(intent.value)
+            is CommunityListMviModel.Intent.SetSortType -> changeSortType(intent.value)
         }
     }
 
@@ -88,6 +90,13 @@ class CommunityListViewModel(
         }
     }
 
+    private fun changeSortType(value: SortType) {
+        mvi.updateState { it.copy(sortType = value) }
+        mvi.scope.launch(Dispatchers.IO) {
+            refresh()
+        }
+    }
+
     private suspend fun refresh() {
         currentPage = 1
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
@@ -97,6 +106,7 @@ class CommunityListViewModel(
     private suspend fun loadNextPage() {
         val currentState = mvi.uiState.value
         if (!currentState.canFetchMore || currentState.loading) {
+            mvi.updateState { it.copy(refreshing = false) }
             return
         }
         mvi.updateState { it.copy(loading = true) }

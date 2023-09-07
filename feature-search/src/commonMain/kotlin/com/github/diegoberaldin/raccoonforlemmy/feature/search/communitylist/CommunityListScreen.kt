@@ -1,10 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.communitylist
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,7 +33,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Density
@@ -52,8 +49,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getSearchScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -71,48 +67,35 @@ class CommunityListScreen : Screen {
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
             topBar = {
-                Row(
-                    modifier = Modifier.height(50.dp).padding(
-                        horizontal = Spacing.s,
-                    ),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Row(
-                        modifier = Modifier.onClick {
-                            bottomNavigator.show(
-                                ListingTypeBottomSheet(
-                                    isLogged = uiState.isLogged,
-                                    onHide = {
-                                        bottomNavigator.hide()
-                                    },
-                                    onSelected = {
-                                        model.reduce(CommunityListMviModel.Intent.SetListingType(it))
-                                    },
-                                ),
-                            )
-                        },
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(Spacing.m),
-                    ) {
-                        Image(
-                            imageVector = uiState.listingType.toIcon(),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                CommunityTopBar(
+                    listingType = uiState.listingType,
+                    sortType = uiState.sortType,
+                    onSelectListingType = {
+                        bottomNavigator.show(
+                            ListingTypeBottomSheet(
+                                isLogged = uiState.isLogged,
+                                onHide = {
+                                    bottomNavigator.hide()
+                                },
+                                onSelected = {
+                                    model.reduce(CommunityListMviModel.Intent.SetListingType(it))
+                                },
+                            ),
                         )
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                        ) {
-                            Text(
-                                text = stringResource(MR.strings.instance_detail_communities),
-                                style = MaterialTheme.typography.titleLarge,
-                            )
-                            Text(
-                                text = uiState.listingType.toReadableName(),
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                        }
-                    }
-                }
+                    },
+                    onSelectSortType = {
+                        bottomNavigator.show(
+                            SortBottomSheet(
+                                onHide = {
+                                    bottomNavigator.hide()
+                                },
+                                onSelected = {
+                                    model.reduce(CommunityListMviModel.Intent.SetSortType(it))
+                                },
+                            ),
+                        )
+                    },
+                )
             },
         ) { padding ->
             Column(

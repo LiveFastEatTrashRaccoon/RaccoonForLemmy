@@ -12,6 +12,7 @@ interface CommunityListMviModel :
         object LoadNextPage : Intent
         data class SetSearch(val value: String) : Intent
         data class SetListingType(val value: ListingType) : Intent
+        data class SetSortType(val value: SortType) : Intent
     }
 
     data class UiState(
