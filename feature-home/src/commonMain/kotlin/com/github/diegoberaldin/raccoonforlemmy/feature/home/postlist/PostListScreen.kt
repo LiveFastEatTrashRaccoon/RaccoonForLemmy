@@ -26,12 +26,15 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -50,7 +53,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getHomeScreenModel
 
-class PostListScreen : Screen {
+class PostListScreen(
+    val bottomBarNestedScrollConnection: NestedScrollConnection,
+) : Screen {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
@@ -59,6 +64,7 @@ class PostListScreen : Screen {
         val uiState by model.uiState.collectAsState()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val navigator = LocalNavigator.current?.parent ?: throw Exception("Navigator not found")
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
@@ -67,6 +73,7 @@ class PostListScreen : Screen {
                     currentInstance = uiState.instance,
                     listingType = uiState.listingType,
                     sortType = uiState.sortType,
+                    scrollBehavior = scrollBehavior,
                     onSelectListingType = {
                         bottomSheetNavigator.show(
                             ListingTypeBottomSheet(
@@ -100,7 +107,11 @@ class PostListScreen : Screen {
                 model.reduce(PostListMviModel.Intent.Refresh)
             })
             Box(
-                modifier = Modifier.padding(padding).pullRefresh(pullRefreshState),
+                modifier = Modifier
+                    .padding(padding)
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .nestedScroll(bottomBarNestedScrollConnection)
+                    .pullRefresh(pullRefreshState),
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
