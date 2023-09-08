@@ -26,7 +26,7 @@ class PostsRepository(
         type: ListingType = ListingType.Local,
         sort: SortType = SortType.Active,
         communityId: Int? = null,
-    ): List<PostModel> {
+    ): List<PostModel> = runCatching {
         val response = services.post.getAll(
             auth = auth,
             communityId = communityId,
@@ -36,8 +36,8 @@ class PostsRepository(
             sort = sort.toDto(),
         )
         val dto = response.body()?.posts ?: emptyList()
-        return dto.map { it.toModel() }
-    }
+        dto.map { it.toModel() }
+    }.getOrElse { emptyList() }
 
     suspend fun getAllInInstance(
         instance: String = "",
@@ -46,7 +46,7 @@ class PostsRepository(
         type: ListingType = ListingType.Local,
         sort: SortType = SortType.Active,
         communityId: Int? = null,
-    ): List<PostModel> {
+    ): List<PostModel> = runCatching {
         customServices.changeInstance(instance)
         val response = customServices.post.getAll(
             communityId = communityId,
@@ -56,8 +56,8 @@ class PostsRepository(
             sort = sort.toDto(),
         )
         val dto = response.body()?.posts ?: emptyList()
-        return dto.map { it.toModel() }
-    }
+        dto.map { it.toModel() }
+    }.getOrElse { emptyList() }
 
     fun asUpVoted(post: PostModel, voted: Boolean) = post.copy(
         myVote = if (voted) 1 else 0,
@@ -69,7 +69,7 @@ class PostsRepository(
         },
     )
 
-    suspend fun upVote(post: PostModel, auth: String, voted: Boolean) {
+    suspend fun upVote(post: PostModel, auth: String, voted: Boolean) = runCatching {
         val data = CreatePostLikeForm(
             postId = post.id,
             score = if (voted) 1 else 0,
@@ -88,7 +88,7 @@ class PostsRepository(
         },
     )
 
-    suspend fun downVote(post: PostModel, auth: String, downVoted: Boolean) {
+    suspend fun downVote(post: PostModel, auth: String, downVoted: Boolean) = runCatching {
         val data = CreatePostLikeForm(
             postId = post.id,
             score = if (downVoted) -1 else 0,
@@ -99,7 +99,7 @@ class PostsRepository(
 
     fun asSaved(post: PostModel, saved: Boolean): PostModel = post.copy(saved = saved)
 
-    suspend fun save(post: PostModel, auth: String, saved: Boolean) {
+    suspend fun save(post: PostModel, auth: String, saved: Boolean) = runCatching {
         val data = SavePostForm(
             postId = post.id,
             save = saved,

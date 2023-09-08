@@ -20,13 +20,13 @@ class UserRepository(
     suspend fun get(
         id: Int,
         auth: String? = null,
-    ): UserModel? {
+    ): UserModel? = runCatching {
         val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
         )
-        val dto = response.body() ?: return null
-        return UserModel(
+        val dto = response.body() ?: return@runCatching null
+        UserModel(
             id = dto.personView.person.id,
             name = dto.personView.person.name,
             avatar = dto.personView.person.avatar,
@@ -35,7 +35,7 @@ class UserRepository(
             score = dto.personView.counts.toModel(),
             accountAge = dto.personView.person.published,
         )
-    }
+    }.getOrNull()
 
     suspend fun getPosts(
         id: Int,
@@ -44,7 +44,7 @@ class UserRepository(
         limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
         savedOnly: Boolean = false,
-    ): List<PostModel> {
+    ): List<PostModel> = runCatching {
         val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
@@ -53,9 +53,9 @@ class UserRepository(
             sort = sort.toCommentDto(),
             savedOnly = savedOnly,
         )
-        val dto = response.body() ?: return emptyList()
-        return dto.posts.map { it.toModel() }
-    }
+        val dto = response.body() ?: return@runCatching emptyList()
+        dto.posts.map { it.toModel() }
+    }.getOrElse { emptyList() }
 
     suspend fun getComments(
         id: Int,
@@ -63,7 +63,7 @@ class UserRepository(
         page: Int,
         limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
-    ): List<CommentModel> {
+    ): List<CommentModel> = runCatching {
         val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
@@ -71,9 +71,9 @@ class UserRepository(
             limit = limit,
             sort = sort.toCommentDto(),
         )
-        val dto = response.body() ?: return emptyList()
-        return dto.comments.map { it.toModel() }
-    }
+        val dto = response.body() ?: return@runCatching emptyList()
+        dto.comments.map { it.toModel() }
+    }.getOrElse { emptyList() }
 
     suspend fun getMentions(
         auth: String? = null,
@@ -81,7 +81,7 @@ class UserRepository(
         limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
         unreadOnly: Boolean = true,
-    ): List<PersonMentionModel> {
+    ): List<PersonMentionModel> = runCatching {
         val response = serviceProvider.user.getMentions(
             auth = auth,
             limit = limit,
@@ -89,9 +89,9 @@ class UserRepository(
             page = page,
             unreadOnly = unreadOnly,
         )
-        val dto = response.body() ?: return emptyList()
-        return dto.mentions.map { it.toModel() }
-    }
+        val dto = response.body() ?: return@runCatching emptyList()
+        dto.mentions.map { it.toModel() }
+    }.getOrElse { emptyList() }
 
     suspend fun getReplies(
         auth: String? = null,
@@ -99,7 +99,7 @@ class UserRepository(
         limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
         unreadOnly: Boolean = true,
-    ): List<PersonMentionModel> {
+    ): List<PersonMentionModel> = runCatching {
         val response = serviceProvider.user.getReplies(
             auth = auth,
             limit = limit,
@@ -107,9 +107,9 @@ class UserRepository(
             page = page,
             unreadOnly = unreadOnly,
         )
-        val dto = response.body() ?: return emptyList()
-        return dto.replies.map { it.toModel() }
-    }
+        val dto = response.body() ?: return@runCatching emptyList()
+        dto.replies.map { it.toModel() }
+    }.getOrElse { emptyList() }
 
     suspend fun readAll(
         auth: String? = null,
@@ -118,7 +118,7 @@ class UserRepository(
         serviceProvider.user.markAllAsRead(data)
     }
 
-    suspend fun setMentionRead(read: Boolean, mentionId: Int, auth: String? = null) {
+    suspend fun setMentionRead(read: Boolean, mentionId: Int, auth: String? = null) = runCatching {
         val data = MarkPersonMentionAsReadForm(
             mentionId = mentionId,
             read = read,
@@ -127,7 +127,7 @@ class UserRepository(
         serviceProvider.user.markPersonMentionAsRead(data)
     }
 
-    suspend fun setReplyRead(read: Boolean, replyId: Int, auth: String? = null) {
+    suspend fun setReplyRead(read: Boolean, replyId: Int, auth: String? = null) = runCatching {
         val data = MarkCommentReplyAsReadForm(
             replyId = replyId,
             read = read,

@@ -27,7 +27,7 @@ class CommunityRepository(
         limit: Int = DEFAULT_PAGE_SIZE,
         listingType: ListingType = ListingType.All,
         sortType: SortType = SortType.Active,
-    ): List<CommunityModel> {
+    ): List<CommunityModel> = runCatching {
         val response = services.search.search(
             q = query,
             auth = auth,
@@ -37,10 +37,10 @@ class CommunityRepository(
             listingType = listingType.toDto(),
             sort = sortType.toDto(),
         ).body()
-        return response?.communities?.map {
+        response?.communities?.map {
             it.toModel()
         }.orEmpty()
-    }
+    }.getOrElse { emptyList() }
 
     suspend fun getAllInInstance(
         instance: String = "",
@@ -48,7 +48,7 @@ class CommunityRepository(
         page: Int,
         limit: Int = DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
-    ): List<CommunityModel> {
+    ): List<CommunityModel> = runCatching {
         customServices.changeInstance(instance)
         val response = customServices.community.getAll(
             auth = auth,
@@ -56,54 +56,54 @@ class CommunityRepository(
             limit = limit,
             sort = sort.toDto(),
         ).body()
-        return response?.communities?.map {
+        response?.communities?.map {
             it.toModel()
         }.orEmpty()
-    }
+    }.getOrElse { emptyList() }
 
     suspend fun getSubscribed(
         auth: String? = null,
-    ): List<CommunityModel> {
+    ): List<CommunityModel> = runCatching {
         val response = services.site.get(auth).body()
-        return response?.myUser?.follows?.map { it.community.toModel() }.orEmpty()
-    }
+        response?.myUser?.follows?.map { it.community.toModel() }.orEmpty()
+    }.getOrElse { emptyList() }
 
     suspend fun get(
         auth: String? = null,
         id: Int,
-    ): CommunityModel? {
+    ): CommunityModel? = runCatching {
         val response = services.community.get(
             auth = auth,
             id = id,
         ).body()
-        return response?.communityView?.toModel()
-    }
+        response?.communityView?.toModel()
+    }.getOrNull()
 
     suspend fun subscribe(
         auth: String? = null,
         id: Int,
-    ): CommunityModel? {
+    ): CommunityModel? = runCatching {
         val data = FollowCommunityForm(
             auth = auth.orEmpty(),
             communityId = id,
             follow = true,
         )
         val response = services.community.follow(data)
-        return response.body()?.communityView?.toModel()
-    }
+        response.body()?.communityView?.toModel()
+    }.getOrNull()
 
     suspend fun unsubscribe(
         auth: String? = null,
         id: Int,
-    ): CommunityModel? {
+    ): CommunityModel? = runCatching {
         val data = FollowCommunityForm(
             auth = auth.orEmpty(),
             communityId = id,
             follow = false,
         )
         val response = services.community.follow(data)
-        return response.body()?.communityView?.toModel()
-    }
+        response.body()?.communityView?.toModel()
+    }.getOrNull()
 }
 
 private fun CommunityView.toModel() = community.toModel().copy(

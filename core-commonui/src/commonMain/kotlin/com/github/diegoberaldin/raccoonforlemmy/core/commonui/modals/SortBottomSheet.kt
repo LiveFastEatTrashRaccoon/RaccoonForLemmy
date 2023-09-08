@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -99,7 +102,9 @@ class SortBottomSheet(
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Image(
-                            imageVector = value.toIcon(),
+                            imageVector = if (value == SortType.Top.Generic && expandTop) {
+                               Icons.Default.ChevronRight
+                            } else value.toIcon(),
                             contentDescription = null,
                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )

@@ -26,7 +26,7 @@ class CommentRepository(
         type: ListingType = ListingType.All,
         sort: SortType = SortType.New,
         maxDepth: Int = 1,
-    ): List<CommentModel> {
+    ): List<CommentModel> = runCatching {
         val response = services.comment.getAll(
             auth = auth,
             postId = postId,
@@ -37,8 +37,8 @@ class CommentRepository(
             maxDepth = maxDepth,
         )
         val dto = response.body()?.comments ?: emptyList()
-        return dto.map { it.toModel() }
-    }
+        dto.map { it.toModel() }
+    }.getOrElse { emptyList() }
 
     suspend fun getChildren(
         parentId: Int,
@@ -47,7 +47,7 @@ class CommentRepository(
         type: ListingType = ListingType.All,
         sort: SortType = SortType.New,
         maxDepth: Int = 1,
-    ): List<CommentModel> {
+    ): List<CommentModel> = runCatching {
         val response = services.comment.getAll(
             auth = auth,
             parentId = parentId,
@@ -57,8 +57,8 @@ class CommentRepository(
             maxDepth = maxDepth,
         )
         val dto = response.body()?.comments ?: emptyList()
-        return dto.map { it.toModel() }
-    }
+        dto.map { it.toModel() }
+    }.getOrElse { emptyList() }
 
     fun asUpVoted(comment: CommentModel, voted: Boolean) = comment.copy(
         myVote = if (voted) 1 else 0,
@@ -89,7 +89,7 @@ class CommentRepository(
         },
     )
 
-    suspend fun downVote(comment: CommentModel, auth: String, downVoted: Boolean) {
+    suspend fun downVote(comment: CommentModel, auth: String, downVoted: Boolean) = runCatching {
         val data = CreateCommentLikeForm(
             commentId = comment.id,
             score = if (downVoted) -1 else 0,
@@ -100,7 +100,7 @@ class CommentRepository(
 
     fun asSaved(comment: CommentModel, saved: Boolean) = comment.copy(saved = saved)
 
-    suspend fun save(comment: CommentModel, auth: String, saved: Boolean) {
+    suspend fun save(comment: CommentModel, auth: String, saved: Boolean) = runCatching {
         val data = SaveCommentForm(
             commentId = comment.id,
             save = saved,

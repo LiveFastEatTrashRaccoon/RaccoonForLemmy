@@ -19,7 +19,6 @@ internal class DefaultAuthRepository(
         )
         val response = services.auth.login(data)
         if (!response.isSuccessful) {
-            // TODO: better API error handling
             val error = response.errorBody().toString()
             throw Exception(error)
         }
