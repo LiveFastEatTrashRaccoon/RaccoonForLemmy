@@ -180,17 +180,18 @@ class PostListScreen : Screen {
                                 )
                             },
                             content = {
-                                PostCard(modifier = Modifier.onClick {
-                                    navigator?.push(
-                                        PostDetailScreen(
-                                            post = post,
-                                        ).apply {
-                                            onBack = {
-                                                navigator.pop()
-                                            }
-                                        },
-                                    )
-                                },
+                                PostCard(
+                                    modifier = Modifier.onClick {
+                                        navigator?.push(
+                                            PostDetailScreen(
+                                                post = post,
+                                            ).apply {
+                                                onBack = {
+                                                    navigator.pop()
+                                                }
+                                            },
+                                        )
+                                    },
                                     post = post,
                                     blurNsfw = uiState.blurNsfw,
                                     onOpenCommunity = { community ->

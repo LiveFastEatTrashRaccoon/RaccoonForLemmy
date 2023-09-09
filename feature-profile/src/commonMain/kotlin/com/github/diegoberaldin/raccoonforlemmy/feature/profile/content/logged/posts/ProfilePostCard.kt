@@ -37,6 +37,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 @Composable
 fun ProfilePostCard(
     post: PostModel,
+    modifier: Modifier = Modifier,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
 ) {
     val themeRepository = remember { getThemeRepository() }
@@ -48,7 +49,7 @@ fun ProfilePostCard(
         ),
     ) {
         Card(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .background(
                     color = MaterialTheme.colorScheme.surfaceVariant,
