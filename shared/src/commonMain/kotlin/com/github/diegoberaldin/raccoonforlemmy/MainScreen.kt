@@ -25,7 +25,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepos
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_surface
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_dark_surface
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_light_surface
-import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getBottomNavCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
@@ -52,9 +52,9 @@ internal class MainScreen : Screen {
                 }
             }
         }
-        val bottomNavBarCoordinator = remember { getBottomNavCoordinator() }
+        val bottomNavBarCoordinator = remember { getNavigationCoordinator() }
         LaunchedEffect(bottomNavBarCoordinator) {
-            bottomNavBarCoordinator.setConnection(bottomBarNestedScrollConnection)
+            bottomNavBarCoordinator.setBottomBarScrollConnection(bottomBarNestedScrollConnection)
         }
 
         TabNavigator(HomeTab) {

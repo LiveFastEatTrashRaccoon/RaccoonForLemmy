@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -84,7 +85,7 @@ internal class ProfileContentScreen : Screen {
             ) {
                 if (!uiState.initial) {
                     val user = uiState.currentUser
-                    if (user == null) {
+                    val screen = if (user == null) {
                         ProfileNotLoggedContent().apply {
                             onLogin = {
                                 bottomSheetNavigator.show(
@@ -95,12 +96,13 @@ internal class ProfileContentScreen : Screen {
                                     ),
                                 )
                             }
-                        }.Content()
+                        }
                     } else {
                         ProfileLoggedScreen(
                             user = user,
-                        ).Content()
+                        )
                     }
+                    Navigator(screen)
                 }
             }
         }

@@ -40,6 +40,6 @@ object InboxTab : Tab {
 
     @Composable
     override fun Content() {
-        InboxScreen().Content()
+        Navigator(InboxScreen())
     }
 }

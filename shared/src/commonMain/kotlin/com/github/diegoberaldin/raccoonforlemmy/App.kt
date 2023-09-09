@@ -8,11 +8,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import cafe.adriel.voyager.navigator.CurrentScreen
+import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.getTemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
@@ -63,6 +66,7 @@ fun App() {
         themeRepository.changeDynamicColors(dynamicColors)
     }
     val useDynamicColors by themeRepository.dynamicColors.collectAsState()
+    val navigationCoordinator = remember { getNavigationCoordinator() }
 
     AppTheme(
         theme = currentTheme,
@@ -73,7 +77,11 @@ fun App() {
         LaunchedEffect(lang) {}
 
         BottomSheetNavigator {
-            Navigator(MainScreen())
+            Navigator(MainScreen()) {
+                val navigator = LocalNavigator.current
+                navigationCoordinator.setRootNavigator(navigator)
+                CurrentScreen()
+            }
         }
     }
 }

@@ -30,6 +30,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,7 +38,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -46,11 +46,11 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.Co
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
-import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getBottomNavCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getHomeScreenModel
 
 class PostListScreen : Screen {
@@ -62,9 +62,9 @@ class PostListScreen : Screen {
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
-        val navigator = LocalNavigator.current?.parent ?: throw Exception("Navigator not found")
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-        val bottomNavCoordinator = getBottomNavCoordinator()
+        val bottomNavCoordinator = remember { getNavigationCoordinator() }
+        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
 
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
@@ -107,16 +107,13 @@ class PostListScreen : Screen {
                 model.reduce(PostListMviModel.Intent.Refresh)
             })
             Box(
-                modifier = Modifier
-                    .padding(padding)
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .let {
-                        val connection = bottomNavCoordinator.getConnection()
+                modifier = Modifier.padding(padding)
+                    .nestedScroll(scrollBehavior.nestedScrollConnection).let {
+                        val connection = bottomNavCoordinator.getBottomBarScrollConnection()
                         if (connection != null) {
                             it.nestedScroll(connection)
                         } else it
-                    }
-                    .pullRefresh(pullRefreshState),
+                    }.pullRefresh(pullRefreshState),
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -183,22 +180,21 @@ class PostListScreen : Screen {
                                 )
                             },
                             content = {
-                                PostCard(
-                                    modifier = Modifier.onClick {
-                                        navigator.push(
-                                            PostDetailScreen(
-                                                post = post,
-                                            ).apply {
-                                                onBack = {
-                                                    navigator.pop()
-                                                }
-                                            },
-                                        )
-                                    },
+                                PostCard(modifier = Modifier.onClick {
+                                    navigator?.push(
+                                        PostDetailScreen(
+                                            post = post,
+                                        ).apply {
+                                            onBack = {
+                                                navigator.pop()
+                                            }
+                                        },
+                                    )
+                                },
                                     post = post,
                                     blurNsfw = uiState.blurNsfw,
                                     onOpenCommunity = { community ->
-                                        navigator.push(
+                                        navigator?.push(
                                             CommunityDetailScreen(
                                                 community = community,
                                             ).apply {
@@ -209,7 +205,7 @@ class PostListScreen : Screen {
                                         )
                                     },
                                     onOpenCreator = { user ->
-                                        navigator.push(
+                                        navigator?.push(
                                             UserDetailScreen(
                                                 user = user,
                                             ).apply {
@@ -245,16 +241,13 @@ class PostListScreen : Screen {
                                     },
                                     onReply = {
                                         bottomSheetNavigator.show(
-                                            CreateCommentScreen(
-                                                originalPost = post,
+                                            CreateCommentScreen(originalPost = post,
                                                 onCommentCreated = {
                                                     bottomSheetNavigator.hide()
                                                     model.reduce(PostListMviModel.Intent.Refresh)
-                                                }
-                                            )
+                                                })
                                         )
-                                    }
-                                )
+                                    })
                             },
                         )
                     }

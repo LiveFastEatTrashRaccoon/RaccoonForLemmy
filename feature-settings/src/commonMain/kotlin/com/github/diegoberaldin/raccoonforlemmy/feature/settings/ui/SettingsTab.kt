@@ -37,6 +37,6 @@ object SettingsTab : Tab {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-       SettingsScreen().Content()
+        Navigator(SettingsScreen())
     }
 }

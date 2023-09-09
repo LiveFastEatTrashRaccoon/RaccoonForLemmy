@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -110,7 +111,7 @@ class UserDetailScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                when (uiState.currentTab) {
+                val screen = when (uiState.currentTab) {
                     UserDetailSection.POSTS -> {
                         UserDetailPostsScreen(
                             modifier = Modifier.weight(1f).fillMaxWidth(),
@@ -120,7 +121,7 @@ class UserDetailScreen(
                             onSectionSelected = {
                                 model.reduce(UserDetailMviModel.Intent.SelectTab(it))
                             }
-                        }.Content()
+                        }
                     }
 
                     UserDetailSection.COMMENTS -> {
@@ -132,9 +133,10 @@ class UserDetailScreen(
                             onSectionSelected = {
                                 model.reduce(UserDetailMviModel.Intent.SelectTab(it))
                             }
-                        }.Content()
+                        }
                     }
                 }
+                Navigator(screen)
             }
         }
     }

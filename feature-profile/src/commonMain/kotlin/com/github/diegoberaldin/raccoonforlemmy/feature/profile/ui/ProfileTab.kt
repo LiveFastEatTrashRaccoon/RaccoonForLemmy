@@ -32,6 +32,6 @@ object ProfileTab : Tab {
 
     @Composable
     override fun Content() {
-        ProfileContentScreen().Content()
+        Navigator(ProfileContentScreen())
     }
 }

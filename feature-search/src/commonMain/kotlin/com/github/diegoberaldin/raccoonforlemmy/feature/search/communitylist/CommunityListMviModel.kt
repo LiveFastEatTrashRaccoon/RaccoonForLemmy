@@ -22,7 +22,7 @@ interface CommunityListMviModel :
         val isLogged: Boolean = false,
         val instance: String = "",
         val searchText: String = "",
-        val listingType: ListingType = ListingType.All,
+        val listingType: ListingType = ListingType.Local,
         val sortType: SortType = SortType.Active,
         val communities: List<CommunityModel> = emptyList(),
     )

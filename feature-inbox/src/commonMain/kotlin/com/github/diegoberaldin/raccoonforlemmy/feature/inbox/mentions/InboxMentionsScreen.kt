@@ -28,18 +28,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxMentionCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxMentionsViewModel
@@ -60,7 +61,7 @@ class InboxMentionsScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val parentUiState by parentModel.uiState.collectAsState()
-        val navigator = LocalNavigator.current?.parent ?: throw Exception("Navigator not found")
+        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
 
         LaunchedEffect(parentModel) {
             parentModel.uiState.map { it.unreadOnly }.distinctUntilChanged().onEach {
@@ -151,7 +152,7 @@ class InboxMentionsScreen(
                             InboxMentionCard(
                                 mention = mention,
                                 onOpenPost = { post ->
-                                    navigator.push(
+                                    navigator?.push(
                                         PostDetailScreen(
                                             post = post,
                                         ).apply {
@@ -162,7 +163,7 @@ class InboxMentionsScreen(
                                     )
                                 },
                                 onOpenCreator = { user ->
-                                    navigator.push(
+                                    navigator?.push(
                                         UserDetailScreen(
                                             user = user,
                                         ).apply {
@@ -173,7 +174,7 @@ class InboxMentionsScreen(
                                     )
                                 },
                                 onOpenCommunity = { community ->
-                                    navigator.push(
+                                    navigator?.push(
                                         CommunityDetailScreen(
                                             community = community,
                                         ).apply {

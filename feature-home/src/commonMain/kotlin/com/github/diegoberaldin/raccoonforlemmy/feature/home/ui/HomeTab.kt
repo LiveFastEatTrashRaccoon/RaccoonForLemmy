@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist.PostListScreen
@@ -36,6 +37,6 @@ object HomeTab : Tab {
 
     @Composable
     override fun Content() {
-        PostListScreen().Content()
+        Navigator(PostListScreen())
     }
 }

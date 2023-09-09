@@ -5,6 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.Co
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.comments.UserCommentsViewModel
@@ -14,6 +15,12 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import org.koin.core.parameter.parametersOf
 import org.koin.java.KoinJavaComponent.inject
+
+actual fun getNavigationCoordinator(): NavigationCoordinator {
+    val res: NavigationCoordinator by inject(NavigationCoordinator::class.java)
+    return res
+}
+
 
 actual fun getPostDetailViewModel(post: PostModel): PostDetailViewModel {
     val res: PostDetailViewModel by inject(
