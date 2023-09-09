@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -41,54 +42,52 @@ class InboxTypeSheet(
                 ),
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
         ) {
-            Box(
-                modifier = Modifier.align(Alignment.CenterHorizontally).width(60.dp).height(1.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        shape = RoundedCornerShape(1.dp),
-                    ),
-            )
-            Text(
-                modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
-                text = stringResource(MR.strings.inbox_listing_type_title),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
             Column(
-                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-                    modifier = Modifier.padding(
-                        horizontal = Spacing.s,
-                        vertical = Spacing.m,
-                    )
-                        .fillMaxWidth()
-                        .onClick {
-                            onUnreadSelected(true)
+                BottomSheetHandle()
+                Text(
+                    modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
+                    text = stringResource(MR.strings.inbox_listing_type_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                ) {
+                    Row(
+                        modifier = Modifier.padding(
+                            horizontal = Spacing.s,
+                            vertical = Spacing.m,
+                        )
+                            .fillMaxWidth()
+                            .onClick {
+                                onUnreadSelected(true)
+                                onHide()
+                            },
+                    ) {
+                        Text(
+                            text = stringResource(MR.strings.inbox_listing_type_unread),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.padding(
+                            horizontal = Spacing.s,
+                            vertical = Spacing.m,
+                        ).onClick {
+                            onUnreadSelected(false)
                             onHide()
                         },
-                ) {
-                    Text(
-                        text = stringResource(MR.strings.inbox_listing_type_unread),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                }
-                Row(
-                    modifier = Modifier.padding(
-                        horizontal = Spacing.s,
-                        vertical = Spacing.m,
-                    ).onClick {
-                        onUnreadSelected(false)
-                        onHide()
-                    },
-                ) {
-                    Text(
-                        text = stringResource(MR.strings.inbox_listing_type_all),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
+                    ) {
+                        Text(
+                            text = stringResource(MR.strings.inbox_listing_type_all),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
                 }
             }
         }

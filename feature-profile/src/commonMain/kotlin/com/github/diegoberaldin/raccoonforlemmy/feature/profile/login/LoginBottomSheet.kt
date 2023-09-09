@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.profile.login
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -50,6 +53,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getLoginBottomSheetViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.localized
@@ -96,10 +100,16 @@ class LoginBottomSheet(
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(
-                            modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
-                            text = stringResource(MR.strings.profile_button_login),
-                        )
+                        Column(
+                            modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            BottomSheetHandle()
+                            Text(
+                                modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
+                                text = stringResource(MR.strings.profile_button_login),
+                            )
+                        }
                     },
                 )
             },

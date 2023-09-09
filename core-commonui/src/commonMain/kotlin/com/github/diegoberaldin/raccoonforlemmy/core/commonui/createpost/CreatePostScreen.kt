@@ -44,6 +44,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCreatePostViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -84,14 +85,7 @@ class CreatePostScreen(
                             verticalArrangement = Arrangement.spacedBy(Spacing.s),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Box(
-                                modifier = Modifier.width(60.dp)
-                                    .height(1.dp)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        shape = RoundedCornerShape(1.dp),
-                                    ),
-                            )
+                            BottomSheetHandle()
                             Text(
                                 text = stringResource(MR.strings.create_post_title),
                                 style = MaterialTheme.typography.titleLarge,

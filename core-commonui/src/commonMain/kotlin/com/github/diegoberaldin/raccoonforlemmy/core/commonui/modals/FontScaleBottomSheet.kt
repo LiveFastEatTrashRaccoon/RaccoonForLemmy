@@ -24,6 +24,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.FontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.scaleFactor
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -45,52 +46,50 @@ class FontScaleBottomSheet(
                 ),
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
         ) {
-            Box(
-                modifier = Modifier.align(Alignment.CenterHorizontally).width(60.dp).height(1.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        shape = RoundedCornerShape(1.dp),
-                    ),
-            )
-            Text(
-                modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
-                text = stringResource(MR.strings.settings_content_font_scale),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-            val values = listOf(
-                FontScale.Largest,
-                FontScale.Larger,
-                FontScale.Large,
-                FontScale.Normal,
-                FontScale.Small,
-                FontScale.Smaller,
-                FontScale.Smallest,
-            )
             Column(
-                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                for (value in values) {
-                    Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.m,
-                        )
-                            .fillMaxWidth()
-                            .onClick {
-                                onSelected(value.scaleFactor)
-                                onHide()
-                            },
-                    ) {
-                        val originalFontSize = MaterialTheme.typography.bodyLarge.fontSize
-                        Text(
-                            text = value.toReadableName(),
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                fontSize = originalFontSize * value.scaleFactor,
-                            ),
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
+                BottomSheetHandle()
+                Text(
+                    modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
+                    text = stringResource(MR.strings.settings_content_font_scale),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                val values = listOf(
+                    FontScale.Largest,
+                    FontScale.Larger,
+                    FontScale.Large,
+                    FontScale.Normal,
+                    FontScale.Small,
+                    FontScale.Smaller,
+                    FontScale.Smallest,
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                ) {
+                    for (value in values) {
+                        Row(
+                            modifier = Modifier.padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.m,
+                            )
+                                .fillMaxWidth()
+                                .onClick {
+                                    onSelected(value.scaleFactor)
+                                    onHide()
+                                },
+                        ) {
+                            val originalFontSize = MaterialTheme.typography.bodyLarge.fontSize
+                            Text(
+                                text = value.toReadableName(),
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    fontSize = originalFontSize * value.scaleFactor,
+                                ),
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
                     }
                 }
             }

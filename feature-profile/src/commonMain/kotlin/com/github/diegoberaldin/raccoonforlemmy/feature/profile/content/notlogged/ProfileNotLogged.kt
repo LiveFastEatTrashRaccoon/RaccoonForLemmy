@@ -16,7 +16,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
-internal class ProfileNotLoggedContent : Screen {
+internal class ProfileNotLoggedScreen : Screen {
 
     var onLogin: (() -> Unit)? = null
 

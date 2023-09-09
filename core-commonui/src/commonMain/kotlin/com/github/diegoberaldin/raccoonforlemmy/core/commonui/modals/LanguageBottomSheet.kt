@@ -22,6 +22,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLanguageName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -43,44 +44,42 @@ class LanguageBottomSheet(
                 ),
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
         ) {
-            Box(
-                modifier = Modifier.align(Alignment.CenterHorizontally).width(60.dp).height(1.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        shape = RoundedCornerShape(1.dp),
-                    ),
-            )
-            Text(
-                modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
-                text = stringResource(MR.strings.settings_language),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-            val values = listOf(
-                "en",
-                "it",
-            )
             Column(
-                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                for (value in values) {
-                    Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.m,
-                        )
-                            .fillMaxWidth()
-                            .onClick {
-                                onSelected(value)
-                                onHide()
-                            },
-                    ) {
-                        Text(
-                            text = value.toLanguageName(),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
+                BottomSheetHandle()
+                Text(
+                    modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
+                    text = stringResource(MR.strings.settings_language),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                val values = listOf(
+                    "en",
+                    "it",
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                ) {
+                    for (value in values) {
+                        Row(
+                            modifier = Modifier.padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.m,
+                            )
+                                .fillMaxWidth()
+                                .onClick {
+                                    onSelected(value)
+                                    onHide()
+                                },
+                        ) {
+                            Text(
+                                text = value.toLanguageName(),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
                     }
                 }
             }

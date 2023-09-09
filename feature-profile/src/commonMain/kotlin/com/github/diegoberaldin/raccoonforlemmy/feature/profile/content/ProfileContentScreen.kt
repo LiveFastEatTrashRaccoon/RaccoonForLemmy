@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,19 +23,25 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.CurrentScreen
+import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedScreen
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.notlogged.ProfileNotLoggedContent
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.notlogged.ProfileNotLoggedScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
 import dev.icerock.moko.resources.desc.desc
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 internal class ProfileContentScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -62,7 +69,7 @@ internal class ProfileContentScreen : Screen {
                         )
                     },
                     actions = {
-                        if (uiState.currentUser != null) {
+                        if (uiState.logged == true) {
                             Image(
                                 modifier = Modifier.onClick {
                                     model.reduce(ProfileContentMviModel.Intent.Logout)
@@ -83,26 +90,36 @@ internal class ProfileContentScreen : Screen {
                     .padding(it),
                 contentAlignment = Alignment.Center,
             ) {
-                if (!uiState.initial) {
-                    val user = uiState.currentUser
-                    val screen = if (user == null) {
-                        ProfileNotLoggedContent().apply {
-                            onLogin = {
-                                bottomSheetNavigator.show(
-                                    LoginBottomSheet(
-                                        onHide = {
-                                            bottomSheetNavigator.hide()
-                                        },
-                                    ),
-                                )
-                            }
+                val screens = listOf(
+                    ProfileNotLoggedScreen().apply {
+                        onLogin = {
+                            bottomSheetNavigator.show(
+                                LoginBottomSheet(
+                                    onHide = {
+                                        bottomSheetNavigator.hide()
+                                    },
+                                ),
+                            )
                         }
-                    } else {
-                        ProfileLoggedScreen(
-                            user = user,
-                        )
+                    },
+                    ProfileLoggedScreen(),
+                )
+                Navigator(screens) {
+                    CurrentScreen()
+
+                    val navigator = LocalNavigator.current
+                    LaunchedEffect(model) {
+                        model.uiState.map { s -> s.logged }.distinctUntilChanged()
+                            .onEach { logged ->
+                                val index = when (logged) {
+                                    true -> 1
+                                    else -> 0
+                                }
+                                navigator?.apply {
+                                    replace(screens[index])
+                                }
+                            }.launchIn(this)
                     }
-                    Navigator(screen)
                 }
             }
         }

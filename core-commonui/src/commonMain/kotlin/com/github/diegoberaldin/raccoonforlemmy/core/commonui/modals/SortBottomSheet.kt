@@ -31,6 +31,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
@@ -62,12 +63,8 @@ class SortBottomSheet(
             ),
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
         ) {
-            Box(
-                modifier = Modifier.align(Alignment.CenterHorizontally).width(60.dp).height(1.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        shape = RoundedCornerShape(1.dp),
-                    ),
+            BottomSheetHandle(
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Navigator(
                 SortBottomSheetMain(
@@ -91,7 +88,9 @@ internal class SortBottomSheetMain(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        Column {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
                 modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
                 text = stringResource(MR.strings.home_sort_title),

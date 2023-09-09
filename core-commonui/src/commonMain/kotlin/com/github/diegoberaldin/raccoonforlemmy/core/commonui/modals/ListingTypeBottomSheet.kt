@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
@@ -48,53 +49,51 @@ class ListingTypeBottomSheet(
                 ),
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
         ) {
-            Box(
-                modifier = Modifier.align(Alignment.CenterHorizontally).width(60.dp).height(1.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        shape = RoundedCornerShape(1.dp),
-                    ),
-            )
-            Text(
-                modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
-                text = stringResource(MR.strings.home_listing_title),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-            val values = buildList {
-                if (isLogged) {
-                    this += ListingType.Subscribed
-                }
-                this += ListingType.All
-                this += ListingType.Local
-            }
             Column(
-                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                for (value in values) {
-                    Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.m,
-                        )
-                            .fillMaxWidth()
-                            .onClick {
-                                onSelected(value)
-                                onHide()
-                            },
-                    ) {
-                        Text(
-                            text = value.toReadableName(),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Image(
-                            imageVector = value.toIcon(),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                BottomSheetHandle()
+                Text(
+                    modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
+                    text = stringResource(MR.strings.home_listing_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                val values = buildList {
+                    if (isLogged) {
+                        this += ListingType.Subscribed
+                    }
+                    this += ListingType.All
+                    this += ListingType.Local
+                }
+                Column(
+                    modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                ) {
+                    for (value in values) {
+                        Row(
+                            modifier = Modifier.padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.m,
+                            )
+                                .fillMaxWidth()
+                                .onClick {
+                                    onSelected(value)
+                                    onHide()
+                                },
+                        ) {
+                            Text(
+                                text = value.toReadableName(),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            Image(
+                                imageVector = value.toIcon(),
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                            )
+                        }
                     }
                 }
             }
