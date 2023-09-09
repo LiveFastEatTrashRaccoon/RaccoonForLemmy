@@ -87,8 +87,10 @@ import dev.icerock.moko.resources.compose.stringResource
 
 class PostDetailScreen(
     private val post: PostModel,
-    private val onBack: () -> Unit,
 ) : Screen {
+
+    var onBack: (() -> Unit)? = null
+
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
@@ -147,7 +149,7 @@ class PostDetailScreen(
                     navigationIcon = {
                         Image(
                             modifier = Modifier.onClick {
-                                onBack()
+                                onBack?.invoke()
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -230,20 +232,22 @@ class PostDetailScreen(
                                         navigator.push(
                                             CommunityDetailScreen(
                                                 community = community,
+                                            ).apply {
                                                 onBack = {
                                                     navigator.pop()
-                                                },
-                                            ),
+                                                }
+                                            },
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator.push(
                                             UserDetailScreen(
                                                 user = user,
+                                            ).apply {
                                                 onBack = {
                                                     navigator.pop()
-                                                },
-                                            ),
+                                                }
+                                            },
                                         )
                                     },
                                 )

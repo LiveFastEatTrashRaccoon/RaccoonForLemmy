@@ -16,9 +16,7 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageReposito
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
 import dev.icerock.moko.resources.desc.desc
 
-class HomeTab(
-    val bottomBarNestedScrollConnection: NestedScrollConnection,
-) : Tab {
+object HomeTab : Tab {
 
     override val options: TabOptions
         @Composable
@@ -38,6 +36,6 @@ class HomeTab(
 
     @Composable
     override fun Content() {
-        PostListScreen(bottomBarNestedScrollConnection).Content()
+        PostListScreen().Content()
     }
 }

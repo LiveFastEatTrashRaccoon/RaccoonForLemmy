@@ -94,8 +94,10 @@ import io.kamel.image.asyncPainterResource
 class CommunityDetailScreen(
     private val community: CommunityModel,
     private val otherInstance: String = "",
-    private val onBack: () -> Unit,
 ) : Screen {
+
+    var onBack: (() -> Unit)? = null
+
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
@@ -171,7 +173,7 @@ class CommunityDetailScreen(
                     navigationIcon = {
                         Image(
                             modifier = Modifier.onClick {
-                                onBack()
+                                onBack?.invoke()
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -309,10 +311,11 @@ class CommunityDetailScreen(
                                             navigator.push(
                                                 InstanceInfoScreen(
                                                     url = community.instanceUrl,
+                                                ).apply {
                                                     onBack = {
                                                         navigator.pop()
-                                                    },
-                                                ),
+                                                    }
+                                                },
                                             )
                                         },
                                         text = stringResource(MR.strings.community_detail_instance_info),
@@ -478,20 +481,23 @@ class CommunityDetailScreen(
                                         navigator.push(
                                             PostDetailScreen(
                                                 post = post,
+                                            ).apply {
                                                 onBack = {
                                                     navigator.pop()
-                                                },
-                                            ),
+                                                }
+                                            },
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator.push(
                                             UserDetailScreen(
                                                 user = user,
+
+                                                ).apply {
                                                 onBack = {
                                                     navigator.pop()
-                                                },
-                                            ),
+                                                }
+                                            },
                                         )
                                     },
                                     post = post,

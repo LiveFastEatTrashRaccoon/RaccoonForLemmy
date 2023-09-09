@@ -37,8 +37,9 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 
 class UserDetailScreen(
     private val user: UserModel,
-    private val onBack: () -> Unit,
 ) : Screen {
+
+    var onBack: (() -> Unit)? = null
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -91,7 +92,7 @@ class UserDetailScreen(
                     navigationIcon = {
                         Image(
                             modifier = Modifier.onClick {
-                                onBack()
+                                onBack?.invoke()
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -114,22 +115,24 @@ class UserDetailScreen(
                         UserDetailPostsScreen(
                             modifier = Modifier.weight(1f).fillMaxWidth(),
                             user = user,
-                            parentModel = model,
+                        ).apply {
+                            parentModel = model
                             onSectionSelected = {
                                 model.reduce(UserDetailMviModel.Intent.SelectTab(it))
-                            },
-                        ).Content()
+                            }
+                        }.Content()
                     }
 
                     UserDetailSection.COMMENTS -> {
                         UserDetailCommentsScreen(
                             modifier = Modifier.weight(1f).fillMaxWidth(),
                             user = user,
-                            parentModel = model,
+                        ).apply {
+                            parentModel = model
                             onSectionSelected = {
                                 model.reduce(UserDetailMviModel.Intent.SelectTab(it))
-                            },
-                        ).Content()
+                            }
+                        }.Content()
                     }
                 }
             }

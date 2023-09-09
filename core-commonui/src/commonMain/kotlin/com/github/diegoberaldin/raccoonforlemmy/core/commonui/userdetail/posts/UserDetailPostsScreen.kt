@@ -63,9 +63,12 @@ import kotlinx.coroutines.flow.onEach
 internal class UserDetailPostsScreen(
     private val modifier: Modifier = Modifier,
     private val user: UserModel,
-    private val onSectionSelected: (UserDetailSection) -> Unit,
-    private val parentModel: UserDetailViewModel,
-) : Screen {
+
+    ) : Screen {
+
+    var onSectionSelected: ((UserDetailSection) -> Unit)? = null
+    var parentModel: UserDetailViewModel? = null
+
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
@@ -82,9 +85,9 @@ internal class UserDetailPostsScreen(
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         LaunchedEffect(parentModel) {
-            parentModel.uiState.map { it.sortType }.distinctUntilChanged().onEach { sortType ->
+            parentModel?.uiState?.map { it.sortType }?.distinctUntilChanged()?.onEach { sortType ->
                 model.reduce(UserPostsMviModel.Intent.ChangeSort(sortType))
-            }.launchIn(this)
+            }?.launchIn(this)
         }
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
@@ -119,7 +122,7 @@ internal class UserDetailPostsScreen(
                                     0 -> UserDetailSection.POSTS
                                     else -> UserDetailSection.COMMENTS
                                 }
-                                onSectionSelected(section)
+                                onSectionSelected?.invoke(section)
                             },
                         )
                     }
@@ -225,10 +228,11 @@ internal class UserDetailPostsScreen(
                                     navigator.push(
                                         CommunityDetailScreen(
                                             community = community,
+                                        ).apply {
                                             onBack = {
                                                 navigator.pop()
-                                            },
-                                        ),
+                                            }
+                                        },
                                     )
                                 },
                                 onReply = {

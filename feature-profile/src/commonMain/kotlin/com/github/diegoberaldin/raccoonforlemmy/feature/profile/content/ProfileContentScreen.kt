@@ -85,7 +85,7 @@ internal class ProfileContentScreen : Screen {
                 if (!uiState.initial) {
                     val user = uiState.currentUser
                     if (user == null) {
-                        ProfileNotLoggedContent(
+                        ProfileNotLoggedContent().apply {
                             onLogin = {
                                 bottomSheetNavigator.show(
                                     LoginBottomSheet(
@@ -94,8 +94,8 @@ internal class ProfileContentScreen : Screen {
                                         },
                                     ),
                                 )
-                            },
-                        ).Content()
+                            }
+                        }.Content()
                     } else {
                         ProfileLoggedScreen(
                             user = user,

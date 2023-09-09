@@ -61,9 +61,12 @@ import kotlinx.coroutines.flow.onEach
 internal class UserDetailCommentsScreen(
     private val modifier: Modifier = Modifier,
     private val user: UserModel,
-    private val onSectionSelected: (UserDetailSection) -> Unit,
-    private val parentModel: UserDetailViewModel,
+
 ) : Screen {
+
+    var onSectionSelected: ((UserDetailSection) -> Unit)? = null
+    var parentModel: UserDetailViewModel? = null
+
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
@@ -75,9 +78,9 @@ internal class UserDetailCommentsScreen(
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         LaunchedEffect(parentModel) {
-            parentModel.uiState.map { it.sortType }.distinctUntilChanged().onEach { sortType ->
+            parentModel?.uiState?.map { it.sortType }?.distinctUntilChanged()?.onEach { sortType ->
                 model.reduce(UserCommentsMviModel.Intent.ChangeSort(sortType))
-            }.launchIn(this)
+            }?.launchIn(this)
         }
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
@@ -111,7 +114,7 @@ internal class UserDetailCommentsScreen(
                                     0 -> UserDetailSection.POSTS
                                     else -> UserDetailSection.COMMENTS
                                 }
-                                onSectionSelected(section)
+                                onSectionSelected?.invoke(section)
                             },
                         )
                     }

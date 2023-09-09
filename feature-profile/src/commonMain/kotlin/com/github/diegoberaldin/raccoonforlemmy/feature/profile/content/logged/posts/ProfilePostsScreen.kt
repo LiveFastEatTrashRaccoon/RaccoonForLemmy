@@ -43,8 +43,10 @@ import dev.icerock.moko.resources.compose.stringResource
 internal class ProfilePostsScreen(
     private val modifier: Modifier = Modifier,
     private val user: UserModel,
-    private val onSectionSelected: (ProfileLoggedSection) -> Unit,
 ) : Screen {
+
+    var onSectionSelected: ((ProfileLoggedSection) -> Unit)? = null
+
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
@@ -91,7 +93,7 @@ internal class ProfilePostsScreen(
                                     1 -> ProfileLoggedSection.COMMENTS
                                     else -> ProfileLoggedSection.SAVED
                                 }
-                                onSectionSelected(section)
+                                onSectionSelected?.invoke(section)
                             },
                         )
                         Spacer(modifier = Modifier.height(Spacing.m))
@@ -104,10 +106,11 @@ internal class ProfilePostsScreen(
                             navigator.push(
                                 CommunityDetailScreen(
                                     community = community,
+                                ).apply {
                                     onBack = {
                                         navigator.pop()
-                                    },
-                                ),
+                                    }
+                                },
                             )
                         },
                     )

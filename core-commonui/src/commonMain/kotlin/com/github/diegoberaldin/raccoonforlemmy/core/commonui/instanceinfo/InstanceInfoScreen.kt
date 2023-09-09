@@ -53,8 +53,10 @@ import dev.icerock.moko.resources.compose.stringResource
 
 class InstanceInfoScreen(
     private val url: String,
-    private val onBack: () -> Unit,
 ) : Screen {
+
+    private var onBack: (() -> Unit)? = null
+
     @OptIn(
         ExperimentalMaterial3Api::class,
         ExperimentalMaterialApi::class,
@@ -76,7 +78,7 @@ class InstanceInfoScreen(
                     navigationIcon = {
                         Image(
                             modifier = Modifier.onClick {
-                                onBack()
+                                onBack?.invoke()
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -149,10 +151,11 @@ class InstanceInfoScreen(
                                         CommunityDetailScreen(
                                             community = it,
                                             otherInstance = instanceName,
+                                        ).apply {
                                             onBack = {
                                                 navigator.pop()
-                                            },
-                                        ),
+                                            }
+                                        },
                                     )
                                 },
                                 community = it,

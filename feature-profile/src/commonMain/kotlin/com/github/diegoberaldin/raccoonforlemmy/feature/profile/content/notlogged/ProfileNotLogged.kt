@@ -16,9 +16,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
-internal class ProfileNotLoggedContent(
-    private val onLogin: () -> Unit,
-) : Screen {
+internal class ProfileNotLoggedContent : Screen {
+
+    var onLogin: (() -> Unit)? = null
 
     @Composable
     override fun Content() {
@@ -33,7 +33,7 @@ internal class ProfileNotLoggedContent(
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
-                    onLogin()
+                    onLogin?.invoke()
                 },
             ) {
                 Text(stringResource(MR.strings.profile_button_login))

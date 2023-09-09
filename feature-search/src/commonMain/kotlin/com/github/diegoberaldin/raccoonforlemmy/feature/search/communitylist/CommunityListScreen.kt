@@ -161,10 +161,11 @@ class CommunityListScreen : Screen {
                                         navigator.push(
                                             CommunityDetailScreen(
                                                 community = community,
+                                            ).apply {
                                                 onBack = {
                                                     navigator.pop()
-                                                },
-                                            ),
+                                                }
+                                            },
                                         )
                                     },
                                     community = community,

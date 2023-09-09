@@ -40,30 +40,33 @@ internal class ProfileLoggedScreen(
                     ProfilePostsScreen(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         user = user,
+                    ).apply {
                         onSectionSelected = {
                             model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
-                        },
-                    ).Content()
+                        }
+                    }.Content()
                 }
 
                 ProfileLoggedSection.COMMENTS -> {
                     ProfileCommentsScreen(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         user = user,
+                    ).apply {
                         onSectionSelected = {
                             model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
-                        },
-                    ).Content()
+                        }
+                    }.Content()
                 }
 
                 ProfileLoggedSection.SAVED -> {
                     ProfileSavedScreen(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         user = user,
+                    ).apply {
                         onSectionSelected = {
                             model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
-                        },
-                    ).Content()
+                        }
+                    }.Content()
                 }
             }
         }

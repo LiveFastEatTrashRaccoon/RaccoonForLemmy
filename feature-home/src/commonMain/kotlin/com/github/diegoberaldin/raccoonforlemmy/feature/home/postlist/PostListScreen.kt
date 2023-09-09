@@ -33,7 +33,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -51,11 +50,11 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getBottomNavCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getHomeScreenModel
 
-class PostListScreen(
-    val bottomBarNestedScrollConnection: NestedScrollConnection,
-) : Screen {
+class PostListScreen : Screen {
+
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
@@ -65,6 +64,7 @@ class PostListScreen(
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val navigator = LocalNavigator.current?.parent ?: throw Exception("Navigator not found")
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val bottomNavCoordinator = getBottomNavCoordinator()
 
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
@@ -110,7 +110,12 @@ class PostListScreen(
                 modifier = Modifier
                     .padding(padding)
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .nestedScroll(bottomBarNestedScrollConnection)
+                    .let {
+                        val connection = bottomNavCoordinator.getConnection()
+                        if (connection != null) {
+                            it.nestedScroll(connection)
+                        } else it
+                    }
                     .pullRefresh(pullRefreshState),
             ) {
                 LazyColumn(
@@ -183,10 +188,11 @@ class PostListScreen(
                                         navigator.push(
                                             PostDetailScreen(
                                                 post = post,
+                                            ).apply {
                                                 onBack = {
                                                     navigator.pop()
-                                                },
-                                            ),
+                                                }
+                                            },
                                         )
                                     },
                                     post = post,
@@ -195,20 +201,22 @@ class PostListScreen(
                                         navigator.push(
                                             CommunityDetailScreen(
                                                 community = community,
+                                            ).apply {
                                                 onBack = {
                                                     navigator.pop()
-                                                },
-                                            ),
+                                                }
+                                            },
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator.push(
                                             UserDetailScreen(
                                                 user = user,
+                                            ).apply {
                                                 onBack = {
                                                     navigator.pop()
-                                                },
-                                            ),
+                                                }
+                                            },
                                         )
                                     },
                                     onUpVote = {

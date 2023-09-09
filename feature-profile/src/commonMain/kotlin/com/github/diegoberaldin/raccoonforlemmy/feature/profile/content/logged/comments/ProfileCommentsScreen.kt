@@ -41,8 +41,9 @@ import dev.icerock.moko.resources.compose.stringResource
 internal class ProfileCommentsScreen(
     private val modifier: Modifier = Modifier,
     private val user: UserModel,
-    private val onSectionSelected: (ProfileLoggedSection) -> Unit,
 ) : Screen {
+    var onSectionSelected: ((ProfileLoggedSection) -> Unit)? = null
+
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
@@ -84,7 +85,7 @@ internal class ProfileCommentsScreen(
                                     1 -> ProfileLoggedSection.COMMENTS
                                     else -> ProfileLoggedSection.SAVED
                                 }
-                                onSectionSelected(section)
+                                onSectionSelected?.invoke(section)
                             },
                         )
                         Spacer(modifier = Modifier.height(Spacing.m))
