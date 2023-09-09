@@ -46,39 +46,42 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDet
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxRepliesViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-class InboxRepliesScreen(
-    private val parentModel: InboxViewModel,
-) : Screen {
+class InboxRepliesScreen : Screen {
+
+    var parentModel: InboxViewModel? = null
+
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
         val model = rememberScreenModel { getInboxRepliesViewModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val parentUiState by parentModel.uiState.collectAsState()
+        val parentUiState by (parentModel?.uiState
+            ?: MutableStateFlow(InboxMviModel.UiState())).collectAsState()
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
 
         LaunchedEffect(parentModel) {
-            parentModel.uiState.map { it.unreadOnly }.distinctUntilChanged().onEach {
+            parentModel?.uiState?.map { it.unreadOnly }?.distinctUntilChanged()?.onEach {
                 model.reduce(InboxRepliesMviModel.Intent.ChangeUnreadOnly(unread = it))
-            }.launchIn(this)
+            }?.launchIn(this)
 
             if (uiState.unreadOnly != parentUiState.unreadOnly) {
                 model.reduce(InboxRepliesMviModel.Intent.ChangeUnreadOnly(parentUiState.unreadOnly))
             }
 
-            parentModel.effects.onEach {
+            parentModel?.effects?.onEach {
                 when (it) {
                     InboxMviModel.Effect.Refresh -> {
                         model.reduce(InboxRepliesMviModel.Intent.Refresh)
                     }
                 }
-            }.launchIn(this)
+            }?.launchIn(this)
         }
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {

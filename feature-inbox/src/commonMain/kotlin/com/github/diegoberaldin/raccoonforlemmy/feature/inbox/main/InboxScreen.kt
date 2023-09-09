@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.CurrentScreen
+import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
@@ -31,12 +34,16 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Section
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.InboxTypeSheet
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsScreen
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.InboxMessagesScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesScreen
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
 import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.desc
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 class InboxScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -133,19 +140,28 @@ class InboxScreen : Screen {
                         model.reduce(InboxMviModel.Intent.ChangeSection(section))
                     },
                 )
-                val screen = when (uiState.section) {
-                    InboxSection.REPLIES -> InboxRepliesScreen(
-                        parentModel = model,
-                    )
-
-                    InboxSection.MENTIONS -> InboxMentionsScreen(
-                        parentModel = model,
-                    )
-
-                    InboxSection.MESSAGES -> null
-                }
-                if (screen != null) {
-                    Navigator(screen)
+                val screens = listOf(
+                    InboxRepliesScreen().apply {
+                        parentModel = model
+                    },
+                    InboxMentionsScreen().apply {
+                        parentModel = model
+                    },
+                    InboxMessagesScreen()
+                )
+                Navigator(screens) {
+                    CurrentScreen()
+                    val navigator = LocalNavigator.current
+                    LaunchedEffect(model) {
+                        model.uiState.map { it.section }.onEach { section ->
+                            val index = when (section) {
+                                InboxSection.REPLIES -> 0
+                                InboxSection.MENTIONS -> 1
+                                InboxSection.MESSAGES -> 2
+                            }
+                            navigator?.replace(screens[index])
+                        }.launchIn(this)
+                    }
                 }
             }
         }
