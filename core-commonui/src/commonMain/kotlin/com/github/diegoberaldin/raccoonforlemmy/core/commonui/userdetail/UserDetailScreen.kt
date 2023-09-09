@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,6 +26,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.CurrentScreen
+import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
@@ -36,6 +39,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.comment
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.posts.UserDetailPostsScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 class UserDetailScreen(
     private val user: UserModel,
@@ -114,32 +121,41 @@ class UserDetailScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val screen = when (uiState.currentTab) {
-                    UserDetailSection.POSTS -> {
-                        UserDetailPostsScreen(
-                            modifier = Modifier.weight(1f).fillMaxWidth(),
-                            user = user,
-                        ).apply {
-                            parentModel = model
-                            onSectionSelected = {
-                                model.reduce(UserDetailMviModel.Intent.SelectTab(it))
-                            }
+                val screens = listOf(
+                    UserDetailPostsScreen(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        user = user,
+                    ).apply {
+                        parentModel = model
+                        onSectionSelected = {
+                            model.reduce(UserDetailMviModel.Intent.SelectTab(it))
+                        }
+                    },
+                    UserDetailCommentsScreen(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        user = user,
+                    ).apply {
+                        parentModel = model
+                        onSectionSelected = {
+                            model.reduce(UserDetailMviModel.Intent.SelectTab(it))
                         }
                     }
+                )
+                Navigator(screens) {
+                    CurrentScreen()
 
-                    UserDetailSection.COMMENTS -> {
-                        UserDetailCommentsScreen(
-                            modifier = Modifier.weight(1f).fillMaxWidth(),
-                            user = user,
-                        ).apply {
-                            parentModel = model
-                            onSectionSelected = {
-                                model.reduce(UserDetailMviModel.Intent.SelectTab(it))
-                            }
-                        }
+                    val navigator = LocalNavigator.current
+                    LaunchedEffect(model) {
+                        model.uiState.map { state -> state.currentTab }.distinctUntilChanged()
+                            .onEach { tab ->
+                                val index = when (tab) {
+                                    UserDetailSection.POSTS -> 0
+                                    UserDetailSection.COMMENTS -> 1
+                                }
+                                navigator?.replace(screens[index])
+                            }.launchIn(this)
                     }
                 }
-                Navigator(screen)
             }
         }
     }

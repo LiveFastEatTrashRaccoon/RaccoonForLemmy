@@ -39,6 +39,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
@@ -50,6 +51,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCou
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserPostsViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -198,6 +200,17 @@ internal class UserDetailPostsScreen(
                         },
                         content = {
                             PostCard(
+                                modifier = Modifier.onClick {
+                                    navigator.push(
+                                        PostDetailScreen(
+                                            post = post,
+                                        ).apply {
+                                            onBack = {
+                                                navigator.pop()
+                                            }
+                                        },
+                                    )
+                                },
                                 post = post,
                                 blurNsfw = uiState.blurNsfw,
                                 onUpVote = {
