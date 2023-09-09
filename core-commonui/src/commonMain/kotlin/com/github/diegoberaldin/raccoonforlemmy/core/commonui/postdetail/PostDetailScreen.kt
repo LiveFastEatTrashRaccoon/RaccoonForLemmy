@@ -55,6 +55,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -119,7 +120,14 @@ class PostDetailScreen(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
             topBar = {
                 TopAppBar(
-                    title = {},
+                    title = {
+                        Text(
+                            modifier = Modifier.padding(horizontal = Spacing.s),
+                            text = post.title,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    },
                     scrollBehavior = scrollBehavior,
                     actions = {
                         Image(
