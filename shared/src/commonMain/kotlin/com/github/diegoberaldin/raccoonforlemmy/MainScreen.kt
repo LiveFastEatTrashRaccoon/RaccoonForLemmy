@@ -38,27 +38,30 @@ import com.github.diegoberaldin.raccoonforlemmy.ui.navigation.TabNavigationItem
 import kotlin.math.roundToInt
 
 internal class MainScreen : Screen {
+
+    private var bottomBarOffsetHeightPx = mutableStateOf(0f)
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val themeRepository = remember { getThemeRepository() }
         var bottomBarHeightPx by remember { mutableStateOf(0f) }
-        var bottomBarOffsetHeightPx by remember { mutableStateOf(0f) }
-        val bottomBarNestedScrollConnection = remember {
-            object : NestedScrollConnection {
+        val bottomNavBarCoordinator = remember { getNavigationCoordinator() }
+
+        LaunchedEffect(bottomNavBarCoordinator) {
+            val scrollConnection = object : NestedScrollConnection {
                 override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                     val delta = available.y
-                    val newOffset = bottomBarOffsetHeightPx + delta
-                    bottomBarOffsetHeightPx = newOffset.coerceIn(-bottomBarHeightPx, 0f)
+                    val newOffset =
+                        (bottomBarOffsetHeightPx.value + delta).coerceIn(-bottomBarHeightPx, 0f)
+                    bottomBarOffsetHeightPx.value = newOffset
                     return Offset.Zero
                 }
             }
-        }
-
-        val bottomNavBarCoordinator = remember { getNavigationCoordinator() }
-        LaunchedEffect(bottomNavBarCoordinator) {
-            bottomNavBarCoordinator.setBottomBarScrollConnection(bottomBarNestedScrollConnection)
-            bottomNavBarCoordinator.setCurrentSection(HomeTab)
+            bottomNavBarCoordinator.apply {
+                setBottomBarScrollConnection(scrollConnection)
+                setCurrentSection(HomeTab)
+            }
         }
 
         TabNavigator(HomeTab) {
@@ -77,7 +80,7 @@ internal class MainScreen : Screen {
                             .offset {
                                 IntOffset(
                                     x = 0,
-                                    y = -bottomBarOffsetHeightPx.roundToInt()
+                                    y = -bottomBarOffsetHeightPx.value.roundToInt()
                                 )
                             },
                         contentPadding = PaddingValues(0.dp),
