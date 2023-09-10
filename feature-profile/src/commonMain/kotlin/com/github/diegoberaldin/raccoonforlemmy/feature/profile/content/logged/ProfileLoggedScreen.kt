@@ -3,7 +3,6 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,10 +11,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
+import cafe.adriel.voyager.navigator.tab.Tab
+import cafe.adriel.voyager.navigator.tab.TabNavigator
+import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.comments.ProfileCommentsScreen
@@ -27,7 +27,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-internal class ProfileLoggedScreen : Screen {
+internal object ProfileLoggedScreen : Tab {
+
+    override val options: TabOptions
+        @Composable get() {
+            return TabOptions(0u, "")
+        }
 
     @Composable
     override fun Content() {
@@ -43,7 +48,6 @@ internal class ProfileLoggedScreen : Screen {
             if (user != null) {
                 val screens = listOf(
                     ProfilePostsScreen(
-                        modifier = Modifier.weight(1f).fillMaxWidth(),
                         user = user,
                     ).apply {
                         onSectionSelected = {
@@ -51,7 +55,6 @@ internal class ProfileLoggedScreen : Screen {
                         }
                     },
                     ProfileCommentsScreen(
-                        modifier = Modifier.weight(1f).fillMaxWidth(),
                         user = user,
                     ).apply {
                         onSectionSelected = {
@@ -59,7 +62,6 @@ internal class ProfileLoggedScreen : Screen {
                         }
                     },
                     ProfileSavedScreen(
-                        modifier = Modifier.weight(1f).fillMaxWidth(),
                         user = user,
                     ).apply {
                         onSectionSelected = {
@@ -68,10 +70,9 @@ internal class ProfileLoggedScreen : Screen {
                     },
                 )
 
-                Navigator(screens) {
+                TabNavigator(screens.first()) {
                     CurrentScreen()
-
-                    val navigator = LocalNavigator.current
+                    val navigator = LocalTabNavigator.current
                     LaunchedEffect(model) {
                         model.uiState.map { it.currentTab }
                             .distinctUntilChanged()
@@ -81,9 +82,7 @@ internal class ProfileLoggedScreen : Screen {
                                     ProfileLoggedSection.COMMENTS -> 1
                                     ProfileLoggedSection.SAVED -> 2
                                 }
-                                navigator?.apply {
-                                    replace(screens[index])
-                                }
+                                navigator.current = screens[index]
                             }.launchIn(this)
                     }
                 }
