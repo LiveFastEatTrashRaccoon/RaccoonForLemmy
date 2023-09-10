@@ -19,7 +19,7 @@ interface InboxRepliesMviModel :
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,
         val unreadOnly: Boolean = true,
-        val mentions: List<PersonMentionModel> = emptyList(),
+        val replies: List<PersonMentionModel> = emptyList(),
     )
 
     sealed interface Effect

@@ -17,7 +17,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -84,20 +83,49 @@ class PostListViewModel(
                     it.copy(isLogged = isLogged)
                 }
             }.launchIn(this)
-            notificationCenter.events.filterIsInstance<NotificationCenter.Event.PostUpdate>()
+            notificationCenter.events
                 .onEach { evt ->
-                    val newPost = evt.post
-                    mvi.updateState {
-                        it.copy(
-                            posts = it.posts.map { p ->
-                                if (p.id == newPost.id) {
-                                    newPost
-                                } else {
-                                    p
-                                }
-                            },
-                        )
+                    when (evt) {
+                        is NotificationCenter.Event.PostUpdate -> {
+                            val newPost = evt.post
+                            mvi.updateState {
+                                it.copy(
+                                    posts = it.posts.map { p ->
+                                        if (p.id == newPost.id) {
+                                            newPost
+                                        } else {
+                                            p
+                                        }
+                                    },
+                                )
+                            }
+                        }
+
+                        else -> Unit
                     }
+                }.launchIn(this)
+            notificationCenter.events
+                .onEach { evt ->
+                    when (evt) {
+                        NotificationCenter.Event.Logout -> {
+                            currentPage = 1
+                            val listingType =
+                                keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
+                            val sortType =
+                                keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
+                            mvi.updateState {
+                                it.copy(
+                                    listingType = listingType,
+                                    sortType = sortType,
+                                    posts = emptyList(),
+                                    isLogged = false,
+                                )
+                            }
+                        }
+
+                        else -> Unit
+                    }
+
                 }.launchIn(this)
         }
 

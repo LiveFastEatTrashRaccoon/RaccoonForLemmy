@@ -25,7 +25,6 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -45,10 +44,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxRepliesViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 class InboxRepliesScreen : Tab {
     override val options: TabOptions
@@ -74,7 +69,7 @@ class InboxRepliesScreen : Tab {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
-                items(uiState.mentions) { mention ->
+                items(uiState.replies) { mention ->
                     SwipeableCard(
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = {

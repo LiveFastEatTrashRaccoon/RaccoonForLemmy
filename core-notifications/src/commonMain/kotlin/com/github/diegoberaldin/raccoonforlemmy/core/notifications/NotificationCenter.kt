@@ -15,6 +15,7 @@ interface NotificationCenter {
     sealed interface Event {
         data class PostUpdate(val post: PostModel) : Event
         data class CommentUpdate(val comment: CommentModel) : Event
+        object Logout : Event
     }
 
     /**

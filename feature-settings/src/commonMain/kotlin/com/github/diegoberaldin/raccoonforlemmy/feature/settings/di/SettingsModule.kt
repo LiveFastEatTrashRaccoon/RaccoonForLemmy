@@ -16,6 +16,7 @@ val settingsTabModule = module {
             languageRepository = get(),
             identityRepository = get(),
             colorSchemeProvider = get(),
+            notificationCenter = get(),
         )
     }
 }

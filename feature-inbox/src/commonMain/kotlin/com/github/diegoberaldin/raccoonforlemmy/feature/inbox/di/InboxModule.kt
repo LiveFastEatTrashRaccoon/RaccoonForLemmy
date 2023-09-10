@@ -31,6 +31,7 @@ val inboxTabModule = module {
             siteRepository = get(),
             hapticFeedback = get(),
             coordinator = get(),
+            notificationCenter = get(),
         )
     }
     factory {
@@ -40,6 +41,7 @@ val inboxTabModule = module {
             identityRepository = get(),
             hapticFeedback = get(),
             coordinator = get(),
+            notificationCenter = get(),
         )
     }
 }

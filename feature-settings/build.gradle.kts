@@ -51,6 +51,7 @@ kotlin {
                 implementation(projects.coreArchitecture)
                 implementation(projects.coreUtils)
                 implementation(projects.coreCommonui)
+                implementation(projects.coreNotifications)
                 implementation(projects.resources)
                 implementation(projects.domainLemmy.data)
                 implementation(projects.domainIdentity)

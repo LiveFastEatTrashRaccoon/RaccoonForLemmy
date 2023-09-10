@@ -18,6 +18,8 @@ val profileTabModule = module {
         ProfileContentViewModel(
             mvi = DefaultMviModel(ProfileContentMviModel.UiState()),
             identityRepository = get(),
+            keyStore = get(),
+            notificationCenter = get(),
         )
     }
     factory {

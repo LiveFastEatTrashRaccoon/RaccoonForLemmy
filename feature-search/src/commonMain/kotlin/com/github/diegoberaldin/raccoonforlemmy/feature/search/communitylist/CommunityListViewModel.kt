@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.search.communitylist
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
@@ -26,6 +27,7 @@ class CommunityListViewModel(
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
     private val keyStore: TemporaryKeyStore,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<CommunityListMviModel.Intent, CommunityListMviModel.UiState, CommunityListMviModel.Effect> by mvi {
 
@@ -43,6 +45,21 @@ class CommunityListViewModel(
             identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->
                 mvi.updateState {
                     it.copy(isLogged = isLogged)
+                }
+            }.launchIn(this)
+            notificationCenter.events.onEach { evt ->
+                when (evt) {
+                    NotificationCenter.Event.Logout -> {
+                        currentPage = 1
+                        mvi.updateState {
+                            it.copy(
+                                listingType = ListingType.Local,
+                                communities = emptyList(),
+                            )
+                        }
+                    }
+
+                    else -> Unit
                 }
             }.launchIn(this)
         }

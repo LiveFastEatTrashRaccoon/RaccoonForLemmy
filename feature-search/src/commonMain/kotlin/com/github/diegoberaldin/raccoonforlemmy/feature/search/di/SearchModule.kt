@@ -13,6 +13,7 @@ val searchTabModule = module {
             identityRepository = get(),
             communityRepository = get(),
             keyStore = get(),
+            notificationCenter = get(),
         )
     }
 }

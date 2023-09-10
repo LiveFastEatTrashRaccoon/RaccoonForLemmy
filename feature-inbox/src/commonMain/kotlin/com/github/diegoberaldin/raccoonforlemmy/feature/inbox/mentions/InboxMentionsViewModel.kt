@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
@@ -23,6 +24,7 @@ class InboxMentionsViewModel(
     private val userRepository: UserRepository,
     private val hapticFeedback: HapticFeedback,
     private val coordinator: InboxCoordinator,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect> by mvi {
 
@@ -39,6 +41,15 @@ class InboxMentionsViewModel(
             coordinator.unreadOnly.onEach {
                 if (it != uiState.value.unreadOnly) {
                     changeUnreadOnly(it)
+                }
+            }.launchIn(this)
+            notificationCenter.events.onEach { evt ->
+                when (evt) {
+                    NotificationCenter.Event.Logout -> {
+                        mvi.updateState { it.copy(mentions = emptyList()) }
+                    }
+
+                    else -> Unit
                 }
             }.launchIn(this)
         }

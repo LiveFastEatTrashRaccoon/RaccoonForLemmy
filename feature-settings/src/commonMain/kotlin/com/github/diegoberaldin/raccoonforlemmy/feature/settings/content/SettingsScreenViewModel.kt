@@ -9,6 +9,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.Theme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -30,6 +31,7 @@ class SettingsScreenViewModel(
     private val languageRepository: LanguageRepository,
     private val identityRepository: IdentityRepository,
     private val keyStore: TemporaryKeyStore,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<SettingsScreenMviModel.Intent, SettingsScreenMviModel.UiState, SettingsScreenMviModel.Effect> by mvi {
 
@@ -53,6 +55,27 @@ class SettingsScreenViewModel(
             }.launchIn(this)
             identityRepository.authToken.onEach { auth ->
                 mvi.updateState { it.copy(isLogged = !auth.isNullOrEmpty()) }
+            }.launchIn(this)
+            notificationCenter.events.onEach { evt ->
+                when (evt) {
+                    NotificationCenter.Event.Logout -> {
+                        val listingType =
+                            keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
+                        val postSortType =
+                            keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
+                        val commentSortType =
+                            keyStore[KeyStoreKeys.DefaultCommentSortType, 3].toSortType()
+                        mvi.updateState {
+                            it.copy(
+                                defaultListingType = listingType,
+                                defaultPostSortType = postSortType,
+                                defaultCommentSortType = commentSortType,
+                            )
+                        }
+                    }
+
+                    else -> Unit
+                }
             }.launchIn(this)
         }
 
