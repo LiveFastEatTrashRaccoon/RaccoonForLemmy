@@ -232,7 +232,9 @@ class PostDetailScreen(
                                     horizontal = Spacing.s,
                                 ),
                             ) {
-                                PostCardTitle(post)
+                                PostCardTitle(
+                                    text = post.title
+                                )
                                 PostCardSubtitle(
                                     community = post.community,
                                     creator = post.creator?.copy(avatar = null),

@@ -85,12 +85,14 @@ internal fun PostView.toModel() = PostModel(
     score = counts.score,
     comments = counts.comments,
     thumbnailUrl = post.thumbnailUrl.orEmpty(),
+    url = post.url,
     community = community.toModel(),
     creator = creator.toModel(),
     saved = saved,
     myVote = myVote ?: 0,
     publishDate = post.published,
     nsfw = post.nsfw,
+    embedVideoUrl = post.embedVideoUrl
 )
 
 internal fun CommentView.toModel() = CommentModel(
@@ -125,7 +127,16 @@ internal fun PersonMentionView.toModel() = PersonMentionModel(
         id = post.id,
         title = post.name,
         text = post.body.orEmpty(),
+        score = counts.score,
+        thumbnailUrl = post.thumbnailUrl.orEmpty(),
+        url = post.url,
+        community = community.toModel(),
+        creator = creator.toModel(),
+        saved = saved,
+        myVote = myVote ?: 0,
+        publishDate = post.published,
         nsfw = post.nsfw,
+        embedVideoUrl = post.embedVideoUrl
     ),
     comment = CommentModel(
         id = comment.id,
@@ -147,9 +158,16 @@ internal fun CommentReplyView.toModel() = PersonMentionModel(
         id = post.id,
         title = post.name,
         text = post.body.orEmpty(),
-        creator = UserModel(id = post.creatorId),
+        score = counts.score,
+        thumbnailUrl = post.thumbnailUrl.orEmpty(),
+        url = post.url,
+        community = community.toModel(),
+        creator = creator.toModel(),
+        saved = saved,
+        myVote = myVote ?: 0,
         publishDate = post.published,
         nsfw = post.nsfw,
+        embedVideoUrl = post.embedVideoUrl
     ),
     comment = CommentModel(
         id = comment.id,

@@ -7,6 +7,8 @@ data class PostModel(
     val score: Int = 0,
     val comments: Int = 0,
     val thumbnailUrl: String? = null,
+    val url: String? = null,
+    val embedVideoUrl: String? = null,
     val community: CommunityModel? = null,
     val creator: UserModel? = null,
     val saved: Boolean = false,

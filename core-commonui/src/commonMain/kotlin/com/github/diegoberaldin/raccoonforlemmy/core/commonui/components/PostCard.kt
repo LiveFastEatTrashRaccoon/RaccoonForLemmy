@@ -65,7 +65,7 @@ fun PostCard(
             ) {
                 PostCardTitle(
                     modifier = Modifier.padding(top = Spacing.s),
-                    post = post
+                    text = post.title
                 )
                 PostCardSubtitle(
                     community = post.community,
