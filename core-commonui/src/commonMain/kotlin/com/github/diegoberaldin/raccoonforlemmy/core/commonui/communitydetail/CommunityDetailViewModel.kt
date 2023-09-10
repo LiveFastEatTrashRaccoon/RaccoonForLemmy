@@ -53,17 +53,17 @@ class CommunityDetailViewModel(
             CommunityDetailMviModel.Intent.Refresh -> refresh()
 
             is CommunityDetailMviModel.Intent.DownVotePost -> toggleDownVotePost(
-                post = intent.post,
+                post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 
             is CommunityDetailMviModel.Intent.SavePost -> toggleSavePost(
-                post = intent.post,
+                post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 
             is CommunityDetailMviModel.Intent.UpVotePost -> toggleUpVotePost(
-                post = intent.post,
+                post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 

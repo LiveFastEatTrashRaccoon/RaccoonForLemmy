@@ -12,11 +12,11 @@ interface UserCommentsMviModel :
         object Refresh : Intent
         object LoadNextPage : Intent
         data class ChangeSort(val value: SortType) : Intent
-        data class UpVoteComment(val comment: CommentModel, val feedback: Boolean = false) : Intent
-        data class DownVoteComment(val comment: CommentModel, val feedback: Boolean = false) :
+        data class UpVoteComment(val index: Int, val feedback: Boolean = false) : Intent
+        data class DownVoteComment(val index: Int, val feedback: Boolean = false) :
             Intent
 
-        data class SaveComment(val comment: CommentModel, val feedback: Boolean = false) : Intent
+        data class SaveComment(val index: Int, val feedback: Boolean = false) : Intent
         object HapticIndication : Intent
     }
 

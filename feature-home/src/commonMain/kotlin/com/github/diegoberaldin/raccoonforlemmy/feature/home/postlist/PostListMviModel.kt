@@ -13,9 +13,9 @@ interface PostListMviModel :
         object LoadNextPage : Intent
         data class ChangeSort(val value: SortType) : Intent
         data class ChangeListing(val value: ListingType) : Intent
-        data class UpVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
-        data class DownVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
-        data class SavePost(val post: PostModel, val feedback: Boolean = false) : Intent
+        data class UpVotePost(val index: Int, val feedback: Boolean = false) : Intent
+        data class DownVotePost(val index: Int, val feedback: Boolean = false) : Intent
+        data class SavePost(val index: Int, val feedback: Boolean = false) : Intent
         object HapticIndication : Intent
     }
 

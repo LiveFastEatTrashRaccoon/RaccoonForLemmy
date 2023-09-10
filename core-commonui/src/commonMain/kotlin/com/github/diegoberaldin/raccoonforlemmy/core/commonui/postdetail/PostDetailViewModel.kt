@@ -55,17 +55,17 @@ class PostDetailViewModel(
             is PostDetailMviModel.Intent.ChangeSort -> applySortType(intent.value)
 
             is PostDetailMviModel.Intent.DownVoteComment -> toggleDownVoteComment(
-                comment = intent.comment,
+                comment = uiState.value.comments[intent.index],
                 feedback = intent.feedback,
             )
 
             is PostDetailMviModel.Intent.DownVotePost -> toggleDownVotePost(
-                post = intent.post,
+                post = uiState.value.post,
                 feedback = intent.feedback,
             )
 
             is PostDetailMviModel.Intent.SaveComment -> toggleSaveComment(
-                comment = intent.comment,
+                comment = uiState.value.comments[intent.index],
                 feedback = intent.feedback,
             )
 
@@ -75,12 +75,12 @@ class PostDetailViewModel(
             )
 
             is PostDetailMviModel.Intent.UpVoteComment -> toggleUpVoteComment(
-                comment = intent.comment,
+                comment = uiState.value.comments[intent.index],
                 feedback = intent.feedback,
             )
 
             is PostDetailMviModel.Intent.UpVotePost -> toggleUpVotePost(
-                post = intent.post,
+                post = uiState.value.post,
                 feedback = intent.feedback,
             )
 

@@ -13,14 +13,14 @@ interface PostDetailMviModel :
         object LoadNextPage : Intent
         data class FetchMoreComments(val parentId: Int) : Intent
         data class ChangeSort(val value: SortType) : Intent
-        data class UpVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
-        data class DownVotePost(val post: PostModel, val feedback: Boolean = false) : Intent
+        data class UpVotePost(val feedback: Boolean = false) : Intent
+        data class DownVotePost(val feedback: Boolean = false) : Intent
         data class SavePost(val post: PostModel, val feedback: Boolean = false) : Intent
-        data class UpVoteComment(val comment: CommentModel, val feedback: Boolean = false) : Intent
-        data class DownVoteComment(val comment: CommentModel, val feedback: Boolean = false) :
+        data class UpVoteComment(val index: Int, val feedback: Boolean = false) : Intent
+        data class DownVoteComment(val index: Int, val feedback: Boolean = false) :
             Intent
 
-        data class SaveComment(val comment: CommentModel, val feedback: Boolean = false) : Intent
+        data class SaveComment(val index: Int, val feedback: Boolean = false) : Intent
         object HapticIndication : Intent
     }
 

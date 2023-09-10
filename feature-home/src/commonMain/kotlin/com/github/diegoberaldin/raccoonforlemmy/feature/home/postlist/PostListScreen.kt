@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
@@ -134,17 +134,17 @@ class PostListScreen : Screen {
                     state = lazyListState,
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
-                    items(uiState.posts) { post ->
+                    itemsIndexed(uiState.posts) { idx, post ->
                         SwipeableCard(
                             modifier = Modifier.fillMaxWidth(),
                             onGestureBegin = {
                                 model.reduce(PostListMviModel.Intent.HapticIndication)
                             },
                             onDismissToStart = {
-                                model.reduce(PostListMviModel.Intent.UpVotePost(post))
+                                model.reduce(PostListMviModel.Intent.UpVotePost(idx))
                             },
                             onDismissToEnd = {
-                                model.reduce(PostListMviModel.Intent.DownVotePost(post))
+                                model.reduce(PostListMviModel.Intent.DownVotePost(idx))
                             },
                             backgroundColor = {
                                 when (it) {
@@ -234,7 +234,7 @@ class PostListScreen : Screen {
                                     onUpVote = {
                                         model.reduce(
                                             PostListMviModel.Intent.UpVotePost(
-                                                post = post,
+                                                index = idx,
                                                 feedback = true,
                                             ),
                                         )
@@ -242,7 +242,7 @@ class PostListScreen : Screen {
                                     onDownVote = {
                                         model.reduce(
                                             PostListMviModel.Intent.DownVotePost(
-                                                post = post,
+                                                index = idx,
                                                 feedback = true,
                                             ),
                                         )
@@ -250,18 +250,20 @@ class PostListScreen : Screen {
                                     onSave = {
                                         model.reduce(
                                             PostListMviModel.Intent.SavePost(
-                                                post = post,
+                                                index = idx,
                                                 feedback = true,
                                             ),
                                         )
                                     },
                                     onReply = {
                                         bottomSheetNavigator.show(
-                                            CreateCommentScreen(originalPost = post,
+                                            CreateCommentScreen(
+                                                originalPost = post,
                                                 onCommentCreated = {
                                                     bottomSheetNavigator.hide()
                                                     model.reduce(PostListMviModel.Intent.Refresh)
-                                                })
+                                                },
+                                            )
                                         )
                                     })
                             },

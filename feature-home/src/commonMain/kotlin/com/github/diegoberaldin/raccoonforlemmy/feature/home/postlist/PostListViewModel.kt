@@ -43,17 +43,17 @@ class PostListViewModel(
             is PostListMviModel.Intent.ChangeSort -> applySortType(intent.value)
             is PostListMviModel.Intent.ChangeListing -> applyListingType(intent.value)
             is PostListMviModel.Intent.DownVotePost -> toggleDownVote(
-                post = intent.post,
+                post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 
             is PostListMviModel.Intent.SavePost -> toggleSave(
-                post = intent.post,
+                post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 
             is PostListMviModel.Intent.UpVotePost -> toggleUpVote(
-                post = intent.post,
+                post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 

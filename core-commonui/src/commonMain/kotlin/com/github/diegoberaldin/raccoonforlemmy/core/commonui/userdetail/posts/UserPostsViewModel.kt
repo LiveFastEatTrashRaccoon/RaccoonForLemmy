@@ -49,17 +49,17 @@ class UserPostsViewModel(
             UserPostsMviModel.Intent.LoadNextPage -> loadNextPage()
             UserPostsMviModel.Intent.Refresh -> refresh()
             is UserPostsMviModel.Intent.DownVotePost -> toggleDownVote(
-                post = intent.post,
+                post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 
             is UserPostsMviModel.Intent.SavePost -> toggleSave(
-                post = intent.post,
+                post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 
             is UserPostsMviModel.Intent.UpVotePost -> toggleUpVote(
-                post = intent.post,
+                post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 

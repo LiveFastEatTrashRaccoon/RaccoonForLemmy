@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DismissDirection
@@ -402,7 +402,7 @@ class CommunityDetailScreen(
                             }
                         }
                     }
-                    items(uiState.posts) { post ->
+                    itemsIndexed(uiState.posts) { idx, post ->
                         SwipeableCard(
                             modifier = Modifier.fillMaxWidth(),
                             directions = if (isOnOtherInstance) {
@@ -466,16 +466,12 @@ class CommunityDetailScreen(
                             },
                             onDismissToStart = {
                                 model.reduce(
-                                    CommunityDetailMviModel.Intent.UpVotePost(
-                                        post = post,
-                                    ),
+                                    CommunityDetailMviModel.Intent.UpVotePost(idx),
                                 )
                             },
                             onDismissToEnd = {
                                 model.reduce(
-                                    CommunityDetailMviModel.Intent.DownVotePost(
-                                        post = post,
-                                    ),
+                                    CommunityDetailMviModel.Intent.DownVotePost(idx),
                                 )
                             },
                             content = {
@@ -514,7 +510,7 @@ class CommunityDetailScreen(
                                         {
                                             model.reduce(
                                                 CommunityDetailMviModel.Intent.UpVotePost(
-                                                    post = post,
+                                                    index = idx,
                                                     feedback = true,
                                                 ),
                                             )
@@ -526,7 +522,7 @@ class CommunityDetailScreen(
                                         {
                                             model.reduce(
                                                 CommunityDetailMviModel.Intent.DownVotePost(
-                                                    post = post,
+                                                    index = idx,
                                                     feedback = true,
                                                 ),
                                             )
@@ -538,7 +534,7 @@ class CommunityDetailScreen(
                                         {
                                             model.reduce(
                                                 CommunityDetailMviModel.Intent.SavePost(
-                                                    post = post,
+                                                    index = idx,
                                                     feedback = true,
                                                 ),
                                             )

@@ -276,7 +276,6 @@ class PostDetailScreen(
                                     onUpVote = {
                                         model.reduce(
                                             PostDetailMviModel.Intent.UpVotePost(
-                                                post = post,
                                                 feedback = true,
                                             ),
                                         )
@@ -284,7 +283,6 @@ class PostDetailScreen(
                                     onDownVote = {
                                         model.reduce(
                                             PostDetailMviModel.Intent.DownVotePost(
-                                                post = post,
                                                 feedback = true,
                                             ),
                                         )
@@ -317,16 +315,12 @@ class PostDetailScreen(
                                 },
                                 onDismissToStart = {
                                     model.reduce(
-                                        PostDetailMviModel.Intent.UpVoteComment(
-                                            comment = comment,
-                                        ),
+                                        PostDetailMviModel.Intent.UpVoteComment(idx),
                                     )
                                 },
                                 onDismissToEnd = {
                                     model.reduce(
-                                        PostDetailMviModel.Intent.DownVoteComment(
-                                            comment = comment,
-                                        ),
+                                        PostDetailMviModel.Intent.DownVoteComment(idx),
                                     )
                                 },
                                 swipeContent = { direction ->
@@ -376,7 +370,7 @@ class PostDetailScreen(
                                         onUpVote = {
                                             model.reduce(
                                                 PostDetailMviModel.Intent.UpVoteComment(
-                                                    comment = comment,
+                                                    index = idx,
                                                     feedback = true,
                                                 ),
                                             )
@@ -384,7 +378,7 @@ class PostDetailScreen(
                                         onDownVote = {
                                             model.reduce(
                                                 PostDetailMviModel.Intent.DownVoteComment(
-                                                    comment = comment,
+                                                    index = idx,
                                                     feedback = true,
                                                 ),
                                             )
@@ -392,7 +386,7 @@ class PostDetailScreen(
                                         onSave = {
                                             model.reduce(
                                                 PostDetailMviModel.Intent.SaveComment(
-                                                    comment = comment,
+                                                    index = idx,
                                                     feedback = true,
                                                 ),
                                             )

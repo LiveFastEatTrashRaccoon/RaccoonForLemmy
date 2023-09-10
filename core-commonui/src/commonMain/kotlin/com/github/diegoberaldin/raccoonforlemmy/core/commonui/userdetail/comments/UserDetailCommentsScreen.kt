@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
@@ -124,7 +123,7 @@ internal class UserDetailCommentsScreen(
                         )
                     }
                 }
-                items(uiState.comments) { comment ->
+                itemsIndexed(uiState.comments) { idx, comment ->
                     SwipeableCard(
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = {
@@ -180,16 +179,12 @@ internal class UserDetailCommentsScreen(
                         },
                         onDismissToStart = {
                             model.reduce(
-                                UserCommentsMviModel.Intent.UpVoteComment(
-                                    comment = comment,
-                                ),
+                                UserCommentsMviModel.Intent.UpVoteComment(idx),
                             )
                         },
                         onDismissToEnd = {
                             model.reduce(
-                                UserCommentsMviModel.Intent.DownVoteComment(
-                                    comment = comment,
-                                ),
+                                UserCommentsMviModel.Intent.DownVoteComment(idx),
                             )
                         },
                         content = {
@@ -198,7 +193,7 @@ internal class UserDetailCommentsScreen(
                                 onSave = {
                                     model.reduce(
                                         UserCommentsMviModel.Intent.SaveComment(
-                                            comment = comment,
+                                            index = idx,
                                             feedback = true,
                                         ),
                                     )
@@ -206,7 +201,7 @@ internal class UserDetailCommentsScreen(
                                 onUpVote = {
                                     model.reduce(
                                         UserCommentsMviModel.Intent.UpVoteComment(
-                                            comment = comment,
+                                            index = idx,
                                             feedback = true,
                                         ),
                                     )
@@ -214,7 +209,7 @@ internal class UserDetailCommentsScreen(
                                 onDownVote = {
                                     model.reduce(
                                         UserCommentsMviModel.Intent.DownVoteComment(
-                                            comment = comment,
+                                            index = idx,
                                             feedback = true,
                                         ),
                                     )

@@ -42,18 +42,18 @@ class UserCommentsViewModel(
             UserCommentsMviModel.Intent.LoadNextPage -> loadNextPage()
             UserCommentsMviModel.Intent.Refresh -> refresh()
             is UserCommentsMviModel.Intent.DownVoteComment -> toggleDownVoteComment(
-                comment = intent.comment,
+                comment = uiState.value.comments[intent.index],
                 feedback = intent.feedback,
             )
 
             UserCommentsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             is UserCommentsMviModel.Intent.SaveComment -> toggleSaveComment(
-                comment = intent.comment,
+                comment = uiState.value.comments[intent.index],
                 feedback = intent.feedback,
             )
 
             is UserCommentsMviModel.Intent.UpVoteComment -> toggleUpVoteComment(
-                comment = intent.comment,
+                comment = uiState.value.comments[intent.index],
                 feedback = intent.feedback,
             )
 
