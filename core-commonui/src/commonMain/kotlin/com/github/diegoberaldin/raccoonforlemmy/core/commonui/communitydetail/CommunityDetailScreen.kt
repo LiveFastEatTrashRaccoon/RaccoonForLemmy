@@ -67,9 +67,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -81,6 +79,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Swipeab
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
@@ -111,7 +110,7 @@ class CommunityDetailScreen(
         }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val navigator = LocalNavigator.currentOrThrow
+        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val isOnOtherInstance = otherInstance.isNotEmpty()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -312,7 +311,7 @@ class CommunityDetailScreen(
                                             vertical = Spacing.xs,
                                         ).onClick {
                                             optionsExpanded = false
-                                            navigator.push(
+                                            navigator?.push(
                                                 InstanceInfoScreen(
                                                     url = community.instanceUrl,
                                                 ).apply {
@@ -478,7 +477,7 @@ class CommunityDetailScreen(
                             content = {
                                 PostCard(
                                     modifier = Modifier.onClick {
-                                        navigator.push(
+                                        navigator?.push(
                                             PostDetailScreen(
                                                 post = post,
                                             ).apply {
@@ -489,7 +488,7 @@ class CommunityDetailScreen(
                                         )
                                     },
                                     onOpenCreator = { user ->
-                                        navigator.push(
+                                        navigator?.push(
                                             UserDetailScreen(
                                                 user = user,
 

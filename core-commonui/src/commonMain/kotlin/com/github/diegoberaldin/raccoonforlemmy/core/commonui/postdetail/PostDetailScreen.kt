@@ -60,9 +60,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
@@ -77,6 +75,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostLinkBanner
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
@@ -100,7 +99,7 @@ class PostDetailScreen(
         val model = rememberScreenModel { getPostDetailViewModel(post) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val navigator = LocalNavigator.currentOrThrow
+        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val isFabVisible = remember { mutableStateOf(true) }
@@ -235,7 +234,7 @@ class PostDetailScreen(
                                     community = post.community,
                                     creator = post.creator?.copy(avatar = null),
                                     onOpenCommunity = { community ->
-                                        navigator.push(
+                                        navigator?.push(
                                             CommunityDetailScreen(
                                                 community = community,
                                             ).apply {
@@ -246,7 +245,7 @@ class PostDetailScreen(
                                         )
                                     },
                                     onOpenCreator = { user ->
-                                        navigator.push(
+                                        navigator?.push(
                                             UserDetailScreen(
                                                 user = user,
                                             ).apply {
@@ -260,7 +259,7 @@ class PostDetailScreen(
                                 PostCardImage(
                                     imageUrl = post.thumbnailUrl.orEmpty(),
                                     onImageClick = {
-                                        navigator.push(
+                                        navigator?.push(
                                             ZoomableImageScreen(
                                                 url = post.thumbnailUrl.orEmpty()
                                             ).apply {

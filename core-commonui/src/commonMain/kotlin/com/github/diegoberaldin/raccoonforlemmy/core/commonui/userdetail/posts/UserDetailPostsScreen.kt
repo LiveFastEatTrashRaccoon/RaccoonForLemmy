@@ -29,15 +29,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
@@ -51,6 +50,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Swipeab
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserPostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
@@ -88,7 +88,7 @@ internal class UserDetailPostsScreen(
         }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val navigator = LocalNavigator.currentOrThrow
+        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         LaunchedEffect(parentModel) {
@@ -202,7 +202,7 @@ internal class UserDetailPostsScreen(
                         content = {
                             PostCard(
                                 modifier = Modifier.onClick {
-                                    navigator.push(
+                                    navigator?.push(
                                         PostDetailScreen(
                                             post = post,
                                         ).apply {
@@ -239,7 +239,7 @@ internal class UserDetailPostsScreen(
                                     )
                                 },
                                 onOpenCommunity = { community ->
-                                    navigator.push(
+                                    navigator?.push(
                                         CommunityDetailScreen(
                                             community = community,
                                         ).apply {

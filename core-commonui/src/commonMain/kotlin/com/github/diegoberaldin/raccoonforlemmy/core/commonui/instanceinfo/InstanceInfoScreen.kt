@@ -39,8 +39,6 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -48,6 +46,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getInstanceInfoViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -66,7 +65,7 @@ class InstanceInfoScreen(
         val model = rememberScreenModel { getInstanceInfoViewModel(url) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val navigator = LocalNavigator.currentOrThrow
+        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val instanceName = url.replace("https://", "")
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -147,7 +146,7 @@ class InstanceInfoScreen(
                         ) {
                             CommunityItem(
                                 modifier = Modifier.onClick {
-                                    navigator.push(
+                                    navigator?.push(
                                         CommunityDetailScreen(
                                             community = it,
                                             otherInstance = instanceName,
