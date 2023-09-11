@@ -49,6 +49,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
@@ -265,7 +266,17 @@ class PostListScreen : Screen {
                                                 },
                                             )
                                         )
-                                    })
+                                    },
+                                    onImageClick = { url ->
+                                        navigator?.push(
+                                            ZoomableImageScreen(url).apply {
+                                                onBack = {
+                                                    navigator.pop()
+                                                }
+                                            }
+                                        )
+                                    },
+                                )
                             },
                         )
                     }

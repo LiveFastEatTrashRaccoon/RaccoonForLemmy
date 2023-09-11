@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -42,6 +43,7 @@ fun PostCard(
     onDownVote: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
+    onImageClick: ((String) -> Unit)? = null,
 ) {
     val themeRepository = remember { getThemeRepository() }
     val fontScale by themeRepository.contentFontScale.collectAsState()
@@ -77,10 +79,12 @@ fun PostCard(
                     modifier = Modifier.clip(RoundedCornerShape(CornerSize.xl)),
                     post = post,
                     blurNsfw = blurNsfw,
+                    onImageClick = onImageClick,
                 )
                 Box {
                     PostCardBody(
-                        modifier = Modifier.heightIn(max = 200.dp).padding(bottom = Spacing.xs),
+                        modifier = Modifier.heightIn(max = 200.dp)
+                            .padding(bottom = Spacing.xs),
                         text = post.text,
                     )
                     Box(

@@ -81,6 +81,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Swipeab
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
@@ -550,7 +551,16 @@ class CommunityDetailScreen(
                                                 }
                                             )
                                         )
-                                    }
+                                    },
+                                    onImageClick = { url ->
+                                        navigator?.push(
+                                            ZoomableImageScreen(url).apply {
+                                                onBack = {
+                                                    navigator.pop()
+                                                }
+                                            }
+                                        )
+                                    },
                                 )
                             },
                         )

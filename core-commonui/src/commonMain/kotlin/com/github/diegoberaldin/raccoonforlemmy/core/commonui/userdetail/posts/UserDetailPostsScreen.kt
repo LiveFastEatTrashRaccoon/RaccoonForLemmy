@@ -52,6 +52,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCou
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserPostsViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
@@ -258,7 +259,16 @@ internal class UserDetailPostsScreen(
                                             }
                                         )
                                     )
-                                }
+                                },
+                                onImageClick = { url ->
+                                    navigator?.push(
+                                        ZoomableImageScreen(url).apply {
+                                            onBack = {
+                                                navigator.pop()
+                                            }
+                                        }
+                                    )
+                                },
                             )
                         },
                     )

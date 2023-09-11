@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
@@ -37,6 +36,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Section
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedSection
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostCard
@@ -121,6 +121,15 @@ internal class ProfileSavedScreen(
                                         navigator.pop()
                                     }
                                 },
+                            )
+                        },
+                        onImageClick = { url ->
+                            navigator?.push(
+                                ZoomableImageScreen(url).apply {
+                                    onBack = {
+                                        navigator.pop()
+                                    }
+                                }
                             )
                         },
                     )

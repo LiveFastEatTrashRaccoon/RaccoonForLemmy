@@ -37,6 +37,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Section
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedSection
@@ -130,6 +131,15 @@ internal class ProfilePostsScreen(
                                         navigator.pop()
                                     }
                                 },
+                            )
+                        },
+                        onImageClick = { url ->
+                            navigator?.push(
+                                ZoomableImageScreen(url).apply {
+                                    onBack = {
+                                        navigator.pop()
+                                    }
+                                }
                             )
                         },
                     )

@@ -39,6 +39,7 @@ fun ProfilePostCard(
     post: PostModel,
     modifier: Modifier = Modifier,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
+    onImageClick: ((String) -> Unit)? = null,
 ) {
     val themeRepository = remember { getThemeRepository() }
     val fontScale by themeRepository.contentFontScale.collectAsState()
@@ -73,6 +74,7 @@ fun ProfilePostCard(
                 PostCardImage(
                     post = post,
                     blurNsfw = false,
+                    onImageClick = onImageClick,
                 )
 
                 Box {

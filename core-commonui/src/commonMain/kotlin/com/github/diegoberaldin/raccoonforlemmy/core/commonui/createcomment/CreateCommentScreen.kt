@@ -135,7 +135,7 @@ class CreateCommentScreen(
                         PostCard(
                             modifier = referenceModifier,
                             post = originalPost,
-                            blurNsfw = false
+                            blurNsfw = false,
                         )
                     }
                 }
