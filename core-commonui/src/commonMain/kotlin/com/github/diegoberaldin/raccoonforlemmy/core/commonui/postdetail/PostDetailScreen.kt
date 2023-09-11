@@ -77,6 +77,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -116,8 +117,8 @@ class PostDetailScreen(
             }
         }
 
-        Scaffold(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
+        Scaffold(modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+            .padding(Spacing.xs),
             topBar = {
                 TopAppBar(
                     title = {
@@ -181,13 +182,10 @@ class PostDetailScreen(
                         backgroundColor = MaterialTheme.colorScheme.secondary,
                         onClick = {
                             bottomSheetNavigator.show(
-                                CreateCommentScreen(
-                                    originalPost = post,
-                                    onCommentCreated = {
-                                        bottomSheetNavigator.hide()
-                                        model.reduce(PostDetailMviModel.Intent.Refresh)
-                                    }
-                                )
+                                CreateCommentScreen(originalPost = post, onCommentCreated = {
+                                    bottomSheetNavigator.hide()
+                                    model.reduce(PostDetailMviModel.Intent.Refresh)
+                                })
                             )
                         },
                         content = {
@@ -198,17 +196,14 @@ class PostDetailScreen(
                         },
                     )
                 }
-            }
-        ) { padding ->
+            }) { padding ->
             val post = uiState.post
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                 model.reduce(PostDetailMviModel.Intent.Refresh)
             })
             Box(
-                modifier = Modifier
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .nestedScroll(fabNestedScrollConnection)
-                    .pullRefresh(pullRefreshState),
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .nestedScroll(fabNestedScrollConnection).pullRefresh(pullRefreshState),
             ) {
                 LazyColumn(
                     modifier = Modifier.padding(padding),
@@ -262,8 +257,18 @@ class PostDetailScreen(
                                     },
                                 )
                                 PostCardImage(
-                                    post = post,
-                                    blurNsfw = false,
+                                    imageUrl = post.thumbnailUrl.orEmpty(),
+                                    onImageClick = {
+                                        navigator.push(
+                                            ZoomableImageScreen(
+                                                url = post.thumbnailUrl.orEmpty()
+                                            ).apply {
+                                                onBack = {
+                                                    navigator.pop()
+                                                }
+                                            }
+                                        )
+                                    }
                                 )
                                 PostCardBody(
                                     text = post.text,
@@ -367,61 +372,51 @@ class PostDetailScreen(
                                     )
                                 },
                                 content = {
-                                    CommentCard(
-                                        comment = comment,
-                                        onUpVote = {
-                                            model.reduce(
-                                                PostDetailMviModel.Intent.UpVoteComment(
-                                                    index = idx,
-                                                    feedback = true,
-                                                ),
-                                            )
-                                        },
-                                        onDownVote = {
-                                            model.reduce(
-                                                PostDetailMviModel.Intent.DownVoteComment(
-                                                    index = idx,
-                                                    feedback = true,
-                                                ),
-                                            )
-                                        },
-                                        onSave = {
-                                            model.reduce(
-                                                PostDetailMviModel.Intent.SaveComment(
-                                                    index = idx,
-                                                    feedback = true,
-                                                ),
-                                            )
-                                        },
-                                        onReply = {
-                                            bottomSheetNavigator.show(
-                                                CreateCommentScreen(
-                                                    originalPost = post,
-                                                    originalComment = comment,
-                                                    onCommentCreated = {
-                                                        bottomSheetNavigator.hide()
-                                                        model.reduce(PostDetailMviModel.Intent.Refresh)
-                                                    }
-                                                )
-                                            )
-                                        }
-                                    )
+                                    CommentCard(comment = comment, onUpVote = {
+                                        model.reduce(
+                                            PostDetailMviModel.Intent.UpVoteComment(
+                                                index = idx,
+                                                feedback = true,
+                                            ),
+                                        )
+                                    }, onDownVote = {
+                                        model.reduce(
+                                            PostDetailMviModel.Intent.DownVoteComment(
+                                                index = idx,
+                                                feedback = true,
+                                            ),
+                                        )
+                                    }, onSave = {
+                                        model.reduce(
+                                            PostDetailMviModel.Intent.SaveComment(
+                                                index = idx,
+                                                feedback = true,
+                                            ),
+                                        )
+                                    }, onReply = {
+                                        bottomSheetNavigator.show(
+                                            CreateCommentScreen(originalPost = post,
+                                                originalComment = comment,
+                                                onCommentCreated = {
+                                                    bottomSheetNavigator.hide()
+                                                    model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                })
+                                        )
+                                    })
                                 },
                             )
-                            if ((comment.comments ?: 0) > 0
-                                && comment.depth == CommentRepository.MAX_COMMENT_DEPTH
-                                && (idx < uiState.comments.lastIndex && uiState.comments[idx + 1].depth < comment.depth)
+                            if ((comment.comments
+                                    ?: 0) > 0 && comment.depth == CommentRepository.MAX_COMMENT_DEPTH && (idx < uiState.comments.lastIndex && uiState.comments[idx + 1].depth < comment.depth)
                             ) {
                                 Row {
                                     Spacer(modifier = Modifier.weight(1f))
-                                    Button(
-                                        onClick = {
-                                            model.reduce(
-                                                PostDetailMviModel.Intent.FetchMoreComments(
-                                                    parentId = comment.id
-                                                )
+                                    Button(onClick = {
+                                        model.reduce(
+                                            PostDetailMviModel.Intent.FetchMoreComments(
+                                                parentId = comment.id
                                             )
-                                        }) {
+                                        )
+                                    }) {
                                         Text(
                                             text = stringResource(MR.strings.post_detail_load_more_comments),
                                             style = MaterialTheme.typography.labelMedium,

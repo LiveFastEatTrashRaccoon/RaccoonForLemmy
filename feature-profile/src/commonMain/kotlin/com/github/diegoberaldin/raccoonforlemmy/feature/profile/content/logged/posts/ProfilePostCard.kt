@@ -72,8 +72,8 @@ fun ProfilePostCard(
                     onOpenCommunity = onOpenCommunity,
                 )
                 PostCardImage(
-                    post = post,
-                    blurNsfw = false,
+                    imageUrl = post.thumbnailUrl.orEmpty(),
+                    blurred = false,
                     onImageClick = onImageClick,
                 )
 

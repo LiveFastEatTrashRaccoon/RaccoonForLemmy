@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -77,8 +76,8 @@ fun PostCard(
                 )
                 PostCardImage(
                     modifier = Modifier.clip(RoundedCornerShape(CornerSize.xl)),
-                    post = post,
-                    blurNsfw = blurNsfw,
+                    imageUrl = post.thumbnailUrl.orEmpty(),
+                    blurred = blurNsfw && post.nsfw,
                     onImageClick = onImageClick,
                 )
                 Box {
