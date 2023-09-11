@@ -116,20 +116,12 @@ internal class ProfileSavedScreen(
                             navigator?.push(
                                 CommunityDetailScreen(
                                     community = community,
-                                ).apply {
-                                    onBack = {
-                                        navigator.pop()
-                                    }
-                                },
+                                ),
                             )
                         },
                         onImageClick = { url ->
                             navigator?.push(
-                                ZoomableImageScreen(url).apply {
-                                    onBack = {
-                                        navigator.pop()
-                                    }
-                                }
+                                ZoomableImageScreen(url),
                             )
                         },
                     )

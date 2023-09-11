@@ -54,8 +54,6 @@ class InstanceInfoScreen(
     private val url: String,
 ) : Screen {
 
-    private var onBack: (() -> Unit)? = null
-
     @OptIn(
         ExperimentalMaterial3Api::class,
         ExperimentalMaterialApi::class,
@@ -77,7 +75,7 @@ class InstanceInfoScreen(
                     navigationIcon = {
                         Image(
                             modifier = Modifier.onClick {
-                                onBack?.invoke()
+                                navigator?.pop()
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -150,11 +148,7 @@ class InstanceInfoScreen(
                                         CommunityDetailScreen(
                                             community = it,
                                             otherInstance = instanceName,
-                                        ).apply {
-                                            onBack = {
-                                                navigator.pop()
-                                            }
-                                        },
+                                        ),
                                     )
                                 },
                                 community = it,

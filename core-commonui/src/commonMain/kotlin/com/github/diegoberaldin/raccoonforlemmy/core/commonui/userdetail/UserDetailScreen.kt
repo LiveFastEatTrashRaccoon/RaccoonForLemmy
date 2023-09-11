@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -32,6 +33,7 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.comments.UserDetailCommentsScreen
@@ -47,8 +49,6 @@ class UserDetailScreen(
     private val user: UserModel,
 ) : Screen {
 
-    var onBack: (() -> Unit)? = null
-
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
@@ -56,6 +56,7 @@ class UserDetailScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
         Scaffold(
@@ -102,7 +103,7 @@ class UserDetailScreen(
                     navigationIcon = {
                         Image(
                             modifier = Modifier.onClick {
-                                onBack?.invoke()
+                                navigator?.pop()
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,

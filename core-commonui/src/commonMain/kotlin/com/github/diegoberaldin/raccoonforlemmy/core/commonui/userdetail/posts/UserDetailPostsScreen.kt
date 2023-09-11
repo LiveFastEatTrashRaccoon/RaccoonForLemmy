@@ -205,11 +205,7 @@ internal class UserDetailPostsScreen(
                                     navigator?.push(
                                         PostDetailScreen(
                                             post = post,
-                                        ).apply {
-                                            onBack = {
-                                                navigator.pop()
-                                            }
-                                        },
+                                        ),
                                     )
                                 },
                                 post = post,
@@ -242,11 +238,7 @@ internal class UserDetailPostsScreen(
                                     navigator?.push(
                                         CommunityDetailScreen(
                                             community = community,
-                                        ).apply {
-                                            onBack = {
-                                                navigator.pop()
-                                            }
-                                        },
+                                        ),
                                     )
                                 },
                                 onReply = {
@@ -262,11 +254,7 @@ internal class UserDetailPostsScreen(
                                 },
                                 onImageClick = { url ->
                                     navigator?.push(
-                                        ZoomableImageScreen(url).apply {
-                                            onBack = {
-                                                navigator.pop()
-                                            }
-                                        }
+                                        ZoomableImageScreen(url),
                                     )
                                 },
                             )

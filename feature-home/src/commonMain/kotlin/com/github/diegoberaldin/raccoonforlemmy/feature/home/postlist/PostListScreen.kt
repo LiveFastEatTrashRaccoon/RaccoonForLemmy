@@ -201,11 +201,7 @@ class PostListScreen : Screen {
                                         navigator?.push(
                                             PostDetailScreen(
                                                 post = post,
-                                            ).apply {
-                                                onBack = {
-                                                    navigator.pop()
-                                                }
-                                            },
+                                            ),
                                         )
                                     },
                                     post = post,
@@ -214,22 +210,14 @@ class PostListScreen : Screen {
                                         navigator?.push(
                                             CommunityDetailScreen(
                                                 community = community,
-                                            ).apply {
-                                                onBack = {
-                                                    navigator.pop()
-                                                }
-                                            },
+                                            ),
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator?.push(
                                             UserDetailScreen(
                                                 user = user,
-                                            ).apply {
-                                                onBack = {
-                                                    navigator.pop()
-                                                }
-                                            },
+                                            ),
                                         )
                                     },
                                     onUpVote = {
@@ -269,11 +257,7 @@ class PostListScreen : Screen {
                                     },
                                     onImageClick = { url ->
                                         navigator?.push(
-                                            ZoomableImageScreen(url).apply {
-                                                onBack = {
-                                                    navigator.pop()
-                                                }
-                                            }
+                                            ZoomableImageScreen(url),
                                         )
                                     },
                                 )

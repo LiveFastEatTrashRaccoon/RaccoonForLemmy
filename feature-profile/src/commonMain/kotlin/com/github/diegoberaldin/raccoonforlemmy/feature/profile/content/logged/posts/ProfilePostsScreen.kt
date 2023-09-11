@@ -114,11 +114,7 @@ internal class ProfilePostsScreen(
                             navigator?.push(
                                 PostDetailScreen(
                                     post = post,
-                                ).apply {
-                                    onBack = {
-                                        navigator.pop()
-                                    }
-                                },
+                                ),
                             )
                         },
                         post = post,
@@ -126,20 +122,12 @@ internal class ProfilePostsScreen(
                             navigator?.push(
                                 CommunityDetailScreen(
                                     community = community,
-                                ).apply {
-                                    onBack = {
-                                        navigator.pop()
-                                    }
-                                },
+                                ),
                             )
                         },
                         onImageClick = { url ->
                             navigator?.push(
-                                ZoomableImageScreen(url).apply {
-                                    onBack = {
-                                        navigator.pop()
-                                    }
-                                }
+                                ZoomableImageScreen(url),
                             )
                         },
                     )

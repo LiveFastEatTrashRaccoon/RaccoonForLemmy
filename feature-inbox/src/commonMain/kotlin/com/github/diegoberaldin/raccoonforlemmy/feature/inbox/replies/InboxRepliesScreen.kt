@@ -133,33 +133,21 @@ class InboxRepliesScreen : Tab {
                                     navigator?.push(
                                         PostDetailScreen(
                                             post = post,
-                                        ).apply {
-                                            onBack = {
-                                                navigator.pop()
-                                            }
-                                        },
+                                        ),
                                     )
                                 },
                                 onOpenCreator = { user ->
                                     navigator?.push(
                                         UserDetailScreen(
                                             user = user,
-                                        ).apply {
-                                            onBack = {
-                                                navigator.pop()
-                                            }
-                                        },
+                                        ),
                                     )
                                 },
                                 onOpenCommunity = { community ->
                                     navigator?.push(
                                         CommunityDetailScreen(
                                             community = community,
-                                        ).apply {
-                                            onBack = {
-                                                navigator.pop()
-                                            }
-                                        },
+                                        ),
                                     )
                                 },
                             )

@@ -91,8 +91,6 @@ class PostDetailScreen(
     private val post: PostModel,
 ) : Screen {
 
-    var onBack: (() -> Unit)? = null
-
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
@@ -158,7 +156,7 @@ class PostDetailScreen(
                     navigationIcon = {
                         Image(
                             modifier = Modifier.onClick {
-                                onBack?.invoke()
+                                navigator?.pop()
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
@@ -237,22 +235,14 @@ class PostDetailScreen(
                                         navigator?.push(
                                             CommunityDetailScreen(
                                                 community = community,
-                                            ).apply {
-                                                onBack = {
-                                                    navigator.pop()
-                                                }
-                                            },
+                                            ),
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator?.push(
                                             UserDetailScreen(
                                                 user = user,
-                                            ).apply {
-                                                onBack = {
-                                                    navigator.pop()
-                                                }
-                                            },
+                                            ),
                                         )
                                     },
                                 )
@@ -262,11 +252,7 @@ class PostDetailScreen(
                                         navigator?.push(
                                             ZoomableImageScreen(
                                                 url = post.thumbnailUrl.orEmpty()
-                                            ).apply {
-                                                onBack = {
-                                                    navigator.pop()
-                                                }
-                                            }
+                                            ),
                                         )
                                     }
                                 )
