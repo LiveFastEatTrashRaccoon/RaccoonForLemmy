@@ -63,9 +63,11 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 internal class UserDetailPostsScreen(
-    private val user: UserModel,
+    private val serialUser: String,
 ) : Tab {
 
     var onSectionSelected: ((UserDetailSection) -> Unit)? = null
@@ -79,6 +81,7 @@ internal class UserDetailPostsScreen(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
+        val user = remember { Json.decodeFromString<UserModel>(serialUser) }
         val model = rememberScreenModel(
             user.id.toString(),
         ) {
@@ -204,7 +207,7 @@ internal class UserDetailPostsScreen(
                                 modifier = Modifier.onClick {
                                     navigator?.push(
                                         PostDetailScreen(
-                                            post = post,
+                                            serialPost = Json.encodeToString(post),
                                         ),
                                     )
                                 },
@@ -237,18 +240,14 @@ internal class UserDetailPostsScreen(
                                 onOpenCommunity = { community ->
                                     navigator?.push(
                                         CommunityDetailScreen(
-                                            community = community,
+                                            serialCommunity = Json.encodeToString(community),
                                         ),
                                     )
                                 },
                                 onReply = {
                                     bottomSheetNavigator.show(
                                         CreateCommentScreen(
-                                            originalPost = post,
-                                            onCommentCreated = {
-                                                bottomSheetNavigator.hide()
-                                                model.reduce(UserPostsMviModel.Intent.Refresh)
-                                            }
+                                            originalPost = Json.encodeToString(post),
                                         )
                                     )
                                 },

@@ -44,6 +44,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxRepliesViewModel
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class InboxRepliesScreen : Tab {
     override val options: TabOptions
@@ -132,21 +134,21 @@ class InboxRepliesScreen : Tab {
                                 onOpenPost = { post ->
                                     navigator?.push(
                                         PostDetailScreen(
-                                            post = post,
+                                            serialPost = Json.encodeToString(post),
                                         ),
                                     )
                                 },
                                 onOpenCreator = { user ->
                                     navigator?.push(
                                         UserDetailScreen(
-                                            user = user,
+                                            serialUser = Json.encodeToString(user),
                                         ),
                                     )
                                 },
                                 onOpenCommunity = { community ->
                                     navigator?.push(
                                         CommunityDetailScreen(
-                                            community = community,
+                                            serialCommunity = Json.encodeToString(community),
                                         ),
                                     )
                                 },

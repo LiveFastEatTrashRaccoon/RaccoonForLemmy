@@ -99,9 +99,6 @@ class SettingsScreen : Screen {
                                             ),
                                         )
                                     },
-                                    onHide = {
-                                        bottomSheetNavigator.hide()
-                                    },
                                 ),
                             )
                         },
@@ -121,9 +118,6 @@ class SettingsScreen : Screen {
                                             ),
                                         )
                                     },
-                                    onHide = {
-                                        bottomSheetNavigator.hide()
-                                    },
                                 ),
                             )
                         },
@@ -142,9 +136,6 @@ class SettingsScreen : Screen {
                                                 newValue,
                                             ),
                                         )
-                                    },
-                                    onHide = {
-                                        bottomSheetNavigator.hide()
                                     },
                                 ),
                             )
@@ -166,9 +157,6 @@ class SettingsScreen : Screen {
                                             ),
                                         )
                                     },
-                                    onHide = {
-                                        bottomSheetNavigator.hide()
-                                    },
                                 ),
                             )
                         },
@@ -188,9 +176,6 @@ class SettingsScreen : Screen {
                                                 newValue,
                                             ),
                                         )
-                                    },
-                                    onHide = {
-                                        bottomSheetNavigator.hide()
                                     },
                                 ),
                             )
@@ -216,9 +201,6 @@ class SettingsScreen : Screen {
                                                 newValue,
                                             ),
                                         )
-                                    },
-                                    onHide = {
-                                        bottomSheetNavigator.hide()
                                     },
                                 ),
                             )

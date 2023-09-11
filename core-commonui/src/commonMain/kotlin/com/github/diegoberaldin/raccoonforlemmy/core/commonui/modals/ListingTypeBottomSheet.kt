@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
@@ -34,10 +35,10 @@ import dev.icerock.moko.resources.compose.stringResource
 class ListingTypeBottomSheet(
     private val isLogged: Boolean = false,
     private val onSelected: (ListingType) -> Unit,
-    private val onHide: () -> Unit,
 ) : Screen {
     @Composable
     override fun Content() {
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -79,7 +80,7 @@ class ListingTypeBottomSheet(
                                 .fillMaxWidth()
                                 .onClick {
                                     onSelected(value)
-                                    onHide()
+                                    bottomSheetNavigator.hide()
                                 },
                         ) {
                             Text(

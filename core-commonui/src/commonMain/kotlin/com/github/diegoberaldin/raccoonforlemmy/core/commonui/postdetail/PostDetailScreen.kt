@@ -86,14 +86,19 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class PostDetailScreen(
-    private val post: PostModel,
+    private val serialPost: String,
 ) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
+        val post = remember {
+            Json.decodeFromString<PostModel>(serialPost)
+        }
         val model = rememberScreenModel { getPostDetailViewModel(post) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
@@ -142,9 +147,6 @@ class PostDetailScreen(
                                         onSelected = {
                                             model.reduce(PostDetailMviModel.Intent.ChangeSort(it))
                                         },
-                                        onHide = {
-                                            bottomSheetNavigator.hide()
-                                        },
                                     ),
                                 )
                             },
@@ -180,10 +182,9 @@ class PostDetailScreen(
                         backgroundColor = MaterialTheme.colorScheme.secondary,
                         onClick = {
                             bottomSheetNavigator.show(
-                                CreateCommentScreen(originalPost = post, onCommentCreated = {
-                                    bottomSheetNavigator.hide()
-                                    model.reduce(PostDetailMviModel.Intent.Refresh)
-                                })
+                                CreateCommentScreen(
+                                    originalPost = Json.encodeToString(post),
+                                ),
                             )
                         },
                         content = {
@@ -195,7 +196,6 @@ class PostDetailScreen(
                     )
                 }
             }) { padding ->
-            val post = uiState.post
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                 model.reduce(PostDetailMviModel.Intent.Refresh)
             })
@@ -234,14 +234,14 @@ class PostDetailScreen(
                                     onOpenCommunity = { community ->
                                         navigator?.push(
                                             CommunityDetailScreen(
-                                                community = community,
+                                                serialCommunity = Json.encodeToString(community),
                                             ),
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator?.push(
                                             UserDetailScreen(
-                                                user = user,
+                                                serialUser = Json.encodeToString(user),
                                             ),
                                         )
                                     },
@@ -387,12 +387,10 @@ class PostDetailScreen(
                                         )
                                     }, onReply = {
                                         bottomSheetNavigator.show(
-                                            CreateCommentScreen(originalPost = post,
-                                                originalComment = comment,
-                                                onCommentCreated = {
-                                                    bottomSheetNavigator.hide()
-                                                    model.reduce(PostDetailMviModel.Intent.Refresh)
-                                                })
+                                            CreateCommentScreen(
+                                                originalPost = Json.encodeToString(post),
+                                                originalComment = Json.encodeToString(comment),
+                                            ),
                                         )
                                     })
                                 },

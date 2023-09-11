@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +17,7 @@ class CreatePostViewModel(
     ),
     private val identityRepository: IdentityRepository,
     private val postsRepository: PostsRepository,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect> by mvi {
 
@@ -53,6 +55,7 @@ class CreatePostViewModel(
             } catch (e: Throwable) {
                 val message = e.message
                 mvi.emitEffect(CreatePostMviModel.Effect.Failure(message))
+                notificationCenter.send(NotificationCenter.Event.PostCreated)
             }
         }
     }

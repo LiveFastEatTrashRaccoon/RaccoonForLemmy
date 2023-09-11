@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -50,10 +51,10 @@ class SortBottomSheet(
     ),
     private val expandTop: Boolean = false,
     private val onSelected: (SortType) -> Unit,
-    private val onHide: () -> Unit,
 ) : Screen {
     @Composable
     override fun Content() {
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
         Column(
             modifier = Modifier.background(MaterialTheme.colorScheme.background).padding(
                 top = Spacing.s,
@@ -72,7 +73,7 @@ class SortBottomSheet(
                     expandTop = expandTop,
                     onSelected = {
                         onSelected(it)
-                        onHide()
+                        bottomSheetNavigator.hide()
                     }
                 )
             )

@@ -33,13 +33,15 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import kotlinx.serialization.json.Json
 
 class CommunityInfoScreen(
-    private val community: CommunityModel,
+    private val serialCommunity: String,
 ) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
+        val community = remember { Json.decodeFromString<CommunityModel>(serialCommunity) }
         val model = rememberScreenModel { getCommunityInfoViewModel(community) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()

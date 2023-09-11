@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toIcon
@@ -28,11 +29,11 @@ import dev.icerock.moko.resources.compose.stringResource
 
 class ThemeBottomSheet(
     private val onSelected: (ThemeState) -> Unit,
-    private val onHide: () -> Unit,
 ) : Screen {
 
     @Composable
     override fun Content() {
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -74,7 +75,7 @@ class ThemeBottomSheet(
                             .fillMaxWidth()
                             .onClick {
                                 onSelected(value)
-                                onHide()
+                                bottomSheetNavigator.hide()
                             },
                     ) {
                         Text(

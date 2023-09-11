@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -48,12 +47,11 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDet
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxMentionsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesMviModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class InboxMentionsScreen : Tab {
 
@@ -165,21 +163,21 @@ class InboxMentionsScreen : Tab {
                                 onOpenPost = { post ->
                                     navigator?.push(
                                         PostDetailScreen(
-                                            post = post,
+                                            serialPost = Json.encodeToString(post),
                                         ),
                                     )
                                 },
                                 onOpenCreator = { user ->
                                     navigator?.push(
                                         UserDetailScreen(
-                                            user = user,
+                                            serialUser = Json.encodeToString(user),
                                         ),
                                     )
                                 },
                                 onOpenCommunity = { community ->
                                     navigator?.push(
                                         CommunityDetailScreen(
-                                            community = community,
+                                            serialCommunity = Json.encodeToString(community),
                                         ),
                                     )
                                 },

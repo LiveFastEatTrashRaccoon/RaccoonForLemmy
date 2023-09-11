@@ -44,9 +44,11 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.p
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfilePostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 internal class ProfileSavedScreen(
-    private val user: UserModel,
+    private val serialUser: String,
 ) : Tab {
 
     var onSectionSelected: ((ProfileLoggedSection) -> Unit)? = null
@@ -59,6 +61,7 @@ internal class ProfileSavedScreen(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
+        val user = remember { Json.decodeFromString<UserModel>(serialUser) }
         val model = rememberScreenModel {
             getProfilePostsViewModel(
                 user = user,
@@ -115,7 +118,7 @@ internal class ProfileSavedScreen(
                         onOpenCommunity = { community ->
                             navigator?.push(
                                 CommunityDetailScreen(
-                                    community = community,
+                                    serialCommunity = Json.encodeToString(community),
                                 ),
                             )
                         },

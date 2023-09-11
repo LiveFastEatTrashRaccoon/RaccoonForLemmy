@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
@@ -22,10 +23,10 @@ import dev.icerock.moko.resources.compose.stringResource
 
 class InboxTypeSheet(
     private val onUnreadSelected: (Boolean) -> Unit,
-    private val onHide: () -> Unit,
 ) : Screen {
     @Composable
     override fun Content() {
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -59,7 +60,7 @@ class InboxTypeSheet(
                             .fillMaxWidth()
                             .onClick {
                                 onUnreadSelected(true)
-                                onHide()
+                                bottomSheetNavigator?.hide()
                             },
                     ) {
                         Text(
@@ -76,7 +77,7 @@ class InboxTypeSheet(
                                 vertical = Spacing.m,
                             ).onClick {
                                 onUnreadSelected(false)
-                                onHide()
+                                bottomSheetNavigator?.hide()
                             },
                     ) {
                         Text(

@@ -54,6 +54,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomS
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getSearchScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class CommunityListScreen : Screen {
 
@@ -78,9 +80,6 @@ class CommunityListScreen : Screen {
                         bottomNavigator.show(
                             ListingTypeBottomSheet(
                                 isLogged = uiState.isLogged,
-                                onHide = {
-                                    bottomNavigator.hide()
-                                },
                                 onSelected = {
                                     model.reduce(CommunityListMviModel.Intent.SetListingType(it))
                                 },
@@ -91,9 +90,6 @@ class CommunityListScreen : Screen {
                         bottomNavigator.show(
                             SortBottomSheet(
                                 expandTop = true,
-                                onHide = {
-                                    bottomNavigator.hide()
-                                },
                                 onSelected = {
                                     model.reduce(CommunityListMviModel.Intent.SetSortType(it))
                                 },
@@ -161,7 +157,7 @@ class CommunityListScreen : Screen {
                                     modifier = Modifier.fillMaxWidth().onClick {
                                         navigator?.push(
                                             CommunityDetailScreen(
-                                                community = community,
+                                                serialCommunity = Json.encodeToString(community),
                                             ),
                                         )
                                     },

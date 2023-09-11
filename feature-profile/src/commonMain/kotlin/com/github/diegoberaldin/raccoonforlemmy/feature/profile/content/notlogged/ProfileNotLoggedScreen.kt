@@ -41,11 +41,7 @@ internal object ProfileNotLoggedScreen : Tab {
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
                     bottomSheetNavigator.show(
-                        LoginBottomSheet(
-                            onHide = {
-                                bottomSheetNavigator.hide()
-                            },
-                        ),
+                        LoginBottomSheet(),
                     )
                 },
             ) {

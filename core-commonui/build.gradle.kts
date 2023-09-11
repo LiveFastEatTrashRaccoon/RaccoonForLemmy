@@ -46,6 +46,7 @@ kotlin {
                 implementation(libs.voyager.bottomsheet)
                 implementation(libs.voyager.tab)
                 implementation(libs.kamel)
+                implementation(libs.kotlinx.serialization.json)
 
                 implementation(projects.coreUtils)
                 implementation(projects.coreAppearance)

@@ -50,6 +50,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
@@ -61,9 +62,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class LoginBottomSheet(
-    private val onHide: () -> Unit,
-) : Screen {
+class LoginBottomSheet : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
@@ -73,6 +72,7 @@ class LoginBottomSheet(
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = stringResource(MR.strings.message_generic_error)
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         LaunchedEffect(model) {
             model.effects.onEach {
@@ -87,7 +87,7 @@ class LoginBottomSheet(
                         snackbarHostState.showSnackbar(
                             message = "Successfully logged in! \uD83C\uDF89\uD83C\uDF89\uD83C\uDF89",
                         )
-                        onHide()
+                        bottomSheetNavigator.hide()
                     }
                 }
             }.launchIn(this)

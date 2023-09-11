@@ -44,14 +44,17 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class UserDetailScreen(
-    private val user: UserModel,
+    private val serialUser: String,
 ) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
+        val user = remember { Json.decodeFromString<UserModel>(serialUser) }
         val model = rememberScreenModel(user.id.toString()) { getUserDetailViewModel(user) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
@@ -89,9 +92,6 @@ class UserDetailScreen(
                                         onSelected = {
                                             model.reduce(UserDetailMviModel.Intent.ChangeSort(it))
                                         },
-                                        onHide = {
-                                            bottomSheetNavigator.hide()
-                                        },
                                     ),
                                 )
                             },
@@ -123,7 +123,7 @@ class UserDetailScreen(
             ) {
                 val screens = listOf(
                     UserDetailPostsScreen(
-                        user = user,
+                        serialUser = Json.encodeToString(user),
                     ).apply {
                         parentModel = model
                         onSectionSelected = {
@@ -131,7 +131,7 @@ class UserDetailScreen(
                         }
                     },
                     UserDetailCommentsScreen(
-                        user = user,
+                        serialUser = Json.encodeToString(user),
                     ).apply {
                         parentModel = model
                         onSectionSelected = {

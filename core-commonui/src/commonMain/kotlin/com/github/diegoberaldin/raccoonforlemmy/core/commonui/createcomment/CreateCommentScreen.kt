@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -51,6 +50,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCreateCommentViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -58,22 +58,25 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.json.Json
 
 class CreateCommentScreen(
-    private val originalPost: PostModel,
-    private val originalComment: CommentModel? = null,
-    private val onCommentCreated: () -> Unit = {},
+    private val originalPost: String,
+    private val originalComment: String? = null,
 ) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
+        val post = remember { Json.decodeFromString<PostModel>(originalPost) }
+        val comment = remember { originalComment?.let { Json.decodeFromString<CommentModel>(it) } }
         val model = rememberScreenModel {
-            getCreateCommentViewModel(postId = originalPost.id, parentId = originalComment?.id)
+            getCreateCommentViewModel(postId = post.id, parentId = comment?.id)
         }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = stringResource(MR.strings.message_generic_error)
+        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
 
         LaunchedEffect(model) {
             model.effects.onEach {
@@ -82,7 +85,9 @@ class CreateCommentScreen(
                         snackbarHostState.showSnackbar(it.message ?: genericError)
                     }
 
-                    CreateCommentMviModel.Effect.Success -> onCommentCreated()
+                    CreateCommentMviModel.Effect.Success -> {
+                        navigator?.pop()
+                    }
                 }
             }.launchIn(this)
         }
@@ -96,7 +101,7 @@ class CreateCommentScreen(
                             verticalArrangement = Arrangement.spacedBy(Spacing.s),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                           BottomSheetHandle()
+                            BottomSheetHandle()
                             Text(
                                 text = stringResource(MR.strings.create_comment_title),
                                 style = MaterialTheme.typography.titleLarge,
@@ -126,15 +131,15 @@ class CreateCommentScreen(
                         horizontal = Spacing.s,
                         vertical = Spacing.xxs,
                     )
-                    if (originalComment != null) {
+                    if (comment != null) {
                         CommentCard(
                             modifier = referenceModifier,
-                            comment = originalComment
+                            comment = comment
                         )
                     } else {
                         PostCard(
                             modifier = referenceModifier,
-                            post = originalPost,
+                            post = post,
                             blurNsfw = false,
                         )
                     }

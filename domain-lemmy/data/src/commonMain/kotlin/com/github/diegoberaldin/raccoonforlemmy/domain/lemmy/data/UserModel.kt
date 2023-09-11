@@ -1,5 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class UserModel(
     val id: Int = 0,
     val name: String = "",

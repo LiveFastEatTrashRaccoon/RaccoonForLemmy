@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
@@ -13,6 +14,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRep
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class UserCommentsViewModel(
@@ -22,6 +25,7 @@ class UserCommentsViewModel(
     private val userRepository: UserRepository,
     private val commentRepository: CommentRepository,
     private val hapticFeedback: HapticFeedback,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<UserCommentsMviModel.Intent, UserCommentsMviModel.UiState, UserCommentsMviModel.Effect> by mvi {
 
@@ -34,6 +38,15 @@ class UserCommentsViewModel(
             if (user != null) {
                 mvi.updateState { it.copy(user = user) }
             }
+            notificationCenter.events.onEach { evt ->
+                when (evt) {
+                    NotificationCenter.Event.CommentCreated -> {
+                        refresh()
+                    }
+
+                    else -> Unit
+                }
+            }.launchIn(this)
         }
     }
 

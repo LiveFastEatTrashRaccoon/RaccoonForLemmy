@@ -58,6 +58,8 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getHomeScreenMod
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class PostListScreen : Screen {
 
@@ -96,9 +98,6 @@ class PostListScreen : Screen {
                                 onSelected = {
                                     model.reduce(PostListMviModel.Intent.ChangeListing(it))
                                 },
-                                onHide = {
-                                    bottomSheetNavigator.hide()
-                                },
                             ),
                         )
                     },
@@ -108,9 +107,6 @@ class PostListScreen : Screen {
                                 expandTop = true,
                                 onSelected = {
                                     model.reduce(PostListMviModel.Intent.ChangeSort(it))
-                                },
-                                onHide = {
-                                    bottomSheetNavigator.hide()
                                 },
                             ),
                         )
@@ -200,7 +196,7 @@ class PostListScreen : Screen {
                                     modifier = Modifier.onClick {
                                         navigator?.push(
                                             PostDetailScreen(
-                                                post = post,
+                                                serialPost = Json.encodeToString(post),
                                             ),
                                         )
                                     },
@@ -209,14 +205,14 @@ class PostListScreen : Screen {
                                     onOpenCommunity = { community ->
                                         navigator?.push(
                                             CommunityDetailScreen(
-                                                community = community,
+                                                serialCommunity = Json.encodeToString(community),
                                             ),
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator?.push(
                                             UserDetailScreen(
-                                                user = user,
+                                                serialUser = Json.encodeToString(user),
                                             ),
                                         )
                                     },
@@ -247,11 +243,7 @@ class PostListScreen : Screen {
                                     onReply = {
                                         bottomSheetNavigator.show(
                                             CreateCommentScreen(
-                                                originalPost = post,
-                                                onCommentCreated = {
-                                                    bottomSheetNavigator.hide()
-                                                    model.reduce(PostListMviModel.Intent.Refresh)
-                                                },
+                                                originalPost = Json.encodeToString(post),
                                             )
                                         )
                                     },

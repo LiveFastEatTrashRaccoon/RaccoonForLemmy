@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,9 +59,11 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 internal class UserDetailCommentsScreen(
-    private val user: UserModel,
+    private val serialUser: String,
 ) : Tab {
 
     var onSectionSelected: ((UserDetailSection) -> Unit)? = null
@@ -74,6 +77,7 @@ internal class UserDetailCommentsScreen(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
+        val user = remember { Json.decodeFromString<UserModel>(serialUser) }
         val model = rememberScreenModel(
             user.id.toString(),
         ) { getUserCommentsViewModel(user) }
@@ -217,13 +221,9 @@ internal class UserDetailCommentsScreen(
                                 onReply = {
                                     bottomSheetNavigator.show(
                                         CreateCommentScreen(
-                                            originalPost = PostModel(id = comment.postId),
-                                            originalComment = comment,
-                                            onCommentCreated = {
-                                                bottomSheetNavigator.hide()
-                                                model.reduce(UserCommentsMviModel.Intent.Refresh)
-                                            }
-                                        )
+                                            originalPost = Json.encodeToString(PostModel(id = comment.postId)),
+                                            originalComment = Json.encodeToString(comment),
+                                        ),
                                     )
                                 }
                             )

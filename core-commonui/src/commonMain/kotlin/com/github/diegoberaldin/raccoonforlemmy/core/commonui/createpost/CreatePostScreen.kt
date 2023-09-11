@@ -46,6 +46,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCreatePostViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
@@ -53,7 +54,6 @@ import kotlinx.coroutines.flow.onEach
 
 class CreatePostScreen(
     private val communityId: Int,
-    private val onPostCreated: () -> Unit = {},
 ) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -63,6 +63,7 @@ class CreatePostScreen(
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = stringResource(MR.strings.message_generic_error)
+        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
 
         LaunchedEffect(model) {
             model.effects.onEach {
@@ -71,7 +72,9 @@ class CreatePostScreen(
                         snackbarHostState.showSnackbar(it.message ?: genericError)
                     }
 
-                    CreatePostMviModel.Effect.Success -> onPostCreated()
+                    CreatePostMviModel.Effect.Success -> {
+                        navigator?.pop()
+                    }
                 }
             }.launchIn(this)
         }

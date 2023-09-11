@@ -96,9 +96,6 @@ object InboxScreen : Tab {
                                                     ),
                                                 )
                                             },
-                                            onHide = {
-                                                bottomSheetNavigator.hide()
-                                            },
                                         ),
                                     )
                                 },

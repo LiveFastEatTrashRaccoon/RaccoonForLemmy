@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,7 @@ class CreateCommentViewModel(
     ),
     private val identityRepository: IdentityRepository,
     private val commentRepository: CommentRepository,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect> by mvi {
 
@@ -44,6 +46,7 @@ class CreateCommentViewModel(
                     auth = auth,
                 )
                 mvi.emitEffect(CreateCommentMviModel.Effect.Success)
+                notificationCenter.send(NotificationCenter.Event.CommentCreated)
             } catch (e: Throwable) {
                 val message = e.message
                 mvi.emitEffect(CreateCommentMviModel.Effect.Failure(message))

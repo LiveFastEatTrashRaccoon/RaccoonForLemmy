@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -14,6 +15,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRep
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class UserPostsViewModel(
@@ -24,6 +27,7 @@ class UserPostsViewModel(
     private val postsRepository: PostsRepository,
     private val hapticFeedback: HapticFeedback,
     private val keyStore: TemporaryKeyStore,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<UserPostsMviModel.Intent, UserPostsMviModel.UiState, UserPostsMviModel.Effect> by mvi {
 
@@ -41,6 +45,15 @@ class UserPostsViewModel(
                     )
                 }
             }
+            notificationCenter.events.onEach { evt ->
+                when (evt) {
+                    NotificationCenter.Event.CommentCreated -> {
+                        refresh()
+                    }
+
+                    else -> Unit
+                }
+            }.launchIn(this)
         }
     }
 

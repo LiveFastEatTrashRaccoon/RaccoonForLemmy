@@ -91,15 +91,18 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class CommunityDetailScreen(
-    private val community: CommunityModel,
+    private val serialCommunity: String,
     private val otherInstance: String = "",
 ) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
+        val community = remember { Json.decodeFromString<CommunityModel>(serialCommunity) }
         val model = rememberScreenModel(community.id.toString() + otherInstance) {
             getCommunityDetailViewModel(
                 community = community,
@@ -160,9 +163,6 @@ class CommunityDetailScreen(
                                                 ),
                                             )
                                         },
-                                        onHide = {
-                                            bottomSheetNavigator.hide()
-                                        },
                                     ),
                                 )
                             },
@@ -200,11 +200,7 @@ class CommunityDetailScreen(
                             bottomSheetNavigator.show(
                                 CreatePostScreen(
                                     communityId = community.id,
-                                    onPostCreated = {
-                                        bottomSheetNavigator.hide()
-                                        model.reduce(CommunityDetailMviModel.Intent.Refresh)
-                                    }
-                                )
+                                ),
                             )
                         },
                         content = {
@@ -217,7 +213,6 @@ class CommunityDetailScreen(
                 }
             }
         ) { padding ->
-            val community = uiState.community
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                 model.reduce(CommunityDetailMviModel.Intent.Refresh)
             })
@@ -298,7 +293,9 @@ class CommunityDetailScreen(
                                         ).onClick {
                                             optionsExpanded = false
                                             bottomSheetNavigator.show(
-                                                CommunityInfoScreen(community),
+                                                CommunityInfoScreen(
+                                                    serialCommunity = Json.encodeToString(community)
+                                                ),
                                             )
                                         },
                                         text = stringResource(MR.strings.community_detail_info),
@@ -473,14 +470,14 @@ class CommunityDetailScreen(
                                     modifier = Modifier.onClick {
                                         navigator?.push(
                                             PostDetailScreen(
-                                                post = post,
+                                                serialPost = Json.encodeToString(post),
                                             ),
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator?.push(
                                             UserDetailScreen(
-                                                user = user,
+                                                serialUser = Json.encodeToString(user),
                                             ),
                                         )
                                     },
@@ -528,12 +525,8 @@ class CommunityDetailScreen(
                                     onReply = {
                                         bottomSheetNavigator.show(
                                             CreateCommentScreen(
-                                                originalPost = post,
-                                                onCommentCreated = {
-                                                    bottomSheetNavigator.hide()
-                                                    model.reduce(CommunityDetailMviModel.Intent.Refresh)
-                                                }
-                                            )
+                                                originalPost = Json.encodeToString(post),
+                                            ),
                                         )
                                     },
                                     onImageClick = { url ->

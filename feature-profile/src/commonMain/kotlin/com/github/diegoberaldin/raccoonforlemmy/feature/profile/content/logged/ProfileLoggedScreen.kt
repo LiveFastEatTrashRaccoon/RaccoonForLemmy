@@ -26,6 +26,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 internal object ProfileLoggedScreen : Tab {
 
@@ -48,21 +50,21 @@ internal object ProfileLoggedScreen : Tab {
             if (user != null) {
                 val screens = listOf(
                     ProfilePostsScreen(
-                        user = user,
+                       serialUser = Json.encodeToString(user),
                     ).apply {
                         onSectionSelected = {
                             model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
                         }
                     },
                     ProfileCommentsScreen(
-                        user = user,
+                        serialUser = Json.encodeToString(user),
                     ).apply {
                         onSectionSelected = {
                             model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
                         }
                     },
                     ProfileSavedScreen(
-                        user = user,
+                        serialUser = Json.encodeToString(user),
                     ).apply {
                         onSectionSelected = {
                             model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))

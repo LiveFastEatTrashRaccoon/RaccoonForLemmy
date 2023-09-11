@@ -49,6 +49,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getInstanceInfo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class InstanceInfoScreen(
     private val url: String,
@@ -146,7 +148,7 @@ class InstanceInfoScreen(
                                 modifier = Modifier.onClick {
                                     navigator?.push(
                                         CommunityDetailScreen(
-                                            community = it,
+                                            serialCommunity = Json.encodeToString(it),
                                             otherInstance = instanceName,
                                         ),
                                     )

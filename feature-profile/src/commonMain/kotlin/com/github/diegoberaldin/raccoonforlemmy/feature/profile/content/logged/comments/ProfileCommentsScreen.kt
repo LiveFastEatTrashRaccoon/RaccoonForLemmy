@@ -20,12 +20,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
@@ -39,9 +39,10 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.P
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileCommentsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.serialization.json.Json
 
 internal class ProfileCommentsScreen(
-    private val user: UserModel,
+    private val serialUser: String,
 ) : Tab {
 
     var onSectionSelected: ((ProfileLoggedSection) -> Unit)? = null
@@ -54,6 +55,7 @@ internal class ProfileCommentsScreen(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
+        val user = remember { Json.decodeFromString<UserModel>(serialUser) }
         val model = rememberScreenModel { getProfileCommentsViewModel(user) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
