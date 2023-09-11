@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy
+package com.github.diegoberaldin.raccoonforlemmy.di
 
 import com.github.diegoberaldin.racconforlemmy.core.utils.hapticFeedbackModule
 import com.github.diegoberaldin.raccoonforlemmy.core.api.di.coreApiModule
@@ -17,6 +17,7 @@ import org.koin.dsl.module
 
 val sharedHelperModule = module {
     includes(
+        internalSharedModule,
         coreAppearanceModule,
         corePreferencesModule,
         coreApiModule,

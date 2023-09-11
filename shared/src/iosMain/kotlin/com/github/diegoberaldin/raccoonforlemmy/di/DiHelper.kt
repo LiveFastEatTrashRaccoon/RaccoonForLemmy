@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy
+package com.github.diegoberaldin.raccoonforlemmy.di
 
 import com.github.diegoberaldin.racconforlemmy.core.utils.AppInfo
 import com.github.diegoberaldin.racconforlemmy.core.utils.hapticFeedbackModule
@@ -20,6 +20,7 @@ import platform.Foundation.NSBundle
 fun initKoin() {
     startKoin {
         modules(
+            internalSharedModule,
             coreAppearanceModule,
             corePreferencesModule,
             coreApiModule,

@@ -20,6 +20,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
@@ -29,6 +30,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_b
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_dark_surface
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_light_surface
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.di.getMainViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
@@ -39,7 +41,6 @@ import kotlin.math.roundToInt
 
 internal class MainScreen : Screen {
 
-    private var bottomBarOffsetHeightPx = mutableStateOf(0f)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -47,14 +48,18 @@ internal class MainScreen : Screen {
         val themeRepository = remember { getThemeRepository() }
         var bottomBarHeightPx by remember { mutableStateOf(0f) }
         val bottomNavBarCoordinator = remember { getNavigationCoordinator() }
+        val model = rememberScreenModel { getMainViewModel() }
 
         LaunchedEffect(bottomNavBarCoordinator) {
             val scrollConnection = object : NestedScrollConnection {
                 override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                     val delta = available.y
                     val newOffset =
-                        (bottomBarOffsetHeightPx.value + delta).coerceIn(-bottomBarHeightPx, 0f)
-                    bottomBarOffsetHeightPx.value = newOffset
+                        (model.bottomBarOffsetHeightPx.value + delta).coerceIn(
+                            -bottomBarHeightPx,
+                            0f
+                        )
+                    model.bottomBarOffsetHeightPx.value = newOffset
                     return Offset.Zero
                 }
             }
@@ -80,7 +85,7 @@ internal class MainScreen : Screen {
                             .offset {
                                 IntOffset(
                                     x = 0,
-                                    y = -bottomBarOffsetHeightPx.value.roundToInt()
+                                    y = -model.bottomBarOffsetHeightPx.value.roundToInt()
                                 )
                             },
                         contentPadding = PaddingValues(0.dp),
