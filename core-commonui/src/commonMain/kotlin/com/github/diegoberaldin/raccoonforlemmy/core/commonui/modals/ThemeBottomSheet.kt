@@ -45,6 +45,7 @@ class ThemeBottomSheet(
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
         ) {
             Column(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 BottomSheetHandle()

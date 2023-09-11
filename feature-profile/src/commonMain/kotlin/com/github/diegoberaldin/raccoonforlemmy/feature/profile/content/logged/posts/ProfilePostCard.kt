@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
@@ -31,6 +32,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardFooter
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostLinkBanner
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 
@@ -72,6 +74,7 @@ fun ProfilePostCard(
                     onOpenCommunity = onOpenCommunity,
                 )
                 PostCardImage(
+                    modifier = Modifier.clip(RoundedCornerShape(CornerSize.xl)),
                     imageUrl = post.thumbnailUrl.orEmpty(),
                     blurred = false,
                     onImageClick = onImageClick,
@@ -97,6 +100,12 @@ fun ProfilePostCard(
                             ),
                     )
                 }
+                PostLinkBanner(
+                    modifier = Modifier.padding(vertical = Spacing.xs),
+                    url = post.url.takeIf {
+                        it?.contains("pictrs/image") == false
+                    }.orEmpty(),
+                )
                 PostCardFooter(
                     comments = post.comments,
                     score = post.score,

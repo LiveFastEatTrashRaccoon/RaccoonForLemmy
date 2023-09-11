@@ -98,6 +98,12 @@ fun PostCard(
                             ),
                     )
                 }
+                PostLinkBanner(
+                    modifier = Modifier.padding(vertical = Spacing.xs),
+                    url = post.url.takeIf {
+                        it?.contains("pictrs/image") == false
+                    }.orEmpty(),
+                )
                 PostCardFooter(
                     comments = post.comments,
                     score = post.score,

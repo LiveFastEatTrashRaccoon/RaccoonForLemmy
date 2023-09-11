@@ -74,6 +74,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardTitle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostLinkBanner
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailViewModel
@@ -272,6 +273,12 @@ class PostDetailScreen(
                                 )
                                 PostCardBody(
                                     text = post.text,
+                                )
+                                PostLinkBanner(
+                                    modifier = Modifier.padding(vertical = Spacing.xs),
+                                    url = post.url.takeIf {
+                                        it?.contains("pictrs/image") == false
+                                    }.orEmpty(),
                                 )
                                 PostCardFooter(
                                     comments = post.comments,
