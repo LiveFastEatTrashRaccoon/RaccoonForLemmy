@@ -29,6 +29,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -51,6 +52,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Communi
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getSearchScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -68,6 +71,12 @@ class CommunityListScreen : Screen {
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val bottomNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val notificationCenter = remember { getNotificationCenter() }
+        DisposableEffect(key) {
+            onDispose {
+                notificationCenter.removeObserver(key)
+            }
+        }
 
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
@@ -77,14 +86,15 @@ class CommunityListScreen : Screen {
                     listingType = uiState.listingType,
                     sortType = uiState.sortType,
                     onSelectListingType = {
-                        bottomNavigator.show(
-                            ListingTypeBottomSheet(
-                                isLogged = uiState.isLogged,
-                                onSelected = {
-                                    model.reduce(CommunityListMviModel.Intent.SetListingType(it))
-                                },
-                            ),
+                        val sheet = ListingTypeBottomSheet(
+                            isLogged = uiState.isLogged,
                         )
+                        notificationCenter.addObserver({ result ->
+                            (result as? ListingType)?.also {
+                                model.reduce(CommunityListMviModel.Intent.SetListingType(it))
+                            }
+                        }, key, sheet.key)
+                        bottomNavigator.show(sheet)
                     },
                     onSelectSortType = {
                         bottomNavigator.show(

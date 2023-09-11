@@ -29,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -54,6 +55,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getHomeScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import kotlinx.coroutines.flow.launchIn
@@ -73,6 +76,12 @@ class PostListScreen : Screen {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val bottomNavCoordinator = remember { getNavigationCoordinator() }
         val navigator = remember { bottomNavCoordinator.getRootNavigator() }
+        val notificationCenter = remember { getNotificationCenter() }
+        DisposableEffect(key) {
+            onDispose {
+                notificationCenter.removeObserver(key)
+            }
+        }
 
         val lazyListState = rememberLazyListState()
         LaunchedEffect(navigator) {
@@ -92,14 +101,15 @@ class PostListScreen : Screen {
                     sortType = uiState.sortType,
                     scrollBehavior = scrollBehavior,
                     onSelectListingType = {
-                        bottomSheetNavigator.show(
-                            ListingTypeBottomSheet(
-                                isLogged = uiState.isLogged,
-                                onSelected = {
-                                    model.reduce(PostListMviModel.Intent.ChangeListing(it))
-                                },
-                            ),
+                        val sheet = ListingTypeBottomSheet(
+                            isLogged = uiState.isLogged,
                         )
+                        notificationCenter.addObserver({ result ->
+                            (result as? ListingType)?.also {
+                                model.reduce(PostListMviModel.Intent.ChangeListing(it))
+                            }
+                        }, key, sheet.key)
+                        bottomSheetNavigator.show(sheet)
                     },
                     onSelectSortType = {
                         bottomSheetNavigator.show(

@@ -3,29 +3,26 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
@@ -34,11 +31,11 @@ import dev.icerock.moko.resources.compose.stringResource
 
 class ListingTypeBottomSheet(
     private val isLogged: Boolean = false,
-    private val onSelected: (ListingType) -> Unit,
 ) : Screen {
     @Composable
     override fun Content() {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val notificationCenter = remember { getNotificationCenter() }
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -79,7 +76,7 @@ class ListingTypeBottomSheet(
                             )
                                 .fillMaxWidth()
                                 .onClick {
-                                    onSelected(value)
+                                    notificationCenter.getObserver(key)?.invoke(value)
                                     bottomSheetNavigator.hide()
                                 },
                         ) {

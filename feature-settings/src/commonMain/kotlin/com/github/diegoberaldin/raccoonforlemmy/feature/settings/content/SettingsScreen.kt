@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.LanguageBot
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ThemeBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.di.getSettingsScreenModel
@@ -52,6 +55,12 @@ class SettingsScreen : Screen {
         val uiState by model.uiState.collectAsState()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val notificationCenter = remember { getNotificationCenter() }
+        DisposableEffect(key) {
+            onDispose {
+                notificationCenter.removeObserver(key)
+            }
+        }
 
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
@@ -147,18 +156,15 @@ class SettingsScreen : Screen {
                         title = stringResource(MR.strings.settings_default_listing_type),
                         value = uiState.defaultListingType.toReadableName(),
                         onTap = {
-                            bottomSheetNavigator.show(
-                                ListingTypeBottomSheet(
-                                    isLogged = uiState.isLogged,
-                                    onSelected = { newValue ->
-                                        model.reduce(
-                                            SettingsScreenMviModel.Intent.ChangeDefaultListingType(
-                                                newValue,
-                                            ),
-                                        )
-                                    },
-                                ),
+                            val sheet = ListingTypeBottomSheet(
+                                isLogged = uiState.isLogged,
                             )
+                            notificationCenter.addObserver({ result ->
+                                (result as? ListingType)?.also {
+                                    model.reduce(SettingsScreenMviModel.Intent.ChangeDefaultListingType(it))
+                                }
+                            }, key, sheet.key)
+                            bottomSheetNavigator.show(sheet)
                         },
                     )
 

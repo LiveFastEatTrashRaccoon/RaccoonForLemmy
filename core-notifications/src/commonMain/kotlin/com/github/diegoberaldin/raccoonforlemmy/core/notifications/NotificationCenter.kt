@@ -31,4 +31,10 @@ interface NotificationCenter {
      * @param event Event to send
      */
     fun send(event: Event)
+
+    fun addObserver(observer: (Any) -> Unit, key: String, contract: String)
+
+    fun getObserver(contract: String): ((Any) -> Unit)?
+
+    fun removeObserver(key: String)
 }
