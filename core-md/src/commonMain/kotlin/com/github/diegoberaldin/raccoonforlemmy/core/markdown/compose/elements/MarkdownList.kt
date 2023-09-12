@@ -65,6 +65,7 @@ internal fun MarkdownOrderedList(
     node: ASTNode,
     style: TextStyle = LocalMarkdownTypography.current.ordered,
     level: Int = 0,
+    onOpenUrl: ((String) -> Unit)? = null,
 ) {
     val orderedListHandler = LocalOrderedListHandler.current
     MarkdownListItems(content, node, style, level) { child ->
@@ -81,7 +82,12 @@ internal fun MarkdownOrderedList(
                 buildMarkdownAnnotatedString(content, child.children.filterNonListTypes())
                 pop()
             }
-            MarkdownText(text, Modifier.padding(bottom = 4.dp), style = style)
+            MarkdownText(
+                text,
+                Modifier.padding(bottom = 4.dp),
+                style = style,
+                onOpenUrl = onOpenUrl
+            )
         }
     }
 }
@@ -92,6 +98,7 @@ internal fun MarkdownBulletList(
     node: ASTNode,
     style: TextStyle = LocalMarkdownTypography.current.bullet,
     level: Int = 0,
+    onOpenUrl: ((String) -> Unit)? = null,
 ) {
     val bulletHandler = LocalBulletListHandler.current
     MarkdownListItems(content, node, style, level) { child ->
@@ -108,7 +115,12 @@ internal fun MarkdownBulletList(
                 buildMarkdownAnnotatedString(content, child.children.filterNonListTypes())
                 pop()
             }
-            MarkdownText(text, Modifier.padding(bottom = 4.dp), style = style)
+            MarkdownText(
+                text,
+                Modifier.padding(bottom = 4.dp),
+                style = style,
+                onOpenUrl = onOpenUrl
+            )
         }
     }
 }

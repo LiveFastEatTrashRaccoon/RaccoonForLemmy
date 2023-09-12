@@ -82,6 +82,7 @@ class SettingsScreenViewModel(
         val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
         val postSortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
         val commentSortType = keyStore[KeyStoreKeys.DefaultCommentSortType, 3].toSortType()
+        val openUrlsInExternalBrowser = keyStore[KeyStoreKeys.OpenUrlsInExternalBrowser, false]
         mvi.updateState {
             it.copy(
                 defaultListingType = listingType,
@@ -89,8 +90,9 @@ class SettingsScreenViewModel(
                 defaultCommentSortType = commentSortType,
                 includeNsfw = keyStore[KeyStoreKeys.IncludeNsfw, true],
                 blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
-                appVersion = AppInfo.versionCode,
                 supportsDynamicColors = colorSchemeProvider.supportsDynamicColors,
+                openUrlsInExternalBrowser = openUrlsInExternalBrowser,
+                appVersion = AppInfo.versionCode,
             )
         }
     }
@@ -135,6 +137,10 @@ class SettingsScreenViewModel(
 
             is SettingsScreenMviModel.Intent.ChangeDynamicColors -> {
                 changeDynamicColors(intent.value)
+            }
+
+            is SettingsScreenMviModel.Intent.ChangeOpenUrlsInExternalBrowser -> {
+                changeOpenUrlsInExternalBrowser(intent.value)
             }
         }
     }
@@ -187,5 +193,10 @@ class SettingsScreenViewModel(
     private fun changeDynamicColors(value: Boolean) {
         themeRepository.changeDynamicColors(value)
         keyStore.save(KeyStoreKeys.DynamicColors, value)
+    }
+
+    private fun changeOpenUrlsInExternalBrowser(value: Boolean) {
+        mvi.updateState { it.copy(openUrlsInExternalBrowser = value) }
+        keyStore.save(KeyStoreKeys.OpenUrlsInExternalBrowser, value)
     }
 }

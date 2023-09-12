@@ -59,6 +59,7 @@ fun Markdown(
     padding: MarkdownPadding = markdownPadding(),
     modifier: Modifier = Modifier.fillMaxSize(),
     flavour: MarkdownFlavourDescriptor = GFMFlavourDescriptor(),
+    onOpenUrl: ((String) -> Unit)? = null,
 ) {
     CompositionLocalProvider(
         LocalReferenceLinkHandler provides ReferenceLinkHandlerImpl(),
@@ -69,9 +70,9 @@ fun Markdown(
         Column(modifier) {
             val parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(content)
             parsedTree.children.forEach { node ->
-                if (!node.handleElement(content)) {
+                if (!node.handleElement(content, onOpenUrl)) {
                     node.children.forEach { child ->
-                        child.handleElement(content)
+                        child.handleElement(content, onOpenUrl)
                     }
                 }
             }
@@ -80,12 +81,15 @@ fun Markdown(
 }
 
 @Composable
-private fun ASTNode.handleElement(content: String): Boolean {
+private fun ASTNode.handleElement(
+    content: String,
+    onOpenUrl: ((String) -> Unit)? = null,
+): Boolean {
     val typography = LocalMarkdownTypography.current
     var handled = true
     Spacer(Modifier.height(LocalMarkdownPadding.current.block))
     when (type) {
-        TEXT -> MarkdownText(getTextInNode(content).toString())
+        TEXT -> MarkdownText(getTextInNode(content).toString(), onOpenUrl = onOpenUrl)
         EOL -> {}
         CODE_FENCE -> MarkdownCodeFence(content, this)
         CODE_BLOCK -> MarkdownCodeBlock(content, this)
@@ -96,13 +100,29 @@ private fun ASTNode.handleElement(content: String): Boolean {
         ATX_5 -> MarkdownHeader(content, this, typography.h5)
         ATX_6 -> MarkdownHeader(content, this, typography.h6)
         BLOCK_QUOTE -> MarkdownBlockQuote(content, this)
-        PARAGRAPH -> MarkdownParagraph(content, this, style = typography.paragraph)
+        PARAGRAPH -> MarkdownParagraph(
+            content,
+            this,
+            style = typography.paragraph,
+            onOpenUrl = onOpenUrl
+        )
+
         ORDERED_LIST -> Column(modifier = Modifier) {
-            MarkdownOrderedList(content, this@handleElement, style = typography.ordered)
+            MarkdownOrderedList(
+                content,
+                this@handleElement,
+                style = typography.ordered,
+                onOpenUrl = onOpenUrl
+            )
         }
 
         UNORDERED_LIST -> Column(modifier = Modifier) {
-            MarkdownBulletList(content, this@handleElement, style = typography.bullet)
+            MarkdownBulletList(
+                content,
+                this@handleElement,
+                style = typography.bullet,
+                onOpenUrl = onOpenUrl
+            )
         }
 
         IMAGE -> MarkdownImage(content, this)

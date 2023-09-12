@@ -77,7 +77,13 @@ fun App() {
         LaunchedEffect(lang) {}
 
         BottomSheetNavigator {
-            Navigator(MainScreen()) {
+            Navigator(
+                screen = MainScreen(),
+                onBackPressed = {
+                    val callback = navigationCoordinator.getCanGoBackCallback()
+                    callback?.let { it() } ?: true
+                }
+            ) {
                 val navigator = LocalNavigator.current
                 navigationCoordinator.setRootNavigator(navigator)
                 CurrentScreen()

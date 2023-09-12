@@ -240,6 +240,19 @@ class SettingsScreen : Screen {
                         )
                     }
 
+                    // URL open
+                    SettingsSwitchRow(
+                        title = stringResource(MR.strings.settings_open_url_external),
+                        value = uiState.openUrlsInExternalBrowser,
+                        onValueChanged = { value ->
+                            model.reduce(
+                                SettingsScreenMviModel.Intent.ChangeOpenUrlsInExternalBrowser(
+                                    value
+                                )
+                            )
+                        }
+                    )
+
                     // NSFW options
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_include_nsfw),

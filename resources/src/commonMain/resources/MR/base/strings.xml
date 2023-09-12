@@ -94,6 +94,7 @@
     <string name="settings_blur_nsfw">Blur NSFW images</string>
     <string name="settings_app_version">App version</string>
     <string name="settings_dynamic_colors">Use dynamic colors</string>
+    <string name="settings_open_url_external">Open URLs in external browser</string>
 
     <string name="community_button_subscribe">Subscribe</string>
     <string name="community_button_subscribed">Subscribed</string>

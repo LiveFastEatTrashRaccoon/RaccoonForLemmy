@@ -2,7 +2,7 @@
 androidx_activity_compose = "1.7.2"
 androidx_crypto = "1.0.0"
 android_gradle = "7.4.2"
-compose = "1.4.3"
+compose = "1.5.1"
 crashlytics = "18.4.1"
 crashlytics_gradle = "2.9.9"
 gms_gradle = "4.3.15"

@@ -20,6 +20,7 @@ interface SettingsScreenMviModel :
         data class ChangeDynamicColors(val value: Boolean) : Intent
         data class ChangeIncludeNsfw(val value: Boolean) : Intent
         data class ChangeBlurNsfw(val value: Boolean) : Intent
+        data class ChangeOpenUrlsInExternalBrowser(val value: Boolean) : Intent
     }
 
     data class UiState(
@@ -35,6 +36,7 @@ interface SettingsScreenMviModel :
         val dynamicColors: Boolean = false,
         val includeNsfw: Boolean = true,
         val blurNsfw: Boolean = true,
+        val openUrlsInExternalBrowser: Boolean = false,
         val appVersion: String = "",
     )
 

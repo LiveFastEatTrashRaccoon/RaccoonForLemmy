@@ -13,4 +13,5 @@ object KeyStoreKeys {
     const val BlurNsfw = "blurNsfw"
     const val NavItemTitlesVisible = "navItemTitlesVisible"
     const val DynamicColors = "dynamicColors"
+    const val OpenUrlsInExternalBrowser = "openUrlsInExternalBrowser"
 }

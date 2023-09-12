@@ -12,11 +12,12 @@ internal fun MarkdownParagraph(
     content: String,
     node: ASTNode,
     style: TextStyle = LocalMarkdownTypography.current.paragraph,
+    onOpenUrl: ((String) -> Unit)? = null,
 ) {
     val styledText = buildAnnotatedString {
         pushStyle(style.toSpanStyle())
         buildMarkdownAnnotatedString(content, node)
         pop()
     }
-    MarkdownText(styledText, style = style)
+    MarkdownText(styledText, style = style, onOpenUrl = onOpenUrl)
 }

@@ -16,6 +16,7 @@ internal class DefaultNavigationCoordinator : NavigationCoordinator {
     private var navigator: Navigator? = null
     private var currentTab: Tab? = null
     private val scope = CoroutineScope(SupervisorJob())
+    private var canGoBackCallback: (() -> Boolean)? = null
 
     override fun setRootNavigator(value: Navigator?) {
         navigator = value
@@ -38,4 +39,10 @@ internal class DefaultNavigationCoordinator : NavigationCoordinator {
             }
         }
     }
+
+    override fun setCanGoBackCallback(value: (() -> Boolean)?) {
+        canGoBackCallback = value
+    }
+
+    override fun getCanGoBackCallback(): (() -> Boolean)? = canGoBackCallback
 }

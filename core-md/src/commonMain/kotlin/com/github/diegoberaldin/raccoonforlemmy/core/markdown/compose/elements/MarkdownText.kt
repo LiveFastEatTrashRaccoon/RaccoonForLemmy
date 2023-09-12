@@ -10,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -30,8 +29,9 @@ internal fun MarkdownText(
     content: String,
     modifier: Modifier = Modifier,
     style: TextStyle = LocalMarkdownTypography.current.text,
+    onOpenUrl: ((String) -> Unit)? = null,
 ) {
-    MarkdownText(AnnotatedString(content), modifier, style)
+    MarkdownText(AnnotatedString(content), modifier, style, onOpenUrl)
 }
 
 @Composable
@@ -39,8 +39,8 @@ internal fun MarkdownText(
     content: AnnotatedString,
     modifier: Modifier = Modifier,
     style: TextStyle = LocalMarkdownTypography.current.text,
+    onOpenUrl: ((String) -> Unit)? = null,
 ) {
-    val uriHandler = LocalUriHandler.current
     val referenceLinkHandler = LocalReferenceLinkHandler.current
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
 
@@ -52,7 +52,10 @@ internal fun MarkdownText(
                     val position = layoutResult.getOffsetForPosition(pos)
                     content.getStringAnnotations(TAG_URL, position, position)
                         .firstOrNull()
-                        ?.let { uriHandler.openUri(referenceLinkHandler.find(it.item)) }
+                        ?.let {
+                            val url = referenceLinkHandler.find(it.item)
+                            onOpenUrl?.invoke(url)
+                        }
                 }
             }
         }
