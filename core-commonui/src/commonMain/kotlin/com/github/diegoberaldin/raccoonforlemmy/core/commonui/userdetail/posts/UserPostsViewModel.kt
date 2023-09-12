@@ -27,7 +27,6 @@ class UserPostsViewModel(
     private val postsRepository: PostsRepository,
     private val hapticFeedback: HapticFeedback,
     private val keyStore: TemporaryKeyStore,
-    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<UserPostsMviModel.Intent, UserPostsMviModel.UiState, UserPostsMviModel.Effect> by mvi {
 
@@ -45,15 +44,6 @@ class UserPostsViewModel(
                     )
                 }
             }
-            notificationCenter.events.onEach { evt ->
-                when (evt) {
-                    NotificationCenter.Event.CommentCreated -> {
-                        refresh()
-                    }
-
-                    else -> Unit
-                }
-            }.launchIn(this)
         }
     }
 

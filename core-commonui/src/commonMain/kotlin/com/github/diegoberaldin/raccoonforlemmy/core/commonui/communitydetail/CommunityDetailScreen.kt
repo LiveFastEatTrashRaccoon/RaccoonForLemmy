@@ -85,7 +85,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -140,8 +139,8 @@ class CommunityDetailScreen(
             }
         }
 
-        Scaffold(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
+        Scaffold(modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+            .padding(Spacing.xs),
             topBar = {
                 val communityName = community.name
                 val communityHost = community.host
@@ -168,7 +167,11 @@ class CommunityDetailScreen(
                                 )
                                 notificationCenter.addObserver({
                                     (it as? SortType)?.also { sortType ->
-                                        model.reduce(CommunityDetailMviModel.Intent.ChangeSort(sortType))
+                                        model.reduce(
+                                            CommunityDetailMviModel.Intent.ChangeSort(
+                                                sortType
+                                            )
+                                        )
                                     }
                                 }, key, sheet.key)
                                 bottomSheetNavigator.show(sheet)
@@ -204,11 +207,13 @@ class CommunityDetailScreen(
                         backgroundColor = MaterialTheme.colorScheme.secondary,
                         shape = CircleShape,
                         onClick = {
-                            bottomSheetNavigator.show(
-                                CreatePostScreen(
-                                    communityId = community.id,
-                                ),
+                            val screen = CreatePostScreen(
+                                communityId = community.id,
                             )
+                            notificationCenter.addObserver({
+                                model.reduce(CommunityDetailMviModel.Intent.Refresh)
+                            }, key, screen.key)
+                            bottomSheetNavigator.show(screen)
                         },
                         content = {
                             Icon(
@@ -218,16 +223,13 @@ class CommunityDetailScreen(
                         },
                     )
                 }
-            }
-        ) { padding ->
+            }) { padding ->
             val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                 model.reduce(CommunityDetailMviModel.Intent.Refresh)
             })
             Box(
-                modifier = Modifier
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .nestedScroll(fabNestedScrollConnection)
-                    .padding(padding)
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .nestedScroll(fabNestedScrollConnection).padding(padding)
                     .pullRefresh(pullRefreshState),
             ) {
                 LazyColumn(
@@ -265,18 +267,13 @@ class CommunityDetailScreen(
                                     )
                                 }
                                 Icon(
-                                    modifier = Modifier
-                                        .padding(
+                                    modifier = Modifier.padding(
                                             top = Spacing.s,
                                             end = Spacing.s,
-                                        )
-                                        .background(
+                                        ).background(
                                             color = MaterialTheme.colorScheme.primary,
                                             shape = CircleShape,
-                                        )
-                                        .padding(Spacing.s)
-                                        .align(Alignment.TopEnd)
-                                        .onClick {
+                                        ).padding(Spacing.s).align(Alignment.TopEnd).onClick {
                                             optionsExpanded = true
                                         },
                                     imageVector = Icons.Rounded.MoreVert,
@@ -329,8 +326,7 @@ class CommunityDetailScreen(
                                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                             ) {
                                 if (communityIcon.isNotEmpty()) {
-                                    val painterResource =
-                                        asyncPainterResource(data = communityIcon)
+                                    val painterResource = asyncPainterResource(data = communityIcon)
                                     KamelImage(
                                         modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
                                             .clip(RoundedCornerShape(iconSize / 2)),
@@ -363,8 +359,7 @@ class CommunityDetailScreen(
                                 )
                                 if (!isOnOtherInstance) {
                                     Button(
-                                        modifier = Modifier
-                                            .align(Alignment.CenterHorizontally)
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
                                             .padding(top = Spacing.m),
                                         onClick = {
                                             when (community.subscribed) {
@@ -530,11 +525,13 @@ class CommunityDetailScreen(
                                         }
                                     },
                                     onReply = {
-                                        bottomSheetNavigator.show(
-                                            CreateCommentScreen(
-                                                originalPost = Json.encodeToString(post),
-                                            ),
+                                        val screen = CreateCommentScreen(
+                                            originalPost = Json.encodeToString(post),
                                         )
+                                        notificationCenter.addObserver({
+                                            model.reduce(CommunityDetailMviModel.Intent.Refresh)
+                                        }, key, screen.key)
+                                        bottomSheetNavigator.show(screen)
                                     },
                                     onImageClick = { url ->
                                         navigator?.push(

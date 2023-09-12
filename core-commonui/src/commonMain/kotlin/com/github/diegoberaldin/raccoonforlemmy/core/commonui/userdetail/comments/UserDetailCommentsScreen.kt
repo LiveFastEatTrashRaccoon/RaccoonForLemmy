@@ -26,6 +26,7 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -51,6 +52,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserComments
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -84,6 +86,12 @@ internal class UserDetailCommentsScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val notificationCenter = remember { getNotificationCenter() }
+        DisposableEffect(key) {
+            onDispose {
+                notificationCenter.removeObserver(key)
+            }
+        }
 
         LaunchedEffect(parentModel) {
             parentModel?.uiState?.map { it.sortType }?.distinctUntilChanged()?.onEach { sortType ->
@@ -219,12 +227,14 @@ internal class UserDetailCommentsScreen(
                                     )
                                 },
                                 onReply = {
-                                    bottomSheetNavigator.show(
-                                        CreateCommentScreen(
-                                            originalPost = Json.encodeToString(PostModel(id = comment.postId)),
-                                            originalComment = Json.encodeToString(comment),
-                                        ),
+                                    val screen = CreateCommentScreen(
+                                        originalPost = Json.encodeToString(PostModel(id = comment.postId)),
+                                        originalComment = Json.encodeToString(comment),
                                     )
+                                    notificationCenter.addObserver({
+                                        model.reduce(UserCommentsMviModel.Intent.Refresh)
+                                    }, key, screen.key)
+                                    bottomSheetNavigator.show(screen)
                                 }
                             )
                         },

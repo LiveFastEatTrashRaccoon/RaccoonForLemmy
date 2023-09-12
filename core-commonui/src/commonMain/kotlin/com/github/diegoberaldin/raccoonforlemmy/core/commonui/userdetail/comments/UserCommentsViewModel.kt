@@ -38,15 +38,6 @@ class UserCommentsViewModel(
             if (user != null) {
                 mvi.updateState { it.copy(user = user) }
             }
-            notificationCenter.events.onEach { evt ->
-                when (evt) {
-                    NotificationCenter.Event.CommentCreated -> {
-                        refresh()
-                    }
-
-                    else -> Unit
-                }
-            }.launchIn(this)
         }
     }
 

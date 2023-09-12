@@ -29,7 +29,6 @@ class CommunityDetailViewModel(
     private val postsRepository: PostsRepository,
     private val keyStore: TemporaryKeyStore,
     private val hapticFeedback: HapticFeedback,
-    private val notificationCenter: NotificationCenter,
 ) : MviModel<CommunityDetailMviModel.Intent, CommunityDetailMviModel.UiState, CommunityDetailMviModel.Effect> by mvi,
     ScreenModel {
     private var currentPage: Int = 1
@@ -43,17 +42,6 @@ class CommunityDetailViewModel(
                 sortType = sortType,
                 blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
             )
-        }
-        mvi.scope.launch {
-            notificationCenter.events.onEach { evt ->
-                when (evt) {
-                    NotificationCenter.Event.PostCreated -> {
-                        refresh()
-                    }
-
-                    else -> Unit
-                }
-            }
         }
 
         if (mvi.uiState.value.posts.isEmpty()) {

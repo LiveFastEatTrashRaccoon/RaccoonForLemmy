@@ -16,7 +16,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentR
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class PostDetailViewModel(
@@ -41,17 +40,6 @@ class PostDetailViewModel(
                 sortType = sortType,
                 post = post,
             )
-        }
-        mvi.scope.launch {
-            notificationCenter.events.onEach { evt ->
-                when (evt) {
-                    NotificationCenter.Event.CommentCreated -> {
-                        refresh()
-                    }
-
-                    else -> Unit
-                }
-            }
         }
 
         if (mvi.uiState.value.comments.isEmpty()) {

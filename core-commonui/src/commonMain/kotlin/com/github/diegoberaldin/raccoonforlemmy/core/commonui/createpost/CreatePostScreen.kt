@@ -1,8 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -47,6 +43,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCreatePostViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
@@ -64,6 +61,7 @@ class CreatePostScreen(
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = stringResource(MR.strings.message_generic_error)
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
+        val notificationCenter = remember { getNotificationCenter() }
 
         LaunchedEffect(model) {
             model.effects.onEach {
@@ -73,6 +71,7 @@ class CreatePostScreen(
                     }
 
                     CreatePostMviModel.Effect.Success -> {
+                        notificationCenter.getObserver(key)?.also { o -> o.invoke(Unit) }
                         navigator?.pop()
                     }
                 }

@@ -255,11 +255,13 @@ class PostListScreen : Screen {
                                         )
                                     },
                                     onReply = {
-                                        bottomSheetNavigator.show(
-                                            CreateCommentScreen(
-                                                originalPost = Json.encodeToString(post),
-                                            )
+                                        val screen = CreateCommentScreen(
+                                            originalPost = Json.encodeToString(post),
                                         )
+                                        notificationCenter.addObserver({
+                                            model.reduce(PostListMviModel.Intent.Refresh)
+                                        }, key, screen.key)
+                                        bottomSheetNavigator.show(screen)
                                     },
                                     onImageClick = { url ->
                                         navigator?.push(

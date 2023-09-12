@@ -17,7 +17,6 @@ class CreatePostViewModel(
     ),
     private val identityRepository: IdentityRepository,
     private val postsRepository: PostsRepository,
-    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect> by mvi {
 
@@ -55,7 +54,6 @@ class CreatePostViewModel(
             } catch (e: Throwable) {
                 val message = e.message
                 mvi.emitEffect(CreatePostMviModel.Effect.Failure(message))
-                notificationCenter.send(NotificationCenter.Event.PostCreated)
             }
         }
     }

@@ -80,7 +80,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -191,11 +190,13 @@ class PostDetailScreen(
                         shape = CircleShape,
                         backgroundColor = MaterialTheme.colorScheme.secondary,
                         onClick = {
-                            bottomSheetNavigator.show(
-                                CreateCommentScreen(
-                                    originalPost = Json.encodeToString(post),
-                                ),
+                            val screen = CreateCommentScreen(
+                                originalPost = Json.encodeToString(post),
                             )
+                            notificationCenter.addObserver({
+                                model.reduce(PostDetailMviModel.Intent.Refresh)
+                            }, key, screen.key)
+                            bottomSheetNavigator.show(screen)
                         },
                         content = {
                             Icon(
@@ -396,12 +397,14 @@ class PostDetailScreen(
                                             ),
                                         )
                                     }, onReply = {
-                                        bottomSheetNavigator.show(
-                                            CreateCommentScreen(
-                                                originalPost = Json.encodeToString(post),
-                                                originalComment = Json.encodeToString(comment),
-                                            ),
+                                        val screen = CreateCommentScreen(
+                                            originalPost = Json.encodeToString(post),
+                                            originalComment = Json.encodeToString(comment),
                                         )
+                                        notificationCenter.addObserver({
+                                            model.reduce(PostDetailMviModel.Intent.Refresh)
+                                        }, key, screen.key)
+                                        bottomSheetNavigator.show(screen)
                                     })
                                 },
                             )

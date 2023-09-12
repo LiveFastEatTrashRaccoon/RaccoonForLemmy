@@ -47,7 +47,6 @@ val commonUiModule = module {
             postsRepository = get(),
             keyStore = get(),
             hapticFeedback = get(),
-            notificationCenter = get(),
         )
     }
     factory { params ->
@@ -71,7 +70,6 @@ val commonUiModule = module {
             postsRepository = get(),
             hapticFeedback = get(),
             keyStore = get(),
-            notificationCenter = get(),
         )
     }
     factory {
@@ -100,7 +98,6 @@ val commonUiModule = module {
             parentId = params[1],
             identityRepository = get(),
             commentRepository = get(),
-            notificationCenter = get(),
         )
     }
     factory { params ->
@@ -108,7 +105,6 @@ val commonUiModule = module {
             communityId = params[0],
             identityRepository = get(),
             postsRepository = get(),
-            notificationCenter = get(),
         )
     }
 }

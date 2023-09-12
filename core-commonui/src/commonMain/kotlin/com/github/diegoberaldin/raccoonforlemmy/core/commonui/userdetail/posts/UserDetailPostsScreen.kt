@@ -26,6 +26,7 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -56,6 +57,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -93,6 +95,12 @@ internal class UserDetailPostsScreen(
         val uiState by model.uiState.collectAsState()
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val notificationCenter = remember { getNotificationCenter() }
+        DisposableEffect(key) {
+            onDispose {
+                notificationCenter.removeObserver(key)
+            }
+        }
 
         LaunchedEffect(parentModel) {
             parentModel?.uiState?.map { it.sortType }?.distinctUntilChanged()?.onEach { sortType ->
@@ -245,11 +253,13 @@ internal class UserDetailPostsScreen(
                                     )
                                 },
                                 onReply = {
-                                    bottomSheetNavigator.show(
-                                        CreateCommentScreen(
-                                            originalPost = Json.encodeToString(post),
-                                        )
+                                    val screen = CreateCommentScreen(
+                                        originalPost = Json.encodeToString(post),
                                     )
+                                    notificationCenter.addObserver({
+                                        model.reduce(UserPostsMviModel.Intent.Refresh)
+                                    }, key, screen.key)
+                                    bottomSheetNavigator.show(screen)
                                 },
                                 onImageClick = { url ->
                                     navigator?.push(
