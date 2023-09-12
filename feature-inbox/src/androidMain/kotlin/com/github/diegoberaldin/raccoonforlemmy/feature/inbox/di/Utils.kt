@@ -1,8 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di
 
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
 import org.koin.java.KoinJavaComponent
 
 actual fun getInboxViewModel(): InboxViewModel {

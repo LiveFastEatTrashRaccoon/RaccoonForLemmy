@@ -94,8 +94,6 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class CommunityDetailScreen(
     private val community: CommunityModel,
@@ -519,7 +517,7 @@ class CommunityDetailScreen(
                                     },
                                     onReply = {
                                         val screen = CreateCommentScreen(
-                                            originalPost = Json.encodeToString(post),
+                                            originalPost = post,
                                         )
                                         notificationCenter.addObserver({
                                             model.reduce(CommunityDetailMviModel.Intent.Refresh)

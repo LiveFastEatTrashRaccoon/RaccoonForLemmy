@@ -44,8 +44,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxRepliesViewModel
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class InboxRepliesScreen : Tab {
     override val options: TabOptions

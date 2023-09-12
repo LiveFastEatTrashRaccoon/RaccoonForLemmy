@@ -62,8 +62,6 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getHomeScreenMod
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class PostListScreen : Screen {
 
@@ -250,7 +248,7 @@ class PostListScreen : Screen {
                                     },
                                     onReply = {
                                         val screen = CreateCommentScreen(
-                                            originalPost = Json.encodeToString(post),
+                                            originalPost = post,
                                         )
                                         notificationCenter.addObserver({
                                             model.reduce(PostListMviModel.Intent.Refresh)

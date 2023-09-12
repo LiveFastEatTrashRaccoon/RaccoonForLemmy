@@ -58,8 +58,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getSearchScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class CommunityListScreen : Screen {
 

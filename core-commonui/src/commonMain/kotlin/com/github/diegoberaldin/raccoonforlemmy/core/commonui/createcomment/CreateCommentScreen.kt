@@ -58,19 +58,16 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.serialization.json.Json
 
 class CreateCommentScreen(
-    private val originalPost: String,
-    private val originalComment: String? = null,
+    private val originalPost: PostModel,
+    private val originalComment: CommentModel? = null,
 ) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val post = remember { Json.decodeFromString<PostModel>(originalPost) }
-        val comment = remember { originalComment?.let { Json.decodeFromString<CommentModel>(it) } }
         val model = rememberScreenModel {
-            getCreateCommentViewModel(postId = post.id, parentId = comment?.id)
+            getCreateCommentViewModel(postId = originalPost.id, parentId = originalComment?.id)
         }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
@@ -131,15 +128,15 @@ class CreateCommentScreen(
                         horizontal = Spacing.s,
                         vertical = Spacing.xxs,
                     )
-                    if (comment != null) {
+                    if (originalComment != null) {
                         CommentCard(
                             modifier = referenceModifier,
-                            comment = comment
+                            comment = originalComment
                         )
                     } else {
                         PostCard(
                             modifier = referenceModifier,
-                            post = post,
+                            post = originalPost,
                             blurNsfw = false,
                         )
                     }

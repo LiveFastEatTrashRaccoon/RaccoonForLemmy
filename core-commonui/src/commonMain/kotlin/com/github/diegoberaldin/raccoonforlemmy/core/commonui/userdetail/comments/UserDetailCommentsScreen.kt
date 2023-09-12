@@ -56,8 +56,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 internal class UserDetailCommentsScreen(
     private val user: UserModel,
@@ -221,8 +219,8 @@ internal class UserDetailCommentsScreen(
                                 },
                                 onReply = {
                                     val screen = CreateCommentScreen(
-                                        originalPost = Json.encodeToString(PostModel(id = comment.postId)),
-                                        originalComment = Json.encodeToString(comment),
+                                        originalPost = PostModel(id = comment.postId),
+                                        originalComment = comment,
                                     )
                                     notificationCenter.addObserver({
                                         model.reduce(UserCommentsMviModel.Intent.Refresh)

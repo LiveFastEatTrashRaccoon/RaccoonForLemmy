@@ -40,7 +40,6 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.P
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileCommentsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.serialization.json.Json
 
 internal class ProfileCommentsScreen(
     private val user: UserModel,

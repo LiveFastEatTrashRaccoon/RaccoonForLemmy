@@ -88,8 +88,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class PostDetailScreen(
     private val post: PostModel,
@@ -188,7 +186,7 @@ class PostDetailScreen(
                         backgroundColor = MaterialTheme.colorScheme.secondary,
                         onClick = {
                             val screen = CreateCommentScreen(
-                                originalPost = Json.encodeToString(post),
+                                originalPost = post,
                             )
                             notificationCenter.addObserver({
                                 model.reduce(PostDetailMviModel.Intent.Refresh)
@@ -391,8 +389,8 @@ class PostDetailScreen(
                                         )
                                     }, onReply = {
                                         val screen = CreateCommentScreen(
-                                            originalPost = Json.encodeToString(post),
-                                            originalComment = Json.encodeToString(comment),
+                                            originalPost = post,
+                                            originalComment = comment,
                                         )
                                         notificationCenter.addObserver({
                                             model.reduce(PostDetailMviModel.Intent.Refresh)

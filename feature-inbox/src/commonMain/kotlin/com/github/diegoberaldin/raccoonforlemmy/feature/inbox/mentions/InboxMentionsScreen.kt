@@ -50,8 +50,6 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class InboxMentionsScreen : Tab {
 
