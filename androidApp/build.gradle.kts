@@ -13,8 +13,8 @@ android {
         applicationId = "com.github.diegoberaldin.raccoonforlemmy.android"
         minSdk = 26
         targetSdk = 33
-        versionCode = 5
-        versionName = "1.0.0-alpha06"
+        versionCode = 6
+        versionName = "1.0.0-alpha07"
     }
     buildFeatures {
         compose = true
