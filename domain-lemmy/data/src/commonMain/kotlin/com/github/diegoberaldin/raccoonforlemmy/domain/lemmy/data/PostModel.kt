@@ -1,8 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class PostModel(
     val id: Int = 0,
     val title: String = "",
@@ -18,4 +15,4 @@ data class PostModel(
     val myVote: Int = 0,
     val publishDate: String? = null,
     val nsfw: Boolean = false,
-)
+) : JavaSerializable

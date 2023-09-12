@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 data class MetadataModel(
     val title: String = "",
     val description: String = "",
-)
+): JavaSerializable

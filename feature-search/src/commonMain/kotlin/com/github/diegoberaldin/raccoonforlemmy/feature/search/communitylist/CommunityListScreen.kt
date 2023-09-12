@@ -170,9 +170,7 @@ class CommunityListScreen : Screen {
                                 CommunityItem(
                                     modifier = Modifier.fillMaxWidth().onClick {
                                         navigator?.push(
-                                            CommunityDetailScreen(
-                                                serialCommunity = Json.encodeToString(community),
-                                            ),
+                                            CommunityDetailScreen(community),
                                         )
                                     },
                                     community = community,

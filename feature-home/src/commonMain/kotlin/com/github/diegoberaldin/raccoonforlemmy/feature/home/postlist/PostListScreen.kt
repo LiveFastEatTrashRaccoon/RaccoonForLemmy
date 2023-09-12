@@ -209,25 +209,19 @@ class PostListScreen : Screen {
                                 PostCard(
                                     modifier = Modifier.onClick {
                                         navigator?.push(
-                                            PostDetailScreen(
-                                                serialPost = Json.encodeToString(post),
-                                            ),
+                                            PostDetailScreen(post),
                                         )
                                     },
                                     post = post,
                                     blurNsfw = uiState.blurNsfw,
                                     onOpenCommunity = { community ->
                                         navigator?.push(
-                                            CommunityDetailScreen(
-                                                serialCommunity = Json.encodeToString(community),
-                                            ),
+                                            CommunityDetailScreen(community),
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator?.push(
-                                            UserDetailScreen(
-                                                serialUser = Json.encodeToString(user),
-                                            ),
+                                            UserDetailScreen(user),
                                         )
                                     },
                                     onUpVote = {

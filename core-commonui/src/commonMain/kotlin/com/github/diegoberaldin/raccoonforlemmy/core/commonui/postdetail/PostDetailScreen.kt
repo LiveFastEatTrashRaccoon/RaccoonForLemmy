@@ -92,15 +92,12 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class PostDetailScreen(
-    private val serialPost: String,
+    private val post: PostModel,
 ) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val post = remember {
-            Json.decodeFromString<PostModel>(serialPost)
-        }
         val model = rememberScreenModel { getPostDetailViewModel(post) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
@@ -244,16 +241,12 @@ class PostDetailScreen(
                                     creator = post.creator?.copy(avatar = null),
                                     onOpenCommunity = { community ->
                                         navigator?.push(
-                                            CommunityDetailScreen(
-                                                serialCommunity = Json.encodeToString(community),
-                                            ),
+                                            CommunityDetailScreen(community),
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator?.push(
-                                            UserDetailScreen(
-                                                serialUser = Json.encodeToString(user),
-                                            ),
+                                            UserDetailScreen(user),
                                         )
                                     },
                                 )

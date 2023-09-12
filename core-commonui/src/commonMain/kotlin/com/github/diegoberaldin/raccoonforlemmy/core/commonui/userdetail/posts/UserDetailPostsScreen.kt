@@ -27,7 +27,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -56,24 +55,18 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserPostsVie
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailSection
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 internal class UserDetailPostsScreen(
-    private val serialUser: String,
+    private val user: UserModel,
+    private val parentKey: String,
 ) : Tab {
-
-    var onSectionSelected: ((UserDetailSection) -> Unit)? = null
-    var parentModel: UserDetailViewModel? = null
 
     override val options: TabOptions
         @Composable get() {
@@ -83,7 +76,6 @@ internal class UserDetailPostsScreen(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val user = remember { Json.decodeFromString<UserModel>(serialUser) }
         val model = rememberScreenModel(
             user.id.toString(),
         ) {
@@ -97,15 +89,15 @@ internal class UserDetailPostsScreen(
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val notificationCenter = remember { getNotificationCenter() }
         DisposableEffect(key) {
+            notificationCenter.addObserver({
+                (it as? SortType)?.also { sortType ->
+                    model.reduce(UserPostsMviModel.Intent.ChangeSort(sortType))
+                }
+            }, key, parentKey)
+
             onDispose {
                 notificationCenter.removeObserver(key)
             }
-        }
-
-        LaunchedEffect(parentModel) {
-            parentModel?.uiState?.map { it.sortType }?.distinctUntilChanged()?.onEach { sortType ->
-                model.reduce(UserPostsMviModel.Intent.ChangeSort(sortType))
-            }?.launchIn(this)
         }
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
@@ -140,7 +132,9 @@ internal class UserDetailPostsScreen(
                                     0 -> UserDetailSection.POSTS
                                     else -> UserDetailSection.COMMENTS
                                 }
-                                onSectionSelected?.invoke(section)
+                                notificationCenter.getObserver(key)?.also { obsever ->
+                                    obsever.invoke(section)
+                                }
                             },
                         )
                     }
@@ -214,9 +208,7 @@ internal class UserDetailPostsScreen(
                             PostCard(
                                 modifier = Modifier.onClick {
                                     navigator?.push(
-                                        PostDetailScreen(
-                                            serialPost = Json.encodeToString(post),
-                                        ),
+                                        PostDetailScreen(post),
                                     )
                                 },
                                 post = post,
@@ -247,9 +239,7 @@ internal class UserDetailPostsScreen(
                                 },
                                 onOpenCommunity = { community ->
                                     navigator?.push(
-                                        CommunityDetailScreen(
-                                            serialCommunity = Json.encodeToString(community),
-                                        ),
+                                        CommunityDetailScreen(community),
                                     )
                                 },
                                 onReply = {

@@ -49,7 +49,6 @@ kotlin {
                 implementation(libs.kamel)
                 implementation(libs.ktor.cio)
                 implementation(libs.kamel)
-                implementation(libs.kotlinx.serialization.json)
 
                 implementation(projects.resources)
                 implementation(projects.coreArchitecture)

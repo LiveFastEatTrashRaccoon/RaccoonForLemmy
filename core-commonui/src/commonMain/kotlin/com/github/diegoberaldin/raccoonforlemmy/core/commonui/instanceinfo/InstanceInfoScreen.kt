@@ -148,7 +148,7 @@ class InstanceInfoScreen(
                                 modifier = Modifier.onClick {
                                     navigator?.push(
                                         CommunityDetailScreen(
-                                            serialCommunity = Json.encodeToString(it),
+                                            community = it,
                                             otherInstance = instanceName,
                                         ),
                                     )

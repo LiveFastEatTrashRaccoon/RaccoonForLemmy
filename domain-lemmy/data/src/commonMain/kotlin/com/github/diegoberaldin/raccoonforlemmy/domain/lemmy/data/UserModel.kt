@@ -11,4 +11,4 @@ data class UserModel(
     val host: String = "",
     val score: UserScoreModel? = null,
     val accountAge: String = "",
-)
+) : JavaSerializable

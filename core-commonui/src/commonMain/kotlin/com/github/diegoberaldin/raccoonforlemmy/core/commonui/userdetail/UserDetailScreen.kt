@@ -47,17 +47,14 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class UserDetailScreen(
-    private val serialUser: String,
+    private val user: UserModel,
 ) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val user = remember { Json.decodeFromString<UserModel>(serialUser) }
         val model = rememberScreenModel(user.id.toString()) { getUserDetailViewModel(user) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
@@ -131,24 +128,28 @@ class UserDetailScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                val postsScreen = remember {
+                    UserDetailPostsScreen(user, key)
+                }
+                val commentsScreen = remember {
+                    UserDetailCommentsScreen(user, key)
+                }
                 val screens = listOf(
-                    UserDetailPostsScreen(
-                        serialUser = Json.encodeToString(user),
-                    ).apply {
-                        parentModel = model
-                        onSectionSelected = {
-                            model.reduce(UserDetailMviModel.Intent.SelectTab(it))
-                        }
-                    },
-                    UserDetailCommentsScreen(
-                        serialUser = Json.encodeToString(user),
-                    ).apply {
-                        parentModel = model
-                        onSectionSelected = {
-                            model.reduce(UserDetailMviModel.Intent.SelectTab(it))
-                        }
-                    }
+                    postsScreen,
+                    commentsScreen,
                 )
+                LaunchedEffect(key) {
+                    notificationCenter.addObserver({
+                        (it as? UserDetailSection)?.also { section ->
+                            model.reduce(UserDetailMviModel.Intent.SelectTab(section))
+                        }
+                    }, key, postsScreen.key)
+                    notificationCenter.addObserver({
+                        (it as? UserDetailSection)?.also { section ->
+                            model.reduce(UserDetailMviModel.Intent.SelectTab(section))
+                        }
+                    }, key, commentsScreen.key)
+                }
                 TabNavigator(screens.first()) {
                     CurrentScreen()
 

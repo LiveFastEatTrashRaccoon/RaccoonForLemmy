@@ -37,6 +37,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCou
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedSection
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostCard
@@ -44,14 +45,10 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.p
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfilePostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 internal class ProfileSavedScreen(
-    private val serialUser: String,
+    private val user: UserModel,
 ) : Tab {
-
-    var onSectionSelected: ((ProfileLoggedSection) -> Unit)? = null
 
     override val options: TabOptions
         @Composable get() {
@@ -61,7 +58,6 @@ internal class ProfileSavedScreen(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val user = remember { Json.decodeFromString<UserModel>(serialUser) }
         val model = rememberScreenModel {
             getProfilePostsViewModel(
                 user = user,
@@ -71,7 +67,7 @@ internal class ProfileSavedScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
-
+        val notificationCenter = remember { getNotificationCenter() }
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
             model.reduce(ProfilePostsMviModel.Intent.Refresh)
         })
@@ -106,7 +102,9 @@ internal class ProfileSavedScreen(
                                     1 -> ProfileLoggedSection.COMMENTS
                                     else -> ProfileLoggedSection.SAVED
                                 }
-                                onSectionSelected?.invoke(section)
+                                notificationCenter.getObserver(key)?.also { observer ->
+                                    observer.invoke(section)
+                                }
                             },
                         )
                         Spacer(modifier = Modifier.height(Spacing.m))
@@ -117,9 +115,7 @@ internal class ProfileSavedScreen(
                         post = post,
                         onOpenCommunity = { community ->
                             navigator?.push(
-                                CommunityDetailScreen(
-                                    serialCommunity = Json.encodeToString(community),
-                                ),
+                                CommunityDetailScreen(community),
                             )
                         },
                         onImageClick = { url ->

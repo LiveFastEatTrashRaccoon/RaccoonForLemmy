@@ -98,14 +98,13 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class CommunityDetailScreen(
-    private val serialCommunity: String,
+    private val community: CommunityModel,
     private val otherInstance: String = "",
 ) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val community = remember { Json.decodeFromString<CommunityModel>(serialCommunity) }
         val model = rememberScreenModel(community.id.toString() + otherInstance) {
             getCommunityDetailViewModel(
                 community = community,
@@ -268,14 +267,14 @@ class CommunityDetailScreen(
                                 }
                                 Icon(
                                     modifier = Modifier.padding(
-                                            top = Spacing.s,
-                                            end = Spacing.s,
-                                        ).background(
-                                            color = MaterialTheme.colorScheme.primary,
-                                            shape = CircleShape,
-                                        ).padding(Spacing.s).align(Alignment.TopEnd).onClick {
-                                            optionsExpanded = true
-                                        },
+                                        top = Spacing.s,
+                                        end = Spacing.s,
+                                    ).background(
+                                        color = MaterialTheme.colorScheme.primary,
+                                        shape = CircleShape,
+                                    ).padding(Spacing.s).align(Alignment.TopEnd).onClick {
+                                        optionsExpanded = true
+                                    },
                                     imageVector = Icons.Rounded.MoreVert,
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.onPrimary,
@@ -297,9 +296,7 @@ class CommunityDetailScreen(
                                         ).onClick {
                                             optionsExpanded = false
                                             bottomSheetNavigator.show(
-                                                CommunityInfoScreen(
-                                                    serialCommunity = Json.encodeToString(community)
-                                                ),
+                                                CommunityInfoScreen(community),
                                             )
                                         },
                                         text = stringResource(MR.strings.community_detail_info),
@@ -471,16 +468,12 @@ class CommunityDetailScreen(
                                 PostCard(
                                     modifier = Modifier.onClick {
                                         navigator?.push(
-                                            PostDetailScreen(
-                                                serialPost = Json.encodeToString(post),
-                                            ),
+                                            PostDetailScreen(post),
                                         )
                                     },
                                     onOpenCreator = { user ->
                                         navigator?.push(
-                                            UserDetailScreen(
-                                                serialUser = Json.encodeToString(user),
-                                            ),
+                                            UserDetailScreen(user),
                                         )
                                     },
                                     post = post,

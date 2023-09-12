@@ -1,8 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class PersonMentionModel(
     val id: Int = 0,
     val post: PostModel,
@@ -14,4 +11,4 @@ data class PersonMentionModel(
     val saved: Boolean,
     val isOwnPost: Boolean = false,
     val publishDate: String? = null,
-)
+) : JavaSerializable

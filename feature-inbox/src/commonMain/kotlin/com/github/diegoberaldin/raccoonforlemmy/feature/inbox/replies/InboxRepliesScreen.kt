@@ -133,23 +133,17 @@ class InboxRepliesScreen : Tab {
                                 mention = mention,
                                 onOpenPost = { post ->
                                     navigator?.push(
-                                        PostDetailScreen(
-                                            serialPost = Json.encodeToString(post),
-                                        ),
+                                        PostDetailScreen(post),
                                     )
                                 },
                                 onOpenCreator = { user ->
                                     navigator?.push(
-                                        UserDetailScreen(
-                                            serialUser = Json.encodeToString(user),
-                                        ),
+                                        UserDetailScreen(user),
                                     )
                                 },
                                 onOpenCommunity = { community ->
                                     navigator?.push(
-                                        CommunityDetailScreen(
-                                            serialCommunity = Json.encodeToString(community),
-                                        ),
+                                        CommunityDetailScreen(community),
                                     )
                                 },
                             )

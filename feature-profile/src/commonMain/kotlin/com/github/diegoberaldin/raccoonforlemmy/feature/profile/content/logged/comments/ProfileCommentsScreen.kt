@@ -34,6 +34,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedSection
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileCommentsViewModel
@@ -42,10 +43,8 @@ import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.serialization.json.Json
 
 internal class ProfileCommentsScreen(
-    private val serialUser: String,
+    private val user: UserModel,
 ) : Tab {
-
-    var onSectionSelected: ((ProfileLoggedSection) -> Unit)? = null
 
     override val options: TabOptions
         @Composable get() {
@@ -55,11 +54,10 @@ internal class ProfileCommentsScreen(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val user = remember { Json.decodeFromString<UserModel>(serialUser) }
         val model = rememberScreenModel { getProfileCommentsViewModel(user) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-
+        val notificationCenter = remember { getNotificationCenter() }
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
             model.reduce(ProfileCommentsMviModel.Intent.Refresh)
         })
@@ -94,7 +92,9 @@ internal class ProfileCommentsScreen(
                                     1 -> ProfileLoggedSection.COMMENTS
                                     else -> ProfileLoggedSection.SAVED
                                 }
-                                onSectionSelected?.invoke(section)
+                                notificationCenter.getObserver(key)?.also { observer ->
+                                    observer.invoke(section)
+                                }
                             },
                         )
                         Spacer(modifier = Modifier.height(Spacing.m))

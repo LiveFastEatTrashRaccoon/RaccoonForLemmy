@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -18,6 +20,7 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.comments.ProfileCommentsScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostsScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.saved.ProfileSavedScreen
@@ -26,8 +29,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 internal object ProfileLoggedScreen : Tab {
 
@@ -47,31 +48,39 @@ internal object ProfileLoggedScreen : Tab {
             model.bindToLifecycle(key)
             val uiState by model.uiState.collectAsState()
             val user = uiState.user
-            if (user != null) {
-                val screens = listOf(
-                    ProfilePostsScreen(
-                       serialUser = Json.encodeToString(user),
-                    ).apply {
-                        onSectionSelected = {
-                            model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
-                        }
-                    },
-                    ProfileCommentsScreen(
-                        serialUser = Json.encodeToString(user),
-                    ).apply {
-                        onSectionSelected = {
-                            model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
-                        }
-                    },
-                    ProfileSavedScreen(
-                        serialUser = Json.encodeToString(user),
-                    ).apply {
-                        onSectionSelected = {
-                            model.reduce(ProfileLoggedMviModel.Intent.SelectTab(it))
-                        }
-                    },
-                )
+            val notificationCenter = remember { getNotificationCenter() }
+            DisposableEffect(key) {
+                onDispose {
+                    notificationCenter.removeObserver(key)
+                }
+            }
 
+            if (user != null) {
+                val postsScreen = remember { ProfilePostsScreen(user) }
+                val commentsScreen = remember { ProfileCommentsScreen(user) }
+                val savedScreen = remember { ProfileSavedScreen(user) }
+                LaunchedEffect(key) {
+                    notificationCenter.addObserver({
+                        (it as? ProfileLoggedSection)?.also { value ->
+                            model.reduce(ProfileLoggedMviModel.Intent.SelectTab(value))
+                        }
+                    }, key, postsScreen.key)
+                    notificationCenter.addObserver({
+                        (it as? ProfileLoggedSection)?.also { value ->
+                            model.reduce(ProfileLoggedMviModel.Intent.SelectTab(value))
+                        }
+                    }, key, commentsScreen.key)
+                    notificationCenter.addObserver({
+                        (it as? ProfileLoggedSection)?.also { value ->
+                            model.reduce(ProfileLoggedMviModel.Intent.SelectTab(value))
+                        }
+                    }, key, savedScreen.key)
+                }
+                val screens = listOf(
+                    postsScreen,
+                    commentsScreen,
+                    savedScreen,
+                )
                 TabNavigator(screens.first()) {
                     CurrentScreen()
                     val navigator = LocalTabNavigator.current

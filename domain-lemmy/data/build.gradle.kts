@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose)
     alias(libs.plugins.native.cocoapods)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.kotlinx.serialization)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -38,9 +36,6 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.materialIconsExtended)
-
-                implementation(libs.kotlinx.serialization.json)
-
                 implementation(projects.resources)
             }
         }

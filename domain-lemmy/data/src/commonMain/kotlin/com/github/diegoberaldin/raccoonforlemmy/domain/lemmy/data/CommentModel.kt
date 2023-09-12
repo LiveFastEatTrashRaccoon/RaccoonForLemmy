@@ -1,8 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class CommentModel(
     val id: Int = 0,
     val postId: Int = 0,
@@ -16,6 +13,6 @@ data class CommentModel(
     val comments: Int? = null,
     val path: String = "",
     val children: List<CommentModel>? = null,
-) {
-    val depth: Int = (path.split(".").size - 1).coerceAtLeast(0)
+) : JavaSerializable {
+    val depth: Int get() = (path.split(".").size - 1).coerceAtLeast(0)
 }

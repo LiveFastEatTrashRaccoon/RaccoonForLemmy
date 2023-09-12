@@ -39,20 +39,16 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHea
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedSection
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfilePostsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 internal class ProfilePostsScreen(
-    private val serialUser: String,
+    private val user: UserModel,
 ) : Tab {
-
-    var onSectionSelected: ((ProfileLoggedSection) -> Unit)? = null
-
     override val options: TabOptions
         @Composable get() {
             return TabOptions(0u, "")
@@ -61,7 +57,6 @@ internal class ProfilePostsScreen(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val user = remember { Json.decodeFromString<UserModel>(serialUser) }
         val model = rememberScreenModel {
             getProfilePostsViewModel(
                 user = user,
@@ -70,7 +65,7 @@ internal class ProfilePostsScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
-
+        val notificationCenter = remember { getNotificationCenter() }
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
             model.reduce(ProfilePostsMviModel.Intent.Refresh)
         })
@@ -105,7 +100,9 @@ internal class ProfilePostsScreen(
                                     1 -> ProfileLoggedSection.COMMENTS
                                     else -> ProfileLoggedSection.SAVED
                                 }
-                                onSectionSelected?.invoke(section)
+                                notificationCenter.getObserver(key)?.also { observer ->
+                                    observer.invoke(section)
+                                }
                             },
                         )
                         Spacer(modifier = Modifier.height(Spacing.m))
@@ -115,17 +112,13 @@ internal class ProfilePostsScreen(
                     ProfilePostCard(
                         modifier = Modifier.onClick {
                             navigator?.push(
-                                PostDetailScreen(
-                                    serialPost = Json.encodeToString(post),
-                                ),
+                                PostDetailScreen(post),
                             )
                         },
                         post = post,
                         onOpenCommunity = { community ->
                             navigator?.push(
-                                CommunityDetailScreen(
-                                    serialCommunity = Json.encodeToString(community),
-                                ),
+                                CommunityDetailScreen(community),
                             )
                         },
                         onImageClick = { url ->
