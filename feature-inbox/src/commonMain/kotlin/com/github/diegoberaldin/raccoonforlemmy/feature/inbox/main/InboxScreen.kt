@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
@@ -34,6 +34,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.InboxTypeSheet
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.InboxMessagesScreen
@@ -61,6 +62,12 @@ object InboxScreen : Tab {
         val uiState by model.uiState.collectAsState()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val notificationCenter = remember { getNotificationCenter() }
+        DisposableEffect(key) {
+            onDispose {
+                notificationCenter.removeObserver(key)
+            }
+        }
 
 
         Scaffold(
@@ -87,17 +94,15 @@ object InboxScreen : Tab {
                             }
                             Text(
                                 modifier = Modifier.onClick {
-                                    bottomSheetNavigator.show(
-                                        InboxTypeSheet(
-                                            onUnreadSelected = {
-                                                model.reduce(
-                                                    InboxMviModel.Intent.ChangeUnreadOnly(
-                                                        unread = it,
-                                                    ),
-                                                )
-                                            },
-                                        ),
-                                    )
+                                    val sheet = InboxTypeSheet()
+                                    notificationCenter.addObserver({
+                                        (it as? Boolean)?.also { value ->
+                                            model.reduce(
+                                                InboxMviModel.Intent.ChangeUnreadOnly(value)
+                                            )
+                                        }
+                                    }, key, sheet.key)
+                                    bottomSheetNavigator.show(sheet)
                                 },
                                 text = text,
                                 style = MaterialTheme.typography.titleSmall,

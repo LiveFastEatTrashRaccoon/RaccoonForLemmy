@@ -54,6 +54,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getSearchScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -97,14 +98,17 @@ class CommunityListScreen : Screen {
                         bottomNavigator.show(sheet)
                     },
                     onSelectSortType = {
-                        bottomNavigator.show(
-                            SortBottomSheet(
-                                expandTop = true,
-                                onSelected = {
-                                    model.reduce(CommunityListMviModel.Intent.SetSortType(it))
-                                },
-                            ),
+                        val sheet = SortBottomSheet(
+                            expandTop = true,
                         )
+                        notificationCenter.addObserver({
+                            (it as? SortType)?.also { sortType ->
+                                model.reduce(
+                                    CommunityListMviModel.Intent.SetSortType(sortType)
+                                )
+                            }
+                        }, key, sheet.key)
+                        bottomNavigator.show(sheet)
                     },
                 )
             },

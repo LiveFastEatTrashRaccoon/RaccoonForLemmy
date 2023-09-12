@@ -3,16 +3,12 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -21,10 +17,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -33,6 +29,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
@@ -50,11 +47,9 @@ class SortBottomSheet(
         SortType.Old,
     ),
     private val expandTop: Boolean = false,
-    private val onSelected: (SortType) -> Unit,
 ) : Screen {
     @Composable
     override fun Content() {
-        val bottomSheetNavigator = LocalBottomSheetNavigator.current
         Column(
             modifier = Modifier.background(MaterialTheme.colorScheme.background).padding(
                 top = Spacing.s,
@@ -71,10 +66,7 @@ class SortBottomSheet(
                 SortBottomSheetMain(
                     values = values,
                     expandTop = expandTop,
-                    onSelected = {
-                        onSelected(it)
-                        bottomSheetNavigator.hide()
-                    }
+                    mainKey = key,
                 )
             )
         }
@@ -84,11 +76,13 @@ class SortBottomSheet(
 internal class SortBottomSheetMain(
     private val values: List<SortType>,
     private val expandTop: Boolean = false,
-    private val onSelected: (SortType) -> Unit,
+    private val mainKey: String,
 ) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val notificationCenter = remember { getNotificationCenter() }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -112,14 +106,13 @@ internal class SortBottomSheetMain(
                             .onClick {
                                 if (value == SortType.Top.Generic == expandTop) {
                                     navigator.push(
-                                        SortBottomSheetTop(
-                                            onSelected = {
-                                                onSelected(it)
-                                            }
-                                        )
+                                        SortBottomSheetTop(mainKey = mainKey)
                                     )
                                 } else {
-                                    onSelected(value)
+                                    notificationCenter.getObserver(mainKey)?.also {
+                                        it.invoke(value)
+                                    }
+                                    bottomSheetNavigator.hide()
                                 }
                             },
                     ) {
@@ -159,11 +152,14 @@ internal class SortBottomSheetTop(
         SortType.Top.Month,
         SortType.Top.Year,
     ),
-    private val onSelected: (SortType) -> Unit,
+    private val mainKey: String,
 ) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val notificationCenter = remember { getNotificationCenter() }
+
         Column {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(Spacing.s),
@@ -194,7 +190,10 @@ internal class SortBottomSheetTop(
                         )
                             .fillMaxWidth()
                             .onClick {
-                                onSelected(value)
+                                notificationCenter.getObserver(mainKey)?.also {
+                                    it.invoke(value)
+                                }
+                                bottomSheetNavigator.hide()
                             },
                     ) {
                         Text(

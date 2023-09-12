@@ -42,6 +42,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -79,7 +80,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
@@ -119,6 +122,12 @@ class PostDetailScreen(
                 }
             }
         }
+        val notificationCenter = remember { getNotificationCenter() }
+        DisposableEffect(key) {
+            onDispose {
+                notificationCenter.removeObserver(key)
+            }
+        }
 
         Scaffold(modifier = Modifier.background(MaterialTheme.colorScheme.surface)
             .padding(Spacing.xs),
@@ -136,19 +145,20 @@ class PostDetailScreen(
                     actions = {
                         Image(
                             modifier = Modifier.onClick {
-                                bottomSheetNavigator.show(
-                                    SortBottomSheet(
-                                        values = listOf(
-                                            SortType.Hot,
-                                            SortType.Top.Generic,
-                                            SortType.New,
-                                            SortType.Old,
-                                        ),
-                                        onSelected = {
-                                            model.reduce(PostDetailMviModel.Intent.ChangeSort(it))
-                                        },
+                                val sheet = SortBottomSheet(
+                                    values = listOf(
+                                        SortType.Hot,
+                                        SortType.Top.Generic,
+                                        SortType.New,
+                                        SortType.Old,
                                     ),
                                 )
+                                notificationCenter.addObserver({
+                                    (it as? SortType)?.also { sortType ->
+                                        model.reduce(PostDetailMviModel.Intent.ChangeSort(sortType))
+                                    }
+                                }, key, sheet.key)
+                                bottomSheetNavigator.show(sheet)
                             },
                             imageVector = uiState.sortType.toIcon(),
                             contentDescription = null,

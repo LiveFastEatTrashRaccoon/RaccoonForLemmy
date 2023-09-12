@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,6 +39,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserDetailVi
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.comments.UserDetailCommentsScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.posts.UserDetailPostsScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -61,6 +64,12 @@ class UserDetailScreen(
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val notificationCenter = remember { getNotificationCenter() }
+        DisposableEffect(key) {
+            onDispose {
+                notificationCenter.removeObserver(key)
+            }
+        }
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
@@ -86,14 +95,15 @@ class UserDetailScreen(
                     actions = {
                         Image(
                             modifier = Modifier.onClick {
-                                bottomSheetNavigator.show(
-                                    SortBottomSheet(
-                                        expandTop = true,
-                                        onSelected = {
-                                            model.reduce(UserDetailMviModel.Intent.ChangeSort(it))
-                                        },
-                                    ),
+                                val sheet = SortBottomSheet(
+                                    expandTop = true,
                                 )
+                                notificationCenter.addObserver({
+                                    (it as? SortType)?.also { sortType ->
+                                        model.reduce(UserDetailMviModel.Intent.ChangeSort(sortType))
+                                    }
+                                }, key, sheet.key)
+                                bottomSheetNavigator.show(sheet)
                             },
                             imageVector = uiState.sortType.toIcon(),
                             contentDescription = null,
@@ -142,7 +152,7 @@ class UserDetailScreen(
                 TabNavigator(screens.first()) {
                     CurrentScreen()
 
-                    val navigator = LocalTabNavigator.current
+                    val tabNavigator = LocalTabNavigator.current
                     LaunchedEffect(model) {
                         model.uiState.map { state -> state.currentTab }.distinctUntilChanged()
                             .onEach { tab ->
@@ -150,7 +160,7 @@ class UserDetailScreen(
                                     UserDetailSection.POSTS -> 0
                                     UserDetailSection.COMMENTS -> 1
                                 }
-                                navigator.current = screens[index]
+                                tabNavigator.current = screens[index]
                             }.launchIn(this)
                     }
                 }

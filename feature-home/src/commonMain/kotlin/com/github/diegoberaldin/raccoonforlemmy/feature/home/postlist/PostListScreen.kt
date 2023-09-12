@@ -57,6 +57,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.di.getHomeScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import kotlinx.coroutines.flow.launchIn
@@ -112,14 +113,17 @@ class PostListScreen : Screen {
                         bottomSheetNavigator.show(sheet)
                     },
                     onSelectSortType = {
-                        bottomSheetNavigator.show(
-                            SortBottomSheet(
-                                expandTop = true,
-                                onSelected = {
-                                    model.reduce(PostListMviModel.Intent.ChangeSort(it))
-                                },
-                            ),
+                        val sheet = SortBottomSheet(
+                            expandTop = true,
                         )
+                        notificationCenter.addObserver({
+                            (it as? SortType)?.also { sortType ->
+                                model.reduce(
+                                    PostListMviModel.Intent.ChangeSort(sortType)
+                                )
+                            }
+                        }, key, sheet.key)
+                        bottomSheetNavigator.show(sheet)
                     },
                 )
             },

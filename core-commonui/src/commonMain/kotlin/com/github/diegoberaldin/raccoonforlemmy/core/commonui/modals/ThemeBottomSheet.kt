@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -24,16 +25,16 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
-class ThemeBottomSheet(
-    private val onSelected: (ThemeState) -> Unit,
-) : Screen {
+class ThemeBottomSheet : Screen {
 
     @Composable
     override fun Content() {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val notificationCenter = remember { getNotificationCenter() }
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -74,7 +75,9 @@ class ThemeBottomSheet(
                         )
                             .fillMaxWidth()
                             .onClick {
-                                onSelected(value)
+                                notificationCenter.getObserver(key)?.also {
+                                    it.invoke(value)
+                                }
                                 bottomSheetNavigator.hide()
                             },
                     ) {

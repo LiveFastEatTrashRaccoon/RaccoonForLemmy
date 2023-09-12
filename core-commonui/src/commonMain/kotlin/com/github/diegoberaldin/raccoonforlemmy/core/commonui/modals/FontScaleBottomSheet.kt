@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
@@ -21,16 +22,16 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.scaleFactor
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
-class FontScaleBottomSheet(
-    private val onSelected: (Float) -> Unit,
-) : Screen {
+class FontScaleBottomSheet : Screen {
 
     @Composable
     override fun Content() {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val notificationCenter = remember { getNotificationCenter() }
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -73,7 +74,9 @@ class FontScaleBottomSheet(
                             )
                                 .fillMaxWidth()
                                 .onClick {
-                                    onSelected(value.scaleFactor)
+                                    notificationCenter.getObserver(key)?.also {
+                                        it.invoke(value.scaleFactor)
+                                    }
                                     bottomSheetNavigator.hide()
                                 },
                         ) {

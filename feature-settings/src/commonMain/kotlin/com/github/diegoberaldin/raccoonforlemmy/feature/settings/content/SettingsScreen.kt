@@ -25,6 +25,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLanguageName
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
@@ -80,10 +81,10 @@ class SettingsScreen : Screen {
                     }
                 )
             },
-        ) {
+        ) { paddingValues ->
             Box(
                 modifier = Modifier
-                    .padding(it)
+                    .padding(paddingValues)
                     .nestedScroll(scrollBehavior.nestedScrollConnection),
             ) {
                 Column(
@@ -99,17 +100,13 @@ class SettingsScreen : Screen {
                         title = stringResource(MR.strings.settings_ui_theme),
                         value = uiState.currentTheme.toReadableName(),
                         onTap = {
-                            bottomSheetNavigator.show(
-                                ThemeBottomSheet(
-                                    onSelected = { newValue ->
-                                        model.reduce(
-                                            SettingsScreenMviModel.Intent.ChangeTheme(
-                                                newValue,
-                                            ),
-                                        )
-                                    },
-                                ),
-                            )
+                            val sheet = ThemeBottomSheet()
+                            notificationCenter.addObserver({ result ->
+                                (result as? ThemeState)?.also { value ->
+                                    model.reduce(SettingsScreenMviModel.Intent.ChangeTheme(value))
+                                }
+                            }, key, sheet.key)
+                            bottomSheetNavigator.show(sheet)
                         },
                     )
 
@@ -118,17 +115,17 @@ class SettingsScreen : Screen {
                         title = stringResource(MR.strings.settings_content_font_scale),
                         value = uiState.currentFontScale.toReadableName(),
                         onTap = {
-                            bottomSheetNavigator.show(
-                                FontScaleBottomSheet(
-                                    onSelected = { scale ->
-                                        model.reduce(
-                                            SettingsScreenMviModel.Intent.ChangeContentFontSize(
-                                                scale,
-                                            ),
+                            val sheet = FontScaleBottomSheet()
+                            notificationCenter.addObserver({ result ->
+                                (result as? Float)?.also { value ->
+                                    model.reduce(
+                                        SettingsScreenMviModel.Intent.ChangeContentFontSize(
+                                            value
                                         )
-                                    },
-                                ),
-                            )
+                                    )
+                                }
+                            }, key, sheet.key)
+                            bottomSheetNavigator.show(sheet)
                         },
                     )
 
@@ -137,17 +134,13 @@ class SettingsScreen : Screen {
                         title = stringResource(MR.strings.settings_language),
                         value = uiState.lang.toLanguageName(),
                         onTap = {
-                            bottomSheetNavigator.show(
-                                LanguageBottomSheet(
-                                    onSelected = { newValue ->
-                                        model.reduce(
-                                            SettingsScreenMviModel.Intent.ChangeLanguage(
-                                                newValue,
-                                            ),
-                                        )
-                                    },
-                                ),
-                            )
+                            val sheet = LanguageBottomSheet()
+                            notificationCenter.addObserver({ result ->
+                                (result as? String)?.also { lang ->
+                                    model.reduce(SettingsScreenMviModel.Intent.ChangeLanguage(lang))
+                                }
+                            }, key, sheet.key)
+                            bottomSheetNavigator.show(sheet)
                         },
                     )
 
@@ -161,7 +154,11 @@ class SettingsScreen : Screen {
                             )
                             notificationCenter.addObserver({ result ->
                                 (result as? ListingType)?.also {
-                                    model.reduce(SettingsScreenMviModel.Intent.ChangeDefaultListingType(it))
+                                    model.reduce(
+                                        SettingsScreenMviModel.Intent.ChangeDefaultListingType(
+                                            it
+                                        )
+                                    )
                                 }
                             }, key, sheet.key)
                             bottomSheetNavigator.show(sheet)
@@ -173,18 +170,19 @@ class SettingsScreen : Screen {
                         title = stringResource(MR.strings.settings_default_post_sort_type),
                         value = uiState.defaultPostSortType.toReadableName(),
                         onTap = {
-                            bottomSheetNavigator.show(
-                                SortBottomSheet(
-                                    expandTop = true,
-                                    onSelected = { newValue ->
-                                        model.reduce(
-                                            SettingsScreenMviModel.Intent.ChangeDefaultPostSortType(
-                                                newValue,
-                                            ),
-                                        )
-                                    },
-                                ),
+                            val sheet = SortBottomSheet(
+                                expandTop = true,
                             )
+                            notificationCenter.addObserver({
+                                (it as? SortType)?.also { sortType ->
+                                    model.reduce(
+                                        SettingsScreenMviModel.Intent.ChangeDefaultPostSortType(
+                                            sortType
+                                        )
+                                    )
+                                }
+                            }, key, sheet.key)
+                            bottomSheetNavigator.show(sheet)
                         },
                     )
 
@@ -193,23 +191,24 @@ class SettingsScreen : Screen {
                         title = stringResource(MR.strings.settings_default_comment_sort_type),
                         value = uiState.defaultCommentSortType.toReadableName(),
                         onTap = {
-                            bottomSheetNavigator.show(
-                                SortBottomSheet(
-                                    values = listOf(
-                                        SortType.Hot,
-                                        SortType.Top.Generic,
-                                        SortType.New,
-                                        SortType.Old,
-                                    ),
-                                    onSelected = { newValue ->
-                                        model.reduce(
-                                            SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType(
-                                                newValue,
-                                            ),
-                                        )
-                                    },
+                            val sheet = SortBottomSheet(
+                                values = listOf(
+                                    SortType.Hot,
+                                    SortType.Top.Generic,
+                                    SortType.New,
+                                    SortType.Old,
                                 ),
                             )
+                            notificationCenter.addObserver({
+                                (it as? SortType)?.also { sortType ->
+                                    model.reduce(
+                                        SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType(
+                                            sortType
+                                        )
+                                    )
+                                }
+                            }, key, sheet.key)
+                            bottomSheetNavigator.show(sheet)
                         },
                     )
 

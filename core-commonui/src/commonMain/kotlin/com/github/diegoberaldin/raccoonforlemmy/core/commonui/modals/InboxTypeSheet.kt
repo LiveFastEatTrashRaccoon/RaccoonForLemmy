@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
@@ -18,15 +19,16 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
-class InboxTypeSheet(
-    private val onUnreadSelected: (Boolean) -> Unit,
-) : Screen {
+class InboxTypeSheet : Screen {
     @Composable
     override fun Content() {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val notificationCenter = remember { getNotificationCenter() }
+
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -59,8 +61,10 @@ class InboxTypeSheet(
                         )
                             .fillMaxWidth()
                             .onClick {
-                                onUnreadSelected(true)
-                                bottomSheetNavigator?.hide()
+                                notificationCenter.getObserver(key)?.also {
+                                    it.invoke(true)
+                                }
+                                bottomSheetNavigator.hide()
                             },
                     ) {
                         Text(
@@ -76,8 +80,10 @@ class InboxTypeSheet(
                                 horizontal = Spacing.s,
                                 vertical = Spacing.m,
                             ).onClick {
-                                onUnreadSelected(false)
-                                bottomSheetNavigator?.hide()
+                                notificationCenter.getObserver(key)?.also {
+                                    it.invoke(false)
+                                }
+                                bottomSheetNavigator.hide()
                             },
                     ) {
                         Text(
