@@ -18,8 +18,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class InboxMentionsViewModel(
-    private val mvi: DefaultMviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect> = DefaultMviModel(
-        InboxMentionsMviModel.UiState()),
+    private val mvi: DefaultMviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
     private val hapticFeedback: HapticFeedback,

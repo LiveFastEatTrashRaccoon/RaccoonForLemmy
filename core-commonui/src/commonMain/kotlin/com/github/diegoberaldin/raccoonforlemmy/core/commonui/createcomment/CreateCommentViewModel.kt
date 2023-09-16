@@ -12,9 +12,7 @@ import kotlinx.coroutines.launch
 class CreateCommentViewModel(
     private val postId: Int,
     private val parentId: Int?,
-    private val mvi: DefaultMviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect> = DefaultMviModel(
-        CreateCommentMviModel.UiState()
-    ),
+    private val mvi: DefaultMviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val commentRepository: CommentRepository,
 ) : ScreenModel,

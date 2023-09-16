@@ -11,9 +11,7 @@ import kotlinx.coroutines.launch
 
 class CreatePostViewModel(
     private val communityId: Int,
-    private val mvi: DefaultMviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect> = DefaultMviModel(
-        CreatePostMviModel.UiState()
-    ),
+    private val mvi: DefaultMviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val postsRepository: PostsRepository,
 ) : ScreenModel,

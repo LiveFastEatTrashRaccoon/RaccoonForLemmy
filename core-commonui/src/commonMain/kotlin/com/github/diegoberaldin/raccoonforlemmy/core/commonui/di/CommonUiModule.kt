@@ -5,7 +5,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.Comm
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
@@ -94,6 +96,7 @@ val commonUiModule = module {
     }
     factory { params ->
         CreateCommentViewModel(
+            mvi = DefaultMviModel(CreateCommentMviModel.UiState()),
             postId = params[0],
             parentId = params[1],
             identityRepository = get(),
@@ -102,6 +105,7 @@ val commonUiModule = module {
     }
     factory { params ->
         CreatePostViewModel(
+            mvi = DefaultMviModel(CreatePostMviModel.UiState()),
             communityId = params[0],
             identityRepository = get(),
             postsRepository = get(),

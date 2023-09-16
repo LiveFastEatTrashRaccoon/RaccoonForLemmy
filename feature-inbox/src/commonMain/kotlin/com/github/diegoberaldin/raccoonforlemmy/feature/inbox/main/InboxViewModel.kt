@@ -11,9 +11,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 
 class InboxViewModel(
-    private val mvi: DefaultMviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect> = DefaultMviModel(
-        InboxMviModel.UiState()
-    ),
+    private val mvi: DefaultMviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
     private val coordinator: InboxCoordinator,

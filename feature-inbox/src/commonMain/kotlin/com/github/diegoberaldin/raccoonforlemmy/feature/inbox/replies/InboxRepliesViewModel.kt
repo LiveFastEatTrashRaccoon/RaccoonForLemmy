@@ -19,9 +19,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class InboxRepliesViewModel(
-    private val mvi: DefaultMviModel<InboxRepliesMviModel.Intent, InboxRepliesMviModel.UiState, InboxRepliesMviModel.Effect> = DefaultMviModel(
-        InboxRepliesMviModel.UiState()
-    ),
+    private val mvi: DefaultMviModel<InboxRepliesMviModel.Intent, InboxRepliesMviModel.UiState, InboxRepliesMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
     private val siteRepository: SiteRepository,

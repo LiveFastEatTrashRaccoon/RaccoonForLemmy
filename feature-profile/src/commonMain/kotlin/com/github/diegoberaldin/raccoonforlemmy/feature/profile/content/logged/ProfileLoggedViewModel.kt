@@ -10,9 +10,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 
 class ProfileLoggedViewModel(
-    private val mvi: DefaultMviModel<ProfileLoggedMviModel.Intent, ProfileLoggedMviModel.UiState, ProfileLoggedMviModel.Effect> = DefaultMviModel(
-        ProfileLoggedMviModel.UiState()
-    ),
+    private val mvi: DefaultMviModel<ProfileLoggedMviModel.Intent, ProfileLoggedMviModel.UiState, ProfileLoggedMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
 ) : ScreenModel,
