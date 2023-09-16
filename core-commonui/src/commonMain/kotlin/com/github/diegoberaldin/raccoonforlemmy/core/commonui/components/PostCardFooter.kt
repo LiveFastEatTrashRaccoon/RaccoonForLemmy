@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleDown
@@ -16,7 +15,8 @@ import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.More
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,12 +28,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.DateTime
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
+import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -54,15 +57,9 @@ fun PostCardFooter(
     onOptionSelected: ((Int) -> Unit)? = null,
 ) {
     var optionsExpanded by remember { mutableStateOf(false) }
-    var width by remember { mutableStateOf(0.dp) }
-    var height by remember { mutableStateOf(0.dp) }
+    var optionsOffset by remember { mutableStateOf(Offset.Zero) }
 
-    Box(
-        modifier = Modifier.onGloballyPositioned {
-            width = it.size.width.dp
-            height = it.size.height.dp
-        },
-    ) {
+    Box {
         Row(
             modifier = Modifier.padding(bottom = Spacing.xxxs),
             verticalAlignment = Alignment.CenterVertically,
@@ -123,6 +120,19 @@ fun PostCardFooter(
                     },
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            if (options.isNotEmpty()) {
+                Icon(
+                    modifier = buttonModifier
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        }
+                        .onClick {
+                            optionsExpanded = true
+                        },
+                    imageVector = Icons.Default.MoreHoriz,
+                    contentDescription = null,
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -206,18 +216,6 @@ fun PostCardFooter(
                     },
                 ),
             )
-
-            if (options.isNotEmpty()) {
-                Icon(
-                    modifier = Modifier
-                        .width(14.dp)
-                        .onClick {
-                            optionsExpanded = true
-                        },
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = null,
-                )
-            }
         }
 
         CustomDropDown(
@@ -226,8 +224,8 @@ fun PostCardFooter(
                 optionsExpanded = false
             },
             offset = DpOffset(
-                x = width - Spacing.m,
-                y = 0.dp,
+                x = optionsOffset.x.toLocalDp(),
+                y = optionsOffset.y.toLocalDp(),
             ),
         ) {
             options.forEachIndexed { idx, text ->
