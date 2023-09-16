@@ -81,6 +81,9 @@ internal fun MarkdownText(
                     contentDescription = null,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth(),
+                    onFailure = {
+                        Text(text = "⚠️ Image loading error")
+                    },
                 )
             },
         ),
