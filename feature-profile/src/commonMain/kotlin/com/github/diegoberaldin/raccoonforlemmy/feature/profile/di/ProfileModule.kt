@@ -42,6 +42,7 @@ val profileTabModule = module {
             savedOnly = params[1],
             identityRepository = get(),
             userRepository = get(),
+            notificationCenter = get(),
         )
     }
     factory { params ->

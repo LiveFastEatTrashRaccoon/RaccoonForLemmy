@@ -19,6 +19,8 @@ object DefaultNotificationCenter : NotificationCenter {
     }
 
     override fun addObserver(observer: (Any) -> Unit, key: String, contract: String) {
+        removeObserver(key)
+
         val mapKey = key to contract
         registry[mapKey] = observer
     }

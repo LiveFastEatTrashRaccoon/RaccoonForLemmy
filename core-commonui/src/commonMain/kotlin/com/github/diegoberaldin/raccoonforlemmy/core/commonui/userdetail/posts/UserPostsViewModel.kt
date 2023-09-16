@@ -4,6 +4,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -24,12 +26,24 @@ class UserPostsViewModel(
     private val postsRepository: PostsRepository,
     private val hapticFeedback: HapticFeedback,
     private val keyStore: TemporaryKeyStore,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<UserPostsMviModel.Intent, UserPostsMviModel.UiState, UserPostsMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1
+
+    fun finalize() {
+        notificationCenter.removeObserver(this::class.simpleName.orEmpty())
+    }
+
     override fun onStarted() {
         mvi.onStarted()
+
+        notificationCenter.addObserver({
+            (it as? PostModel)?.also { post ->
+                handlePostUpdate(post)
+            }
+        }, this::class.simpleName.orEmpty(), NotificationCenterContractKeys.PostUpdate)
 
         mvi.scope.launch(Dispatchers.IO) {
             val user = userRepository.get(user.id)
@@ -246,6 +260,20 @@ class UserPostsViewModel(
                     )
                 }
             }
+        }
+    }
+
+    private fun handlePostUpdate(post: PostModel) {
+        mvi.updateState {
+            it.copy(
+                posts = it.posts.map { p ->
+                    if (p.id == post.id) {
+                        post
+                    } else {
+                        p
+                    }
+                },
+            )
         }
     }
 }

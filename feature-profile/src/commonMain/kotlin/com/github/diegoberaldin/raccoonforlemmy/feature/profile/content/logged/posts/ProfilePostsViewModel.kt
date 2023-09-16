@@ -3,7 +3,10 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
@@ -18,13 +21,24 @@ class ProfilePostsViewModel(
     private val savedOnly: Boolean = false,
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<ProfilePostsMviModel.Intent, ProfilePostsMviModel.UiState, ProfilePostsMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1
 
+    fun finalize() {
+        notificationCenter.removeObserver(this::class.simpleName.orEmpty())
+    }
+
     override fun onStarted() {
         mvi.onStarted()
+
+        notificationCenter.addObserver({
+            (it as? PostModel)?.also { post ->
+                handlePostUpdate(post)
+            }
+        }, this::class.simpleName.orEmpty(), NotificationCenterContractKeys.PostUpdate)
 
         if (mvi.uiState.value.posts.isEmpty()) {
             refresh()
@@ -77,6 +91,20 @@ class ProfilePostsViewModel(
                     refreshing = false,
                 )
             }
+        }
+    }
+
+    private fun handlePostUpdate(post: PostModel) {
+        mvi.updateState {
+            it.copy(
+                posts = it.posts.map { p ->
+                    if (p.id == post.id) {
+                        post
+                    } else {
+                        p
+                    }
+                },
+            )
         }
     }
 }

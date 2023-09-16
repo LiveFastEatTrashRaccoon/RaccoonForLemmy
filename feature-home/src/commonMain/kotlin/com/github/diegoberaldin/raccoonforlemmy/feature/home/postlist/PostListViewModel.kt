@@ -5,6 +5,7 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
@@ -35,6 +36,10 @@ class PostListViewModel(
 
     private var currentPage: Int = 1
 
+    fun finalize() {
+        notificationCenter.removeObserver(this::class.simpleName.orEmpty())
+    }
+
     override fun reduce(intent: PostListMviModel.Intent) {
         when (intent) {
             PostListMviModel.Intent.LoadNextPage -> loadNextPage()
@@ -57,15 +62,13 @@ class PostListViewModel(
             )
 
             PostListMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            is PostListMviModel.Intent.HandlePostUpdate -> handlePostUpdate(intent.post)
         }
-    }
-
-    override fun onDisposed() {
-        mvi.onDisposed()
     }
 
     override fun onStarted() {
         mvi.onStarted()
+
         val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
         val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
         mvi.updateState {
@@ -77,33 +80,18 @@ class PostListViewModel(
             )
         }
 
+        notificationCenter.addObserver({
+            (it as? PostModel)?.also { post ->
+                handlePostUpdate(post)
+            }
+        }, this::class.simpleName.orEmpty(), NotificationCenterContractKeys.PostUpdate)
+
         mvi.scope.launch(Dispatchers.Main) {
             identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->
                 mvi.updateState {
                     it.copy(isLogged = isLogged)
                 }
             }.launchIn(this)
-            notificationCenter.events
-                .onEach { evt ->
-                    when (evt) {
-                        is NotificationCenter.Event.PostUpdate -> {
-                            val newPost = evt.post
-                            mvi.updateState {
-                                it.copy(
-                                    posts = it.posts.map { p ->
-                                        if (p.id == newPost.id) {
-                                            newPost
-                                        } else {
-                                            p
-                                        }
-                                    },
-                                )
-                            }
-                        }
-
-                        else -> Unit
-                    }
-                }.launchIn(this)
             notificationCenter.events
                 .onEach { evt ->
                     when (evt) {
@@ -326,6 +314,20 @@ class PostListViewModel(
                     )
                 }
             }
+        }
+    }
+
+    private fun handlePostUpdate(post: PostModel) {
+        mvi.updateState {
+            it.copy(
+                posts = it.posts.map { p ->
+                    if (p.id == post.id) {
+                        post
+                    } else {
+                        p
+                    }
+                },
+            )
         }
     }
 }

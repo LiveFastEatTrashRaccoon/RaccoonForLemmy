@@ -16,6 +16,7 @@ interface PostListMviModel :
         data class UpVotePost(val index: Int, val feedback: Boolean = false) : Intent
         data class DownVotePost(val index: Int, val feedback: Boolean = false) : Intent
         data class SavePost(val index: Int, val feedback: Boolean = false) : Intent
+        data class HandlePostUpdate(val post: PostModel) : Intent
         object HapticIndication : Intent
     }
 

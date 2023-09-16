@@ -5,6 +5,7 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -180,7 +181,9 @@ class PostDetailViewModel(
                     post = post,
                     voted = newValue,
                 )
-                notificationCenter.send(NotificationCenter.Event.PostUpdate(newPost))
+                notificationCenter.getObserver(NotificationCenterContractKeys.PostUpdate)?.also {
+                    it.invoke(newPost)
+                }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState { it.copy(post = post) }
@@ -210,7 +213,9 @@ class PostDetailViewModel(
                     post = post,
                     downVoted = newValue,
                 )
-                notificationCenter.send(NotificationCenter.Event.PostUpdate(newPost))
+                notificationCenter.getObserver(NotificationCenterContractKeys.PostUpdate)?.also {
+                    it.invoke(newPost)
+                }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState { it.copy(post = post) }
@@ -239,7 +244,9 @@ class PostDetailViewModel(
                     post = post,
                     saved = newValue,
                 )
-                notificationCenter.send(NotificationCenter.Event.PostUpdate(newPost))
+                notificationCenter.getObserver(NotificationCenterContractKeys.PostUpdate)?.also {
+                    it.invoke(newPost)
+                }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState { it.copy(post = post) }
@@ -278,7 +285,6 @@ class PostDetailViewModel(
                     comment = comment,
                     voted = newValue,
                 )
-                notificationCenter.send(NotificationCenter.Event.CommentUpdate(newComment))
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -324,7 +330,6 @@ class PostDetailViewModel(
                     comment = comment,
                     downVoted = newValue,
                 )
-                notificationCenter.send(NotificationCenter.Event.CommentUpdate(newComment))
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -373,7 +378,6 @@ class PostDetailViewModel(
                     comment = comment,
                     saved = newValue,
                 )
-                notificationCenter.send(NotificationCenter.Event.CommentUpdate(newComment))
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
