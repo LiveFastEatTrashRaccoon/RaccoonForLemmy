@@ -1,7 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -15,6 +17,7 @@ import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.getTemporaryKeyStore
@@ -76,7 +79,10 @@ fun App() {
         val lang by languageRepository.currentLanguage.collectAsState()
         LaunchedEffect(lang) {}
 
-        BottomSheetNavigator {
+        BottomSheetNavigator(
+            sheetShape = RoundedCornerShape(topStart = CornerSize.xl, topEnd = CornerSize.xl),
+            sheetBackgroundColor = MaterialTheme.colorScheme.background,
+        ) {
             Navigator(
                 screen = MainScreen(),
                 onBackPressed = {

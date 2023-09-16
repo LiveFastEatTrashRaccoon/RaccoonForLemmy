@@ -34,7 +34,6 @@ class FontScaleBottomSheet : Screen {
         val notificationCenter = remember { getNotificationCenter() }
         Column(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
                 .padding(
                     top = Spacing.s,
                     start = Spacing.s,

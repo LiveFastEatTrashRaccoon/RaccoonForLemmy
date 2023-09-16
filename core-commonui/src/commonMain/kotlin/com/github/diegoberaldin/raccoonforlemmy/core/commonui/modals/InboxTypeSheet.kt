@@ -31,7 +31,6 @@ class InboxTypeSheet : Screen {
 
         Column(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
                 .padding(
                     top = Spacing.s,
                     start = Spacing.s,
