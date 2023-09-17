@@ -1,7 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -84,31 +86,34 @@ class CreatePostScreen(
             topBar = {
                 TopAppBar(
                     title = {
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
-                            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            BottomSheetHandle()
-                            Text(
-                                text = stringResource(MR.strings.create_post_title),
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-                    },
-                    actions = {
-                        IconButton(
-                            content = {
-                                Icon(
-                                    imageVector = Icons.Default.Send,
-                                    contentDescription = null,
+                        Box {
+                            Column(
+                                modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
+                                verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                BottomSheetHandle()
+                                Text(
+                                    text = stringResource(MR.strings.create_post_title),
+                                    style = MaterialTheme.typography.titleLarge,
+                                    color = MaterialTheme.colorScheme.onBackground,
                                 )
-                            },
-                            onClick = {
-                                model.reduce(CreatePostMviModel.Intent.Send)
                             }
-                        )
+                            Row {
+                                Spacer(modifier = Modifier.weight(1f))
+                                IconButton(
+                                    content = {
+                                        Icon(
+                                            imageVector = Icons.Default.Send,
+                                            contentDescription = null,
+                                        )
+                                    },
+                                    onClick = {
+                                        model.reduce(CreatePostMviModel.Intent.Send)
+                                    }
+                                )
+                            }
+                        }
                     },
                 )
             },
