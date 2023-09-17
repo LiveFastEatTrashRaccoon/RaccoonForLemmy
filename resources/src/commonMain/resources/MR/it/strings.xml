@@ -105,6 +105,7 @@
     <string name="instance_detail_title">Istanza: %1$s</string>
     <string name="instance_detail_communities">Comunità</string>
 
+    <string name="inbox_not_logged_message">Login non effettuato.\nAggiungi un account dalla schermata Profilo per accedere alla inbox. </string>
     <string name="inbox_section_replies">Risposte</string>
     <string name="inbox_section_mentions">Menzioni</string>
     <string name="inbox_section_messages">Messaggi</string>

@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.InboxCoordinator
 import kotlinx.coroutines.Dispatchers
@@ -13,10 +14,21 @@ import kotlinx.coroutines.launch
 class InboxViewModel(
     private val mvi: DefaultMviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect>,
     private val identityRepository: IdentityRepository,
+    private val siteRepository: SiteRepository,
     private val userRepository: UserRepository,
     private val coordinator: InboxCoordinator,
 ) : ScreenModel,
     MviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect> by mvi {
+
+    override fun onStarted() {
+        mvi.onStarted()
+        mvi.scope?.launch(Dispatchers.IO) {
+            val auth = identityRepository.authToken.value.orEmpty()
+            siteRepository.getCurrentUser(auth)?.also { user ->
+                mvi.updateState { it.copy(currentUserId = user.id) }
+            }
+        }
+    }
 
     override fun reduce(intent: InboxMviModel.Intent) {
         when (intent) {

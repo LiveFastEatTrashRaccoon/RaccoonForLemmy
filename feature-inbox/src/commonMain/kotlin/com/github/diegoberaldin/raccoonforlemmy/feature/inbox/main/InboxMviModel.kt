@@ -12,6 +12,7 @@ interface InboxMviModel :
     }
 
     data class UiState(
+        val currentUserId: Int? = null,
         val section: InboxSection = InboxSection.REPLIES,
         val unreadOnly: Boolean = true,
     )

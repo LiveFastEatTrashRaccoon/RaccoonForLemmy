@@ -24,6 +24,7 @@ val inboxTabModule = module {
             mvi = DefaultMviModel(InboxMviModel.UiState()),
             identityRepository = get(),
             userRepository = get(),
+            siteRepository = get(),
             coordinator = get(),
         )
     }
