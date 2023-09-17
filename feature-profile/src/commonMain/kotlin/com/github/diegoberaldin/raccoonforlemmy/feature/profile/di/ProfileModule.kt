@@ -5,10 +5,8 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.ProfileC
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.ProfileContentViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.ProfileLoggedViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.comments.ProfileCommentsMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.comments.ProfileCommentsViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostsMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged.posts.ProfilePostsViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.saved.ProfileSavedMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.saved.ProfileSavedViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheetMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheetViewModel
 import org.koin.dsl.module
@@ -33,26 +31,22 @@ val profileTabModule = module {
             mvi = DefaultMviModel(ProfileLoggedMviModel.UiState()),
             identityRepository = get(),
             siteRepository = get(),
-        )
-    }
-    factory { params ->
-        ProfilePostsViewModel(
-            mvi = DefaultMviModel(ProfilePostsMviModel.UiState()),
-            user = params[0],
-            savedOnly = params[1],
-            identityRepository = get(),
             userRepository = get(),
             postsRepository = get(),
+            commentRepository = get(),
             notificationCenter = get(),
         )
     }
     factory { params ->
-        ProfileCommentsViewModel(
-            mvi = DefaultMviModel(ProfileCommentsMviModel.UiState()),
+        ProfileSavedViewModel(
+            mvi = DefaultMviModel(ProfileSavedMviModel.UiState()),
             user = params[0],
             identityRepository = get(),
             userRepository = get(),
+            postsRepository = get(),
             commentRepository = get(),
+            hapticFeedback = get(),
+            notificationCenter = get(),
         )
     }
 }
