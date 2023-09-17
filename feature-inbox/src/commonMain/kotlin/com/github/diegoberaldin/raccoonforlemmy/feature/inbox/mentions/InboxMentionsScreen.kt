@@ -73,6 +73,7 @@ class InboxMentionsScreen : Tab {
                 items(uiState.mentions) { mention ->
                     SwipeableCard(
                         modifier = Modifier.fillMaxWidth(),
+                        enabled = uiState.swipeActionsEnabled,
                         backgroundColor = {
                             when (it) {
                                 DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary

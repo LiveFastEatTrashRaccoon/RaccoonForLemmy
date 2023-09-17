@@ -27,6 +27,7 @@ interface UserCommentsMviModel :
         val comments: List<CommentModel> = emptyList(),
         val user: UserModel = UserModel(),
         val sortType: SortType = SortType.Active,
+        val swipeActionsEnabled: Boolean = true,
     )
 
     sealed interface Effect

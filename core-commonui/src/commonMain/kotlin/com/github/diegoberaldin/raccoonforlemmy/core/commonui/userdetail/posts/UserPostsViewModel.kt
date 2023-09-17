@@ -54,6 +54,7 @@ class UserPostsViewModel(
                     it.copy(
                         user = user,
                         blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
+                        swipeActionsEnabled = keyStore[KeyStoreKeys.EnableSwipeActions, true],
                     )
                 }
             }

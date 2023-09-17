@@ -19,6 +19,7 @@ interface InboxRepliesMviModel :
         val canFetchMore: Boolean = true,
         val unreadOnly: Boolean = true,
         val replies: List<PersonMentionModel> = emptyList(),
+        val swipeActionsEnabled: Boolean = true,
     )
 
     sealed interface Effect

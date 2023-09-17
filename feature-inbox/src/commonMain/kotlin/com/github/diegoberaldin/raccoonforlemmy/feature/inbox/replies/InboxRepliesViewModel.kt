@@ -6,6 +6,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
@@ -27,6 +29,7 @@ class InboxRepliesViewModel(
     private val hapticFeedback: HapticFeedback,
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
+    private val keyStore: TemporaryKeyStore,
 ) : ScreenModel,
     MviModel<InboxRepliesMviModel.Intent, InboxRepliesMviModel.UiState, InboxRepliesMviModel.Effect> by mvi {
 
@@ -44,6 +47,11 @@ class InboxRepliesViewModel(
 
     override fun onStarted() {
         mvi.onStarted()
+        mvi.updateState {
+            it.copy(
+                swipeActionsEnabled = keyStore[KeyStoreKeys.EnableSwipeActions, true],
+            )
+        }
         mvi.scope?.launch {
             coordinator.effects.onEach {
                 when (it) {

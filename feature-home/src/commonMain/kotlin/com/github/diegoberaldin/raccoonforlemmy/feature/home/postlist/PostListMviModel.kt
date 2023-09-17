@@ -32,6 +32,7 @@ interface PostListMviModel :
         val posts: List<PostModel> = emptyList(),
         val blurNsfw: Boolean = true,
         val currentUserId: Int = 0,
+        val swipeActionsEnabled: Boolean = true,
     )
 
     sealed interface Effect

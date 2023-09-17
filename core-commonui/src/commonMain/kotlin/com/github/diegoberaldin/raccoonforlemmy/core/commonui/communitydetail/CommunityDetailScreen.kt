@@ -394,6 +394,7 @@ class CommunityDetailScreen(
                         itemsIndexed(uiState.posts) { idx, post ->
                             SwipeableCard(
                                 modifier = Modifier.fillMaxWidth(),
+                                enabled = uiState.swipeActionsEnabled,
                                 directions = if (isOnOtherInstance) {
                                     emptySet()
                                 } else {

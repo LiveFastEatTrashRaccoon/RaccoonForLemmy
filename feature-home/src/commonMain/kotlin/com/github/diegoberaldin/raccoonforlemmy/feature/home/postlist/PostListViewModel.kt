@@ -58,6 +58,41 @@ class PostListViewModel(
         notificationCenter.removeObserver(this::class.simpleName.orEmpty())
     }
 
+    override fun onStarted() {
+        mvi.onStarted()
+
+        val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
+        val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
+        mvi.updateState {
+            it.copy(
+                instance = apiConfigRepository.getInstance(),
+                listingType = listingType,
+                sortType = sortType,
+                blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
+                swipeActionsEnabled = keyStore[KeyStoreKeys.EnableSwipeActions, true],
+            )
+        }
+
+        mvi.scope?.launch(Dispatchers.Main) {
+            identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->
+                mvi.updateState {
+                    it.copy(isLogged = isLogged)
+                }
+            }.launchIn(this)
+        }
+
+        mvi.scope?.launch(Dispatchers.IO) {
+            if (uiState.value.currentUserId == null) {
+                val auth = identityRepository.authToken.value.orEmpty()
+                val user = siteRepository.getCurrentUser(auth)
+                mvi.updateState { it.copy(currentUserId = user?.id ?: 0) }
+                if (mvi.uiState.value.posts.isEmpty()) {
+                    refresh()
+                }
+            }
+        }
+    }
+
     override fun reduce(intent: PostListMviModel.Intent) {
         when (intent) {
             PostListMviModel.Intent.LoadNextPage -> loadNextPage()
@@ -82,40 +117,6 @@ class PostListViewModel(
             PostListMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             is PostListMviModel.Intent.HandlePostUpdate -> handlePostUpdate(intent.post)
             is PostListMviModel.Intent.DeletePost -> handlePostDelete(intent.id)
-        }
-    }
-
-    override fun onStarted() {
-        mvi.onStarted()
-
-        val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
-        val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
-        mvi.updateState {
-            it.copy(
-                instance = apiConfigRepository.getInstance(),
-                listingType = listingType,
-                sortType = sortType,
-                blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
-            )
-        }
-
-        mvi.scope?.launch(Dispatchers.Main) {
-            identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->
-                mvi.updateState {
-                    it.copy(isLogged = isLogged)
-                }
-            }.launchIn(this)
-        }
-
-        mvi.scope?.launch(Dispatchers.IO) {
-            if (uiState.value.currentUserId == null) {
-                val auth = identityRepository.authToken.value.orEmpty()
-                val user = siteRepository.getCurrentUser(auth)
-                mvi.updateState { it.copy(currentUserId = user?.id ?: 0) }
-                if (mvi.uiState.value.posts.isEmpty()) {
-                    refresh()
-                }
-            }
         }
     }
 

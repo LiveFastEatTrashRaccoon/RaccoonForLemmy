@@ -75,6 +75,7 @@ class SettingsScreenViewModel(
         val postSortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
         val commentSortType = keyStore[KeyStoreKeys.DefaultCommentSortType, 3].toSortType()
         val openUrlsInExternalBrowser = keyStore[KeyStoreKeys.OpenUrlsInExternalBrowser, false]
+        val enableSwipeActions = keyStore[KeyStoreKeys.EnableSwipeActions, true]
         mvi.updateState {
             it.copy(
                 defaultListingType = listingType,
@@ -84,6 +85,7 @@ class SettingsScreenViewModel(
                 blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
                 supportsDynamicColors = colorSchemeProvider.supportsDynamicColors,
                 openUrlsInExternalBrowser = openUrlsInExternalBrowser,
+                enableSwipeActions = enableSwipeActions,
                 appVersion = AppInfo.versionCode,
             )
         }
@@ -133,6 +135,10 @@ class SettingsScreenViewModel(
 
             is SettingsScreenMviModel.Intent.ChangeOpenUrlsInExternalBrowser -> {
                 changeOpenUrlsInExternalBrowser(intent.value)
+            }
+
+            is SettingsScreenMviModel.Intent.ChangeEnableSwipeActions -> {
+                changeEnableSwipeActions(intent.value)
             }
         }
     }
@@ -190,6 +196,11 @@ class SettingsScreenViewModel(
     private fun changeOpenUrlsInExternalBrowser(value: Boolean) {
         mvi.updateState { it.copy(openUrlsInExternalBrowser = value) }
         keyStore.save(KeyStoreKeys.OpenUrlsInExternalBrowser, value)
+    }
+
+    private fun changeEnableSwipeActions(value: Boolean) {
+        mvi.updateState { it.copy(enableSwipeActions = value) }
+        keyStore.save(KeyStoreKeys.EnableSwipeActions, value)
     }
 
     private fun handleLogout() {

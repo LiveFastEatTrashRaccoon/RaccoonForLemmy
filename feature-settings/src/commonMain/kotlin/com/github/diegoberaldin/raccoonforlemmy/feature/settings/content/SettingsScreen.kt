@@ -270,6 +270,19 @@ class SettingsScreen : Screen {
                         }
                     )
 
+                    // swipe actions
+                    SettingsSwitchRow(
+                        title = stringResource(MR.strings.settings_enable_swipe_actions),
+                        value = uiState.enableSwipeActions,
+                        onValueChanged = { value ->
+                            model.reduce(
+                                SettingsScreenMviModel.Intent.ChangeEnableSwipeActions(
+                                    value
+                                )
+                            )
+                        }
+                    )
+
                     // app version
                     SettingsRow(
                         modifier = Modifier.padding(top = Spacing.xl),

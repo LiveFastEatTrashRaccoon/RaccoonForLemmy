@@ -33,6 +33,7 @@ fun SwipeableCard(
         DismissDirection.StartToEnd,
         DismissDirection.EndToStart,
     ),
+    enabled: Boolean = true,
     content: @Composable () -> Unit,
     swipeContent: @Composable (DismissDirection) -> Unit,
     backgroundColor: @Composable (DismissValue) -> Color,
@@ -40,68 +41,72 @@ fun SwipeableCard(
     onDismissToEnd: (() -> Unit) = {},
     onDismissToStart: (() -> Unit) = {},
 ) {
-    var width by remember { mutableStateOf(0f) }
-    val dismissState = rememberDismissState(
-        confirmStateChange = {
-            when (it) {
-                DismissValue.DismissedToEnd -> {
-                    onDismissToEnd()
-                }
+    if (enabled) {
+        var width by remember { mutableStateOf(0f) }
+        val dismissState = rememberDismissState(
+            confirmStateChange = {
+                when (it) {
+                    DismissValue.DismissedToEnd -> {
+                        onDismissToEnd()
+                    }
 
-                DismissValue.DismissedToStart -> {
-                    onDismissToStart()
-                }
+                    DismissValue.DismissedToStart -> {
+                        onDismissToStart()
+                    }
 
-                else -> Unit
-            }
-            false
-        },
-    )
-    var willDismissDirection: DismissDirection? by remember {
-        mutableStateOf(null)
-    }
-    val threshold = 0.15f
-    LaunchedEffect(Unit) {
-        snapshotFlow { dismissState.offset.value }.collect {
-            willDismissDirection = when {
-                it > width * threshold -> DismissDirection.StartToEnd
-                it < -width * threshold -> DismissDirection.EndToStart
-                else -> null
+                    else -> Unit
+                }
+                false
+            },
+        )
+        var willDismissDirection: DismissDirection? by remember {
+            mutableStateOf(null)
+        }
+        val threshold = 0.15f
+        LaunchedEffect(Unit) {
+            snapshotFlow { dismissState.offset.value }.collect {
+                willDismissDirection = when {
+                    it > width * threshold -> DismissDirection.StartToEnd
+                    it < -width * threshold -> DismissDirection.EndToStart
+                    else -> null
+                }
             }
         }
-    }
-    LaunchedEffect(willDismissDirection) {
-        if (willDismissDirection != null) {
-            onGestureBegin()
+        LaunchedEffect(willDismissDirection) {
+            if (willDismissDirection != null) {
+                onGestureBegin()
+            }
         }
-    }
-    SwipeToDismiss(
-        modifier = modifier.onGloballyPositioned {
-            width = it.size.toSize().width
-        },
-        state = dismissState,
-        directions = directions,
-        dismissThresholds = {
-            FractionalThreshold(threshold)
-        },
-        background = {
-            val direction =
-                dismissState.dismissDirection ?: return@SwipeToDismiss
-            val bgColor by animateColorAsState(
-                backgroundColor(dismissState.targetValue),
-            )
-            val alignment = when (direction) {
-                DismissDirection.StartToEnd -> Alignment.CenterStart
-                DismissDirection.EndToStart -> Alignment.CenterEnd
-            }
-            Box(
-                Modifier.fillMaxSize().background(bgColor).padding(horizontal = 20.dp),
-                contentAlignment = alignment,
-            ) {
-                swipeContent(direction)
-            }
-        },
-    ) {
+        SwipeToDismiss(
+            modifier = modifier.onGloballyPositioned {
+                width = it.size.toSize().width
+            },
+            state = dismissState,
+            directions = directions,
+            dismissThresholds = {
+                FractionalThreshold(threshold)
+            },
+            background = {
+                val direction =
+                    dismissState.dismissDirection ?: return@SwipeToDismiss
+                val bgColor by animateColorAsState(
+                    backgroundColor(dismissState.targetValue),
+                )
+                val alignment = when (direction) {
+                    DismissDirection.StartToEnd -> Alignment.CenterStart
+                    DismissDirection.EndToStart -> Alignment.CenterEnd
+                }
+                Box(
+                    Modifier.fillMaxSize().background(bgColor).padding(horizontal = 20.dp),
+                    contentAlignment = alignment,
+                ) {
+                    swipeContent(direction)
+                }
+            },
+        ) {
+            content()
+        }
+    } else {
         content()
     }
 }

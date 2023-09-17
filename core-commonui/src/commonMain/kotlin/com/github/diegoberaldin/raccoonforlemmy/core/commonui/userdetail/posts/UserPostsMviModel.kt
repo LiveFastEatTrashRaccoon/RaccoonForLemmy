@@ -26,6 +26,7 @@ interface UserPostsMviModel :
         val user: UserModel = UserModel(),
         val sortType: SortType = SortType.Active,
         val blurNsfw: Boolean = true,
+        val swipeActionsEnabled: Boolean = true,
     )
 
     sealed interface Effect

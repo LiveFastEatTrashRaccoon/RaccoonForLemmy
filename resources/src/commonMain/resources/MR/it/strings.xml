@@ -95,6 +95,7 @@
     <string name="settings_app_version">Versione app</string>
     <string name="settings_dynamic_colors">Usa colori dinamici</string>
     <string name="settings_open_url_external">Apri URL su browser esterno</string>
+    <string name="settings_enable_swipe_actions">Consenti azioni allo swipe</string>
 
     <string name="community_button_subscribe">Iscriviti</string>
     <string name="community_button_subscribed">Iscritto</string>

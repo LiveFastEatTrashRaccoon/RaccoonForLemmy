@@ -4,7 +4,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
-import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
@@ -23,13 +24,19 @@ class UserCommentsViewModel(
     private val userRepository: UserRepository,
     private val commentRepository: CommentRepository,
     private val hapticFeedback: HapticFeedback,
-    private val notificationCenter: NotificationCenter,
+    private val keyStore: TemporaryKeyStore,
 ) : ScreenModel,
     MviModel<UserCommentsMviModel.Intent, UserCommentsMviModel.UiState, UserCommentsMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1
     override fun onStarted() {
         mvi.onStarted()
+
+        mvi.updateState {
+            it.copy(
+                swipeActionsEnabled = keyStore[KeyStoreKeys.EnableSwipeActions, true]
+            )
+        }
 
         mvi.scope?.launch(Dispatchers.IO) {
             val user = userRepository.get(user.id)

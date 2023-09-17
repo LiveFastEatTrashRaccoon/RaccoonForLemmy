@@ -130,6 +130,7 @@ internal class UserDetailCommentsScreen(
                 itemsIndexed(uiState.comments) { idx, comment ->
                     SwipeableCard(
                         modifier = Modifier.fillMaxWidth(),
+                        enabled = uiState.swipeActionsEnabled,
                         backgroundColor = {
                             when (it) {
                                 DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary

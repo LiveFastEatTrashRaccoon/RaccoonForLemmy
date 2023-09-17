@@ -332,6 +332,7 @@ class PostDetailScreen(
                             Column {
                                 SwipeableCard(
                                     modifier = Modifier.fillMaxWidth(),
+                                    enabled = uiState.swipeActionsEnabled,
                                     backgroundColor = {
                                         when (it) {
                                             DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary

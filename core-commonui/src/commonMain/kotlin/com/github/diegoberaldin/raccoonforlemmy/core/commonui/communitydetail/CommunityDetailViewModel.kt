@@ -41,6 +41,7 @@ class CommunityDetailViewModel(
                 community = community,
                 sortType = sortType,
                 blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
+                swipeActionsEnabled = keyStore[KeyStoreKeys.EnableSwipeActions, true],
             )
         }
 

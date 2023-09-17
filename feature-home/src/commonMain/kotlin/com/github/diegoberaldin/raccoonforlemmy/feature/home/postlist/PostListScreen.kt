@@ -162,6 +162,7 @@ class PostListScreen : Screen {
                             ) {
                                 SwipeableCard(
                                     modifier = Modifier.fillMaxWidth(),
+                                    enabled = uiState.swipeActionsEnabled,
                                     onGestureBegin = {
                                         model.reduce(PostListMviModel.Intent.HapticIndication)
                                     },

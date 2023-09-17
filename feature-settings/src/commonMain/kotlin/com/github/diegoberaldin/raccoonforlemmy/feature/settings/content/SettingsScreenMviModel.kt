@@ -21,6 +21,7 @@ interface SettingsScreenMviModel :
         data class ChangeIncludeNsfw(val value: Boolean) : Intent
         data class ChangeBlurNsfw(val value: Boolean) : Intent
         data class ChangeOpenUrlsInExternalBrowser(val value: Boolean) : Intent
+        data class ChangeEnableSwipeActions(val value: Boolean) : Intent
     }
 
     data class UiState(
@@ -37,6 +38,7 @@ interface SettingsScreenMviModel :
         val includeNsfw: Boolean = true,
         val blurNsfw: Boolean = true,
         val openUrlsInExternalBrowser: Boolean = false,
+        val enableSwipeActions: Boolean = true,
         val appVersion: String = "",
     )
 

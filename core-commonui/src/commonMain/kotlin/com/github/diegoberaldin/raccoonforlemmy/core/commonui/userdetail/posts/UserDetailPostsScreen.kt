@@ -141,6 +141,7 @@ internal class UserDetailPostsScreen(
                 itemsIndexed(uiState.posts) { idx, post ->
                     SwipeableCard(
                         modifier = Modifier.fillMaxWidth(),
+                        enabled = uiState.swipeActionsEnabled,
                         backgroundColor = {
                             when (it) {
                                 DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary

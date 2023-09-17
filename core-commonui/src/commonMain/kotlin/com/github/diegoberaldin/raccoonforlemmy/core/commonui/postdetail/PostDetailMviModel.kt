@@ -34,6 +34,7 @@ interface PostDetailMviModel :
         val sortType: SortType = SortType.New,
         val comments: List<CommentModel> = emptyList(),
         val currentUserId: Int? = 0,
+        val swipeActionsEnabled: Boolean = true,
     )
 
     sealed interface Effect {
