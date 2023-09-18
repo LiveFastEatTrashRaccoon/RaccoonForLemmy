@@ -37,6 +37,7 @@ class CreatePostViewModel(
 
     private fun submit() {
         mvi.scope?.launch(Dispatchers.IO) {
+            mvi.updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 val title = uiState.value.title
@@ -51,6 +52,8 @@ class CreatePostViewModel(
             } catch (e: Throwable) {
                 val message = e.message
                 mvi.emitEffect(CreatePostMviModel.Effect.Failure(message))
+            } finally {
+                mvi.updateState { it.copy(loading = false) }
             }
         }
     }

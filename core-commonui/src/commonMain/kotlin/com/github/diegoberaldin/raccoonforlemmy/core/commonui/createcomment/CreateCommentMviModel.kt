@@ -13,6 +13,7 @@ interface CreateCommentMviModel :
 
     data class UiState(
         val text: String = "",
+        val loading: Boolean = false,
     )
 
     sealed interface Effect {

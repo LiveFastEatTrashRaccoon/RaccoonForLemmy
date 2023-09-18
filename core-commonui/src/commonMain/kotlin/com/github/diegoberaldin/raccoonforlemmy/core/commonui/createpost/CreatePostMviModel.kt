@@ -15,6 +15,7 @@ interface CreatePostMviModel :
     data class UiState(
         val title: String = "",
         val body: String = "",
+        val loading: Boolean = false,
     )
 
     sealed interface Effect {

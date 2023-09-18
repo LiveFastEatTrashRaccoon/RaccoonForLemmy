@@ -32,6 +32,7 @@ class CreateCommentViewModel(
 
     private fun submit() {
         mvi.scope?.launch(Dispatchers.IO) {
+            mvi.updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 val text = uiState.value.text
@@ -45,6 +46,8 @@ class CreateCommentViewModel(
             } catch (e: Throwable) {
                 val message = e.message
                 mvi.emitEffect(CreateCommentMviModel.Effect.Failure(message))
+            } finally {
+                mvi.updateState { it.copy(loading = false) }
             }
         }
     }
