@@ -41,14 +41,19 @@ class PostDetailViewModel(
         mvi.updateState {
             it.copy(
                 sortType = sortType,
-                post = post,
             )
         }
         mvi.scope?.launch {
             if (uiState.value.currentUserId == null) {
                 val auth = identityRepository.authToken.value.orEmpty()
                 val user = siteRepository.getCurrentUser(auth)
-                mvi.updateState { it.copy(currentUserId = user?.id ?: 0) }
+                val p = postsRepository.get(id = post.id, auth = auth) ?: post
+                mvi.updateState {
+                    it.copy(
+                        currentUserId = user?.id ?: 0,
+                        post = p,
+                    )
+                }
             }
             if (mvi.uiState.value.comments.isEmpty()) {
                 refresh()

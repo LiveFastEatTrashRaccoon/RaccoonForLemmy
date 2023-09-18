@@ -60,6 +60,11 @@ class PostsRepository(
         dto.map { it.toModel() }
     }.getOrElse { emptyList() }
 
+    suspend fun get(id: Int, auth: String? = null): PostModel? = runCatching {
+        val dto = services.post.get(auth, id).body()?.postView
+        dto?.toModel()
+    }.getOrNull()
+
     fun asUpVoted(post: PostModel, voted: Boolean) = post.copy(
         myVote = if (voted) 1 else 0,
         score = when {

@@ -33,7 +33,7 @@ interface PostDetailMviModel :
         val canFetchMore: Boolean = true,
         val sortType: SortType = SortType.New,
         val comments: List<CommentModel> = emptyList(),
-        val currentUserId: Int? = 0,
+        val currentUserId: Int? = null,
         val swipeActionsEnabled: Boolean = true,
     )
 

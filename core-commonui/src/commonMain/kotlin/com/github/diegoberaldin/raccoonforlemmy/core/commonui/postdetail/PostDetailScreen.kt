@@ -293,7 +293,7 @@ class PostDetailScreen(
                                         saved = statePost.saved,
                                         date = statePost.publishDate,
                                         options = buildList {
-                                            if (post.creator?.id == uiState.currentUserId) {
+                                            if (statePost.creator?.id == uiState.currentUserId) {
                                                 add(stringResource(MR.strings.comment_action_delete))
                                             }
                                         },
