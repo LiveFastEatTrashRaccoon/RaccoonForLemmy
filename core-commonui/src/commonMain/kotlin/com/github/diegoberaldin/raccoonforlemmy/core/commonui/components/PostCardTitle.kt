@@ -26,7 +26,14 @@ fun PostCardTitle(
         modifier = modifier,
         content = text,
         typography = markdownTypography(
-            text = MaterialTheme.typography.displaySmall,
+            h1 = MaterialTheme.typography.headlineLarge,
+            h2 = MaterialTheme.typography.headlineMedium,
+            h3 = MaterialTheme.typography.headlineSmall,
+            h4 = MaterialTheme.typography.titleLarge,
+            h5 = MaterialTheme.typography.titleMedium,
+            h6 = MaterialTheme.typography.titleSmall,
+            text = MaterialTheme.typography.bodyMedium,
+            paragraph = MaterialTheme.typography.bodyMedium,
         ),
         colors = markdownColor(
             text = MaterialTheme.colorScheme.onSurfaceVariant,

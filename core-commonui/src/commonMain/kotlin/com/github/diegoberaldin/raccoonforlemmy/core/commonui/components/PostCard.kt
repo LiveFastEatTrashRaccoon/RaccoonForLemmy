@@ -84,7 +84,8 @@ fun PostCard(
                 )
                 Box {
                     PostCardBody(
-                        modifier = Modifier.heightIn(max = 200.dp)
+                        modifier = Modifier
+                            .heightIn(max = 200.dp)
                             .padding(bottom = Spacing.xs),
                         text = post.text,
                     )
