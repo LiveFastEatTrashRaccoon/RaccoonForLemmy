@@ -55,7 +55,10 @@ class UserDetailViewModel(
         mvi.onStarted()
         val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
         mvi.updateState {
-            it.copy(sortType = sortType)
+            it.copy(
+                user = user,
+                sortType = sortType
+            )
         }
     }
 
