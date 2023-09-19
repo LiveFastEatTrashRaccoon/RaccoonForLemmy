@@ -164,6 +164,13 @@ class PostListScreen : Screen {
                                 SwipeableCard(
                                     modifier = Modifier.fillMaxWidth(),
                                     enabled = uiState.swipeActionsEnabled,
+                                    backgroundColor = {
+                                        when (it) {
+                                            DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
+                                            DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
+                                            DismissValue.Default -> Color.Transparent
+                                        }
+                                    },
                                     onGestureBegin = {
                                         model.reduce(PostListMviModel.Intent.HapticIndication)
                                     },
@@ -172,13 +179,6 @@ class PostListScreen : Screen {
                                     },
                                     onDismissToEnd = {
                                         model.reduce(PostListMviModel.Intent.DownVotePost(idx))
-                                    },
-                                    backgroundColor = {
-                                        when (it) {
-                                            DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
-                                            DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
-                                            else -> Color.Transparent
-                                        }
                                     },
                                     swipeContent = { direction ->
                                         val icon = when (direction) {

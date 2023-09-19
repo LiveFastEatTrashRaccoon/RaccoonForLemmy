@@ -47,7 +47,9 @@ fun CommentCard(
             fontScale = fontScale,
         ),
     ) {
-        Column {
+        Column(
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+        ) {
             var commentHeight by remember { mutableStateOf(0f) }
             val barWidth = 2.dp
             val barColor = themeRepository.getCommentBarColor(

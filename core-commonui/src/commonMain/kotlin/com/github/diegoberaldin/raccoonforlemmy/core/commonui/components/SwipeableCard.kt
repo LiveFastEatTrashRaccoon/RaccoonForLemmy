@@ -24,6 +24,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -59,23 +62,20 @@ fun SwipeableCard(
                 false
             },
         )
-        var willDismissDirection: DismissDirection? by remember {
-            mutableStateOf(null)
-        }
-        val threshold = 0.15f
-        LaunchedEffect(Unit) {
-            snapshotFlow { dismissState.offset.value }.collect {
-                willDismissDirection = when {
+
+        val threshold = 0.25f
+        LaunchedEffect(dismissState) {
+            snapshotFlow { dismissState.offset.value }.map {
+                when {
                     it > width * threshold -> DismissDirection.StartToEnd
                     it < -width * threshold -> DismissDirection.EndToStart
                     else -> null
                 }
-            }
-        }
-        LaunchedEffect(willDismissDirection) {
-            if (willDismissDirection != null) {
-                onGestureBegin()
-            }
+            }.onEach { willDismissDirection ->
+                if (willDismissDirection != null) {
+                    onGestureBegin()
+                }
+            }.launchIn(this)
         }
         SwipeToDismiss(
             modifier = modifier.onGloballyPositioned {
@@ -97,7 +97,10 @@ fun SwipeableCard(
                     DismissDirection.EndToStart -> Alignment.CenterEnd
                 }
                 Box(
-                    Modifier.fillMaxSize().background(bgColor).padding(horizontal = 20.dp),
+                    Modifier
+                        .fillMaxSize()
+                        .background(bgColor)
+                        .padding(horizontal = 20.dp),
                     contentAlignment = alignment,
                 ) {
                     swipeContent(direction)

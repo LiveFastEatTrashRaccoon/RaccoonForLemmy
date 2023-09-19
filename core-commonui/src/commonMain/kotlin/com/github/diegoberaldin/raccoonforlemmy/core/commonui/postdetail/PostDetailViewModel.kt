@@ -41,9 +41,11 @@ class PostDetailViewModel(
     override fun onStarted() {
         mvi.onStarted()
         val sortType = keyStore[KeyStoreKeys.DefaultCommentSortType, 3].toSortType()
+        val swipeActionsEnabled = keyStore[KeyStoreKeys.EnableSwipeActions, true]
         mvi.updateState {
             it.copy(
                 sortType = sortType,
+                swipeActionsEnabled = swipeActionsEnabled,
             )
         }
         mvi.scope?.launch {
