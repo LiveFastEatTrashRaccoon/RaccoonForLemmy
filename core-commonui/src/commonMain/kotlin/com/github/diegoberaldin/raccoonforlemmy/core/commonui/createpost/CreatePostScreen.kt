@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -136,6 +137,7 @@ class CreatePostScreen(
                 modifier = Modifier.padding(padding)
             ) {
                 val bodyFocusRequester = remember { FocusRequester() }
+                val urlFocusRequester = remember { FocusRequester() }
                 val focusManager = LocalFocusManager.current
                 TextField(
                     modifier = Modifier.fillMaxWidth().heightIn(max = 300.dp),
@@ -152,13 +154,59 @@ class CreatePostScreen(
                     ),
                     keyboardActions = KeyboardActions(
                         onNext = {
-                            bodyFocusRequester.requestFocus()
+                            urlFocusRequester.requestFocus()
                         }
                     ),
                     onValueChange = { value ->
                         model.reduce(CreatePostMviModel.Intent.SetTitle(value))
                     },
                 )
+
+                TextField(
+                    modifier = Modifier.fillMaxWidth()
+                        .focusRequester(urlFocusRequester),
+                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                    maxLines = 1,
+                    label = {
+                        Text(text = stringResource(MR.strings.create_post_url))
+                    },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    value = uiState.url,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Ascii,
+                        autoCorrect = false,
+                        imeAction = ImeAction.Next,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            bodyFocusRequester.requestFocus()
+                        }
+                    ),
+                    onValueChange = { value ->
+                        model.reduce(CreatePostMviModel.Intent.SetUrl(value))
+                    },
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(
+                        vertical = Spacing.s,
+                        horizontal = Spacing.m
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = stringResource(MR.strings.create_post_nsfw),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Switch(
+                        checked = uiState.nsfw,
+                        onCheckedChange = {
+                            model.reduce(CreatePostMviModel.Intent.ChangeNsfw(it))
+                        }
+                    )
+                }
 
                 TextField(
                     modifier = Modifier.height(500.dp)

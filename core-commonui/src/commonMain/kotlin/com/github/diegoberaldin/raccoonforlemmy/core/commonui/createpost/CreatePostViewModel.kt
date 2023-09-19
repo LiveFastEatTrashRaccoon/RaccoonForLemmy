@@ -32,6 +32,20 @@ class CreatePostViewModel(
                 }
             }
 
+
+            is CreatePostMviModel.Intent.ChangeNsfw -> {
+                mvi.updateState {
+                    it.copy(nsfw = intent.value)
+                }
+            }
+
+
+            is CreatePostMviModel.Intent.SetUrl -> {
+                mvi.updateState {
+                    it.copy(url = intent.value)
+                }
+            }
+
             CreatePostMviModel.Intent.Send -> submit()
         }
     }
@@ -43,12 +57,16 @@ class CreatePostViewModel(
                 val auth = identityRepository.authToken.value.orEmpty()
                 val title = uiState.value.title
                 val body = uiState.value.body
+                val url = uiState.value.url
+                val nsfw = uiState.value.nsfw
                 when {
                     communityId != null -> {
                         postsRepository.create(
                             communityId = communityId,
                             title = title,
                             body = body,
+                            url = url,
+                            nsfw = nsfw,
                             auth = auth,
                         )
                     }
@@ -58,6 +76,8 @@ class CreatePostViewModel(
                             postId = editedPostId,
                             title = title,
                             body = body,
+                            url = url,
+                            nsfw = nsfw,
                             auth = auth,
                         )
                     }

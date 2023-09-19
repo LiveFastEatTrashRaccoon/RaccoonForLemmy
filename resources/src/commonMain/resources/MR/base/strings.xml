@@ -133,4 +133,6 @@
     <string name="create_post_title">New post</string>
     <string name="create_post_name">Post title</string>
     <string name="create_post_body">Post body</string>
+    <string name="create_post_url">URL</string>
+    <string name="create_post_nsfw">NSFW</string>
 </resources>
