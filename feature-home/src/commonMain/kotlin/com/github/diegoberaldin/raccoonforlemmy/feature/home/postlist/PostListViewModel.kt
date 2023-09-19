@@ -64,6 +64,8 @@ class PostListViewModel(
     override fun onStarted() {
         mvi.onStarted()
 
+        val oldListingType = uiState.value.listingType
+        val oldSortType = uiState.value.sortType
         val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
         val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
         mvi.updateState {
@@ -85,13 +87,11 @@ class PostListViewModel(
         }
 
         mvi.scope?.launch(Dispatchers.IO) {
-            if (uiState.value.currentUserId == null) {
-                val auth = identityRepository.authToken.value.orEmpty()
-                val user = siteRepository.getCurrentUser(auth)
-                mvi.updateState { it.copy(currentUserId = user?.id ?: 0) }
-                if (mvi.uiState.value.posts.isEmpty()) {
-                    refresh()
-                }
+            val auth = identityRepository.authToken.value.orEmpty()
+            val user = siteRepository.getCurrentUser(auth)
+            mvi.updateState { it.copy(currentUserId = user?.id ?: 0) }
+            if (uiState.value.posts.isEmpty() || oldListingType != listingType || oldSortType != sortType) {
+                refresh()
             }
         }
     }

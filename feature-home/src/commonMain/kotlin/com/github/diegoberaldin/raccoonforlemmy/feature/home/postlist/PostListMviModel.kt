@@ -32,7 +32,7 @@ interface PostListMviModel :
         val sortType: SortType = SortType.Active,
         val posts: List<PostModel> = emptyList(),
         val blurNsfw: Boolean = true,
-        val currentUserId: Int = 0,
+        val currentUserId: Int? = null,
         val swipeActionsEnabled: Boolean = true,
     )
 
