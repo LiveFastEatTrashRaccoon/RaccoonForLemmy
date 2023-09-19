@@ -146,9 +146,12 @@ class PostDetailViewModel(
                 page = currentPage,
                 sort = sort,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
-            )
+            ).let {
+                processCommentsToGetNestedOrder(it)
+            }
             currentPage++
-            val canFetchMore = commentList.size >= CommentRepository.DEFAULT_PAGE_SIZE
+            val topLevelItems = commentList.filter { it.depth == 0 }
+            val canFetchMore = topLevelItems.size >= CommentRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {
                 val newcomments = if (refreshing) {
                     commentList
@@ -180,7 +183,9 @@ class PostDetailViewModel(
                 parentId = parentId,
                 sort = sort,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
-            )
+            ).let {
+                processCommentsToGetNestedOrder(it)
+            }
             val newList = uiState.value.comments.let { list ->
                 val index = list.indexOfFirst { c -> c.id == parentId }
                 list.toMutableList().apply {
@@ -451,4 +456,61 @@ class PostDetailViewModel(
             shareHelper.share(url, "text/plain")
         }
     }
+}
+
+
+private data class Node(
+    val comment: CommentModel?,
+    val children: MutableList<Node> = mutableListOf(),
+)
+
+private fun findNode(id: String, node: Node): Node? {
+    if (node.comment?.id.toString() == id) {
+        return node
+    }
+    for (c in node.children) {
+        val res = findNode(id, c)
+        if (res != null) {
+            return res
+        }
+    }
+    return null
+}
+
+
+private fun linearize(node: Node, list: MutableList<CommentModel>) {
+    if (node.children.isEmpty()) {
+        if (node.comment != null) {
+            list.add(node.comment)
+        }
+        return
+    }
+    for (c in node.children) {
+        linearize(c, list)
+    }
+    if (node.comment != null) {
+        list.add(node.comment)
+    }
+}
+
+private fun processCommentsToGetNestedOrder(items: List<CommentModel>): List<CommentModel> {
+    val root = Node(null)
+    // reconstructs the tree
+    for (c in items) {
+        val parentId = c.parentId
+        if (parentId == null) {
+            root.children += Node(c)
+        } else {
+            val parent = findNode(parentId, root)
+            if (parent != null) {
+                parent.children += Node(c)
+            }
+        }
+    }
+
+    // linearize the tree depth first
+    val result = mutableListOf<CommentModel>()
+    linearize(root, result)
+
+    return result.reversed().toList()
 }

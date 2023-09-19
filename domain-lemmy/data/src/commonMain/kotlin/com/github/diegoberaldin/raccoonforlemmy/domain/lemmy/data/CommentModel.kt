@@ -14,4 +14,9 @@ data class CommentModel(
     val path: String = "",
 ) : JavaSerializable {
     val depth: Int get() = (path.split(".").size - 2).coerceAtLeast(0)
+    val parentId: String?
+        get() = path.split(".")
+            .let {
+                it.getOrNull(it.lastIndex - 1)
+            }?.takeIf { it != "0" }
 }
