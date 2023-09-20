@@ -50,7 +50,7 @@ internal fun RowScope.TabNavigationItem(tab: Tab, withText: Boolean = true) {
                 MaterialTheme.colorScheme.outline
             }
             Icon(
-                modifier = Modifier.size(36.dp),
+                modifier = Modifier.size(34.dp),
                 painter = tab.options.icon ?: rememberVectorPainter(Icons.Default.Home),
                 contentDescription = null,
                 tint = color,
