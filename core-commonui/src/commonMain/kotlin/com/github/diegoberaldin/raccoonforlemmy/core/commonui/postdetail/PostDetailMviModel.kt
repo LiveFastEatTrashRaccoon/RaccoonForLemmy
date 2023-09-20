@@ -10,6 +10,7 @@ interface PostDetailMviModel :
 
     sealed interface Intent {
         object Refresh : Intent
+        object RefreshPost : Intent
         object LoadNextPage : Intent
         data class FetchMoreComments(val parentId: Int) : Intent
         data class ChangeSort(val value: SortType) : Intent

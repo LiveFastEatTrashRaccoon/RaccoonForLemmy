@@ -206,6 +206,7 @@ class PostDetailScreen(
                             )
                             notificationCenter.addObserver({
                                 model.reduce(PostDetailMviModel.Intent.Refresh)
+                                model.reduce(PostDetailMviModel.Intent.RefreshPost)
                             }, key, NotificationCenterContractKeys.CommentCreated)
                             bottomSheetNavigator.show(screen)
                         },
@@ -321,11 +322,10 @@ class PostDetailScreen(
                                         },
                                         onOptionSelected = { idx ->
                                             when (idx) {
-                                                2 -> model.reduce(PostDetailMviModel.Intent.DeletePost)
                                                 1 -> {
                                                     notificationCenter.addObserver(
                                                         {
-                                                            model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                            model.reduce(PostDetailMviModel.Intent.RefreshPost)
                                                         },
                                                         key,
                                                         NotificationCenterContractKeys.PostCreated
@@ -336,6 +336,8 @@ class PostDetailScreen(
                                                         )
                                                     )
                                                 }
+
+                                                2 -> model.reduce(PostDetailMviModel.Intent.DeletePost)
 
                                                 else -> model.reduce(PostDetailMviModel.Intent.SharePost)
                                             }
@@ -442,6 +444,7 @@ class PostDetailScreen(
                                         notificationCenter.addObserver(
                                             {
                                                 model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                model.reduce(PostDetailMviModel.Intent.RefreshPost)
                                             },
                                             key,
                                             NotificationCenterContractKeys.CommentCreated
@@ -459,6 +462,7 @@ class PostDetailScreen(
                                                 notificationCenter.addObserver(
                                                     {
                                                         model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                        model.reduce(PostDetailMviModel.Intent.RefreshPost)
                                                     },
                                                     key,
                                                     NotificationCenterContractKeys.CommentCreated

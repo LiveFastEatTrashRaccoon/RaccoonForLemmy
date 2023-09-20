@@ -44,6 +44,7 @@ class PostDetailViewModel(
         val swipeActionsEnabled = keyStore[KeyStoreKeys.EnableSwipeActions, true]
         mvi.updateState {
             it.copy(
+                post = post,
                 sortType = sortType,
                 swipeActionsEnabled = swipeActionsEnabled,
             )
@@ -68,6 +69,7 @@ class PostDetailViewModel(
         when (intent) {
             PostDetailMviModel.Intent.LoadNextPage -> loadNextPage()
             PostDetailMviModel.Intent.Refresh -> refresh()
+            PostDetailMviModel.Intent.RefreshPost -> refreshPost()
             PostDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             is PostDetailMviModel.Intent.ChangeSort -> applySortType(intent.value)
 
@@ -113,9 +115,7 @@ class PostDetailViewModel(
         }
     }
 
-    private fun refresh() {
-        currentPage = 1
-        mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
+    private fun refreshPost() {
         mvi.scope?.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value
             val updatedPost = postsRepository.get(id = post.id, auth = auth) ?: post
@@ -125,6 +125,11 @@ class PostDetailViewModel(
                 )
             }
         }
+    }
+
+    private fun refresh() {
+        currentPage = 1
+        mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
         loadNextPage()
     }
 
@@ -436,6 +441,7 @@ class PostDetailViewModel(
             val auth = identityRepository.authToken.value.orEmpty()
             commentRepository.delete(id, auth)
             refresh()
+            refreshPost()
         }
     }
 
