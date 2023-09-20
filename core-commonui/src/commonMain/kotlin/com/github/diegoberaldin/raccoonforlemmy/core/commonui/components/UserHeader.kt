@@ -47,7 +47,7 @@ fun UserHeader(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(4.5f)
-            .padding(horizontal = Spacing.m, vertical = Spacing.s),
+            .padding(Spacing.xs),
     ) {
         // banner
         val banner = user.banner.orEmpty()
@@ -75,9 +75,7 @@ fun UserHeader(
         }
 
         Row(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(Spacing.s)
+            modifier = Modifier.align(Alignment.TopEnd)
         ) {
             // open bookmarks button
             if (onOpenBookmarks != null) {

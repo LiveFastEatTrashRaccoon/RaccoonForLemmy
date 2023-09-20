@@ -7,10 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,25 +15,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -50,32 +41,24 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
-import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomDropDown
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
@@ -94,8 +77,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 class CommunityDetailScreen(
     private val community: CommunityModel,
@@ -236,174 +217,29 @@ class CommunityDetailScreen(
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         item {
-                            val communityIcon = community.icon.orEmpty()
-                            val communityTitle = community.title
-
-                            val iconSize = 80.dp
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                var width by remember { mutableStateOf(0.dp) }
-                                var optionsExpanded by remember { mutableStateOf(false) }
-                                Box(
-                                    modifier = Modifier.onGloballyPositioned {
-                                        width = it.size.width.dp
-                                    },
-                                ) {
-                                    val banner = community.banner.orEmpty()
-                                    if (banner.isNotEmpty()) {
-                                        val painterResource = asyncPainterResource(banner)
-                                        KamelImage(
-                                            modifier = Modifier.fillMaxWidth().aspectRatio(2f),
-                                            resource = painterResource,
-                                            contentScale = ContentScale.FillBounds,
-                                            contentDescription = null,
-                                            onFailure = {
-                                                Text(
-                                                    modifier = Modifier.fillMaxWidth(),
-                                                    textAlign = TextAlign.Center,
-                                                    text = stringResource(MR.strings.message_image_loading_error)
-                                                )
-                                            },
-                                            onLoading = { progress ->
-                                                CircularProgressIndicator(
-                                                    progress = progress,
-                                                    color = MaterialTheme.colorScheme.primary,
-                                                )
-                                            },
-                                        )
-                                    } else {
-                                        Box(
-                                            modifier = Modifier.fillMaxWidth().aspectRatio(2f),
-                                        )
-                                    }
-                                    Icon(
-                                        modifier = Modifier.padding(
-                                            top = Spacing.s,
-                                            end = Spacing.s,
-                                        ).background(
-                                            color = MaterialTheme.colorScheme.primary,
-                                            shape = CircleShape,
-                                        ).padding(Spacing.s).align(Alignment.TopEnd).onClick {
-                                            optionsExpanded = true
-                                        },
-                                        imageVector = Icons.Rounded.MoreVert,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onPrimary,
+                            CommunityHeader(
+                                community = community,
+                                isOnOtherInstance = isOnOtherInstance,
+                                onOpenCommunityInfo = {
+                                    bottomSheetNavigator.show(
+                                        CommunityInfoScreen(community),
                                     )
-                                    CustomDropDown(
-                                        expanded = optionsExpanded,
-                                        onDismiss = {
-                                            optionsExpanded = false
-                                        },
-                                        offset = DpOffset(
-                                            x = width - Spacing.m,
-                                            y = 0.dp,
+                                },
+                                onOpenInstanceInfo = {
+                                    navigator?.push(
+                                        InstanceInfoScreen(
+                                            url = community.instanceUrl,
                                         ),
-                                    ) {
-                                        Text(
-                                            modifier = Modifier.padding(
-                                                horizontal = Spacing.m,
-                                                vertical = Spacing.xs,
-                                            ).onClick {
-                                                optionsExpanded = false
-                                                bottomSheetNavigator.show(
-                                                    CommunityInfoScreen(community),
-                                                )
-                                            },
-                                            text = stringResource(MR.strings.community_detail_info),
-                                        )
-                                        Text(
-                                            modifier = Modifier.padding(
-                                                horizontal = Spacing.m,
-                                                vertical = Spacing.xs,
-                                            ).onClick {
-                                                optionsExpanded = false
-                                                navigator?.push(
-                                                    InstanceInfoScreen(
-                                                        url = community.instanceUrl,
-                                                    ),
-                                                )
-                                            },
-                                            text = stringResource(MR.strings.community_detail_instance_info),
-                                        )
-                                    }
-                                }
-                                Column(
-                                    modifier = Modifier.graphicsLayer(translationY = -(iconSize / 2).toLocalPixel()),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-                                ) {
-                                    if (communityIcon.isNotEmpty()) {
-                                        val painterResource =
-                                            asyncPainterResource(data = communityIcon)
-                                        KamelImage(
-                                            modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
-                                                .clip(RoundedCornerShape(iconSize / 2)),
-                                            resource = painterResource,
-                                            contentDescription = null,
-                                            contentScale = ContentScale.FillBounds,
-                                        )
-                                    } else {
-                                        Box(
-                                            modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
-                                                .background(
-                                                    color = MaterialTheme.colorScheme.primary,
-                                                    shape = RoundedCornerShape(iconSize / 2),
-                                                ),
-                                            contentAlignment = Alignment.Center,
-                                        ) {
-                                            Text(
-                                                text = community.name.firstOrNull()?.toString()
-                                                    .orEmpty().uppercase(),
-                                                style = MaterialTheme.typography.bodyLarge,
-                                                color = MaterialTheme.colorScheme.onPrimary,
-                                            )
-                                        }
-                                    }
-                                    Text(
-                                        text = buildString {
-                                            append(communityTitle)
-                                        },
-                                        style = MaterialTheme.typography.headlineSmall,
                                     )
-                                    if (!isOnOtherInstance) {
-                                        Button(
-                                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                                                .padding(top = Spacing.m),
-                                            onClick = {
-                                                when (community.subscribed) {
-                                                    true -> model.reduce(CommunityDetailMviModel.Intent.Unsubscribe)
-                                                    false -> model.reduce(CommunityDetailMviModel.Intent.Subscribe)
-                                                    else -> Unit
-                                                }
-                                            },
-                                        ) {
-                                            Row(
-                                                horizontalArrangement = Arrangement.spacedBy(Spacing.s),
-                                                verticalAlignment = Alignment.CenterVertically,
-                                            ) {
-                                                Image(
-                                                    imageVector = when (community.subscribed) {
-                                                        true -> Icons.Default.Check
-                                                        false -> Icons.Default.AddCircle
-                                                        else -> Icons.Default.MoreHoriz
-                                                    },
-                                                    contentDescription = null,
-                                                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary),
-                                                )
-                                                Text(
-                                                    text = when (community.subscribed) {
-                                                        true -> stringResource(MR.strings.community_button_subscribed)
-                                                        false -> stringResource(MR.strings.community_button_subscribe)
-                                                        else -> stringResource(MR.strings.community_button_pending)
-                                                    },
-                                                )
-                                            }
-                                        }
+                                },
+                                onSubscribeButtonClicked = {
+                                    when (community.subscribed) {
+                                        true -> model.reduce(CommunityDetailMviModel.Intent.Unsubscribe)
+                                        false -> model.reduce(CommunityDetailMviModel.Intent.Subscribe)
+                                        else -> Unit
                                     }
-                                }
-                            }
+                                },
+                            )
                         }
                         itemsIndexed(uiState.posts) { idx, post ->
                             SwipeableCard(
