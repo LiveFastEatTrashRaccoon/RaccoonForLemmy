@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -71,7 +72,7 @@ fun SwipeableCard(
                     it < -width * threshold -> DismissDirection.EndToStart
                     else -> null
                 }
-            }.onEach { willDismissDirection ->
+            }.stateIn(this).onEach { willDismissDirection ->
                 if (willDismissDirection != null) {
                     onGestureBegin()
                 }
