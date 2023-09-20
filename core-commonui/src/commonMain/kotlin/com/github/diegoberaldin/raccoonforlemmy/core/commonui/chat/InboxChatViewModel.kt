@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.detail
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
@@ -10,12 +10,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentR
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.InboxCoordinator
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class InboxChatViewModel(
@@ -25,7 +21,6 @@ class InboxChatViewModel(
     private val siteRepository: SiteRepository,
     private val messageRepository: PrivateMessageRepository,
     private val userRepository: UserRepository,
-    private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.SideEffect> by mvi {
@@ -46,11 +41,6 @@ class InboxChatViewModel(
     override fun onStarted() {
         mvi.onStarted()
         mvi.scope?.launch {
-            coordinator.effects.onEach {
-                when (it) {
-                    InboxMviModel.Effect.Refresh -> refresh()
-                }
-            }.launchIn(this)
             launch(Dispatchers.IO) {
                 val auth = identityRepository.authToken.value.orEmpty()
 

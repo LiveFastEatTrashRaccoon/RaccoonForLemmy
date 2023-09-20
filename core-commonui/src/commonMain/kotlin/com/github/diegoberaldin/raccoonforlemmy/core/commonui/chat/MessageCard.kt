@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.detail
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background

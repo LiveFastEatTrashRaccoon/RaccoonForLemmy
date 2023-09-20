@@ -35,7 +35,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxMessagesViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.detail.InboxChatScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatScreen
 
 class InboxMessagesScreen : Tab {
 

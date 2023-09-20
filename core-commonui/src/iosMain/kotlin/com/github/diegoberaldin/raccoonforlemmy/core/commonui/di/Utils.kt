@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentViewModel
@@ -51,6 +52,9 @@ actual fun getCreatePostViewModel(
 
 actual fun getZoomableImageViewModel(): ZoomableImageViewModel =
     CommonUiViewModelHelper.zoomableImageModel
+
+actual fun getInboxChatViewModel(otherUserId: Int) =
+    CommonUiViewModelHelper.getChatViewModel(otherUserId)
 
 object CommonUiViewModelHelper : KoinComponent {
 
@@ -109,6 +113,13 @@ object CommonUiViewModelHelper : KoinComponent {
     fun getCreatePostModel(communityId: Int?, editedPostId: Int?): CreatePostViewModel {
         val model: CreatePostViewModel by inject(
             parameters = { parametersOf(communityId, editedPostId) }
+        )
+        return model
+    }
+
+    fun getChatViewModel(otherUserId: Int): InboxChatViewModel {
+        val model: InboxChatViewModel by inject(
+            parameters = { parametersOf(otherUserId) }
         )
         return model
     }

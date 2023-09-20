@@ -7,8 +7,8 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.detail.InboxChatMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.detail.InboxChatViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.list.InboxMessagesMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.list.InboxMessagesViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesMviModel
@@ -56,18 +56,6 @@ val inboxTabModule = module {
             mvi = DefaultMviModel(InboxMessagesMviModel.UiState()),
             identityRepository = get(),
             siteRepository = get(),
-            messageRepository = get(),
-            coordinator = get(),
-            notificationCenter = get(),
-        )
-    }
-    factory {
-        InboxChatViewModel(
-            otherUserId = it[0],
-            mvi = DefaultMviModel(InboxChatMviModel.UiState()),
-            identityRepository = get(),
-            siteRepository = get(),
-            userRepository = get(),
             messageRepository = get(),
             coordinator = get(),
             notificationCenter = get(),

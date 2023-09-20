@@ -1,6 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailMviModel
@@ -106,6 +108,17 @@ val commonUiModule = module {
             mvi = DefaultMviModel(ZoomableImageMviModel.UiState()),
             shareHelper = get(),
             galleryHelper = get(),
+        )
+    }
+    factory {
+        InboxChatViewModel(
+            otherUserId = it[0],
+            mvi = DefaultMviModel(InboxChatMviModel.UiState()),
+            identityRepository = get(),
+            siteRepository = get(),
+            userRepository = get(),
+            messageRepository = get(),
+            notificationCenter = get(),
         )
     }
 }

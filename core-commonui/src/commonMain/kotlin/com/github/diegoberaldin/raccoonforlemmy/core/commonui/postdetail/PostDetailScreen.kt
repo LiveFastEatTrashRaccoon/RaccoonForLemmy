@@ -139,8 +139,9 @@ class PostDetailScreen(
         }
 
         val statePost = uiState.post
-        Scaffold(modifier = Modifier.background(MaterialTheme.colorScheme.surface)
-            .padding(Spacing.xs),
+        Scaffold(
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+                .padding(Spacing.xs),
             topBar = {
                 TopAppBar(
                     title = {
@@ -218,7 +219,8 @@ class PostDetailScreen(
                         },
                     )
                 }
-            }) { padding ->
+            },
+        ) { padding ->
             if (uiState.currentUserId != null) {
                 val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                     model.reduce(PostDetailMviModel.Intent.Refresh)

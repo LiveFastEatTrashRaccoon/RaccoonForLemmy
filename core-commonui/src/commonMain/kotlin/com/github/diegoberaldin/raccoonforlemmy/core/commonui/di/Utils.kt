@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentViewModel
@@ -48,3 +49,5 @@ expect fun getCreatePostViewModel(
 ): CreatePostViewModel
 
 expect fun getZoomableImageViewModel(): ZoomableImageViewModel
+
+expect fun getInboxChatViewModel(otherUserId: Int): InboxChatViewModel

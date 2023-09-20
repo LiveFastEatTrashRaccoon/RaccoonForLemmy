@@ -1,5 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,11 +20,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -36,12 +41,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -52,6 +61,7 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
@@ -88,6 +98,20 @@ class UserDetailScreen(
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val notificationCenter = remember { getNotificationCenter() }
+        val isFabVisible = remember { mutableStateOf(true) }
+        val fabNestedScrollConnection = remember {
+            object : NestedScrollConnection {
+                override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                    if (available.y < -1) {
+                        isFabVisible.value = false
+                    }
+                    if (available.y > 1) {
+                        isFabVisible.value = true
+                    }
+                    return Offset.Zero
+                }
+            }
+        }
         DisposableEffect(key) {
             onDispose {
                 notificationCenter.removeObserver(key)
@@ -145,12 +169,39 @@ class UserDetailScreen(
                     },
                 )
             },
+            floatingActionButton = {
+                AnimatedVisibility(
+                    visible = isFabVisible.value,
+                    enter = slideInVertically(
+                        initialOffsetY = { it * 2 },
+                    ),
+                    exit = slideOutVertically(
+                        targetOffsetY = { it * 2 },
+                    ),
+                ) {
+                    FloatingActionButton(
+                        shape = CircleShape,
+                        backgroundColor = MaterialTheme.colorScheme.secondary,
+                        onClick = {
+                            val screen = InboxChatScreen(otherUserId = user.id)
+                            navigator?.push(screen)
+                        },
+                        content = {
+                            Icon(
+                                imageVector = Icons.Default.Chat,
+                                contentDescription = null,
+                            )
+                        },
+                    )
+                }
+            },
         ) { padding ->
             Column(
                 modifier = Modifier
                     .padding(padding)
                     .fillMaxSize()
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .nestedScroll(fabNestedScrollConnection),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
