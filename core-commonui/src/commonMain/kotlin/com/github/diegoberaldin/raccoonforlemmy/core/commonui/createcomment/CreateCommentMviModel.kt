@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import dev.icerock.moko.resources.desc.StringDesc
 
 interface CreateCommentMviModel :
     MviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect> {
@@ -13,6 +14,7 @@ interface CreateCommentMviModel :
 
     data class UiState(
         val text: String = "",
+        val textError: StringDesc? = null,
         val loading: Boolean = false,
     )
 

@@ -146,13 +146,16 @@ class LoginBottomSheet : Screen {
                     onValueChange = { value ->
                         model.reduce(LoginBottomSheetMviModel.Intent.SetInstanceName(value))
                     },
+                    supportingText = {
+                        if (uiState.instanceNameError != null) {
+                            Text(
+                                text = uiState.instanceNameError?.localized().orEmpty(),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    },
                 )
-                if (uiState.instanceNameError != null) {
-                    Text(
-                        text = uiState.instanceNameError?.localized().orEmpty(),
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                }
+
                 TextField(
                     modifier = Modifier.focusRequester(usernameFocusRequester),
                     label = {
@@ -174,13 +177,16 @@ class LoginBottomSheet : Screen {
                     onValueChange = { value ->
                         model.reduce(LoginBottomSheetMviModel.Intent.SetUsername(value))
                     },
+                    supportingText = {
+                        if (uiState.usernameError != null) {
+                            Text(
+                                text = uiState.usernameError?.localized().orEmpty(),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    },
                 )
-                if (uiState.usernameError != null) {
-                    Text(
-                        text = uiState.usernameError?.localized().orEmpty(),
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                }
+
                 var transformation: VisualTransformation by remember {
                     mutableStateOf(PasswordVisualTransformation())
                 }
@@ -223,13 +229,16 @@ class LoginBottomSheet : Screen {
                             colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface),
                         )
                     },
+                    supportingText = {
+                        if (uiState.passwordError != null) {
+                            Text(
+                                text = uiState.passwordError?.localized().orEmpty(),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    },
                 )
-                if (uiState.passwordError != null) {
-                    Text(
-                        text = uiState.passwordError?.localized().orEmpty(),
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                }
+
                 TextField(
                     modifier = Modifier.focusRequester(tokenFocusRequester),
                     label = {

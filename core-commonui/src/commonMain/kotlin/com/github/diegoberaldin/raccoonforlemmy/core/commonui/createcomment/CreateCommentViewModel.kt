@@ -5,6 +5,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR.strings.message_missing_field
+import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -32,11 +34,29 @@ class CreateCommentViewModel(
     }
 
     private fun submit() {
+        mvi.updateState {
+            it.copy(
+                textError = null,
+            )
+        }
+        val text = uiState.value.text
+        var valid = true
+        if (text.isEmpty()) {
+            mvi.updateState {
+                it.copy(
+                    textError = message_missing_field.desc(),
+                )
+            }
+            valid = false
+        }
+        if (!valid) {
+            return
+        }
+
         mvi.scope?.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                val text = uiState.value.text
                 if (postId != null) {
                     commentRepository.create(
                         postId = postId,

@@ -51,6 +51,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.localized
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -160,6 +161,15 @@ class CreatePostScreen(
                     onValueChange = { value ->
                         model.reduce(CreatePostMviModel.Intent.SetTitle(value))
                     },
+                    isError = uiState.titleError != null,
+                    supportingText = {
+                        if (uiState.titleError != null) {
+                            Text(
+                                text = uiState.titleError?.localized().orEmpty(),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    },
                 )
 
                 TextField(
@@ -184,6 +194,15 @@ class CreatePostScreen(
                     ),
                     onValueChange = { value ->
                         model.reduce(CreatePostMviModel.Intent.SetUrl(value))
+                    },
+                    isError = uiState.urlError != null,
+                    supportingText = {
+                        if (uiState.urlError != null) {
+                            Text(
+                                text = uiState.urlError?.localized().orEmpty(),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
                     },
                 )
 
@@ -230,6 +249,15 @@ class CreatePostScreen(
                     ),
                     onValueChange = { value ->
                         model.reduce(CreatePostMviModel.Intent.SetText(value))
+                    },
+                    isError = uiState.bodyError != null,
+                    supportingText = {
+                        if (uiState.bodyError != null) {
+                            Text(
+                                text = uiState.bodyError?.localized().orEmpty(),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
                     },
                 )
 

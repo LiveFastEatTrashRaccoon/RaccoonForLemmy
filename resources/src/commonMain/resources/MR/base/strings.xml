@@ -13,6 +13,7 @@
 
     <string name="message_generic_error">Generic error</string>
     <string name="message_missing_field">Missing field</string>
+    <string name="message_invalid_field">Invalid field</string>
 
     <string name="button_confirm">Confirm</string>
 

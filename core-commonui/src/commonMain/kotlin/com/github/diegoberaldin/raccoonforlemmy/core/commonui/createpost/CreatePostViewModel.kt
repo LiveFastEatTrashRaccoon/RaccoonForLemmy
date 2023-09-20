@@ -1,10 +1,14 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.github.diegoberaldin.racconforlemmy.core.utils.StringUtils.isValidUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR.strings.message_invalid_field
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR.strings.message_missing_field
+import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -51,14 +55,50 @@ class CreatePostViewModel(
     }
 
     private fun submit() {
+        mvi.updateState {
+            it.copy(
+                titleError = null,
+                urlError = null,
+                bodyError = null,
+            )
+        }
+        val title = uiState.value.title
+        val body = uiState.value.body
+        val url = uiState.value.url
+        val nsfw = uiState.value.nsfw
+        var valid = true
+        if (title.isEmpty()) {
+            mvi.updateState {
+                it.copy(
+                    titleError = message_missing_field.desc(),
+                )
+            }
+            valid = false
+        }
+        if (body.isEmpty()) {
+            mvi.updateState {
+                it.copy(
+                    bodyError = message_missing_field.desc(),
+                )
+            }
+            valid = false
+        }
+        if (url.isNotEmpty() && !url.isValidUrl()) {
+            mvi.updateState {
+                it.copy(
+                    urlError = message_invalid_field.desc(),
+                )
+            }
+            valid = false
+        }
+        if (!valid) {
+            return
+        }
+
         mvi.scope?.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                val title = uiState.value.title
-                val body = uiState.value.body
-                val url = uiState.value.url
-                val nsfw = uiState.value.nsfw
                 when {
                     communityId != null -> {
                         postsRepository.create(

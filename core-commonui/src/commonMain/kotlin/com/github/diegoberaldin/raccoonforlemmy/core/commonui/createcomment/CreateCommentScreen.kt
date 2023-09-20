@@ -61,6 +61,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotific
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.localized
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -201,6 +202,15 @@ class CreateCommentScreen(
                     }),
                     onValueChange = { value ->
                         model.reduce(CreateCommentMviModel.Intent.SetText(value))
+                    },
+                    isError = uiState.textError != null,
+                    supportingText = {
+                        if (uiState.textError != null) {
+                            Text(
+                                text = uiState.textError?.localized().orEmpty(),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
                     },
                 )
 
