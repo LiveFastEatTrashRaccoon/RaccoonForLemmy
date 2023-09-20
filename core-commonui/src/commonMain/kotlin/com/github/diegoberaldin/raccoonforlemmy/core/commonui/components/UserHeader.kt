@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bookmarks
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,11 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -50,6 +54,19 @@ fun UserHeader(
                     resource = painterResource,
                     contentScale = ContentScale.FillBounds,
                     contentDescription = null,
+                    onFailure = {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            text = stringResource(MR.strings.message_image_loading_error)
+                        )
+                    },
+                    onLoading = { progress ->
+                        CircularProgressIndicator(
+                            progress = progress,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    },
                 )
             } else {
                 Box(

@@ -3,6 +3,8 @@ package com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.elements
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -89,6 +91,12 @@ internal fun MarkdownText(
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center,
                             text = stringResource(MR.strings.message_image_loading_error)
+                        )
+                    },
+                    onLoading = { progress ->
+                        CircularProgressIndicator(
+                            progress = progress,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     },
                 )

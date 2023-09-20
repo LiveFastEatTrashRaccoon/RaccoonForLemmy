@@ -5,6 +5,8 @@ import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -62,6 +64,12 @@ fun ZoomableImage(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     text = stringResource(MR.strings.message_image_loading_error)
+                )
+            },
+            onLoading = { progress ->
+                CircularProgressIndicator(
+                    progress = progress,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             },
         )

@@ -63,6 +63,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -257,6 +258,19 @@ class CommunityDetailScreen(
                                             resource = painterResource,
                                             contentScale = ContentScale.FillBounds,
                                             contentDescription = null,
+                                            onFailure = {
+                                                Text(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    textAlign = TextAlign.Center,
+                                                    text = stringResource(MR.strings.message_image_loading_error)
+                                                )
+                                            },
+                                            onLoading = { progress ->
+                                                CircularProgressIndicator(
+                                                    progress = progress,
+                                                    color = MaterialTheme.colorScheme.primary,
+                                                )
+                                            },
                                         )
                                     } else {
                                         Box(

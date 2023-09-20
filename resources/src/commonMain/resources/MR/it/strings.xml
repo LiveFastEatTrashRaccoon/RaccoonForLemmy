@@ -11,7 +11,7 @@
     <string name="message_generic_error">Errore generico</string>
     <string name="message_missing_field">Campo obbligatorio</string>
     <string name="message_invalid_field">Campo non valido</string>
-    <string name="message_image_loading_error">⚠️ Errore caricamento immagine ⚠️</string>
+    <string name="message_image_loading_error">Errore caricamento immagine</string>
     <string name="message_login_successful">🎉 Login effettuato con successo! 🎉</string>
 
     <string name="button_confirm">Conferma</string>
