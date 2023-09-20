@@ -15,6 +15,9 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.sp
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalMarkdownColors
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalMarkdownTypography
@@ -82,7 +85,11 @@ internal fun MarkdownText(
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth(),
                     onFailure = {
-                        Text(text = "⚠️ Image loading error")
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            text = stringResource(MR.strings.message_image_loading_error)
+                        )
                     },
                 )
             },

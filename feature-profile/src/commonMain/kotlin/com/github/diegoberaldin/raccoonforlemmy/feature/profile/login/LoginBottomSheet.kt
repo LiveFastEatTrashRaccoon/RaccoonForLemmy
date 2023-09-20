@@ -70,6 +70,7 @@ class LoginBottomSheet : Screen {
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = stringResource(MR.strings.message_generic_error)
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val successfulLoginMessage = stringResource(MR.strings.message_login_successful)
 
         LaunchedEffect(model) {
             model.effects.onEach {
@@ -81,9 +82,7 @@ class LoginBottomSheet : Screen {
                     }
 
                     LoginBottomSheetMviModel.Effect.LoginSuccess -> {
-                        snackbarHostState.showSnackbar(
-                            message = "Successfully logged in! \uD83C\uDF89\uD83C\uDF89\uD83C\uDF89",
-                        )
+                        snackbarHostState.showSnackbar(message = successfulLoginMessage)
                         bottomSheetNavigator.hide()
                     }
                 }

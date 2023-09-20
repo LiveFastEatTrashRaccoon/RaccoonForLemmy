@@ -40,6 +40,7 @@ kotlin {
 
                 api(libs.markdown)
                 implementation(libs.kamel)
+                implementation(projects.resources)
             }
         }
         val commonTest by getting {
