@@ -58,19 +58,6 @@ fun UserHeader(
                 resource = painterResource,
                 contentScale = ContentScale.FillBounds,
                 contentDescription = null,
-                onFailure = {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        text = stringResource(MR.strings.message_image_loading_error)
-                    )
-                },
-                onLoading = { progress ->
-                    CircularProgressIndicator(
-                        progress = progress,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                },
             )
         }
 
