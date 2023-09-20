@@ -25,19 +25,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
-import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
@@ -103,11 +100,6 @@ internal object ProfileLoggedScreen : Tab {
                                         )
                                     },
                                 )
-                                UserCounters(
-                                    modifier = Modifier.graphicsLayer(translationY = -Spacing.m.toLocalPixel()),
-                                    user = user,
-                                )
-                                Spacer(modifier = Modifier.height(Spacing.xs))
                                 SectionSelector(
                                     titles = listOf(
                                         stringResource(MR.strings.profile_section_posts),

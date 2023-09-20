@@ -48,7 +48,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -58,7 +57,6 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
-import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatScreen
@@ -67,7 +65,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Comment
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserCounters
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
@@ -221,11 +218,6 @@ class UserDetailScreen(
                                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                             ) {
                                 UserHeader(user = uiState.user)
-                                UserCounters(
-                                    modifier = Modifier.graphicsLayer(translationY = -Spacing.m.toLocalPixel()),
-                                    user = uiState.user,
-                                )
-                                Spacer(modifier = Modifier.height(Spacing.s))
                                 SectionSelector(
                                     titles = listOf(
                                         stringResource(MR.strings.profile_section_posts),

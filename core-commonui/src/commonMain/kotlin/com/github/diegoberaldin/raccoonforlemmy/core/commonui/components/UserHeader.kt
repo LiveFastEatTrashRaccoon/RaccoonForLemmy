@@ -4,12 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Padding
+import androidx.compose.material.icons.filled.Reply
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -19,12 +26,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.github.diegoberaldin.racconforlemmy.core.utils.DateTime
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
-import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -37,99 +43,199 @@ fun UserHeader(
     user: UserModel,
     onOpenBookmarks: (() -> Unit)? = null,
 ) {
-    val userAvatar = user.avatar.orEmpty()
-    val userDisplayName = user.name
-    val iconSize = 80.dp
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(4.5f)
+            .padding(horizontal = Spacing.m, vertical = Spacing.s),
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            val banner = user.banner.orEmpty()
-            if (banner.isNotEmpty()) {
-                val painterResource = asyncPainterResource(banner)
-                KamelImage(
-                    modifier = Modifier.fillMaxWidth().aspectRatio(2f),
-                    resource = painterResource,
-                    contentScale = ContentScale.FillBounds,
-                    contentDescription = null,
-                    onFailure = {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                            text = stringResource(MR.strings.message_image_loading_error)
-                        )
-                    },
-                    onLoading = { progress ->
-                        CircularProgressIndicator(
-                            progress = progress,
-                            color = MaterialTheme.colorScheme.primary,
-                        )
-                    },
-                )
-            } else {
-                Box(
-                    modifier = Modifier.fillMaxWidth().aspectRatio(2f),
-                )
-            }
-            Column(
-                modifier = Modifier.graphicsLayer(translationY = -(iconSize / 2).toLocalPixel()),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-            ) {
-                if (userAvatar.isNotEmpty()) {
-                    val painterResource =
-                        asyncPainterResource(data = userAvatar)
-                    KamelImage(
-                        modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
-                            .clip(RoundedCornerShape(iconSize / 2)),
-                        resource = painterResource,
-                        contentDescription = null,
-                        contentScale = ContentScale.FillBounds,
+        // banner
+        val banner = user.banner.orEmpty()
+        if (banner.isNotEmpty()) {
+            val painterResource = asyncPainterResource(banner)
+            KamelImage(
+                modifier = Modifier.fillMaxSize(),
+                resource = painterResource,
+                contentScale = ContentScale.FillBounds,
+                contentDescription = null,
+                onFailure = {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(MR.strings.message_image_loading_error)
                     )
-                } else {
-                    Box(
-                        modifier = Modifier.padding(Spacing.xxxs)
-                            .size(iconSize)
-                            .background(
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(iconSize / 2),
-                            ),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = user.name.firstOrNull()?.toString()
-                                .orEmpty()
-                                .uppercase(),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                        )
-                    }
-                }
-                Text(
-                    text = buildString {
-                        append(userDisplayName)
+                },
+                onLoading = { progress ->
+                    CircularProgressIndicator(
+                        progress = progress,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                },
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(Spacing.s)
+        ) {
+            // open bookmarks button
+            if (onOpenBookmarks != null) {
+                Icon(
+                    modifier = Modifier.onClick {
+                        onOpenBookmarks.invoke()
                     },
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-                Text(
-                    text = user.host,
-                    style = MaterialTheme.typography.titleMedium,
+                    imageVector = Icons.Outlined.Bookmarks,
+                    contentDescription = null,
                 )
             }
         }
-        if (onOpenBookmarks != null) {
-            Icon(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(Spacing.s)
-                    .onClick {
-                        onOpenBookmarks.invoke()
+
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Spacing.m)
+        ) {
+            // avatar
+            val userAvatar = user.avatar.orEmpty()
+            val avatarSize = 60.dp
+            if (userAvatar.isNotEmpty()) {
+                val painterResource =
+                    asyncPainterResource(data = userAvatar)
+                KamelImage(
+                    modifier = Modifier
+                        .padding(Spacing.xxxs)
+                        .size(avatarSize)
+                        .clip(RoundedCornerShape(avatarSize / 2)),
+                    resource = painterResource,
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .padding(Spacing.xxxs)
+                        .size(avatarSize)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(avatarSize / 2),
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = user.name.firstOrNull()?.toString()
+                            .orEmpty()
+                            .uppercase(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
+
+            // textual data
+            Column(
+                verticalArrangement = Arrangement.spacedBy(Spacing.s),
+            ) {
+                Text(
+                    text = buildString {
+                        if (user.displayName.isNotEmpty()) {
+                            append(user.displayName)
+                        } else {
+                            append(user.name)
+                        }
                     },
-                imageVector = Icons.Outlined.Bookmarks,
-                contentDescription = null,
-            )
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = buildString {
+                        append(user.name)
+                        append("@")
+                        append(user.host)
+                    },
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+
+                // stats and age
+                val iconSize = 22.dp
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    val postScore = user.score?.postScore
+                    val commentScore = user.score?.commentScore
+                    if (postScore != null) {
+                        Icon(
+                            modifier = Modifier.size(iconSize),
+                            imageVector = Icons.Default.Padding,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = postScore.toString(),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
+                    if (commentScore != null) {
+                        if (postScore != null) {
+                            Spacer(modifier = Modifier.width(Spacing.xxxs))
+                        }
+                        Icon(
+                            modifier = Modifier.size(iconSize),
+                            imageVector = Icons.Default.Reply,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = commentScore.toString(),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
+
+                    if (user.accountAge.isNotEmpty()) {
+                        if (postScore != null || commentScore != null) {
+                            Spacer(modifier = Modifier.width(Spacing.xxxs))
+                        }
+                        Icon(
+                            modifier = Modifier.size(iconSize),
+                            imageVector = Icons.Default.Schedule,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = user.accountAge.let {
+                                when {
+                                    !it.endsWith("Z") -> {
+                                        DateTime.getPrettyDate(
+                                            iso8601Timestamp = it + "Z",
+                                            yearLabel = stringResource(MR.strings.profile_year_short),
+                                            monthLabel = stringResource(MR.strings.profile_month_short),
+                                            dayLabel = stringResource(MR.strings.profile_day_short),
+                                            hourLabel = stringResource(MR.strings.post_hour_short),
+                                            minuteLabel = stringResource(MR.strings.post_minute_short),
+                                            secondLabel = stringResource(MR.strings.post_second_short),
+                                        )
+                                    }
+
+                                    else -> {
+                                        DateTime.getPrettyDate(
+                                            iso8601Timestamp = it,
+                                            yearLabel = stringResource(MR.strings.profile_year_short),
+                                            monthLabel = stringResource(MR.strings.profile_month_short),
+                                            dayLabel = stringResource(MR.strings.profile_day_short),
+                                            hourLabel = stringResource(MR.strings.post_hour_short),
+                                            minuteLabel = stringResource(MR.strings.post_minute_short),
+                                            secondLabel = stringResource(MR.strings.post_second_short),
+                                        )
+                                    }
+                                }
+                            },
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
+                }
+            }
         }
     }
 }

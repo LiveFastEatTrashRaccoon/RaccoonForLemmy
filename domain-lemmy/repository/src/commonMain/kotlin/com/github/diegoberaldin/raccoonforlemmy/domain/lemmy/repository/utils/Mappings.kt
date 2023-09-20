@@ -81,6 +81,7 @@ internal fun SearchResultType.toDto(): SearchType = when (this) {
 internal fun Person.toModel() = UserModel(
     id = id,
     name = name,
+    displayName = displayName.orEmpty(),
     avatar = avatar,
     host = actorId.toHost(),
     accountAge = published,
