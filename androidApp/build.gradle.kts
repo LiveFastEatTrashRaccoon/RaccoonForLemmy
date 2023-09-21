@@ -13,6 +13,13 @@ android {
         targetSdk = 33
         versionCode = 13
         versionName = "1.0.0-beta03"
+
+        buildConfigField(
+            "String",
+            "CRASH_REPORT_EMAIL",
+            "\"diego.beraldin+raccon4lemmy@gmail.com\""
+        )
+        buildConfigField("String", "CRASH_REPORT_SUBJECT", "\"Crash report\"")
     }
     buildFeatures {
         compose = true
@@ -46,6 +53,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+
+    implementation(libs.acra.mail)
+    implementation(libs.acra.notification)
 
     implementation(projects.shared)
     implementation(projects.coreUtils)
