@@ -64,7 +64,7 @@ fun SwipeableCard(
             },
         )
 
-        val threshold = 0.25f
+        val threshold = 0.15f
         LaunchedEffect(dismissState) {
             snapshotFlow { dismissState.offset.value }.map {
                 when {
