@@ -59,6 +59,16 @@ class PostDetailViewModel(
                     )
                 }
             }
+            if (post.title.isEmpty()) {
+                // empty post must be loaded
+                postsRepository.get(post.id)?.also { updatedPost ->
+                    mvi.updateState {
+                        it.copy(
+                            post = updatedPost,
+                        )
+                    }
+                }
+            }
             if (mvi.uiState.value.comments.isEmpty()) {
                 refresh()
             }

@@ -299,6 +299,11 @@ class ExploreScreen : Screen {
 
                                     is CommentModel -> {
                                         CommentCard(
+                                            modifier = Modifier.onClick {
+                                                navigator?.push(
+                                                    PostDetailScreen(post = PostModel(result.postId)),
+                                                )
+                                            },
                                             comment = result,
                                             onUpVote = {
                                                 model.reduce(
