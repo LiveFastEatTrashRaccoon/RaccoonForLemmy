@@ -5,7 +5,6 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.hapticFeedbackModule
 import com.github.diegoberaldin.racconforlemmy.core.utils.shareHelperModule
 import com.github.diegoberaldin.raccoonforlemmy.core.api.di.coreApiModule
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.coreAppearanceModule
-import com.github.diegoberaldin.raccoonforlemmy.core.crashreport.di.crashReportModule
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.coreNotificationModule
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.corePreferencesModule
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.di.coreIdentityModule
@@ -25,7 +24,6 @@ val sharedHelperModule = module {
         coreApiModule,
         coreIdentityModule,
         coreNotificationModule,
-        crashReportModule,
         hapticFeedbackModule,
         localizationModule,
         shareHelperModule,

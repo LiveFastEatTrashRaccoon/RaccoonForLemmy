@@ -1,5 +1,3 @@
-AntiFeatures:
-  - HopeNot
 Categories:
   - Internet
   - Reading
@@ -7,13 +5,9 @@ License: GPL-3.0-or-later
 AuthorName: Diego Beraldin
 AuthorEmail: diego.beraldin@gmail.com
 AuthorWebSite: https://github.com/diegoberaldin
-WebSite:
 SourceCode: https://github.com/diegoberaldin/RacconForLemmy
 IssueTracker: https://github.com/diegoberaldin/RacconForLemmy/issues
-Translation: Submit a PR on GitHub or email me
 Changelog: https://github.com/diegoberaldin/RacconForLemmy/releases
-Donate:
-Bitcoin:
 
 AutoName: Raccoon for Lemmy
 
@@ -21,15 +15,14 @@ RepoType: git
 Repo: git@github.com:diegoberaldin/RacconForLemmy.git
 
 Builds:
-  - versionName: '1.0.0-beta02'
+  - versionName: 1.0.0-beta02
     versionCode: 12
     commit: 1.0.0-beta02
-    subdir: app
-    submodules: true
+    subdir: androidApp
     gradle:
       - yes
 
-AutoUpdateMode: Version %v
+AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: '1.0.0-beta02'
+CurrentVersion: 1.0.0-beta02
 CurrentVersionCode: 12

@@ -1,5 +1,4 @@
 import SwiftUI
-import Firebase
 
 @main
 struct iOSApp: App {
@@ -7,7 +6,6 @@ struct iOSApp: App {
     init() {
         // DiHelperKt.initKoin()
         DiHelperKt.doInitKoin()
-        FirebaseApp.configure()
     }
 
 	var body: some Scene {
