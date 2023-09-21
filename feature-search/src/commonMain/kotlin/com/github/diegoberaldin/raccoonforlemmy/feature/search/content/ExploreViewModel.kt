@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ExporeViewModel(
+class ExploreViewModel(
     private val mvi: DefaultMviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect>,
     private val apiConfigRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
