@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -21,10 +22,16 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.IncompleteCircle
+import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.PauseCircleOutline
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -123,24 +130,39 @@ class CommunityDetailScreen(
         Scaffold(modifier = Modifier.background(MaterialTheme.colorScheme.surface)
             .padding(Spacing.xs),
             topBar = {
-                val communityName = stateCommunity.name
-                val communityHost = stateCommunity.host
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
                     title = {
                         Text(
                             modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = buildString {
-                                append(communityName)
-                                if (communityHost.isNotEmpty()) {
-                                    append("@$communityHost")
-                                }
-                            },
+                            text = stateCommunity.name,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
                     },
                     actions = {
+                        // subscribe button
+                        if (!isOnOtherInstance) {
+                            Image(
+                                modifier = Modifier.onClick {
+                                    when (stateCommunity.subscribed) {
+                                        true -> model.reduce(CommunityDetailMviModel.Intent.Unsubscribe)
+                                        false -> model.reduce(CommunityDetailMviModel.Intent.Subscribe)
+                                        else -> Unit
+                                    }
+                                },
+                                imageVector = when (community.subscribed) {
+                                    true -> Icons.Default.CheckCircle
+                                    false -> Icons.Default.AddCircle
+                                    else -> Icons.Default.PauseCircleOutline
+                                },
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
+                            )
+                            Spacer(Modifier.width(Spacing.s))
+                        }
+
+                        // sort button
                         Image(
                             modifier = Modifier.onClick {
                                 val sheet = SortBottomSheet(
@@ -220,7 +242,6 @@ class CommunityDetailScreen(
                         item {
                             CommunityHeader(
                                 community = stateCommunity,
-                                isOnOtherInstance = isOnOtherInstance,
                                 onOpenCommunityInfo = {
                                     bottomSheetNavigator.show(
                                         CommunityInfoScreen(stateCommunity),
@@ -232,13 +253,6 @@ class CommunityDetailScreen(
                                             url = stateCommunity.instanceUrl,
                                         ),
                                     )
-                                },
-                                onSubscribeButtonClicked = {
-                                    when (stateCommunity.subscribed) {
-                                        true -> model.reduce(CommunityDetailMviModel.Intent.Unsubscribe)
-                                        false -> model.reduce(CommunityDetailMviModel.Intent.Subscribe)
-                                        else -> Unit
-                                    }
                                 },
                             )
                         }

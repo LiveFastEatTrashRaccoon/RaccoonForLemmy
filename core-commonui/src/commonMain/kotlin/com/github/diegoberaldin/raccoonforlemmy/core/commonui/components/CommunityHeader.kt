@@ -1,11 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,12 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,12 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
@@ -52,10 +43,8 @@ import io.kamel.image.asyncPainterResource
 @Composable
 fun CommunityHeader(
     community: CommunityModel,
-    isOnOtherInstance: Boolean = false,
     onOpenCommunityInfo: (() -> Unit)? = null,
     onOpenInstanceInfo: (() -> Unit)? = null,
-    onSubscribeButtonClicked: (() -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier.fillMaxWidth().aspectRatio(4.5f).padding(Spacing.xs),
@@ -159,38 +148,19 @@ fun CommunityHeader(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
 
-                // subscribe button
-                if (!isOnOtherInstance) {
-                    Button(
-                        contentPadding = PaddingValues(horizontal = Spacing.m),
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        onClick = {
-                            onSubscribeButtonClicked?.invoke()
-                        },
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.s),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Image(
-                                imageVector = when (community.subscribed) {
-                                    true -> Icons.Default.Check
-                                    false -> Icons.Default.AddCircle
-                                    else -> Icons.Default.MoreHoriz
-                                },
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary),
-                            )
-                            Text(
-                                text = when (community.subscribed) {
-                                    true -> stringResource(MR.strings.community_button_subscribed)
-                                    false -> stringResource(MR.strings.community_button_subscribe)
-                                    else -> stringResource(MR.strings.community_button_pending)
-                                },
-                            )
+                Text(
+                    modifier = Modifier.padding(horizontal = Spacing.s),
+                    text = buildString {
+                        append(community.name)
+                        if (community.host.isNotEmpty()) {
+                            append("@${community.host}")
                         }
-                    }
-                }
+                    },
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
             }
         }
     }
