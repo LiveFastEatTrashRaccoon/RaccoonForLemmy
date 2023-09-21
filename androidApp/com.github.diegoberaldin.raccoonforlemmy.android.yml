@@ -12,7 +12,7 @@ Changelog: https://github.com/diegoberaldin/RacconForLemmy/releases
 AutoName: Raccoon for Lemmy
 
 RepoType: git
-Repo: git@github.com:diegoberaldin/RacconForLemmy.git
+Repo: https://github.com/diegoberaldin/RacconForLemmy.git
 
 Builds:
   - versionName: 1.0.0-beta03
@@ -20,7 +20,7 @@ Builds:
     commit: 1.0.0-beta03
     subdir: androidApp
     gradle:
-      - yes
+      - githubConfig
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
