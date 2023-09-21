@@ -8,8 +8,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class ProfileContentViewModel(
     private val mvi: DefaultMviModel<ProfileContentMviModel.Intent, ProfileContentMviModel.UiState, ProfileContentMviModel.Effect>,
@@ -22,8 +24,8 @@ class ProfileContentViewModel(
     override fun onStarted() {
         mvi.onStarted()
 
-        mvi.scope?.apply {
-            identityRepository.authToken.onEach { token ->
+        mvi.scope?.launch {
+            identityRepository.authToken.debounce(250).onEach { token ->
                 mvi.updateState { it.copy(logged = !token.isNullOrEmpty()) }
             }.launchIn(this)
         }

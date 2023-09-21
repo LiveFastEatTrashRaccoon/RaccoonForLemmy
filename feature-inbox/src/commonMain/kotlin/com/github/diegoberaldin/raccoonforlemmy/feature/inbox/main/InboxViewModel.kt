@@ -4,17 +4,18 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.InboxCoordinator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class InboxViewModel(
     private val mvi: DefaultMviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect>,
     private val identityRepository: IdentityRepository,
-    private val siteRepository: SiteRepository,
     private val userRepository: UserRepository,
     private val coordinator: InboxCoordinator,
 ) : ScreenModel,
@@ -22,11 +23,10 @@ class InboxViewModel(
 
     override fun onStarted() {
         mvi.onStarted()
-        mvi.scope?.launch(Dispatchers.IO) {
-            val auth = identityRepository.authToken.value.orEmpty()
-            siteRepository.getCurrentUser(auth)?.also { user ->
-                mvi.updateState { it.copy(currentUserId = user.id) }
-            }
+        mvi.scope?.launch {
+            identityRepository.authToken.debounce(250).onEach { auth ->
+                mvi.updateState { it.copy(isLogged = !auth.isNullOrEmpty()) }
+            }.launchIn(this)
         }
     }
 

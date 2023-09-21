@@ -110,7 +110,7 @@ object InboxScreen : Tab {
                         }
                     },
                     actions = {
-                        if (uiState.currentUserId != null) {
+                        if (uiState.isLogged == true) {
                             Image(
                                 modifier = Modifier.onClick {
                                     model.reduce(InboxMviModel.Intent.ReadAll)
@@ -124,64 +124,70 @@ object InboxScreen : Tab {
                 )
             },
         ) { paddingValues ->
-            if (uiState.currentUserId == null) {
-                Column(
-                    modifier = Modifier.padding(paddingValues).padding(horizontal = Spacing.m)
-                ) {
-                    Text(
-                        text = stringResource(MR.strings.inbox_not_logged_message),
-                    )
-                }
-            } else {
-                Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .nestedScroll(scrollBehavior.nestedScrollConnection),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.s),
-                ) {
-                    SectionSelector(
-                        modifier = Modifier.padding(vertical = Spacing.s),
-                        titles = listOf(
-                            stringResource(MR.strings.inbox_section_replies),
-                            stringResource(MR.strings.inbox_section_mentions),
-                            stringResource(MR.strings.inbox_section_messages),
-                        ),
-                        currentSection = when (uiState.section) {
-                            InboxSection.MENTIONS -> 1
-                            InboxSection.MESSAGES -> 2
-                            else -> 0
-                        },
-                        onSectionSelected = {
-                            val section = when (it) {
-                                1 -> InboxSection.MENTIONS
-                                2 -> InboxSection.MESSAGES
-                                else -> InboxSection.REPLIES
-                            }
-                            model.reduce(InboxMviModel.Intent.ChangeSection(section))
-                        },
-                    )
-                    val screens = remember {
-                        listOf(
-                            InboxRepliesScreen(),
-                            InboxMentionsScreen(),
-                            InboxMessagesScreen(),
+            when (uiState.isLogged) {
+                false -> {
+                    Column(
+                        modifier = Modifier.padding(paddingValues).padding(horizontal = Spacing.m)
+                    ) {
+                        Text(
+                            text = stringResource(MR.strings.inbox_not_logged_message),
                         )
                     }
-                    TabNavigator(screens.first()) {
-                        CurrentScreen()
-                        val navigator = LocalTabNavigator.current
-                        LaunchedEffect(model) {
-                            model.uiState.map { it.section }.onEach { section ->
-                                val index = when (section) {
-                                    InboxSection.REPLIES -> 0
-                                    InboxSection.MENTIONS -> 1
-                                    InboxSection.MESSAGES -> 2
+                }
+
+                true -> {
+                    Column(
+                        modifier = Modifier
+                            .padding(paddingValues)
+                            .nestedScroll(scrollBehavior.nestedScrollConnection),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                    ) {
+                        SectionSelector(
+                            modifier = Modifier.padding(vertical = Spacing.s),
+                            titles = listOf(
+                                stringResource(MR.strings.inbox_section_replies),
+                                stringResource(MR.strings.inbox_section_mentions),
+                                stringResource(MR.strings.inbox_section_messages),
+                            ),
+                            currentSection = when (uiState.section) {
+                                InboxSection.MENTIONS -> 1
+                                InboxSection.MESSAGES -> 2
+                                else -> 0
+                            },
+                            onSectionSelected = {
+                                val section = when (it) {
+                                    1 -> InboxSection.MENTIONS
+                                    2 -> InboxSection.MESSAGES
+                                    else -> InboxSection.REPLIES
                                 }
-                                navigator.current = screens[index]
-                            }.launchIn(this)
+                                model.reduce(InboxMviModel.Intent.ChangeSection(section))
+                            },
+                        )
+                        val screens = remember {
+                            listOf(
+                                InboxRepliesScreen(),
+                                InboxMentionsScreen(),
+                                InboxMessagesScreen(),
+                            )
+                        }
+                        TabNavigator(screens.first()) {
+                            CurrentScreen()
+                            val navigator = LocalTabNavigator.current
+                            LaunchedEffect(model) {
+                                model.uiState.map { it.section }.onEach { section ->
+                                    val index = when (section) {
+                                        InboxSection.REPLIES -> 0
+                                        InboxSection.MENTIONS -> 1
+                                        InboxSection.MESSAGES -> 2
+                                    }
+                                    navigator.current = screens[index]
+                                }.launchIn(this)
+                            }
                         }
                     }
                 }
+
+                else -> Unit
             }
         }
     }

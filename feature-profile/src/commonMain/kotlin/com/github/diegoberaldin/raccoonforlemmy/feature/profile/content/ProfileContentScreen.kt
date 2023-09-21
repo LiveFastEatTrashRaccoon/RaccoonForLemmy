@@ -98,19 +98,21 @@ internal object ProfileContentScreen : Tab {
                     ProfileNotLoggedScreen,
                     ProfileLoggedScreen,
                 )
-
-                TabNavigator(ProfileNotLoggedScreen) {
-                    CurrentScreen()
-                    val navigator = LocalTabNavigator.current
-                    LaunchedEffect(model) {
-                        model.uiState.map { s -> s.logged }.distinctUntilChanged()
-                            .onEach { logged ->
-                                val index = when (logged) {
-                                    true -> 1
-                                    else -> 0
-                                }
-                                navigator.current = screens[index]
-                            }.launchIn(this)
+                // wait until logging status is determined
+                if (uiState.logged != null) {
+                    TabNavigator(ProfileNotLoggedScreen) {
+                        CurrentScreen()
+                        val navigator = LocalTabNavigator.current
+                        LaunchedEffect(model) {
+                            model.uiState.map { s -> s.logged }.distinctUntilChanged()
+                                .onEach { logged ->
+                                    val index = when (logged) {
+                                        true -> 1
+                                        else -> 0
+                                    }
+                                    navigator.current = screens[index]
+                                }.launchIn(this)
+                        }
                     }
                 }
             }

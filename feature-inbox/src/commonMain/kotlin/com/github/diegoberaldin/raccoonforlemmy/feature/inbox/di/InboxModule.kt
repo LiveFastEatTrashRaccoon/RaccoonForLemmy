@@ -7,8 +7,6 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatMviModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.list.InboxMessagesMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.list.InboxMessagesViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesMviModel
@@ -24,7 +22,6 @@ val inboxTabModule = module {
             mvi = DefaultMviModel(InboxMviModel.UiState()),
             identityRepository = get(),
             userRepository = get(),
-            siteRepository = get(),
             coordinator = get(),
         )
     }
