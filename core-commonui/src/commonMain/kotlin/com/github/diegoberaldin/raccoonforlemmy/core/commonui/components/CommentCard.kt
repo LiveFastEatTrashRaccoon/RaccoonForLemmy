@@ -26,6 +26,8 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 
 @Composable
@@ -37,6 +39,8 @@ fun CommentCard(
     onDownVote: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
+    onOpenCommunity: ((CommunityModel) -> Unit)? = null,
+    onOpenCreator: ((UserModel) -> Unit)? = null,
     onOptionSelected: ((Int) -> Unit)? = null,
 ) {
     val themeRepository = remember { getThemeRepository() }
@@ -76,6 +80,8 @@ fun CommentCard(
                 ) {
                     PostCardSubtitle(
                         creator = comment.creator,
+                        onOpenCreator = onOpenCreator,
+                        onOpenCommunity = onOpenCommunity,
                     )
                     PostCardBody(
                         text = comment.text,

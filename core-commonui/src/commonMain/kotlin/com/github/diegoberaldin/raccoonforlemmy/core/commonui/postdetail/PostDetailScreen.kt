@@ -413,70 +413,94 @@ class PostDetailScreen(
                                     )
                                 },
                                 content = {
-                                    CommentCard(comment = comment, options = buildList {
-                                        if (comment.creator?.id == uiState.currentUserId) {
-                                            add(stringResource(MR.strings.comment_action_delete))
-                                        }
-                                    }, onUpVote = {
-                                        model.reduce(
-                                            PostDetailMviModel.Intent.UpVoteComment(
-                                                index = idx,
-                                                feedback = true,
-                                            ),
-                                        )
-                                    }, onDownVote = {
-                                        model.reduce(
-                                            PostDetailMviModel.Intent.DownVoteComment(
-                                                index = idx,
-                                                feedback = true,
-                                            ),
-                                        )
-                                    }, onSave = {
-                                        model.reduce(
-                                            PostDetailMviModel.Intent.SaveComment(
-                                                index = idx,
-                                                feedback = true,
-                                            ),
-                                        )
-                                    }, onReply = {
-                                        val screen = CreateCommentScreen(
-                                            originalPost = statePost,
-                                            originalComment = comment,
-                                        )
-                                        notificationCenter.addObserver(
-                                            {
-                                                model.reduce(PostDetailMviModel.Intent.Refresh)
-                                                model.reduce(PostDetailMviModel.Intent.RefreshPost)
-                                            },
-                                            key,
-                                            NotificationCenterContractKeys.CommentCreated
-                                        )
-                                        bottomSheetNavigator.show(screen)
-                                    }, onOptionSelected = { idx ->
-                                        when (idx) {
-                                            1 -> model.reduce(
-                                                PostDetailMviModel.Intent.DeleteComment(
-                                                    comment.id
-                                                )
+                                    CommentCard(
+                                        comment = comment,
+                                        options = buildList {
+                                            if (comment.creator?.id == uiState.currentUserId) {
+                                                add(stringResource(MR.strings.comment_action_delete))
+                                            }
+                                        },
+                                        onUpVote = {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.UpVoteComment(
+                                                    index = idx,
+                                                    feedback = true,
+                                                ),
                                             )
-
-                                            else -> {
-                                                notificationCenter.addObserver(
-                                                    {
-                                                        model.reduce(PostDetailMviModel.Intent.Refresh)
-                                                        model.reduce(PostDetailMviModel.Intent.RefreshPost)
-                                                    },
-                                                    key,
-                                                    NotificationCenterContractKeys.CommentCreated
-                                                )
-                                                bottomSheetNavigator.show(
-                                                    CreateCommentScreen(
-                                                        editedComment = comment,
-                                                    )
+                                        },
+                                        onDownVote = {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.DownVoteComment(
+                                                    index = idx,
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        },
+                                        onSave = {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.SaveComment(
+                                                    index = idx,
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        },
+                                        onReply = {
+                                            val screen = CreateCommentScreen(
+                                                originalPost = statePost,
+                                                originalComment = comment,
+                                            )
+                                            notificationCenter.addObserver(
+                                                {
+                                                    model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                    model.reduce(PostDetailMviModel.Intent.RefreshPost)
+                                                },
+                                                key,
+                                                NotificationCenterContractKeys.CommentCreated
+                                            )
+                                            bottomSheetNavigator.show(screen)
+                                        },
+                                        onOpenCreator = {
+                                            val user = comment.creator
+                                            if (user != null) {
+                                                navigator?.push(
+                                                    UserDetailScreen(user),
                                                 )
                                             }
+                                        },
+                                        onOpenCommunity = {
+                                            val community = comment.community
+                                            if (community != null) {
+                                                navigator?.push(
+                                                    CommunityDetailScreen(community),
+                                                )
+                                            }
+                                        },
+                                        onOptionSelected = { idx ->
+                                            when (idx) {
+                                                1 -> model.reduce(
+                                                    PostDetailMviModel.Intent.DeleteComment(
+                                                        comment.id
+                                                    )
+                                                )
+
+                                                else -> {
+                                                    notificationCenter.addObserver(
+                                                        {
+                                                            model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                            model.reduce(PostDetailMviModel.Intent.RefreshPost)
+                                                        },
+                                                        key,
+                                                        NotificationCenterContractKeys.CommentCreated
+                                                    )
+                                                    bottomSheetNavigator.show(
+                                                        CreateCommentScreen(
+                                                            editedComment = comment,
+                                                        )
+                                                    )
+                                                }
+                                            }
                                         }
-                                    })
+                                    )
                                 },
                             )
                             if ((comment.comments
