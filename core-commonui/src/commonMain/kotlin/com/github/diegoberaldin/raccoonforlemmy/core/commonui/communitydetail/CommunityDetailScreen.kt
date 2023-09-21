@@ -119,11 +119,12 @@ class CommunityDetailScreen(
             }
         }
 
+        val stateCommunity = uiState.community
         Scaffold(modifier = Modifier.background(MaterialTheme.colorScheme.surface)
             .padding(Spacing.xs),
             topBar = {
-                val communityName = community.name
-                val communityHost = community.host
+                val communityName = stateCommunity.name
+                val communityHost = stateCommunity.host
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
                     title = {
@@ -188,7 +189,7 @@ class CommunityDetailScreen(
                         shape = CircleShape,
                         onClick = {
                             val screen = CreatePostScreen(
-                                communityId = community.id,
+                                communityId = stateCommunity.id,
                             )
                             notificationCenter.addObserver({
                                 model.reduce(CommunityDetailMviModel.Intent.Refresh)
@@ -218,22 +219,22 @@ class CommunityDetailScreen(
                     ) {
                         item {
                             CommunityHeader(
-                                community = community,
+                                community = stateCommunity,
                                 isOnOtherInstance = isOnOtherInstance,
                                 onOpenCommunityInfo = {
                                     bottomSheetNavigator.show(
-                                        CommunityInfoScreen(community),
+                                        CommunityInfoScreen(stateCommunity),
                                     )
                                 },
                                 onOpenInstanceInfo = {
                                     navigator?.push(
                                         InstanceInfoScreen(
-                                            url = community.instanceUrl,
+                                            url = stateCommunity.instanceUrl,
                                         ),
                                     )
                                 },
                                 onSubscribeButtonClicked = {
-                                    when (community.subscribed) {
+                                    when (stateCommunity.subscribed) {
                                         true -> model.reduce(CommunityDetailMviModel.Intent.Unsubscribe)
                                         false -> model.reduce(CommunityDetailMviModel.Intent.Subscribe)
                                         else -> Unit
@@ -335,7 +336,7 @@ class CommunityDetailScreen(
                                             }
                                         },
                                         blurNsfw = when {
-                                            community.nsfw -> false
+                                            stateCommunity.nsfw -> false
                                             else -> uiState.blurNsfw
                                         },
                                         onUpVote = if (isOnOtherInstance) {
