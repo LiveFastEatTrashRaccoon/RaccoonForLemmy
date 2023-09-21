@@ -442,6 +442,13 @@ class UserDetailScreen(
                                     },
                                     content = {
                                         CommentCard(
+                                            modifier = Modifier.onClick {
+                                                navigator?.push(
+                                                    PostDetailScreen(
+                                                        post = PostModel(id = comment.postId),
+                                                    )
+                                                )
+                                            },
                                             comment = comment,
                                             onSave = {
                                                 model.reduce(
@@ -480,7 +487,10 @@ class UserDetailScreen(
                                                     NotificationCenterContractKeys.CommentCreated
                                                 )
                                                 bottomSheetNavigator.show(screen)
-                                            }
+                                            },
+                                            onOpenCommunity = {
+                                                navigator?.push(CommunityDetailScreen(it))
+                                            },
                                         )
                                     },
                                 )

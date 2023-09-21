@@ -26,6 +26,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 
 @Composable
 fun ProfileCommentCard(
+    modifier : Modifier = Modifier,
     comment: CommentModel,
     options: List<String> = emptyList(),
     onOptionSelected: ((Int) -> Unit)? = null,
@@ -39,7 +40,7 @@ fun ProfileCommentCard(
         ),
     ) {
         Card(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .background(
                     color = MaterialTheme.colorScheme.surfaceVariant,

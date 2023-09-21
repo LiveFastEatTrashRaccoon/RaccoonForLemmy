@@ -301,7 +301,7 @@ class ExploreScreen : Screen {
                                         CommentCard(
                                             modifier = Modifier.onClick {
                                                 navigator?.push(
-                                                    PostDetailScreen(post = PostModel(result.postId)),
+                                                    PostDetailScreen(post = PostModel(id = result.postId)),
                                                 )
                                             },
                                             comment = result,
@@ -342,6 +342,16 @@ class ExploreScreen : Screen {
                                                     NotificationCenterContractKeys.CommentCreated
                                                 )
                                                 bottomSheetNavigator.show(screen)
+                                            },
+                                            onOpenCommunity = {
+                                                navigator?.push(
+                                                    CommunityDetailScreen(it)
+                                                )
+                                            },
+                                            onOpenCreator = {
+                                                navigator?.push(
+                                                    UserDetailScreen(it)
+                                                )
                                             },
                                         )
                                     }

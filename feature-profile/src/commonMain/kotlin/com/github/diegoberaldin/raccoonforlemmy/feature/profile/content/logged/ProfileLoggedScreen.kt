@@ -43,6 +43,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.saved.ProfileSavedScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileLoggedViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -179,6 +180,11 @@ internal object ProfileLoggedScreen : Tab {
                         } else {
                             items(uiState.comments) { comment ->
                                 ProfileCommentCard(
+                                    modifier = Modifier.onClick {
+                                        navigator?.push(
+                                            PostDetailScreen(post = PostModel(id = comment.postId)),
+                                        )
+                                    },
                                     comment = comment,
                                     options = buildList {
                                         add(stringResource(MR.strings.post_action_edit))
