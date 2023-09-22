@@ -9,6 +9,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
@@ -26,6 +27,7 @@ class InboxRepliesViewModel(
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
     private val siteRepository: SiteRepository,
+    private val commentRepository: CommentRepository,
     private val hapticFeedback: HapticFeedback,
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
@@ -75,7 +77,17 @@ class InboxRepliesViewModel(
                 markAsRead(read = intent.read, replyId = intent.mentionId)
             }
 
+
             InboxRepliesMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            is InboxRepliesMviModel.Intent.DownVoteComment -> toggleDownVoteComment(
+                mention = mvi.uiState.value.replies[intent.index],
+                feedback = true,
+            )
+
+            is InboxRepliesMviModel.Intent.UpVoteComment -> toggleUpVoteComment(
+                mention = mvi.uiState.value.replies[intent.index],
+                feedback = true,
+            )
         }
     }
 
@@ -140,6 +152,99 @@ class InboxRepliesViewModel(
                 auth = auth,
             )
             refresh()
+        }
+    }
+
+    private fun toggleUpVoteComment(
+        mention: PersonMentionModel,
+        feedback: Boolean,
+    ) {
+        val newValue = mention.myVote <= 0
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newComment = commentRepository.asUpVoted(
+            comment = mention.comment,
+            voted = newValue,
+        )
+        mvi.updateState {
+            it.copy(
+                replies = it.replies.map { m ->
+                    if (m.comment.id != mention.comment.id) {
+                        m
+                    } else {
+                        m.copy(myVote = newComment.myVote)
+                    }
+                },
+            )
+        }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                commentRepository.upVote(
+                    auth = auth,
+                    comment = mention.comment,
+                    voted = newValue,
+                )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        replies = it.replies.map { m ->
+                            if (m.comment.id != mention.comment.id) {
+                                m
+                            } else {
+                                m.copy(myVote = mention.myVote)
+                            }
+                        },
+                    )
+                }
+            }
+        }
+    }
+
+    private fun toggleDownVoteComment(
+        mention: PersonMentionModel,
+        feedback: Boolean,
+    ) {
+        val newValue = mention.myVote >= 0
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newComment = commentRepository.asDownVoted(mention.comment, newValue)
+        mvi.updateState {
+            it.copy(
+                replies = it.replies.map { m ->
+                    if (m.comment.id != mention.comment.id) {
+                        m
+                    } else {
+                        m.copy(myVote = newComment.myVote)
+                    }
+                },
+            )
+        }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                commentRepository.downVote(
+                    auth = auth,
+                    comment = mention.comment,
+                    downVoted = newValue,
+                )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        replies = it.replies.map { m ->
+                            if (m.comment.id != mention.comment.id) {
+                                m
+                            } else {
+                                m.copy(myVote = mention.myVote)
+                            }
+                        },
+                    )
+                }
+            }
         }
     }
 

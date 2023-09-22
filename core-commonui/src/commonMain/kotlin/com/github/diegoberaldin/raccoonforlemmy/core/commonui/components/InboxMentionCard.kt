@@ -19,6 +19,7 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -30,6 +31,8 @@ fun InboxMentionCard(
     onOpenPost: (PostModel) -> Unit,
     onOpenCreator: (UserModel) -> Unit,
     onOpenCommunity: (CommunityModel) -> Unit,
+    onUpVote: ((CommentModel) -> Unit)? = null,
+    onDownVote: ((CommentModel) -> Unit)? = null,
 ) {
     val themeRepository = remember { getThemeRepository() }
     val fontScale by themeRepository.contentFontScale.collectAsState()
@@ -66,10 +69,16 @@ fun InboxMentionCard(
                     score = mention.score,
                     upVoted = mention.myVote > 0,
                     downVoted = mention.myVote < 0,
+                    onOpenCommunity = onOpenCommunity,
                     onOpenCreator = { user ->
                         onOpenCreator(user)
                     },
-                    onOpenCommunity = onOpenCommunity,
+                    onUpVote = {
+                        onUpVote?.invoke(mention.comment)
+                    },
+                    onDownVote = {
+                        onDownVote?.invoke(mention.comment)
+                    },
                 )
             }
         }

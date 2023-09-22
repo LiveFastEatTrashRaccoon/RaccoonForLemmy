@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
@@ -70,7 +71,7 @@ class InboxMentionsScreen : Tab {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
-                items(uiState.mentions) { mention ->
+                itemsIndexed(uiState.mentions) { idx, mention ->
                     SwipeableCard(
                         modifier = Modifier.fillMaxWidth(),
                         enabled = uiState.swipeActionsEnabled,
@@ -145,6 +146,12 @@ class InboxMentionsScreen : Tab {
                                     navigator?.push(
                                         CommunityDetailScreen(community),
                                     )
+                                },
+                                onUpVote = {
+                                    model.reduce(InboxMentionsMviModel.Intent.UpVoteComment(idx))
+                                },
+                                onDownVote = {
+                                    model.reduce(InboxMentionsMviModel.Intent.DownVoteComment(idx))
                                 },
                             )
                         },

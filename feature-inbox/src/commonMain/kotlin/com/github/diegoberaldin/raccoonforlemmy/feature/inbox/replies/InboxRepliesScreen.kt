@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
@@ -73,7 +74,7 @@ class InboxRepliesScreen : Tab {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
-                items(uiState.replies) { mention ->
+                itemsIndexed(uiState.replies) { idx, mention ->
                     val themeRepository = remember { getThemeRepository() }
                     val fontScale by themeRepository.contentFontScale.collectAsState()
                     CompositionLocalProvider(
@@ -156,6 +157,12 @@ class InboxRepliesScreen : Tab {
                                         navigator?.push(
                                             CommunityDetailScreen(community),
                                         )
+                                    },
+                                    onUpVote = {
+                                        model.reduce(InboxRepliesMviModel.Intent.UpVoteComment(idx))
+                                    },
+                                    onDownVote = {
+                                        model.reduce(InboxRepliesMviModel.Intent.DownVoteComment(idx))
                                     },
                                 )
                             },

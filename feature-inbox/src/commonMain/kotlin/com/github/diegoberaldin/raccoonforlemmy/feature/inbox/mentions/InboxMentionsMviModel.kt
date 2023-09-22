@@ -1,7 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesMviModel
 
 interface InboxMentionsMviModel :
     MviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect> {
@@ -11,6 +13,8 @@ interface InboxMentionsMviModel :
         object LoadNextPage : Intent
         data class MarkAsRead(val read: Boolean, val mentionId: Int) : Intent
         object HapticIndication : Intent
+        data class UpVoteComment(val index: Int) : Intent
+        data class DownVoteComment(val index: Int) : Intent
     }
 
     data class UiState(
