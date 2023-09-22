@@ -15,14 +15,14 @@ RepoType: git
 Repo: https://github.com/diegoberaldin/RacconForLemmy.git
 
 Builds:
-  - versionName: 1.0.0-beta03
-    versionCode: 13
-    commit: 1.0.0-beta03
+  - versionName: 1.0.0-beta04
+    versionCode: 14
+    commit: 1.0.0-beta04
     subdir: androidApp
     gradle:
       - githubConfig
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: 1.0.0-beta03
-CurrentVersionCode: 13
+CurrentVersion: 1.0.0-beta04
+CurrentVersionCode: 14
