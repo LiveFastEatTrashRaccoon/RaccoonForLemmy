@@ -18,39 +18,37 @@ A Kotlin Multiplatform Mobile client for Lemmy.
 <div align="center">
 <table>
   <tr>
-    <td>
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/6f613ad0-931b-4133-b502-ac7df2cf0484" width="310" />
+    <td><!-- Home -->
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/01b3f04b-3900-46dc-b835-efc11c89ab63" width="310" />
     </td>
-    <td>
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/78caa9d4-ae02-474d-bd04-45f5935ddbe2" width="310" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/3c146016-934c-4d34-a4a2-bbaa25057cd6" width="310" />
-    </td>
-    <td>
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/008e10e1-ed07-44aa-9cb4-4b1fae49126e" width="310" />
+    <td><!-- Post detail -->
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/c303237d-b5df-40bd-acc6-419aeed8de10" width="310" />
     </td>
   </tr>
   <tr>
-    <td>
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/54f932e5-7e4d-4315-bfe4-b9196771f971" width="310" />
+    <td><!-- Explore -->
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/e836c063-f85c-488d-b26a-5aa14a49ec2b" width="310" />
     </td>
-    <td>
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/7fa384ab-cf4d-4aa2-a982-bab38a5616da" width="310" />
+    <td><!-- Community detail -->
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/e9174244-e0bf-4bcc-bed5-6332e807ce60" width="310" />
+    </td>
+  </tr>
+  <tr>
+    <td><!-- Inbox -->
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/1aaff3ac-205b-404d-b83e-ce3f4e267e75" width="310" />
+    </td>
+    <td><!-- Settings -->
+      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/3e5e95bf-d09e-4339-bdaf-4e56dedb2bf3" width="310" />
     </td>
   </tr>
 </table>
 </div>
 
-This is mostly an exercise to play around with KMM and Compose Multiplatform and implement a Lemmy
-client.
+This started out as an exercise to play around with KMP and Compose Multiplatform and implement a Lemmy client and gradually grew to a fully functional client.
 
-The project is still at an early stage and not ready for production, expect things to change and
-even major changes to the source code.
+The application is under active development, expect new features to be added (e.g. multi-account support, video support, customizable post layouts, etc.).
 
-Libraries used:
+## Libraries used:
 
 - [Koin](https://github.com/InsertKoinIO/koin) for dependency injection
 - [Voyager](https://github.com/adrielcafe/voyager) for screen navigation
@@ -63,10 +61,14 @@ Libraries used:
 - [Markdown](https://github.com/JetBrains/markdown) for markdown parsing
 - ... more to come (e.g. SQLdelight for persistence)
 
-Credits:
+## Credits:
 
 - the `core-api` module is heavily inspired
   by [Jerboa for Lemmy](https://github.com/dessalines/jerboa)
-- the `core-md` module is copied
-  from [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer)
-- the UI is vaguely inspired by the [Thunder](https://github.com/thunder-app/thunder) app
+- the `core-md` module is taken
+  from [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) with some adptations a posteriori
+- the UI is inspired by the really great [Thunder](https://github.com/thunder-app/thunder) app
+
+## Want to try it out?
+
+- get it on [Obtanium](https://github.com/ImranR98/Obtainium/releases) by simply adding this repo `https://github.com/diegoberaldin/RacconForLemmy`
