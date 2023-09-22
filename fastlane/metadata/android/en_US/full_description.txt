@@ -1,0 +1,3 @@
+Raccoon for Lemmy is fully open source, and intends to offer an ad-free and as functional as possible experience on Lemmy. The application is implemented in Kotlin Multiplatform and  uses Jetpack Compose multiplatform.
+
+The project is under active development, new features are going to added in future releases. Have a look at the project GitHub repository for more information.

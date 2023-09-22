@@ -1,0 +1,3 @@
+- fix unlogged content appearing in profile and inbox
+- open author and community from comments even in explore and user detail
+- remove non-free crash reporting tool
