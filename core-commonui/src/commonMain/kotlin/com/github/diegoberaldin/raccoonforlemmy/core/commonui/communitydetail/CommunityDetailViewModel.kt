@@ -39,18 +39,19 @@ class CommunityDetailViewModel(
         mvi.onStarted()
 
         val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
+        val auth = identityRepository.authToken.value.orEmpty()
         mvi.updateState {
             it.copy(
                 community = community,
                 sortType = sortType,
                 blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
                 swipeActionsEnabled = keyStore[KeyStoreKeys.EnableSwipeActions, true],
+                isLogged = !auth.isNullOrEmpty(),
             )
         }
 
         mvi.scope?.launch(Dispatchers.IO) {
             if (uiState.value.currentUserId == null) {
-                val auth = identityRepository.authToken.value.orEmpty()
                 val user = siteRepository.getCurrentUser(auth)
                 mvi.updateState { it.copy(currentUserId = user?.id ?: 0) }
             }

@@ -24,6 +24,7 @@ interface CommunityDetailMviModel :
 
     data class UiState(
         val community: CommunityModel = CommunityModel(),
+        val isLogged: Boolean = false,
         val refreshing: Boolean = false,
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,
