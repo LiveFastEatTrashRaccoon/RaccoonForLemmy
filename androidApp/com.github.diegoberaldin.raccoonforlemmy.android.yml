@@ -17,10 +17,14 @@ Repo: https://github.com/diegoberaldin/RacconForLemmy.git
 Builds:
   - versionName: 1.0.0-beta04
     versionCode: 14
-    commit: 1.0.0-beta04
+    commit: 257025c2cb3532deb73eeddf4734f3c1ee0eb95c
     subdir: androidApp
-    gradle:
-      - githubConfig
+    sudo:
+      - apt-get update
+      - apt-get install -y openjdk-17-jdk-headless
+      - update-alternatives --auto java
+    output: build/outputs/apk/release/*.apk
+    build: JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 gradle assembleRelease
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
