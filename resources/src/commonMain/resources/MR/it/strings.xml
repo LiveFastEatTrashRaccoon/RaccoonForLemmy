@@ -63,10 +63,6 @@
         continuare.
     </string>
     <string name="profile_button_login">Login</string>
-    <string name="profile_button_logout">Logout</string>
-    <string name="profile_post_score">Punti post</string>
-    <string name="profile_comment_score">Punti commento</string>
-    <string name="profile_account_age">Età account</string>
     <string name="profile_year_short">a</string>
     <string name="profile_month_short">m</string>
     <string name="profile_day_short">g</string>
@@ -106,10 +102,6 @@
     <string name="settings_dynamic_colors">Usa colori dinamici</string>
     <string name="settings_open_url_external">Apri URL su browser esterno</string>
     <string name="settings_enable_swipe_actions">Consenti azioni allo swipe</string>
-
-    <string name="community_button_subscribe">Iscriviti</string>
-    <string name="community_button_subscribed">Iscritto</string>
-    <string name="community_button_pending">In corso</string>
 
     <string name="community_detail_info">Info comunità</string>
     <string name="community_detail_instance_info">Dettagli istanza</string>

@@ -66,10 +66,6 @@
         account to continue.
     </string>
     <string name="profile_button_login">Login</string>
-    <string name="profile_button_logout">Logout</string>
-    <string name="profile_post_score">Post score</string>
-    <string name="profile_comment_score">Comment score</string>
-    <string name="profile_account_age">Account age</string>
     <string name="profile_year_short">y</string>
     <string name="profile_month_short">m</string>
     <string name="profile_day_short">d</string>
@@ -108,10 +104,6 @@
     <string name="settings_dynamic_colors">Use dynamic colors</string>
     <string name="settings_open_url_external">Open URLs in external browser</string>
     <string name="settings_enable_swipe_actions">Enable swipe actions</string>
-
-    <string name="community_button_subscribe">Subscribe</string>
-    <string name="community_button_subscribed">Subscribed</string>
-    <string name="community_button_pending">Pending</string>
 
     <string name="community_detail_info">Community info</string>
     <string name="community_detail_instance_info">Instance details</string>
