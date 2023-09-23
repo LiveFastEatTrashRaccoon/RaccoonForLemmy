@@ -2,9 +2,11 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,6 +15,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -27,22 +30,26 @@ import dev.icerock.moko.resources.compose.stringResource
 internal fun PostsTopBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     currentInstance: String,
-    listingType: ListingType,
-    sortType: SortType,
+    listingType: ListingType?,
+    sortType: SortType?,
     onSelectListingType: () -> Unit,
     onSelectSortType: () -> Unit,
 ) {
     TopAppBar(
         scrollBehavior = scrollBehavior,
         navigationIcon = {
-            Image(
-                modifier = Modifier.onClick {
-                    onSelectListingType()
-                },
-                imageVector = listingType.toIcon(),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-            )
+            if (listingType != null) {
+                Image(
+                    modifier = Modifier.onClick {
+                        onSelectListingType()
+                    },
+                    imageVector = listingType.toIcon(),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                )
+            } else {
+                Box(modifier = Modifier.size(24.dp))
+            }
         },
         title = {
             Column(
@@ -50,7 +57,7 @@ internal fun PostsTopBar(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
                 Text(
-                    text = listingType.toReadableName(),
+                    text = listingType?.toReadableName().orEmpty(),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
@@ -85,14 +92,16 @@ internal fun PostsTopBar(
                         }
                     )
                 }
-                Image(
-                    modifier = Modifier.onClick {
-                        onSelectSortType()
-                    },
-                    imageVector = sortType.toIcon(),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                )
+                if (sortType != null) {
+                    Image(
+                        modifier = Modifier.onClick {
+                            onSelectSortType()
+                        },
+                        imageVector = sortType.toIcon(),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                    )
+                }
             }
         },
     )

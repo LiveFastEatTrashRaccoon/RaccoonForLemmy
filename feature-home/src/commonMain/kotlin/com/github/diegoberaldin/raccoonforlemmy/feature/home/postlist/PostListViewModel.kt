@@ -64,15 +64,9 @@ class PostListViewModel(
     override fun onStarted() {
         mvi.onStarted()
 
-        val oldListingType = uiState.value.listingType
-        val oldSortType = uiState.value.sortType
-        val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
-        val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
         mvi.updateState {
             it.copy(
                 instance = apiConfigRepository.getInstance(),
-                listingType = listingType,
-                sortType = sortType,
                 blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
                 swipeActionsEnabled = keyStore[KeyStoreKeys.EnableSwipeActions, true],
             )
@@ -90,7 +84,13 @@ class PostListViewModel(
             val auth = identityRepository.authToken.value.orEmpty()
             val user = siteRepository.getCurrentUser(auth)
             mvi.updateState { it.copy(currentUserId = user?.id ?: 0) }
-            if (uiState.value.posts.isEmpty() || oldListingType != listingType || oldSortType != sortType) {
+            if (uiState.value.posts.isEmpty()) {
+                val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
+                val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
+                mvi.updateState { it.copy(
+                    listingType = listingType,
+                    sortType = sortType,
+                ) }
                 refresh()
             }
         }
@@ -142,8 +142,8 @@ class PostListViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
-            val type = currentState.listingType
-            val sort = currentState.sortType
+            val type = currentState.listingType ?: ListingType.Local
+            val sort = currentState.sortType ?: SortType.Active
             val refreshing = currentState.refreshing
             val includeNsfw = keyStore[KeyStoreKeys.IncludeNsfw, true]
             val postList = postsRepository.getAll(
