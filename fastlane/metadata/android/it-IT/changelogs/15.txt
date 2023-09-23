@@ -1,0 +1,8 @@
+- fix(profile): profile comment action on option selected
+- chore(l10n): cleanup strings and l10n fixes
+- chore(deps): Kotlin 1.9.10, raise target SDK level, compose 1.5.1, kamel 0.7.3, voyager 1.0.0-rc07
+- fix(explore): apply default listing and sort types
+- fix(md): improve heading rendering
+- fix(home): prevent custom feed and sort type reset when navigating back
+- feat(inbox): upvote and downvote from mentions and replies
+- fix(common): community subscription status was not updated
