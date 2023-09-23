@@ -43,11 +43,11 @@ private class DefaultMarkdownTypography(
 
 @Composable
 fun markdownTypography(
-    h1: TextStyle = MaterialTheme.typography.headlineLarge,
-    h2: TextStyle = MaterialTheme.typography.headlineMedium,
-    h3: TextStyle = MaterialTheme.typography.headlineSmall,
-    h4: TextStyle = MaterialTheme.typography.titleLarge,
-    h5: TextStyle = MaterialTheme.typography.titleMedium,
+    h1: TextStyle = MaterialTheme.typography.titleLarge,
+    h2: TextStyle = MaterialTheme.typography.titleLarge,
+    h3: TextStyle = MaterialTheme.typography.titleMedium,
+    h4: TextStyle = MaterialTheme.typography.titleMedium,
+    h5: TextStyle = MaterialTheme.typography.titleSmall,
     h6: TextStyle = MaterialTheme.typography.titleSmall,
     text: TextStyle = MaterialTheme.typography.bodyMedium,
     code: TextStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
