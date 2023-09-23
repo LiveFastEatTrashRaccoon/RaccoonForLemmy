@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose)
-    alias(libs.plugins.native.cocoapods)
     alias(libs.plugins.moko.resources)
 }
 
@@ -10,23 +9,9 @@ kotlin {
     android {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "17"
+                jvmTarget = "1.8"
             }
         }
-    }
-
-    cocoapods {
-        version = "1.0.0"
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
-        ios.deploymentTarget = "14.1"
-        podfile = project.file("../iosApp/Podfile")
-        framework {
-            baseName = "shared"
-            isStatic = true
-        }
-        extraSpecAttributes["resources"] =
-            "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     listOf(
@@ -76,7 +61,9 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependsOn(commonMain)
+        }
         val androidUnitTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -101,8 +88,8 @@ kotlin {
 
 android {
     namespace = "com.github.diegoberaldin.raccoonforlemmy"
-    compileSdk = 33
+    compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
-        minSdk = 26
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
 }

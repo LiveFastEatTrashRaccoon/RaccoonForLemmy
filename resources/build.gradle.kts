@@ -1,35 +1,24 @@
 plugins {
+    alias(libs.plugins.moko.resources)
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose)
-    alias(libs.plugins.native.cocoapods)
-    alias(libs.plugins.moko.resources)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
     targetHierarchy.default()
 
-    android {
+    androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "17"
+                jvmTarget = "1.8"
             }
         }
     }
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-
-    cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
-        version = "1.0"
-        ios.deploymentTarget = "14.1"
-        framework {
-            baseName = "resources"
-        }
-    }
 
     sourceSets {
         val commonMain by getting {
@@ -39,10 +28,20 @@ kotlin {
                 api(libs.moko.resources.compose)
             }
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
+        val androidMain by getting {
+            dependsOn(commonMain)
+        }
+        val iosMain by getting {
+            dependsOn(commonMain)
+        }
+        val iosX64Main by getting {
+            resources.srcDirs("build/generated/moko/iosX64Main/src")
+        }
+        val iosArm64Main by getting {
+            resources.srcDirs("build/generated/moko/iosArm64Main/src")
+        }
+        val iosSimulatorArm64Main by getting {
+            resources.srcDirs("build/generated/moko/iosSimulatorArm64Main/src")
         }
     }
 }
@@ -54,8 +53,11 @@ multiplatformResources {
 
 android {
     namespace = "com.github.diegoberaldin.raccoonforlemmy.resources"
-    compileSdk = 33
+    compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
-        minSdk = 26
+        minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+    sourceSets {
+        getByName("main").java.srcDirs("build/generated/moko/androidMain/src")
     }
 }

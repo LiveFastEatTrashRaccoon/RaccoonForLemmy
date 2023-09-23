@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.kotlin.android).apply(false)
     alias(libs.plugins.kotlin.multiplatform).apply(false)
     alias(libs.plugins.compose).apply(false)
-    alias(libs.plugins.native.cocoapods).apply(false)
     alias(libs.plugins.moko.resources).apply(false)
     alias(libs.plugins.ksp).apply(false)
     alias(libs.plugins.ktorfit).apply(false)

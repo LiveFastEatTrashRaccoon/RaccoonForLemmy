@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace = "com.github.diegoberaldin.raccoonforlemmy.android"
-    compileSdk = 33
+    compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
         applicationId = "com.github.diegoberaldin.raccoonforlemmy.android"
-        minSdk = 26
-        targetSdk = 33
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 14
         versionName = "1.0.0-beta04"
 
@@ -23,9 +23,10 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
     packagingOptions {
         resources {
@@ -38,11 +39,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 }
 

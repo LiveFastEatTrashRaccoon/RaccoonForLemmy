@@ -129,7 +129,7 @@ fun InboxReplySubtitle(
                             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                         ) {
                             if (communityIcon.isNotEmpty()) {
-                                val painterResource =asyncPainterResource(
+                                val painterResource = asyncPainterResource(
                                     data = communityIcon,
                                     filterQuality = FilterQuality.Low,
                                 )

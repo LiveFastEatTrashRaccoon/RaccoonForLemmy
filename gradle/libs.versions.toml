@@ -2,22 +2,23 @@
 acra = "5.11.2"
 androidx_activity = "1.7.2"
 androidx_crypto = "1.0.0"
-android_gradle = "7.4.2"
+android_gradle = "8.1.1"
 compose = "1.5.1"
-crashlytics = "18.4.1"
-crashlytics_gradle = "2.9.9"
-kamel = "0.7.1"
+compose_compiler = "1.5.3"
+kamel = "0.7.3"
 koin = "3.5.0"
-kotlin = "1.8.20"
+kotlin = "1.9.10"
 kotlinx_serialization_json = "1.6.0"
-ksp = "1.8.20-1.0.11"
+ksp = "1.9.10-1.0.13"
 ktor = "2.3.4"
-ktorfit_gradle = "1.0.0"
+ktorfit_gradle = "1.7.0"
 ktorfit_lib = "1.7.0"
 markdown = "0.5.0"
 moko_resources = "0.23.0"
 multiplatform_settings = "1.0.0"
-voyager = "1.0.0-rc06"
+voyager = "1.0.0-rc07"
+android_targetSdk = "34"
+android_minSdk = "26"
 
 [libraries]
 
@@ -61,11 +62,10 @@ voyager_androidx = { module = "cafe.adriel.voyager:voyager-koin", version.ref = 
 
 android_application = { id = "com.android.application", version.ref = "android.gradle" }
 android_library = { id = "com.android.library", version.ref = "android.gradle" }
-compose = { id = "org.jetbrains.compose", version = "1.4.1" }
+compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin_multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit.gradle" }
-native_cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 moko_resources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "moko.resources" }

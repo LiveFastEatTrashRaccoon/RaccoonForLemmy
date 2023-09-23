@@ -19,14 +19,14 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import com.github.diegoberaldin.raccoonforlemmy.resources.MR
-import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.sp
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalMarkdownColors
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalMarkdownTypography
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.LocalReferenceLinkHandler
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.utils.TAG_IMAGE_URL
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.utils.TAG_URL
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
