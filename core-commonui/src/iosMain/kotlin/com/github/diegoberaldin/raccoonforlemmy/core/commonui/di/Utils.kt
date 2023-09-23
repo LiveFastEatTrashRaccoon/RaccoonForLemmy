@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
+package com.github.diegoberaldin.raccoonforlemmy.core.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel

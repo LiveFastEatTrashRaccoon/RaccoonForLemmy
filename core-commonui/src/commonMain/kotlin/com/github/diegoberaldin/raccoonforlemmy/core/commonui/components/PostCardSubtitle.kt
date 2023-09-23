@@ -20,8 +20,6 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 @Composable
 fun PostCardSubtitle(
@@ -59,16 +57,13 @@ fun PostCardSubtitle(
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         if (communityIcon.isNotEmpty()) {
-                            val painterResource = asyncPainterResource(
-                                data = communityIcon,
-                                filterQuality = FilterQuality.Low,
-                            )
-                            KamelImage(
+                            CustomImage(
                                 modifier = Modifier
                                     .padding(Spacing.xxxs)
                                     .size(iconSize)
                                     .clip(RoundedCornerShape(iconSize / 2)),
-                                resource = painterResource,
+                                url = communityIcon,
+                                quality = FilterQuality.Low,
                                 contentDescription = null,
                                 contentScale = ContentScale.FillBounds,
                             )
@@ -109,16 +104,13 @@ fun PostCardSubtitle(
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         if (creatorAvatar.isNotEmpty()) {
-                            val painterResource = asyncPainterResource(
-                                data = creatorAvatar,
-                                filterQuality = FilterQuality.Low,
-                            )
-                            KamelImage(
+                            CustomImage(
                                 modifier = Modifier
                                     .padding(Spacing.xxxs)
                                     .size(iconSize)
                                     .clip(RoundedCornerShape(iconSize / 2)),
-                                resource = painterResource,
+                                url = creatorAvatar,
+                                quality = FilterQuality.Low,
                                 contentDescription = null,
                                 contentScale = ContentScale.FillBounds,
                             )

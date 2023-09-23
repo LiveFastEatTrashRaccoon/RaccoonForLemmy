@@ -8,15 +8,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 @Composable
 fun PostCardImage(
@@ -26,18 +23,14 @@ fun PostCardImage(
     onImageClick: ((String) -> Unit)? = null,
 ) {
     if (imageUrl.isNotEmpty()) {
-        val painterResource = asyncPainterResource(
-            data = imageUrl,
-            filterQuality = FilterQuality.Medium,
-        )
-        KamelImage(
+        CustomImage(
             modifier = modifier.fillMaxWidth()
                 .heightIn(min = 200.dp)
                 .blur(radius = if (blurred) 60.dp else 0.dp)
                 .onClick {
                     onImageClick?.invoke(imageUrl)
                 },
-            resource = painterResource,
+            url = imageUrl,
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
             onFailure = {

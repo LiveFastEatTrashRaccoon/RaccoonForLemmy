@@ -17,15 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 @Composable
 fun ZoomableImage(
@@ -48,11 +45,7 @@ fun ZoomableImage(
                 }
             }
     ) {
-        val painterResource = asyncPainterResource(
-            data = url,
-            filterQuality = FilterQuality.Medium,
-        )
-        KamelImage(
+        CustomImage(
             modifier = Modifier
                 .align(Alignment.Center)
                 .graphicsLayer(
@@ -61,7 +54,7 @@ fun ZoomableImage(
                     translationX = offsetX,
                     translationY = offsetY,
                 ),
-            resource = painterResource,
+            url = url,
             contentDescription = null,
             onFailure = {
                 Text(

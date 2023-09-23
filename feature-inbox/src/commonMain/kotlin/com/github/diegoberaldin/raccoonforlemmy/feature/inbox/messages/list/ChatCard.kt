@@ -24,11 +24,10 @@ import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.DateTime
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomImage
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 @Composable
 internal fun ChatCard(
@@ -54,11 +53,7 @@ internal fun ChatCard(
         val iconSize = 46.dp
 
         if (creatorAvatar.isNotEmpty()) {
-            val painterResource = asyncPainterResource(
-                data = creatorAvatar,
-                filterQuality = FilterQuality.Low,
-            )
-            KamelImage(
+            CustomImage(
                 modifier = Modifier
                     .padding(Spacing.xxxs)
                     .size(iconSize)
@@ -68,7 +63,8 @@ internal fun ChatCard(
                             onOpenUser?.invoke(user)
                         }
                     },
-                resource = painterResource,
+                quality = FilterQuality.Low,
+                url = creatorAvatar,
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
             )

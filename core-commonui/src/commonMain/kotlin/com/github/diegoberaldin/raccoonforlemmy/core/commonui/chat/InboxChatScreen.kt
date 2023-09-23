@@ -55,10 +55,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepos
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getInboxChatViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 class InboxChatScreen(
     private val otherUserId: Int,
@@ -83,14 +82,11 @@ class InboxChatScreen(
                             val iconSize = 23.dp
                             val avatar = uiState.otherUserAvatar.orEmpty()
                             if (avatar.isNotEmpty()) {
-                                val painterResource = asyncPainterResource(
-                                    data = avatar,
-                                    filterQuality = FilterQuality.Low,
-                                )
-                                KamelImage(
+                                CustomImage(
                                     modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
                                         .clip(RoundedCornerShape(iconSize / 2)),
-                                    resource = painterResource,
+                                    url = avatar,
+                                    quality = FilterQuality.Low,
                                     contentDescription = null,
                                     contentScale = ContentScale.FillBounds,
                                 )

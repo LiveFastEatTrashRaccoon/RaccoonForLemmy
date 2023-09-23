@@ -30,23 +30,9 @@ kotlin {
                 implementation(compose.components.resources)
                 implementation(compose.materialIconsExtended)
 
-                implementation(libs.koin.core)
-                implementation(libs.voyager.navigator)
-                implementation(libs.voyager.bottomsheet)
-                implementation(libs.voyager.tab)
+                implementation(libs.kamel)
 
-                implementation(projects.coreUtils)
                 implementation(projects.coreAppearance)
-                implementation(projects.coreArchitecture)
-                implementation(projects.corePreferences)
-                implementation(projects.coreMd)
-                implementation(projects.coreNotifications)
-                implementation(projects.coreCommonui.components)
-
-                implementation(projects.domainLemmy.data)
-                implementation(projects.domainLemmy.repository)
-                implementation(projects.domainIdentity)
-
                 implementation(projects.resources)
             }
         }
@@ -59,7 +45,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.commonui"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.commonui.components"
     compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

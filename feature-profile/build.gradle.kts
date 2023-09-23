@@ -44,6 +44,7 @@ kotlin {
                 implementation(projects.coreUtils)
                 implementation(projects.coreMd)
                 implementation(projects.coreCommonui)
+                implementation(projects.coreCommonui.components)
                 implementation(projects.corePreferences)
                 implementation(projects.coreNotifications)
                 implementation(projects.domainIdentity)

@@ -41,6 +41,7 @@ kotlin {
                 implementation(projects.coreArchitecture)
                 implementation(projects.coreAppearance)
                 implementation(projects.coreCommonui)
+                implementation(projects.coreCommonui.components)
                 implementation(projects.coreUtils)
                 implementation(projects.corePreferences)
                 implementation(projects.coreNotifications)

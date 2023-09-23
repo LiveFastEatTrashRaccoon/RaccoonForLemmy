@@ -38,8 +38,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 @Composable
 fun CommunityHeader(
@@ -53,13 +51,9 @@ fun CommunityHeader(
         // banner
         val banner = community.banner.orEmpty()
         if (banner.isNotEmpty()) {
-            val painterResource = asyncPainterResource(
-                data = banner,
-                filterQuality = FilterQuality.Medium,
-            )
-            KamelImage(
+            CustomImage(
                 modifier = Modifier.fillMaxSize(),
-                resource = painterResource,
+                url = banner,
                 contentScale = ContentScale.FillBounds,
                 contentDescription = null,
             )
@@ -118,14 +112,11 @@ fun CommunityHeader(
             val communityIcon = community.icon.orEmpty()
             val avatarSize = 60.dp
             if (communityIcon.isNotEmpty()) {
-                val painterResource = asyncPainterResource(
-                    data = communityIcon,
-                    filterQuality = FilterQuality.Low,
-                )
-                KamelImage(
+                CustomImage(
                     modifier = Modifier.padding(Spacing.xxxs).size(avatarSize)
                         .clip(RoundedCornerShape(avatarSize / 2)),
-                    resource = painterResource,
+                    url = communityIcon,
+                    quality = FilterQuality.Low,
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds,
                 )

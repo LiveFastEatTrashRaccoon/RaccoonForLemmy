@@ -18,8 +18,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 @Composable
 fun UserItem(
@@ -39,14 +37,11 @@ fun UserItem(
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
         if (avatar.isNotEmpty()) {
-            val painterResource = asyncPainterResource(
-                data = avatar,
-                filterQuality = FilterQuality.Low,
-            )
-            KamelImage(
+            CustomImage(
                 modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
                     .clip(RoundedCornerShape(iconSize / 2)),
-                resource = painterResource,
+                url = avatar,
+                quality = FilterQuality.Low,
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
             )

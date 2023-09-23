@@ -12,6 +12,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.interop.UIKitView
 import androidx.compose.ui.platform.LocalDensity
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.readValue
 import kotlinx.cinterop.useContents
 import kotlinx.coroutines.flow.launchIn
@@ -25,6 +26,7 @@ import platform.WebKit.WKWebView
 import platform.WebKit.WKWebViewConfiguration
 import platform.darwin.NSObject
 
+@OptIn(ExperimentalForeignApi::class)
 @Composable
 actual fun CustomWebView(
     url: String,

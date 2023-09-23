@@ -33,8 +33,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 @Composable
 fun InboxReplySubtitle(
@@ -80,16 +78,13 @@ fun InboxReplySubtitle(
                             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                         ) {
                             if (creatorAvatar.isNotEmpty()) {
-                                val painterResource = asyncPainterResource(
-                                    data = creatorAvatar,
-                                    filterQuality = FilterQuality.Low,
-                                )
-                                KamelImage(
+                                CustomImage(
                                     modifier = Modifier
                                         .padding(Spacing.xxxs)
                                         .size(iconSize)
                                         .clip(RoundedCornerShape(iconSize / 2)),
-                                    resource = painterResource,
+                                    url = creatorAvatar,
+                                    quality = FilterQuality.Low,
                                     contentDescription = null,
                                     contentScale = ContentScale.FillBounds,
                                 )
@@ -129,16 +124,13 @@ fun InboxReplySubtitle(
                             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                         ) {
                             if (communityIcon.isNotEmpty()) {
-                                val painterResource = asyncPainterResource(
-                                    data = communityIcon,
-                                    filterQuality = FilterQuality.Low,
-                                )
-                                KamelImage(
+                                CustomImage(
                                     modifier = Modifier
                                         .padding(Spacing.xxxs)
                                         .size(iconSize)
                                         .clip(RoundedCornerShape(iconSize / 2)),
-                                    resource = painterResource,
+                                    url = communityIcon,
+                                    quality = FilterQuality.Low,
                                     contentDescription = null,
                                     contentScale = ContentScale.FillBounds,
                                 )

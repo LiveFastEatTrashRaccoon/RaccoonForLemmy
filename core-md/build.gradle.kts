@@ -29,6 +29,7 @@ kotlin {
 
                 api(libs.markdown)
                 implementation(libs.kamel)
+                implementation(projects.coreCommonui.components)
                 implementation(projects.resources)
             }
         }
