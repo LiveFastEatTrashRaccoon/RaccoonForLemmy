@@ -16,6 +16,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
@@ -72,6 +74,14 @@ class ExploreViewModel(
         }
 
         if (mvi.uiState.value.results.isEmpty()) {
+            val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
+            val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
+            mvi.updateState {
+                it.copy(
+                    listingType = listingType,
+                    sortType = sortType,
+                )
+            }
             mvi.scope?.launch(Dispatchers.IO) {
                 refresh()
             }
