@@ -192,7 +192,7 @@ internal object ProfileLoggedScreen : Tab {
                                     },
                                     onOptionSelected = { optionIdx ->
                                         when (optionIdx) {
-                                            0 -> {
+                                            1 -> {
                                                 model.reduce(
                                                     ProfileLoggedMviModel.Intent.DeleteComment(
                                                         comment.id
