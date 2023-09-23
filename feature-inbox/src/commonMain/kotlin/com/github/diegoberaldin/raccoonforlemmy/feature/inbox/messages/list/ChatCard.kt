@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -53,7 +54,10 @@ internal fun ChatCard(
         val iconSize = 46.dp
 
         if (creatorAvatar.isNotEmpty()) {
-            val painterResource = asyncPainterResource(data = creatorAvatar)
+            val painterResource = asyncPainterResource(
+                data = creatorAvatar,
+                filterQuality = FilterQuality.Low,
+            )
             KamelImage(
                 modifier = Modifier
                     .padding(Spacing.xxxs)

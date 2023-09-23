@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.AnnotatedString
@@ -80,7 +81,10 @@ internal fun MarkdownText(
                     PlaceholderVerticalAlign.Bottom,
                 ), // TODO, identify flexible scaling!
             ) { link ->
-                val painterResource = asyncPainterResource(data = link)
+                val painterResource = asyncPainterResource(
+                    data = link,
+                    filterQuality = FilterQuality.Low,
+                )
                 KamelImage(
                     resource = painterResource,
                     contentDescription = null,

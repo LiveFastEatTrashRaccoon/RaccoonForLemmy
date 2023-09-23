@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -82,7 +83,10 @@ class InboxChatScreen(
                             val iconSize = 23.dp
                             val avatar = uiState.otherUserAvatar.orEmpty()
                             if (avatar.isNotEmpty()) {
-                                val painterResource = asyncPainterResource(data = avatar)
+                                val painterResource = asyncPainterResource(
+                                    data = avatar,
+                                    filterQuality = FilterQuality.Low,
+                                )
                                 KamelImage(
                                     modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
                                         .clip(RoundedCornerShape(iconSize / 2)),

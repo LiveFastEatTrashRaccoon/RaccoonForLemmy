@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.utils.findChildOfTypeRecursive
@@ -23,7 +24,10 @@ internal fun MarkdownImage(content: String, node: ASTNode) {
         node.findChildOfTypeRecursive(MarkdownElementTypes.LINK_DESTINATION)?.getTextInNode(content)
             ?.toString() ?: return
 
-    val painterResource = asyncPainterResource(data = link)
+    val painterResource = asyncPainterResource(
+        data = link,
+        filterQuality = FilterQuality.Medium,
+    )
     KamelImage(
         resource = painterResource,
         contentDescription = null,

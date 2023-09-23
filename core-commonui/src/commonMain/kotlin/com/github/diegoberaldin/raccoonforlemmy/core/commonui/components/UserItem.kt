@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -38,7 +39,10 @@ fun UserItem(
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
         if (avatar.isNotEmpty()) {
-            val painterResource = asyncPainterResource(data = avatar)
+            val painterResource = asyncPainterResource(
+                data = avatar,
+                filterQuality = FilterQuality.Low,
+            )
             KamelImage(
                 modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
                     .clip(RoundedCornerShape(iconSize / 2)),

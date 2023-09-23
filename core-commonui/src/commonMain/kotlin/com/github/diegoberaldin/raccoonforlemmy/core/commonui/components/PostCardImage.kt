@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -25,7 +26,10 @@ fun PostCardImage(
     onImageClick: ((String) -> Unit)? = null,
 ) {
     if (imageUrl.isNotEmpty()) {
-        val painterResource = asyncPainterResource(data = imageUrl)
+        val painterResource = asyncPainterResource(
+            data = imageUrl,
+            filterQuality = FilterQuality.Medium,
+        )
         KamelImage(
             modifier = modifier.fillMaxWidth()
                 .heightIn(min = 200.dp)

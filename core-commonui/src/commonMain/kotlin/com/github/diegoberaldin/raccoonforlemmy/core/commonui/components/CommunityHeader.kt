@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
@@ -52,7 +53,10 @@ fun CommunityHeader(
         // banner
         val banner = community.banner.orEmpty()
         if (banner.isNotEmpty()) {
-            val painterResource = asyncPainterResource(banner)
+            val painterResource = asyncPainterResource(
+                data = banner,
+                filterQuality = FilterQuality.Medium,
+            )
             KamelImage(
                 modifier = Modifier.fillMaxSize(),
                 resource = painterResource,
@@ -114,7 +118,10 @@ fun CommunityHeader(
             val communityIcon = community.icon.orEmpty()
             val avatarSize = 60.dp
             if (communityIcon.isNotEmpty()) {
-                val painterResource = asyncPainterResource(data = communityIcon)
+                val painterResource = asyncPainterResource(
+                    data = communityIcon,
+                    filterQuality = FilterQuality.Low,
+                )
                 KamelImage(
                     modifier = Modifier.padding(Spacing.xxxs).size(avatarSize)
                         .clip(RoundedCornerShape(avatarSize / 2)),

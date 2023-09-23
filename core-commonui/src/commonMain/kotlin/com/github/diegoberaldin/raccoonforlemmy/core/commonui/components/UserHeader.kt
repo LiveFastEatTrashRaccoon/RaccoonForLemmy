@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,7 +54,10 @@ fun UserHeader(
         // banner
         val banner = user.banner.orEmpty()
         if (banner.isNotEmpty()) {
-            val painterResource = asyncPainterResource(banner)
+            val painterResource = asyncPainterResource(
+                data = banner,
+                filterQuality = FilterQuality.Low,
+            )
             KamelImage(
                 modifier = Modifier.fillMaxSize(),
                 resource = painterResource,
@@ -86,8 +90,10 @@ fun UserHeader(
             val userAvatar = user.avatar.orEmpty()
             val avatarSize = 60.dp
             if (userAvatar.isNotEmpty()) {
-                val painterResource =
-                    asyncPainterResource(data = userAvatar)
+                val painterResource = asyncPainterResource(
+                    data = userAvatar,
+                    filterQuality = FilterQuality.Low,
+                )
                 KamelImage(
                     modifier = Modifier
                         .padding(Spacing.xxxs)

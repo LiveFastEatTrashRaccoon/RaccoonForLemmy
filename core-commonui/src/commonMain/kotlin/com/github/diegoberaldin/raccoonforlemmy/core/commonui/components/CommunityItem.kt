@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -40,7 +41,10 @@ fun CommunityItem(
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
         if (communityIcon.isNotEmpty()) {
-            val painterResource = asyncPainterResource(data = communityIcon)
+            val painterResource = asyncPainterResource(
+                data = communityIcon,
+                filterQuality = FilterQuality.Medium,
+            )
             KamelImage(
                 modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
                     .clip(RoundedCornerShape(iconSize / 2)),

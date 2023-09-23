@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
@@ -58,7 +59,10 @@ fun PostCardSubtitle(
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         if (communityIcon.isNotEmpty()) {
-                            val painterResource = asyncPainterResource(data = communityIcon)
+                            val painterResource = asyncPainterResource(
+                                data = communityIcon,
+                                filterQuality = FilterQuality.Low,
+                            )
                             KamelImage(
                                 modifier = Modifier
                                     .padding(Spacing.xxxs)
@@ -105,7 +109,10 @@ fun PostCardSubtitle(
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         if (creatorAvatar.isNotEmpty()) {
-                            val painterResource = asyncPainterResource(data = creatorAvatar)
+                            val painterResource = asyncPainterResource(
+                                data = creatorAvatar,
+                                filterQuality = FilterQuality.Low,
+                            )
                             KamelImage(
                                 modifier = Modifier
                                     .padding(Spacing.xxxs)
