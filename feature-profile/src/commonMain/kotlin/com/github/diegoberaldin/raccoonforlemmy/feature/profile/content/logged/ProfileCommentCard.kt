@@ -19,9 +19,9 @@ import androidx.compose.ui.unit.Density
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityAndCreatorInfo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardFooter
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 
 @Composable
@@ -53,7 +53,7 @@ fun ProfileCommentCard(
             Column(
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
-                PostCardSubtitle(
+                CommunityAndCreatorInfo(
                     community = comment.community,
                 )
                 PostCardBody(

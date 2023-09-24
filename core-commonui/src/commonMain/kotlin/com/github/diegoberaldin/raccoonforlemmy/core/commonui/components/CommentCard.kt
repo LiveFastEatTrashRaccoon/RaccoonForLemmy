@@ -78,7 +78,7 @@ fun CommentCard(
                             commentHeight = it.size.toSize().height
                         }
                 ) {
-                    PostCardSubtitle(
+                    CommunityAndCreatorInfo(
                         creator = comment.creator,
                         onOpenCreator = onOpenCreator,
                         onOpenCommunity = onOpenCommunity,

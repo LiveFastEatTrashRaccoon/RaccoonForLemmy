@@ -59,22 +59,22 @@ fun PostCard(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(CornerSize.m),
             ).padding(
-                vertical = Spacing.xxs,
+                vertical = Spacing.s,
                 horizontal = Spacing.s,
             ),
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
-                PostCardTitle(
-                    modifier = Modifier.padding(top = Spacing.s),
-                    text = post.title
-                )
-                PostCardSubtitle(
+                CommunityAndCreatorInfo(
                     community = post.community,
                     creator = post.creator?.copy(avatar = null),
                     onOpenCommunity = onOpenCommunity,
                     onOpenCreator = onOpenCreator,
+                )
+                PostCardTitle(
+                    modifier = Modifier.padding(top = Spacing.s),
+                    text = post.title
                 )
                 PostCardImage(
                     modifier = Modifier.clip(RoundedCornerShape(CornerSize.xl)),

@@ -70,10 +70,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityAndCreatorInfo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardFooter
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardImage
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardTitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostLinkBanner
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
@@ -253,10 +253,7 @@ class PostDetailScreen(
                                         horizontal = Spacing.s,
                                     ),
                                 ) {
-                                    PostCardTitle(
-                                        text = statePost.title
-                                    )
-                                    PostCardSubtitle(
+                                    CommunityAndCreatorInfo(
                                         community = statePost.community,
                                         creator = statePost.creator?.copy(avatar = null),
                                         onOpenCommunity = { community ->
@@ -269,6 +266,9 @@ class PostDetailScreen(
                                                 UserDetailScreen(user),
                                             )
                                         },
+                                    )
+                                    PostCardTitle(
+                                        text = statePost.title
                                     )
                                     PostCardImage(imageUrl = statePost.thumbnailUrl.orEmpty(),
                                         onImageClick = {

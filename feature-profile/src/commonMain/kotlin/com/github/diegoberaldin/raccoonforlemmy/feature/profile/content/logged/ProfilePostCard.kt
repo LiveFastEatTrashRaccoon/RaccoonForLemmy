@@ -28,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityAndCreatorInfo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardFooter
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardImage
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardSubtitle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostLinkBanner
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -60,20 +60,20 @@ fun ProfilePostCard(
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = RoundedCornerShape(CornerSize.m),
                 ).padding(
-                    vertical = Spacing.lHalf,
+                    vertical = Spacing.s,
                     horizontal = Spacing.s,
                 ),
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
+                CommunityAndCreatorInfo(
+                    community = post.community,
+                    onOpenCommunity = onOpenCommunity,
+                )
                 Text(
                     text = post.title,
                     style = MaterialTheme.typography.titleMedium,
-                )
-                PostCardSubtitle(
-                    community = post.community,
-                    onOpenCommunity = onOpenCommunity,
                 )
                 PostCardImage(
                     modifier = Modifier.clip(RoundedCornerShape(CornerSize.xl)),
