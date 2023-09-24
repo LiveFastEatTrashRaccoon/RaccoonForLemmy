@@ -6,8 +6,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PrivateMessage
 interface InboxMessagesMviModel :
     MviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.SideEffect> {
     sealed interface Intent {
-        object Refresh : Intent
-        object LoadNextPage : Intent
+        data object Refresh : Intent
+        data object LoadNextPage : Intent
     }
 
     data class UiState(

@@ -8,8 +8,8 @@ interface ProfileSavedMviModel :
     MviModel<ProfileSavedMviModel.Intent, ProfileSavedMviModel.UiState, ProfileSavedMviModel.Effect> {
 
     sealed interface Intent {
-        object Refresh : Intent
-        object LoadNextPage : Intent
+        data object Refresh : Intent
+        data object LoadNextPage : Intent
         data class ChangeSection(val section: ProfileSavedSection) : Intent
         data class UpVotePost(val index: Int, val feedback: Boolean = false) : Intent
         data class DownVotePost(val index: Int, val feedback: Boolean = false) : Intent

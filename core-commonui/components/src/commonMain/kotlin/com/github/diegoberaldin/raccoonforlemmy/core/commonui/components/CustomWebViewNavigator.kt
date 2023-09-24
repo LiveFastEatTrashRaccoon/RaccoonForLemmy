@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 internal sealed interface WebViewNavigationEvent {
-    object GoBack : WebViewNavigationEvent
+    data object GoBack : WebViewNavigationEvent
 }
 
 class WebViewNavigator(

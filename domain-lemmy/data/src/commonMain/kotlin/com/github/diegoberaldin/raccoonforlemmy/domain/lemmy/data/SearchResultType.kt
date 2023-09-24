@@ -1,9 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data
 
 sealed interface SearchResultType {
-    object All : SearchResultType
-    object Posts : SearchResultType
-    object Comments : SearchResultType
-    object Users : SearchResultType
-    object Communities : SearchResultType
+    data object All : SearchResultType
+    data object Posts : SearchResultType
+    data object Comments : SearchResultType
+    data object Users : SearchResultType
+    data object Communities : SearchResultType
 }

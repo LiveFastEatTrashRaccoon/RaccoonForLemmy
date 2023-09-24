@@ -11,7 +11,7 @@ interface LoginBottomSheetMviModel :
         data class SetPassword(val value: String) : Intent
         data class SetTotp2faToken(val value: String) : Intent
 
-        object Confirm : Intent
+        data object Confirm : Intent
     }
 
     data class UiState(
@@ -27,6 +27,6 @@ interface LoginBottomSheetMviModel :
 
     sealed interface Effect {
         data class LoginError(val message: String?) : Effect
-        object LoginSuccess : Effect
+        data object LoginSuccess : Effect
     }
 }

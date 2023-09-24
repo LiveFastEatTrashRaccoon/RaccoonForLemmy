@@ -1,17 +1,16 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 
 interface InboxRepliesMviModel :
     MviModel<InboxRepliesMviModel.Intent, InboxRepliesMviModel.UiState, InboxRepliesMviModel.Effect> {
 
     sealed interface Intent {
-        object Refresh : Intent
-        object LoadNextPage : Intent
+        data object Refresh : Intent
+        data object LoadNextPage : Intent
         data class MarkAsRead(val read: Boolean, val mentionId: Int) : Intent
-        object HapticIndication : Intent
+        data object HapticIndication : Intent
         data class UpVoteComment(val index: Int) : Intent
         data class DownVoteComment(val index: Int) : Intent
     }

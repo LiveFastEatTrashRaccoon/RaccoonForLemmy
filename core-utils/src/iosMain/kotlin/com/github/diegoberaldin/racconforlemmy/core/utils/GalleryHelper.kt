@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.interop.LocalUIViewController
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.allocArrayOf
 import kotlinx.cinterop.memScoped
@@ -40,6 +41,7 @@ fun ImageBytes.toByteArray(): ByteArray = ByteArray(this@toByteArray.length.toIn
 
 class DefaultGalleryHelper : GalleryHelper {
 
+    @OptIn(ExperimentalForeignApi::class)
     override fun saveToGallery(bytes: ByteArray, name: String) {
         val image = UIImage(bytes.toImageBytes())
         UIImageWriteToSavedPhotosAlbum(image, null, null, null)

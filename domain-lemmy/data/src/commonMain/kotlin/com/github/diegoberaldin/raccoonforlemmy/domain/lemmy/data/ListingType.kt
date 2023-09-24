@@ -9,9 +9,9 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
 sealed interface ListingType {
-    object All : ListingType
-    object Subscribed : ListingType
-    object Local : ListingType
+    data object All : ListingType
+    data object Subscribed : ListingType
+    data object Local : ListingType
 }
 
 fun ListingType.toInt() = when (this) {

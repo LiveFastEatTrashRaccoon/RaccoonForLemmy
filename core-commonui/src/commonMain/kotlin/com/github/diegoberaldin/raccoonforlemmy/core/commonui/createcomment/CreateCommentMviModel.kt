@@ -9,7 +9,7 @@ interface CreateCommentMviModel :
     sealed interface Intent {
         data class SetText(val value: String) : Intent
 
-        object Send : Intent
+        data object Send : Intent
     }
 
     data class UiState(
@@ -19,7 +19,7 @@ interface CreateCommentMviModel :
     )
 
     sealed interface Effect {
-        object Success : Effect
+        data object Success : Effect
 
         data class Failure(val message: String?) : Effect
     }

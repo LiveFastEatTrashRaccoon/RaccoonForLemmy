@@ -10,8 +10,8 @@ interface ProfileLoggedMviModel :
 
     sealed interface Intent {
         data class ChangeSection(val section: ProfileLoggedSection) : Intent
-        object Refresh : Intent
-        object LoadNextPage : Intent
+        data object Refresh : Intent
+        data object LoadNextPage : Intent
         data class DeletePost(val id: Int) : Intent
         data class DeleteComment(val id: Int) : Intent
         data class SharePost(val index: Int) : Intent

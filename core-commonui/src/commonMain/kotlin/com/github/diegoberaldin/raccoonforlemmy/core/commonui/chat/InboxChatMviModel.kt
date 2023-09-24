@@ -6,9 +6,9 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PrivateMessage
 interface InboxChatMviModel :
     MviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.SideEffect> {
     sealed interface Intent {
-        object LoadNextPage : Intent
+        data object LoadNextPage : Intent
         data class SetNewMessageContent(val value: String) : Intent
-        object SubmitNewMessage : Intent
+        data object SubmitNewMessage : Intent
     }
 
     data class UiState(

@@ -14,21 +14,21 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
 sealed interface SortType {
-    object Active : SortType
-    object Hot : SortType
-    object New : SortType
-    object MostComments : SortType
-    object NewComments : SortType
-    object Old : SortType
+    data object Active : SortType
+    data object Hot : SortType
+    data object New : SortType
+    data object MostComments : SortType
+    data object NewComments : SortType
+    data object Old : SortType
     sealed interface Top : SortType {
-        object Generic : Top
-        object PastHour : Top
-        object Past6Hours : Top
-        object Past12Hours : Top
-        object Day : Top
-        object Week : Top
-        object Month : Top
-        object Year : Top
+        data object Generic : Top
+        data object PastHour : Top
+        data object Past6Hours : Top
+        data object Past12Hours : Top
+        data object Day : Top
+        data object Week : Top
+        data object Month : Top
+        data object Year : Top
     }
 }
 

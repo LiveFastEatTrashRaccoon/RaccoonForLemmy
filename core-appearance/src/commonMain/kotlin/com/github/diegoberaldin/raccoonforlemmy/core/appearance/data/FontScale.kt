@@ -5,13 +5,13 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
 sealed interface FontScale {
-    object Largest : FontScale
-    object Larger : FontScale
-    object Large : FontScale
-    object Normal : FontScale
-    object Small : FontScale
-    object Smaller : FontScale
-    object Smallest : FontScale
+    data object Largest : FontScale
+    data object Larger : FontScale
+    data object Large : FontScale
+    data object Normal : FontScale
+    data object Small : FontScale
+    data object Smaller : FontScale
+    data object Smallest : FontScale
 }
 
 val FontScale.scaleFactor: Float

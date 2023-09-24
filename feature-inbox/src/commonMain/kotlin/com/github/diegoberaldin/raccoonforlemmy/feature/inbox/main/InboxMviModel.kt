@@ -8,7 +8,7 @@ interface InboxMviModel :
     sealed interface Intent {
         data class ChangeSection(val value: InboxSection) : Intent
         data class ChangeUnreadOnly(val unread: Boolean) : Intent
-        object ReadAll : Intent
+        data object ReadAll : Intent
     }
 
     data class UiState(
@@ -18,6 +18,6 @@ interface InboxMviModel :
     )
 
     sealed interface Effect {
-        object Refresh : Effect
+        data object Refresh : Effect
     }
 }

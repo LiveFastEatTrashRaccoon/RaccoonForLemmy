@@ -11,8 +11,8 @@ interface UserDetailMviModel :
 
     sealed interface Intent {
         data class ChangeSort(val value: SortType) : Intent
-        object Refresh : Intent
-        object LoadNextPage : Intent
+        data object Refresh : Intent
+        data object LoadNextPage : Intent
         data class ChangeSection(val section: UserDetailSection) : Intent
         data class UpVotePost(val index: Int, val feedback: Boolean = false) : Intent
         data class DownVotePost(val index: Int, val feedback: Boolean = false) : Intent
@@ -21,7 +21,7 @@ interface UserDetailMviModel :
         data class DownVoteComment(val index: Int, val feedback: Boolean = false) : Intent
 
         data class SaveComment(val index: Int, val feedback: Boolean = false) : Intent
-        object HapticIndication : Intent
+        data object HapticIndication : Intent
         data class SharePost(val index: Int) : Intent
     }
 

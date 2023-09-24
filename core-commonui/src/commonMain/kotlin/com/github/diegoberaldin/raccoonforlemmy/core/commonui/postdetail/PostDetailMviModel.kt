@@ -9,9 +9,9 @@ interface PostDetailMviModel :
     MviModel<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect> {
 
     sealed interface Intent {
-        object Refresh : Intent
-        object RefreshPost : Intent
-        object LoadNextPage : Intent
+        data object Refresh : Intent
+        data object RefreshPost : Intent
+        data object LoadNextPage : Intent
         data class FetchMoreComments(val parentId: Int) : Intent
         data class ChangeSort(val value: SortType) : Intent
         data class UpVotePost(val feedback: Boolean = false) : Intent
@@ -23,9 +23,9 @@ interface PostDetailMviModel :
 
         data class SaveComment(val index: Int, val feedback: Boolean = false) : Intent
         data class DeleteComment(val id: Int) : Intent
-        object DeletePost : Intent
-        object HapticIndication : Intent
-        object SharePost : Intent
+        data object DeletePost : Intent
+        data object HapticIndication : Intent
+        data object SharePost : Intent
     }
 
     data class UiState(
@@ -40,6 +40,6 @@ interface PostDetailMviModel :
     )
 
     sealed interface Effect {
-        object Close : Effect
+        data object Close : Effect
     }
 }

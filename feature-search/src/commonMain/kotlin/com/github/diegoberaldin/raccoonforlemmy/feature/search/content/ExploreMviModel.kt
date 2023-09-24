@@ -8,8 +8,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 interface ExploreMviModel :
     MviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect> {
     sealed interface Intent {
-        object Refresh : Intent
-        object LoadNextPage : Intent
+        data object Refresh : Intent
+        data object LoadNextPage : Intent
         data class SetSearch(val value: String) : Intent
         data class SetListingType(val value: ListingType) : Intent
         data class SetSortType(val value: SortType) : Intent

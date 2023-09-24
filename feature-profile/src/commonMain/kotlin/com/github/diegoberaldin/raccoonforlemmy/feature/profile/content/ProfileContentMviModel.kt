@@ -6,7 +6,7 @@ interface ProfileContentMviModel :
     MviModel<ProfileContentMviModel.Intent, ProfileContentMviModel.UiState, ProfileContentMviModel.Effect> {
 
     sealed interface Intent {
-        object Logout : Intent
+        data object Logout : Intent
     }
 
     data class UiState(

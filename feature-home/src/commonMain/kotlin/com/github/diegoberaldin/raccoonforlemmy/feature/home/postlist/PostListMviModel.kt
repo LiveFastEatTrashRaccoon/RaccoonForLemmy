@@ -9,15 +9,15 @@ interface PostListMviModel :
     MviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect> {
 
     sealed interface Intent {
-        object Refresh : Intent
-        object LoadNextPage : Intent
+        data object Refresh : Intent
+        data object LoadNextPage : Intent
         data class ChangeSort(val value: SortType) : Intent
         data class ChangeListing(val value: ListingType) : Intent
         data class UpVotePost(val index: Int, val feedback: Boolean = false) : Intent
         data class DownVotePost(val index: Int, val feedback: Boolean = false) : Intent
         data class SavePost(val index: Int, val feedback: Boolean = false) : Intent
         data class HandlePostUpdate(val post: PostModel) : Intent
-        object HapticIndication : Intent
+        data object HapticIndication : Intent
         data class DeletePost(val id: Int) : Intent
         data class SharePost(val index: Int) : Intent
     }

@@ -12,8 +12,7 @@ interface CreatePostMviModel :
         data class SetUrl(val value: String) : Intent
         data class ChangeNsfw(val value: Boolean) : Intent
         data class ImageSelected(val value: ByteArray) : Intent
-
-        object Send : Intent
+        data object Send : Intent
     }
 
     data class UiState(
@@ -28,7 +27,7 @@ interface CreatePostMviModel :
     )
 
     sealed interface Effect {
-        object Success : Effect
+        data object Success : Effect
 
         data class Failure(val message: String?) : Effect
     }

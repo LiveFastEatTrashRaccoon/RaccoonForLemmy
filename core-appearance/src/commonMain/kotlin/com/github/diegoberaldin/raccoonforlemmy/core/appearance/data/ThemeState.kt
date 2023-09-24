@@ -9,9 +9,9 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
 sealed interface ThemeState {
-    object Light : ThemeState
-    object Dark : ThemeState
-    object Black : ThemeState
+    data object Light : ThemeState
+    data object Dark : ThemeState
+    data object Black : ThemeState
 }
 
 fun Int.toThemeState() = when (this) {
