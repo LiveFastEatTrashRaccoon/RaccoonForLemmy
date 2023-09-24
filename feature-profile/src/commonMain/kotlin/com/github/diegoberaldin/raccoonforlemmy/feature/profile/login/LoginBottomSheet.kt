@@ -102,7 +102,7 @@ class LoginBottomSheet : Screen {
                         ) {
                             BottomSheetHandle()
                             Text(
-                                modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
+                                modifier = Modifier.padding(top = Spacing.s),
                                 text = stringResource(MR.strings.profile_button_login),
                             )
                         }
