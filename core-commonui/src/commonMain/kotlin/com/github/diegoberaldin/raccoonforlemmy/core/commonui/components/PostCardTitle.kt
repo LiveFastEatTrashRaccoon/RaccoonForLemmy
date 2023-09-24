@@ -24,7 +24,7 @@ fun PostCardTitle(
 
     Markdown(
         modifier = modifier,
-        content = text,
+        content = text.replace("&amp;", "&"),
         typography = markdownTypography(
             h1 = MaterialTheme.typography.titleLarge,
             h2 = MaterialTheme.typography.titleLarge,

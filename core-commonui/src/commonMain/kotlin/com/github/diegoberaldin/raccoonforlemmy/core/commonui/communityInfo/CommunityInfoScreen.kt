@@ -31,6 +31,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepos
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 
@@ -97,11 +98,9 @@ class CommunityInfoScreen(
                             fontScale = fontScale,
                         ),
                     ) {
-                        Text(
+                        PostCardBody(
                             modifier = Modifier.fillMaxWidth(),
                             text = uiState.community.description,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }
