@@ -10,6 +10,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -64,9 +66,23 @@ fun App() {
     val themeRepository = remember { getThemeRepository() }
     val navTitles = keyStore[KeyStoreKeys.NavItemTitlesVisible, false]
     val dynamicColors = keyStore[KeyStoreKeys.DynamicColors, false]
+    val customPrimaryColor = if (keyStore.containsKey(KeyStoreKeys.CustomPrimaryColor)) {
+        Color(keyStore[KeyStoreKeys.CustomPrimaryColor, Color.Black.toArgb()])
+    } else null
+    val customSecondaryColor = if (keyStore.containsKey(KeyStoreKeys.CustomSecondaryColor)) {
+        Color(keyStore[KeyStoreKeys.CustomSecondaryColor, Color.Black.toArgb()])
+    } else null
+    val customTertiaryColor = if (keyStore.containsKey(KeyStoreKeys.CustomTertiaryColor)) {
+        Color(keyStore[KeyStoreKeys.CustomTertiaryColor, Color.Black.toArgb()])
+    } else null
     LaunchedEffect(Unit) {
-        themeRepository.changeNavItemTitles(navTitles)
-        themeRepository.changeDynamicColors(dynamicColors)
+        with(themeRepository) {
+            changeNavItemTitles(navTitles)
+            changeDynamicColors(dynamicColors)
+            changeCustomPrimaryColor(customPrimaryColor)
+            changeCustomSecondaryColor(customSecondaryColor)
+            changeCustomTertiaryColor(customTertiaryColor)
+        }
     }
     val useDynamicColors by themeRepository.dynamicColors.collectAsState()
     val navigationCoordinator = remember { getNavigationCoordinator() }

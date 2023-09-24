@@ -18,6 +18,7 @@
     <string name="message_login_successful">🎉 Login successful! 🎉</string>
 
     <string name="button_confirm">Confirm</string>
+    <string name="button_reset">Reset default</string>
 
     <string name="home_listing_type_all">All</string>
     <string name="home_listing_type_local">Local</string>
@@ -104,6 +105,9 @@
     <string name="settings_dynamic_colors">Use dynamic colors</string>
     <string name="settings_open_url_external">Open URLs in external browser</string>
     <string name="settings_enable_swipe_actions">Enable swipe actions</string>
+    <string name="settings_primary_color">Primary color</string>
+    <string name="settings_secondary_color">Secondary color</string>
+    <string name="settings_tertiary_color">Tertiary color</string>
 
     <string name="community_detail_info">Community info</string>
     <string name="community_detail_instance_info">Instance details</string>

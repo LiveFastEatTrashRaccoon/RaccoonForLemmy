@@ -89,6 +89,14 @@ interface TemporaryKeyStore {
     fun save(key: String, value: Double)
 
     /**
+     * Save a long integer value in the keystore under a given key.
+     *
+     * @param key Key
+     * @param value Value
+     */
+    fun save(key: String, value: Long)
+
+    /**
      * Retrieve a floating point (double precision) value from the key store given its key.
      *
      * @param key Key
@@ -96,4 +104,18 @@ interface TemporaryKeyStore {
      * @return value saved in the keystore or the default one
      */
     operator fun get(key: String, default: Double): Double
+
+    /**
+     * Retrieve a long integer value from the key store given its key.
+     *
+     * @param key Key
+     * @param default Default value
+     * @return value saved in the keystore or the default one
+     */
+    operator fun get(key: String, default: Long): Long
+
+    /**
+     * Remove the given key from the repository.
+     */
+    fun remove(key: String)
 }

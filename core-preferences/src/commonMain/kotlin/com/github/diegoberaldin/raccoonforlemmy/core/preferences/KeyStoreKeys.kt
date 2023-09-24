@@ -15,4 +15,7 @@ object KeyStoreKeys {
     const val DynamicColors = "dynamicColors"
     const val OpenUrlsInExternalBrowser = "openUrlsInExternalBrowser"
     const val EnableSwipeActions = "enableSwipeActions"
+    const val CustomPrimaryColor = "customPrimaryColor"
+    const val CustomSecondaryColor = "customSecondaryColor"
+    const val CustomTertiaryColor = "customTertiaryColor"
 }

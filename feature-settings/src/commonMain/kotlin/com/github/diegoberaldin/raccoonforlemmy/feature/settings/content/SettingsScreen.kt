@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -20,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -27,8 +29,10 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLanguageName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toReadableName
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ColorBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.FontScaleBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.LanguageBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
@@ -90,7 +94,9 @@ class SettingsScreen : Screen {
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize()
-                        .padding(horizontal = Spacing.m)
+                        .padding(
+                            horizontal = Spacing.m,
+                        )
                         .verticalScroll(
                             rememberScrollState()
                         ),
@@ -107,6 +113,82 @@ class SettingsScreen : Screen {
                                     model.reduce(SettingsScreenMviModel.Intent.ChangeTheme(value))
                                 }
                             }, key, NotificationCenterContractKeys.ChangeTheme)
+                            bottomSheetNavigator.show(sheet)
+                        },
+                    )
+
+                    // dynamic colors
+                    if (uiState.supportsDynamicColors) {
+                        SettingsSwitchRow(
+                            title = stringResource(MR.strings.settings_dynamic_colors),
+                            value = uiState.dynamicColors,
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    SettingsScreenMviModel.Intent.ChangeDynamicColors(
+                                        value
+                                    )
+                                )
+                            }
+                        )
+                    }
+
+                    val colorSchemeProvider = remember { getColorSchemeProvider() }
+                    // custom primary color
+                    SettingsColorRow(
+                        title = stringResource(MR.strings.settings_primary_color),
+                        value = uiState.customPrimaryColor ?: colorSchemeProvider.getColorScheme(
+                            theme = uiState.currentTheme,
+                            dynamic = uiState.dynamicColors,
+                        ).primary,
+                        onTap = {
+                            val sheet = ColorBottomSheet()
+                            notificationCenter.addObserver({ result ->
+                                model.reduce(
+                                    SettingsScreenMviModel.Intent.ChangeCustomPrimaryColor(
+                                        result as? Color?
+                                    )
+                                )
+                            }, key, NotificationCenterContractKeys.ChangeColor)
+                            bottomSheetNavigator.show(sheet)
+                        },
+                    )
+
+                    // custom secondary color
+                    SettingsColorRow(
+                        title = stringResource(MR.strings.settings_secondary_color),
+                        value = uiState.customSecondaryColor ?: colorSchemeProvider.getColorScheme(
+                            theme = uiState.currentTheme,
+                            dynamic = uiState.dynamicColors,
+                        ).secondary,
+                        onTap = {
+                            val sheet = ColorBottomSheet()
+                            notificationCenter.addObserver({ result ->
+                                model.reduce(
+                                    SettingsScreenMviModel.Intent.ChangeCustomSecondaryColor(
+                                        result as? Color?
+                                    )
+                                )
+                            }, key, NotificationCenterContractKeys.ChangeColor)
+                            bottomSheetNavigator.show(sheet)
+                        },
+                    )
+
+                    // custom tertiary color
+                    SettingsColorRow(
+                        title = stringResource(MR.strings.settings_tertiary_color),
+                        value = uiState.customTertiaryColor ?: colorSchemeProvider.getColorScheme(
+                            theme = uiState.currentTheme,
+                            dynamic = uiState.dynamicColors,
+                        ).tertiary,
+                        onTap = {
+                            val sheet = ColorBottomSheet()
+                            notificationCenter.addObserver({ result ->
+                                model.reduce(
+                                    SettingsScreenMviModel.Intent.ChangeCustomTertiaryColor(
+                                        result as? Color?
+                                    )
+                                )
+                            }, key, NotificationCenterContractKeys.ChangeColor)
                             bottomSheetNavigator.show(sheet)
                         },
                     )
@@ -213,6 +295,19 @@ class SettingsScreen : Screen {
                         },
                     )
 
+                    // swipe actions
+                    SettingsSwitchRow(
+                        title = stringResource(MR.strings.settings_enable_swipe_actions),
+                        value = uiState.enableSwipeActions,
+                        onValueChanged = { value ->
+                            model.reduce(
+                                SettingsScreenMviModel.Intent.ChangeEnableSwipeActions(
+                                    value
+                                )
+                            )
+                        }
+                    )
+
                     // navigation bar titles
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_navigation_bar_titles_visible),
@@ -225,21 +320,6 @@ class SettingsScreen : Screen {
                             )
                         }
                     )
-
-                    // dynamic colors
-                    if (uiState.supportsDynamicColors) {
-                        SettingsSwitchRow(
-                            title = stringResource(MR.strings.settings_dynamic_colors),
-                            value = uiState.dynamicColors,
-                            onValueChanged = { value ->
-                                model.reduce(
-                                    SettingsScreenMviModel.Intent.ChangeDynamicColors(
-                                        value
-                                    )
-                                )
-                            }
-                        )
-                    }
 
                     // URL open
                     SettingsSwitchRow(
@@ -270,22 +350,10 @@ class SettingsScreen : Screen {
                         }
                     )
 
-                    // swipe actions
-                    SettingsSwitchRow(
-                        title = stringResource(MR.strings.settings_enable_swipe_actions),
-                        value = uiState.enableSwipeActions,
-                        onValueChanged = { value ->
-                            model.reduce(
-                                SettingsScreenMviModel.Intent.ChangeEnableSwipeActions(
-                                    value
-                                )
-                            )
-                        }
-                    )
+                    Divider()
 
                     // app version
                     SettingsRow(
-                        modifier = Modifier.padding(top = Spacing.xl),
                         title = stringResource(MR.strings.settings_app_version),
                         value = uiState.appVersion,
                     )

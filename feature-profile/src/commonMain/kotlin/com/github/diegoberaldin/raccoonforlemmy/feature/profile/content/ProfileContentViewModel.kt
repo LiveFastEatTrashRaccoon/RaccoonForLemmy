@@ -38,9 +38,21 @@ class ProfileContentViewModel(
     }
 
     private fun logout() {
-        keyStore.save(KeyStoreKeys.DefaultListingType, 0)
-        keyStore.save(KeyStoreKeys.DefaultCommentSortType, 13)
-        keyStore.save(KeyStoreKeys.DefaultPostSortType, 0)
+        keyStore.remove(KeyStoreKeys.UiTheme)
+        keyStore.remove(KeyStoreKeys.DynamicColors)
+        keyStore.remove(KeyStoreKeys.CustomPrimaryColor)
+        keyStore.remove(KeyStoreKeys.CustomSecondaryColor)
+        keyStore.remove(KeyStoreKeys.CustomTertiaryColor)
+        keyStore.remove(KeyStoreKeys.ContentFontScale)
+        keyStore.remove(KeyStoreKeys.Locale)
+        keyStore.remove(KeyStoreKeys.DefaultListingType)
+        keyStore.remove(KeyStoreKeys.DefaultCommentSortType)
+        keyStore.remove(KeyStoreKeys.DefaultPostSortType)
+        keyStore.remove(KeyStoreKeys.EnableSwipeActions)
+        keyStore.remove(KeyStoreKeys.NavItemTitlesVisible)
+        keyStore.remove(KeyStoreKeys.OpenUrlsInExternalBrowser)
+        keyStore.remove(KeyStoreKeys.IncludeNsfw)
+        keyStore.remove(KeyStoreKeys.BlurNsfw)
         identityRepository.clearToken()
         notificationCenter.getAllObservers(NotificationCenterContractKeys.Logout)?.forEach {
             it.invoke(Unit)

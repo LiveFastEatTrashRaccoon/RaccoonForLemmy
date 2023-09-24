@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.settings.content
 
+import androidx.compose.ui.graphics.Color
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.FontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
@@ -22,11 +23,17 @@ interface SettingsScreenMviModel :
         data class ChangeBlurNsfw(val value: Boolean) : Intent
         data class ChangeOpenUrlsInExternalBrowser(val value: Boolean) : Intent
         data class ChangeEnableSwipeActions(val value: Boolean) : Intent
+        data class ChangeCustomPrimaryColor(val value: Color?) : Intent
+        data class ChangeCustomSecondaryColor(val value: Color?) : Intent
+        data class ChangeCustomTertiaryColor(val value: Color?) : Intent
     }
 
     data class UiState(
         val isLogged: Boolean = false,
         val currentTheme: ThemeState = ThemeState.Light,
+        val customPrimaryColor: Color? = null,
+        val customSecondaryColor: Color? = null,
+        val customTertiaryColor: Color? = null,
         val currentFontScale: FontScale = FontScale.Normal,
         val lang: String = "",
         val defaultListingType: ListingType = ListingType.Local,

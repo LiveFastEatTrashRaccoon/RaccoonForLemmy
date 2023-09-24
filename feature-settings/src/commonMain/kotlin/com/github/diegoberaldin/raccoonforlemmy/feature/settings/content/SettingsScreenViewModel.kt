@@ -1,5 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.settings.content
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.AppInfo
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
@@ -62,6 +64,15 @@ class SettingsScreenViewModel(
             }.launchIn(this)
             themeRepository.dynamicColors.onEach { value ->
                 mvi.updateState { it.copy(dynamicColors = value) }
+            }.launchIn(this)
+            themeRepository.customPrimaryColor.onEach { value ->
+                mvi.updateState { it.copy(customPrimaryColor = value) }
+            }.launchIn(this)
+            themeRepository.customSecondaryColor.onEach { value ->
+                mvi.updateState { it.copy(customSecondaryColor = value) }
+            }.launchIn(this)
+            themeRepository.customTertiaryColor.onEach { value ->
+                mvi.updateState { it.copy(customTertiaryColor = value) }
             }.launchIn(this)
             languageRepository.currentLanguage.onEach { lang ->
                 mvi.updateState { it.copy(lang = lang) }
@@ -140,6 +151,18 @@ class SettingsScreenViewModel(
             is SettingsScreenMviModel.Intent.ChangeEnableSwipeActions -> {
                 changeEnableSwipeActions(intent.value)
             }
+
+            is SettingsScreenMviModel.Intent.ChangeCustomPrimaryColor -> changeCustomPrimaryColor(
+                intent.value
+            )
+
+            is SettingsScreenMviModel.Intent.ChangeCustomSecondaryColor -> changeCustomSecondaryColor(
+                intent.value
+            )
+
+            is SettingsScreenMviModel.Intent.ChangeCustomTertiaryColor -> changeCustomTertiaryColor(
+                intent.value
+            )
         }
     }
 
@@ -191,6 +214,33 @@ class SettingsScreenViewModel(
     private fun changeDynamicColors(value: Boolean) {
         themeRepository.changeDynamicColors(value)
         keyStore.save(KeyStoreKeys.DynamicColors, value)
+    }
+
+    private fun changeCustomPrimaryColor(value: Color?) {
+        themeRepository.changeCustomPrimaryColor(value)
+        if (value != null) {
+            keyStore.save(KeyStoreKeys.CustomPrimaryColor, value.toArgb())
+        } else {
+            keyStore.remove(KeyStoreKeys.CustomPrimaryColor)
+        }
+    }
+
+    private fun changeCustomSecondaryColor(value: Color?) {
+        themeRepository.changeCustomSecondaryColor(value)
+        if (value != null) {
+            keyStore.save(KeyStoreKeys.CustomSecondaryColor, value.toArgb())
+        } else {
+            keyStore.remove(KeyStoreKeys.CustomSecondaryColor)
+        }
+    }
+
+    private fun changeCustomTertiaryColor(value: Color?) {
+        themeRepository.changeCustomTertiaryColor(value)
+        if (value != null) {
+            keyStore.save(KeyStoreKeys.CustomTertiaryColor, value.toArgb())
+        } else {
+            keyStore.remove(KeyStoreKeys.CustomTertiaryColor)
+        }
     }
 
     private fun changeOpenUrlsInExternalBrowser(value: Boolean) {

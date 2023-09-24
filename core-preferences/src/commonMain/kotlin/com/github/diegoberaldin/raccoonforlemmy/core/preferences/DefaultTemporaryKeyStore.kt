@@ -39,4 +39,14 @@ internal class DefaultTemporaryKeyStore(
     }
 
     override fun get(key: String, default: Double): Double = settings[key, default]
+
+    override fun save(key: String, value: Long) {
+        settings[key] = value
+    }
+
+    override fun get(key: String, default: Long): Long = settings[key, default]
+
+    override fun remove(key: String) {
+        settings.remove(key)
+    }
 }

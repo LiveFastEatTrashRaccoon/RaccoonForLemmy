@@ -15,6 +15,7 @@
     <string name="message_login_successful">🎉 Login effettuato con successo! 🎉</string>
 
     <string name="button_confirm">Conferma</string>
+    <string name="button_reset">Ripristina predefinito</string>
 
     <string name="home_listing_type_all">Tutti</string>
     <string name="home_listing_type_local">Locali</string>
@@ -102,6 +103,9 @@
     <string name="settings_dynamic_colors">Usa colori dinamici</string>
     <string name="settings_open_url_external">Apri URL su browser esterno</string>
     <string name="settings_enable_swipe_actions">Consenti azioni allo swipe</string>
+    <string name="settings_primary_color">Colore primario</string>
+    <string name="settings_secondary_color">Colore secondario</string>
+    <string name="settings_tertiary_color">Colore terziario</string>
 
     <string name="community_detail_info">Info comunità</string>
     <string name="community_detail_instance_info">Dettagli istanza</string>

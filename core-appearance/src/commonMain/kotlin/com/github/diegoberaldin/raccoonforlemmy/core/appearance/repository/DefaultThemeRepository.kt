@@ -11,6 +11,9 @@ internal class DefaultThemeRepository : ThemeRepository {
     override val contentFontScale = MutableStateFlow(1f)
     override val navItemTitles = MutableStateFlow(false)
     override val dynamicColors = MutableStateFlow(false)
+    override val customPrimaryColor = MutableStateFlow<Color?>(null)
+    override val customSecondaryColor = MutableStateFlow<Color?>(null)
+    override val customTertiaryColor = MutableStateFlow<Color?>(null)
 
     override fun changeTheme(value: ThemeState) {
         state.value = value
@@ -55,5 +58,17 @@ internal class DefaultThemeRepository : ThemeRepository {
             g1 + greenStep * index,
             b1 + blueStep * index,
         )
+    }
+
+    override fun changeCustomPrimaryColor(color: Color?) {
+        customPrimaryColor.value = color
+    }
+
+    override fun changeCustomSecondaryColor(color: Color?) {
+        customSecondaryColor.value = color
+    }
+
+    override fun changeCustomTertiaryColor(color: Color?) {
+        customTertiaryColor.value = color
     }
 }

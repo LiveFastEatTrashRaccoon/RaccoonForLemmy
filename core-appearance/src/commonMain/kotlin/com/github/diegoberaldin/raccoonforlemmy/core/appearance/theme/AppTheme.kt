@@ -24,11 +24,17 @@ fun AppTheme(
     }
 
     val themeState by repository.state.collectAsState()
+    val customPrimaryColor by repository.customPrimaryColor.collectAsState()
+    val customSecondaryColor by repository.customSecondaryColor.collectAsState()
+    val customTertiaryColor by repository.customTertiaryColor.collectAsState()
 
     val colorSchemeProvider = remember { getColorSchemeProvider() }
     val colorScheme = colorSchemeProvider.getColorScheme(
         theme = themeState,
-        dynamic = useDynamicColors
+        dynamic = useDynamicColors,
+        customPrimary = customPrimaryColor,
+        customSecondary = customSecondaryColor,
+        customTertiary = customTertiaryColor,
     )
 
     MaterialTheme(

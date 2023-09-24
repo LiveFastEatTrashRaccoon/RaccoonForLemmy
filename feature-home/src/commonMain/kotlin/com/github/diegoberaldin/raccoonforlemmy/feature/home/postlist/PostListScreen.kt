@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -185,40 +183,10 @@ class PostListScreen : Screen {
                                             DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
                                             DismissDirection.EndToStart -> Icons.Default.ArrowCircleUp
                                         }
-                                        val (iconModifier, iconTint) = when {
-                                            direction == DismissDirection.StartToEnd && post.myVote < 0 -> {
-                                                Modifier.background(
-                                                    color = Color.Transparent,
-                                                    shape = CircleShape,
-                                                ) to MaterialTheme.colorScheme.onTertiary
-                                            }
-
-                                            direction == DismissDirection.StartToEnd -> {
-                                                Modifier.background(
-                                                    color = MaterialTheme.colorScheme.onTertiary,
-                                                    shape = CircleShape,
-                                                ) to MaterialTheme.colorScheme.tertiary
-                                            }
-
-                                            direction == DismissDirection.EndToStart && post.myVote > 0 -> {
-                                                Modifier.background(
-                                                    color = Color.Transparent,
-                                                    shape = CircleShape,
-                                                ) to MaterialTheme.colorScheme.onSecondary
-                                            }
-
-                                            else -> {
-                                                Modifier.background(
-                                                    color = MaterialTheme.colorScheme.onSecondary,
-                                                    shape = CircleShape,
-                                                ) to MaterialTheme.colorScheme.secondary
-                                            }
-                                        }
                                         Icon(
-                                            modifier = iconModifier,
                                             imageVector = icon,
                                             contentDescription = null,
-                                            tint = iconTint,
+                                            tint = Color.White,
                                         )
                                     },
                                     content = {

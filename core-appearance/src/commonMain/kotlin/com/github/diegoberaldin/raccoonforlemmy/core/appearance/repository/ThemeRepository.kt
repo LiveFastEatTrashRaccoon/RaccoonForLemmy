@@ -14,6 +14,12 @@ interface ThemeRepository {
 
     val dynamicColors: StateFlow<Boolean>
 
+    val customPrimaryColor: StateFlow<Color?>
+
+    val customSecondaryColor: StateFlow<Color?>
+
+    val customTertiaryColor: StateFlow<Color?>
+
     fun changeTheme(value: ThemeState)
 
     fun changeContentFontScale(value: Float)
@@ -28,4 +34,10 @@ interface ThemeRepository {
         startColor: Color,
         endColor: Color,
     ): Color
+
+    fun changeCustomPrimaryColor(color: Color?)
+
+    fun changeCustomSecondaryColor(color: Color?)
+
+    fun changeCustomTertiaryColor(color: Color?)
 }

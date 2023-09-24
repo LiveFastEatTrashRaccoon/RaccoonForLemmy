@@ -13,5 +13,5 @@ object NotificationCenterContractKeys {
     const val CommentCreated = "commentCreated"
     const val PostUpdated = "postUpdated"
     const val PostDeleted = "postDeleted"
-    const val SectionChanged = "sectionChanged"
+    const val ChangeColor = "changeColor"
 }

@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -10,9 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -106,27 +103,11 @@ class InboxMentionsScreen : Tab {
                                 DismissDirection.StartToEnd -> Icons.Default.MarkChatUnread
                                 DismissDirection.EndToStart -> Icons.Default.MarkChatRead
                             }
-                            val (iconModifier, iconTint) = when (direction) {
-                                DismissDirection.StartToEnd -> {
-                                    Modifier.background(
-                                        color = MaterialTheme.colorScheme.onTertiary,
-                                        shape = CircleShape,
-                                    ) to MaterialTheme.colorScheme.tertiary
-                                }
-
-                                else -> {
-                                    Modifier.background(
-                                        color = MaterialTheme.colorScheme.onSecondary,
-                                        shape = CircleShape,
-                                    ) to MaterialTheme.colorScheme.secondary
-                                }
-                            }
-
                             Icon(
-                                modifier = iconModifier.padding(Spacing.xs),
+                                modifier = Modifier.padding(Spacing.xs),
                                 imageVector = icon,
                                 contentDescription = null,
-                                tint = iconTint,
+                                tint = Color.White,
                             )
                         },
                         content = {
