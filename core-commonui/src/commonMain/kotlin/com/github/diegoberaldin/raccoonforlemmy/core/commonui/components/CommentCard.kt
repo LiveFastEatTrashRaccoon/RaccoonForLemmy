@@ -34,6 +34,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentR
 fun CommentCard(
     comment: CommentModel,
     modifier: Modifier = Modifier,
+    hideAuthor: Boolean = false,
     options: List<String> = emptyList(),
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
@@ -79,7 +80,7 @@ fun CommentCard(
                         }
                 ) {
                     CommunityAndCreatorInfo(
-                        creator = comment.creator,
+                        creator = comment.creator.takeIf { !hideAuthor },
                         onOpenCreator = onOpenCreator,
                         onOpenCommunity = onOpenCommunity,
                     )

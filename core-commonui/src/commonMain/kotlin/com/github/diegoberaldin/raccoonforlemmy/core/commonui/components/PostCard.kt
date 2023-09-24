@@ -35,6 +35,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 fun PostCard(
     modifier: Modifier = Modifier,
     post: PostModel,
+    hideAuthor: Boolean = false,
     blurNsfw: Boolean,
     options: List<String> = emptyList(),
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
@@ -68,7 +69,7 @@ fun PostCard(
             ) {
                 CommunityAndCreatorInfo(
                     community = post.community,
-                    creator = post.creator?.copy(avatar = null),
+                    creator = post.creator.takeIf { !hideAuthor },
                     onOpenCommunity = onOpenCommunity,
                     onOpenCreator = onOpenCreator,
                 )

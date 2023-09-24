@@ -34,6 +34,8 @@ import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
@@ -127,13 +129,15 @@ internal object ProfileLoggedScreen : Tab {
                         }
                         if (uiState.section == ProfileLoggedSection.Posts) {
                             itemsIndexed(uiState.posts) { idx, post ->
-                                ProfilePostCard(
+                                PostCard(
                                     modifier = Modifier.onClick {
                                         navigator?.push(
                                             PostDetailScreen(post),
                                         )
                                     },
                                     post = post,
+                                    hideAuthor = true,
+                                    blurNsfw = false,
                                     options = buildList {
                                         add(stringResource(MR.strings.post_action_share))
                                         add(stringResource(MR.strings.post_action_edit))
@@ -179,13 +183,14 @@ internal object ProfileLoggedScreen : Tab {
                             }
                         } else {
                             items(uiState.comments) { comment ->
-                                ProfileCommentCard(
+                                CommentCard(
                                     modifier = Modifier.onClick {
                                         navigator?.push(
                                             PostDetailScreen(post = PostModel(id = comment.postId)),
                                         )
                                     },
                                     comment = comment,
+                                    hideAuthor = true,
                                     options = buildList {
                                         add(stringResource(MR.strings.post_action_edit))
                                         add(stringResource(MR.strings.comment_action_delete))
