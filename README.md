@@ -71,4 +71,4 @@ The application is under active development, expect new features to be added (e.
 
 ## Want to try it out?
 
-- get it on [Obtanium](https://github.com/ImranR98/Obtainium/releases) by simply adding this repo `https://github.com/diegoberaldin/RacconForLemmy`
+- get it on [Obtanium](https://github.com/ImranR98/Obtainium/releases) by simply adding this repo `https://github.com/diegoberaldin/RaccoonForLemmy`
