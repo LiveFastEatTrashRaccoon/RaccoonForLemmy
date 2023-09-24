@@ -282,6 +282,7 @@ class UserDetailScreen(
                                                 )
                                             },
                                             post = post,
+                                            postLayout = uiState.postLayout,
                                             blurNsfw = uiState.blurNsfw,
                                             options = buildList {
                                                 add(stringResource(MR.strings.post_action_share))

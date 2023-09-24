@@ -8,6 +8,7 @@ object NotificationCenterContractKeys {
     const val ChangeTheme = "changeTheme"
     const val ChangeFontSize = "changeFontSize"
     const val ChangeLanguage = "changeLanguage"
+    const val ChangePostLayout = "changePostLayout"
     const val Logout = "logout"
     const val PostCreated = "postCreated"
     const val CommentCreated = "commentCreated"

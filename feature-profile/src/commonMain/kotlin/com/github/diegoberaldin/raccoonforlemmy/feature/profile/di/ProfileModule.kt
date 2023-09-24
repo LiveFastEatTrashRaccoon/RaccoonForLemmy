@@ -34,6 +34,7 @@ val profileTabModule = module {
             userRepository = get(),
             postsRepository = get(),
             commentRepository = get(),
+            themeRepository = get(),
             shareHelper = get(),
             notificationCenter = get(),
         )
@@ -46,6 +47,7 @@ val profileTabModule = module {
             userRepository = get(),
             postsRepository = get(),
             commentRepository = get(),
+            themeRepository = get(),
             hapticFeedback = get(),
             notificationCenter = get(),
         )

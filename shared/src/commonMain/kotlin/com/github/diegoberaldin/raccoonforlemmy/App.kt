@@ -16,6 +16,9 @@ import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toInt
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toPostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
@@ -75,6 +78,7 @@ fun App() {
     val customTertiaryColor = if (keyStore.containsKey(KeyStoreKeys.CustomTertiaryColor)) {
         Color(keyStore[KeyStoreKeys.CustomTertiaryColor, Color.Black.toArgb()])
     } else null
+    val postLayout = keyStore[KeyStoreKeys.PostLayout, PostLayout.Card.toInt()].toPostLayout()
     LaunchedEffect(Unit) {
         with(themeRepository) {
             changeNavItemTitles(navTitles)
@@ -82,6 +86,7 @@ fun App() {
             changeCustomPrimaryColor(customPrimaryColor)
             changeCustomSecondaryColor(customSecondaryColor)
             changeCustomTertiaryColor(customTertiaryColor)
+            changePostLayout(postLayout)
         }
     }
     val useDynamicColors by themeRepository.dynamicColors.collectAsState()

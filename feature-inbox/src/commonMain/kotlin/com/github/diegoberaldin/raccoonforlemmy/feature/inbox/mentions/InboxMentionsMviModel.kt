@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions
 
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 
@@ -22,6 +23,7 @@ interface InboxMentionsMviModel :
         val unreadOnly: Boolean = true,
         val mentions: List<PersonMentionModel> = emptyList(),
         val swipeActionsEnabled: Boolean = true,
+        val postLayout: PostLayout = PostLayout.Card,
     )
 
     sealed interface Effect

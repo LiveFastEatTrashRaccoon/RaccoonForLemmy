@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.saved
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -16,6 +17,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRep
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ProfileSavedViewModel(
@@ -25,6 +28,7 @@ class ProfileSavedViewModel(
     private val userRepository: UserRepository,
     private val postsRepository: PostsRepository,
     private val commentRepository: CommentRepository,
+    private val themeRepository: ThemeRepository,
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
 ) : ScreenModel,
@@ -46,6 +50,11 @@ class ProfileSavedViewModel(
 
     override fun onStarted() {
         mvi.onStarted()
+        mvi.scope?.launch {
+            themeRepository.postLayout.onEach { layout ->
+                mvi.updateState { it.copy(postLayout = layout) }
+            }.launchIn(this)
+        }
 
         if (mvi.uiState.value.posts.isEmpty()) {
             refresh()

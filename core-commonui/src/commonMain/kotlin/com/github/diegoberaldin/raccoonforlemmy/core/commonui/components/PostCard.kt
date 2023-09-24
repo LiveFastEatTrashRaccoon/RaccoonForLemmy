@@ -4,12 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -23,7 +24,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -36,6 +39,7 @@ fun PostCard(
     modifier: Modifier = Modifier,
     post: PostModel,
     hideAuthor: Boolean = false,
+    postLayout: PostLayout = PostLayout.Card,
     blurNsfw: Boolean,
     options: List<String> = emptyList(),
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
@@ -55,74 +59,210 @@ fun PostCard(
             fontScale = fontScale,
         ),
     ) {
-        Card(
-            modifier = modifier.background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(CornerSize.m),
-            ).padding(
-                vertical = Spacing.s,
-                horizontal = Spacing.s,
-            ),
+        Box(
+            modifier = modifier.let {
+                if (postLayout == PostLayout.Card) {
+                    it.padding(bottom = Spacing.xs)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(CornerSize.l),
+                        ).padding(
+                            top = Spacing.s,
+                            bottom = Spacing.s,
+                            start = Spacing.s,
+                            end = Spacing.s,
+                        )
+                } else {
+                    it
+                }
+            },
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-            ) {
-                CommunityAndCreatorInfo(
-                    community = post.community,
-                    creator = post.creator.takeIf { !hideAuthor },
+            if (postLayout != PostLayout.List) {
+                ExtendedPost(
+                    post = post,
+                    hideAuthor = hideAuthor,
+                    withDivider = postLayout == PostLayout.Full,
+                    overflowBlurColor = when (postLayout) {
+                        PostLayout.Card -> MaterialTheme.colorScheme.surfaceVariant
+                        else -> MaterialTheme.colorScheme.surface
+                    },
+                    blurNsfw = blurNsfw,
+                    options = options,
                     onOpenCommunity = onOpenCommunity,
                     onOpenCreator = onOpenCreator,
-                )
-                PostCardTitle(
-                    modifier = Modifier.padding(top = Spacing.s),
-                    text = post.title
-                )
-                PostCardImage(
-                    modifier = Modifier.clip(RoundedCornerShape(CornerSize.xl)),
-                    imageUrl = post.thumbnailUrl.orEmpty(),
-                    blurred = blurNsfw && post.nsfw,
-                    onImageClick = onImageClick,
-                )
-                Box {
-                    PostCardBody(
-                        modifier = Modifier
-                            .heightIn(max = 200.dp)
-                            .padding(bottom = Spacing.xs),
-                        text = post.text,
-                    )
-                    Box(
-                        modifier = Modifier.height(Spacing.s).fillMaxWidth()
-                            .align(Alignment.BottomCenter).background(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color.Transparent,
-                                        MaterialTheme.colorScheme.surfaceVariant,
-                                    ),
-                                ),
-                            ),
-                    )
-                }
-                PostLinkBanner(
-                    modifier = Modifier.padding(vertical = Spacing.xs),
-                    url = post.url.takeIf {
-                        it?.contains("pictrs/image") == false
-                    }.orEmpty(),
-                )
-                PostCardFooter(
-                    comments = post.comments,
-                    score = post.score,
-                    upVoted = post.myVote > 0,
-                    downVoted = post.myVote < 0,
-                    saved = post.saved,
                     onUpVote = onUpVote,
                     onDownVote = onDownVote,
                     onSave = onSave,
                     onReply = onReply,
-                    date = post.publishDate,
+                    onImageClick = onImageClick,
+                    onOptionSelected = onOptionSelected,
+                )
+            } else {
+                CompactPost(
+                    post = post,
+                    hideAuthor = hideAuthor,
+                    blurNsfw = blurNsfw,
                     options = options,
+                    onOpenCommunity = onOpenCommunity,
+                    onOpenCreator = onOpenCreator,
+                    onUpVote = onUpVote,
+                    onDownVote = onDownVote,
+                    onSave = onSave,
+                    onReply = onReply,
+                    onImageClick = onImageClick,
                     onOptionSelected = onOptionSelected,
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun CompactPost(
+    modifier: Modifier = Modifier,
+    post: PostModel,
+    hideAuthor: Boolean = false,
+    blurNsfw: Boolean,
+    options: List<String> = emptyList(),
+    onOpenCommunity: ((CommunityModel) -> Unit)? = null,
+    onOpenCreator: ((UserModel) -> Unit)? = null,
+    onUpVote: (() -> Unit)? = null,
+    onDownVote: (() -> Unit)? = null,
+    onSave: (() -> Unit)? = null,
+    onReply: (() -> Unit)? = null,
+    onImageClick: ((String) -> Unit)? = null,
+    onOptionSelected: ((Int) -> Unit)? = null,
+) {
+    Column(
+        modifier = modifier.background(MaterialTheme.colorScheme.surface),
+        verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+    ) {
+        CommunityAndCreatorInfo(
+            small = true,
+            community = post.community,
+            creator = post.creator.takeIf { !hideAuthor },
+            onOpenCommunity = onOpenCommunity,
+            onOpenCreator = onOpenCreator,
+        )
+        Row(
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(Spacing.xs)
+        ) {
+            PostCardImage(
+                modifier = Modifier
+                    .weight(0.2f)
+                    .clip(RoundedCornerShape(CornerSize.s)),
+                minHeight = Dp.Unspecified,
+                maxHeight = Dp.Unspecified,
+                imageUrl = post.thumbnailUrl.orEmpty(),
+                blurred = blurNsfw && post.nsfw,
+                onImageClick = onImageClick,
+            )
+            PostCardTitle(
+                modifier = Modifier.weight(1f),
+                text = post.title
+            )
+        }
+        PostCardFooter(
+            comments = post.comments,
+            score = post.score,
+            upVoted = post.myVote > 0,
+            downVoted = post.myVote < 0,
+            saved = post.saved,
+            onUpVote = onUpVote,
+            onDownVote = onDownVote,
+            onSave = onSave,
+            onReply = onReply,
+            date = post.publishDate,
+            options = options,
+            onOptionSelected = onOptionSelected,
+        )
+        Divider(modifier = Modifier.padding(vertical = Spacing.s))
+    }
+}
+
+@Composable
+private fun ExtendedPost(
+    modifier: Modifier = Modifier,
+    post: PostModel,
+    hideAuthor: Boolean = false,
+    blurNsfw: Boolean,
+    withDivider: Boolean = false,
+    overflowBlurColor: Color = MaterialTheme.colorScheme.background,
+    options: List<String> = emptyList(),
+    onOpenCommunity: ((CommunityModel) -> Unit)? = null,
+    onOpenCreator: ((UserModel) -> Unit)? = null,
+    onUpVote: (() -> Unit)? = null,
+    onDownVote: (() -> Unit)? = null,
+    onSave: (() -> Unit)? = null,
+    onReply: (() -> Unit)? = null,
+    onImageClick: ((String) -> Unit)? = null,
+    onOptionSelected: ((Int) -> Unit)? = null,
+) {
+    Column(
+        modifier = modifier.background(overflowBlurColor),
+        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+    ) {
+        CommunityAndCreatorInfo(
+            community = post.community,
+            creator = post.creator.takeIf { !hideAuthor },
+            onOpenCommunity = onOpenCommunity,
+            onOpenCreator = onOpenCreator,
+        )
+        PostCardTitle(
+            modifier = Modifier.padding(top = Spacing.s),
+            text = post.title
+        )
+        PostCardImage(
+            modifier = Modifier.clip(RoundedCornerShape(CornerSize.xl)),
+            imageUrl = post.thumbnailUrl.orEmpty(),
+            blurred = blurNsfw && post.nsfw,
+            onImageClick = onImageClick,
+        )
+        Box {
+            PostCardBody(
+                modifier = Modifier
+                    .heightIn(max = 200.dp)
+                    .padding(bottom = Spacing.xs),
+                text = post.text,
+            )
+            Box(
+                modifier = Modifier
+                    .height(Spacing.s)
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter).background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                overflowBlurColor,
+                            ),
+                        ),
+                    ),
+            )
+        }
+        PostLinkBanner(
+            modifier = Modifier.padding(vertical = Spacing.xs),
+            url = post.url.takeIf {
+                it?.contains("pictrs/image") == false
+            }.orEmpty(),
+        )
+        PostCardFooter(
+            comments = post.comments,
+            score = post.score,
+            upVoted = post.myVote > 0,
+            downVoted = post.myVote < 0,
+            saved = post.saved,
+            onUpVote = onUpVote,
+            onDownVote = onDownVote,
+            onSave = onSave,
+            onReply = onReply,
+            date = post.publishDate,
+            options = options,
+            onOptionSelected = onOptionSelected,
+        )
+
+        if (withDivider) {
+            Divider(modifier = Modifier.padding(vertical = Spacing.s))
         }
     }
 }

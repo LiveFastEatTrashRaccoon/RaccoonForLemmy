@@ -23,6 +23,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 @Composable
 fun CommunityAndCreatorInfo(
     modifier: Modifier = Modifier,
+    small: Boolean = false,
     community: CommunityModel? = null,
     creator: UserModel? = null,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
@@ -34,7 +35,7 @@ fun CommunityAndCreatorInfo(
     val creatorName = creator?.name.orEmpty()
     val creatorAvatar = creator?.avatar.orEmpty()
     val creatorHost = creator?.host.orEmpty()
-    val iconSize = 32.dp
+    val iconSize = if (small) 20.dp else 32.dp
 
     Row(
         modifier = modifier,

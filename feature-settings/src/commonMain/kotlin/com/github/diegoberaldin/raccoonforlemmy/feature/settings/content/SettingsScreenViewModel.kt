@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.AppInfo
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toFontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toInt
@@ -73,6 +74,9 @@ class SettingsScreenViewModel(
             }.launchIn(this)
             themeRepository.customTertiaryColor.onEach { value ->
                 mvi.updateState { it.copy(customTertiaryColor = value) }
+            }.launchIn(this)
+            themeRepository.postLayout.onEach { value ->
+                mvi.updateState { it.copy(postLayout = value) }
             }.launchIn(this)
             languageRepository.currentLanguage.onEach { lang ->
                 mvi.updateState { it.copy(lang = lang) }
@@ -163,6 +167,8 @@ class SettingsScreenViewModel(
             is SettingsScreenMviModel.Intent.ChangeCustomTertiaryColor -> changeCustomTertiaryColor(
                 intent.value
             )
+
+            is SettingsScreenMviModel.Intent.ChangePostLayout -> changePostLayout(intent.value)
         }
     }
 
@@ -251,6 +257,11 @@ class SettingsScreenViewModel(
     private fun changeEnableSwipeActions(value: Boolean) {
         mvi.updateState { it.copy(enableSwipeActions = value) }
         keyStore.save(KeyStoreKeys.EnableSwipeActions, value)
+    }
+
+    private fun changePostLayout(value: PostLayout) {
+        themeRepository.changePostLayout(value)
+        keyStore.save(KeyStoreKeys.PostLayout, value.toInt())
     }
 
     private fun handleLogout() {

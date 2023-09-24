@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository
 
 import androidx.compose.ui.graphics.Color
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -14,6 +15,7 @@ internal class DefaultThemeRepository : ThemeRepository {
     override val customPrimaryColor = MutableStateFlow<Color?>(null)
     override val customSecondaryColor = MutableStateFlow<Color?>(null)
     override val customTertiaryColor = MutableStateFlow<Color?>(null)
+    override val postLayout = MutableStateFlow<PostLayout>(PostLayout.Card)
 
     override fun changeTheme(value: ThemeState) {
         state.value = value
@@ -70,5 +72,9 @@ internal class DefaultThemeRepository : ThemeRepository {
 
     override fun changeCustomTertiaryColor(color: Color?) {
         customTertiaryColor.value = color
+    }
+
+    override fun changePostLayout(value: PostLayout) {
+        postLayout.value = value
     }
 }

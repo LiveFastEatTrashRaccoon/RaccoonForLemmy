@@ -138,6 +138,7 @@ internal class ProfileSavedScreen(
                                         )
                                     },
                                     post = post,
+                                    postLayout = uiState.postLayout,
                                     blurNsfw = uiState.blurNsfw,
                                     onOpenCommunity = { community ->
                                         navigator?.push(

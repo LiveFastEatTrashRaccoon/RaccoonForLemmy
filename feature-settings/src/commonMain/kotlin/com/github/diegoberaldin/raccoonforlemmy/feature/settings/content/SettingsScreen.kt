@@ -27,6 +27,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.racconforlemmy.core.utils.toLanguageName
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
@@ -36,6 +37,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ColorBottom
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.FontScaleBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.LanguageBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.PostLayoutBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ThemeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
@@ -223,6 +225,25 @@ class SettingsScreen : Screen {
                                     model.reduce(SettingsScreenMviModel.Intent.ChangeLanguage(lang))
                                 }
                             }, key, NotificationCenterContractKeys.ChangeLanguage)
+                            bottomSheetNavigator.show(sheet)
+                        },
+                    )
+
+                    // post layout
+                    SettingsRow(
+                        title = stringResource(MR.strings.settings_post_layout),
+                        value = uiState.postLayout.toReadableName(),
+                        onTap = {
+                            val sheet = PostLayoutBottomSheet()
+                            notificationCenter.addObserver({ result ->
+                                (result as? PostLayout)?.also { value ->
+                                    model.reduce(
+                                        SettingsScreenMviModel.Intent.ChangePostLayout(
+                                            value
+                                        )
+                                    )
+                                }
+                            }, key, NotificationCenterContractKeys.ChangePostLayout)
                             bottomSheetNavigator.show(sheet)
                         },
                     )

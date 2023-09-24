@@ -241,6 +241,7 @@ class ExploreScreen : Screen {
                                                 )
                                             },
                                             post = result,
+                                            postLayout = uiState.postLayout,
                                             blurNsfw = uiState.blurNsfw,
                                             onOpenCommunity = { community ->
                                                 navigator?.push(

@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.settings.content
 
 import androidx.compose.ui.graphics.Color
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.FontScale
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -15,6 +16,7 @@ interface SettingsScreenMviModel :
         data class ChangeContentFontSize(val value: Float) : Intent
         data class ChangeLanguage(val value: String) : Intent
         data class ChangeDefaultListingType(val value: ListingType) : Intent
+        data class ChangePostLayout(val value: PostLayout) : Intent
         data class ChangeDefaultPostSortType(val value: SortType) : Intent
         data class ChangeDefaultCommentSortType(val value: SortType) : Intent
         data class ChangeNavBarTitlesVisible(val value: Boolean) : Intent
@@ -36,6 +38,7 @@ interface SettingsScreenMviModel :
         val customTertiaryColor: Color? = null,
         val currentFontScale: FontScale = FontScale.Normal,
         val lang: String = "",
+        val postLayout: PostLayout = PostLayout.Card,
         val defaultListingType: ListingType = ListingType.Local,
         val defaultPostSortType: SortType = SortType.Active,
         val defaultCommentSortType: SortType = SortType.New,

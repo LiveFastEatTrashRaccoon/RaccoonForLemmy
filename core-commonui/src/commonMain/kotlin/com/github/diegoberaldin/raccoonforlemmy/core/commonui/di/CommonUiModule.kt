@@ -35,6 +35,7 @@ val commonUiModule = module {
             siteRepository = get(),
             postsRepository = get(),
             commentRepository = get(),
+            themeRepository = get(),
             shareHelper = get(),
             keyStore = get(),
             notificationCenter = get(),
@@ -50,6 +51,7 @@ val commonUiModule = module {
             communityRepository = get(),
             postsRepository = get(),
             siteRepository = get(),
+            themeRepository = get(),
             shareHelper = get(),
             keyStore = get(),
             hapticFeedback = get(),
@@ -69,6 +71,7 @@ val commonUiModule = module {
             userRepository = get(),
             postsRepository = get(),
             commentRepository = get(),
+            themeRepository = get(),
             shareHelper = get(),
             hapticFeedback = get(),
             keyStore = get(),
@@ -92,6 +95,7 @@ val commonUiModule = module {
             editedCommentId = params[2],
             identityRepository = get(),
             commentRepository = get(),
+            themeRepository = get(),
         )
     }
     factory { params ->

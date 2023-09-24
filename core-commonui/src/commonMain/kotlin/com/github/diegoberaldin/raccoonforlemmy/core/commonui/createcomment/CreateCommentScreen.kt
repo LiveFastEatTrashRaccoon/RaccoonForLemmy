@@ -166,6 +166,7 @@ class CreateCommentScreen(
                         originalPost != null -> {
                             PostCard(
                                 modifier = referenceModifier,
+                                postLayout = uiState.postLayout,
                                 post = originalPost,
                                 blurNsfw = false,
                             )

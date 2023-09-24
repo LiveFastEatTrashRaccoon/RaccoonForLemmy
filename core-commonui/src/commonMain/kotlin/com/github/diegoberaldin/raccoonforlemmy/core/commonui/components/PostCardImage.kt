@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -19,13 +20,15 @@ import dev.icerock.moko.resources.compose.stringResource
 fun PostCardImage(
     modifier: Modifier = Modifier,
     imageUrl: String,
+    minHeight: Dp = 200.dp,
+    maxHeight: Dp = Dp.Unspecified,
     blurred: Boolean = false,
     onImageClick: ((String) -> Unit)? = null,
 ) {
     if (imageUrl.isNotEmpty()) {
         CustomImage(
             modifier = modifier.fillMaxWidth()
-                .heightIn(min = 200.dp)
+                .heightIn(min = minHeight, max = maxHeight)
                 .blur(radius = if (blurred) 60.dp else 0.dp)
                 .onClick {
                     onImageClick?.invoke(imageUrl)

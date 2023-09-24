@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.search.content
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -37,6 +38,7 @@ class ExploreViewModel(
     private val communityRepository: CommunityRepository,
     private val postsRepository: PostsRepository,
     private val commentRepository: CommentRepository,
+    private val themeRepository: ThemeRepository,
     private val keyStore: TemporaryKeyStore,
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
@@ -70,6 +72,9 @@ class ExploreViewModel(
                 mvi.updateState {
                     it.copy(isLogged = isLogged)
                 }
+            }.launchIn(this)
+            themeRepository.postLayout.onEach { layout ->
+                mvi.updateState { it.copy(postLayout = layout) }
             }.launchIn(this)
         }
 

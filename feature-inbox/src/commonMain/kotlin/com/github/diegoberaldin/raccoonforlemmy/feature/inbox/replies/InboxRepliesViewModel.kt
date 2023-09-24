@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -28,6 +29,7 @@ class InboxRepliesViewModel(
     private val userRepository: UserRepository,
     private val siteRepository: SiteRepository,
     private val commentRepository: CommentRepository,
+    private val themeRepository: ThemeRepository,
     private val hapticFeedback: HapticFeedback,
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
@@ -64,6 +66,9 @@ class InboxRepliesViewModel(
                 if (it != uiState.value.unreadOnly) {
                     changeUnreadOnly(it)
                 }
+            }.launchIn(this)
+            themeRepository.postLayout.onEach { layout ->
+                mvi.updateState { it.copy(postLayout = layout) }
             }.launchIn(this)
         }
     }

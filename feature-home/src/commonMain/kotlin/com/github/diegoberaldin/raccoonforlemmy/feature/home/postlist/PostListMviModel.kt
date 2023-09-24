@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -34,6 +35,7 @@ interface PostListMviModel :
         val blurNsfw: Boolean = true,
         val currentUserId: Int? = null,
         val swipeActionsEnabled: Boolean = true,
+        val postLayout: PostLayout = PostLayout.Card,
     )
 
     sealed interface Effect

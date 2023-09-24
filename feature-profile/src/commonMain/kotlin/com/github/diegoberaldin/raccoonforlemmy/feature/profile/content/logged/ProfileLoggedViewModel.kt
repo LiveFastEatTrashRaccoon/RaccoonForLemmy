@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.ShareHelper
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -16,6 +17,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepo
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ProfileLoggedViewModel(
@@ -25,6 +28,7 @@ class ProfileLoggedViewModel(
     private val postsRepository: PostsRepository,
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
+    private val themeRepository: ThemeRepository,
     private val shareHelper: ShareHelper,
     private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
@@ -53,6 +57,10 @@ class ProfileLoggedViewModel(
         mvi.onStarted()
         val auth = identityRepository.authToken.value.orEmpty()
         mvi.scope?.launch(Dispatchers.IO) {
+            themeRepository.postLayout.onEach { layout ->
+                mvi.updateState { it.copy(postLayout = layout) }
+            }.launchIn(this)
+
             val user = siteRepository.getCurrentUser(auth)
             mvi.updateState { it.copy(user = user) }
         }

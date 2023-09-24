@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.racconforlemmy.core.utils.ShareHelper
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -32,6 +33,7 @@ class PostListViewModel(
     private val apiConfigRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
+    private val themeRepository: ThemeRepository,
     private val shareHelper: ShareHelper,
     private val keyStore: TemporaryKeyStore,
     private val notificationCenter: NotificationCenter,
@@ -78,6 +80,9 @@ class PostListViewModel(
                     it.copy(isLogged = isLogged)
                 }
             }.launchIn(this)
+            themeRepository.postLayout.onEach { layout ->
+                mvi.updateState { it.copy(postLayout = layout) }
+            }.launchIn(this)
         }
 
         mvi.scope?.launch(Dispatchers.IO) {
@@ -87,10 +92,12 @@ class PostListViewModel(
             if (uiState.value.posts.isEmpty()) {
                 val listingType = keyStore[KeyStoreKeys.DefaultListingType, 0].toListingType()
                 val sortType = keyStore[KeyStoreKeys.DefaultPostSortType, 0].toSortType()
-                mvi.updateState { it.copy(
-                    listingType = listingType,
-                    sortType = sortType,
-                ) }
+                mvi.updateState {
+                    it.copy(
+                        listingType = listingType,
+                        sortType = sortType,
+                    )
+                }
                 refresh()
             }
         }

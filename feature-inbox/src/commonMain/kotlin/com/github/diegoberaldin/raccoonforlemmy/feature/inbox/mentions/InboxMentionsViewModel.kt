@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -26,6 +27,7 @@ class InboxMentionsViewModel(
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
     private val commentRepository: CommentRepository,
+    private val themeRepository: ThemeRepository,
     private val hapticFeedback: HapticFeedback,
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
@@ -62,6 +64,9 @@ class InboxMentionsViewModel(
                 if (it != uiState.value.unreadOnly) {
                     changeUnreadOnly(it)
                 }
+            }.launchIn(this)
+            themeRepository.postLayout.onEach { layout ->
+                mvi.updateState { it.copy(postLayout = layout) }
             }.launchIn(this)
         }
     }

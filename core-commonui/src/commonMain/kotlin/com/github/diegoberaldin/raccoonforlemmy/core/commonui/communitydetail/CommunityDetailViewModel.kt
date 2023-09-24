@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.racconforlemmy.core.utils.ShareHelper
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
@@ -19,6 +20,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRep
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class CommunityDetailViewModel(
@@ -29,6 +32,7 @@ class CommunityDetailViewModel(
     private val communityRepository: CommunityRepository,
     private val postsRepository: PostsRepository,
     private val siteRepository: SiteRepository,
+    private val themeRepository: ThemeRepository,
     private val shareHelper: ShareHelper,
     private val keyStore: TemporaryKeyStore,
     private val hapticFeedback: HapticFeedback,
@@ -51,6 +55,10 @@ class CommunityDetailViewModel(
         }
 
         mvi.scope?.launch(Dispatchers.IO) {
+            themeRepository.postLayout.onEach { layout ->
+                mvi.updateState { it.copy(postLayout = layout) }
+            }.launchIn(this)
+
             if (uiState.value.currentUserId == null) {
                 val user = siteRepository.getCurrentUser(auth)
                 mvi.updateState { it.copy(currentUserId = user?.id ?: 0) }

@@ -108,6 +108,10 @@
     <string name="settings_primary_color">Primary color</string>
     <string name="settings_secondary_color">Secondary color</string>
     <string name="settings_tertiary_color">Tertiary color</string>
+    <string name="settings_post_layout">Post layout</string>
+    <string name="settings_post_layout_list">List</string>
+    <string name="settings_post_layout_card">Card</string>
+    <string name="settings_post_layout_full">Full</string>
 
     <string name="community_detail_info">Community info</string>
     <string name="community_detail_instance_info">Instance details</string>

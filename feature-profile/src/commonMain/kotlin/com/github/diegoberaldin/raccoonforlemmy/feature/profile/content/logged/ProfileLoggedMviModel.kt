@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content.logged
 
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -25,6 +26,7 @@ interface ProfileLoggedMviModel :
         val canFetchMore: Boolean = true,
         val posts: List<PostModel> = emptyList(),
         val comments: List<CommentModel> = emptyList(),
+        val postLayout: PostLayout = PostLayout.Card,
     )
 
     sealed interface Effect

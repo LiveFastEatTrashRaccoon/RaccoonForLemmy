@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.content
 
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultType
@@ -34,6 +35,7 @@ interface ExploreMviModel :
         val sortType: SortType = SortType.Active,
         val results: List<Any> = emptyList(),
         val resultType: SearchResultType = SearchResultType.All,
+        val postLayout: PostLayout = PostLayout.Card,
     )
 
     sealed interface Effect

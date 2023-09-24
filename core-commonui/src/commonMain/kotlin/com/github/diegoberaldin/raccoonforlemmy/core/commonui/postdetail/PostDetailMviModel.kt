@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail
 
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -37,6 +38,7 @@ interface PostDetailMviModel :
         val comments: List<CommentModel> = emptyList(),
         val currentUserId: Int? = null,
         val swipeActionsEnabled: Boolean = true,
+        val postLayout: PostLayout = PostLayout.Card,
     )
 
     sealed interface Effect {

@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies
 
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 
@@ -21,6 +22,7 @@ interface InboxRepliesMviModel :
         val canFetchMore: Boolean = true,
         val unreadOnly: Boolean = true,
         val replies: List<PersonMentionModel> = emptyList(),
+        val postLayout: PostLayout = PostLayout.Card,
         val swipeActionsEnabled: Boolean = true,
     )
 

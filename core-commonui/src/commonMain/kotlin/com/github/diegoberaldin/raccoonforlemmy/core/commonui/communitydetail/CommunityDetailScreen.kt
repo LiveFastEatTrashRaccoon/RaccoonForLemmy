@@ -309,6 +309,7 @@ class CommunityDetailScreen(
                                             )
                                         },
                                         post = post,
+                                        postLayout = uiState.postLayout,
                                         options = buildList {
                                             add(stringResource(MR.strings.post_action_share))
                                             if (post.creator?.id == uiState.currentUserId) {

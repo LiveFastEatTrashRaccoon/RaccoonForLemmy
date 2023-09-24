@@ -18,4 +18,5 @@ object KeyStoreKeys {
     const val CustomPrimaryColor = "customPrimaryColor"
     const val CustomSecondaryColor = "customSecondaryColor"
     const val CustomTertiaryColor = "customTertiaryColor"
+    const val PostLayout = "postLayout"
 }

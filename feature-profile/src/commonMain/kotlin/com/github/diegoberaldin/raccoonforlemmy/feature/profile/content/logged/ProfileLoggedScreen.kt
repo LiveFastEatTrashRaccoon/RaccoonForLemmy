@@ -136,6 +136,7 @@ internal object ProfileLoggedScreen : Tab {
                                         )
                                     },
                                     post = post,
+                                    postLayout = uiState.postLayout,
                                     hideAuthor = true,
                                     blurNsfw = false,
                                     options = buildList {

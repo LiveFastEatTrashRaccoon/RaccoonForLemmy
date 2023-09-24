@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository
 
 import androidx.compose.ui.graphics.Color
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import kotlinx.coroutines.flow.StateFlow
 
@@ -19,6 +20,8 @@ interface ThemeRepository {
     val customSecondaryColor: StateFlow<Color?>
 
     val customTertiaryColor: StateFlow<Color?>
+
+    val postLayout: StateFlow<PostLayout>
 
     fun changeTheme(value: ThemeState)
 
@@ -40,4 +43,6 @@ interface ThemeRepository {
     fun changeCustomSecondaryColor(color: Color?)
 
     fun changeCustomTertiaryColor(color: Color?)
+
+    fun changePostLayout(value: PostLayout)
 }

@@ -106,6 +106,10 @@
     <string name="settings_primary_color">Colore primario</string>
     <string name="settings_secondary_color">Colore secondario</string>
     <string name="settings_tertiary_color">Colore terziario</string>
+    <string name="settings_post_layout">Layout post</string>
+    <string name="settings_post_layout_list">Lista</string>
+    <string name="settings_post_layout_card">Carta</string>
+    <string name="settings_post_layout_full">Intero</string>
 
     <string name="community_detail_info">Info comunità</string>
     <string name="community_detail_instance_info">Dettagli istanza</string>
