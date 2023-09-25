@@ -16,7 +16,6 @@ import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -64,43 +63,39 @@ fun InboxReplySubtitle(
                 horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 if (creatorName.isNotEmpty()) {
-                    Surface(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                    Row(
                         modifier = Modifier
                             .onClick {
                                 if (creator != null) {
                                     onOpenCreator?.invoke(creator)
                                 }
                             },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
-                        ) {
-                            if (creatorAvatar.isNotEmpty()) {
-                                CustomImage(
-                                    modifier = Modifier
-                                        .padding(Spacing.xxxs)
-                                        .size(iconSize)
-                                        .clip(RoundedCornerShape(iconSize / 2)),
-                                    url = creatorAvatar,
-                                    quality = FilterQuality.Low,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillBounds,
-                                )
-                            }
-                            Text(
-                                modifier = Modifier.padding(vertical = Spacing.xs),
-                                text = buildString {
-                                    append(creatorName)
-                                    if (creatorHost.isNotEmpty() && communityHost != creatorHost) {
-                                        append("@$creatorHost")
-                                    }
-                                },
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        if (creatorAvatar.isNotEmpty()) {
+                            CustomImage(
+                                modifier = Modifier
+                                    .padding(Spacing.xxxs)
+                                    .size(iconSize)
+                                    .clip(RoundedCornerShape(iconSize / 2)),
+                                url = creatorAvatar,
+                                quality = FilterQuality.Low,
+                                contentDescription = null,
+                                contentScale = ContentScale.FillBounds,
                             )
                         }
+                        Text(
+                            modifier = Modifier.padding(vertical = Spacing.xs),
+                            text = buildString {
+                                append(creatorName)
+                                if (creatorHost.isNotEmpty() && communityHost != creatorHost) {
+                                    append("@$creatorHost")
+                                }
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
                 }
                 if (communityName.isNotEmpty()) {
@@ -110,42 +105,38 @@ fun InboxReplySubtitle(
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
-                    Surface(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                    Row(
                         modifier = Modifier
                             .onClick {
                                 if (community != null) {
                                     onOpenCommunity?.invoke(community)
                                 }
                             },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
-                        ) {
-                            if (communityIcon.isNotEmpty()) {
-                                CustomImage(
-                                    modifier = Modifier
-                                        .padding(Spacing.xxxs)
-                                        .size(iconSize)
-                                        .clip(RoundedCornerShape(iconSize / 2)),
-                                    url = communityIcon,
-                                    quality = FilterQuality.Low,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillBounds,
-                                )
-                            }
-                            Text(
-                                modifier = Modifier.padding(vertical = Spacing.xs),
-                                text = buildString {
-                                    append(communityName)
-                                    if (communityHost.isNotEmpty()) {
-                                        append("@$communityHost")
-                                    }
-                                },
-                                style = MaterialTheme.typography.bodySmall,
+                        if (communityIcon.isNotEmpty()) {
+                            CustomImage(
+                                modifier = Modifier
+                                    .padding(Spacing.xxxs)
+                                    .size(iconSize)
+                                    .clip(RoundedCornerShape(iconSize / 2)),
+                                url = communityIcon,
+                                quality = FilterQuality.Low,
+                                contentDescription = null,
+                                contentScale = ContentScale.FillBounds,
                             )
                         }
+                        Text(
+                            modifier = Modifier.padding(vertical = Spacing.xs),
+                            text = buildString {
+                                append(communityName)
+                                if (communityHost.isNotEmpty()) {
+                                    append("@$communityHost")
+                                }
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                        )
                     }
                 }
             }

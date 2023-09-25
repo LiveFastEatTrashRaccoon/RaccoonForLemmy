@@ -2,10 +2,11 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import com.github.diegoberaldin.racconforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -28,6 +30,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 @Composable
 fun InboxMentionCard(
     mention: PersonMentionModel,
+    postLayout: PostLayout = PostLayout.Card,
     onOpenPost: (PostModel) -> Unit,
     onOpenCreator: (UserModel) -> Unit,
     onOpenCommunity: (CommunityModel) -> Unit,
@@ -42,14 +45,23 @@ fun InboxMentionCard(
             fontScale = fontScale,
         ),
     ) {
-        Card(
-            modifier = Modifier.background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(CornerSize.m),
-            ).padding(
-                vertical = Spacing.s,
-                horizontal = Spacing.s,
-            ).onClick {
+        Box(
+            modifier = Modifier.let {
+                if (postLayout == PostLayout.Card) {
+                    it.padding(bottom = Spacing.xs)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(CornerSize.l),
+                        ).padding(
+                            top = Spacing.s,
+                            bottom = Spacing.s,
+                            start = Spacing.s,
+                            end = Spacing.s,
+                        )
+                } else {
+                    it
+                }
+            }.onClick {
                 onOpenPost(mention.post)
             },
         ) {
@@ -80,6 +92,10 @@ fun InboxMentionCard(
                         onDownVote?.invoke(mention.comment)
                     },
                 )
+
+                if (postLayout != PostLayout.Card) {
+                    Divider(modifier = Modifier.padding(vertical = Spacing.s))
+                }
             }
         }
     }

@@ -113,6 +113,7 @@ class InboxMentionsScreen : Tab {
                         content = {
                             InboxMentionCard(
                                 mention = mention,
+                                postLayout = uiState.postLayout,
                                 onOpenPost = { post ->
                                     navigator?.push(
                                         PostDetailScreen(post),
