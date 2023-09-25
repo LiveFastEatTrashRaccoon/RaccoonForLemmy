@@ -115,7 +115,7 @@ class UserRepository(
         auth: String? = null,
         page: Int,
         limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
-        sort: SortType = SortType.Active,
+        sort: SortType = SortType.New,
         unreadOnly: Boolean = true,
     ): List<PersonMentionModel> = runCatching {
         val response = serviceProvider.user.getMentions(
@@ -133,7 +133,7 @@ class UserRepository(
         auth: String? = null,
         page: Int,
         limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
-        sort: SortType = SortType.Active,
+        sort: SortType = SortType.New,
         unreadOnly: Boolean = true,
     ): List<PersonMentionModel> = runCatching {
         val response = serviceProvider.user.getReplies(

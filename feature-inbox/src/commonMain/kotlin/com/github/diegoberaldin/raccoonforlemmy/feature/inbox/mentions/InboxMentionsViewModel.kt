@@ -96,6 +96,7 @@ class InboxMentionsViewModel(
         currentPage = 1
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
         loadNextPage()
+        updateUnreadItems()
     }
 
     private fun changeUnreadOnly(value: Boolean) {
@@ -241,6 +242,22 @@ class InboxMentionsViewModel(
                     )
                 }
             }
+        }
+    }
+
+    private fun updateUnreadItems() {
+        mvi.scope?.launch(Dispatchers.IO) {
+            val auth = identityRepository.authToken.value
+            val unreadCount = if (!auth.isNullOrEmpty()) {
+                val mentionCount =
+                    userRepository.getMentions(auth, page = 1, limit = 50).count()
+                val replyCount =
+                    userRepository.getReplies(auth, page = 1, limit = 50).count()
+                mentionCount + replyCount
+            } else {
+                0
+            }
+            mvi.emitEffect(InboxMentionsMviModel.Effect.UpdateUnreadItems(unreadCount))
         }
     }
 

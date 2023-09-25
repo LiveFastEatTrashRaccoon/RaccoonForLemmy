@@ -29,6 +29,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepos
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_surface
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_dark_surface
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_light_surface
+import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.di.getMainViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
@@ -37,6 +38,8 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.SearchTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
 import com.github.diegoberaldin.raccoonforlemmy.ui.navigation.TabNavigationItem
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlin.math.roundToInt
 
 internal class MainScreen : Screen {
@@ -47,23 +50,35 @@ internal class MainScreen : Screen {
     override fun Content() {
         val themeRepository = remember { getThemeRepository() }
         var bottomBarHeightPx by remember { mutableStateOf(0f) }
-        val bottomNavBarCoordinator = remember { getNavigationCoordinator() }
+        val navigationCoordinator = remember { getNavigationCoordinator() }
         val model = rememberScreenModel { getMainViewModel() }
+        model.bindToLifecycle(key)
+        val uiState by model.uiState.collectAsState()
 
-        LaunchedEffect(bottomNavBarCoordinator) {
+        LaunchedEffect(model) {
+            model.effects.onEach {
+                when (it) {
+                    is MainScreenMviModel.Effect.UnreadItemsDetected -> {
+                        navigationCoordinator.setInboxUnread(it.value)
+                    }
+                }
+            }.launchIn(this)
+        }
+
+        LaunchedEffect(navigationCoordinator) {
             val scrollConnection = object : NestedScrollConnection {
                 override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                     val delta = available.y
                     val newOffset =
-                        (model.bottomBarOffsetHeightPx.value + delta).coerceIn(
+                        (uiState.bottomBarOffsetHeightPx + delta).coerceIn(
                             -bottomBarHeightPx,
                             0f
                         )
-                    model.bottomBarOffsetHeightPx.value = newOffset
+                    model.reduce(MainScreenMviModel.Intent.SetBottomBarOffsetHeightPx(newOffset))
                     return Offset.Zero
                 }
             }
-            bottomNavBarCoordinator.apply {
+            navigationCoordinator.apply {
                 setBottomBarScrollConnection(scrollConnection)
                 setCurrentSection(HomeTab)
             }
@@ -85,7 +100,7 @@ internal class MainScreen : Screen {
                             .offset {
                                 IntOffset(
                                     x = 0,
-                                    y = -model.bottomBarOffsetHeightPx.value.roundToInt()
+                                    y = -uiState.bottomBarOffsetHeightPx.roundToInt()
                                 )
                             },
                         contentPadding = PaddingValues(0.dp),

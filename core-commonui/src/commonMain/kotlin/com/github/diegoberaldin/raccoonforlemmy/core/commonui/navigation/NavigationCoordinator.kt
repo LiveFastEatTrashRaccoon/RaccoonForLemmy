@@ -4,10 +4,12 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 
 interface NavigationCoordinator {
 
     val onDoubleTabSelection: SharedFlow<Tab>
+    val inboxUnread: StateFlow<Int>
 
     fun setCurrentSection(tab: Tab)
 
@@ -22,4 +24,6 @@ interface NavigationCoordinator {
     fun setBottomBarScrollConnection(value: NestedScrollConnection?)
 
     fun getBottomBarScrollConnection(): NestedScrollConnection?
+
+    fun setInboxUnread(count: Int)
 }

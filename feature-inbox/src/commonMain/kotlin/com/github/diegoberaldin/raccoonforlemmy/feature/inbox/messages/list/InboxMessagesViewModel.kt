@@ -9,6 +9,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.Ident
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.InboxCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
 import kotlinx.coroutines.Dispatchers
@@ -18,14 +19,15 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class InboxMessagesViewModel(
-    private val mvi: DefaultMviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.SideEffect>,
+    private val mvi: DefaultMviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
     private val messageRepository: PrivateMessageRepository,
+    private val userRepository: UserRepository,
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
-    MviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.SideEffect> by mvi {
+    MviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1
 
@@ -71,6 +73,7 @@ class InboxMessagesViewModel(
         currentPage = 1
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
         loadNextPage()
+        updateUnreadItems()
     }
 
     private fun changeUnreadOnly(value: Boolean) {
@@ -117,6 +120,22 @@ class InboxMessagesViewModel(
                     refreshing = false,
                 )
             }
+        }
+    }
+
+    private fun updateUnreadItems() {
+        mvi.scope?.launch(Dispatchers.IO) {
+            val auth = identityRepository.authToken.value
+            val unreadCount = if (!auth.isNullOrEmpty()) {
+                val mentionCount =
+                    userRepository.getMentions(auth, page = 1, limit = 50).count()
+                val replyCount =
+                    userRepository.getReplies(auth, page = 1, limit = 50).count()
+                mentionCount + replyCount
+            } else {
+                0
+            }
+            mvi.emitEffect(InboxMessagesMviModel.Effect.UpdateUnreadItems(unreadCount))
         }
     }
 

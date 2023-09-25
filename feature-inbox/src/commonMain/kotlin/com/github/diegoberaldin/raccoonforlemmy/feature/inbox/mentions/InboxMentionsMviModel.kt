@@ -26,5 +26,7 @@ interface InboxMentionsMviModel :
         val postLayout: PostLayout = PostLayout.Card,
     )
 
-    sealed interface Effect
+    sealed interface Effect {
+        data class UpdateUnreadItems(val value: Int) : Effect
+    }
 }

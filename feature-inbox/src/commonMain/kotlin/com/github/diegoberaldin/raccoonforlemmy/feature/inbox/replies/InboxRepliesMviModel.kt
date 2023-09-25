@@ -26,5 +26,7 @@ interface InboxRepliesMviModel :
         val swipeActionsEnabled: Boolean = true,
     )
 
-    sealed interface Effect
+    sealed interface Effect {
+        data class UpdateUnreadItems(val value: Int) : Effect
+    }
 }

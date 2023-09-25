@@ -41,12 +41,15 @@ kotlin {
                 implementation(libs.voyager.bottomsheet)
 
                 implementation(projects.coreUtils)
+                implementation(projects.coreArchitecture)
                 implementation(projects.coreAppearance)
                 implementation(projects.corePreferences)
                 implementation(projects.coreApi)
                 implementation(projects.coreCommonui)
                 implementation(projects.coreNotifications)
                 implementation(projects.domainIdentity)
+                implementation(projects.domainLemmy.data)
+                implementation(projects.domainLemmy.repository)
 
                 api(projects.resources)
                 api(projects.featureHome)

@@ -6,6 +6,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 internal class DefaultNavigationCoordinator : NavigationCoordinator {
@@ -17,6 +18,7 @@ internal class DefaultNavigationCoordinator : NavigationCoordinator {
     private var currentTab: Tab? = null
     private val scope = CoroutineScope(SupervisorJob())
     private var canGoBackCallback: (() -> Boolean)? = null
+    override val inboxUnread = MutableStateFlow(0)
 
     override fun setRootNavigator(value: Navigator?) {
         navigator = value
@@ -45,4 +47,8 @@ internal class DefaultNavigationCoordinator : NavigationCoordinator {
     }
 
     override fun getCanGoBackCallback(): (() -> Boolean)? = canGoBackCallback
+
+    override fun setInboxUnread(count: Int) {
+        inboxUnread.value = count
+    }
 }

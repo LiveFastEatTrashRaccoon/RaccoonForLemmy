@@ -4,7 +4,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
 
 interface InboxMessagesMviModel :
-    MviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.SideEffect> {
+    MviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
         data object LoadNextPage : Intent
@@ -19,5 +19,7 @@ interface InboxMessagesMviModel :
         val chats: List<PrivateMessageModel> = emptyList(),
     )
 
-    sealed interface SideEffect
+    sealed interface Effect {
+        data class UpdateUnreadItems(val value: Int) : Effect
+    }
 }

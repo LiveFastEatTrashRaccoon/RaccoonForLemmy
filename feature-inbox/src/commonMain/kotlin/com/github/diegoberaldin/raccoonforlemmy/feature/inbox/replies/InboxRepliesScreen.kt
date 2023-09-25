@@ -26,6 +26,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -48,6 +49,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxRepliesViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class InboxRepliesScreen : Tab {
     override val options: TabOptions
@@ -61,7 +64,18 @@ class InboxRepliesScreen : Tab {
         val model = rememberScreenModel { getInboxRepliesViewModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
+        val navigationCoordinator = remember { getNavigationCoordinator() }
+        val navigator = remember { navigationCoordinator.getRootNavigator() }
+
+        LaunchedEffect(model) {
+            model.effects.onEach { effect ->
+                when (effect) {
+                    is InboxRepliesMviModel.Effect.UpdateUnreadItems -> {
+                        navigationCoordinator.setInboxUnread(effect.value)
+                    }
+                }
+            }.launchIn(this)
+        }
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
             model.reduce(InboxRepliesMviModel.Intent.Refresh)

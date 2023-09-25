@@ -59,7 +59,7 @@ fun InboxMentionCard(
                             end = Spacing.s,
                         )
                 } else {
-                    it
+                    it.background(MaterialTheme.colorScheme.surface)
                 }
             }.onClick {
                 onOpenPost(mention.post)

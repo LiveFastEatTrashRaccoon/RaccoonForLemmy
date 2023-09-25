@@ -18,6 +18,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -32,10 +33,12 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxMessagesViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatScreen
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class InboxMessagesScreen : Tab {
 
@@ -50,7 +53,18 @@ class InboxMessagesScreen : Tab {
         val model = rememberScreenModel { getInboxMessagesViewModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
+        val navigationCoordinator = remember { getNavigationCoordinator() }
+        val navigator = remember { navigationCoordinator.getRootNavigator() }
+
+        LaunchedEffect(model) {
+            model.effects.onEach { effect ->
+                when (effect) {
+                    is InboxMessagesMviModel.Effect.UpdateUnreadItems -> {
+                        navigationCoordinator.setInboxUnread(effect.value)
+                    }
+                }
+            }.launchIn(this)
+        }
 
         val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
             model.reduce(InboxMessagesMviModel.Intent.Refresh)
