@@ -1,0 +1,7 @@
+- feat(settins, common-ui): possibility to configure custom primary, secondary and tertiary color
+- feat(settings, explore, common-ui, profile, inbox): support for multiple post layouts
+- refactor(common-ui): improve layout of community and creator post header
+- refactor(common-ui): improve community subscription icon buttons in top app bar
+- feat(common-ui): markdown support in sidebar
+- fix(home, explore): top app bar color while scrolling
+- fix(profile): login sheet title center alignment
