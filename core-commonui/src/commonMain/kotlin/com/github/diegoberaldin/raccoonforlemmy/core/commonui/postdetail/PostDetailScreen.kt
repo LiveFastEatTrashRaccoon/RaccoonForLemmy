@@ -238,6 +238,7 @@ class PostDetailScreen(
                                 PostCard(
                                     post = statePost,
                                     postLayout = uiState.postLayout,
+                                    withOverflowBlurred = false,
                                     blurNsfw = false,
                                     options = buildList {
                                         add(stringResource(MR.strings.post_action_share))

@@ -40,6 +40,7 @@ fun PostCard(
     post: PostModel,
     hideAuthor: Boolean = false,
     postLayout: PostLayout = PostLayout.Card,
+    withOverflowBlurred: Boolean = true,
     blurNsfw: Boolean,
     options: List<String> = emptyList(),
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
@@ -82,10 +83,11 @@ fun PostCard(
                     post = post,
                     hideAuthor = hideAuthor,
                     withDivider = postLayout == PostLayout.Full,
-                    overflowBlurColor = when (postLayout) {
+                    backgroundColor = when (postLayout) {
                         PostLayout.Card -> MaterialTheme.colorScheme.surfaceVariant
                         else -> MaterialTheme.colorScheme.surface
                     },
+                    withOverflowBlurred = withOverflowBlurred,
                     blurNsfw = blurNsfw,
                     options = options,
                     onOpenCommunity = onOpenCommunity,
@@ -188,7 +190,8 @@ private fun ExtendedPost(
     hideAuthor: Boolean = false,
     blurNsfw: Boolean,
     withDivider: Boolean = false,
-    overflowBlurColor: Color = MaterialTheme.colorScheme.background,
+    withOverflowBlurred: Boolean = true,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
     options: List<String> = emptyList(),
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
     onOpenCreator: ((UserModel) -> Unit)? = null,
@@ -200,7 +203,7 @@ private fun ExtendedPost(
     onOptionSelected: ((Int) -> Unit)? = null,
 ) {
     Column(
-        modifier = modifier.background(overflowBlurColor),
+        modifier = modifier.background(backgroundColor),
         verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
     ) {
         CommunityAndCreatorInfo(
@@ -222,23 +225,31 @@ private fun ExtendedPost(
         Box {
             PostCardBody(
                 modifier = Modifier
-                    .heightIn(max = 200.dp)
+                    .let {
+                        if (withOverflowBlurred) {
+                            it.heightIn(max = 200.dp)
+                        } else {
+                            it
+                        }
+                    }
                     .padding(bottom = Spacing.xs),
                 text = post.text,
             )
-            Box(
-                modifier = Modifier
-                    .height(Spacing.s)
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter).background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                overflowBlurColor,
+            if (withOverflowBlurred) {
+                Box(
+                    modifier = Modifier
+                        .height(Spacing.s)
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter).background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    backgroundColor,
+                                ),
                             ),
                         ),
-                    ),
-            )
+                )
+            }
         }
         PostLinkBanner(
             modifier = Modifier.padding(vertical = Spacing.xs),
