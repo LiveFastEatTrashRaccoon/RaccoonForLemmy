@@ -18,6 +18,7 @@ val profileTabModule = module {
             identityRepository = get(),
             keyStore = get(),
             notificationCenter = get(),
+            themeRepository = get(),
         )
     }
     factory {

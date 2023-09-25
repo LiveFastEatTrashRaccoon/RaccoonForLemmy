@@ -1,6 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.profile.content
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -8,6 +10,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -17,10 +20,12 @@ class ProfileContentViewModel(
     private val mvi: DefaultMviModel<ProfileContentMviModel.Intent, ProfileContentMviModel.UiState, ProfileContentMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val keyStore: TemporaryKeyStore,
+    private val themeRepository: ThemeRepository,
     private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<ProfileContentMviModel.Intent, ProfileContentMviModel.UiState, ProfileContentMviModel.Effect> by mvi {
 
+    @OptIn(FlowPreview::class)
     override fun onStarted() {
         mvi.onStarted()
 
@@ -38,23 +43,37 @@ class ProfileContentViewModel(
     }
 
     private fun logout() {
-        keyStore.remove(KeyStoreKeys.UiTheme)
-        keyStore.remove(KeyStoreKeys.DynamicColors)
-        keyStore.remove(KeyStoreKeys.CustomPrimaryColor)
-        keyStore.remove(KeyStoreKeys.CustomSecondaryColor)
-        keyStore.remove(KeyStoreKeys.CustomTertiaryColor)
-        keyStore.remove(KeyStoreKeys.ContentFontScale)
-        keyStore.remove(KeyStoreKeys.Locale)
-        keyStore.remove(KeyStoreKeys.DefaultListingType)
-        keyStore.remove(KeyStoreKeys.DefaultCommentSortType)
-        keyStore.remove(KeyStoreKeys.DefaultPostSortType)
-        keyStore.remove(KeyStoreKeys.EnableSwipeActions)
-        keyStore.remove(KeyStoreKeys.NavItemTitlesVisible)
-        keyStore.remove(KeyStoreKeys.OpenUrlsInExternalBrowser)
-        keyStore.remove(KeyStoreKeys.IncludeNsfw)
-        keyStore.remove(KeyStoreKeys.BlurNsfw)
+        keyStore.apply {
+            remove(KeyStoreKeys.UiTheme)
+            remove(KeyStoreKeys.ContentFontScale)
+            remove(KeyStoreKeys.Locale)
+            remove(KeyStoreKeys.LastIntance)
+            remove(KeyStoreKeys.DefaultListingType)
+            remove(KeyStoreKeys.DefaultPostSortType)
+            remove(KeyStoreKeys.DefaultCommentSortType)
+            remove(KeyStoreKeys.IncludeNsfw)
+            remove(KeyStoreKeys.BlurNsfw)
+            remove(KeyStoreKeys.NavItemTitlesVisible)
+            remove(KeyStoreKeys.DynamicColors)
+            remove(KeyStoreKeys.OpenUrlsInExternalBrowser)
+            remove(KeyStoreKeys.EnableSwipeActions)
+            remove(KeyStoreKeys.CustomPrimaryColor)
+            remove(KeyStoreKeys.CustomSecondaryColor)
+            remove(KeyStoreKeys.CustomTertiaryColor)
+            remove(KeyStoreKeys.PostLayout)
+        }
+
         identityRepository.clearToken()
-        notificationCenter.getAllObservers(NotificationCenterContractKeys.Logout)?.forEach {
+        themeRepository.apply {
+            changePostLayout(PostLayout.Card)
+            changeCustomPrimaryColor(null)
+            changeCustomSecondaryColor(null)
+            changeCustomTertiaryColor(null)
+            changeDynamicColors(false)
+            changeNavItemTitles(true)
+        }
+
+        notificationCenter.getAllObservers(NotificationCenterContractKeys.Logout).forEach {
             it.invoke(Unit)
         }
     }
