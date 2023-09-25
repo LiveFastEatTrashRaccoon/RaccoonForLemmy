@@ -61,6 +61,32 @@ fun Markdown(
     flavour: MarkdownFlavourDescriptor = GFMFlavourDescriptor(),
     onOpenUrl: ((String) -> Unit)? = null,
 ) {
+    val matches = Regex("::: spoiler (?<title>.*?)\\n(?<content>.*?)\\n:::\\n").findAll(content)
+    val mangledContent = buildString {
+        var lastIndex = -1
+        for (match in matches) {
+            val (start, end) = match.range.first to match.range.last
+            if (lastIndex == -1) {
+                append(content.substring(0, start))
+            } else {
+                append(content.substring(lastIndex, start))
+            }
+            val title = match.groups["title"]?.value.orEmpty()
+            val spoilerContent = match.groups["content"]?.value.orEmpty()
+            val replacement =
+                "<details>\\n<summary>\\n$title\\n</summary>\\n\\n$spoilerContent\\n</details>\\n"
+            append(replacement)
+            lastIndex = end
+        }
+        if (lastIndex >= 0) {
+            if (lastIndex < content.length) {
+                append(content.substring(lastIndex))
+            }
+        } else {
+            append(content)
+        }
+    }
+
     CompositionLocalProvider(
         LocalReferenceLinkHandler provides ReferenceLinkHandlerImpl(),
         LocalMarkdownPadding provides padding,
@@ -68,11 +94,11 @@ fun Markdown(
         LocalMarkdownTypography provides typography,
     ) {
         Column(modifier) {
-            val parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(content)
+            val parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(mangledContent)
             parsedTree.children.forEach { node ->
-                if (!node.handleElement(content, onOpenUrl)) {
+                if (!node.handleElement(mangledContent, onOpenUrl)) {
                     node.children.forEach { child ->
-                        child.handleElement(content, onOpenUrl)
+                        child.handleElement(mangledContent, onOpenUrl)
                     }
                 }
             }
@@ -89,7 +115,11 @@ private fun ASTNode.handleElement(
     var handled = true
     Spacer(Modifier.height(LocalMarkdownPadding.current.block))
     when (type) {
-        TEXT -> MarkdownText(getTextInNode(content).toString(), onOpenUrl = onOpenUrl)
+        TEXT -> {
+            val text = getTextInNode(content).toString()
+            MarkdownText(text, onOpenUrl = onOpenUrl)
+        }
+
         EOL -> {}
         CODE_FENCE -> MarkdownCodeFence(content, this)
         CODE_BLOCK -> MarkdownCodeBlock(content, this)
