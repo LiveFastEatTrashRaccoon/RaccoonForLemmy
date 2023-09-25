@@ -213,7 +213,10 @@ private fun ExtendedPost(
             onOpenCreator = onOpenCreator,
         )
         PostCardTitle(
-            modifier = Modifier.padding(top = Spacing.s),
+            modifier = Modifier.padding(
+                vertical = Spacing.s,
+                horizontal = Spacing.xxs,
+            ),
             text = post.title
         )
         PostCardImage(
@@ -232,7 +235,11 @@ private fun ExtendedPost(
                             it
                         }
                     }
-                    .padding(bottom = Spacing.xs),
+                    .padding(
+                        start = Spacing.xxs,
+                        end = Spacing.xxs,
+                        bottom = Spacing.xs,
+                    ),
                 text = post.text,
             )
             if (withOverflowBlurred) {
