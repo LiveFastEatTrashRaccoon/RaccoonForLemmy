@@ -95,6 +95,8 @@ class ProfileSavedViewModel(
                 post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
+
+            is ProfileSavedMviModel.Intent.ChangeSort -> applySortType(intent.value)
         }
     }
 
@@ -120,12 +122,13 @@ class ProfileSavedViewModel(
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
             val section = currentState.section
+            val sortType = currentState.sortType
             if (section == ProfileSavedSection.Posts) {
                 val postList = userRepository.getSavedPosts(
                     auth = auth,
                     id = user.id,
                     page = currentPage,
-                    sort = SortType.New,
+                    sort = sortType,
                 )
                 val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE
                 mvi.updateState {
@@ -146,7 +149,7 @@ class ProfileSavedViewModel(
                     auth = auth,
                     id = user.id,
                     page = currentPage,
-                    sort = SortType.New,
+                    sort = sortType,
                 )
                 val canFetchMore = commentList.size >= PostsRepository.DEFAULT_PAGE_SIZE
                 mvi.updateState {
@@ -167,6 +170,11 @@ class ProfileSavedViewModel(
         }
     }
 
+    private fun applySortType(value: SortType) {
+        mvi.updateState { it.copy(sortType = value) }
+        refresh()
+    }
+
     private fun handlePostUpdate(post: PostModel) {
         mvi.updateState {
             it.copy(
@@ -183,14 +191,6 @@ class ProfileSavedViewModel(
 
     private fun handlePostDelete(id: Int) {
         mvi.updateState { it.copy(posts = it.posts.filter { post -> post.id != id }) }
-    }
-
-    private fun deletePost(id: Int) {
-        mvi.scope?.launch(Dispatchers.IO) {
-            val auth = identityRepository.authToken.value.orEmpty()
-            postsRepository.delete(id = id, auth = auth)
-            handlePostDelete(id)
-        }
     }
 
     private fun changeSection(section: ProfileSavedSection) {

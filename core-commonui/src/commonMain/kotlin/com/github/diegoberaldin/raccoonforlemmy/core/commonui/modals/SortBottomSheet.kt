@@ -105,7 +105,7 @@ internal class SortBottomSheetMain(
                         )
                             .fillMaxWidth()
                             .onClick {
-                                if (value == SortType.Top.Generic == expandTop) {
+                                if (value == SortType.Top.Generic && expandTop) {
                                     navigator.push(
                                         SortBottomSheetTop()
                                     )
@@ -170,6 +170,7 @@ internal class SortBottomSheetTop(
                         navigator.pop()
                     },
                     imageVector = Icons.Default.ArrowBack,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     contentDescription = null,
                 )
                 Text(

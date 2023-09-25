@@ -46,10 +46,15 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Section
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileSavedViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -74,6 +79,7 @@ internal class ProfileSavedScreen(
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val notificationCenter = remember { getNotificationCenter() }
 
         Scaffold(
             topBar = {
@@ -81,6 +87,28 @@ internal class ProfileSavedScreen(
                     scrollBehavior = scrollBehavior,
                     title = {
                         Text(stringResource(MR.strings.profile_section_saved))
+                    },
+                    actions = {
+                        Image(
+                            modifier = Modifier.onClick {
+                                val sheet = SortBottomSheet(
+                                    values = listOf(
+                                        SortType.Hot,
+                                        SortType.New,
+                                        SortType.Old,
+                                    ),
+                                )
+                                notificationCenter.addObserver({
+                                    (it as? SortType)?.also { sortType ->
+                                        model.reduce(ProfileSavedMviModel.Intent.ChangeSort(sortType))
+                                    }
+                                }, key, NotificationCenterContractKeys.ChangeSortType)
+                                bottomSheetNavigator.show(sheet)
+                            },
+                            imageVector = uiState.sortType.toIcon(),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                        )
                     },
                     navigationIcon = {
                         Image(
@@ -126,7 +154,7 @@ internal class ProfileSavedScreen(
                     modifier = Modifier.pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.xxxs),
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         if (uiState.section == ProfileSavedSection.Posts) {

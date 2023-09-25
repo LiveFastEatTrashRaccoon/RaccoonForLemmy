@@ -207,6 +207,7 @@ private fun ExtendedPost(
         verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
     ) {
         CommunityAndCreatorInfo(
+            modifier = Modifier.padding(horizontal = Spacing.xxs),
             community = post.community,
             creator = post.creator.takeIf { !hideAuthor },
             onOpenCommunity = onOpenCommunity,
@@ -215,7 +216,7 @@ private fun ExtendedPost(
         PostCardTitle(
             modifier = Modifier.padding(
                 vertical = Spacing.s,
-                horizontal = Spacing.xxs,
+                horizontal = Spacing.xs,
             ),
             text = post.title
         )
@@ -236,8 +237,8 @@ private fun ExtendedPost(
                         }
                     }
                     .padding(
-                        start = Spacing.xxs,
-                        end = Spacing.xxs,
+                        start = Spacing.xs,
+                        end = Spacing.xs,
                         bottom = Spacing.xs,
                     ),
                 text = post.text,
