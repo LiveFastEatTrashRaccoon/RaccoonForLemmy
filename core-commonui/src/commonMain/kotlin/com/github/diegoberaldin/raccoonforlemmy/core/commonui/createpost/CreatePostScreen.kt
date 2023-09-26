@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,8 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Send
@@ -37,7 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -47,7 +49,9 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCreatePostViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -96,8 +100,6 @@ class CreatePostScreen(
                             ?.also { o -> o.invoke(Unit) }
                         bottomSheetNavigator.hide()
                     }
-
-                    else -> {}
                 }
             }.launchIn(this)
         }
@@ -123,14 +125,19 @@ class CreatePostScreen(
             SnackbarHost(snackbarHostState)
         }) { padding ->
             Column(
-                modifier = Modifier.padding(padding)
+                modifier = Modifier
+                    .padding(padding)
+                    .verticalScroll(rememberScrollState()),
             ) {
                 val bodyFocusRequester = remember { FocusRequester() }
                 val urlFocusRequester = remember { FocusRequester() }
-                val focusManager = LocalFocusManager.current
                 TextField(
                     modifier = Modifier.fillMaxWidth().heightIn(max = 300.dp),
-                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                    ),
                     label = {
                         Text(text = stringResource(MR.strings.create_post_name))
                     },
@@ -168,7 +175,11 @@ class CreatePostScreen(
 
                 TextField(
                     modifier = Modifier.fillMaxWidth().focusRequester(urlFocusRequester),
-                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                    ),
                     maxLines = 1,
                     label = {
                         Text(text = stringResource(MR.strings.create_post_url))
@@ -223,45 +234,87 @@ class CreatePostScreen(
                     })
                 }
 
-                TextField(
-                    modifier = Modifier.height(500.dp).fillMaxWidth()
-                        .focusRequester(bodyFocusRequester),
-                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
-                    label = {
-                        Text(text = stringResource(MR.strings.create_post_body))
-                    },
-                    textStyle = MaterialTheme.typography.bodyMedium,
-                    value = uiState.body,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        autoCorrect = true,
+                SectionSelector(
+                    titles = listOf(
+                        stringResource(MR.strings.create_post_tab_editor),
+                        stringResource(MR.strings.create_post_tab_preview),
                     ),
-                    onValueChange = { value ->
-                        model.reduce(CreatePostMviModel.Intent.SetText(value))
+                    currentSection = when (uiState.section) {
+                        CreatePostSection.Preview -> 1
+                        else -> 0
                     },
-                    isError = uiState.bodyError != null,
-                    supportingText = {
-                        if (uiState.bodyError != null) {
-                            Text(
-                                text = uiState.bodyError?.localized().orEmpty(),
-                                color = MaterialTheme.colorScheme.error,
-                            )
+                    onSectionSelected = {
+                        val section = when (it) {
+                            1 -> CreatePostSection.Preview
+                            else -> CreatePostSection.Edit
                         }
-                    },
+                        model.reduce(CreatePostMviModel.Intent.ChangeSection(section))
+                    }
                 )
 
+                if (uiState.section == CreatePostSection.Edit) {
+                    TextField(
+                        modifier = Modifier
+                            .height(500.dp)
+                            .fillMaxWidth()
+                            .focusRequester(bodyFocusRequester),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                        ),
+                        label = {
+                            Text(text = stringResource(MR.strings.create_post_body))
+                        },
+                        textStyle = MaterialTheme.typography.bodyMedium,
+                        value = uiState.body,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            autoCorrect = true,
+                        ),
+                        onValueChange = { value ->
+                            model.reduce(CreatePostMviModel.Intent.SetText(value))
+                        },
+                        isError = uiState.bodyError != null,
+                        supportingText = {
+                            if (uiState.bodyError != null) {
+                                Text(
+                                    text = uiState.bodyError?.localized().orEmpty(),
+                                    color = MaterialTheme.colorScheme.error,
+                                )
+                            }
+                        },
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .height(500.dp)
+                            .fillMaxWidth()
+                    ) {
+                        PostCardBody(
+                            modifier = Modifier
+                                .padding(Spacing.s)
+                                .verticalScroll(rememberScrollState()),
+                            text = uiState.body,
+                        )
+                    }
+                }
+
                 Row(
-                    modifier = Modifier.padding(top = Spacing.s),
+                    modifier = Modifier.padding(top = Spacing.xs),
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
-                    IconButton(content = {
-                        Icon(
-                            imageVector = Icons.Default.Send,
-                            contentDescription = null,
-                        )
-                    }, onClick = {
-                        model.reduce(CreatePostMviModel.Intent.Send)
-                    })
+                    IconButton(
+                        content = {
+                            Icon(
+                                imageVector = Icons.Default.Send,
+                                contentDescription = null,
+                            )
+                        },
+                        onClick = {
+                            model.reduce(CreatePostMviModel.Intent.Send)
+                        },
+                    )
                 }
 
                 Spacer(Modifier.height(Spacing.xxl))

@@ -54,6 +54,11 @@ class CreatePostViewModel(
                 loadImageAndObtainUrl(intent.value)
             }
 
+
+            is CreatePostMviModel.Intent.ChangeSection -> mvi.updateState {
+                it.copy(section = intent.value)
+            }
+
             CreatePostMviModel.Intent.Send -> submit()
         }
     }

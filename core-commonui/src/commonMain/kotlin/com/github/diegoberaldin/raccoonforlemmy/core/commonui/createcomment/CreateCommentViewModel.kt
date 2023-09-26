@@ -42,6 +42,10 @@ class CreateCommentViewModel(
                 }
             }
 
+            is CreateCommentMviModel.Intent.ChangeSection -> mvi.updateState {
+                it.copy(section = intent.value)
+            }
+
             CreateCommentMviModel.Intent.Send -> submit()
         }
     }

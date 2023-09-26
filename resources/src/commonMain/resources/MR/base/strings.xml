@@ -138,4 +138,6 @@
     <string name="create_post_body">Post body</string>
     <string name="create_post_url">URL</string>
     <string name="create_post_nsfw">NSFW</string>
+    <string name="create_post_tab_editor">Editor</string>
+    <string name="create_post_tab_preview">Preview</string>
 </resources>

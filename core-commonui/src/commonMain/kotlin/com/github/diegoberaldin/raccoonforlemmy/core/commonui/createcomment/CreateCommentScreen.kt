@@ -39,7 +39,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -52,7 +51,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostSection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCreateCommentViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -127,7 +129,9 @@ class CreateCommentScreen(
             SnackbarHost(snackbarHostState)
         }) { padding ->
             Column(
-                modifier = Modifier.padding(padding).verticalScroll(rememberScrollState())
+                modifier = Modifier
+                    .padding(padding)
+                    .verticalScroll(rememberScrollState()),
             ) {
                 val themeRepository = remember { getThemeRepository() }
                 val fontScale by themeRepository.contentFontScale.collectAsState()
@@ -167,47 +171,86 @@ class CreateCommentScreen(
                         ),
                 )
 
-                val commentFocusRequester = remember { FocusRequester() }
-                val focusManager = LocalFocusManager.current
-                TextField(
-                    modifier = Modifier.focusRequester(commentFocusRequester)
-                        .heightIn(min = 300.dp, max = 500.dp).fillMaxWidth(),
-                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
-                    label = {
-                        Text(text = stringResource(MR.strings.create_comment_body))
-                    },
-                    textStyle = MaterialTheme.typography.bodyMedium,
-                    value = uiState.text,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        autoCorrect = true,
+                SectionSelector(
+                    titles = listOf(
+                        stringResource(MR.strings.create_post_tab_editor),
+                        stringResource(MR.strings.create_post_tab_preview),
                     ),
-                    onValueChange = { value ->
-                        model.reduce(CreateCommentMviModel.Intent.SetText(value))
+                    currentSection = when (uiState.section) {
+                        CreatePostSection.Preview -> 1
+                        else -> 0
                     },
-                    isError = uiState.textError != null,
-                    supportingText = {
-                        if (uiState.textError != null) {
-                            Text(
-                                text = uiState.textError?.localized().orEmpty(),
-                                color = MaterialTheme.colorScheme.error,
-                            )
+                    onSectionSelected = {
+                        val section = when (it) {
+                            1 -> CreatePostSection.Preview
+                            else -> CreatePostSection.Edit
                         }
-                    },
+                        model.reduce(CreateCommentMviModel.Intent.ChangeSection(section))
+                    }
                 )
 
+                if (uiState.section == CreatePostSection.Edit) {
+                    val commentFocusRequester = remember { FocusRequester() }
+                    TextField(
+                        modifier = Modifier.focusRequester(commentFocusRequester)
+                            .heightIn(min = 300.dp, max = 500.dp).fillMaxWidth(),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                        ),
+                        label = {
+                            Text(text = stringResource(MR.strings.create_comment_body))
+                        },
+                        textStyle = MaterialTheme.typography.bodyMedium,
+                        value = uiState.text,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            autoCorrect = true,
+                        ),
+                        onValueChange = { value ->
+                            model.reduce(CreateCommentMviModel.Intent.SetText(value))
+                        },
+                        isError = uiState.textError != null,
+                        supportingText = {
+                            if (uiState.textError != null) {
+                                Text(
+                                    text = uiState.textError?.localized().orEmpty(),
+                                    color = MaterialTheme.colorScheme.error,
+                                )
+                            }
+                        },
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .heightIn(min = 300.dp, max = 500.dp)
+                            .fillMaxWidth()
+                    ) {
+                        PostCardBody(
+                            modifier = Modifier
+                                .padding(Spacing.s)
+                                .verticalScroll(rememberScrollState()),
+                            text = uiState.text,
+                        )
+                    }
+                }
+
                 Row(
-                    modifier = Modifier.padding(top = Spacing.s),
+                    modifier = Modifier.padding(top = Spacing.xs),
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
-                    IconButton(content = {
-                        Icon(
-                            imageVector = Icons.Default.Send,
-                            contentDescription = null,
-                        )
-                    }, onClick = {
-                        model.reduce(CreateCommentMviModel.Intent.Send)
-                    })
+                    IconButton(
+                        content = {
+                            Icon(
+                                imageVector = Icons.Default.Send,
+                                contentDescription = null,
+                            )
+                        },
+                        onClick = {
+                            model.reduce(CreateCommentMviModel.Intent.Send)
+                        },
+                    )
                 }
 
                 Spacer(Modifier.height(Spacing.xxl))

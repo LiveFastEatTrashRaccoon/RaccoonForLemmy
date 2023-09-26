@@ -11,7 +11,24 @@ interface CreatePostMviModel :
         data class SetText(val value: String) : Intent
         data class SetUrl(val value: String) : Intent
         data class ChangeNsfw(val value: Boolean) : Intent
-        data class ImageSelected(val value: ByteArray) : Intent
+        data class ImageSelected(val value: ByteArray) : Intent {
+            override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (other == null || this::class != other::class) return false
+
+                other as ImageSelected
+
+                if (!value.contentEquals(other.value)) return false
+
+                return true
+            }
+
+            override fun hashCode(): Int {
+                return value.contentHashCode()
+            }
+        }
+
+        data class ChangeSection(val value: CreatePostSection) : Intent
         data object Send : Intent
     }
 
@@ -24,6 +41,7 @@ interface CreatePostMviModel :
         val urlError: StringDesc? = null,
         val nsfw: Boolean = false,
         val loading: Boolean = false,
+        val section: CreatePostSection = CreatePostSection.Edit,
     )
 
     sealed interface Effect {
