@@ -166,7 +166,7 @@ class CreateCommentScreen(
                 Box(
                     modifier = Modifier.padding(vertical = Spacing.s).fillMaxWidth().height(1.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onBackground,
                             shape = RoundedCornerShape(1.dp),
                         ),
                 )

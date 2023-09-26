@@ -69,23 +69,15 @@ fun App() {
     val themeRepository = remember { getThemeRepository() }
     val navTitles = keyStore[KeyStoreKeys.NavItemTitlesVisible, false]
     val dynamicColors = keyStore[KeyStoreKeys.DynamicColors, false]
-    val customPrimaryColor = if (keyStore.containsKey(KeyStoreKeys.CustomPrimaryColor)) {
-        Color(keyStore[KeyStoreKeys.CustomPrimaryColor, Color.Black.toArgb()])
-    } else null
-    val customSecondaryColor = if (keyStore.containsKey(KeyStoreKeys.CustomSecondaryColor)) {
-        Color(keyStore[KeyStoreKeys.CustomSecondaryColor, Color.Black.toArgb()])
-    } else null
-    val customTertiaryColor = if (keyStore.containsKey(KeyStoreKeys.CustomTertiaryColor)) {
-        Color(keyStore[KeyStoreKeys.CustomTertiaryColor, Color.Black.toArgb()])
+    val customSeedColor = if (keyStore.containsKey(KeyStoreKeys.CustomSeedColor)) {
+        Color(keyStore[KeyStoreKeys.CustomSeedColor, Color.Black.toArgb()])
     } else null
     val postLayout = keyStore[KeyStoreKeys.PostLayout, PostLayout.Card.toInt()].toPostLayout()
     LaunchedEffect(Unit) {
         with(themeRepository) {
             changeNavItemTitles(navTitles)
             changeDynamicColors(dynamicColors)
-            changeCustomPrimaryColor(customPrimaryColor)
-            changeCustomSecondaryColor(customSecondaryColor)
-            changeCustomTertiaryColor(customTertiaryColor)
+            changeCustomSeedColor(customSeedColor)
             changePostLayout(postLayout)
         }
     }

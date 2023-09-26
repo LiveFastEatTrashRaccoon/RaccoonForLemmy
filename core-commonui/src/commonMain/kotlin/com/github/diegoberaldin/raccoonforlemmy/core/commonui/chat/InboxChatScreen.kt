@@ -71,7 +71,8 @@ class InboxChatScreen(
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
 
         Scaffold(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                .padding(Spacing.xs),
             topBar = {
                 TopAppBar(
                     title = {
@@ -106,7 +107,7 @@ class InboxChatScreen(
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )
                     },
                 )
@@ -172,7 +173,7 @@ class InboxChatScreen(
                             val focusManager = LocalFocusManager.current
                             Box(
                                 modifier = Modifier.weight(1f).background(
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f),
+                                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
                                     shape = RoundedCornerShape(CornerSize.l)
                                 ).padding(Spacing.s)
                             ) {
@@ -181,9 +182,9 @@ class InboxChatScreen(
                                         .fillMaxWidth()
                                         .heightIn(min = 20.dp, max = 200.dp),
                                     textStyle = MaterialTheme.typography.bodyMedium.copy(
-                                        color = MaterialTheme.colorScheme.onSurface,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     ),
-                                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
+                                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimaryContainer),
                                     value = uiState.newMessageContent,
                                     keyboardOptions = KeyboardOptions(
                                         keyboardType = KeyboardType.Ascii,

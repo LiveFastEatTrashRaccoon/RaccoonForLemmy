@@ -126,8 +126,9 @@ class CommunityDetailScreen(
         }
 
         val stateCommunity = uiState.community
-        Scaffold(modifier = Modifier.background(MaterialTheme.colorScheme.surface)
-            .padding(Spacing.xs),
+        Scaffold(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                .padding(Spacing.xs),
             topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
@@ -190,7 +191,7 @@ class CommunityDetailScreen(
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )
                     },
                 )
@@ -435,8 +436,8 @@ class CommunityDetailScreen(
                         refreshing = uiState.refreshing,
                         state = pullRefreshState,
                         modifier = Modifier.align(Alignment.TopCenter),
-                        backgroundColor = MaterialTheme.colorScheme.surface,
-                        contentColor = MaterialTheme.colorScheme.onSurface,
+                        backgroundColor = MaterialTheme.colorScheme.background,
+                        contentColor = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }

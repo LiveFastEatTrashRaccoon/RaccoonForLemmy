@@ -15,7 +15,7 @@
     <string name="message_login_successful">🎉 Login effettuato con successo! 🎉</string>
 
     <string name="button_confirm">Conferma</string>
-    <string name="button_reset">Ripristina predefinito</string>
+    <string name="button_reset">Reset</string>
 
     <string name="home_listing_type_all">Tutti</string>
     <string name="home_listing_type_local">Locali</string>
@@ -103,13 +103,19 @@
     <string name="settings_dynamic_colors">Usa colori dinamici</string>
     <string name="settings_open_url_external">Apri URL su browser esterno</string>
     <string name="settings_enable_swipe_actions">Consenti azioni allo swipe</string>
-    <string name="settings_primary_color">Colore primario</string>
-    <string name="settings_secondary_color">Colore secondario</string>
-    <string name="settings_tertiary_color">Colore terziario</string>
+    <string name="settings_custom_seed_color">Colore tema personalizzato</string>
     <string name="settings_post_layout">Layout post</string>
     <string name="settings_post_layout_list">Lista</string>
     <string name="settings_post_layout_card">Carta</string>
     <string name="settings_post_layout_full">Intero</string>
+    <string name="settings_color_blue">Blu aziendale</string>
+    <string name="settings_color_aquamarine">Acquamarina</string>
+    <string name="settings_color_purple">Iris</string>
+    <string name="settings_color_green">Menta piperita</string>
+    <string name="settings_color_red">Rosso fuoco</string>
+    <string name="settings_color_orange">Aranciata</string>
+    <string name="settings_color_pink">Rosa shocking</string>
+    <string name="settings_color_gray">Cemento</string>
 
     <string name="community_detail_info">Info comunità</string>
     <string name="community_detail_instance_info">Dettagli istanza</string>

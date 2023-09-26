@@ -15,11 +15,7 @@ interface ThemeRepository {
 
     val dynamicColors: StateFlow<Boolean>
 
-    val customPrimaryColor: StateFlow<Color?>
-
-    val customSecondaryColor: StateFlow<Color?>
-
-    val customTertiaryColor: StateFlow<Color?>
+    val customSeedColor: StateFlow<Color?>
 
     val postLayout: StateFlow<PostLayout>
 
@@ -38,11 +34,7 @@ interface ThemeRepository {
         endColor: Color,
     ): Color
 
-    fun changeCustomPrimaryColor(color: Color?)
-
-    fun changeCustomSecondaryColor(color: Color?)
-
-    fun changeCustomTertiaryColor(color: Color?)
+    fun changeCustomSeedColor(color: Color?)
 
     fun changePostLayout(value: PostLayout)
 }

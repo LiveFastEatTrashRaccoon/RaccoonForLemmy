@@ -68,7 +68,8 @@ class InstanceInfoScreen(
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
         Scaffold(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface).padding(Spacing.xs),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                .padding(Spacing.xs),
             topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
@@ -79,7 +80,7 @@ class InstanceInfoScreen(
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )
                     },
                     title = {
@@ -177,8 +178,8 @@ class InstanceInfoScreen(
                     refreshing = uiState.refreshing,
                     state = pullRefreshState,
                     modifier = Modifier.align(Alignment.TopCenter),
-                    backgroundColor = MaterialTheme.colorScheme.surface,
-                    contentColor = MaterialTheme.colorScheme.onSurface,
+                    backgroundColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.onBackground,
                 )
             }
         }

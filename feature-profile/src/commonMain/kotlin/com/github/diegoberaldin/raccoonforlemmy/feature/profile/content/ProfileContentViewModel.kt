@@ -57,18 +57,14 @@ class ProfileContentViewModel(
             remove(KeyStoreKeys.DynamicColors)
             remove(KeyStoreKeys.OpenUrlsInExternalBrowser)
             remove(KeyStoreKeys.EnableSwipeActions)
-            remove(KeyStoreKeys.CustomPrimaryColor)
-            remove(KeyStoreKeys.CustomSecondaryColor)
-            remove(KeyStoreKeys.CustomTertiaryColor)
+            remove(KeyStoreKeys.CustomSeedColor)
             remove(KeyStoreKeys.PostLayout)
         }
 
         identityRepository.clearToken()
         themeRepository.apply {
             changePostLayout(PostLayout.Card)
-            changeCustomPrimaryColor(null)
-            changeCustomSecondaryColor(null)
-            changeCustomTertiaryColor(null)
+            changeCustomSeedColor(null)
             changeDynamicColors(false)
             changeNavItemTitles(true)
         }

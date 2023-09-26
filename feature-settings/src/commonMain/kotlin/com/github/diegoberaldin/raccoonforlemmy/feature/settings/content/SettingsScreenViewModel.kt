@@ -66,14 +66,8 @@ class SettingsScreenViewModel(
             themeRepository.dynamicColors.onEach { value ->
                 mvi.updateState { it.copy(dynamicColors = value) }
             }.launchIn(this)
-            themeRepository.customPrimaryColor.onEach { value ->
-                mvi.updateState { it.copy(customPrimaryColor = value) }
-            }.launchIn(this)
-            themeRepository.customSecondaryColor.onEach { value ->
-                mvi.updateState { it.copy(customSecondaryColor = value) }
-            }.launchIn(this)
-            themeRepository.customTertiaryColor.onEach { value ->
-                mvi.updateState { it.copy(customTertiaryColor = value) }
+            themeRepository.customSeedColor.onEach { value ->
+                mvi.updateState { it.copy(customSeedColor = value) }
             }.launchIn(this)
             themeRepository.postLayout.onEach { value ->
                 mvi.updateState { it.copy(postLayout = value) }
@@ -156,15 +150,7 @@ class SettingsScreenViewModel(
                 changeEnableSwipeActions(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeCustomPrimaryColor -> changeCustomPrimaryColor(
-                intent.value
-            )
-
-            is SettingsScreenMviModel.Intent.ChangeCustomSecondaryColor -> changeCustomSecondaryColor(
-                intent.value
-            )
-
-            is SettingsScreenMviModel.Intent.ChangeCustomTertiaryColor -> changeCustomTertiaryColor(
+            is SettingsScreenMviModel.Intent.ChangeCustomSeedColor -> changeCustomSeedColor(
                 intent.value
             )
 
@@ -222,30 +208,12 @@ class SettingsScreenViewModel(
         keyStore.save(KeyStoreKeys.DynamicColors, value)
     }
 
-    private fun changeCustomPrimaryColor(value: Color?) {
-        themeRepository.changeCustomPrimaryColor(value)
+    private fun changeCustomSeedColor(value: Color?) {
+        themeRepository.changeCustomSeedColor(value)
         if (value != null) {
-            keyStore.save(KeyStoreKeys.CustomPrimaryColor, value.toArgb())
+            keyStore.save(KeyStoreKeys.CustomSeedColor, value.toArgb())
         } else {
-            keyStore.remove(KeyStoreKeys.CustomPrimaryColor)
-        }
-    }
-
-    private fun changeCustomSecondaryColor(value: Color?) {
-        themeRepository.changeCustomSecondaryColor(value)
-        if (value != null) {
-            keyStore.save(KeyStoreKeys.CustomSecondaryColor, value.toArgb())
-        } else {
-            keyStore.remove(KeyStoreKeys.CustomSecondaryColor)
-        }
-    }
-
-    private fun changeCustomTertiaryColor(value: Color?) {
-        themeRepository.changeCustomTertiaryColor(value)
-        if (value != null) {
-            keyStore.save(KeyStoreKeys.CustomTertiaryColor, value.toArgb())
-        } else {
-            keyStore.remove(KeyStoreKeys.CustomTertiaryColor)
+            keyStore.remove(KeyStoreKeys.CustomSeedColor)
         }
     }
 

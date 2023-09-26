@@ -14,6 +14,7 @@ ktor = "2.3.4"
 ktorfit_gradle = "1.7.0"
 ktorfit_lib = "1.7.0"
 markdown = "0.5.0"
+materialKolor = "1.2.5"
 moko_resources = "0.23.0"
 multiplatform_settings = "1.0.0"
 voyager = "1.0.0-rc07"
@@ -42,6 +43,8 @@ ktor_logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor_json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktorfit_ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit.lib" }
 ktorfit_lib = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit.lib" }
+
+materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 
 moko_gradle = { module = "dev.icerock.moko:resources-generator", version.ref = "moko.resources" }
 moko_resources = { module = "dev.icerock.moko:resources", version.ref = "moko.resources" }

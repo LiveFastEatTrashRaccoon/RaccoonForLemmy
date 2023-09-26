@@ -131,7 +131,7 @@ fun CommunityHeader(
                     Text(
                         text = community.name.firstOrNull()?.toString().orEmpty().uppercase(),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }
@@ -143,7 +143,7 @@ fun CommunityHeader(
                 Text(
                     text = community.name,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
 
                 Text(
@@ -157,7 +157,7 @@ fun CommunityHeader(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
         }

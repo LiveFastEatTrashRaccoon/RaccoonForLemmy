@@ -72,13 +72,13 @@ fun PostCardFooter(
                     },
                     imageVector = Icons.Default.Chat,
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface),
+                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
                 )
                 Text(
                     modifier = Modifier.padding(end = Spacing.s),
                     text = "$comments",
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
             if (date != null) {
@@ -86,7 +86,7 @@ fun PostCardFooter(
                     modifier = buttonModifier.padding(1.dp),
                     imageVector = Icons.Default.Schedule,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface,
+                    tint = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
                     text = date.let {
@@ -118,7 +118,7 @@ fun PostCardFooter(
                         }
                     },
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
             if (options.isNotEmpty()) {
@@ -149,7 +149,7 @@ fun PostCardFooter(
                     color = if (saved) {
                         MaterialTheme.colorScheme.secondary
                     } else {
-                        MaterialTheme.colorScheme.onSurface
+                        MaterialTheme.colorScheme.onBackground
                     },
                 ),
             )
@@ -158,7 +158,7 @@ fun PostCardFooter(
                     .let {
                         if (upVoted) {
                             it.background(
-                                color = MaterialTheme.colorScheme.onSurface,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 shape = CircleShape,
                             )
                         } else {
@@ -175,23 +175,23 @@ fun PostCardFooter(
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
                     color = if (upVoted) {
-                        MaterialTheme.colorScheme.surface
+                        MaterialTheme.colorScheme.background
                     } else {
-                        MaterialTheme.colorScheme.onSurface
+                        MaterialTheme.colorScheme.onBackground
                     },
                 ),
             )
             Text(
                 text = "$score",
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onBackground,
             )
             Image(
                 modifier = buttonModifier
                     .let {
                         if (downVoted) {
                             it.background(
-                                color = MaterialTheme.colorScheme.onSurface,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 shape = CircleShape,
                             )
                         } else {
@@ -209,9 +209,9 @@ fun PostCardFooter(
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
                     color = if (downVoted) {
-                        MaterialTheme.colorScheme.surface
+                        MaterialTheme.colorScheme.background
                     } else {
-                        MaterialTheme.colorScheme.onSurface
+                        MaterialTheme.colorScheme.onBackground
                     },
                 ),
             )

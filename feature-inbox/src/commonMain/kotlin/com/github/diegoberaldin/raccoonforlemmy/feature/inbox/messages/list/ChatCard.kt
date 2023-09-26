@@ -103,7 +103,7 @@ internal fun ChatCard(
                     }
                 },
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             // last message text
             Text(
@@ -111,7 +111,7 @@ internal fun ChatCard(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.9f),
+                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f),
             )
 
             // last message date
@@ -125,7 +125,7 @@ internal fun ChatCard(
                         modifier = buttonModifier.padding(1.dp),
                         imageVector = Icons.Default.Schedule,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface,
+                        tint = MaterialTheme.colorScheme.onBackground,
                     )
                     Text(
                         text = lastMessageDate.let {
@@ -157,7 +157,7 @@ internal fun ChatCard(
                             }
                         },
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
             }

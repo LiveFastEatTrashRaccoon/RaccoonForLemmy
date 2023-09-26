@@ -92,7 +92,7 @@ class LoginBottomSheet : Screen {
         Scaffold(
             modifier = Modifier
                 .fillMaxHeight(0.65f)
-                .background(MaterialTheme.colorScheme.surface),
+                .background(MaterialTheme.colorScheme.background),
             topBar = {
                 TopAppBar(
                     title = {
@@ -225,7 +225,7 @@ class LoginBottomSheet : Screen {
                                 Icons.Default.Visibility
                             },
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface),
+                            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
                         )
                     },
                     supportingText = {

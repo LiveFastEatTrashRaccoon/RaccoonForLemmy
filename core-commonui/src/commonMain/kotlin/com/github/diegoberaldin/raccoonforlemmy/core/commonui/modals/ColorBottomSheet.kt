@@ -52,21 +52,20 @@ class ColorBottomSheet : Screen {
                 BottomSheetHandle()
                 Text(
                     modifier = Modifier.padding(start = Spacing.s, top = Spacing.s),
-                    text = stringResource(MR.strings.settings_ui_theme),
+                    text = stringResource(MR.strings.settings_custom_seed_color),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
             }
             val values: List<Pair<Color?, String>> = listOf(
-                Color.Red to "Red",
-                Color.Green to "Green",
-                Color.Blue to "Blue",
-                Color.Cyan to "Cyan",
-                Color.Magenta to "Magenta",
-                Color.Yellow to "Yellow",
-                Color.Gray to "Gray",
-                Color.DarkGray to "Dark gray",
-                Color.LightGray to "Light gray",
+                Color(0xFF001F7D) to stringResource(MR.strings.settings_color_blue),
+                Color(0xFF36B3B3) to stringResource(MR.strings.settings_color_aquamarine),
+                Color(0xFF884DFF) to stringResource(MR.strings.settings_color_purple),
+                Color(0xFF00B300) to stringResource(MR.strings.settings_color_green),
+                Color(0xFFFF0000) to stringResource(MR.strings.settings_color_red),
+                Color(0xFFFF66600) to stringResource(MR.strings.settings_color_orange),
+                Color(0xFFFC0FC0) to stringResource(MR.strings.settings_color_pink),
+                Color(0xFF303B47) to stringResource(MR.strings.settings_color_gray),
                 null to stringResource(MR.strings.button_reset),
             )
             Column(

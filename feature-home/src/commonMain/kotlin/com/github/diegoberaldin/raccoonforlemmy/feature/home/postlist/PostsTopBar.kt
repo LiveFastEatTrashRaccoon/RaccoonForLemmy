@@ -39,7 +39,7 @@ internal fun PostsTopBar(
     TopAppBar(
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
-            scrolledContainerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.background,
         ),
         navigationIcon = {
             if (listingType != null) {

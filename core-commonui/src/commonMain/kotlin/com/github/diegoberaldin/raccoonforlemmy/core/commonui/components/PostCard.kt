@@ -63,7 +63,7 @@ fun PostCard(
             modifier = modifier.let {
                 if (postLayout == PostLayout.Card) {
                     it.background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         shape = RoundedCornerShape(CornerSize.l),
                     ).padding(Spacing.s)
                 } else {
@@ -76,8 +76,8 @@ fun PostCard(
                     post = post,
                     hideAuthor = hideAuthor,
                     backgroundColor = when (postLayout) {
-                        PostLayout.Card -> MaterialTheme.colorScheme.surfaceVariant
-                        else -> MaterialTheme.colorScheme.surface
+                        PostLayout.Card -> MaterialTheme.colorScheme.primaryContainer
+                        else -> MaterialTheme.colorScheme.background
                     },
                     withOverflowBlurred = withOverflowBlurred,
                     blurNsfw = blurNsfw,
@@ -128,7 +128,7 @@ private fun CompactPost(
     onOptionSelected: ((Int) -> Unit)? = null,
 ) {
     Column(
-        modifier = modifier.background(MaterialTheme.colorScheme.surface),
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
     ) {
         CommunityAndCreatorInfo(

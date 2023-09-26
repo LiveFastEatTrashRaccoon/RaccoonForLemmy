@@ -21,7 +21,7 @@ fun BottomSheetHandle(
             .height(3.dp)
             .padding(vertical = Spacing.xxxs)
             .background(
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onBackground,
                 shape = RoundedCornerShape(1.dp),
             ),
     )

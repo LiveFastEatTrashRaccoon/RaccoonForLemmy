@@ -42,7 +42,7 @@ class WebViewScreen(
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )
                     },
                 )

@@ -36,8 +36,8 @@ fun PostCardTitle(
             paragraph = MaterialTheme.typography.bodyMedium,
         ),
         colors = markdownColor(
-            text = MaterialTheme.colorScheme.onSurfaceVariant,
-            backgroundCode = MaterialTheme.colorScheme.surfaceVariant,
+            text = MaterialTheme.colorScheme.onBackground,
+            backgroundCode = MaterialTheme.colorScheme.background,
         ),
         onOpenUrl = { url ->
             val openExternal = keyStore[KeyStoreKeys.OpenUrlsInExternalBrowser, false]

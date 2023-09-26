@@ -30,6 +30,9 @@ kotlin {
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
                 implementation(compose.materialIconsExtended)
+
+                implementation(libs.materialKolor)
+
                 implementation(projects.resources)
             }
         }

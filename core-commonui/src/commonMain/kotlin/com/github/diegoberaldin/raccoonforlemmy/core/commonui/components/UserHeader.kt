@@ -109,7 +109,7 @@ fun UserHeader(
                             .orEmpty()
                             .uppercase(),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }
@@ -127,7 +127,7 @@ fun UserHeader(
                         }
                     },
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
                     text = buildString {
@@ -138,7 +138,7 @@ fun UserHeader(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
 
                 // stats and age
@@ -158,7 +158,7 @@ fun UserHeader(
                         Text(
                             text = postScore.toString(),
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                     if (commentScore != null) {
@@ -173,7 +173,7 @@ fun UserHeader(
                         Text(
                             text = commentScore.toString(),
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
 
@@ -215,7 +215,7 @@ fun UserHeader(
                                 }
                             },
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }

@@ -48,11 +48,11 @@ fun InboxMentionCard(
             modifier = Modifier.let {
                 if (postLayout == PostLayout.Card) {
                     it.background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         shape = RoundedCornerShape(CornerSize.l),
                     ).padding(Spacing.s)
                 } else {
-                    it.background(MaterialTheme.colorScheme.surface)
+                    it.background(MaterialTheme.colorScheme.background)
                 }
             }.onClick {
                 onOpenPost(mention.post)

@@ -55,7 +55,7 @@ class ZoomableImageScreen(
                             },
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface,
+                            tint = MaterialTheme.colorScheme.onBackground,
                         )
                     },
                     actions = {
@@ -65,7 +65,7 @@ class ZoomableImageScreen(
                             },
                             imageVector = Icons.Default.Download,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface,
+                            tint = MaterialTheme.colorScheme.onBackground,
                         )
                         Spacer(Modifier.width(Spacing.s))
                         Icon(
@@ -74,7 +74,7 @@ class ZoomableImageScreen(
                             },
                             imageVector = Icons.Default.Share,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface,
+                            tint = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 )

@@ -135,10 +135,10 @@ class SettingsScreen : Screen {
                     }
 
                     val colorSchemeProvider = remember { getColorSchemeProvider() }
-                    // custom primary color
+                    // custom scheme seed color
                     SettingsColorRow(
-                        title = stringResource(MR.strings.settings_primary_color),
-                        value = uiState.customPrimaryColor ?: colorSchemeProvider.getColorScheme(
+                        title = stringResource(MR.strings.settings_custom_seed_color),
+                        value = uiState.customSeedColor ?: colorSchemeProvider.getColorScheme(
                             theme = uiState.currentTheme,
                             dynamic = uiState.dynamicColors,
                         ).primary,
@@ -146,47 +146,7 @@ class SettingsScreen : Screen {
                             val sheet = ColorBottomSheet()
                             notificationCenter.addObserver({ result ->
                                 model.reduce(
-                                    SettingsScreenMviModel.Intent.ChangeCustomPrimaryColor(
-                                        result as? Color?
-                                    )
-                                )
-                            }, key, NotificationCenterContractKeys.ChangeColor)
-                            bottomSheetNavigator.show(sheet)
-                        },
-                    )
-
-                    // custom secondary color
-                    SettingsColorRow(
-                        title = stringResource(MR.strings.settings_secondary_color),
-                        value = uiState.customSecondaryColor ?: colorSchemeProvider.getColorScheme(
-                            theme = uiState.currentTheme,
-                            dynamic = uiState.dynamicColors,
-                        ).secondary,
-                        onTap = {
-                            val sheet = ColorBottomSheet()
-                            notificationCenter.addObserver({ result ->
-                                model.reduce(
-                                    SettingsScreenMviModel.Intent.ChangeCustomSecondaryColor(
-                                        result as? Color?
-                                    )
-                                )
-                            }, key, NotificationCenterContractKeys.ChangeColor)
-                            bottomSheetNavigator.show(sheet)
-                        },
-                    )
-
-                    // custom tertiary color
-                    SettingsColorRow(
-                        title = stringResource(MR.strings.settings_tertiary_color),
-                        value = uiState.customTertiaryColor ?: colorSchemeProvider.getColorScheme(
-                            theme = uiState.currentTheme,
-                            dynamic = uiState.dynamicColors,
-                        ).tertiary,
-                        onTap = {
-                            val sheet = ColorBottomSheet()
-                            notificationCenter.addObserver({ result ->
-                                model.reduce(
-                                    SettingsScreenMviModel.Intent.ChangeCustomTertiaryColor(
+                                    SettingsScreenMviModel.Intent.ChangeCustomSeedColor(
                                         result as? Color?
                                     )
                                 )

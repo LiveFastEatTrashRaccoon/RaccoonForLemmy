@@ -94,7 +94,7 @@ fun InboxReplySubtitle(
                                 }
                             },
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }
@@ -149,7 +149,7 @@ fun InboxReplySubtitle(
                 modifier = buttonModifier,
                 imageVector = Icons.Default.Schedule,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = MaterialTheme.colorScheme.onBackground,
             )
             Text(
                 text = date?.let {
@@ -187,7 +187,7 @@ fun InboxReplySubtitle(
                     .let {
                         if (upVoted) {
                             it.background(
-                                color = MaterialTheme.colorScheme.onSurface,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 shape = CircleShape,
                             )
                         } else {
@@ -204,9 +204,9 @@ fun InboxReplySubtitle(
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
                     color = if (upVoted) {
-                        MaterialTheme.colorScheme.surface
+                        MaterialTheme.colorScheme.background
                     } else {
-                        MaterialTheme.colorScheme.onSurface
+                        MaterialTheme.colorScheme.onBackground
                     },
                 ),
             )
@@ -218,7 +218,7 @@ fun InboxReplySubtitle(
                     .let {
                         if (downVoted) {
                             it.background(
-                                color = MaterialTheme.colorScheme.onSurface,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 shape = CircleShape,
                             )
                         } else {
@@ -236,9 +236,9 @@ fun InboxReplySubtitle(
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
                     color = if (downVoted) {
-                        MaterialTheme.colorScheme.surface
+                        MaterialTheme.colorScheme.background
                     } else {
-                        MaterialTheme.colorScheme.onSurface
+                        MaterialTheme.colorScheme.onBackground
                     },
                 ),
             )

@@ -25,17 +25,13 @@ interface SettingsScreenMviModel :
         data class ChangeBlurNsfw(val value: Boolean) : Intent
         data class ChangeOpenUrlsInExternalBrowser(val value: Boolean) : Intent
         data class ChangeEnableSwipeActions(val value: Boolean) : Intent
-        data class ChangeCustomPrimaryColor(val value: Color?) : Intent
-        data class ChangeCustomSecondaryColor(val value: Color?) : Intent
-        data class ChangeCustomTertiaryColor(val value: Color?) : Intent
+        data class ChangeCustomSeedColor(val value: Color?) : Intent
     }
 
     data class UiState(
         val isLogged: Boolean = false,
         val currentTheme: ThemeState = ThemeState.Light,
-        val customPrimaryColor: Color? = null,
-        val customSecondaryColor: Color? = null,
-        val customTertiaryColor: Color? = null,
+        val customSeedColor: Color? = null,
         val currentFontScale: FontScale = FontScale.Normal,
         val lang: String = "",
         val postLayout: PostLayout = PostLayout.Card,

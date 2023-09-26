@@ -25,7 +25,7 @@ fun SectionSelector(
                         Text(
                             text = title,
                             style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     },
                     onClick = {

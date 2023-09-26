@@ -11,21 +11,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.BlackColor
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.DarkColors
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.LightColors
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.applyCustom
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_background
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_errorContainer
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_onBackground
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_onErrorContainer
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_onPrimaryContainer
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_onSecondaryContainer
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_onSurface
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_onSurfaceVariant
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_onTertiaryContainer
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_primaryContainer
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_secondaryContainer
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_surface
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_surfaceVariant
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_tertiaryContainer
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.blackify
+import com.materialkolor.dynamicColorScheme
 
 internal class DefaultColorSchemeProvider(private val context: Context) : ColorSchemeProvider {
 
@@ -37,32 +24,54 @@ internal class DefaultColorSchemeProvider(private val context: Context) : ColorS
     override fun getColorScheme(
         theme: ThemeState,
         dynamic: Boolean,
-        customPrimary: Color?,
-        customSecondary: Color?,
-        customTertiary: Color?,
+        customSeed: Color?,
     ): ColorScheme = when (theme) {
-        ThemeState.Dark -> if (dynamic) dynamicDarkColorScheme(context) else DarkColors
-        ThemeState.Black -> if (dynamic) dynamicDarkColorScheme(context).copy(
-            primaryContainer = md_theme_black_primaryContainer,
-            onPrimaryContainer = md_theme_black_onPrimaryContainer,
-            secondaryContainer = md_theme_black_secondaryContainer,
-            onSecondaryContainer = md_theme_black_onSecondaryContainer,
-            tertiaryContainer = md_theme_black_tertiaryContainer,
-            onTertiaryContainer = md_theme_black_onTertiaryContainer,
-            errorContainer = md_theme_black_errorContainer,
-            onErrorContainer = md_theme_black_onErrorContainer,
-            background = md_theme_black_background,
-            onBackground = md_theme_black_onBackground,
-            surface = md_theme_black_surface,
-            onSurface = md_theme_black_onSurface,
-            surfaceVariant = md_theme_black_surfaceVariant,
-            onSurfaceVariant = md_theme_black_onSurfaceVariant,
-        ) else BlackColors
+        ThemeState.Dark -> {
+            when {
+                dynamic -> {
+                    dynamicDarkColorScheme(context)
+                }
 
-        else -> if (dynamic) dynamicLightColorScheme(context) else LightColors
-    }.applyCustom(
-        customPrimary,
-        customSecondary,
-        customTertiary
-    )
+                customSeed != null -> {
+                    dynamicColorScheme(customSeed, true)
+                }
+
+                else -> {
+                    DarkColors
+                }
+            }
+        }
+
+        ThemeState.Black -> {
+            when {
+                dynamic -> {
+                    dynamicDarkColorScheme(context).blackify()
+                }
+
+                customSeed != null -> {
+                    dynamicColorScheme(customSeed, true).blackify()
+                }
+
+                else -> {
+                    BlackColors
+                }
+            }
+        }
+
+        else -> {
+            when {
+                dynamic -> {
+                    dynamicLightColorScheme(context)
+                }
+
+                customSeed != null -> {
+                    dynamicColorScheme(customSeed, false)
+                }
+
+                else -> {
+                    LightColors
+                }
+            }
+        }
+    }
 }

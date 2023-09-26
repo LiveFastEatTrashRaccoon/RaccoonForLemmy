@@ -18,7 +18,7 @@
     <string name="message_login_successful">🎉 Login successful! 🎉</string>
 
     <string name="button_confirm">Confirm</string>
-    <string name="button_reset">Reset default</string>
+    <string name="button_reset">Reset</string>
 
     <string name="home_listing_type_all">All</string>
     <string name="home_listing_type_local">Local</string>
@@ -105,13 +105,19 @@
     <string name="settings_dynamic_colors">Use dynamic colors</string>
     <string name="settings_open_url_external">Open URLs in external browser</string>
     <string name="settings_enable_swipe_actions">Enable swipe actions</string>
-    <string name="settings_primary_color">Primary color</string>
-    <string name="settings_secondary_color">Secondary color</string>
-    <string name="settings_tertiary_color">Tertiary color</string>
+    <string name="settings_custom_seed_color">Custom theme color</string>
     <string name="settings_post_layout">Post layout</string>
     <string name="settings_post_layout_list">List</string>
     <string name="settings_post_layout_card">Card</string>
     <string name="settings_post_layout_full">Full</string>
+    <string name="settings_color_blue">Corporate blue</string>
+    <string name="settings_color_aquamarine">Aquamarine</string>
+    <string name="settings_color_purple">Iris</string>
+    <string name="settings_color_green">Peppermint</string>
+    <string name="settings_color_red">Bright red</string>
+    <string name="settings_color_orange">Orance juice</string>
+    <string name="settings_color_pink">Shocking pink</string>
+    <string name="settings_color_gray">Concrete</string>
 
     <string name="community_detail_info">Community info</string>
     <string name="community_detail_instance_info">Instance details</string>

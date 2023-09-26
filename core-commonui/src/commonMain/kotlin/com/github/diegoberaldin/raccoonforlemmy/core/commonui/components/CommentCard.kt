@@ -53,7 +53,7 @@ fun CommentCard(
         ),
     ) {
         Column(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
         ) {
             var commentHeight by remember { mutableStateOf(0f) }
             val barWidth = 2.dp
@@ -61,7 +61,7 @@ fun CommentCard(
                 depth = comment.depth,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
                 startColor = MaterialTheme.colorScheme.primary,
-                endColor = MaterialTheme.colorScheme.surface,
+                endColor = MaterialTheme.colorScheme.background,
             )
             Box(
                 modifier = modifier.padding(
@@ -113,7 +113,7 @@ fun CommentCard(
                 modifier = Modifier
                     .height(Dp.Hairline)
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
+                    .background(MaterialTheme.colorScheme.background)
             )
         }
     }
