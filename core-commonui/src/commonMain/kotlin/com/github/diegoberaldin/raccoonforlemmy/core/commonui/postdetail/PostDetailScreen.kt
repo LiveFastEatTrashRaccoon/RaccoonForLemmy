@@ -352,6 +352,7 @@ class PostDetailScreen(
                                             comment = comment,
                                             options = buildList {
                                                 if (comment.creator?.id == uiState.currentUserId) {
+                                                    add(stringResource(MR.strings.post_action_edit))
                                                     add(stringResource(MR.strings.comment_action_delete))
                                                 }
                                             },
