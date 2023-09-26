@@ -269,6 +269,16 @@ class PostDetailScreen(
                                             ),
                                         )
                                     },
+                                    onReply = {
+                                        val screen = CreateCommentScreen(
+                                            originalPost = statePost,
+                                        )
+                                        notificationCenter.addObserver({
+                                            model.reduce(PostDetailMviModel.Intent.Refresh)
+                                            model.reduce(PostDetailMviModel.Intent.RefreshPost)
+                                        }, key, NotificationCenterContractKeys.CommentCreated)
+                                        bottomSheetNavigator.show(screen)
+                                    },
                                     onOptionSelected = { idx ->
                                         when (idx) {
                                             1 -> {
