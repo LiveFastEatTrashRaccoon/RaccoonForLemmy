@@ -1,2 +1,0 @@
-- add open source crash report library for Android
-- update build scripts for F-Droid
