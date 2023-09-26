@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -41,7 +40,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -111,30 +109,17 @@ class CreateCommentScreen(
         Scaffold(topBar = {
             TopAppBar(
                 title = {
-                    Box {
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
-                            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            BottomSheetHandle()
-                            Text(
-                                text = stringResource(MR.strings.create_comment_title),
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-                        Row {
-                            Spacer(modifier = Modifier.weight(1f))
-                            IconButton(content = {
-                                Icon(
-                                    imageVector = Icons.Default.Send,
-                                    contentDescription = null,
-                                )
-                            }, onClick = {
-                                model.reduce(CreateCommentMviModel.Intent.Send)
-                            })
-                        }
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        BottomSheetHandle()
+                        Text(
+                            text = stringResource(MR.strings.create_comment_title),
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
                     }
                 },
             )
@@ -194,13 +179,9 @@ class CreateCommentScreen(
                     textStyle = MaterialTheme.typography.bodyMedium,
                     value = uiState.text,
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Ascii,
-                        autoCorrect = false,
-                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Text,
+                        autoCorrect = true,
                     ),
-                    keyboardActions = KeyboardActions(onDone = {
-                        focusManager.clearFocus()
-                    }),
                     onValueChange = { value ->
                         model.reduce(CreateCommentMviModel.Intent.SetText(value))
                     },
@@ -214,6 +195,20 @@ class CreateCommentScreen(
                         }
                     },
                 )
+
+                Row(
+                    modifier = Modifier.padding(top = Spacing.s),
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    IconButton(content = {
+                        Icon(
+                            imageVector = Icons.Default.Send,
+                            contentDescription = null,
+                        )
+                    }, onClick = {
+                        model.reduce(CreateCommentMviModel.Intent.Send)
+                    })
+                }
 
                 Spacer(Modifier.height(Spacing.xxl))
             }

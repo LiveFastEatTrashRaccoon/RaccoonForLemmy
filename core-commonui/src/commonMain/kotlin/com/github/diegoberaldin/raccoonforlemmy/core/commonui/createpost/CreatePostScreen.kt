@@ -1,7 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -106,30 +105,17 @@ class CreatePostScreen(
         Scaffold(topBar = {
             TopAppBar(
                 title = {
-                    Box {
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
-                            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            BottomSheetHandle()
-                            Text(
-                                text = stringResource(MR.strings.create_post_title),
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-                        Row {
-                            Spacer(modifier = Modifier.weight(1f))
-                            IconButton(content = {
-                                Icon(
-                                    imageVector = Icons.Default.Send,
-                                    contentDescription = null,
-                                )
-                            }, onClick = {
-                                model.reduce(CreatePostMviModel.Intent.Send)
-                            })
-                        }
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        BottomSheetHandle()
+                        Text(
+                            text = stringResource(MR.strings.create_post_title),
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
                     }
                 },
             )
@@ -247,13 +233,9 @@ class CreatePostScreen(
                     textStyle = MaterialTheme.typography.bodyMedium,
                     value = uiState.body,
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Ascii,
-                        autoCorrect = false,
-                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Text,
+                        autoCorrect = true,
                     ),
-                    keyboardActions = KeyboardActions(onDone = {
-                        focusManager.clearFocus()
-                    }),
                     onValueChange = { value ->
                         model.reduce(CreatePostMviModel.Intent.SetText(value))
                     },
@@ -267,6 +249,20 @@ class CreatePostScreen(
                         }
                     },
                 )
+
+                Row(
+                    modifier = Modifier.padding(top = Spacing.s),
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    IconButton(content = {
+                        Icon(
+                            imageVector = Icons.Default.Send,
+                            contentDescription = null,
+                        )
+                    }, onClick = {
+                        model.reduce(CreatePostMviModel.Intent.Send)
+                    })
+                }
 
                 Spacer(Modifier.height(Spacing.xxl))
             }
