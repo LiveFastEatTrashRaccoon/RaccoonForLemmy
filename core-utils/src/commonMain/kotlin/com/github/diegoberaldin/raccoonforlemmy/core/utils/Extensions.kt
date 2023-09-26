@@ -34,6 +34,7 @@ fun Modifier.onClick(onClick: () -> Unit): Modifier = composed {
 
 @Composable
 fun String.toLanguageName() = when (this) {
+    "es" -> stringResource(MR.strings.language_es)
     "it" -> stringResource(MR.strings.language_it)
     else -> stringResource(MR.strings.language_en)
 }

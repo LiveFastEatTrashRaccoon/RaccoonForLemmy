@@ -10,6 +10,7 @@
 
     <string name="language_en" translatable="false">English</string>
     <string name="language_it" translatable="false">Italiano</string>
+    <string name="language_es" translatable="false">Español</string>
 
     <string name="message_generic_error">Generic error</string>
     <string name="message_missing_field">Missing field</string>

@@ -52,6 +52,7 @@ class LanguageBottomSheet : Screen {
                 )
                 val values = listOf(
                     "en",
+                    "es",
                     "it",
                 )
                 Column(
