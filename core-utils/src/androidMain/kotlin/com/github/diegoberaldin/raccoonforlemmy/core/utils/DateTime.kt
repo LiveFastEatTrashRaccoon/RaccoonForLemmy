@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.racconforlemmy.core.utils
+package com.github.diegoberaldin.raccoonforlemmy.core.utils
 
 import java.time.Period
 import java.time.ZonedDateTime

@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.racconforlemmy.core.utils
+package com.github.diegoberaldin.raccoonforlemmy.core.utils
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

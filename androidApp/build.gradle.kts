@@ -17,7 +17,7 @@ android {
         buildConfigField(
             "String",
             "CRASH_REPORT_EMAIL",
-            "\"diego.beraldin+raccon4lemmy@gmail.com\""
+            "\"diego.beraldin+raccoon4lemmy@gmail.com\""
         )
         buildConfigField("String", "CRASH_REPORT_SUBJECT", "\"Crash report\"")
     }

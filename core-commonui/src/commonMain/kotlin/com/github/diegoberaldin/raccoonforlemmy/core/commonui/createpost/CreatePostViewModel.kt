@@ -1,9 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import com.github.diegoberaldin.racconforlemmy.core.utils.StringUtils.isValidUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.StringUtils.isValidUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR.strings.message_invalid_field

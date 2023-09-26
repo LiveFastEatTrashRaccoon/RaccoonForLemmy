@@ -1,6 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase
 
-import com.github.diegoberaldin.racconforlemmy.core.utils.Log
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.Log
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.AuthRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository

@@ -1,11 +1,10 @@
-- feat(inbox): check for new items and show badge number in bottom bar
+- feat(inbox): check for new items, show badge number in bottom bar
 - feat(profile): saved items can be sorted
 - fix(ui): open community and user from post header
-- fix(ui): move send button to bottom in post and comment, allow return in keyboard
+- fix(ui): move send button to bottom in post and comment
 - fix(ui): possibility to reply from footer icon in post detail
-- fix(ui): swipe area  in card mode and dividers
-- fix(ui): show full post in detail screen without height limit
-- fix(inbox): mention and reply background in full layout mode
+- fix(ui): swipe area  in card mode
+- fix(ui): show full post in detail screen
+- fix(inbox): mention and reply background in full mode
 - fix(profile): improve logout
 - fix(ui): improve layout post card margins
-- chore(deps): update gradle wrapper

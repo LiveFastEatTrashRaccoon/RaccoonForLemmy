@@ -33,7 +33,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.racconforlemmy.domain.lemmy"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.domain.lemmy"
     compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

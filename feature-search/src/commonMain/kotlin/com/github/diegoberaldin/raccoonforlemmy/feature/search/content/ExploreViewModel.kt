@@ -1,7 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.content
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import com.github.diegoberaldin.racconforlemmy.core.utils.HapticFeedback
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel

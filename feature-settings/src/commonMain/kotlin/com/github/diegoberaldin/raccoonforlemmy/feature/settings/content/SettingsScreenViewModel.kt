@@ -3,7 +3,6 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.settings.content
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import cafe.adriel.voyager.core.model.ScreenModel
-import com.github.diegoberaldin.racconforlemmy.core.utils.AppInfo
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toFontScale
@@ -16,6 +15,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.AppInfo
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType

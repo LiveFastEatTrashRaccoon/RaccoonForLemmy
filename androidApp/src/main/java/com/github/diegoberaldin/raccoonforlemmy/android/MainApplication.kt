@@ -2,7 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.android
 
 import android.app.Application
 import android.content.Context
-import com.github.diegoberaldin.racconforlemmy.core.utils.AppInfo
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.AppInfo
 import com.github.diegoberaldin.raccoonforlemmy.di.sharedHelperModule
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import org.acra.config.mailSender

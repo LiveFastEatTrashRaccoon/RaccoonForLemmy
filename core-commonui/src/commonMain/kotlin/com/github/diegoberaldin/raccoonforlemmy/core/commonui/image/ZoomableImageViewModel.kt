@@ -1,12 +1,12 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.image
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import com.github.diegoberaldin.racconforlemmy.core.utils.DateTime
-import com.github.diegoberaldin.racconforlemmy.core.utils.GalleryHelper
-import com.github.diegoberaldin.racconforlemmy.core.utils.ShareHelper
-import com.github.diegoberaldin.racconforlemmy.core.utils.download
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.DateTime
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.GalleryHelper
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.ShareHelper
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.download
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch

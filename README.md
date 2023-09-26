@@ -2,16 +2,16 @@
   <img src="https://img.shields.io/badge/Kotlin-1.9.10-7f52ff?logo=kotlin" />
   <img src="https://img.shields.io/badge/platforms-Android,iOS-green" />
   <img src="https://img.shields.io/badge/Jetpack_Compose-1.5.1-3e7fea?logo=jetpackcompose" />
-  <img src="https://img.shields.io/github/license/diegoberaldin/RacconForLemmy" />
+  <img src="https://img.shields.io/github/license/diegoberaldin/RaccoonForLemmy" />
 </div>
 
 <br />
 
 <div align="center">
-  <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/6785188f-9c2a-4622-ab6b-5aa116d27c31" width="250" height="auto" />
+  <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/6785188f-9c2a-4622-ab6b-5aa116d27c31" width="250" height="auto" />
 </div>
 
-# Raccon for Lemmy
+# Raccoon for Lemmy
 
 A Kotlin Multiplatform Mobile client for Lemmy.
 
@@ -19,26 +19,26 @@ A Kotlin Multiplatform Mobile client for Lemmy.
 <table>
   <tr>
     <td><!-- Home -->
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/01b3f04b-3900-46dc-b835-efc11c89ab63" width="310" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/01b3f04b-3900-46dc-b835-efc11c89ab63" width="310" />
     </td>
     <td><!-- Post detail -->
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/c303237d-b5df-40bd-acc6-419aeed8de10" width="310" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/c303237d-b5df-40bd-acc6-419aeed8de10" width="310" />
     </td>
   </tr>
   <tr>
     <td><!-- Explore -->
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/e836c063-f85c-488d-b26a-5aa14a49ec2b" width="310" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/e836c063-f85c-488d-b26a-5aa14a49ec2b" width="310" />
     </td>
     <td><!-- Community detail -->
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/e9174244-e0bf-4bcc-bed5-6332e807ce60" width="310" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/e9174244-e0bf-4bcc-bed5-6332e807ce60" width="310" />
     </td>
   </tr>
   <tr>
     <td><!-- Inbox -->
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/1aaff3ac-205b-404d-b83e-ce3f4e267e75" width="310" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/1aaff3ac-205b-404d-b83e-ce3f4e267e75" width="310" />
     </td>
     <td><!-- Settings -->
-      <img src="https://github.com/diegoberaldin/RacconForLemmy/assets/2738294/3e5e95bf-d09e-4339-bdaf-4e56dedb2bf3" width="310" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/3e5e95bf-d09e-4339-bdaf-4e56dedb2bf3" width="310" />
     </td>
   </tr>
 </table>
