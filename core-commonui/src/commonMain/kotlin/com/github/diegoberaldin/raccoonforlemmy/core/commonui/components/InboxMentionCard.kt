@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -48,16 +47,10 @@ fun InboxMentionCard(
         Box(
             modifier = Modifier.let {
                 if (postLayout == PostLayout.Card) {
-                    it.padding(bottom = Spacing.xs)
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
-                            shape = RoundedCornerShape(CornerSize.l),
-                        ).padding(
-                            top = Spacing.s,
-                            bottom = Spacing.s,
-                            start = Spacing.s,
-                            end = Spacing.s,
-                        )
+                    it.background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = RoundedCornerShape(CornerSize.l),
+                    ).padding(Spacing.s)
                 } else {
                     it.background(MaterialTheme.colorScheme.surface)
                 }
@@ -72,9 +65,15 @@ fun InboxMentionCard(
                     mention = mention,
                 )
                 PostCardBody(
+                    modifier = Modifier.padding(
+                        horizontal = Spacing.xs,
+                    ),
                     text = mention.comment.text,
                 )
                 InboxReplySubtitle(
+                    modifier = Modifier.padding(
+                        horizontal = Spacing.xs,
+                    ),
                     creator = mention.creator,
                     community = mention.community,
                     date = mention.publishDate,
@@ -92,10 +91,6 @@ fun InboxMentionCard(
                         onDownVote?.invoke(mention.comment)
                     },
                 )
-
-                if (postLayout != PostLayout.Card) {
-                    Divider(modifier = Modifier.padding(vertical = Spacing.s))
-                }
             }
         }
     }

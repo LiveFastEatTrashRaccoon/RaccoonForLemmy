@@ -28,7 +28,7 @@ fun InboxReplyHeader(mention: PersonMentionModel) {
         }
     }
     Text(
-        modifier = Modifier.padding(vertical = Spacing.xs),
+        modifier = Modifier.padding(vertical = Spacing.xs, horizontal = Spacing.xs),
         text = header,
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onBackground,

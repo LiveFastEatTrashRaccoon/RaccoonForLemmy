@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -63,16 +62,10 @@ fun PostCard(
         Box(
             modifier = modifier.let {
                 if (postLayout == PostLayout.Card) {
-                    it.padding(bottom = Spacing.xs)
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
-                            shape = RoundedCornerShape(CornerSize.l),
-                        ).padding(
-                            top = Spacing.s,
-                            bottom = Spacing.s,
-                            start = Spacing.s,
-                            end = Spacing.s,
-                        )
+                    it.background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = RoundedCornerShape(CornerSize.l),
+                    ).padding(Spacing.s)
                 } else {
                     it
                 }
@@ -82,7 +75,6 @@ fun PostCard(
                 ExtendedPost(
                     post = post,
                     hideAuthor = hideAuthor,
-                    withDivider = postLayout == PostLayout.Full,
                     backgroundColor = when (postLayout) {
                         PostLayout.Card -> MaterialTheme.colorScheme.surfaceVariant
                         else -> MaterialTheme.colorScheme.surface
@@ -179,7 +171,6 @@ private fun CompactPost(
             options = options,
             onOptionSelected = onOptionSelected,
         )
-        Divider(modifier = Modifier.padding(vertical = Spacing.s))
     }
 }
 
@@ -189,7 +180,6 @@ private fun ExtendedPost(
     post: PostModel,
     hideAuthor: Boolean = false,
     blurNsfw: Boolean,
-    withDivider: Boolean = false,
     withOverflowBlurred: Boolean = true,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     options: List<String> = emptyList(),
@@ -279,9 +269,5 @@ private fun ExtendedPost(
             options = options,
             onOptionSelected = onOptionSelected,
         )
-
-        if (withDivider) {
-            Divider(modifier = Modifier.padding(vertical = Spacing.s))
-        }
     }
 }
