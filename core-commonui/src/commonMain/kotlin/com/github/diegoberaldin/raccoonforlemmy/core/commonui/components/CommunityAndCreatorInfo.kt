@@ -45,6 +45,11 @@ fun CommunityAndCreatorInfo(
         if (communityIcon.isNotEmpty()) {
             CustomImage(
                 modifier = Modifier
+                    .onClick {
+                        if (community != null) {
+                            onOpenCommunity?.invoke(community)
+                        }
+                    }
                     .padding(Spacing.xxxs)
                     .size(iconSize)
                     .clip(RoundedCornerShape(iconSize / 2)),
@@ -56,14 +61,14 @@ fun CommunityAndCreatorInfo(
         } else if (creatorAvatar.isNotEmpty()) {
             CustomImage(
                 modifier = Modifier
+                    .onClick {
+                        if (creator != null) {
+                            onOpenCreator?.invoke(creator)
+                        }
+                    }
                     .padding(Spacing.xxxs)
                     .size(iconSize)
-                    .clip(RoundedCornerShape(iconSize / 2))
-                    .onClick {
-                        if (community != null) {
-                            onOpenCommunity?.invoke(community)
-                        }
-                    },
+                    .clip(RoundedCornerShape(iconSize / 2)),
                 url = creatorAvatar,
                 quality = FilterQuality.Low,
                 contentDescription = null,
