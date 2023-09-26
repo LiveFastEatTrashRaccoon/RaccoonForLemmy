@@ -47,6 +47,10 @@ class CreateCommentViewModel(
     }
 
     private fun submit() {
+        if (mvi.uiState.value.loading) {
+            return
+        }
+
         mvi.updateState {
             it.copy(
                 textError = null,
@@ -66,8 +70,8 @@ class CreateCommentViewModel(
             return
         }
 
+        mvi.updateState { it.copy(loading = true) }
         mvi.scope?.launch(Dispatchers.IO) {
-            mvi.updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 if (postId != null) {

@@ -76,6 +76,10 @@ class CreatePostViewModel(
     }
 
     private fun submit() {
+        if (mvi.uiState.value.loading) {
+            return
+        }
+
         mvi.updateState {
             it.copy(
                 titleError = null,
@@ -116,8 +120,8 @@ class CreatePostViewModel(
             return
         }
 
+        mvi.updateState { it.copy(loading = true) }
         mvi.scope?.launch(Dispatchers.IO) {
-            mvi.updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 when {
