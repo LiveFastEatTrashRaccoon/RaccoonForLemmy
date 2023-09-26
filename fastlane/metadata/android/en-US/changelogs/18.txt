@@ -1,0 +1,7 @@
+- feat(ui): add Spanish localization
+- feat(settings, ui): generate palette with seed color
+- feat(ui): post and comment preview in composer
+- fix(ui): improve pan and scale for zoomable images
+- fix(ui): improve comment navigation
+- fix(ui): possibility to edit and delete own comments
+- fix(ui): prevent duplication in comment creation
