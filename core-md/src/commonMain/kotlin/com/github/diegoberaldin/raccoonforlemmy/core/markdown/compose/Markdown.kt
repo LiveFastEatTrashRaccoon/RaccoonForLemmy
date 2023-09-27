@@ -60,6 +60,7 @@ fun Markdown(
     modifier: Modifier = Modifier.fillMaxSize(),
     flavour: MarkdownFlavourDescriptor = GFMFlavourDescriptor(),
     onOpenUrl: ((String) -> Unit)? = null,
+    inlineImages: Boolean = true,
 ) {
     val matches = Regex("::: spoiler (?<title>.*?)\\n(?<content>.*?)\\n:::\\n").findAll(content)
     val mangledContent = buildString {
@@ -96,9 +97,9 @@ fun Markdown(
         Column(modifier) {
             val parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(mangledContent)
             parsedTree.children.forEach { node ->
-                if (!node.handleElement(mangledContent, onOpenUrl)) {
+                if (!node.handleElement(mangledContent, onOpenUrl, inlineImages)) {
                     node.children.forEach { child ->
-                        child.handleElement(mangledContent, onOpenUrl)
+                        child.handleElement(mangledContent, onOpenUrl, inlineImages)
                     }
                 }
             }
@@ -110,6 +111,7 @@ fun Markdown(
 private fun ASTNode.handleElement(
     content: String,
     onOpenUrl: ((String) -> Unit)? = null,
+    inlineImages: Boolean = true,
 ): Boolean {
     val typography = LocalMarkdownTypography.current
     var handled = true
@@ -117,7 +119,11 @@ private fun ASTNode.handleElement(
     when (type) {
         TEXT -> {
             val text = getTextInNode(content).toString()
-            MarkdownText(text, onOpenUrl = onOpenUrl)
+            MarkdownText(
+                content = text,
+                onOpenUrl = onOpenUrl,
+                inlineImages = inlineImages
+            )
         }
 
         EOL -> {}
@@ -134,7 +140,8 @@ private fun ASTNode.handleElement(
             content,
             this,
             style = typography.paragraph,
-            onOpenUrl = onOpenUrl
+            onOpenUrl = onOpenUrl,
+            inlineImages = inlineImages,
         )
 
         ORDERED_LIST -> Column(modifier = Modifier) {

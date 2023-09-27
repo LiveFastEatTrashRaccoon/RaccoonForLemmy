@@ -40,6 +40,7 @@ fun PostCardBody(
                 text = MaterialTheme.colorScheme.onBackground,
                 backgroundCode = MaterialTheme.colorScheme.background,
             ),
+            inlineImages = false,
             onOpenUrl = { url ->
                 val openExternal = keyStore[KeyStoreKeys.OpenUrlsInExternalBrowser, false]
                 if (openExternal) {
