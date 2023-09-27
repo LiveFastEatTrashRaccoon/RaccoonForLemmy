@@ -33,6 +33,7 @@ kotlin {
                 implementation(projects.corePreferences)
                 implementation(projects.coreApi)
                 implementation(projects.coreUtils)
+                implementation(projects.corePersistence)
             }
         }
         val commonTest by getting {
