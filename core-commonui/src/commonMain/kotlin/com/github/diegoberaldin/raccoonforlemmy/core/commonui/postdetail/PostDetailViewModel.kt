@@ -170,7 +170,9 @@ class PostDetailViewModel(
                 sort = sort,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
             ).let {
-                processCommentsToGetNestedOrder(it)
+                processCommentsToGetNestedOrder(
+                    items = it,
+                )
             }
             currentPage++
             val topLevelItems = commentList.filter { it.depth == 0 }
@@ -207,12 +209,15 @@ class PostDetailViewModel(
                 sort = sort,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
             ).let {
-                processCommentsToGetNestedOrder(it)
+                processCommentsToGetNestedOrder(
+                    items = it,
+                    ancestorId = parentId.toString(),
+                )
             }
             val newList = uiState.value.comments.let { list ->
                 val index = list.indexOfFirst { c -> c.id == parentId }
                 list.toMutableList().apply {
-                    addAll(index, fetchResult)
+                    addAll(index + 1, fetchResult)
                 }.toList()
             }
             mvi.updateState { it.copy(comments = newList) }
@@ -517,14 +522,17 @@ private fun linearize(node: Node, list: MutableList<CommentModel>) {
     }
 }
 
-private fun processCommentsToGetNestedOrder(items: List<CommentModel>): List<CommentModel> {
+private fun processCommentsToGetNestedOrder(
+    items: List<CommentModel>,
+    ancestorId: String? = null,
+): List<CommentModel> {
     val root = Node(null)
     // reconstructs the tree
     for (c in items) {
         val parentId = c.parentId
-        if (parentId == null) {
+        if (parentId == ancestorId) {
             root.children += Node(c)
-        } else {
+        } else if (parentId != null) {
             val parent = findNode(parentId, root)
             if (parent != null) {
                 parent.children += Node(c)

@@ -82,7 +82,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
@@ -448,9 +447,10 @@ class PostDetailScreen(
                                 )
                                 Divider(thickness = 0.25.dp)
                             }
-                            if ((comment.comments
-                                    ?: 0) > 0 && comment.depth == CommentRepository.MAX_COMMENT_DEPTH && (idx < uiState.comments.lastIndex && uiState.comments[idx + 1].depth < comment.depth)
-                            ) {
+                            val hasMoreComments = (comment.comments ?: 0) > 0
+                            val isNextCommentOfHigherDepth =
+                                idx < uiState.comments.lastIndex && uiState.comments[idx + 1].depth < comment.depth
+                            if (hasMoreComments && isNextCommentOfHigherDepth) {
                                 Row {
                                     Spacer(modifier = Modifier.weight(1f))
                                     Button(onClick = {
