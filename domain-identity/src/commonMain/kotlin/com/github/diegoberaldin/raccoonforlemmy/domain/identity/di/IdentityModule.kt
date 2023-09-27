@@ -13,13 +13,12 @@ import org.koin.dsl.module
 val coreIdentityModule = module {
     single<ApiConfigurationRepository> {
         DefaultApiConfigurationRepository(
-            keyStore = get(),
             serviceProvider = get(),
         )
     }
     single<IdentityRepository> {
         DefaultIdentityRepository(
-            keyStore = get(),
+            accountRepository = get(),
         )
     }
     single<AuthRepository> {
@@ -32,6 +31,7 @@ val coreIdentityModule = module {
             apiConfigurationRepository = get(),
             authRepository = get(),
             identityRepository = get(),
+            accountRepository = get(),
         )
     }
 }

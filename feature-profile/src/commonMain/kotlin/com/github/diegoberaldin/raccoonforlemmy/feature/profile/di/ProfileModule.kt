@@ -19,6 +19,7 @@ val profileTabModule = module {
             keyStore = get(),
             notificationCenter = get(),
             themeRepository = get(),
+            loginUseCase = get(),
         )
     }
     factory {

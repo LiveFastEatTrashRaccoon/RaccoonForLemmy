@@ -10,6 +10,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase.LoginUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 class ProfileContentViewModel(
     private val mvi: DefaultMviModel<ProfileContentMviModel.Intent, ProfileContentMviModel.UiState, ProfileContentMviModel.Effect>,
     private val identityRepository: IdentityRepository,
+    private val loginUseCase: LoginUseCase,
     private val keyStore: TemporaryKeyStore,
     private val themeRepository: ThemeRepository,
     private val notificationCenter: NotificationCenter,
@@ -46,7 +48,6 @@ class ProfileContentViewModel(
             remove(KeyStoreKeys.UiTheme)
             remove(KeyStoreKeys.ContentFontScale)
             remove(KeyStoreKeys.Locale)
-            remove(KeyStoreKeys.LastIntance)
             remove(KeyStoreKeys.DefaultListingType)
             remove(KeyStoreKeys.DefaultPostSortType)
             remove(KeyStoreKeys.DefaultCommentSortType)
@@ -59,8 +60,6 @@ class ProfileContentViewModel(
             remove(KeyStoreKeys.CustomSeedColor)
             remove(KeyStoreKeys.PostLayout)
         }
-
-        identityRepository.clearToken()
         themeRepository.apply {
             changePostLayout(PostLayout.Card)
             changeCustomSeedColor(null)
@@ -68,8 +67,12 @@ class ProfileContentViewModel(
             changeNavItemTitles(true)
         }
 
-        notificationCenter.getAllObservers(NotificationCenterContractKeys.Logout).forEach {
-            it.invoke(Unit)
+        mvi.scope?.launch {
+            loginUseCase.logout()
+
+            notificationCenter.getAllObservers(NotificationCenterContractKeys.Logout).forEach {
+                it.invoke(Unit)
+            }
         }
     }
 }

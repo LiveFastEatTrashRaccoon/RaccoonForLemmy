@@ -17,7 +17,10 @@ markdown = "0.5.0"
 materialKolor = "1.2.5"
 moko_resources = "0.23.0"
 multiplatform_settings = "1.0.0"
+sqlcipher = "4.5.4"
+sqldelight = "2.0.0"
 voyager = "1.0.0-rc07"
+
 android_targetSdk = "34"
 android_minSdk = "26"
 
@@ -61,6 +64,10 @@ voyager_transition = { module = "cafe.adriel.voyager:voyager-transitions", versi
 voyager_koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 voyager_androidx = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 
+sqlcipher = { module = "net.zetetic:android-database-sqlcipher", version.ref = "sqlcipher" }
+sqldelight_android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight_native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
+
 [plugins]
 
 android_application = { id = "com.android.application", version.ref = "android.gradle" }
@@ -72,3 +79,4 @@ kotlinx_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit.gradle" }
 moko_resources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "moko.resources" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

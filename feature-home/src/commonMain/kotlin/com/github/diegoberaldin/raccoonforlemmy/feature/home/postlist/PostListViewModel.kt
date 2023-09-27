@@ -68,18 +68,24 @@ class PostListViewModel(
 
         mvi.updateState {
             it.copy(
-                instance = apiConfigRepository.getInstance(),
                 blurNsfw = keyStore[KeyStoreKeys.BlurNsfw, true],
                 swipeActionsEnabled = keyStore[KeyStoreKeys.EnableSwipeActions, true],
             )
         }
 
         mvi.scope?.launch(Dispatchers.Main) {
+            apiConfigRepository.instance.onEach { instance ->
+                mvi.updateState {
+                    it.copy(instance = instance)
+                }
+            }.launchIn(this)
+
             identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->
                 mvi.updateState {
                     it.copy(isLogged = isLogged)
                 }
             }.launchIn(this)
+
             themeRepository.postLayout.onEach { layout ->
                 mvi.updateState { it.copy(postLayout = layout) }
             }.launchIn(this)

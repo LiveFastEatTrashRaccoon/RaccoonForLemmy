@@ -24,6 +24,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepos
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getAccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.getTemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
@@ -57,13 +58,14 @@ fun App() {
         StringDesc.localeType = StringDesc.LocaleType.Custom(lang)
     }.launchIn(scope)
 
-    val lastInstance = keyStore[KeyStoreKeys.LastIntance, ""]
+    val accountRepository = remember { getAccountRepository() }
     val apiConfigurationRepository = remember { getApiConfigurationRepository() }
-    if (lastInstance.isEmpty()) {
-        val instance = apiConfigurationRepository.getInstance()
-        keyStore.save(KeyStoreKeys.LastIntance, instance)
-    } else {
-        apiConfigurationRepository.changeInstance(lastInstance)
+    LaunchedEffect(Unit) {
+        val lastActiveAccount = accountRepository.getActive()
+        val lastInstance = lastActiveAccount?.instance
+        if (lastInstance != null) {
+            apiConfigurationRepository.changeInstance(lastInstance)
+        }
     }
 
     val themeRepository = remember { getThemeRepository() }

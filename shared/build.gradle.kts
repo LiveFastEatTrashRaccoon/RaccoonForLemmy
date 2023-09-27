@@ -47,6 +47,7 @@ kotlin {
                 implementation(projects.coreApi)
                 implementation(projects.coreCommonui)
                 implementation(projects.coreNotifications)
+                implementation(projects.corePersistence)
                 implementation(projects.domainIdentity)
                 implementation(projects.domainLemmy.data)
                 implementation(projects.domainLemmy.repository)
