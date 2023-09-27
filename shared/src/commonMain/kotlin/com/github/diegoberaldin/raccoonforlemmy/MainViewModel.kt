@@ -8,7 +8,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,8 +25,9 @@ class MainViewModel(
 
         mvi.scope?.launch(Dispatchers.IO) {
             launch {
-                identityRepository.authToken.debounce(250).onEach { auth ->
-                    val unreadCount = if (!auth.isNullOrEmpty()) {
+                identityRepository.isLogged.onEach { logged ->
+                    val unreadCount = if (logged == true) {
+                        val auth = identityRepository.authToken.value
                         val mentionCount =
                             userRepository.getMentions(auth, page = 1, limit = 50).count()
                         val replyCount =

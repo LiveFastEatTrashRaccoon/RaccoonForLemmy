@@ -11,7 +11,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -30,8 +29,8 @@ class ProfileContentViewModel(
         mvi.onStarted()
 
         mvi.scope?.launch {
-            identityRepository.authToken.debounce(250).onEach { token ->
-                mvi.updateState { it.copy(logged = !token.isNullOrEmpty()) }
+            identityRepository.isLogged.onEach { logged ->
+                mvi.updateState { it.copy(logged = logged) }
             }.launchIn(this)
         }
     }

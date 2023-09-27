@@ -8,7 +8,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepo
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.InboxCoordinator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,8 +23,8 @@ class InboxViewModel(
     override fun onStarted() {
         mvi.onStarted()
         mvi.scope?.launch {
-            identityRepository.authToken.debounce(250).onEach { auth ->
-                mvi.updateState { it.copy(isLogged = !auth.isNullOrEmpty()) }
+            identityRepository.isLogged.onEach { logged ->
+                mvi.updateState { it.copy(isLogged = logged) }
             }.launchIn(this)
         }
     }

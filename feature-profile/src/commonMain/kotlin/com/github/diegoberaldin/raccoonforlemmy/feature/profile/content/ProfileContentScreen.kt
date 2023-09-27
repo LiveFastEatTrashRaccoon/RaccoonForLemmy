@@ -94,13 +94,17 @@ internal object ProfileContentScreen : Tab {
                     .padding(it),
                 contentAlignment = Alignment.Center,
             ) {
-                val screens = listOf(
-                    ProfileNotLoggedScreen,
-                    ProfileLoggedScreen,
-                )
                 // wait until logging status is determined
-                if (uiState.logged != null) {
-                    TabNavigator(ProfileNotLoggedScreen) {
+                val logged = uiState.logged
+                if (logged != null) {
+                    val screens = remember {
+                        listOf(
+                            ProfileNotLoggedScreen,
+                            ProfileLoggedScreen,
+                        )
+                    }
+                    val root = if (logged) screens[1] else screens[0]
+                    TabNavigator(root) {
                         CurrentScreen()
                         val navigator = LocalTabNavigator.current
                         LaunchedEffect(model) {
