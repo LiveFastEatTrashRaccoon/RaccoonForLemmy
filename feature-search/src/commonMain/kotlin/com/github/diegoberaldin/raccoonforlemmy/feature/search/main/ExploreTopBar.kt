@@ -70,6 +70,17 @@ internal fun CommunityTopBar(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
+                if (isLogged) {
+                    Image(
+                        modifier = Modifier.onClick {
+                            onSettings?.invoke()
+                        },
+                        imageVector = Icons.Default.ManageAccounts,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                    )
+                }
+
                 val additionalLabel = when (sortType) {
                     SortType.Top.Day -> stringResource(MR.strings.home_sort_type_top_day_short)
                     SortType.Top.Month -> stringResource(MR.strings.home_sort_type_top_month_short)
@@ -97,17 +108,6 @@ internal fun CommunityTopBar(
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                 )
-
-                if (isLogged) {
-                    Image(
-                        modifier = Modifier.onClick {
-                            onSettings?.invoke()
-                        },
-                        imageVector = Icons.Default.ManageAccounts,
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                    )
-                }
             }
         },
     )
