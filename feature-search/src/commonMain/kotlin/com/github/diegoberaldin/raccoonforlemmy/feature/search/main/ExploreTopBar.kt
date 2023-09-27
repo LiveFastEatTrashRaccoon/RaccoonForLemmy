@@ -1,10 +1,12 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.search.content
+package com.github.diegoberaldin.raccoonforlemmy.feature.search.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,8 +31,10 @@ internal fun CommunityTopBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     listingType: ListingType,
     sortType: SortType,
-    onSelectListingType: () -> Unit,
-    onSelectSortType: () -> Unit,
+    isLogged: Boolean = false,
+    onSelectListingType: (() -> Unit)? = null,
+    onSelectSortType: (() -> Unit)? = null,
+    onSettings: (() -> Unit)? = null,
 ) {
     TopAppBar(
         scrollBehavior = scrollBehavior,
@@ -40,7 +44,7 @@ internal fun CommunityTopBar(
         navigationIcon = {
             Image(
                 modifier = Modifier.onClick {
-                    onSelectListingType()
+                    onSelectListingType?.invoke()
                 },
                 imageVector = listingType.toIcon(),
                 contentDescription = null,
@@ -63,7 +67,9 @@ internal fun CommunityTopBar(
             }
         },
         actions = {
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+            ) {
                 val additionalLabel = when (sortType) {
                     SortType.Top.Day -> stringResource(MR.strings.home_sort_type_top_day_short)
                     SortType.Top.Month -> stringResource(MR.strings.home_sort_type_top_month_short)
@@ -85,12 +91,23 @@ internal fun CommunityTopBar(
                 }
                 Image(
                     modifier = Modifier.onClick {
-                        onSelectSortType()
+                        onSelectSortType?.invoke()
                     },
                     imageVector = sortType.toIcon(),
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                 )
+
+                if (isLogged) {
+                    Image(
+                        modifier = Modifier.onClick {
+                            onSettings?.invoke()
+                        },
+                        imageVector = Icons.Default.ManageAccounts,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                    )
+                }
             }
         },
     )

@@ -1,8 +1,10 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.content.ExploreMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.content.ExploreViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.main.ExploreMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.main.ExploreViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptions.ManageSubscriptionsMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptions.ManageSubscriptionsViewModel
 import org.koin.dsl.module
 
 val searchTabModule = module {
@@ -17,6 +19,14 @@ val searchTabModule = module {
             themeRepository = get(),
             keyStore = get(),
             notificationCenter = get(),
+            hapticFeedback = get(),
+        )
+    }
+    factory {
+        ManageSubscriptionsViewModel(
+            mvi = DefaultMviModel(ManageSubscriptionsMviModel.UiState()),
+            identityRepository = get(),
+            communityRepository = get(),
             hapticFeedback = get(),
         )
     }

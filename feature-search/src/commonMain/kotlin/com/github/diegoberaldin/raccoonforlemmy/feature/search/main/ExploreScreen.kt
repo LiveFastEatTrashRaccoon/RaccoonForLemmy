@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.search.content
+package com.github.diegoberaldin.raccoonforlemmy.feature.search.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -73,6 +73,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultTy
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getExploreViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptions.ManageSubscriptionsScreen
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -101,6 +102,7 @@ class ExploreScreen : Screen {
                     scrollBehavior = scrollBehavior,
                     listingType = uiState.listingType,
                     sortType = uiState.sortType,
+                    isLogged = uiState.isLogged,
                     onSelectListingType = {
                         val sheet = ListingTypeBottomSheet(
                             isLogged = uiState.isLogged,
@@ -124,6 +126,10 @@ class ExploreScreen : Screen {
                             }
                         }, key, NotificationCenterContractKeys.ChangeSortType)
                         bottomSheetNavigator.show(sheet)
+                    },
+                    onSettings = {
+                        val sheet = ManageSubscriptionsScreen()
+                        navigator?.push(sheet)
                     },
                 )
             },
