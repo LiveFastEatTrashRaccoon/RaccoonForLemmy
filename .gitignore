@@ -9,6 +9,7 @@ captures
 local.properties
 xcuserdata
 Pods/
+release/
 
 google-services.json
 GoogleService-Info.plist
