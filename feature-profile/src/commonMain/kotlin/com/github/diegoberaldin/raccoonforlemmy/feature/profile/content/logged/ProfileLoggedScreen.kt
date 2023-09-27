@@ -230,6 +230,7 @@ internal object ProfileLoggedScreen : Tab {
                                         }
                                     }
                                 )
+                                Divider(thickness = 0.25.dp)
                             }
                         }
                         item {

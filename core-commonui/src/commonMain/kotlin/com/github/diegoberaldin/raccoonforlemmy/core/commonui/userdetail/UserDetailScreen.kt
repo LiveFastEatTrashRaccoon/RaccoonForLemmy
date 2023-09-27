@@ -441,6 +441,7 @@ class UserDetailScreen(
                                                 navigator?.push(CommunityDetailScreen(it))
                                             },
                                         )
+                                        Divider(thickness = 0.25.dp)
                                     },
                                 )
                             }

@@ -362,6 +362,7 @@ class ExploreScreen : Screen {
                                                 )
                                             },
                                         )
+                                        Divider(thickness = 0.25.dp)
                                     }
 
                                     is UserModel -> {

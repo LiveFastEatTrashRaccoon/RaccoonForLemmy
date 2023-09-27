@@ -260,6 +260,7 @@ internal class ProfileSavedScreen(
                                         bottomSheetNavigator.show(screen)
                                     },
                                 )
+                                Divider(thickness = 0.25.dp)
                             }
                         }
                         item {
