@@ -88,6 +88,7 @@ class CreatePostScreen(
         LaunchedEffect(model) {
             model.reduce(CreatePostMviModel.Intent.SetTitle(editedPost?.title.orEmpty()))
             model.reduce(CreatePostMviModel.Intent.SetText(editedPost?.text.orEmpty()))
+            model.reduce(CreatePostMviModel.Intent.SetUrl(editedPost?.url.orEmpty()))
 
             model.effects.onEach {
                 when (it) {
