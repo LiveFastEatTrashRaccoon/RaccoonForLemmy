@@ -3,7 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.BottomAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,11 +24,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_black_surface
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_dark_surface
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_light_surface
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.di.getMainViewModel
@@ -44,8 +40,6 @@ import kotlin.math.roundToInt
 
 internal class MainScreen : Screen {
 
-
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val themeRepository = remember { getThemeRepository() }
@@ -104,19 +98,7 @@ internal class MainScreen : Screen {
                                 )
                             },
                         contentPadding = PaddingValues(0.dp),
-                        backgroundColor = when (themeState) {
-                            ThemeState.Light -> {
-                                md_theme_light_surface
-                            }
-
-                            ThemeState.Dark -> {
-                                md_theme_dark_surface
-                            }
-
-                            else -> {
-                                md_theme_black_surface
-                            }
-                        },
+                        backgroundColor = MaterialTheme.colorScheme.background,
                     ) {
                         TabNavigationItem(HomeTab, withText = titleVisible)
                         TabNavigationItem(SearchTab, withText = titleVisible)
