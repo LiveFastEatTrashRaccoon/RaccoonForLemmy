@@ -2,12 +2,12 @@ package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddComment
-import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.Fireplace
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.LocalActivity
+import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.MilitaryTech
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Rocket
-import androidx.compose.material.icons.filled.Timer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -68,11 +68,11 @@ fun Int.toSortType() = when (this) {
 
 fun SortType.toIcon(): ImageVector = when (this) {
     SortType.Active -> Icons.Default.Rocket
-    SortType.Hot -> Icons.Default.Fireplace
-    SortType.MostComments -> Icons.Default.Reviews
-    SortType.New -> Icons.Default.Bolt
-    SortType.NewComments -> Icons.Default.AddComment
-    SortType.Old -> Icons.Default.Timer
+    SortType.Hot -> Icons.Default.LocalFireDepartment
+    SortType.MostComments -> Icons.Default.AddComment
+    SortType.New -> Icons.Default.LocalActivity
+    SortType.NewComments -> Icons.Default.Reviews
+    SortType.Old -> Icons.Default.History
     else -> Icons.Default.MilitaryTech
 }
 
