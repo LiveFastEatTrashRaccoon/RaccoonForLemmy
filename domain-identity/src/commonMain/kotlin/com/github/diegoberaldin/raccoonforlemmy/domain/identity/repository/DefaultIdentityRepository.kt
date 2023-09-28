@@ -20,7 +20,7 @@ internal class DefaultIdentityRepository(
     }
 
     init {
-        val previousToken = keyStore[KeyStoreKeys.AuthToken, ""].takeIf { it.isNotEmpty() }
+        val previousToken = keyStore[KeyStoreKeys.AuthToken, ""]
         authToken.value = previousToken
     }
 
