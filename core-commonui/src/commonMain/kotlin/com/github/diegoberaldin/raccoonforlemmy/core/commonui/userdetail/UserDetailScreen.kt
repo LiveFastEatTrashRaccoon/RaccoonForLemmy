@@ -213,10 +213,7 @@ class UserDetailScreen(
                 Box(
                     modifier = Modifier.pullRefresh(pullRefreshState),
                 ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                    ) {
+                    LazyColumn {
                         item {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -443,7 +440,10 @@ class UserDetailScreen(
                                                 navigator?.push(CommunityDetailScreen(it))
                                             },
                                         )
-                                        Divider(thickness = 0.25.dp)
+                                        Divider(
+                                            modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                            thickness = 0.25.dp
+                                        )
                                     },
                                 )
                             }

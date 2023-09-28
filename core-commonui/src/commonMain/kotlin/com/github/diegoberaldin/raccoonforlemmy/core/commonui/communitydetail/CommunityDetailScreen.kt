@@ -5,7 +5,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -236,9 +235,7 @@ class CommunityDetailScreen(
                         .nestedScroll(fabNestedScrollConnection).padding(padding)
                         .pullRefresh(pullRefreshState),
                 ) {
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                    ) {
+                    LazyColumn {
                         item {
                             CommunityHeader(
                                 community = stateCommunity,

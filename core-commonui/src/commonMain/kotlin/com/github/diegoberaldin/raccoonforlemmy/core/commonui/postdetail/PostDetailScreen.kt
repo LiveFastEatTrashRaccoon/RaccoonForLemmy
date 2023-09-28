@@ -5,11 +5,9 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -223,10 +221,7 @@ class PostDetailScreen(
                         .nestedScroll(fabNestedScrollConnection)
                         .pullRefresh(pullRefreshState),
                 ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                    ) {
+                    LazyColumn {
                         item {
                             val themeRepository = remember { getThemeRepository() }
                             val fontScale by themeRepository.contentFontScale.collectAsState()
@@ -445,7 +440,10 @@ class PostDetailScreen(
                                         )
                                     },
                                 )
-                                Divider(thickness = 0.25.dp)
+                                Divider(
+                                    modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                    thickness = 0.25.dp
+                                )
                             }
                             val hasMoreComments = (comment.comments ?: 0) > 0
                             val isNextCommentOfHigherDepth =

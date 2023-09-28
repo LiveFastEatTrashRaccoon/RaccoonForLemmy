@@ -88,10 +88,7 @@ internal object ProfileLoggedScreen : Tab {
                 Box(
                     modifier = Modifier.pullRefresh(pullRefreshState),
                 ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                    ) {
+                    LazyColumn {
                         item {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -230,7 +227,10 @@ internal object ProfileLoggedScreen : Tab {
                                         }
                                     }
                                 )
-                                Divider(thickness = 0.25.dp)
+                                Divider(
+                                    modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                    thickness = 0.25.dp
+                                )
                             }
                         }
                         item {

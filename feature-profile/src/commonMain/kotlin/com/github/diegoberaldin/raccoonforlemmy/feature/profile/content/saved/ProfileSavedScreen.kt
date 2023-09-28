@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -158,8 +157,7 @@ internal class ProfileSavedScreen(
                     modifier = Modifier.pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.xxxs),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                        modifier = Modifier.padding(horizontal = Spacing.xxxs),
                     ) {
                         if (uiState.section == ProfileSavedSection.Posts) {
                             itemsIndexed(uiState.posts) { idx, post ->
@@ -260,7 +258,10 @@ internal class ProfileSavedScreen(
                                         bottomSheetNavigator.show(screen)
                                     },
                                 )
-                                Divider(thickness = 0.25.dp)
+                                Divider(
+                                    modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                    thickness = 0.25.dp
+                                )
                             }
                         }
                         item {
