@@ -1,0 +1,7 @@
+- feat: possibility to manage subscriptions
+- fix: post list layout with spacing and divider
+- fix: profile logged/unlogged visibility
+- fix: bottom bar color in dark theme
+- fix: URL not retained in post edit
+- fix: display block for images in post/comment body
+- fix: load more comments logic
