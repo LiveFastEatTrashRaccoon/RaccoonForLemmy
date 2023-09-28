@@ -44,31 +44,36 @@ A Kotlin Multiplatform Mobile client for Lemmy.
 </table>
 </div>
 
-This started out as an exercise to play around with KMP and Compose Multiplatform and implement a Lemmy client and gradually grew to a fully functional client.
+This started out as an exercise to play around with KMP and Compose Multiplatform and implement a
+Lemmy client and gradually grew to a fully functional client.
 
-The application is under active development, expect new features to be added (e.g. multi-account support, video support, customizable post layouts, etc.).
+The application is under active development, expect new features to be added (e.g. multi-account
+support, video support, customizable post layouts, etc.).
 
 ## Libraries used:
 
 - [Koin](https://github.com/InsertKoinIO/koin) for dependency injection
 - [Voyager](https://github.com/adrielcafe/voyager) for screen navigation
-- [Ktor](https://github.com/ktorio/ktor) with [Ktorfit](https://github.com/Foso/Ktorfit) for
+- [Ktor](https://github.com/ktorio/ktor) and [Ktorfit](https://github.com/Foso/Ktorfit) for
   networking in conjunction with kotlinx-serialization for JSON marshalling
 - [Moko resources](https://github.com/icerockdev/moko-resources) for resource management
 - [Kamel](https://github.com/Kamel-Media/Kamel) for lazy image loading
 - [Multiplatform settings](https://github.com/russhwolf/multiplatform-settings) for encrypted
   preferences
 - [Markdown](https://github.com/JetBrains/markdown) for markdown parsing
-- ... more to come (e.g. SQLdelight for persistence)
+- [SQLDelight](https://github.com/cashapp/sqldelight)
+  and [SQLCipher](https://github.com/sqlcipher/sqlcipher) for local persistence
 
 ## Credits:
 
 - the `core-api` module is heavily inspired
   by [Jerboa for Lemmy](https://github.com/dessalines/jerboa)
 - the `core-md` module is taken
-  from [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) with some adptations a posteriori
+  from [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer)
+  with some adptations _a posteriori_
 - the UI is inspired by the really great [Thunder](https://github.com/thunder-app/thunder) app
 
 ## Want to try it out?
 
-- get it on [Obtanium](https://github.com/ImranR98/Obtainium/releases) by simply adding this repo `https://github.com/diegoberaldin/RaccoonForLemmy`
+- get it on [Obtanium](https://github.com/ImranR98/Obtainium/releases) by simply adding this
+  repo `https://github.com/diegoberaldin/RaccoonForLemmy`
