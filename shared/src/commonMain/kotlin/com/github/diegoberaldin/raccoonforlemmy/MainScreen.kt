@@ -84,7 +84,6 @@ internal class MainScreen : Screen {
                     CurrentTab()
                 },
                 bottomBar = {
-                    val themeState by themeRepository.state.collectAsState()
                     val titleVisible by themeRepository.navItemTitles.collectAsState()
                     BottomAppBar(
                         modifier = Modifier
