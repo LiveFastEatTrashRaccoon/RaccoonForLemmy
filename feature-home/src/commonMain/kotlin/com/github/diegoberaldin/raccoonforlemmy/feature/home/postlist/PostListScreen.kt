@@ -150,7 +150,7 @@ class PostListScreen : Screen {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         state = lazyListState,
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
                         itemsIndexed(uiState.posts) { idx, post ->
                             val themeRepository = remember { getThemeRepository() }

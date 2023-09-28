@@ -237,7 +237,7 @@ class CommunityDetailScreen(
                         .pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
                         item {
                             CommunityHeader(

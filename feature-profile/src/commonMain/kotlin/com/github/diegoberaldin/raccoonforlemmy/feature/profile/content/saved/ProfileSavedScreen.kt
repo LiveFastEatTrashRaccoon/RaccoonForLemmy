@@ -159,7 +159,7 @@ internal class ProfileSavedScreen(
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.xxxs),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
                         if (uiState.section == ProfileSavedSection.Posts) {
                             itemsIndexed(uiState.posts) { idx, post ->

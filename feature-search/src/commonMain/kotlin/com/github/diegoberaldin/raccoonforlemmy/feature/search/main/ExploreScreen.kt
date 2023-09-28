@@ -210,15 +210,16 @@ class ExploreScreen : Screen {
                     }
                 )
 
-                val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
-                    model.reduce(ExploreMviModel.Intent.Refresh)
-                })
+                val pullRefreshState = rememberPullRefreshState(
+                    uiState.refreshing,
+                    { model.reduce(ExploreMviModel.Intent.Refresh) },
+                )
                 Box(
                     modifier = Modifier.padding(Spacing.xxs).pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
                         itemsIndexed(uiState.results) { idx, result ->
                             val themeRepository = remember { getThemeRepository() }
