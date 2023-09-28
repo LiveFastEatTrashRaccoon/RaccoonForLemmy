@@ -85,12 +85,14 @@ import dev.icerock.moko.resources.compose.stringResource
 
 class UserDetailScreen(
     private val user: UserModel,
+    private val otherInstance: String = "",
 ) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel(user.id.toString()) { getUserDetailViewModel(user) }
+        val model =
+            rememberScreenModel(user.id.toString()) { getUserDetailViewModel(user, otherInstance) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current

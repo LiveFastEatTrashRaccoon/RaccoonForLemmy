@@ -46,7 +46,7 @@ class PostsRepository(
     }.getOrElse { emptyList() }
 
     suspend fun getAllInInstance(
-        instance: String = "",
+        instance: String,
         page: Int,
         limit: Int = DEFAULT_PAGE_SIZE,
         type: ListingType = ListingType.Local,

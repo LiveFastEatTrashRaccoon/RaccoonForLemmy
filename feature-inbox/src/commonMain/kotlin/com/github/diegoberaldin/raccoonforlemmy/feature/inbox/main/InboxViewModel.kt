@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class InboxViewModel(
@@ -23,7 +24,7 @@ class InboxViewModel(
     override fun onStarted() {
         mvi.onStarted()
         mvi.scope?.launch {
-            identityRepository.isLogged.onEach { logged ->
+            identityRepository.isLogged.stateIn(this).onEach { logged ->
                 mvi.updateState { it.copy(isLogged = logged) }
             }.launchIn(this)
         }

@@ -11,9 +11,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core.preferences.KeyStoreKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase.LoginUseCase
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ProfileContentViewModel(
@@ -26,12 +26,11 @@ class ProfileContentViewModel(
 ) : ScreenModel,
     MviModel<ProfileContentMviModel.Intent, ProfileContentMviModel.UiState, ProfileContentMviModel.Effect> by mvi {
 
-    @OptIn(FlowPreview::class)
     override fun onStarted() {
         mvi.onStarted()
 
         mvi.scope?.launch {
-            identityRepository.isLogged.onEach { logged ->
+            identityRepository.isLogged.stateIn(this).onEach { logged ->
                 mvi.updateState { it.copy(logged = logged) }
             }.launchIn(this)
         }

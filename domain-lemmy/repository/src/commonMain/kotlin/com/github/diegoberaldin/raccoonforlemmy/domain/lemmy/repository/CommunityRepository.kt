@@ -76,11 +76,26 @@ class CommunityRepository(
 
     suspend fun get(
         auth: String? = null,
-        id: Int,
+        id: Int? = null,
+        name: String? = null,
     ): CommunityModel? = runCatching {
         val response = services.community.get(
             auth = auth,
             id = id,
+            name = name,
+        ).body()
+        response?.communityView?.toModel()
+    }.getOrNull()
+
+    suspend fun getInInstance(
+        auth: String? = null,
+        name: String? = null,
+        instance: String,
+    ): CommunityModel? = runCatching {
+        customServices.changeInstance(instance)
+        val response = customServices.community.get(
+            auth = auth,
+            name = name,
         ).body()
         response?.communityView?.toModel()
     }.getOrNull()

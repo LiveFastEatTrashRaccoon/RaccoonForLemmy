@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.core.di
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
@@ -34,8 +34,8 @@ actual fun getCommunityInfoViewModel(community: CommunityModel): CommunityInfoVi
 actual fun getInstanceInfoViewModel(url: String): InstanceInfoViewModel =
     CommonUiViewModelHelper.getInstanceInfoModel(url)
 
-actual fun getUserDetailViewModel(user: UserModel): UserDetailViewModel =
-    CommonUiViewModelHelper.getUserDetailModel(user)
+actual fun getUserDetailViewModel(user: UserModel, otherInstance: String): UserDetailViewModel =
+    CommonUiViewModelHelper.getUserDetailModel(user, otherInstance)
 
 actual fun getCreateCommentViewModel(
     postId: Int?,
@@ -92,9 +92,9 @@ object CommonUiViewModelHelper : KoinComponent {
         return model
     }
 
-    fun getUserDetailModel(user: UserModel): UserDetailViewModel {
+    fun getUserDetailModel(user: UserModel, otherInstance: String): UserDetailViewModel {
         val model: UserDetailViewModel by inject(
-            parameters = { parametersOf(user) },
+            parameters = { parametersOf(user, otherInstance) },
         )
         return model
     }

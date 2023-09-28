@@ -104,15 +104,24 @@ class CommunityDetailViewModel(
         currentPage = 1
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
         mvi.scope?.launch(Dispatchers.IO) {
-            val community = communityRepository.get(
-                auth = identityRepository.authToken.value,
-                id = community.id,
-            )
-            if (community != null) {
-                mvi.updateState { it.copy(community = community) }
+            val refreshedCommunity = if (otherInstance.isNotEmpty()) {
+                communityRepository.getInInstance(
+                    auth = identityRepository.authToken.value,
+                    name = community.name,
+                    instance = otherInstance,
+                )
+            } else {
+                communityRepository.get(
+                    auth = identityRepository.authToken.value,
+                    id = community.id,
+                    name = community.name,
+                )
             }
+            if (refreshedCommunity != null) {
+                mvi.updateState { it.copy(community = refreshedCommunity) }
+            }
+            loadNextPage()
         }
-        loadNextPage()
     }
 
     private fun applySortType(value: SortType) {
@@ -132,17 +141,18 @@ class CommunityDetailViewModel(
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
             val sort = currentState.sortType
+            val communityId = currentState.community.id
             val itemList = if (otherInstance.isNotEmpty()) {
                 postsRepository.getAllInInstance(
                     instance = otherInstance,
-                    communityId = community.id,
+                    communityId = communityId,
                     page = currentPage,
                     sort = sort,
                 )
             } else {
                 postsRepository.getAll(
                     auth = auth,
-                    communityId = community.id,
+                    communityId = communityId,
                     page = currentPage,
                     sort = sort,
                 )

@@ -6,10 +6,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -19,13 +19,12 @@ class MainViewModel(
 ) : ScreenModel,
     MviModel<MainScreenMviModel.Intent, MainScreenMviModel.UiState, MainScreenMviModel.Effect> by mvi {
 
-    @OptIn(FlowPreview::class)
     override fun onStarted() {
         mvi.onStarted()
 
         mvi.scope?.launch(Dispatchers.IO) {
             launch {
-                identityRepository.isLogged.onEach { logged ->
+                identityRepository.isLogged.stateIn(this).onEach { logged ->
                     val unreadCount = if (logged == true) {
                         val auth = identityRepository.authToken.value
                         val mentionCount =

@@ -6,7 +6,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.web.WebViewScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.Markdown
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.model.markdownColor
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.model.markdownTypography
@@ -21,6 +20,7 @@ fun PostCardBody(
     val uriHandler = LocalUriHandler.current
     val navigator = remember { getNavigationCoordinator().getRootNavigator() }
     val keyStore = remember { getTemporaryKeyStore() }
+    val openExternal = keyStore[KeyStoreKeys.OpenUrlsInExternalBrowser, false]
 
     if (text.isNotEmpty()) {
         Markdown(
@@ -42,12 +42,12 @@ fun PostCardBody(
             ),
             inlineImages = false,
             onOpenUrl = { url ->
-                val openExternal = keyStore[KeyStoreKeys.OpenUrlsInExternalBrowser, false]
-                if (openExternal) {
-                    uriHandler.openUri(url)
-                } else {
-                    navigator?.push(WebViewScreen(url))
-                }
+                handleUrl(
+                    url = url,
+                    openExternal = openExternal,
+                    uriHandler = uriHandler,
+                    navigator = navigator
+                )
             }
         )
     }

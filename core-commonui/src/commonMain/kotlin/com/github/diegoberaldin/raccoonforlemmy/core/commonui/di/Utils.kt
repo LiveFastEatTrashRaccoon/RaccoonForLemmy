@@ -31,6 +31,7 @@ expect fun getCommunityInfoViewModel(
 
 expect fun getUserDetailViewModel(
     user: UserModel,
+    otherInstance: String = "",
 ): UserDetailViewModel
 
 expect fun getInstanceInfoViewModel(

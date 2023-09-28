@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 class UserDetailViewModel(
     private val mvi: DefaultMviModel<UserDetailMviModel.Intent, UserDetailMviModel.UiState, UserDetailMviModel.Effect>,
     private val user: UserModel,
+    private val otherInstance: String = "",
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
     private val postsRepository: PostsRepository,
@@ -68,6 +69,9 @@ class UserDetailViewModel(
                 user = user,
                 sortType = sortType
             )
+        }
+        if (uiState.value.posts.isEmpty()) {
+            refresh()
         }
     }
 
@@ -135,7 +139,26 @@ class UserDetailViewModel(
     private fun refresh() {
         currentPage = 1
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
-        loadNextPage()
+        mvi.scope?.launch {
+            val auth = identityRepository.authToken.value
+            val refreshedUser = if (otherInstance.isNotEmpty()) {
+                userRepository.getOnOtherInstance(
+                    instance = otherInstance,
+                    auth = auth,
+                    username = user.name,
+                )
+            } else {
+                userRepository.get(
+                    id = user.id,
+                    auth = auth,
+                    username = user.name,
+                )
+            }
+            if (refreshedUser != null) {
+                mvi.updateState { it.copy(user = refreshedUser) }
+            }
+            loadNextPage()
+        }
     }
 
     private fun loadNextPage() {
@@ -150,10 +173,11 @@ class UserDetailViewModel(
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
             val section = currentState.section
+            val userId = currentState.user.id
             if (section == UserDetailSection.Posts) {
                 val postList = userRepository.getPosts(
                     auth = auth,
-                    id = user.id,
+                    id = userId,
                     page = currentPage,
                     sort = currentState.sortType,
                 )
@@ -162,7 +186,7 @@ class UserDetailViewModel(
                     // the lazy column scrolls back to top (it must have an empty data set)
                     userRepository.getComments(
                         auth = auth,
-                        id = user.id,
+                        id = userId,
                         page = currentPage,
                         sort = currentState.sortType,
                     )
@@ -187,7 +211,7 @@ class UserDetailViewModel(
             } else {
                 val commentList = userRepository.getComments(
                     auth = auth,
-                    id = user.id,
+                    id = userId,
                     page = currentPage,
                     sort = currentState.sortType,
                 )

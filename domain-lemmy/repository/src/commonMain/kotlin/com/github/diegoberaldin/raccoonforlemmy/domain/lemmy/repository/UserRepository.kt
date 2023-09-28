@@ -15,15 +15,40 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.to
 
 class UserRepository(
     private val serviceProvider: ServiceProvider,
+    private val customServiceProvider: ServiceProvider,
 ) {
 
     suspend fun get(
         id: Int,
         auth: String? = null,
+        username: String? = null,
     ): UserModel? = runCatching {
         val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
+            username = username,
+        )
+        val dto = response.body() ?: return@runCatching null
+        UserModel(
+            id = dto.personView.person.id,
+            name = dto.personView.person.name,
+            avatar = dto.personView.person.avatar,
+            banner = dto.personView.person.banner,
+            host = dto.personView.person.actorId.toHost(),
+            score = dto.personView.counts.toModel(),
+            accountAge = dto.personView.person.published,
+        )
+    }.getOrNull()
+
+    suspend fun getOnOtherInstance(
+        instance: String,
+        username: String? = null,
+        auth: String? = null,
+    ): UserModel? = runCatching {
+        customServiceProvider.changeInstance(instance)
+        val response = customServiceProvider.user.getDetails(
+            auth = auth,
+            username = username,
         )
         val dto = response.body() ?: return@runCatching null
         UserModel(

@@ -57,10 +57,10 @@ actual fun getInstanceInfoViewModel(url: String): InstanceInfoViewModel {
     return res
 }
 
-actual fun getUserDetailViewModel(user: UserModel): UserDetailViewModel {
+actual fun getUserDetailViewModel(user: UserModel, otherInstance: String): UserDetailViewModel {
     val res: UserDetailViewModel by inject(
         clazz = UserDetailViewModel::class.java,
-        parameters = { parametersOf(user) },
+        parameters = { parametersOf(user, otherInstance) },
     )
     return res
 }

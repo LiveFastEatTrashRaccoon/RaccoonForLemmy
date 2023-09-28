@@ -63,10 +63,11 @@ val commonUiModule = module {
             community = params[0],
         )
     }
-    factory {
+    factory { params ->
         UserDetailViewModel(
             mvi = DefaultMviModel(UserDetailMviModel.UiState()),
-            user = it[0],
+            user = params[0],
+            otherInstance = params[1],
             identityRepository = get(),
             userRepository = get(),
             postsRepository = get(),
@@ -114,9 +115,9 @@ val commonUiModule = module {
             galleryHelper = get(),
         )
     }
-    factory {
+    factory { params ->
         InboxChatViewModel(
-            otherUserId = it[0],
+            otherUserId = params[0],
             mvi = DefaultMviModel(InboxChatMviModel.UiState()),
             identityRepository = get(),
             siteRepository = get(),
