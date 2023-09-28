@@ -6,13 +6,14 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 interface ManageSubscriptionsMviModel :
     MviModel<ManageSubscriptionsMviModel.Intent, ManageSubscriptionsMviModel.UiState, ManageSubscriptionsMviModel.Effect> {
     sealed interface Intent {
+        data object Refresh : Intent
         data object HapticIndication : Intent
 
         data class Unsubscribe(val index: Int) : Intent
     }
 
     data class UiState(
-        val loading: Boolean = false,
+        val refreshing: Boolean = false,
         val communities: List<CommunityModel> = emptyList(),
     )
 

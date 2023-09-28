@@ -29,6 +29,7 @@ class ManageSubscriptionsViewModel(
     override fun reduce(intent: ManageSubscriptionsMviModel.Intent) {
         when (intent) {
             ManageSubscriptionsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            ManageSubscriptionsMviModel.Intent.Refresh -> refresh()
             is ManageSubscriptionsMviModel.Intent.Unsubscribe -> handleUnsubscription(
                 community = uiState.value.communities[intent.index]
             )
@@ -36,13 +37,16 @@ class ManageSubscriptionsViewModel(
     }
 
     private fun refresh() {
-        mvi.updateState { it.copy(loading = true) }
+        if (uiState.value.refreshing) {
+            return
+        }
+        mvi.updateState { it.copy(refreshing = true) }
         mvi.scope?.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value
             val items = communityRepository.getSubscribed(auth).sortedBy { it.name }
             mvi.updateState {
                 it.copy(
-                    loading = false,
+                    refreshing = false,
                     communities = items,
                 )
             }
