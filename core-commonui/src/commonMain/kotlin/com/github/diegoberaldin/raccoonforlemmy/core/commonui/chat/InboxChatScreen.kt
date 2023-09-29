@@ -4,19 +4,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -28,6 +25,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -37,9 +36,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -51,13 +50,14 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getInboxChatViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 
 class InboxChatScreen(
     private val otherUserId: Int,
@@ -69,6 +69,7 @@ class InboxChatScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
+        val focusManager = LocalFocusManager.current
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.background)
@@ -112,100 +113,21 @@ class InboxChatScreen(
                     },
                 )
             },
-        ) { padding ->
-            if (uiState.currentUserId != null) {
+            bottomBar = {
                 Box(
-                    modifier = Modifier.padding(padding)
+                    modifier = Modifier.padding(bottom = Spacing.s),
                 ) {
-                    Column {
-                        LazyColumn(
-                            modifier = Modifier.weight(1f).fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-                            reverseLayout = true,
-                        ) {
-                            item {
-                                Spacer(modifier = Modifier.height(Spacing.s))
-                            }
-                            items(uiState.messages) { message ->
-                                val themeRepository = remember { getThemeRepository() }
-                                val fontScale by themeRepository.contentFontScale.collectAsState()
-                                CompositionLocalProvider(
-                                    LocalDensity provides Density(
-                                        density = LocalDensity.current.density,
-                                        fontScale = fontScale,
-                                    ),
-                                ) {
-                                    val isMyMessage = message.creator?.id == uiState.currentUserId
-                                    val content = message.content.orEmpty()
-                                    val date = message.publishDate.orEmpty()
-                                    MessageCard(
-                                        isMyMessage = isMyMessage,
-                                        content = content,
-                                        date = date,
-                                    )
-                                }
-                            }
-                            item {
-                                if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                                    model.reduce(InboxChatMviModel.Intent.LoadNextPage)
-                                }
-                                if (uiState.loading && !uiState.refreshing) {
-                                    Box(
-                                        modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
-                                        contentAlignment = Alignment.Center,
-                                    ) {
-                                        CircularProgressIndicator(
-                                            modifier = Modifier.size(25.dp),
-                                            color = MaterialTheme.colorScheme.primary,
-                                        )
-                                    }
-                                }
-                            }
-                            item {
-                                Spacer(modifier = Modifier.height(Spacing.xxxl))
-                            }
-                        }
-
-                        Row(
-                            modifier = Modifier,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            val focusManager = LocalFocusManager.current
-                            Box(
-                                modifier = Modifier.weight(1f).background(
-                                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
-                                    shape = RoundedCornerShape(CornerSize.l)
-                                ).padding(Spacing.s)
-                            ) {
-                                BasicTextField(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .heightIn(min = 20.dp, max = 200.dp),
-                                    textStyle = MaterialTheme.typography.bodyMedium.copy(
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    ),
-                                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimaryContainer),
-                                    value = uiState.newMessageContent,
-                                    keyboardOptions = KeyboardOptions(
-                                        keyboardType = KeyboardType.Ascii,
-                                        autoCorrect = false,
-                                        imeAction = ImeAction.Send,
-                                    ),
-                                    keyboardActions = KeyboardActions(
-                                        onSend = {
-                                            model.reduce(InboxChatMviModel.Intent.SubmitNewMessage)
-                                            focusManager.clearFocus()
-                                        }
-                                    ),
-                                    onValueChange = { value ->
-                                        model.reduce(
-                                            InboxChatMviModel.Intent.SetNewMessageContent(
-                                                value
-                                            )
-                                        )
-                                    },
-                                )
-                            }
+                    TextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                        ),
+                        label = {
+                            Text(text = stringResource(MR.strings.inbox_chat_message))
+                        },
+                        trailingIcon = {
                             IconButton(
                                 onClick = {
                                     model.reduce(InboxChatMviModel.Intent.SubmitNewMessage)
@@ -217,6 +139,74 @@ class InboxChatScreen(
                                     contentDescription = null,
                                 )
                             }
+                        },
+                        textStyle = MaterialTheme.typography.bodyMedium,
+                        value = uiState.newMessageContent,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Ascii,
+                            autoCorrect = true,
+                            imeAction = ImeAction.Next,
+                        ),
+                        onValueChange = { value ->
+                            model.reduce(
+                                InboxChatMviModel.Intent.SetNewMessageContent(
+                                    value
+                                )
+                            )
+                        },
+                    )
+                }
+            }
+        ) { padding ->
+            if (uiState.currentUserId != null) {
+                Box(
+                    modifier = Modifier.padding(padding)
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                        reverseLayout = true,
+                    ) {
+                        item {
+                            Spacer(modifier = Modifier.height(Spacing.s))
+                        }
+                        items(uiState.messages) { message ->
+                            val themeRepository = remember { getThemeRepository() }
+                            val fontScale by themeRepository.contentFontScale.collectAsState()
+                            CompositionLocalProvider(
+                                LocalDensity provides Density(
+                                    density = LocalDensity.current.density,
+                                    fontScale = fontScale,
+                                ),
+                            ) {
+                                val isMyMessage = message.creator?.id == uiState.currentUserId
+                                val content = message.content.orEmpty()
+                                val date = message.publishDate.orEmpty()
+                                MessageCard(
+                                    isMyMessage = isMyMessage,
+                                    content = content,
+                                    date = date,
+                                )
+                            }
+                        }
+                        item {
+                            if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                                model.reduce(InboxChatMviModel.Intent.LoadNextPage)
+                            }
+                            if (uiState.loading && !uiState.refreshing) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(25.dp),
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
+                            }
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(Spacing.xxxl))
                         }
                     }
                 }

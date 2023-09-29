@@ -135,6 +135,7 @@
     <string name="inbox_item_reply_post">ha risposto al tuo post su</string>
     <string name="inbox_item_reply_comment">ha risposto al tuo commento su</string>
     <string name="inbox_item_mention">ti ha menzionato in</string>
+    <string name="inbox_chat_message">Messaggio</string>
 
     <string name="create_comment_title">Nuovo commento</string>
     <string name="create_comment_body">Testo commento</string>
