@@ -1,0 +1,5 @@
+- feat: multi account support
+- feat: open Lemmy-style user and community links
+- enhancement: pull to refresh in subscription list
+- fix: typo in Italian l10n
+- refactor: account information on local DB
