@@ -42,16 +42,13 @@ fun UserHeader(
     onOpenBookmarks: (() -> Unit)? = null,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(4.5f)
-            .padding(Spacing.xs),
+        modifier = Modifier.padding(Spacing.xs),
     ) {
         // banner
         val banner = user.banner.orEmpty()
         if (banner.isNotEmpty()) {
             CustomImage(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth().aspectRatio(4.5f),
                 url = banner,
                 quality = FilterQuality.Low,
                 contentScale = ContentScale.FillBounds,
