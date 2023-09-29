@@ -26,9 +26,15 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionM
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
+sealed interface InboxCardType {
+    data object Mention : InboxCardType
+    data object Reply : InboxCardType
+}
+
 @Composable
-fun InboxMentionCard(
+fun InboxCard(
     mention: PersonMentionModel,
+    type: InboxCardType,
     postLayout: PostLayout = PostLayout.Card,
     onOpenPost: (PostModel) -> Unit,
     onOpenCreator: (UserModel) -> Unit,
@@ -61,8 +67,9 @@ fun InboxMentionCard(
             Column(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
-                InboxReplyHeader(
+                InboxCardHeader(
                     mention = mention,
+                    type = type,
                 )
                 PostCardBody(
                     modifier = Modifier.padding(

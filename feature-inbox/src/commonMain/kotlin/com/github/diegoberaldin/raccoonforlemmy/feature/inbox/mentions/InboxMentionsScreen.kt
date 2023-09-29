@@ -39,7 +39,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxMentionCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxCardType
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
@@ -127,9 +128,10 @@ class InboxMentionsScreen : Tab {
                             )
                         },
                         content = {
-                            InboxMentionCard(
+                            InboxCard(
                                 mention = mention,
                                 postLayout = uiState.postLayout,
+                                type = InboxCardType.Mention,
                                 onOpenPost = { post ->
                                     navigator?.push(
                                         PostDetailScreen(post),

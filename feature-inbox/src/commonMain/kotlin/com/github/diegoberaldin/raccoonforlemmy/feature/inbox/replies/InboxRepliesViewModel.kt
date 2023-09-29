@@ -38,6 +38,7 @@ class InboxRepliesViewModel(
     MviModel<InboxRepliesMviModel.Intent, InboxRepliesMviModel.UiState, InboxRepliesMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1
+    private var currentUserId: Int? = null
 
     init {
         notificationCenter.addObserver({
@@ -99,8 +100,13 @@ class InboxRepliesViewModel(
     private fun refresh() {
         currentPage = 1
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
-        loadNextPage()
-        updateUnreadItems()
+        mvi.scope?.launch {
+            val auth = identityRepository.authToken.value
+            val currentUser = siteRepository.getCurrentUser(auth.orEmpty())
+            currentUserId = currentUser?.id
+            loadNextPage()
+            updateUnreadItems()
+        }
     }
 
     private fun changeUnreadOnly(value: Boolean) {
@@ -118,7 +124,6 @@ class InboxRepliesViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
-            val currentUser = siteRepository.getCurrentUser(auth.orEmpty())
             val refreshing = currentState.refreshing
             val unreadOnly = currentState.unreadOnly
             val itemList = userRepository.getReplies(
@@ -127,7 +132,7 @@ class InboxRepliesViewModel(
                 unreadOnly = unreadOnly,
                 sort = SortType.New,
             ).map {
-                val isOwnPost = it.post.creator?.id == currentUser?.id
+                val isOwnPost = it.post.creator?.id == currentUserId
                 it.copy(isOwnPost = isOwnPost)
             }
 
@@ -254,20 +259,18 @@ class InboxRepliesViewModel(
         }
     }
 
-    private fun updateUnreadItems() {
-        mvi.scope?.launch(Dispatchers.IO) {
-            val auth = identityRepository.authToken.value
-            val unreadCount = if (!auth.isNullOrEmpty()) {
-                val mentionCount =
-                    userRepository.getMentions(auth, page = 1, limit = 50).count()
-                val replyCount =
-                    userRepository.getReplies(auth, page = 1, limit = 50).count()
-                mentionCount + replyCount
-            } else {
-                0
-            }
-            mvi.emitEffect(InboxRepliesMviModel.Effect.UpdateUnreadItems(unreadCount))
+    private suspend fun updateUnreadItems() {
+        val auth = identityRepository.authToken.value
+        val unreadCount = if (!auth.isNullOrEmpty()) {
+            val mentionCount =
+                userRepository.getMentions(auth, page = 1, limit = 50).count()
+            val replyCount =
+                userRepository.getReplies(auth, page = 1, limit = 50).count()
+            mentionCount + replyCount
+        } else {
+            0
         }
+        mvi.emitEffect(InboxRepliesMviModel.Effect.UpdateUnreadItems(unreadCount))
     }
 
     private fun handleLogout() {

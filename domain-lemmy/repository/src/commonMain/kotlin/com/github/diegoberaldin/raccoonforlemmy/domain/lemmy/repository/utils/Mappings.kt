@@ -178,7 +178,7 @@ internal fun CommentReplyView.toModel() = PersonMentionModel(
         thumbnailUrl = post.thumbnailUrl.orEmpty(),
         url = post.url,
         community = community.toModel(),
-        creator = creator.toModel(),
+        creator = UserModel(id = post.creatorId),
         saved = saved,
         myVote = myVote ?: 0,
         publishDate = post.published,

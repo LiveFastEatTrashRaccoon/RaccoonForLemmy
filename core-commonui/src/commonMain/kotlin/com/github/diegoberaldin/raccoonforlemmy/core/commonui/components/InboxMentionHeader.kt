@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -15,25 +15,38 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun InboxMentionHeader(mention: PersonMentionModel) {
+fun InboxCardHeader(
+    mention: PersonMentionModel,
+    type: InboxCardType,
+) {
     val header = buildAnnotatedString {
         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
             append(mention.creator.name)
         }
         append(" ")
-        if (mention.isOwnPost) {
-            append(stringResource(MR.strings.inbox_item_reply_post))
-        } else {
-            append(stringResource(MR.strings.inbox_item_reply_comment))
+        when (type) {
+            InboxCardType.Mention -> {
+                append(stringResource(MR.strings.inbox_item_mention))
+            }
+
+            InboxCardType.Reply -> {
+                if (mention.isOwnPost) {
+                    append(stringResource(MR.strings.inbox_item_reply_post))
+                } else {
+                    append(stringResource(MR.strings.inbox_item_reply_comment))
+                }
+            }
         }
+
         append(" ")
         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
             append(mention.post.title)
         }
     }
     Text(
-        modifier = Modifier.padding(vertical = Spacing.xs),
+        modifier = Modifier.padding(vertical = Spacing.xs, horizontal = Spacing.xs),
         text = header,
         style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onBackground,
     )
 }
