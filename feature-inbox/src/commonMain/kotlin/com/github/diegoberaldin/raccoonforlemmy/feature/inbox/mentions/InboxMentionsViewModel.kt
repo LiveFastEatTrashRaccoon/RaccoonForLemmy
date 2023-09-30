@@ -148,7 +148,16 @@ class InboxMentionsViewModel(
                 mentionId = mentionId,
                 auth = auth,
             )
-            refresh()
+            val currentState = uiState.value
+            if (read && currentState.unreadOnly) {
+                mvi.updateState {
+                    it.copy(
+                        mentions = currentState.mentions.filter { m ->
+                            m.id != mentionId
+                        }
+                    )
+                }
+            }
         }
     }
 

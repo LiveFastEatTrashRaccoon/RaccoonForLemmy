@@ -162,7 +162,16 @@ class InboxRepliesViewModel(
                 replyId = replyId,
                 auth = auth,
             )
-            refresh()
+            val currentState = uiState.value
+            if (read && currentState.unreadOnly) {
+                mvi.updateState {
+                    it.copy(
+                        replies = currentState.replies.filter { r ->
+                            r.id != replyId
+                        }
+                    )
+                }
+            }
         }
     }
 
