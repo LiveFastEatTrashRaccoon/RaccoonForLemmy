@@ -39,7 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -125,9 +130,22 @@ class CreatePostScreen(
         }, snackbarHost = {
             SnackbarHost(snackbarHostState)
         }) { padding ->
+            val focusManager = LocalFocusManager.current
+            val keyboardScrollConnection = remember {
+                object : NestedScrollConnection {
+                    override fun onPreScroll(
+                        available: Offset,
+                        source: NestedScrollSource,
+                    ): Offset {
+                        focusManager.clearFocus()
+                        return Offset.Zero
+                    }
+                }
+            }
             Column(
                 modifier = Modifier
                     .padding(padding)
+                    .nestedScroll(keyboardScrollConnection)
                     .verticalScroll(rememberScrollState()),
             ) {
                 val bodyFocusRequester = remember { FocusRequester() }
@@ -285,6 +303,19 @@ class CreatePostScreen(
                                 )
                             }
                         },
+                        trailingIcon = {
+                            IconButton(
+                                content = {
+                                    Icon(
+                                        imageVector = Icons.Default.Send,
+                                        contentDescription = null,
+                                    )
+                                },
+                                onClick = {
+                                    model.reduce(CreatePostMviModel.Intent.Send)
+                                },
+                            )
+                        }
                     )
                 } else {
                     Box(
@@ -299,23 +330,6 @@ class CreatePostScreen(
                             text = uiState.body,
                         )
                     }
-                }
-
-                Row(
-                    modifier = Modifier.padding(top = Spacing.xs),
-                ) {
-                    Spacer(modifier = Modifier.weight(1f))
-                    IconButton(
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.Send,
-                                contentDescription = null,
-                            )
-                        },
-                        onClick = {
-                            model.reduce(CreatePostMviModel.Intent.Send)
-                        },
-                    )
                 }
 
                 Spacer(Modifier.height(Spacing.xxl))
