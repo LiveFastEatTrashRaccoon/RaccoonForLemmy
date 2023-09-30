@@ -1,0 +1,7 @@
+- fix: chat input field in black mode
+- fix: correct header for mentions and replies
+- fix: possibility to open community and creator from post detail
+- enhancement: keyboard management in chat and explore
+- enhancement: do not reload inbox after marking items as read
+- enhancement: prevent operations in guest mode
+- enhancement: general improvements for the black theme

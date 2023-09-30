@@ -236,6 +236,16 @@ class PostDetailScreen(
                                     postLayout = uiState.postLayout,
                                     withOverflowBlurred = false,
                                     blurNsfw = false,
+                                    onOpenCommunity = { community ->
+                                        navigator?.push(
+                                            CommunityDetailScreen(community = community)
+                                        )
+                                    },
+                                    onOpenCreator = { user ->
+                                        navigator?.push(
+                                            UserDetailScreen(user = user)
+                                        )
+                                    },
                                     options = buildList {
                                         add(stringResource(MR.strings.post_action_share))
                                         if (statePost.creator?.id == uiState.currentUserId) {

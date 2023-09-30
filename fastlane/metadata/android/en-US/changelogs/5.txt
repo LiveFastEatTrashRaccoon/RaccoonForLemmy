@@ -1,0 +1,4 @@
+- feat: improved titles for post detail, community detail, user title and bottom sheet headers
+- fix: bug that could produce crash while navigating between screens
+- fix: bug that led the home screen to fully reload after entering a detail screen
+- chore: reviewed navigation system

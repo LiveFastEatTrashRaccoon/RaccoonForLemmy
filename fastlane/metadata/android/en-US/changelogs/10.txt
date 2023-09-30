@@ -1,0 +1,9 @@
+- feat: save image to gallery
+- feat: share post feature
+- feat: converted saved items to separate screen (and added  saved comments)
+- enhancement: add setting to disable swipe actions
+- enhancement: improved title of create post and comment bottom sheets
+- enhancement: progress indicator during post and comment creation
+- fix: missing delete option for own posts in detail screen
+- fix: unwanted top scroll when changing section in user detail and user profile
+- chore: update dependencies

@@ -1,0 +1,6 @@
+- feat: inbox private message section!
+- fix: post failure to upvote or downvote in detail screen
+- fix: sometimes comment were sent multiple times accidentally
+- enhancement: improved comment readability having null indentation for first level comments
+- enhancement: connect web view scrolling to top bar nested scroll connection
+- enhancement: improved dynamic font size on some pages where it was missing

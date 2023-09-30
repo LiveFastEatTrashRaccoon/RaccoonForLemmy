@@ -1,0 +1,11 @@
+- feat: new search with possibility to search posts, comments, communities and users
+- feat: edit post feature
+- feat: edit comment feature
+- feat: URL and NSFW in post creation and field validation in post and comment creation
+- enhancement: reload post only if needed in post detail
+- enhancement: progress while loading images, translation of image loading error
+- fix: home not reloaded after changing default sort and feed type
+- fix: comment loading and pagination
+- fix: action indicators visibility in comment swipe cards
+- fix: user info not loaded in user detail screen
+- fix: markdown headline font size

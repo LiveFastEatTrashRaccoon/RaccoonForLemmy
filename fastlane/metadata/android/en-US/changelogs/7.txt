@@ -1,0 +1,6 @@
+- feat: add possibility to open images in isolated page with pinch to zoom
+- feat: view post URLs and open URLs on internal WebView or external browser
+- enhancement: update UI of tab rows according to material design
+- fix: bug that prevented removal of upvote/downvote on posts and comments
+- chore: update to Compose `1.5.1`
+- fix: crashes on navigation or when app entered background

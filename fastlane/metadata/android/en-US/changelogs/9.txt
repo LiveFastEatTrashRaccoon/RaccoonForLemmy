@@ -1,0 +1,8 @@
+- feat: delete post feature
+- feat: delete comment feature
+- enhancement: message instead of empty inbox if user not logged
+- enhancement: improve bottom sheet top bar with rounded corners
+- enhancement: add alternative in case of image load failed
+- fix: crash when opening user detail → community → user detail
+- fix: counters in post list not updated after upvote/downvote in post detail
+- chore: remove logout event and use contracts, update contract to use constants

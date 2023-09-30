@@ -1,0 +1,2 @@
+- enhancement: layout improvements
+- feat: support for Material3 dynamic colours (on Android)

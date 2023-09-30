@@ -1,0 +1,3 @@
+- enhancement: general UI improvements
+- feat: add possibility to browse nested comment list in post detail
+- feat: sort community list

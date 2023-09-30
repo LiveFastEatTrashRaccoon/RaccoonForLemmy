@@ -1,0 +1,6 @@
+- feat: creation of posts with images
+- feat: open conversation from user detail
+- enhancement: improved layout of bottom bar
+- enhancement: redesign of user header and profile header
+- enhancement: redesign of community header
+- fix: haptic feedback while performing swipe actions
