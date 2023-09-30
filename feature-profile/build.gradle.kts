@@ -41,7 +41,6 @@ kotlin {
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab)
                 implementation(libs.voyager.bottomsheet)
-                implementation(libs.kamel)
                 implementation(libs.ktor.cio)
 
                 implementation(projects.resources)

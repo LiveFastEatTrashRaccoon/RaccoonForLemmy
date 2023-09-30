@@ -4,6 +4,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.persistence.AccountEntity
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.DatabaseProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.AccountModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 internal class DefaultAccountRepository(

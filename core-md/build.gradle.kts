@@ -34,7 +34,6 @@ kotlin {
                 implementation(compose.material3)
 
                 api(libs.markdown)
-                implementation(libs.kamel)
                 implementation(projects.coreCommonui.components)
                 implementation(projects.resources)
             }
