@@ -37,8 +37,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -88,6 +92,15 @@ class ExploreScreen : Screen {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val notificationCenter = remember { getNotificationCenter() }
+        val focusManager = LocalFocusManager.current
+        val keyboardScrollConnection = remember {
+            object : NestedScrollConnection {
+                override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                    focusManager.clearFocus()
+                    return Offset.Zero
+                }
+            }
+        }
         DisposableEffect(key) {
             onDispose {
                 notificationCenter.removeObserver(key)
@@ -103,6 +116,7 @@ class ExploreScreen : Screen {
                     sortType = uiState.sortType,
                     isLogged = uiState.isLogged,
                     onSelectListingType = {
+                        focusManager.clearFocus()
                         val sheet = ListingTypeBottomSheet(
                             isLogged = uiState.isLogged,
                         )
@@ -114,6 +128,7 @@ class ExploreScreen : Screen {
                         bottomSheetNavigator.show(sheet)
                     },
                     onSelectSortType = {
+                        focusManager.clearFocus()
                         val sheet = SortBottomSheet(
                             expandTop = true,
                         )
@@ -136,7 +151,8 @@ class ExploreScreen : Screen {
             Column(
                 modifier = Modifier
                     .padding(padding)
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .nestedScroll(keyboardScrollConnection),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 TextField(
