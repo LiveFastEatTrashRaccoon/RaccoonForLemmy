@@ -70,6 +70,7 @@ class InstanceInfoViewModel(
                 auth = auth,
                 instance = instance,
                 page = currentPage,
+                limit = 50,
             )
             currentPage++
             val canFetchMore = itemList.size >= CommentRepository.DEFAULT_PAGE_SIZE
