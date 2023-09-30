@@ -18,6 +18,7 @@ expect fun getNavigationCoordinator(): NavigationCoordinator
 
 expect fun getPostDetailViewModel(
     post: PostModel,
+    highlightCommentId: Int? = null,
 ): PostDetailViewModel
 
 expect fun getCommunityDetailViewModel(

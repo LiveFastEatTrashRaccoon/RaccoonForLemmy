@@ -19,8 +19,11 @@ import org.koin.core.parameter.parametersOf
 
 actual fun getNavigationCoordinator() = CommonUiViewModelHelper.navigationCoordinator
 
-actual fun getPostDetailViewModel(post: PostModel): PostDetailViewModel =
-    CommonUiViewModelHelper.getPostDetailModel(post)
+actual fun getPostDetailViewModel(
+    post: PostModel,
+    highlightCommentId: Int?,
+): PostDetailViewModel =
+    CommonUiViewModelHelper.getPostDetailModel(post, highlightCommentId)
 
 actual fun getCommunityDetailViewModel(
     community: CommunityModel,
@@ -61,9 +64,9 @@ object CommonUiViewModelHelper : KoinComponent {
     val navigationCoordinator: NavigationCoordinator by inject()
     val zoomableImageModel: ZoomableImageViewModel by inject()
 
-    fun getPostDetailModel(post: PostModel): PostDetailViewModel {
+    fun getPostDetailModel(post: PostModel, highlightCommentPath: Int?): PostDetailViewModel {
         val model: PostDetailViewModel by inject(
-            parameters = { parametersOf(post) },
+            parameters = { parametersOf(post, highlightCommentPath) },
         )
         return model
     }

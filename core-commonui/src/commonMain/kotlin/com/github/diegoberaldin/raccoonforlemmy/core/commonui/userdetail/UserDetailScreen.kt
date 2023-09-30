@@ -428,6 +428,7 @@ class UserDetailScreen(
                                                 navigator?.push(
                                                     PostDetailScreen(
                                                         post = PostModel(id = comment.postId),
+                                                        highlightCommentId = comment.id,
                                                     )
                                                 )
                                             },

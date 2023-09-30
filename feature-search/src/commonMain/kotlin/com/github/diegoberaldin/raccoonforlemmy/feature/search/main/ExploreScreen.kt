@@ -328,7 +328,10 @@ class ExploreScreen : Screen {
                                         CommentCard(
                                             modifier = Modifier.onClick {
                                                 navigator?.push(
-                                                    PostDetailScreen(post = PostModel(id = result.postId)),
+                                                    PostDetailScreen(
+                                                        post = PostModel(id = result.postId),
+                                                        highlightCommentId = result.id,
+                                                    ),
                                                 )
                                             },
                                             comment = result,

@@ -22,10 +22,13 @@ actual fun getNavigationCoordinator(): NavigationCoordinator {
 }
 
 
-actual fun getPostDetailViewModel(post: PostModel): PostDetailViewModel {
+actual fun getPostDetailViewModel(
+    post: PostModel,
+    highlightCommentId: Int?,
+): PostDetailViewModel {
     val res: PostDetailViewModel by inject(
         clazz = PostDetailViewModel::class.java,
-        parameters = { parametersOf(post) },
+        parameters = { parametersOf(post, highlightCommentId) },
     )
     return res
 }

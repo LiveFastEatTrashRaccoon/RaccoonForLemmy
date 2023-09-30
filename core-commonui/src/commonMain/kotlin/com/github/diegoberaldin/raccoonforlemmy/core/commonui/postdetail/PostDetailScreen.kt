@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
@@ -87,12 +88,15 @@ import kotlinx.coroutines.flow.onEach
 
 class PostDetailScreen(
     private val post: PostModel,
+    private val highlightCommentId: Int? = null,
 ) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel { getPostDetailViewModel(post) }
+        val model = rememberScreenModel(
+            post.id.toString() + highlightCommentId.toString()
+        ) { getPostDetailViewModel(post, highlightCommentId) }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
@@ -118,11 +122,16 @@ class PostDetailScreen(
                 notificationCenter.removeObserver(key)
             }
         }
+        val lazyListState = rememberLazyListState()
         LaunchedEffect(model) {
-            model.effects.onEach {
-                when (it) {
+            model.effects.onEach { evt ->
+                when (evt) {
                     PostDetailMviModel.Effect.Close -> {
                         navigator?.pop()
+                    }
+
+                    is PostDetailMviModel.Effect.ScrollToComment -> {
+                        lazyListState.scrollToItem(evt.index)
                     }
                 }
             }.launchIn(this)
@@ -221,7 +230,9 @@ class PostDetailScreen(
                         .nestedScroll(fabNestedScrollConnection)
                         .pullRefresh(pullRefreshState),
                 ) {
-                    LazyColumn {
+                    LazyColumn(
+                        state = lazyListState
+                    ) {
                         item {
                             val themeRepository = remember { getThemeRepository() }
                             val fontScale by themeRepository.contentFontScale.collectAsState()
@@ -360,6 +371,13 @@ class PostDetailScreen(
                                     },
                                     content = {
                                         CommentCard(
+                                            background = if (comment.id == highlightCommentId) {
+                                                MaterialTheme.colorScheme.primaryContainer.copy(
+                                                    alpha = 0.75f
+                                                )
+                                            } else {
+                                                MaterialTheme.colorScheme.background
+                                            },
                                             comment = comment,
                                             options = buildList {
                                                 if (comment.creator?.id == uiState.currentUserId) {

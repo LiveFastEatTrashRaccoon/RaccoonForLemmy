@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 class PostDetailViewModel(
     private val mvi: DefaultMviModel<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect>,
     private val post: PostModel,
+    private val highlightCommentId: Int?,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
     private val postsRepository: PostsRepository,
@@ -41,6 +42,7 @@ class PostDetailViewModel(
     ScreenModel {
 
     private var currentPage: Int = 1
+    private var commentWasHighlighted = false
 
     override fun onStarted() {
         mvi.onStarted()
@@ -79,6 +81,25 @@ class PostDetailViewModel(
             }
             if (mvi.uiState.value.comments.isEmpty()) {
                 refresh()
+            }
+        }
+    }
+
+    private fun downloadUntilHighlight() {
+        if (highlightCommentId != 0) {
+            val indexOfHighlight = uiState.value.comments.indexOfFirst {
+                it.id == highlightCommentId
+            }
+            if (indexOfHighlight == -1) {
+                val lastCommentOfThread = uiState.value.comments
+                    .filter { it.path.contains(highlightCommentId.toString()) }
+                    .maxBy { it.depth }
+                loadMoreComments(lastCommentOfThread.id)
+            } else {
+                mvi.scope?.launch {
+                    commentWasHighlighted = true
+                    mvi.emitEffect(PostDetailMviModel.Effect.ScrollToComment(indexOfHighlight))
+                }
             }
         }
     }
@@ -190,6 +211,9 @@ class PostDetailViewModel(
                     refreshing = false,
                 )
             }
+            if (highlightCommentId != null && !commentWasHighlighted) {
+                downloadUntilHighlight()
+            }
         }
     }
 
@@ -198,7 +222,7 @@ class PostDetailViewModel(
         refresh()
     }
 
-    private fun loadMoreComments(parentId: Int) {
+    private fun loadMoreComments(parentId: Int, loadUntilHighlight: Boolean = false) {
         mvi.scope?.launch(Dispatchers.IO) {
             val currentState = mvi.uiState.value
             val auth = identityRepository.authToken.value
@@ -221,6 +245,10 @@ class PostDetailViewModel(
                 }.toList()
             }
             mvi.updateState { it.copy(comments = newList) }
+            if (loadUntilHighlight) {
+                // start indirect recursion
+                downloadUntilHighlight()
+            }
         }
     }
 

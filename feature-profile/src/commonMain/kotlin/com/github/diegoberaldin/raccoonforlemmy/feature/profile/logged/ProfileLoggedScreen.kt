@@ -191,7 +191,10 @@ internal object ProfileLoggedScreen : Tab {
                                 CommentCard(
                                     modifier = Modifier.onClick {
                                         navigator?.push(
-                                            PostDetailScreen(post = PostModel(id = comment.postId)),
+                                            PostDetailScreen(
+                                                post = PostModel(id = comment.postId),
+                                                highlightCommentId = comment.id,
+                                            ),
                                         )
                                     },
                                     comment = comment,

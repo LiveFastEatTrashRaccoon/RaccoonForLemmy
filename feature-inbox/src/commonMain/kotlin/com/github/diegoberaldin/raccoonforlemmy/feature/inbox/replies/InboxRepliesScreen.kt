@@ -163,7 +163,10 @@ class InboxRepliesScreen : Tab {
                                     type = InboxCardType.Reply,
                                     onOpenPost = { post ->
                                         navigator?.push(
-                                            PostDetailScreen(post),
+                                            PostDetailScreen(
+                                                post = post,
+                                                highlightCommentId = mention.comment.id,
+                                            ),
                                         )
                                     },
                                     onOpenCreator = { user ->
