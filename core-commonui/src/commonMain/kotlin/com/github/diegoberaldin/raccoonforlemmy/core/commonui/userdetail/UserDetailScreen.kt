@@ -91,10 +91,12 @@ class UserDetailScreen(
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val model =
-            rememberScreenModel(user.id.toString()) { getUserDetailViewModel(user, otherInstance) }
+        val model = rememberScreenModel(user.id.toString()) {
+            getUserDetailViewModel(user, otherInstance)
+        }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val isOnOtherInstance = otherInstance.isNotEmpty()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -244,6 +246,14 @@ class UserDetailScreen(
                                 SwipeableCard(
                                     modifier = Modifier.fillMaxWidth(),
                                     enabled = uiState.swipeActionsEnabled,
+                                    directions = if (isOnOtherInstance) {
+                                        emptySet()
+                                    } else {
+                                        setOf(
+                                            DismissDirection.StartToEnd,
+                                            DismissDirection.EndToStart,
+                                        )
+                                    },
                                     backgroundColor = {
                                         when (it) {
                                             DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
@@ -289,47 +299,63 @@ class UserDetailScreen(
                                             options = buildList {
                                                 add(stringResource(MR.strings.post_action_share))
                                             },
-                                            onUpVote = {
-                                                model.reduce(
-                                                    UserDetailMviModel.Intent.UpVotePost(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
+                                            onUpVote = if (isOnOtherInstance) {
+                                                null
+                                            } else {
+                                                {
+                                                    model.reduce(
+                                                        UserDetailMviModel.Intent.UpVotePost(
+                                                            index = idx,
+                                                            feedback = true,
+                                                        ),
+                                                    )
+                                                }
                                             },
-                                            onDownVote = {
-                                                model.reduce(
-                                                    UserDetailMviModel.Intent.DownVotePost(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
+                                            onDownVote = if (isOnOtherInstance) {
+                                                null
+                                            } else {
+                                                {
+                                                    model.reduce(
+                                                        UserDetailMviModel.Intent.DownVotePost(
+                                                            index = idx,
+                                                            feedback = true,
+                                                        ),
+                                                    )
+                                                }
                                             },
-                                            onSave = {
-                                                model.reduce(
-                                                    UserDetailMviModel.Intent.SavePost(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
+                                            onSave = if (isOnOtherInstance) {
+                                                null
+                                            } else {
+                                                {
+                                                    model.reduce(
+                                                        UserDetailMviModel.Intent.SavePost(
+                                                            index = idx,
+                                                            feedback = true,
+                                                        ),
+                                                    )
+                                                }
                                             },
                                             onOpenCommunity = { community ->
                                                 navigator?.push(
                                                     CommunityDetailScreen(community),
                                                 )
                                             },
-                                            onReply = {
-                                                val screen = CreateCommentScreen(
-                                                    originalPost = post,
-                                                )
-                                                notificationCenter.addObserver(
-                                                    {
-                                                        model.reduce(UserDetailMviModel.Intent.Refresh)
-                                                    },
-                                                    key,
-                                                    NotificationCenterContractKeys.CommentCreated
-                                                )
-                                                bottomSheetNavigator.show(screen)
+                                            onReply = if (isOnOtherInstance) {
+                                                null
+                                            } else {
+                                                {
+                                                    val screen = CreateCommentScreen(
+                                                        originalPost = post,
+                                                    )
+                                                    notificationCenter.addObserver(
+                                                        {
+                                                            model.reduce(UserDetailMviModel.Intent.Refresh)
+                                                        },
+                                                        key,
+                                                        NotificationCenterContractKeys.CommentCreated
+                                                    )
+                                                    bottomSheetNavigator.show(screen)
+                                                }
                                             },
                                             onImageClick = { url ->
                                                 navigator?.push(
@@ -357,6 +383,14 @@ class UserDetailScreen(
                                 SwipeableCard(
                                     modifier = Modifier.fillMaxWidth(),
                                     enabled = uiState.swipeActionsEnabled,
+                                    directions = if (isOnOtherInstance) {
+                                        emptySet()
+                                    } else {
+                                        setOf(
+                                            DismissDirection.StartToEnd,
+                                            DismissDirection.EndToStart,
+                                        )
+                                    },
                                     backgroundColor = {
                                         when (it) {
                                             DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
@@ -398,43 +432,59 @@ class UserDetailScreen(
                                                 )
                                             },
                                             comment = comment,
-                                            onSave = {
-                                                model.reduce(
-                                                    UserDetailMviModel.Intent.SaveComment(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
+                                            onSave = if (isOnOtherInstance) {
+                                                null
+                                            } else {
+                                                {
+                                                    model.reduce(
+                                                        UserDetailMviModel.Intent.SaveComment(
+                                                            index = idx,
+                                                            feedback = true,
+                                                        ),
+                                                    )
+                                                }
                                             },
-                                            onUpVote = {
-                                                model.reduce(
-                                                    UserDetailMviModel.Intent.UpVoteComment(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
+                                            onUpVote = if (isOnOtherInstance) {
+                                                null
+                                            } else {
+                                                {
+                                                    model.reduce(
+                                                        UserDetailMviModel.Intent.UpVoteComment(
+                                                            index = idx,
+                                                            feedback = true,
+                                                        ),
+                                                    )
+                                                }
                                             },
-                                            onDownVote = {
-                                                model.reduce(
-                                                    UserDetailMviModel.Intent.DownVoteComment(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
+                                            onDownVote = if (isOnOtherInstance) {
+                                                null
+                                            } else {
+                                                {
+                                                    model.reduce(
+                                                        UserDetailMviModel.Intent.DownVoteComment(
+                                                            index = idx,
+                                                            feedback = true,
+                                                        ),
+                                                    )
+                                                }
                                             },
-                                            onReply = {
-                                                val screen = CreateCommentScreen(
-                                                    originalPost = PostModel(id = comment.postId),
-                                                    originalComment = comment,
-                                                )
-                                                notificationCenter.addObserver(
-                                                    {
-                                                        model.reduce(UserDetailMviModel.Intent.Refresh)
-                                                    },
-                                                    key,
-                                                    NotificationCenterContractKeys.CommentCreated
-                                                )
-                                                bottomSheetNavigator.show(screen)
+                                            onReply = if (isOnOtherInstance) {
+                                                null
+                                            } else {
+                                                {
+                                                    val screen = CreateCommentScreen(
+                                                        originalPost = PostModel(id = comment.postId),
+                                                        originalComment = comment,
+                                                    )
+                                                    notificationCenter.addObserver(
+                                                        {
+                                                            model.reduce(UserDetailMviModel.Intent.Refresh)
+                                                        },
+                                                        key,
+                                                        NotificationCenterContractKeys.CommentCreated
+                                                    )
+                                                    bottomSheetNavigator.show(screen)
+                                                }
                                             },
                                             onOpenCommunity = {
                                                 navigator?.push(CommunityDetailScreen(it))

@@ -100,19 +100,27 @@ class CommunityDetailViewModel(
         }
     }
 
+    override fun onDisposed() {
+        mvi.onDisposed()
+        // needed to force a reload the next time the same community is opened
+        currentPage = 1
+        mvi.updateState { it.copy(posts = emptyList()) }
+    }
+
     private fun refresh() {
         currentPage = 1
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
+        val auth = identityRepository.authToken.value
         mvi.scope?.launch(Dispatchers.IO) {
             val refreshedCommunity = if (otherInstance.isNotEmpty()) {
                 communityRepository.getInInstance(
-                    auth = identityRepository.authToken.value,
+                    auth = auth,
                     name = community.name,
                     instance = otherInstance,
                 )
             } else {
                 communityRepository.get(
-                    auth = identityRepository.authToken.value,
+                    auth = auth,
                     id = community.id,
                     name = community.name,
                 )

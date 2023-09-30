@@ -91,7 +91,7 @@ class CommunityDetailScreen(
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel(community.id.toString() + otherInstance) {
+        val model = rememberScreenModel(community.id.toString()) {
             getCommunityDetailViewModel(
                 community = community,
                 otherInstance = otherInstance,
@@ -305,14 +305,17 @@ class CommunityDetailScreen(
                                         },
                                         onOpenCreator = { user ->
                                             navigator?.push(
-                                                UserDetailScreen(user),
+                                                UserDetailScreen(
+                                                    user = user,
+                                                    otherInstance = otherInstance,
+                                                ),
                                             )
                                         },
                                         post = post,
                                         postLayout = uiState.postLayout,
                                         options = buildList {
                                             add(stringResource(MR.strings.post_action_share))
-                                            if (post.creator?.id == uiState.currentUserId) {
+                                            if (post.creator?.id == uiState.currentUserId && !isOnOtherInstance) {
                                                 add(stringResource(MR.strings.post_action_edit))
                                                 add(stringResource(MR.strings.comment_action_delete))
                                             }
@@ -357,14 +360,22 @@ class CommunityDetailScreen(
                                                 )
                                             }
                                         },
-                                        onReply = {
-                                            val screen = CreateCommentScreen(
-                                                originalPost = post,
-                                            )
-                                            notificationCenter.addObserver({
-                                                model.reduce(CommunityDetailMviModel.Intent.Refresh)
-                                            }, key, NotificationCenterContractKeys.CommentCreated)
-                                            bottomSheetNavigator.show(screen)
+                                        onReply = if (isOnOtherInstance) {
+                                            null
+                                        } else {
+                                            {
+                                                val screen = CreateCommentScreen(
+                                                    originalPost = post,
+                                                )
+                                                notificationCenter.addObserver(
+                                                    {
+                                                        model.reduce(CommunityDetailMviModel.Intent.Refresh)
+                                                    },
+                                                    key,
+                                                    NotificationCenterContractKeys.CommentCreated
+                                                )
+                                                bottomSheetNavigator.show(screen)
+                                            }
                                         },
                                         onImageClick = { url ->
                                             navigator?.push(
