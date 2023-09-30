@@ -22,4 +22,10 @@ fun ColorScheme.blackify(): ColorScheme = copy(
     onSurface = md_theme_black_onSurface,
     surfaceVariant = md_theme_black_surfaceVariant,
     onSurfaceVariant = md_theme_black_onSurfaceVariant,
+    primaryContainer = md_theme_black_primaryContainer,
+    onPrimaryContainer = md_theme_black_onPrimaryContainer,
+    secondaryContainer = md_theme_black_secondaryContainer,
+    onSecondaryContainer = md_theme_black_onSecondaryContainer,
+    tertiaryContainer = md_theme_black_tertiaryContainer,
+    onTertiaryContainer = md_theme_black_onTertiaryContainer,
 )
