@@ -52,7 +52,7 @@ class PostLayoutBottomSheet : Screen {
                 )
                 val values = listOf(
                     PostLayout.Card,
-                    PostLayout.List,
+                    PostLayout.Compact,
                     PostLayout.Full,
                 )
                 Column(

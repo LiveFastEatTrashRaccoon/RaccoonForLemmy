@@ -71,7 +71,7 @@ fun PostCard(
                 }
             },
         ) {
-            if (postLayout != PostLayout.List) {
+            if (postLayout != PostLayout.Compact) {
                 ExtendedPost(
                     post = post,
                     hideAuthor = hideAuthor,
@@ -236,7 +236,7 @@ private fun ExtendedPost(
             if (withOverflowBlurred) {
                 Box(
                     modifier = Modifier
-                        .height(Spacing.s)
+                        .height(Spacing.l)
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter).background(
                             brush = Brush.verticalGradient(

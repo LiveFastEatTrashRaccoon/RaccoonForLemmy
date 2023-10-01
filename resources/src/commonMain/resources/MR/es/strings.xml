@@ -106,7 +106,7 @@
     <string name="settings_enable_swipe_actions">Activar acciones de deslizamiento</string>
     <string name="settings_custom_seed_color">Color tema personalizado</string>
     <string name="settings_post_layout">Disposición publicaciones</string>
-    <string name="settings_post_layout_list">Listado</string>
+    <string name="settings_post_layout_compact">Compacto</string>
     <string name="settings_post_layout_card">Tarjetas</string>
     <string name="settings_post_layout_full">Completo</string>
     <string name="settings_color_blue">Azul corporativo</string>

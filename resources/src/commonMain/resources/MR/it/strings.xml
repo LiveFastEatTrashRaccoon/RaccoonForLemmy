@@ -106,7 +106,7 @@
     <string name="settings_enable_swipe_actions">Consenti azioni allo swipe</string>
     <string name="settings_custom_seed_color">Colore tema personalizzato</string>
     <string name="settings_post_layout">Layout post</string>
-    <string name="settings_post_layout_list">Lista</string>
+    <string name="settings_post_layout_compact">Compatto</string>
     <string name="settings_post_layout_card">Carta</string>
     <string name="settings_post_layout_full">Intero</string>
     <string name="settings_color_blue">Blu aziendale</string>
