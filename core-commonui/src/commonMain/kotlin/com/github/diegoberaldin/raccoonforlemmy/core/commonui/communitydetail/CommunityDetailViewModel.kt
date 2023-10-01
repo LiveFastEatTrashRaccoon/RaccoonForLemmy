@@ -38,7 +38,9 @@ class CommunityDetailViewModel(
     private val hapticFeedback: HapticFeedback,
 ) : MviModel<CommunityDetailMviModel.Intent, CommunityDetailMviModel.UiState, CommunityDetailMviModel.Effect> by mvi,
     ScreenModel {
+
     private var currentPage: Int = 1
+
     override fun onStarted() {
         mvi.onStarted()
 
@@ -98,13 +100,6 @@ class CommunityDetailViewModel(
                 post = uiState.value.posts[intent.index],
             )
         }
-    }
-
-    override fun onDisposed() {
-        mvi.onDisposed()
-        // needed to force a reload the next time the same community is opened
-        currentPage = 1
-        mvi.updateState { it.copy(posts = emptyList()) }
     }
 
     private fun refresh() {
