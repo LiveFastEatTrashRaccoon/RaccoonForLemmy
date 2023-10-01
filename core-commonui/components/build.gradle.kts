@@ -20,6 +20,11 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets {
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.coil.compose)
+            }
+        }
         val commonMain by getting {
             dependencies {
                 implementation(compose.runtime)

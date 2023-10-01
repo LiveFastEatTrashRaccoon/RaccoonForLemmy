@@ -1,11 +1,16 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.Text
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.layout.ContentScale
@@ -44,8 +49,21 @@ fun PostCardImage(
                 )
             },
             onLoading = { progress ->
+                val prog = if (progress != null) {
+                    progress
+                } else {
+                    val transition = rememberInfiniteTransition()
+                    val res by transition.animateFloat(
+                        initialValue = 0f,
+                        targetValue = 1f,
+                        animationSpec = InfiniteRepeatableSpec(
+                            animation = tween(1000)
+                        )
+                    )
+                    res
+                }
                 CircularProgressIndicator(
-                    progress = progress,
+                    progress = prog,
                     color = MaterialTheme.colorScheme.primary,
                 )
             },

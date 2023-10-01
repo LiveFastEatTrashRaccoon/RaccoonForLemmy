@@ -1,5 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -83,8 +87,21 @@ fun ZoomableImage(
                 )
             },
             onLoading = { progress ->
+                val prog = if (progress != null) {
+                    progress
+                } else {
+                    val transition = rememberInfiniteTransition()
+                    val res by transition.animateFloat(
+                        initialValue = 0f,
+                        targetValue = 1f,
+                        animationSpec = InfiniteRepeatableSpec(
+                            animation = tween(1000)
+                        )
+                    )
+                    res
+                }
                 CircularProgressIndicator(
-                    progress = progress,
+                    progress = prog,
                     color = MaterialTheme.colorScheme.primary,
                 )
             },

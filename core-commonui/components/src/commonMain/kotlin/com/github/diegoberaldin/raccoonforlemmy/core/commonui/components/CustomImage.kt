@@ -8,11 +8,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 
 @Composable
-fun CustomImage(
+expect fun CustomImage(
     modifier: Modifier = Modifier,
     url: String,
     contentDescription: String? = null,
@@ -22,23 +20,6 @@ fun CustomImage(
     contentAlignment: Alignment = Alignment.Center,
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
-    onLoading: @Composable (BoxScope.(Float) -> Unit)? = null,
+    onLoading: @Composable (BoxScope.(Float?) -> Unit)? = null,
     onFailure: @Composable (BoxScope.(Throwable) -> Unit)? = null,
-) {
-    val painterResource = asyncPainterResource(
-        data = url,
-        filterQuality = quality,
-    )
-    KamelImage(
-        modifier = modifier,
-        resource = painterResource,
-        contentDescription = contentDescription,
-        contentScale = contentScale,
-        alignment = alignment,
-        contentAlignment = contentAlignment,
-        alpha = alpha,
-        colorFilter = colorFilter,
-        onLoading = onLoading,
-        onFailure = onFailure,
-    )
-}
+)
