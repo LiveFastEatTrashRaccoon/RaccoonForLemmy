@@ -16,7 +16,7 @@ import io.ktor.client.request.forms.formData
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 
-class PostsRepository(
+class PostRepository(
     private val services: ServiceProvider,
     private val customServices: ServiceProvider,
 ) {

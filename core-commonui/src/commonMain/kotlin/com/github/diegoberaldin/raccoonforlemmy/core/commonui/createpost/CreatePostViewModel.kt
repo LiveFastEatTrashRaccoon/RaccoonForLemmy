@@ -5,7 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.StringUtils.isValidUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR.strings.message_invalid_field
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR.strings.message_missing_field
 import dev.icerock.moko.resources.desc.desc
@@ -18,7 +18,7 @@ class CreatePostViewModel(
     private val editedPostId: Int?,
     private val mvi: DefaultMviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect>,
     private val identityRepository: IdentityRepository,
-    private val postsRepository: PostsRepository,
+    private val postRepository: PostRepository,
 ) : ScreenModel,
     MviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect> by mvi {
 
@@ -70,7 +70,7 @@ class CreatePostViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
-            val url = postsRepository.uploadImage(auth, bytes)
+            val url = postRepository.uploadImage(auth, bytes)
             mvi.updateState {
                 it.copy(
                     url = url.orEmpty(),
@@ -131,7 +131,7 @@ class CreatePostViewModel(
                 val auth = identityRepository.authToken.value.orEmpty()
                 when {
                     communityId != null -> {
-                        postsRepository.create(
+                        postRepository.create(
                             communityId = communityId,
                             title = title,
                             body = body,
@@ -142,7 +142,7 @@ class CreatePostViewModel(
                     }
 
                     editedPostId != null -> {
-                        postsRepository.edit(
+                        postRepository.edit(
                             postId = editedPostId,
                             title = title,
                             body = body,

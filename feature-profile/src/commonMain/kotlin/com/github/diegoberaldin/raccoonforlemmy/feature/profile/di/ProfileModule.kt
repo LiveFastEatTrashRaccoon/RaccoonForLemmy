@@ -37,11 +37,12 @@ val profileTabModule = module {
             identityRepository = get(),
             siteRepository = get(),
             userRepository = get(),
-            postsRepository = get(),
+            postRepository = get(),
             commentRepository = get(),
             themeRepository = get(),
             shareHelper = get(),
             notificationCenter = get(),
+            hapticFeedback = get(),
         )
     }
     factory { params ->
@@ -50,7 +51,7 @@ val profileTabModule = module {
             user = params[0],
             identityRepository = get(),
             userRepository = get(),
-            postsRepository = get(),
+            postRepository = get(),
             commentRepository = get(),
             themeRepository = get(),
             hapticFeedback = get(),

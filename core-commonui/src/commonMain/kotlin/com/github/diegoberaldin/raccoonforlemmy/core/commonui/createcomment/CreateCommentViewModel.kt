@@ -4,8 +4,11 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR.strings.message_missing_field
 import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +24,9 @@ class CreateCommentViewModel(
     private val mvi: DefaultMviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val commentRepository: CommentRepository,
+    private val postRepository: PostRepository,
     private val themeRepository: ThemeRepository,
+    private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect> by mvi {
 
@@ -92,12 +97,25 @@ class CreateCommentViewModel(
                         auth = auth,
                     )
                 }
+                // the comment count has changed, emits update
+                emitPostUpdateNotification()
                 mvi.emitEffect(CreateCommentMviModel.Effect.Success)
             } catch (e: Throwable) {
                 val message = e.message
                 mvi.emitEffect(CreateCommentMviModel.Effect.Failure(message))
             } finally {
                 mvi.updateState { it.copy(loading = false) }
+            }
+        }
+    }
+
+    private suspend fun emitPostUpdateNotification() {
+        val postId = postId ?: return
+        val auth = identityRepository.authToken.value
+        val newPost = postRepository.get(postId, auth)
+        if (newPost != null) {
+            notificationCenter.getAllObservers(NotificationCenterContractKeys.PostUpdated).forEach {
+                it.invoke(newPost)
             }
         }
     }

@@ -13,7 +13,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -26,7 +26,7 @@ class ProfileSavedViewModel(
     private val user: UserModel,
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
-    private val postsRepository: PostsRepository,
+    private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
     private val themeRepository: ThemeRepository,
     private val notificationCenter: NotificationCenter,
@@ -130,7 +130,7 @@ class ProfileSavedViewModel(
                     page = currentPage,
                     sort = sortType,
                 )
-                val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE
+                val canFetchMore = postList.size >= PostRepository.DEFAULT_PAGE_SIZE
                 mvi.updateState {
                     val newPosts = if (refreshing) {
                         postList
@@ -151,7 +151,7 @@ class ProfileSavedViewModel(
                     page = currentPage,
                     sort = sortType,
                 )
-                val canFetchMore = commentList.size >= PostsRepository.DEFAULT_PAGE_SIZE
+                val canFetchMore = commentList.size >= PostRepository.DEFAULT_PAGE_SIZE
                 mvi.updateState {
                     val newComments = if (refreshing) {
                         commentList
@@ -213,7 +213,7 @@ class ProfileSavedViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newPost = postsRepository.asUpVoted(
+        val newPost = postRepository.asUpVoted(
             post = post,
             voted = newValue,
         )
@@ -231,14 +231,15 @@ class ProfileSavedViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.upVote(
+                postRepository.upVote(
                     auth = auth,
                     post = post,
                     voted = newValue,
                 )
-                notificationCenter.getObserver(NotificationCenterContractKeys.PostUpdated)?.also {
-                    it.invoke(newPost)
-                }
+                notificationCenter.getAllObservers(NotificationCenterContractKeys.PostUpdated)
+                    .forEach {
+                        it.invoke(newPost)
+                    }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -264,7 +265,7 @@ class ProfileSavedViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newPost = postsRepository.asDownVoted(
+        val newPost = postRepository.asDownVoted(
             post = post,
             downVoted = newValue,
         )
@@ -282,14 +283,15 @@ class ProfileSavedViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.downVote(
+                postRepository.downVote(
                     auth = auth,
                     post = post,
                     downVoted = newValue,
                 )
-                notificationCenter.getObserver(NotificationCenterContractKeys.PostUpdated)?.also {
-                    it.invoke(newPost)
-                }
+                notificationCenter.getAllObservers(NotificationCenterContractKeys.PostUpdated)
+                    .forEach {
+                        it.invoke(newPost)
+                    }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -315,7 +317,7 @@ class ProfileSavedViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newPost = postsRepository.asSaved(
+        val newPost = postRepository.asSaved(
             post = post,
             saved = newValue,
         )
@@ -333,14 +335,15 @@ class ProfileSavedViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.save(
+                postRepository.save(
                     auth = auth,
                     post = post,
                     saved = newValue,
                 )
-                notificationCenter.getObserver(NotificationCenterContractKeys.PostUpdated)?.also {
-                    it.invoke(newPost)
-                }
+                notificationCenter.getAllObservers(NotificationCenterContractKeys.PostUpdated)
+                    .forEach {
+                        it.invoke(newPost)
+                    }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {

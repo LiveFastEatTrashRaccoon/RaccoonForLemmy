@@ -154,7 +154,7 @@ internal class ProfileSavedScreen(
                     model.reduce(ProfileSavedMviModel.Intent.Refresh)
                 })
                 Box(
-                    modifier = Modifier.pullRefresh(pullRefreshState),
+                    modifier = Modifier.fillMaxWidth().pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = Spacing.xxxs),

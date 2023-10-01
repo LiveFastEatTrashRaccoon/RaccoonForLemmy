@@ -18,7 +18,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.shareUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -32,7 +32,7 @@ class UserDetailViewModel(
     private val otherInstance: String = "",
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
-    private val postsRepository: PostsRepository,
+    private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
     private val themeRepository: ThemeRepository,
     private val shareHelper: ShareHelper,
@@ -193,7 +193,7 @@ class UserDetailViewModel(
                 } else {
                     currentState.comments
                 }
-                val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE
+                val canFetchMore = postList.size >= PostRepository.DEFAULT_PAGE_SIZE
                 mvi.updateState {
                     val newPosts = if (refreshing) {
                         postList
@@ -216,7 +216,7 @@ class UserDetailViewModel(
                     sort = currentState.sortType,
                 )
 
-                val canFetchMore = commentList.size >= PostsRepository.DEFAULT_PAGE_SIZE
+                val canFetchMore = commentList.size >= PostRepository.DEFAULT_PAGE_SIZE
                 mvi.updateState {
                     val newcomments = if (refreshing) {
                         commentList
@@ -237,7 +237,7 @@ class UserDetailViewModel(
 
     private fun toggleUpVote(post: PostModel, feedback: Boolean) {
         val newVote = post.myVote <= 0
-        val newPost = postsRepository.asUpVoted(
+        val newPost = postRepository.asUpVoted(
             post = post,
             voted = newVote,
         )
@@ -258,7 +258,7 @@ class UserDetailViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.upVote(
+                postRepository.upVote(
                     post = post,
                     auth = auth,
                     voted = newVote,
@@ -282,7 +282,7 @@ class UserDetailViewModel(
 
     private fun toggleDownVote(post: PostModel, feedback: Boolean) {
         val newValue = post.myVote >= 0
-        val newPost = postsRepository.asDownVoted(
+        val newPost = postRepository.asDownVoted(
             post = post,
             downVoted = newValue,
         )
@@ -303,7 +303,7 @@ class UserDetailViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.downVote(
+                postRepository.downVote(
                     post = post,
                     auth = auth,
                     downVoted = newValue,
@@ -327,7 +327,7 @@ class UserDetailViewModel(
 
     private fun toggleSave(post: PostModel, feedback: Boolean) {
         val newValue = !post.saved
-        val newPost = postsRepository.asSaved(
+        val newPost = postRepository.asSaved(
             post = post,
             saved = newValue,
         )
@@ -348,7 +348,7 @@ class UserDetailViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.save(
+                postRepository.save(
                     post = post,
                     auth = auth,
                     saved = newValue,

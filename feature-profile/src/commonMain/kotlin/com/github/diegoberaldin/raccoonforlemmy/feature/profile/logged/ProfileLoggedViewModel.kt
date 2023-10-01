@@ -6,13 +6,15 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.ShareHelper
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.shareUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
@@ -26,12 +28,13 @@ class ProfileLoggedViewModel(
     private val mvi: DefaultMviModel<ProfileLoggedMviModel.Intent, ProfileLoggedMviModel.UiState, ProfileLoggedMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
-    private val postsRepository: PostsRepository,
+    private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
     private val themeRepository: ThemeRepository,
     private val shareHelper: ShareHelper,
     private val notificationCenter: NotificationCenter,
+    private val hapticFeedback: HapticFeedback,
 ) : ScreenModel,
     MviModel<ProfileLoggedMviModel.Intent, ProfileLoggedMviModel.UiState, ProfileLoggedMviModel.Effect> by mvi {
 
@@ -86,6 +89,36 @@ class ProfileLoggedViewModel(
             ProfileLoggedMviModel.Intent.Refresh -> refresh()
             is ProfileLoggedMviModel.Intent.SharePost -> share(
                 post = uiState.value.posts[intent.index]
+            )
+
+            is ProfileLoggedMviModel.Intent.DownVoteComment -> toggleDownVoteComment(
+                comment = uiState.value.comments[intent.index],
+                feedback = intent.feedback,
+            )
+
+            is ProfileLoggedMviModel.Intent.DownVotePost -> toggleDownVotePost(
+                post = uiState.value.posts[intent.index],
+                feedback = intent.feedback,
+            )
+
+            is ProfileLoggedMviModel.Intent.SaveComment -> toggleSaveComment(
+                comment = uiState.value.comments[intent.index],
+                feedback = intent.feedback,
+            )
+
+            is ProfileLoggedMviModel.Intent.SavePost -> toggleSavePost(
+                post = uiState.value.posts[intent.index],
+                feedback = intent.feedback,
+            )
+
+            is ProfileLoggedMviModel.Intent.UpVoteComment -> toggleUpVoteComment(
+                comment = uiState.value.comments[intent.index],
+                feedback = intent.feedback,
+            )
+
+            is ProfileLoggedMviModel.Intent.UpVotePost -> toggleUpVotePost(
+                post = uiState.value.posts[intent.index],
+                feedback = intent.feedback,
             )
         }
     }
@@ -150,7 +183,7 @@ class ProfileLoggedViewModel(
                 } else {
                     currentState.comments
                 }
-                val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE
+                val canFetchMore = postList.size >= PostRepository.DEFAULT_PAGE_SIZE
                 mvi.updateState {
                     val newPosts = if (refreshing) {
                         postList
@@ -172,7 +205,7 @@ class ProfileLoggedViewModel(
                     page = currentPage,
                     sort = SortType.New,
                 )
-                val canFetchMore = commentList.size >= PostsRepository.DEFAULT_PAGE_SIZE
+                val canFetchMore = commentList.size >= PostRepository.DEFAULT_PAGE_SIZE
                 mvi.updateState {
                     val newcomments = if (refreshing) {
                         commentList
@@ -188,6 +221,282 @@ class ProfileLoggedViewModel(
                 }
             }
             currentPage++
+        }
+    }
+
+    private fun toggleUpVotePost(post: PostModel, feedback: Boolean) {
+        val newVote = post.myVote <= 0
+        val newPost = postRepository.asUpVoted(
+            post = post,
+            voted = newVote,
+        )
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        mvi.updateState {
+            it.copy(
+                posts = it.posts.map { p ->
+                    if (p.id == post.id) {
+                        newPost
+                    } else {
+                        p
+                    }
+                },
+            )
+        }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                postRepository.upVote(
+                    post = post,
+                    auth = auth,
+                    voted = newVote,
+                )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                post
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
+            }
+        }
+    }
+
+    private fun toggleDownVotePost(post: PostModel, feedback: Boolean) {
+        val newValue = post.myVote >= 0
+        val newPost = postRepository.asDownVoted(
+            post = post,
+            downVoted = newValue,
+        )
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        mvi.updateState {
+            it.copy(
+                posts = it.posts.map { p ->
+                    if (p.id == post.id) {
+                        newPost
+                    } else {
+                        p
+                    }
+                },
+            )
+        }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                postRepository.downVote(
+                    post = post,
+                    auth = auth,
+                    downVoted = newValue,
+                )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                post
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
+            }
+        }
+    }
+
+    private fun toggleSavePost(post: PostModel, feedback: Boolean) {
+        val newValue = !post.saved
+        val newPost = postRepository.asSaved(
+            post = post,
+            saved = newValue,
+        )
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        mvi.updateState {
+            it.copy(
+                posts = it.posts.map { p ->
+                    if (p.id == post.id) {
+                        newPost
+                    } else {
+                        p
+                    }
+                },
+            )
+        }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                postRepository.save(
+                    post = post,
+                    auth = auth,
+                    saved = newValue,
+                )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                post
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
+            }
+        }
+    }
+
+    private fun toggleUpVoteComment(
+        comment: CommentModel,
+        feedback: Boolean,
+    ) {
+        val newValue = comment.myVote <= 0
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newComment = commentRepository.asUpVoted(
+            comment = comment,
+            voted = newValue,
+        )
+        mvi.updateState {
+            it.copy(
+                comments = it.comments.map { c ->
+                    if (c.id == comment.id) {
+                        newComment
+                    } else {
+                        c
+                    }
+                },
+            )
+        }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                commentRepository.upVote(
+                    auth = auth,
+                    comment = comment,
+                    voted = newValue,
+                )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        comments = it.comments.map { c ->
+                            if (c.id == comment.id) {
+                                comment
+                            } else {
+                                c
+                            }
+                        },
+                    )
+                }
+            }
+        }
+    }
+
+    private fun toggleDownVoteComment(
+        comment: CommentModel,
+        feedback: Boolean,
+    ) {
+        val newValue = comment.myVote >= 0
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newComment = commentRepository.asDownVoted(comment, newValue)
+        mvi.updateState {
+            it.copy(
+                comments = it.comments.map { c ->
+                    if (c.id == comment.id) {
+                        newComment
+                    } else {
+                        c
+                    }
+                },
+            )
+        }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                commentRepository.downVote(
+                    auth = auth,
+                    comment = comment,
+                    downVoted = newValue,
+                )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        comments = it.comments.map { c ->
+                            if (c.id == comment.id) {
+                                comment
+                            } else {
+                                c
+                            }
+                        },
+                    )
+                }
+            }
+        }
+    }
+
+    private fun toggleSaveComment(
+        comment: CommentModel,
+        feedback: Boolean,
+    ) {
+        val newValue = !comment.saved
+        if (feedback) {
+            hapticFeedback.vibrate()
+        }
+        val newComment = commentRepository.asSaved(
+            comment = comment,
+            saved = newValue,
+        )
+        mvi.updateState {
+            it.copy(
+                comments = it.comments.map { c ->
+                    if (c.id == comment.id) {
+                        newComment
+                    } else {
+                        c
+                    }
+                },
+            )
+        }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                commentRepository.save(
+                    auth = auth,
+                    comment = comment,
+                    saved = newValue,
+                )
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        comments = it.comments.map { c ->
+                            if (c.id == comment.id) {
+                                comment
+                            } else {
+                                c
+                            }
+                        },
+                    )
+                }
+            }
         }
     }
 
@@ -212,7 +521,7 @@ class ProfileLoggedViewModel(
     private fun deletePost(id: Int) {
         mvi.scope?.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value.orEmpty()
-            postsRepository.delete(id = id, auth = auth)
+            postRepository.delete(id = id, auth = auth)
             handlePostDelete(id)
         }
     }

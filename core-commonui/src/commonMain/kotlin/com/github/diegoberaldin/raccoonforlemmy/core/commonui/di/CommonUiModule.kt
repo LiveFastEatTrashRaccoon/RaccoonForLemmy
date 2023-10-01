@@ -34,7 +34,7 @@ val commonUiModule = module {
             highlightCommentId = params[1],
             identityRepository = get(),
             siteRepository = get(),
-            postsRepository = get(),
+            postRepository = get(),
             commentRepository = get(),
             themeRepository = get(),
             shareHelper = get(),
@@ -50,7 +50,7 @@ val commonUiModule = module {
             otherInstance = params[1],
             identityRepository = get(),
             communityRepository = get(),
-            postsRepository = get(),
+            postRepository = get(),
             siteRepository = get(),
             themeRepository = get(),
             shareHelper = get(),
@@ -71,7 +71,7 @@ val commonUiModule = module {
             otherInstance = params[1],
             identityRepository = get(),
             userRepository = get(),
-            postsRepository = get(),
+            postRepository = get(),
             commentRepository = get(),
             themeRepository = get(),
             shareHelper = get(),
@@ -97,7 +97,9 @@ val commonUiModule = module {
             editedCommentId = params[2],
             identityRepository = get(),
             commentRepository = get(),
+            postRepository = get(),
             themeRepository = get(),
+            notificationCenter = get(),
         )
     }
     factory { params ->
@@ -106,7 +108,7 @@ val commonUiModule = module {
             communityId = params[0],
             editedPostId = params[1],
             identityRepository = get(),
-            postsRepository = get(),
+            postRepository = get(),
         )
     }
     factory {

@@ -21,7 +21,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
@@ -36,7 +36,7 @@ class ExploreViewModel(
     private val apiConfigRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
-    private val postsRepository: PostsRepository,
+    private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
     private val themeRepository: ThemeRepository,
     private val keyStore: TemporaryKeyStore,
@@ -202,7 +202,7 @@ class ExploreViewModel(
             sortType = sortType,
         )
         currentPage++
-        val canFetchMore = items.size >= PostsRepository.DEFAULT_PAGE_SIZE
+        val canFetchMore = items.size >= PostRepository.DEFAULT_PAGE_SIZE
         mvi.updateState {
             val newItems = if (refreshing) {
                 items
@@ -241,7 +241,7 @@ class ExploreViewModel(
 
     private fun toggleUpVote(post: PostModel, feedback: Boolean) {
         val newVote = post.myVote <= 0
-        val newPost = postsRepository.asUpVoted(
+        val newPost = postRepository.asUpVoted(
             post = post,
             voted = newVote,
         )
@@ -263,7 +263,7 @@ class ExploreViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.upVote(
+                postRepository.upVote(
                     post = post,
                     auth = auth,
                     voted = newVote,
@@ -288,7 +288,7 @@ class ExploreViewModel(
 
     private fun toggleDownVote(post: PostModel, feedback: Boolean) {
         val newValue = post.myVote >= 0
-        val newPost = postsRepository.asDownVoted(
+        val newPost = postRepository.asDownVoted(
             post = post,
             downVoted = newValue,
         )
@@ -310,7 +310,7 @@ class ExploreViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.downVote(
+                postRepository.downVote(
                     post = post,
                     auth = auth,
                     downVoted = newValue,
@@ -335,7 +335,7 @@ class ExploreViewModel(
 
     private fun toggleSave(post: PostModel, feedback: Boolean) {
         val newValue = !post.saved
-        val newPost = postsRepository.asSaved(
+        val newPost = postRepository.asSaved(
             post = post,
             saved = newValue,
         )
@@ -357,7 +357,7 @@ class ExploreViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.save(
+                postRepository.save(
                     post = post,
                     auth = auth,
                     saved = newValue,

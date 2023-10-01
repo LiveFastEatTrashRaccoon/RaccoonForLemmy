@@ -17,7 +17,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.shareUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -31,7 +31,7 @@ class PostDetailViewModel(
     private val highlightCommentId: Int?,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
-    private val postsRepository: PostsRepository,
+    private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
     private val themeRepository: ThemeRepository,
     private val shareHelper: ShareHelper,
@@ -43,6 +43,18 @@ class PostDetailViewModel(
 
     private var currentPage: Int = 1
     private var commentWasHighlighted = false
+
+    init {
+        notificationCenter.addObserver({
+            (it as? PostModel)?.also { post ->
+                handlePostUpdate(post)
+            }
+        }, this::class.simpleName.orEmpty(), NotificationCenterContractKeys.PostUpdated)
+    }
+
+    fun finalize() {
+        notificationCenter.removeObserver(this::class.simpleName.orEmpty())
+    }
 
     override fun onStarted() {
         mvi.onStarted()
@@ -71,7 +83,7 @@ class PostDetailViewModel(
             }
             if (post.title.isEmpty()) {
                 // empty post must be loaded
-                postsRepository.get(post.id)?.also { updatedPost ->
+                postRepository.get(post.id)?.also { updatedPost ->
                     mvi.updateState {
                         it.copy(
                             post = updatedPost,
@@ -157,7 +169,7 @@ class PostDetailViewModel(
     private fun refreshPost() {
         mvi.scope?.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value
-            val updatedPost = postsRepository.get(id = post.id, auth = auth) ?: post
+            val updatedPost = postRepository.get(id = post.id, auth = auth) ?: post
             mvi.updateState {
                 it.copy(
                     post = updatedPost,
@@ -222,6 +234,12 @@ class PostDetailViewModel(
         refresh()
     }
 
+    private fun handlePostUpdate(post: PostModel) {
+        mvi.updateState {
+            it.copy(post = post)
+        }
+    }
+
     private fun loadMoreComments(parentId: Int, loadUntilHighlight: Boolean = false) {
         mvi.scope?.launch(Dispatchers.IO) {
             val currentState = mvi.uiState.value
@@ -260,22 +278,22 @@ class PostDetailViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newPost = postsRepository.asUpVoted(
+        val newPost = postRepository.asUpVoted(
             post = post,
             voted = newValue,
         )
-        mvi.updateState { it.copy(post = newPost) }
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.upVote(
+                postRepository.upVote(
                     auth = auth,
                     post = post,
                     voted = newValue,
                 )
-                notificationCenter.getObserver(NotificationCenterContractKeys.PostUpdated)?.also {
-                    it.invoke(newPost)
-                }
+                notificationCenter.getAllObservers(NotificationCenterContractKeys.PostUpdated)
+                    .forEach {
+                        it.invoke(newPost)
+                    }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState { it.copy(post = post) }
@@ -291,23 +309,22 @@ class PostDetailViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newPost = postsRepository.asDownVoted(
+        val newPost = postRepository.asDownVoted(
             post = post,
             downVoted = newValue,
         )
-        mvi.updateState { it.copy(post = newPost) }
-
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.downVote(
+                postRepository.downVote(
                     auth = auth,
                     post = post,
                     downVoted = newValue,
                 )
-                notificationCenter.getObserver(NotificationCenterContractKeys.PostUpdated)?.also {
-                    it.invoke(newPost)
-                }
+                notificationCenter.getAllObservers(NotificationCenterContractKeys.PostUpdated)
+                    .forEach {
+                        it.invoke(newPost)
+                    }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState { it.copy(post = post) }
@@ -323,22 +340,22 @@ class PostDetailViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newPost = postsRepository.asSaved(
+        val newPost = postRepository.asSaved(
             post = post,
             saved = newValue,
         )
-        mvi.updateState { it.copy(post = newPost) }
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.save(
+                postRepository.save(
                     auth = auth,
                     post = post,
                     saved = newValue,
                 )
-                notificationCenter.getObserver(NotificationCenterContractKeys.PostUpdated)?.also {
-                    it.invoke(newPost)
-                }
+                notificationCenter.getAllObservers(NotificationCenterContractKeys.PostUpdated)
+                    .forEach {
+                        it.invoke(newPost)
+                    }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState { it.copy(post = post) }
@@ -499,7 +516,7 @@ class PostDetailViewModel(
     private fun deletePost() {
         mvi.scope?.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value.orEmpty()
-            postsRepository.delete(id = post.id, auth = auth)
+            postRepository.delete(id = post.id, auth = auth)
             notificationCenter.getObserver(NotificationCenterContractKeys.PostDeleted)?.also {
                 it.invoke(post)
             }

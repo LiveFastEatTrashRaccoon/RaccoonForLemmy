@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -153,6 +152,30 @@ internal object ProfileLoggedScreen : Tab {
                                             ZoomableImageScreen(url),
                                         )
                                     },
+                                    onUpVote = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.UpVotePost(
+                                                idx,
+                                                true
+                                            )
+                                        )
+                                    },
+                                    onDownVote = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.DownVotePost(
+                                                idx,
+                                                true
+                                            )
+                                        )
+                                    },
+                                    onSave = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.SavePost(
+                                                idx,
+                                                true
+                                            )
+                                        )
+                                    },
                                     onOptionSelected = { optionIdx ->
                                         when (optionIdx) {
                                             1 -> {
@@ -178,7 +201,7 @@ internal object ProfileLoggedScreen : Tab {
                                                 ProfileLoggedMviModel.Intent.SharePost(idx)
                                             )
                                         }
-                                    }
+                                    },
                                 )
                                 if (uiState.postLayout != PostLayout.Card) {
                                     Divider(modifier = Modifier.padding(vertical = Spacing.s))
@@ -187,7 +210,7 @@ internal object ProfileLoggedScreen : Tab {
                                 }
                             }
                         } else {
-                            items(uiState.comments) { comment ->
+                            itemsIndexed(uiState.comments) { idx, comment ->
                                 CommentCard(
                                     modifier = Modifier.onClick {
                                         navigator?.push(
@@ -199,6 +222,30 @@ internal object ProfileLoggedScreen : Tab {
                                     },
                                     comment = comment,
                                     hideAuthor = true,
+                                    onUpVote = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.UpVoteComment(
+                                                idx,
+                                                true
+                                            )
+                                        )
+                                    },
+                                    onDownVote = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.DownVoteComment(
+                                                idx,
+                                                true
+                                            )
+                                        )
+                                    },
+                                    onSave = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.SaveComment(
+                                                idx,
+                                                true
+                                            )
+                                        )
+                                    },
                                     options = buildList {
                                         add(stringResource(MR.strings.post_action_edit))
                                         add(stringResource(MR.strings.comment_action_delete))

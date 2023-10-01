@@ -16,7 +16,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.shareUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -30,7 +30,7 @@ class CommunityDetailViewModel(
     private val otherInstance: String,
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
-    private val postsRepository: PostsRepository,
+    private val postRepository: PostRepository,
     private val siteRepository: SiteRepository,
     private val themeRepository: ThemeRepository,
     private val shareHelper: ShareHelper,
@@ -151,14 +151,14 @@ class CommunityDetailViewModel(
             val sort = currentState.sortType
             val communityId = currentState.community.id
             val itemList = if (otherInstance.isNotEmpty()) {
-                postsRepository.getAllInInstance(
+                postRepository.getAllInInstance(
                     instance = otherInstance,
                     communityId = communityId,
                     page = currentPage,
                     sort = sort,
                 )
             } else {
-                postsRepository.getAll(
+                postRepository.getAll(
                     auth = auth,
                     communityId = communityId,
                     page = currentPage,
@@ -191,7 +191,7 @@ class CommunityDetailViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newPost = postsRepository.asUpVoted(
+        val newPost = postRepository.asUpVoted(
             post = post,
             voted = newValue,
         )
@@ -209,7 +209,7 @@ class CommunityDetailViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.upVote(
+                postRepository.upVote(
                     auth = auth,
                     post = post,
                     voted = newValue,
@@ -239,7 +239,7 @@ class CommunityDetailViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newPost = postsRepository.asDownVoted(
+        val newPost = postRepository.asDownVoted(
             post = post,
             downVoted = newValue,
         )
@@ -257,7 +257,7 @@ class CommunityDetailViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.downVote(
+                postRepository.downVote(
                     auth = auth,
                     post = post,
                     downVoted = newValue,
@@ -287,7 +287,7 @@ class CommunityDetailViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newPost = postsRepository.asSaved(
+        val newPost = postRepository.asSaved(
             post = post,
             saved = newValue,
         )
@@ -305,7 +305,7 @@ class CommunityDetailViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.save(
+                postRepository.save(
                     auth = auth,
                     post = post,
                     saved = newValue,

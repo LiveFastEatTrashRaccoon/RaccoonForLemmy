@@ -15,7 +15,7 @@ val homeTabModule = module {
     factory {
         PostListViewModel(
             mvi = DefaultMviModel(PostListMviModel.UiState()),
-            postsRepository = get(),
+            postRepository = get(),
             apiConfigRepository = get(),
             identityRepository = get(),
             siteRepository = get(),

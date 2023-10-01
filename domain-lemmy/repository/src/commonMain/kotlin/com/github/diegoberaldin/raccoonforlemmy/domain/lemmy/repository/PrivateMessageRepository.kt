@@ -12,7 +12,7 @@ class PrivateMessageRepository(
     suspend fun getAll(
         auth: String? = null,
         page: Int,
-        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         unreadOnly: Boolean = true,
     ): List<PrivateMessageModel> = runCatching {
         val response = serviceProvider.privateMessages.getPrivateMessages(

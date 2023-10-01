@@ -25,7 +25,7 @@ class CommentRepository(
         postId: Int,
         auth: String? = null,
         page: Int,
-        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         type: ListingType = ListingType.All,
         sort: SortType = SortType.New,
         maxDepth: Int = 1,
@@ -46,7 +46,7 @@ class CommentRepository(
     suspend fun getChildren(
         parentId: Int,
         auth: String? = null,
-        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         type: ListingType = ListingType.All,
         sort: SortType = SortType.New,
         maxDepth: Int = 1,

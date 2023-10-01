@@ -66,7 +66,7 @@ class UserRepository(
         id: Int,
         auth: String? = null,
         page: Int,
-        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
     ): List<PostModel> = runCatching {
         val response = serviceProvider.user.getDetails(
@@ -84,7 +84,7 @@ class UserRepository(
         id: Int,
         auth: String? = null,
         page: Int,
-        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
     ): List<PostModel> = runCatching {
         val response = serviceProvider.user.getDetails(
@@ -103,7 +103,7 @@ class UserRepository(
         id: Int,
         auth: String? = null,
         page: Int,
-        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
     ): List<CommentModel> = runCatching {
         val response = serviceProvider.user.getDetails(
@@ -121,7 +121,7 @@ class UserRepository(
         id: Int,
         auth: String? = null,
         page: Int,
-        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
     ): List<CommentModel> = runCatching {
         val response = serviceProvider.user.getDetails(
@@ -139,7 +139,7 @@ class UserRepository(
     suspend fun getMentions(
         auth: String? = null,
         page: Int,
-        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.New,
         unreadOnly: Boolean = true,
     ): List<PersonMentionModel> = runCatching {
@@ -157,7 +157,7 @@ class UserRepository(
     suspend fun getReplies(
         auth: String? = null,
         page: Int,
-        limit: Int = PostsRepository.DEFAULT_PAGE_SIZE,
+        limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.New,
         unreadOnly: Boolean = true,
     ): List<PersonMentionModel> = runCatching {

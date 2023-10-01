@@ -18,7 +18,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.shareUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostsRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 
 class PostListViewModel(
     private val mvi: DefaultMviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect>,
-    private val postsRepository: PostsRepository,
+    private val postRepository: PostRepository,
     private val apiConfigRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
@@ -159,14 +159,14 @@ class PostListViewModel(
             val sort = currentState.sortType ?: SortType.Active
             val refreshing = currentState.refreshing
             val includeNsfw = keyStore[KeyStoreKeys.IncludeNsfw, true]
-            val postList = postsRepository.getAll(
+            val postList = postRepository.getAll(
                 auth = auth,
                 page = currentPage,
                 type = type,
                 sort = sort,
             )
             currentPage++
-            val canFetchMore = postList.size >= PostsRepository.DEFAULT_PAGE_SIZE
+            val canFetchMore = postList.size >= PostRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {
                 val newPosts = if (refreshing) {
                     postList
@@ -201,7 +201,7 @@ class PostListViewModel(
 
     private fun toggleUpVote(post: PostModel, feedback: Boolean) {
         val newVote = post.myVote <= 0
-        val newPost = postsRepository.asUpVoted(
+        val newPost = postRepository.asUpVoted(
             post = post,
             voted = newVote,
         )
@@ -222,7 +222,7 @@ class PostListViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.upVote(
+                postRepository.upVote(
                     post = post,
                     auth = auth,
                     voted = newVote,
@@ -246,7 +246,7 @@ class PostListViewModel(
 
     private fun toggleDownVote(post: PostModel, feedback: Boolean) {
         val newValue = post.myVote >= 0
-        val newPost = postsRepository.asDownVoted(
+        val newPost = postRepository.asDownVoted(
             post = post,
             downVoted = newValue,
         )
@@ -267,7 +267,7 @@ class PostListViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.downVote(
+                postRepository.downVote(
                     post = post,
                     auth = auth,
                     downVoted = newValue,
@@ -291,7 +291,7 @@ class PostListViewModel(
 
     private fun toggleSave(post: PostModel, feedback: Boolean) {
         val newValue = !post.saved
-        val newPost = postsRepository.asSaved(
+        val newPost = postRepository.asSaved(
             post = post,
             saved = newValue,
         )
@@ -312,7 +312,7 @@ class PostListViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
-                postsRepository.save(
+                postRepository.save(
                     post = post,
                     auth = auth,
                     saved = newValue,
@@ -367,7 +367,7 @@ class PostListViewModel(
     private fun handlePostDelete(id: Int) {
         mvi.scope?.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value.orEmpty()
-            postsRepository.delete(id = id, auth = auth)
+            postRepository.delete(id = id, auth = auth)
             handlePostDelete(id)
         }
     }
