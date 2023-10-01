@@ -17,6 +17,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepo
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -55,13 +56,12 @@ class ProfileLoggedViewModel(
 
     override fun onStarted() {
         mvi.onStarted()
-        val auth = identityRepository.authToken.value.orEmpty()
         mvi.scope?.launch(Dispatchers.IO) {
             themeRepository.postLayout.onEach { layout ->
                 mvi.updateState { it.copy(postLayout = layout) }
             }.launchIn(this)
 
-            identityRepository.authToken.onEach {
+            identityRepository.authToken.drop(1).onEach {
                 mvi.updateState {
                     it.copy(
                         posts = emptyList(),
@@ -70,6 +70,10 @@ class ProfileLoggedViewModel(
                 }
                 refresh()
             }.launchIn(this)
+
+            if (uiState.value.posts.isEmpty()) {
+                refresh()
+            }
         }
     }
 
@@ -125,7 +129,7 @@ class ProfileLoggedViewModel(
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
-            val userId = currentState.user?.id ?: 0
+            val userId = currentState.user.id
             val section = currentState.section
             if (section == ProfileLoggedSection.Posts) {
                 val postList = userRepository.getPosts(
