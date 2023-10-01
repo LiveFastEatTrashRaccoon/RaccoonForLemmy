@@ -1,0 +1,6 @@
+- feat: show comments in context when opening post detail from profile, explore and inbox
+- fix: profile fully reloading after each navigation
+- fix: update post counters after creating comments
+- fix: blur exceeding part of post cards not visible
+- enhancement: rename compact post layout
+- chore: update to Compose 1.5.2
