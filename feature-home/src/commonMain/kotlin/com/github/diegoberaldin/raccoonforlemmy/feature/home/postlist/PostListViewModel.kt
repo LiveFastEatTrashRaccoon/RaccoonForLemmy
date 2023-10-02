@@ -171,7 +171,8 @@ class PostListViewModel(
                 val newPosts = if (refreshing) {
                     postList
                 } else {
-                    it.posts + postList
+                    // prevents accidental duplication
+                    it.posts + postList.filter { p -> it.posts.none { e -> e.id == p.id } }
                 }.filter { post ->
                     if (includeNsfw) {
                         true
