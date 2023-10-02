@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.MilitaryTech
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Rocket
+import androidx.compose.material.icons.filled.Thunderstorm
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -30,6 +31,8 @@ sealed interface SortType {
         data object Month : Top
         data object Year : Top
     }
+
+    data object Controversial : SortType
 }
 
 fun SortType.toInt() = when (this) {
@@ -46,6 +49,7 @@ fun SortType.toInt() = when (this) {
     SortType.Top.Week -> 11
     SortType.Top.Year -> 12
     SortType.Old -> 13
+    SortType.Controversial -> 14
     else -> 0
 }
 
@@ -63,6 +67,7 @@ fun Int.toSortType() = when (this) {
     11 -> SortType.Top.Week
     12 -> SortType.Top.Year
     13 -> SortType.Old
+    14 -> SortType.Controversial
     else -> SortType.Active
 }
 
@@ -73,6 +78,7 @@ fun SortType.toIcon(): ImageVector = when (this) {
     SortType.New -> Icons.Default.LocalActivity
     SortType.NewComments -> Icons.Default.Reviews
     SortType.Old -> Icons.Default.History
+    SortType.Controversial -> Icons.Default.Thunderstorm
     else -> Icons.Default.MilitaryTech
 }
 
@@ -91,5 +97,6 @@ fun SortType.toReadableName(): String = when (this) {
     SortType.Top.Week -> stringResource(MR.strings.home_sort_type_top_week)
     SortType.Top.Year -> stringResource(MR.strings.home_sort_type_top_year)
     SortType.Old -> stringResource(MR.strings.home_sort_type_old)
+    SortType.Controversial -> stringResource(MR.strings.home_sort_type_controversial)
     else -> stringResource(MR.strings.home_sort_type_top)
 }

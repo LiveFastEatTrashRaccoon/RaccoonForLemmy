@@ -162,6 +162,7 @@ class PostDetailScreen(
                                         SortType.Top.Generic,
                                         SortType.New,
                                         SortType.Old,
+                                        SortType.Controversial,
                                     ),
                                 )
                                 notificationCenter.addObserver({

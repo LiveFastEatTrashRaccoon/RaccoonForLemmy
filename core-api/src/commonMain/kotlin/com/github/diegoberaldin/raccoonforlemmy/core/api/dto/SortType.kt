@@ -56,4 +56,7 @@ enum class SortType {
 
     @SerialName("TopNineMonths")
     TopNineMonths,
+
+    @SerialName("Controversial")
+    Controversial,
 }
