@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -62,10 +63,12 @@ fun PostCard(
         Box(
             modifier = modifier.let {
                 if (postLayout == PostLayout.Card) {
-                    it.background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = RoundedCornerShape(CornerSize.l),
-                    ).padding(Spacing.s)
+                    it.padding(horizontal = Spacing.xs)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                            shape = RoundedCornerShape(CornerSize.l),
+                        )
+                        .padding(Spacing.s)
                 } else {
                     it
                 }
@@ -76,7 +79,7 @@ fun PostCard(
                     post = post,
                     hideAuthor = hideAuthor,
                     backgroundColor = when (postLayout) {
-                        PostLayout.Card -> MaterialTheme.colorScheme.primaryContainer
+                        PostLayout.Card -> MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
                         else -> MaterialTheme.colorScheme.background
                     },
                     withOverflowBlurred = withOverflowBlurred,

@@ -38,6 +38,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -322,7 +323,7 @@ class PostDetailScreen(
                                 if (uiState.postLayout != PostLayout.Card) {
                                     Divider(modifier = Modifier.padding(vertical = Spacing.s))
                                 } else {
-                                    Spacer(modifier = Modifier.height(Spacing.xs))
+                                    Spacer(modifier = Modifier.height(Spacing.s))
                                 }
                             }
                         }
@@ -372,9 +373,10 @@ class PostDetailScreen(
                                     content = {
                                         CommentCard(
                                             background = if (comment.id == highlightCommentId) {
-                                                MaterialTheme.colorScheme.primaryContainer.copy(
-                                                    alpha = 0.75f
-                                                )
+                                                MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
+                                                    .copy(
+                                                        alpha = 0.75f
+                                                    )
                                             } else {
                                                 MaterialTheme.colorScheme.background
                                             },

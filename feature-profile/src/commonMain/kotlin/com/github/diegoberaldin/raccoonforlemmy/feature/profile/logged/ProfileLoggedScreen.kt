@@ -206,7 +206,7 @@ internal object ProfileLoggedScreen : Tab {
                                 if (uiState.postLayout != PostLayout.Card) {
                                     Divider(modifier = Modifier.padding(vertical = Spacing.s))
                                 } else {
-                                    Spacer(modifier = Modifier.height(Spacing.xs))
+                                    Spacer(modifier = Modifier.height(Spacing.s))
                                 }
                             }
                         } else {
