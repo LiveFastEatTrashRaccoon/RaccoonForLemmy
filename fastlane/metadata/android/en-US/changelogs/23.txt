@@ -1,0 +1,8 @@
+- feat: account-specific settings
+- feat: image in markdown (post body and comment) opening
+- enhancement: help for account creation in login title
+- enhancement: improve spacing and blur for post cards
+- fix: prevent community detail reload after navigation
+- fix: prevent crash on large images loading
+- fix: sort top title alignment
+- fix: avoid post duplication in home
