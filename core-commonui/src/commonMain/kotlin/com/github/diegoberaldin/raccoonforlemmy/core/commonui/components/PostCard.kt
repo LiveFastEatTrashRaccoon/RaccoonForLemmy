@@ -205,7 +205,7 @@ private fun ExtendedPost(
         )
         PostCardTitle(
             modifier = Modifier.padding(
-                vertical = Spacing.s,
+                vertical = Spacing.xs,
                 horizontal = Spacing.xs,
             ),
             text = post.title
@@ -226,17 +226,13 @@ private fun ExtendedPost(
                             it
                         }
                     }
-                    .padding(
-                        start = Spacing.xs,
-                        end = Spacing.xs,
-                        bottom = Spacing.xs,
-                    ),
+                    .padding(horizontal = Spacing.xs),
                 text = post.text,
             )
             if (withOverflowBlurred) {
                 Box(
                     modifier = Modifier
-                        .height(Spacing.l)
+                        .height(Spacing.xxl)
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter).background(
                             brush = Brush.verticalGradient(
