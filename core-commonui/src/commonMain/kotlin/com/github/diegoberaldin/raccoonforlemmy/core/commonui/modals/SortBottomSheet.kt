@@ -164,6 +164,7 @@ internal class SortBottomSheetTop(
         Column {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     modifier = Modifier.onClick {
