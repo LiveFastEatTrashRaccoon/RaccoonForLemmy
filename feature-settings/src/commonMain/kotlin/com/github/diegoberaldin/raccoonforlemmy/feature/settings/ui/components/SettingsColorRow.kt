@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.settings.content
+package com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

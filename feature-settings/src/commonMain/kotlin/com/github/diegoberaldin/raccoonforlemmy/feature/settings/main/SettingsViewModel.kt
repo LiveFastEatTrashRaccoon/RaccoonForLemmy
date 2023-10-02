@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.settings.content
+package com.github.diegoberaldin.raccoonforlemmy.feature.settings.main
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -13,6 +13,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.AppInfo
@@ -28,8 +29,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class SettingsScreenViewModel(
-    private val mvi: DefaultMviModel<SettingsScreenMviModel.Intent, SettingsScreenMviModel.UiState, SettingsScreenMviModel.Effect>,
+class SettingsViewModel(
+    private val mvi: DefaultMviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect>,
     private val themeRepository: ThemeRepository,
     private val colorSchemeProvider: ColorSchemeProvider,
     private val languageRepository: LanguageRepository,
@@ -38,7 +39,7 @@ class SettingsScreenViewModel(
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
-    MviModel<SettingsScreenMviModel.Intent, SettingsScreenMviModel.UiState, SettingsScreenMviModel.Effect> by mvi {
+    MviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect> by mvi {
 
     init {
         notificationCenter.addObserver(
@@ -97,61 +98,61 @@ class SettingsScreenViewModel(
         }
     }
 
-    override fun reduce(intent: SettingsScreenMviModel.Intent) {
+    override fun reduce(intent: SettingsMviModel.Intent) {
         when (intent) {
-            is SettingsScreenMviModel.Intent.ChangeTheme -> {
+            is SettingsMviModel.Intent.ChangeTheme -> {
                 changeTheme(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeContentFontSize -> {
+            is SettingsMviModel.Intent.ChangeContentFontSize -> {
                 changeContentFontScale(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeLanguage -> {
+            is SettingsMviModel.Intent.ChangeLanguage -> {
                 changeLanguage(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType -> {
+            is SettingsMviModel.Intent.ChangeDefaultCommentSortType -> {
                 changeDefaultCommentSortType(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeDefaultListingType -> {
+            is SettingsMviModel.Intent.ChangeDefaultListingType -> {
                 changeDefaultListingType(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeDefaultPostSortType -> {
+            is SettingsMviModel.Intent.ChangeDefaultPostSortType -> {
                 changeDefaultPostSortType(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeBlurNsfw -> {
+            is SettingsMviModel.Intent.ChangeBlurNsfw -> {
                 changeBlurNsfw(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeIncludeNsfw -> {
+            is SettingsMviModel.Intent.ChangeIncludeNsfw -> {
                 changeIncludeNsfw(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeNavBarTitlesVisible -> {
+            is SettingsMviModel.Intent.ChangeNavBarTitlesVisible -> {
                 changeNavBarTitlesVisible(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeDynamicColors -> {
+            is SettingsMviModel.Intent.ChangeDynamicColors -> {
                 changeDynamicColors(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeOpenUrlsInExternalBrowser -> {
+            is SettingsMviModel.Intent.ChangeOpenUrlsInExternalBrowser -> {
                 changeOpenUrlsInExternalBrowser(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeEnableSwipeActions -> {
+            is SettingsMviModel.Intent.ChangeEnableSwipeActions -> {
                 changeEnableSwipeActions(intent.value)
             }
 
-            is SettingsScreenMviModel.Intent.ChangeCustomSeedColor -> changeCustomSeedColor(
+            is SettingsMviModel.Intent.ChangeCustomSeedColor -> changeCustomSeedColor(
                 intent.value
             )
 
-            is SettingsScreenMviModel.Intent.ChangePostLayout -> changePostLayout(intent.value)
+            is SettingsMviModel.Intent.ChangePostLayout -> changePostLayout(intent.value)
         }
     }
 
@@ -161,8 +162,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 theme = value.toInt()
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -172,8 +172,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 contentFontScale = value
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -183,8 +182,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 locale = value
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -194,8 +192,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 defaultListingType = value.toInt()
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -205,8 +202,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 defaultPostSortType = value.toInt()
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -216,8 +212,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 defaultCommentSortType = value.toInt()
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -227,8 +222,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 navigationTitlesVisible = value
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -238,8 +232,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 includeNsfw = value
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -249,8 +242,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 blurNsfw = value
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -260,8 +252,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 dynamicColors = value
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -271,8 +262,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 customSeedColor = value?.toArgb()
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -282,8 +272,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 openUrlsInExternalBrowser = value
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -293,8 +282,7 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 enableSwipeActions = value
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
     }
 
@@ -304,9 +292,14 @@ class SettingsScreenViewModel(
             val settings = settingsRepository.currentSettings.value.copy(
                 postLayout = value.toInt()
             )
-            val accountId = accountRepository.getActive()?.id
-            settingsRepository.updateSettings(settings, accountId)
+            saveSettings(settings)
         }
+    }
+
+    private suspend fun saveSettings(settings: SettingsModel) {
+        val accountId = accountRepository.getActive()?.id
+        settingsRepository.updateSettings(settings, accountId)
+        settingsRepository.changeCurrentSettings(settings)
     }
 
     private fun handleLogout() {

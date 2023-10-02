@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.settings.content
+package com.github.diegoberaldin.raccoonforlemmy.feature.settings.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,6 +47,9 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.di.getSettingsScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components.SettingsColorRow
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components.SettingsRow
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components.SettingsSwitchRow
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
@@ -112,7 +115,7 @@ class SettingsScreen : Screen {
                             val sheet = ThemeBottomSheet()
                             notificationCenter.addObserver({ result ->
                                 (result as? ThemeState)?.also { value ->
-                                    model.reduce(SettingsScreenMviModel.Intent.ChangeTheme(value))
+                                    model.reduce(SettingsMviModel.Intent.ChangeTheme(value))
                                 }
                             }, key, NotificationCenterContractKeys.ChangeTheme)
                             bottomSheetNavigator.show(sheet)
@@ -126,7 +129,7 @@ class SettingsScreen : Screen {
                             value = uiState.dynamicColors,
                             onValueChanged = { value ->
                                 model.reduce(
-                                    SettingsScreenMviModel.Intent.ChangeDynamicColors(
+                                    SettingsMviModel.Intent.ChangeDynamicColors(
                                         value
                                     )
                                 )
@@ -146,7 +149,7 @@ class SettingsScreen : Screen {
                             val sheet = ColorBottomSheet()
                             notificationCenter.addObserver({ result ->
                                 model.reduce(
-                                    SettingsScreenMviModel.Intent.ChangeCustomSeedColor(
+                                    SettingsMviModel.Intent.ChangeCustomSeedColor(
                                         result as? Color?
                                     )
                                 )
@@ -164,7 +167,7 @@ class SettingsScreen : Screen {
                             notificationCenter.addObserver({ result ->
                                 (result as? Float)?.also { value ->
                                     model.reduce(
-                                        SettingsScreenMviModel.Intent.ChangeContentFontSize(
+                                        SettingsMviModel.Intent.ChangeContentFontSize(
                                             value
                                         )
                                     )
@@ -182,7 +185,7 @@ class SettingsScreen : Screen {
                             val sheet = LanguageBottomSheet()
                             notificationCenter.addObserver({ result ->
                                 (result as? String)?.also { lang ->
-                                    model.reduce(SettingsScreenMviModel.Intent.ChangeLanguage(lang))
+                                    model.reduce(SettingsMviModel.Intent.ChangeLanguage(lang))
                                 }
                             }, key, NotificationCenterContractKeys.ChangeLanguage)
                             bottomSheetNavigator.show(sheet)
@@ -198,7 +201,7 @@ class SettingsScreen : Screen {
                             notificationCenter.addObserver({ result ->
                                 (result as? PostLayout)?.also { value ->
                                     model.reduce(
-                                        SettingsScreenMviModel.Intent.ChangePostLayout(
+                                        SettingsMviModel.Intent.ChangePostLayout(
                                             value
                                         )
                                     )
@@ -219,7 +222,7 @@ class SettingsScreen : Screen {
                             notificationCenter.addObserver({ result ->
                                 (result as? ListingType)?.also {
                                     model.reduce(
-                                        SettingsScreenMviModel.Intent.ChangeDefaultListingType(
+                                        SettingsMviModel.Intent.ChangeDefaultListingType(
                                             it
                                         )
                                     )
@@ -240,7 +243,7 @@ class SettingsScreen : Screen {
                             notificationCenter.addObserver({
                                 (it as? SortType)?.also { sortType ->
                                     model.reduce(
-                                        SettingsScreenMviModel.Intent.ChangeDefaultPostSortType(
+                                        SettingsMviModel.Intent.ChangeDefaultPostSortType(
                                             sortType
                                         )
                                     )
@@ -266,7 +269,7 @@ class SettingsScreen : Screen {
                             notificationCenter.addObserver({
                                 (it as? SortType)?.also { sortType ->
                                     model.reduce(
-                                        SettingsScreenMviModel.Intent.ChangeDefaultCommentSortType(
+                                        SettingsMviModel.Intent.ChangeDefaultCommentSortType(
                                             sortType
                                         )
                                     )
@@ -282,7 +285,7 @@ class SettingsScreen : Screen {
                         value = uiState.enableSwipeActions,
                         onValueChanged = { value ->
                             model.reduce(
-                                SettingsScreenMviModel.Intent.ChangeEnableSwipeActions(
+                                SettingsMviModel.Intent.ChangeEnableSwipeActions(
                                     value
                                 )
                             )
@@ -295,7 +298,7 @@ class SettingsScreen : Screen {
                         value = uiState.navBarTitlesVisible,
                         onValueChanged = { value ->
                             model.reduce(
-                                SettingsScreenMviModel.Intent.ChangeNavBarTitlesVisible(
+                                SettingsMviModel.Intent.ChangeNavBarTitlesVisible(
                                     value
                                 )
                             )
@@ -308,7 +311,7 @@ class SettingsScreen : Screen {
                         value = uiState.openUrlsInExternalBrowser,
                         onValueChanged = { value ->
                             model.reduce(
-                                SettingsScreenMviModel.Intent.ChangeOpenUrlsInExternalBrowser(
+                                SettingsMviModel.Intent.ChangeOpenUrlsInExternalBrowser(
                                     value
                                 )
                             )
@@ -320,14 +323,14 @@ class SettingsScreen : Screen {
                         title = stringResource(MR.strings.settings_include_nsfw),
                         value = uiState.includeNsfw,
                         onValueChanged = { value ->
-                            model.reduce(SettingsScreenMviModel.Intent.ChangeIncludeNsfw(value))
+                            model.reduce(SettingsMviModel.Intent.ChangeIncludeNsfw(value))
                         }
                     )
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_blur_nsfw),
                         value = uiState.blurNsfw,
                         onValueChanged = { value ->
-                            model.reduce(SettingsScreenMviModel.Intent.ChangeBlurNsfw(value))
+                            model.reduce(SettingsMviModel.Intent.ChangeBlurNsfw(value))
                         }
                     )
 

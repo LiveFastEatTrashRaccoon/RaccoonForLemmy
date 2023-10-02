@@ -1,15 +1,15 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.settings.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.settings.content.SettingsScreenMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.settings.content.SettingsScreenViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.main.SettingsMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.main.SettingsViewModel
 import org.koin.dsl.module
 
 val settingsTabModule = module {
     factory {
-        SettingsScreenViewModel(
+        SettingsViewModel(
             mvi = DefaultMviModel(
-                SettingsScreenMviModel.UiState(),
+                SettingsMviModel.UiState(),
             ),
             settingsRepository = get(),
             accountRepository = get(),

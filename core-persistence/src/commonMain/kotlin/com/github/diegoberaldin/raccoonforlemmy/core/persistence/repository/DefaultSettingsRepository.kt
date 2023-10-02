@@ -101,8 +101,8 @@ class DefaultSettingsRepository(
                 keyStore.save(KeyStoreKeys.NavItemTitlesVisible, settings.navigationTitlesVisible)
                 keyStore.save(KeyStoreKeys.DynamicColors, settings.dynamicColors)
                 keyStore.save(
-                    KeyStoreKeys.OpenUrlsInExternalBrowser,
-                    settings.openUrlsInExternalBrowser
+                    key = KeyStoreKeys.OpenUrlsInExternalBrowser,
+                    value = settings.openUrlsInExternalBrowser
                 )
                 keyStore.save(KeyStoreKeys.EnableSwipeActions, settings.enableSwipeActions)
                 if (settings.customSeedColor != null) {

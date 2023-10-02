@@ -1,9 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.settings.di
 
-import com.github.diegoberaldin.raccoonforlemmy.feature.settings.content.SettingsScreenViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.main.SettingsViewModel
 import org.koin.java.KoinJavaComponent
 
-actual fun getSettingsScreenModel(): SettingsScreenViewModel {
-    val res: SettingsScreenViewModel by KoinJavaComponent.inject(SettingsScreenViewModel::class.java)
+actual fun getSettingsScreenModel(): SettingsViewModel {
+    val res: SettingsViewModel by KoinJavaComponent.inject(SettingsViewModel::class.java)
     return res
 }
