@@ -45,7 +45,8 @@ fun PostCardImage(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    text = stringResource(MR.strings.message_image_loading_error)
+                    text = stringResource(MR.strings.message_image_loading_error),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
             },
             onLoading = { progress ->

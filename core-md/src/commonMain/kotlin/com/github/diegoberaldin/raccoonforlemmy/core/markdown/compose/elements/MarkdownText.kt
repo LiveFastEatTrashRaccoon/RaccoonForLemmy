@@ -131,7 +131,8 @@ internal fun MarkdownText(
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
                                     textAlign = TextAlign.Center,
-                                    text = stringResource(MR.strings.message_image_loading_error)
+                                    text = stringResource(MR.strings.message_image_loading_error),
+                                    style = LocalMarkdownTypography.current.text
                                 )
                             },
                             onLoading = { progress ->
@@ -182,7 +183,8 @@ internal fun MarkdownText(
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
-                        text = stringResource(MR.strings.message_image_loading_error)
+                        text = stringResource(MR.strings.message_image_loading_error),
+                        style = LocalMarkdownTypography.current.text,
                     )
                 },
                 onLoading = { progress ->
