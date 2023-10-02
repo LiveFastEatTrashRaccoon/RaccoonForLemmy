@@ -256,7 +256,7 @@ class UserDetailScreen(
                                     },
                                     backgroundColor = {
                                         when (it) {
-                                            DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
+                                            DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
                                             DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
                                             else -> Color.Transparent
                                         }

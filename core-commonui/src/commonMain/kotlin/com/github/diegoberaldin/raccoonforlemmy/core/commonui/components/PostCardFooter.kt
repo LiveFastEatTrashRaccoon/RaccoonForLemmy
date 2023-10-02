@@ -1,14 +1,12 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
@@ -155,29 +153,16 @@ fun PostCardFooter(
             )
             Image(
                 modifier = buttonModifier
-                    .let {
-                        if (upVoted) {
-                            it.background(
-                                color = MaterialTheme.colorScheme.onBackground,
-                                shape = CircleShape,
-                            )
-                        } else {
-                            it
-                        }
-                    }.onClick {
+                    .onClick {
                         onUpVote?.invoke()
                     },
-                imageVector = if (upVoted) {
-                    Icons.Default.ArrowCircleUp
-                } else {
-                    Icons.Default.ArrowCircleUp
-                },
+                imageVector = Icons.Default.ArrowCircleUp,
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
                     color = if (upVoted) {
-                        MaterialTheme.colorScheme.background
+                        MaterialTheme.colorScheme.surfaceTint
                     } else {
-                        MaterialTheme.colorScheme.onBackground
+                        MaterialTheme.colorScheme.onSurface
                     },
                 ),
             )
@@ -188,30 +173,16 @@ fun PostCardFooter(
             )
             Image(
                 modifier = buttonModifier
-                    .let {
-                        if (downVoted) {
-                            it.background(
-                                color = MaterialTheme.colorScheme.onBackground,
-                                shape = CircleShape,
-                            )
-                        } else {
-                            it
-                        }
-                    }
                     .onClick {
                         onDownVote?.invoke()
                     },
-                imageVector = if (downVoted) {
-                    Icons.Default.ArrowCircleDown
-                } else {
-                    Icons.Default.ArrowCircleDown
-                },
+                imageVector = Icons.Default.ArrowCircleDown,
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
                     color = if (downVoted) {
-                        MaterialTheme.colorScheme.background
+                        MaterialTheme.colorScheme.tertiary
                     } else {
-                        MaterialTheme.colorScheme.onBackground
+                        MaterialTheme.colorScheme.onSurface
                     },
                 ),
             )

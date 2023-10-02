@@ -103,7 +103,7 @@ class ManageSubscriptionsScreen : Screen {
                             directions = setOf(DismissDirection.EndToStart),
                             backgroundColor = {
                                 when (it) {
-                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
+                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
                                     else -> Color.Transparent
                                 }
                             },

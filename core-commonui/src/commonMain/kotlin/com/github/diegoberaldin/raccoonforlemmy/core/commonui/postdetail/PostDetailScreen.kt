@@ -341,7 +341,7 @@ class PostDetailScreen(
                                     enabled = uiState.swipeActionsEnabled,
                                     backgroundColor = {
                                         when (it) {
-                                            DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
+                                            DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
                                             DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
                                             DismissValue.Default -> Color.Transparent
                                         }
