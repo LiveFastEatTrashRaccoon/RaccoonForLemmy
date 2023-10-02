@@ -148,7 +148,7 @@ private fun CompactPost(
                     .clip(RoundedCornerShape(CornerSize.s)),
                 minHeight = Dp.Unspecified,
                 maxHeight = Dp.Unspecified,
-                imageUrl = post.thumbnailUrl.orEmpty(),
+                imageUrl = post.imageUrl,
                 blurred = blurNsfw && post.nsfw,
                 onImageClick = onImageClick,
             )
@@ -210,9 +210,10 @@ private fun ExtendedPost(
             ),
             text = post.title
         )
+
         PostCardImage(
             modifier = Modifier.clip(RoundedCornerShape(CornerSize.xl)),
-            imageUrl = post.thumbnailUrl.orEmpty(),
+            imageUrl = post.imageUrl,
             blurred = blurNsfw && post.nsfw,
             onImageClick = onImageClick,
         )
@@ -245,12 +246,14 @@ private fun ExtendedPost(
                 )
             }
         }
-        PostLinkBanner(
-            modifier = Modifier.padding(vertical = Spacing.xs),
-            url = post.url.takeIf {
-                it?.contains("pictrs/image") == false
-            }.orEmpty(),
-        )
+        if (post.url != post.imageUrl) {
+            PostLinkBanner(
+                modifier = Modifier.padding(vertical = Spacing.xs),
+                url = post.url.takeIf {
+                    it?.contains("pictrs/image") == false
+                }.orEmpty(),
+            )
+        }
         PostCardFooter(
             comments = post.comments,
             score = post.score,
@@ -267,3 +270,11 @@ private fun ExtendedPost(
         )
     }
 }
+
+private val PostModel.imageUrl: String
+    get() = thumbnailUrl?.takeIf { it.isNotEmpty() } ?: run {
+        url?.takeIf { u ->
+            val imageExtensions = listOf(".jpeg", ".jpg", ".png")
+            imageExtensions.any { u.endsWith(it) }
+        }
+    }.orEmpty()
