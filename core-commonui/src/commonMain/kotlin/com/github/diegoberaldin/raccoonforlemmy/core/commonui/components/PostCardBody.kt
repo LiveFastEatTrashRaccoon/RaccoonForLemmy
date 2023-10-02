@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose.Markdown
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.model.markdownColor
 import com.github.diegoberaldin.raccoonforlemmy.core.markdown.model.markdownTypography
@@ -50,7 +51,10 @@ fun PostCardBody(
                     uriHandler = uriHandler,
                     navigator = navigator
                 )
-            }
+            },
+            onOpenImage = { url ->
+                navigator?.push(ZoomableImageScreen(url))
+            },
         )
     }
 }

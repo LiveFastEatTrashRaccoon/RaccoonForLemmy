@@ -61,6 +61,7 @@ fun Markdown(
     flavour: MarkdownFlavourDescriptor = GFMFlavourDescriptor(),
     onOpenUrl: ((String) -> Unit)? = null,
     inlineImages: Boolean = true,
+    onOpenImage: ((String) -> Unit)? = null,
 ) {
     val matches = Regex("::: spoiler (?<title>.*?)\\n(?<content>.*?)\\n:::\\n").findAll(content)
     val mangledContent = buildString {
@@ -97,9 +98,20 @@ fun Markdown(
         Column(modifier) {
             val parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(mangledContent)
             parsedTree.children.forEach { node ->
-                if (!node.handleElement(mangledContent, onOpenUrl, inlineImages)) {
+                if (!node.handleElement(
+                        content = mangledContent,
+                        onOpenUrl = onOpenUrl,
+                        inlineImages = inlineImages,
+                        onOpenImage = onOpenImage,
+                    )
+                ) {
                     node.children.forEach { child ->
-                        child.handleElement(mangledContent, onOpenUrl, inlineImages)
+                        child.handleElement(
+                            content = mangledContent,
+                            onOpenUrl = onOpenUrl,
+                            inlineImages = inlineImages,
+                            onOpenImage = onOpenImage,
+                        )
                     }
                 }
             }
@@ -112,6 +124,7 @@ private fun ASTNode.handleElement(
     content: String,
     onOpenUrl: ((String) -> Unit)? = null,
     inlineImages: Boolean = true,
+    onOpenImage: ((String) -> Unit)? = null,
 ): Boolean {
     val typography = LocalMarkdownTypography.current
     var handled = true
@@ -122,7 +135,8 @@ private fun ASTNode.handleElement(
             MarkdownText(
                 content = text,
                 onOpenUrl = onOpenUrl,
-                inlineImages = inlineImages
+                inlineImages = inlineImages,
+                onOpenImage = onOpenImage,
             )
         }
 
@@ -142,6 +156,7 @@ private fun ASTNode.handleElement(
             style = typography.paragraph,
             onOpenUrl = onOpenUrl,
             inlineImages = inlineImages,
+            onOpenImage = onOpenImage,
         )
 
         ORDERED_LIST -> Column(modifier = Modifier) {

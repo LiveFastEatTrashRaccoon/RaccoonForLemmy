@@ -4,7 +4,9 @@ import androidx.compose.animation.core.InfiniteRepeatableSpec
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -48,8 +50,16 @@ internal fun MarkdownText(
     style: TextStyle = LocalMarkdownTypography.current.text,
     onOpenUrl: ((String) -> Unit)? = null,
     inlineImages: Boolean = true,
+    onOpenImage: ((String) -> Unit)? = null,
 ) {
-    MarkdownText(AnnotatedString(content), modifier, style, onOpenUrl, inlineImages)
+    MarkdownText(
+        content = AnnotatedString(content),
+        modifier = modifier,
+        style = style,
+        onOpenUrl = onOpenUrl,
+        inlineImages = inlineImages,
+        onOpenImage = onOpenImage,
+    )
 }
 
 @Composable
@@ -59,6 +69,7 @@ internal fun MarkdownText(
     style: TextStyle = LocalMarkdownTypography.current.text,
     onOpenUrl: ((String) -> Unit)? = null,
     inlineImages: Boolean = true,
+    onOpenImage: ((String) -> Unit)? = null,
 ) {
     val referenceLinkHandler = LocalReferenceLinkHandler.current
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -104,11 +115,18 @@ internal fun MarkdownText(
                 ) { link ->
                     if (inlineImages) {
                         CustomImage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    onOpenImage?.invoke(imageUrl)
+                                },
                             url = link,
                             quality = FilterQuality.Low,
                             contentDescription = null,
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(),
                             onFailure = {
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
@@ -144,12 +162,18 @@ internal fun MarkdownText(
             color = LocalMarkdownColors.current.text,
             onTextLayout = { layoutResult.value = it },
         )
-        if (imageUrl.isNotEmpty()) {
+        if (!inlineImages && imageUrl.isNotEmpty()) {
             CustomImage(
                 modifier = modifier.fillMaxWidth()
                     // TODO: improve fixed values
                     .heightIn(min = 200.dp, max = Dp.Unspecified)
-                    .clip(RoundedCornerShape(20.dp)),
+                    .clip(RoundedCornerShape(20.dp))
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        onOpenImage?.invoke(imageUrl)
+                    },
                 url = imageUrl,
                 quality = FilterQuality.Low,
                 contentDescription = null,

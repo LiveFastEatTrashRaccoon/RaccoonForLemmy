@@ -14,6 +14,7 @@ internal fun MarkdownParagraph(
     style: TextStyle = LocalMarkdownTypography.current.paragraph,
     onOpenUrl: ((String) -> Unit)? = null,
     inlineImages: Boolean = true,
+    onOpenImage: ((String) -> Unit)? = null,
 ) {
     val styledText = buildAnnotatedString {
         pushStyle(style.toSpanStyle())
@@ -24,6 +25,7 @@ internal fun MarkdownParagraph(
         content = styledText,
         style = style,
         onOpenUrl = onOpenUrl,
-        inlineImages = inlineImages
+        inlineImages = inlineImages,
+        onOpenImage = onOpenImage,
     )
 }
