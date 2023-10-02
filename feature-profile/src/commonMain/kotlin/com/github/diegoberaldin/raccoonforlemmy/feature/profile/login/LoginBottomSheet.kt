@@ -16,11 +16,14 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -40,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -51,6 +55,9 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.handleUrl
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getLoginBottomSheetViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -60,6 +67,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class LoginBottomSheet : Screen {
+    companion object {
+        private const val HELP_URL = "https://join-lemmy.org/docs/users/01-getting-started.html"
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
@@ -89,6 +100,12 @@ class LoginBottomSheet : Screen {
             }.launchIn(this)
         }
 
+        val uriHandler = LocalUriHandler.current
+        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
+        val settingsRepository = remember { getSettingsRepository() }
+        val settings by settingsRepository.currentSettings.collectAsState()
+        val openExternal = settings.openUrlsInExternalBrowser
+
         Scaffold(
             modifier = Modifier
                 .fillMaxHeight(0.65f)
@@ -104,6 +121,24 @@ class LoginBottomSheet : Screen {
                             Text(
                                 modifier = Modifier.padding(top = Spacing.s),
                                 text = stringResource(MR.strings.profile_button_login),
+                            )
+                        }
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = {
+                                bottomSheetNavigator.hide()
+                                handleUrl(
+                                    url = HELP_URL,
+                                    openExternal = openExternal,
+                                    uriHandler = uriHandler,
+                                    navigator = navigator
+                                )
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.HelpOutline,
+                                contentDescription = null,
                             )
                         }
                     },
