@@ -16,20 +16,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -215,17 +220,22 @@ private fun ExtendedPost(
             onImageClick = onImageClick,
         )
         Box {
+            val maxHeight = 200.dp
+            val maxHeightPx = maxHeight.toLocalPixel()
+            var textHeightPx by remember { mutableStateOf(0f) }
             PostCardBody(
                 modifier = Modifier.let {
                     if (withOverflowBlurred) {
-                        it.heightIn(max = 200.dp)
+                        it.heightIn(max = maxHeight)
                     } else {
                         it
                     }
-                }.padding(horizontal = Spacing.xs),
+                }.padding(horizontal = Spacing.xs).onGloballyPositioned {
+                    textHeightPx = it.size.toSize().height
+                },
                 text = post.text,
             )
-            if (withOverflowBlurred) {
+            if (withOverflowBlurred && textHeightPx >= maxHeightPx) {
                 Box(
                     modifier = Modifier.height(Spacing.xxl).fillMaxWidth()
                         .align(Alignment.BottomCenter).background(
@@ -242,9 +252,7 @@ private fun ExtendedPost(
         if (post.url != post.imageUrl) {
             PostLinkBanner(
                 modifier = Modifier.padding(vertical = Spacing.xs),
-                url = post.url.takeIf {
-                    it?.contains("pictrs/image") == false
-                }.orEmpty(),
+                url = post.url?.takeIf { !it.looksLikeAnImage }.orEmpty(),
             )
         }
         PostCardFooter(
@@ -266,8 +274,11 @@ private fun ExtendedPost(
 
 private val PostModel.imageUrl: String
     get() = thumbnailUrl?.takeIf { it.isNotEmpty() } ?: run {
-        url?.takeIf { u ->
-            val imageExtensions = listOf(".jpeg", ".jpg", ".png")
-            imageExtensions.any { u.endsWith(it) }
-        }
+        url?.takeIf { it.looksLikeAnImage }
     }.orEmpty()
+
+private val String.looksLikeAnImage: Boolean
+    get() {
+        val imageExtensions = listOf(".jpeg", ".jpg", ".png")
+        return imageExtensions.any { this.endsWith(it) }
+    }

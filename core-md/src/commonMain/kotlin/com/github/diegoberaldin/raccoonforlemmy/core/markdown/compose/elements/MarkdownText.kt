@@ -97,72 +97,74 @@ internal fun MarkdownText(
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Text(
-            text = content,
-            modifier = textModifier,
-            style = style,
-            inlineContent = mapOf(
-                TAG_IMAGE_URL to InlineTextContent(
-                    if (inlineImages) {
-                        Placeholder(
-                            180.sp,
-                            180.sp,
-                            PlaceholderVerticalAlign.Bottom,
-                        ) // TODO: identify flexible scaling!
-                    } else {
-                        Placeholder(1.sp, 1.sp, PlaceholderVerticalAlign.Bottom)
-                    }
-                ) { link ->
-                    if (inlineImages) {
-                        CustomImage(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                ) {
-                                    onOpenImage?.invoke(imageUrl)
-                                },
-                            url = link,
-                            quality = FilterQuality.Low,
-                            contentDescription = null,
-                            contentScale = ContentScale.FillWidth,
-                            onFailure = {
-                                Text(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    textAlign = TextAlign.Center,
-                                    text = stringResource(MR.strings.message_image_loading_error),
-                                    style = LocalMarkdownTypography.current.text
-                                )
-                            },
-                            onLoading = { progress ->
-                                val prog = if (progress != null) {
-                                    progress
-                                } else {
-                                    val transition = rememberInfiniteTransition()
-                                    val res by transition.animateFloat(
-                                        initialValue = 0f,
-                                        targetValue = 1f,
-                                        animationSpec = InfiniteRepeatableSpec(
-                                            animation = tween(1000)
-                                        )
+        if (inlineImages || content.text != imageUrl) {
+            Text(
+                text = content,
+                modifier = textModifier,
+                style = style,
+                inlineContent = mapOf(
+                    TAG_IMAGE_URL to InlineTextContent(
+                        if (inlineImages) {
+                            Placeholder(
+                                180.sp,
+                                180.sp,
+                                PlaceholderVerticalAlign.Bottom,
+                            ) // TODO: identify flexible scaling!
+                        } else {
+                            Placeholder(1.sp, 1.sp, PlaceholderVerticalAlign.Bottom)
+                        }
+                    ) { link ->
+                        if (inlineImages) {
+                            CustomImage(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = null
+                                    ) {
+                                        onOpenImage?.invoke(imageUrl)
+                                    },
+                                url = link,
+                                quality = FilterQuality.Low,
+                                contentDescription = null,
+                                contentScale = ContentScale.FillWidth,
+                                onFailure = {
+                                    Text(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.Center,
+                                        text = stringResource(MR.strings.message_image_loading_error),
+                                        style = LocalMarkdownTypography.current.text
                                     )
-                                    res
-                                }
-                                CircularProgressIndicator(
-                                    progress = prog,
-                                    color = MaterialTheme.colorScheme.primary,
-                                )
-                            },
-                        )
-                    } else {
-                        imageUrl = link
-                    }
-                },
-            ),
-            color = LocalMarkdownColors.current.text,
-            onTextLayout = { layoutResult.value = it },
-        )
+                                },
+                                onLoading = { progress ->
+                                    val prog = if (progress != null) {
+                                        progress
+                                    } else {
+                                        val transition = rememberInfiniteTransition()
+                                        val res by transition.animateFloat(
+                                            initialValue = 0f,
+                                            targetValue = 1f,
+                                            animationSpec = InfiniteRepeatableSpec(
+                                                animation = tween(1000)
+                                            )
+                                        )
+                                        res
+                                    }
+                                    CircularProgressIndicator(
+                                        progress = prog,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                },
+                            )
+                        } else {
+                            imageUrl = link
+                        }
+                    },
+                ),
+                color = LocalMarkdownColors.current.text,
+                onTextLayout = { layoutResult.value = it },
+            )
+        }
         if (!inlineImages && imageUrl.isNotEmpty()) {
             CustomImage(
                 modifier = modifier.fillMaxWidth()
