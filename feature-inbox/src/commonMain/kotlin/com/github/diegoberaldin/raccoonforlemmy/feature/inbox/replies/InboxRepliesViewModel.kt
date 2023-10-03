@@ -99,9 +99,15 @@ class InboxRepliesViewModel(
         }
     }
 
-    private fun refresh() {
+    private fun refresh(initial: Boolean = false) {
         currentPage = 1
-        mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
+        mvi.updateState {
+            it.copy(
+                initial = initial,
+                canFetchMore = true,
+                refreshing = true
+            )
+        }
         mvi.scope?.launch {
             val auth = identityRepository.authToken.value
             val currentUser = siteRepository.getCurrentUser(auth.orEmpty())
@@ -113,7 +119,7 @@ class InboxRepliesViewModel(
 
     private fun changeUnreadOnly(value: Boolean) {
         mvi.updateState { it.copy(unreadOnly = value) }
-        refresh()
+        refresh(initial = true)
     }
 
     private fun loadNextPage() {
@@ -151,6 +157,7 @@ class InboxRepliesViewModel(
                     loading = false,
                     canFetchMore = canFetchMore,
                     refreshing = false,
+                    initial = false,
                 )
             }
         }

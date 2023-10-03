@@ -94,16 +94,22 @@ class InboxMentionsViewModel(
         }
     }
 
-    private fun refresh() {
+    private fun refresh(initial: Boolean = false) {
         currentPage = 1
-        mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
+        mvi.updateState {
+            it.copy(
+                initial = initial,
+                canFetchMore = true,
+                refreshing = true
+            )
+        }
         loadNextPage()
         updateUnreadItems()
     }
 
     private fun changeUnreadOnly(value: Boolean) {
         mvi.updateState { it.copy(unreadOnly = value) }
-        refresh()
+        refresh(initial = true)
     }
 
     private fun loadNextPage() {
@@ -137,6 +143,7 @@ class InboxMentionsViewModel(
                     loading = false,
                     canFetchMore = canFetchMore,
                     refreshing = false,
+                    initial = false,
                 )
             }
         }

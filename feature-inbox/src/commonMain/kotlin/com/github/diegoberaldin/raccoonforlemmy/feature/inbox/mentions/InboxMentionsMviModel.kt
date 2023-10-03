@@ -17,6 +17,7 @@ interface InboxMentionsMviModel :
     }
 
     data class UiState(
+        val initial: Boolean = true,
         val refreshing: Boolean = false,
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,

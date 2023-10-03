@@ -3,7 +3,7 @@
     <string name="lang">en</string>
 
     <string name="navigation_home">Publicaciones</string>
-    <string name="navigation_inbox">Buzón de entrada</string>
+    <string name="navigation_inbox">Mensajes</string>
     <string name="navigation_profile">Perfil</string>
     <string name="navigation_search">Descubre</string>
     <string name="navigation_settings">Ajustes</string>
@@ -13,6 +13,7 @@
     <string name="message_invalid_field">Campo no válido</string>
     <string name="message_image_loading_error">No ha sido posible descargar la imagen</string>
     <string name="message_login_successful">🎉 ¡Acceso completado con éxito! 🎉</string>
+    <string name="message_empty_list">Ningún elemento para mostrar</string>
 
     <string name="button_confirm">Confirmar</string>
     <string name="button_reset">Reiniciar</string>
@@ -126,12 +127,12 @@
     <string name="instance_detail_communities">Comunidades</string>
 
     <string name="inbox_not_logged_message">Acceso no efectuado.\nAñadir una cuenta en la pantalla
-        Perfil para acceder al buzón de entrada.
+        Perfil para acceder a los mensajes.
     </string>
     <string name="inbox_section_replies">Respuestas</string>
     <string name="inbox_section_mentions">Menciones</string>
     <string name="inbox_section_messages">Mensajes</string>
-    <string name="inbox_listing_type_title">Tipo de buzón de entrada</string>
+    <string name="inbox_listing_type_title">Tipo de mensajes</string>
     <string name="inbox_listing_type_all">Todos</string>
     <string name="inbox_listing_type_unread">No leídos</string>
     <string name="inbox_item_reply_post">ha contestado a tu publicación en</string>
