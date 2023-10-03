@@ -118,6 +118,7 @@
     <string name="settings_color_orange">Zumo de naranja</string>
     <string name="settings_color_pink">Rosa chillón</string>
     <string name="settings_color_gray">Hormigón</string>
+    <string name="settings_enable_crash_report">Activar notificación de accidentes</string>
 
     <string name="community_detail_info">Info comunidad</string>
     <string name="community_detail_instance_info">Detalles instancia</string>

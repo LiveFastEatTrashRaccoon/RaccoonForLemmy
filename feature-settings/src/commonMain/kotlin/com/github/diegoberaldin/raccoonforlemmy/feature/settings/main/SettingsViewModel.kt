@@ -17,6 +17,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.SettingsMo
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.AppInfo
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.CrashReportConfiguration
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
@@ -38,6 +39,7 @@ class SettingsViewModel(
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
+    private val crashReportConfiguration: CrashReportConfiguration,
 ) : ScreenModel,
     MviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect> by mvi {
 
@@ -93,6 +95,7 @@ class SettingsViewModel(
                 supportsDynamicColors = colorSchemeProvider.supportsDynamicColors,
                 openUrlsInExternalBrowser = settings.openUrlsInExternalBrowser,
                 enableSwipeActions = settings.enableSwipeActions,
+                crashReportEnabled = crashReportConfiguration.isEnabled(),
                 appVersion = AppInfo.versionCode,
             )
         }
@@ -153,6 +156,9 @@ class SettingsViewModel(
             )
 
             is SettingsMviModel.Intent.ChangePostLayout -> changePostLayout(intent.value)
+            is SettingsMviModel.Intent.ChangeCrashReportEnabled -> {
+                changeCrashReportEnabled(intent.value)
+            }
         }
     }
 
@@ -294,6 +300,11 @@ class SettingsViewModel(
             )
             saveSettings(settings)
         }
+    }
+
+    private fun changeCrashReportEnabled(value: Boolean) {
+        crashReportConfiguration.setEnabled(value)
+        mvi.updateState { it.copy(crashReportEnabled = value) }
     }
 
     private suspend fun saveSettings(settings: SettingsModel) {

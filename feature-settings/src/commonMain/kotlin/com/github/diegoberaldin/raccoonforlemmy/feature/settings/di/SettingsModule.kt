@@ -18,6 +18,7 @@ val settingsTabModule = module {
             identityRepository = get(),
             colorSchemeProvider = get(),
             notificationCenter = get(),
+            crashReportConfiguration = get(),
         )
     }
 }

@@ -62,6 +62,7 @@ moko_resources = { module = "dev.icerock.moko:resources", version.ref = "moko.re
 moko_resources_compose = { module = "dev.icerock.moko:resources-compose", version.ref = "moko.resources" }
 moko_resources_test = { module = "dev.icerock.moko:resources-test", version.ref = "moko.resources" }
 
+acra_core = { module = "ch.acra:acra-core", version.ref = "acra" }
 acra_mail = { module = "ch.acra:acra-mail", version.ref = "acra" }
 acra_notification = { module = "ch.acra:acra-notification", version.ref = "acra" }
 

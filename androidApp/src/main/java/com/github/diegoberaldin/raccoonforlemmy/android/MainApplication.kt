@@ -3,8 +3,10 @@ package com.github.diegoberaldin.raccoonforlemmy.android
 import android.app.Application
 import android.content.Context
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.AppInfo
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.CrashReportConfiguration
 import com.github.diegoberaldin.raccoonforlemmy.di.sharedHelperModule
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import org.acra.config.coreConfiguration
 import org.acra.config.mailSender
 import org.acra.config.notification
 import org.acra.data.StringFormat
@@ -20,6 +22,9 @@ class MainApplication : Application() {
         initAcra {
             buildConfigClass = BuildConfig::class.java
             reportFormat = StringFormat.JSON
+            coreConfiguration {
+                additionalSharedPreferences = listOf(CrashReportConfiguration.PREFERENCES_NAME)
+            }
             notification {
                 title = getString(R.string.crash_notification_title)
                 text = getString(R.string.crash_notification_text)

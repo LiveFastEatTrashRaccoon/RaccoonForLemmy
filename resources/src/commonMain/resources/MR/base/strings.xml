@@ -121,6 +121,7 @@
     <string name="settings_color_orange">Orance juice</string>
     <string name="settings_color_pink">Shocking pink</string>
     <string name="settings_color_gray">Concrete</string>
+    <string name="settings_enable_crash_report">Enable crash reporting</string>
 
     <string name="community_detail_info">Community info</string>
     <string name="community_detail_instance_info">Instance details</string>

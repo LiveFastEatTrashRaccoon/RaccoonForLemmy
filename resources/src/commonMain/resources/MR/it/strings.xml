@@ -118,6 +118,7 @@
     <string name="settings_color_orange">Aranciata</string>
     <string name="settings_color_pink">Rosa shocking</string>
     <string name="settings_color_gray">Cemento</string>
+    <string name="settings_enable_crash_report">Abilitare segnalazioni di crash</string>
 
     <string name="community_detail_info">Info comunità</string>
     <string name="community_detail_instance_info">Dettagli istanza</string>

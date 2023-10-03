@@ -3,7 +3,9 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.settings.main
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -337,11 +339,23 @@ class SettingsScreen : Screen {
 
                     Divider()
 
+                    // enable crash report
+
+                    SettingsSwitchRow(
+                        title = stringResource(MR.strings.settings_enable_crash_report),
+                        value = uiState.crashReportEnabled,
+                        onValueChanged = { value ->
+                            model.reduce(SettingsMviModel.Intent.ChangeCrashReportEnabled(value))
+                        }
+                    )
+
                     // app version
                     SettingsRow(
                         title = stringResource(MR.strings.settings_app_version),
                         value = uiState.appVersion,
                     )
+
+                    Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
             }
         }

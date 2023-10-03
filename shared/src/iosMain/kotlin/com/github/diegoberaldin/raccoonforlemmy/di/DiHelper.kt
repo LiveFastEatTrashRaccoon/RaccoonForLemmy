@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.coreNotifi
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.corePersistenceModule
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.corePreferencesModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.AppInfo
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.crashReportModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.galleryHelperModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.hapticFeedbackModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.shareHelperModule
@@ -33,6 +34,7 @@ fun initKoin() {
             localizationModule,
             shareHelperModule,
             galleryHelperModule,
+            crashReportModule,
             homeTabModule,
             inboxTabModule,
             profileTabModule,
