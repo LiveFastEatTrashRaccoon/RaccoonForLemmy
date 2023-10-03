@@ -160,6 +160,7 @@ class InboxMentionsViewModel(
                     )
                 }
             }
+            updateUnreadItems()
         }
     }
 

@@ -174,6 +174,7 @@ class InboxRepliesViewModel(
                     )
                 }
             }
+            updateUnreadItems()
         }
     }
 
