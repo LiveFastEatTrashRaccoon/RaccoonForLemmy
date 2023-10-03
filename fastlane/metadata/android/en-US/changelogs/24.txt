@@ -1,0 +1,11 @@
+- feat: animated placeholders during loading
+- feat: possibility to disable crash reporting
+- feat: sort post and comments by controversial
+- fix: text height in post list
+- fix: inbox badge not updated for single reads
+- fix: show picture if post URL is an image
+- fix: text color for image loading error
+- enhancement: empty list messages in inbox
+- enhancement: change FAB icon to create post
+- enhancement: colors for upvote and downvote
+- enhancement: improved card colors and spacing
