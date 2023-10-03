@@ -22,10 +22,10 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Pending
@@ -221,7 +221,7 @@ class CommunityDetailScreen(
                         },
                         content = {
                             Icon(
-                                imageVector = Icons.Default.Create,
+                                imageVector = Icons.Default.Add,
                                 contentDescription = null,
                             )
                         },
