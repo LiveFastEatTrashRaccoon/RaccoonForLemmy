@@ -90,6 +90,7 @@ fun CommentCard(
                         text = comment.text,
                     )
                     PostCardFooter(
+                        modifier = Modifier.padding(top = Spacing.xxs),
                         score = comment.score,
                         saved = comment.saved,
                         upVoted = comment.myVote > 0,

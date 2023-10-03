@@ -40,6 +40,7 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun PostCardFooter(
+    modifier: Modifier = Modifier,
     comments: Int? = null,
     date: String? = null,
     score: Int,
@@ -56,7 +57,7 @@ fun PostCardFooter(
     var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
 
-    Box {
+    Box(modifier = modifier) {
         Row(
             modifier = Modifier.padding(bottom = Spacing.xxxs),
             verticalAlignment = Alignment.CenterVertically,
