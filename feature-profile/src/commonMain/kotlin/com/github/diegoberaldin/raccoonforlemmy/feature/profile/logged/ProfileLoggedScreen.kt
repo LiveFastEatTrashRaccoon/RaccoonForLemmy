@@ -35,7 +35,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
@@ -126,6 +128,15 @@ internal object ProfileLoggedScreen : Tab {
                             }
                         }
                         if (uiState.section == ProfileLoggedSection.Posts) {
+                            if (uiState.posts.isEmpty() && uiState.loading) {
+                                items(5) {
+                                    Column {
+                                        PostCardPlaceholder(
+                                            postLayout = uiState.postLayout,
+                                        )
+                                    }
+                                }
+                            }
                             itemsIndexed(uiState.posts) { idx, post ->
                                 PostCard(
                                     modifier = Modifier.onClick {
@@ -210,6 +221,11 @@ internal object ProfileLoggedScreen : Tab {
                                 }
                             }
                         } else {
+                            if (uiState.comments.isEmpty() && uiState.loading) {
+                                items(5) {
+                                    CommentCardPlaceholder(hideAuthor = true)
+                                }
+                            }
                             itemsIndexed(uiState.comments) { idx, comment ->
                                 CommentCard(
                                     modifier = Modifier.onClick {

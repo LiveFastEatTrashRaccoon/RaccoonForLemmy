@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.list
+package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

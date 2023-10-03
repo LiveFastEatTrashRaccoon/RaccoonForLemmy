@@ -1,11 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.utils
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -22,15 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
-
-fun Modifier.onClick(onClick: () -> Unit): Modifier = composed {
-    clickable(
-        indication = null,
-        interactionSource = remember { MutableInteractionSource() },
-    ) {
-        onClick()
-    }
-}
 
 @Composable
 fun String.toLanguageName() = when (this) {

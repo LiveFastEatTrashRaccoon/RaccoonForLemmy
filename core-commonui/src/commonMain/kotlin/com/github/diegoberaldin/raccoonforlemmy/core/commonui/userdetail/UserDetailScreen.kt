@@ -63,7 +63,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
@@ -242,6 +244,15 @@ class UserDetailScreen(
                             }
                         }
                         if (uiState.section == UserDetailSection.Posts) {
+                            if (uiState.posts.isEmpty() && uiState.loading) {
+                                items(5) {
+                                    Column {
+                                        PostCardPlaceholder(
+                                            postLayout = uiState.postLayout,
+                                        )
+                                    }
+                                }
+                            }
                             itemsIndexed(uiState.posts) { idx, post ->
                                 SwipeableCard(
                                     modifier = Modifier.fillMaxWidth(),
@@ -379,6 +390,11 @@ class UserDetailScreen(
                                 }
                             }
                         } else {
+                            if (uiState.comments.isEmpty() && uiState.loading) {
+                                items(5) {
+                                    CommentCardPlaceholder()
+                                }
+                            }
                             itemsIndexed(uiState.comments) { idx, comment ->
                                 SwipeableCard(
                                     modifier = Modifier.fillMaxWidth(),

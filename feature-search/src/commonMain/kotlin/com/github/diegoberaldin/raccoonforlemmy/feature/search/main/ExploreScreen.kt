@@ -57,6 +57,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.Co
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
@@ -233,6 +234,15 @@ class ExploreScreen : Screen {
                     modifier = Modifier.padding(Spacing.xxs).pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn {
+                        if (uiState.results.isEmpty() && uiState.loading) {
+                            items(5) {
+                                Column {
+                                    PostCardPlaceholder(
+                                        postLayout = uiState.postLayout,
+                                    )
+                                }
+                            }
+                        }
                         itemsIndexed(uiState.results) { idx, result ->
                             val themeRepository = remember { getThemeRepository() }
                             val fontScale by themeRepository.contentFontScale.collectAsState()

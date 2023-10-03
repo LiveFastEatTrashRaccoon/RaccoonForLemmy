@@ -41,7 +41,7 @@ fun PostCard(
     hideAuthor: Boolean = false,
     postLayout: PostLayout = PostLayout.Card,
     withOverflowBlurred: Boolean = true,
-    blurNsfw: Boolean,
+    blurNsfw: Boolean = true,
     options: List<String> = emptyList(),
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
     onOpenCreator: ((UserModel) -> Unit)? = null,
@@ -63,12 +63,10 @@ fun PostCard(
         Box(
             modifier = modifier.let {
                 if (postLayout == PostLayout.Card) {
-                    it.padding(horizontal = Spacing.xs)
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                            shape = RoundedCornerShape(CornerSize.l),
-                        )
-                        .padding(Spacing.s)
+                    it.padding(horizontal = Spacing.xs).background(
+                        color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                        shape = RoundedCornerShape(CornerSize.l),
+                    ).padding(Spacing.s)
                 } else {
                     it
                 }
@@ -146,9 +144,7 @@ private fun CompactPost(
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs)
         ) {
             PostCardImage(
-                modifier = Modifier
-                    .weight(0.2f)
-                    .clip(RoundedCornerShape(CornerSize.s)),
+                modifier = Modifier.weight(0.2f).clip(RoundedCornerShape(CornerSize.s)),
                 minHeight = Dp.Unspecified,
                 maxHeight = Dp.Unspecified,
                 imageUrl = post.imageUrl,
@@ -156,8 +152,7 @@ private fun CompactPost(
                 onImageClick = onImageClick,
             )
             PostCardTitle(
-                modifier = Modifier.weight(1f),
-                text = post.title
+                modifier = Modifier.weight(1f), text = post.title
             )
         }
         PostCardFooter(
@@ -210,8 +205,7 @@ private fun ExtendedPost(
             modifier = Modifier.padding(
                 vertical = Spacing.xs,
                 horizontal = Spacing.xs,
-            ),
-            text = post.title
+            ), text = post.title
         )
 
         PostCardImage(
@@ -222,22 +216,18 @@ private fun ExtendedPost(
         )
         Box {
             PostCardBody(
-                modifier = Modifier
-                    .let {
-                        if (withOverflowBlurred) {
-                            it.heightIn(max = 200.dp)
-                        } else {
-                            it
-                        }
+                modifier = Modifier.let {
+                    if (withOverflowBlurred) {
+                        it.heightIn(max = 200.dp)
+                    } else {
+                        it
                     }
-                    .padding(horizontal = Spacing.xs),
+                }.padding(horizontal = Spacing.xs),
                 text = post.text,
             )
             if (withOverflowBlurred) {
                 Box(
-                    modifier = Modifier
-                        .height(Spacing.xxl)
-                        .fillMaxWidth()
+                    modifier = Modifier.height(Spacing.xxl).fillMaxWidth()
                         .align(Alignment.BottomCenter).background(
                             brush = Brush.verticalGradient(
                                 colors = listOf(

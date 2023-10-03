@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,6 +49,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
@@ -151,6 +153,15 @@ class PostListScreen : Screen {
                     LazyColumn(
                         state = lazyListState,
                     ) {
+                        if (uiState.posts.isEmpty() && uiState.loading) {
+                            items(5) {
+                                Column {
+                                    PostCardPlaceholder(
+                                        postLayout = uiState.postLayout,
+                                    )
+                                }
+                            }
+                        }
                         itemsIndexed(uiState.posts) { idx, post ->
                             val themeRepository = remember { getThemeRepository() }
                             val fontScale by themeRepository.contentFontScale.collectAsState()

@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.list
+package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -76,6 +76,11 @@ class InboxMessagesScreen : Tab {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
+                if (uiState.chats.isEmpty() && uiState.loading) {
+                    items(1) {
+                        ChatCardPlaceholder()
+                    }
+                }
                 items(uiState.chats) { chat ->
                     val themeRepository = remember { getThemeRepository() }
                     val fontScale by themeRepository.contentFontScale.collectAsState()

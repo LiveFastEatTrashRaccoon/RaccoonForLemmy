@@ -46,6 +46,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.InboxCardType
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
@@ -90,6 +91,13 @@ class InboxRepliesScreen : Tab {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
+                if (uiState.replies.isEmpty() && uiState.loading) {
+                    items(3) {
+                        InboxCardPlaceholder(
+                            postLayout = uiState.postLayout,
+                        )
+                    }
+                }
                 itemsIndexed(uiState.replies) { idx, mention ->
                     val themeRepository = remember { getThemeRepository() }
                     val fontScale by themeRepository.contentFontScale.collectAsState()

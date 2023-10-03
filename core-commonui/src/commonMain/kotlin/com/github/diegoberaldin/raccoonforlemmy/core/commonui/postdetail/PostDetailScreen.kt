@@ -68,6 +68,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
@@ -326,6 +327,11 @@ class PostDetailScreen(
                                 } else {
                                     Spacer(modifier = Modifier.height(Spacing.s))
                                 }
+                            }
+                        }
+                        if (uiState.comments.isEmpty() && uiState.loading) {
+                            items(5) {
+                                CommentCardPlaceholder()
                             }
                         }
                         itemsIndexed(uiState.comments) { idx, comment ->
