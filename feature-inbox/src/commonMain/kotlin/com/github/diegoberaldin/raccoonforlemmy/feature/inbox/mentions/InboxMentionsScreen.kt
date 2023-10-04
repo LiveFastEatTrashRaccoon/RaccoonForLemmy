@@ -131,7 +131,7 @@ class InboxMentionsScreen : Tab {
                             model.reduce(
                                 InboxMentionsMviModel.Intent.MarkAsRead(
                                     read = true,
-                                    mentionId = mention.id,
+                                    index = idx,
                                 ),
                             )
                         },
@@ -139,7 +139,7 @@ class InboxMentionsScreen : Tab {
                             model.reduce(
                                 InboxMentionsMviModel.Intent.MarkAsRead(
                                     read = false,
-                                    mentionId = mention.id,
+                                    index = idx,
                                 ),
                             )
                         },

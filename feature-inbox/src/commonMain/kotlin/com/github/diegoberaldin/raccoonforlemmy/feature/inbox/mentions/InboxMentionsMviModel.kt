@@ -10,7 +10,7 @@ interface InboxMentionsMviModel :
     sealed interface Intent {
         data object Refresh : Intent
         data object LoadNextPage : Intent
-        data class MarkAsRead(val read: Boolean, val mentionId: Int) : Intent
+        data class MarkAsRead(val read: Boolean, val index: Int) : Intent
         data object HapticIndication : Intent
         data class UpVoteComment(val index: Int) : Intent
         data class DownVoteComment(val index: Int) : Intent

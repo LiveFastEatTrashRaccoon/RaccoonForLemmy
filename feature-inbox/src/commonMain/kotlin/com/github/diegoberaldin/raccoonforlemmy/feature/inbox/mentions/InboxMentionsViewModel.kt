@@ -78,7 +78,10 @@ class InboxMentionsViewModel(
             InboxMentionsMviModel.Intent.LoadNextPage -> loadNextPage()
             InboxMentionsMviModel.Intent.Refresh -> refresh()
             is InboxMentionsMviModel.Intent.MarkAsRead -> {
-                markAsRead(read = intent.read, mentionId = intent.mentionId)
+                markAsRead(
+                    read = intent.read,
+                    mention = mvi.uiState.value.mentions[intent.index],
+                )
             }
 
             InboxMentionsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
@@ -149,12 +152,12 @@ class InboxMentionsViewModel(
         }
     }
 
-    private fun markAsRead(read: Boolean, mentionId: Int) {
+    private fun markAsRead(read: Boolean, mention: PersonMentionModel) {
         val auth = identityRepository.authToken.value
         mvi.scope?.launch(Dispatchers.IO) {
             userRepository.setMentionRead(
                 read = read,
-                mentionId = mentionId,
+                mentionId = mention.id,
                 auth = auth,
             )
             val currentState = uiState.value
@@ -162,7 +165,7 @@ class InboxMentionsViewModel(
                 mvi.updateState {
                     it.copy(
                         mentions = currentState.mentions.filter { m ->
-                            m.id != mentionId
+                            m.id != mention.id
                         }
                     )
                 }
