@@ -236,10 +236,13 @@ class ExploreScreen : Screen {
                     LazyColumn {
                         if (uiState.results.isEmpty() && uiState.loading) {
                             items(5) {
-                                Column {
-                                    PostCardPlaceholder(
-                                        postLayout = uiState.postLayout,
-                                    )
+                                PostCardPlaceholder(
+                                    postLayout = uiState.postLayout,
+                                )
+                                if (uiState.postLayout != PostLayout.Card) {
+                                    Divider(modifier = Modifier.padding(vertical = Spacing.s))
+                                } else {
+                                    Spacer(modifier = Modifier.height(Spacing.s))
                                 }
                             }
                         }

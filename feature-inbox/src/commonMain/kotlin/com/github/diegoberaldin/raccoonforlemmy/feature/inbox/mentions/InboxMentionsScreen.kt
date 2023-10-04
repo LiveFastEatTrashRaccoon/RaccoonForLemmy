@@ -95,6 +95,11 @@ class InboxMentionsScreen : Tab {
                         InboxCardPlaceholder(
                             postLayout = uiState.postLayout,
                         )
+                        if (uiState.postLayout != PostLayout.Card) {
+                            Divider(modifier = Modifier.padding(vertical = Spacing.s))
+                        } else {
+                            Spacer(modifier = Modifier.height(Spacing.s))
+                        }
                     }
                 }
                 if (uiState.mentions.isEmpty() && !uiState.initial) {

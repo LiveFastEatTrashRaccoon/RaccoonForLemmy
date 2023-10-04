@@ -332,6 +332,10 @@ class PostDetailScreen(
                         if (uiState.comments.isEmpty() && uiState.loading) {
                             items(5) {
                                 CommentCardPlaceholder()
+                                Divider(
+                                    modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                    thickness = 0.25.dp
+                                )
                             }
                         }
                         itemsIndexed(uiState.comments) { idx, comment ->

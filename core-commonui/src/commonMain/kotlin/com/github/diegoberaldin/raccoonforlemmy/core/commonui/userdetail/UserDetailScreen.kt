@@ -246,10 +246,13 @@ class UserDetailScreen(
                         if (uiState.section == UserDetailSection.Posts) {
                             if (uiState.posts.isEmpty() && uiState.loading) {
                                 items(5) {
-                                    Column {
-                                        PostCardPlaceholder(
-                                            postLayout = uiState.postLayout,
-                                        )
+                                    PostCardPlaceholder(
+                                        postLayout = uiState.postLayout,
+                                    )
+                                    if (uiState.postLayout != PostLayout.Card) {
+                                        Divider(modifier = Modifier.padding(vertical = Spacing.s))
+                                    } else {
+                                        Spacer(modifier = Modifier.height(Spacing.s))
                                     }
                                 }
                             }
@@ -393,6 +396,10 @@ class UserDetailScreen(
                             if (uiState.comments.isEmpty() && uiState.loading) {
                                 items(5) {
                                     CommentCardPlaceholder()
+                                    Divider(
+                                        modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                        thickness = 0.25.dp
+                                    )
                                 }
                             }
                             itemsIndexed(uiState.comments) { idx, comment ->

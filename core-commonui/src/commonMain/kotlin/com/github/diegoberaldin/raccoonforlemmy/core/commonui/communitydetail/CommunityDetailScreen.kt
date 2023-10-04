@@ -6,7 +6,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -257,10 +256,13 @@ class CommunityDetailScreen(
                         }
                         if (uiState.posts.isEmpty() && uiState.loading) {
                             items(5) {
-                                Column {
-                                    PostCardPlaceholder(
-                                        postLayout = uiState.postLayout,
-                                    )
+                                PostCardPlaceholder(
+                                    postLayout = uiState.postLayout,
+                                )
+                                if (uiState.postLayout != PostLayout.Card) {
+                                    Divider(modifier = Modifier.padding(vertical = Spacing.s))
+                                } else {
+                                    Spacer(modifier = Modifier.height(Spacing.s))
                                 }
                             }
                         }
