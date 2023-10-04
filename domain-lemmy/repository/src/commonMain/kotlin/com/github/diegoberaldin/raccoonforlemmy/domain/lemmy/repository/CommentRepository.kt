@@ -43,6 +43,10 @@ class CommentRepository(
         dto.map { it.toModel() }
     }.getOrElse { emptyList() }
 
+    suspend fun getBy(id: Int, auth: String?): CommentModel? = runCatching {
+        services.comment.getBy(id, auth).body()?.commentView?.toModel()
+    }.getOrNull()
+
     suspend fun getChildren(
         parentId: Int,
         auth: String? = null,

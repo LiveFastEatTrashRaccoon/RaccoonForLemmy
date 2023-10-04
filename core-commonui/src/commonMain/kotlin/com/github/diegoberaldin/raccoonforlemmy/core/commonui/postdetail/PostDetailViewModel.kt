@@ -41,6 +41,7 @@ class PostDetailViewModel(
     ScreenModel {
 
     private var currentPage: Int = 1
+    private var highlightCommentPath: String? = null
     private var commentWasHighlighted = false
 
     init {
@@ -95,27 +96,44 @@ class PostDetailViewModel(
                     }
                 }
             }
-            if (mvi.uiState.value.comments.isEmpty()) {
-                refresh()
+            mvi.scope?.launch {
+                if (highlightCommentId != null) {
+                    val auth = identityRepository.authToken.value
+                    val comment = commentRepository.getBy(highlightCommentId, auth)
+                    highlightCommentPath = comment?.path
+                }
+                if (mvi.uiState.value.comments.isEmpty()) {
+                    refresh()
+                }
             }
         }
     }
 
     private fun downloadUntilHighlight() {
-        if (highlightCommentId != 0) {
-            val indexOfHighlight = uiState.value.comments.indexOfFirst {
-                it.id == highlightCommentId
-            }
-            if (indexOfHighlight == -1) {
-                val lastCommentOfThread = uiState.value.comments
-                    .filter { it.path.contains(highlightCommentId.toString()) }
-                    .maxBy { it.depth }
-                loadMoreComments(lastCommentOfThread.id)
+        val highlightPath = highlightCommentPath ?: return
+
+        val indexOfHighlight = uiState.value.comments.indexOfFirst {
+            it.path == highlightPath
+        }
+        if (indexOfHighlight == -1) {
+            val lastCommentOfThread = uiState.value.comments.filter {
+                highlightPath.startsWith(it.path)
+            }.takeIf { it.isNotEmpty() }?.maxBy { it.depth }
+            if (lastCommentOfThread != null) {
+                // comment has an ancestor in the list, go down that path
+                loadMoreComments(
+                    parentId = lastCommentOfThread.id,
+                    loadUntilHighlight = true,
+                )
             } else {
-                mvi.scope?.launch {
-                    commentWasHighlighted = true
-                    mvi.emitEffect(PostDetailMviModel.Effect.ScrollToComment(indexOfHighlight))
-                }
+                // no ancestor of the comment on this pages, check the next one
+                loadNextPage()
+            }
+        } else {
+            // comment to highlight found
+            commentWasHighlighted = true
+            mvi.scope?.launch {
+                mvi.emitEffect(PostDetailMviModel.Effect.ScrollToComment(indexOfHighlight))
             }
         }
     }
@@ -212,8 +230,7 @@ class PostDetailViewModel(
                 )
             }
             currentPage++
-            val topLevelItems = commentList.filter { it.depth == 0 }
-            val canFetchMore = topLevelItems.size >= CommentRepository.DEFAULT_PAGE_SIZE
+            val canFetchMore = commentList.size >= CommentRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {
                 val newcomments = if (refreshing) {
                     commentList
@@ -227,7 +244,7 @@ class PostDetailViewModel(
                     refreshing = false,
                 )
             }
-            if (highlightCommentId != null && !commentWasHighlighted) {
+            if (highlightCommentPath != null && !commentWasHighlighted) {
                 downloadUntilHighlight()
             }
         }

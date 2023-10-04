@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreateCommentForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreateCommentLikeForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.DeleteCommentForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.EditCommentForm
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetCommentResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetCommentsResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SaveCommentForm
@@ -32,6 +33,12 @@ interface CommentService {
         @Query("community_name") communityName: String? = null,
         @Query("saved_only") savedOnly: Boolean? = null,
     ): Response<GetCommentsResponse>
+
+    @GET("comment")
+    suspend fun getBy(
+        @Query("id") id: Int,
+        @Query("auth") auth: String? = null,
+    ): Response<GetCommentResponse>
 
     @PUT("comment/save")
     @Headers("Content-Type: application/json")

@@ -64,9 +64,9 @@ object CommonUiViewModelHelper : KoinComponent {
     val navigationCoordinator: NavigationCoordinator by inject()
     val zoomableImageModel: ZoomableImageViewModel by inject()
 
-    fun getPostDetailModel(post: PostModel, highlightCommentPath: Int?): PostDetailViewModel {
+    fun getPostDetailModel(post: PostModel, highlightCommentId: Int?): PostDetailViewModel {
         val model: PostDetailViewModel by inject(
-            parameters = { parametersOf(post, highlightCommentPath) },
+            parameters = { parametersOf(post, highlightCommentId) },
         )
         return model
     }
