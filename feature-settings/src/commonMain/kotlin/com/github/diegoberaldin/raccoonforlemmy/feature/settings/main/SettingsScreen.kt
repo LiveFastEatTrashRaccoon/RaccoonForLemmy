@@ -9,7 +9,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.SettingsApplications
+import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -50,6 +55,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.di.getSettingsScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components.SettingsColorRow
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components.SettingsHeader
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components.SettingsRow
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components.SettingsSwitchRow
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
@@ -100,15 +106,31 @@ class SettingsScreen : Screen {
                     .nestedScroll(scrollBehavior.nestedScrollConnection),
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize()
-                        .padding(
-                            horizontal = Spacing.m,
-                        )
+                    modifier = Modifier
+                        .fillMaxSize()
                         .verticalScroll(
                             rememberScrollState()
                         ),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
+                    SettingsHeader(
+                        icon = Icons.Default.Palette,
+                        title = stringResource(MR.strings.settings_section_appearance),
+                    )
+                    // language
+                    SettingsRow(
+                        title = stringResource(MR.strings.settings_language),
+                        value = uiState.lang.toLanguageName(),
+                        onTap = {
+                            val sheet = LanguageBottomSheet()
+                            notificationCenter.addObserver({ result ->
+                                (result as? String)?.also { lang ->
+                                    model.reduce(SettingsMviModel.Intent.ChangeLanguage(lang))
+                                }
+                            }, key, NotificationCenterContractKeys.ChangeLanguage)
+                            bottomSheetNavigator.show(sheet)
+                        },
+                    )
                     // theme
                     SettingsRow(
                         title = stringResource(MR.strings.settings_ui_theme),
@@ -179,21 +201,6 @@ class SettingsScreen : Screen {
                         },
                     )
 
-                    // language
-                    SettingsRow(
-                        title = stringResource(MR.strings.settings_language),
-                        value = uiState.lang.toLanguageName(),
-                        onTap = {
-                            val sheet = LanguageBottomSheet()
-                            notificationCenter.addObserver({ result ->
-                                (result as? String)?.also { lang ->
-                                    model.reduce(SettingsMviModel.Intent.ChangeLanguage(lang))
-                                }
-                            }, key, NotificationCenterContractKeys.ChangeLanguage)
-                            bottomSheetNavigator.show(sheet)
-                        },
-                    )
-
                     // post layout
                     SettingsRow(
                         title = stringResource(MR.strings.settings_post_layout),
@@ -213,6 +220,23 @@ class SettingsScreen : Screen {
                         },
                     )
 
+                    // navigation bar titles
+                    SettingsSwitchRow(
+                        title = stringResource(MR.strings.settings_navigation_bar_titles_visible),
+                        value = uiState.navBarTitlesVisible,
+                        onValueChanged = { value ->
+                            model.reduce(
+                                SettingsMviModel.Intent.ChangeNavBarTitlesVisible(
+                                    value
+                                )
+                            )
+                        }
+                    )
+
+                    SettingsHeader(
+                        icon = Icons.Default.Tune,
+                        title = stringResource(MR.strings.settings_section_feed),
+                    )
                     // default listing type
                     SettingsRow(
                         title = stringResource(MR.strings.settings_default_listing_type),
@@ -282,6 +306,10 @@ class SettingsScreen : Screen {
                         },
                     )
 
+                    SettingsHeader(
+                        icon = Icons.Default.SettingsApplications,
+                        title = stringResource(MR.strings.settings_section_behaviour),
+                    )
                     // swipe actions
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_enable_swipe_actions),
@@ -289,19 +317,6 @@ class SettingsScreen : Screen {
                         onValueChanged = { value ->
                             model.reduce(
                                 SettingsMviModel.Intent.ChangeEnableSwipeActions(
-                                    value
-                                )
-                            )
-                        }
-                    )
-
-                    // navigation bar titles
-                    SettingsSwitchRow(
-                        title = stringResource(MR.strings.settings_navigation_bar_titles_visible),
-                        value = uiState.navBarTitlesVisible,
-                        onValueChanged = { value ->
-                            model.reduce(
-                                SettingsMviModel.Intent.ChangeNavBarTitlesVisible(
                                     value
                                 )
                             )
@@ -321,6 +336,10 @@ class SettingsScreen : Screen {
                         }
                     )
 
+                    SettingsHeader(
+                        icon = Icons.Default.Shield,
+                        title = stringResource(MR.strings.settings_section_nsfw),
+                    )
                     // NSFW options
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_include_nsfw),
@@ -337,10 +356,11 @@ class SettingsScreen : Screen {
                         }
                     )
 
-                    Divider()
-
+                    SettingsHeader(
+                        icon = Icons.Default.BugReport,
+                        title = stringResource(MR.strings.settings_section_debug),
+                    )
                     // enable crash report
-
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_enable_crash_report),
                         value = uiState.crashReportEnabled,

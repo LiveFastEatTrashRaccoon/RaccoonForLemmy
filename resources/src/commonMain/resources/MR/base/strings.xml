@@ -124,6 +124,11 @@
     <string name="settings_color_pink">Shocking pink</string>
     <string name="settings_color_gray">Concrete</string>
     <string name="settings_enable_crash_report">Enable crash reporting</string>
+    <string name="settings_section_appearance">Look and feel</string>
+    <string name="settings_section_feed">Posts and comments</string>
+    <string name="settings_section_behaviour">Behaviour</string>
+    <string name="settings_section_nsfw">NSFW</string>
+    <string name="settings_section_debug">Debug</string>
 
     <string name="community_detail_info">Community info</string>
     <string name="community_detail_instance_info">Instance details</string>

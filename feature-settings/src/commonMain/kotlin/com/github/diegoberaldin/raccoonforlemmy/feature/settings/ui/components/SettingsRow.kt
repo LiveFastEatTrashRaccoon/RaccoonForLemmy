@@ -20,7 +20,7 @@ internal fun SettingsRow(
 ) {
     Row(
         modifier = modifier
-            .padding(vertical = Spacing.s)
+            .padding(vertical = Spacing.s, horizontal = Spacing.m)
             .onClick {
                 onTap()
             },
