@@ -24,6 +24,7 @@ interface UserDetailMviModel :
         data class SaveComment(val index: Int, val feedback: Boolean = false) : Intent
         data object HapticIndication : Intent
         data class SharePost(val index: Int) : Intent
+        data object Block : Intent
     }
 
     data class UiState(
@@ -31,6 +32,7 @@ interface UserDetailMviModel :
         val sortType: SortType = SortType.Active,
         val refreshing: Boolean = false,
         val loading: Boolean = false,
+        val asyncInProgress: Boolean = false,
         val canFetchMore: Boolean = true,
         val posts: List<PostModel> = emptyList(),
         val comments: List<CommentModel> = emptyList(),
@@ -40,5 +42,8 @@ interface UserDetailMviModel :
         val postLayout: PostLayout = PostLayout.Card,
     )
 
-    sealed interface Effect
+    sealed interface Effect {
+        data object BlockSuccess : Effect
+        data class BlockError(val message: String?) : Effect
+    }
 }

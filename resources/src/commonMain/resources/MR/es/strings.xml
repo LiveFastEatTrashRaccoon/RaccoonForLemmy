@@ -14,6 +14,7 @@
     <string name="message_image_loading_error">No ha sido posible descargar la imagen</string>
     <string name="message_login_successful">🎉 ¡Acceso completado con éxito! 🎉</string>
     <string name="message_empty_list">Ningún elemento para mostrar</string>
+    <string name="message_operation_successful">Operación completada con éxito</string>
 
     <string name="button_confirm">Confirmar</string>
     <string name="button_reset">Reiniciar</string>
@@ -123,6 +124,7 @@
 
     <string name="community_detail_info">Info comunidad</string>
     <string name="community_detail_instance_info">Detalles instancia</string>
+    <string name="community_detail_block">Bloquear</string>
     <string name="instance_detail_title">Instancia: %1$s</string>
     <string name="instance_detail_communities">Comunidades</string>
 

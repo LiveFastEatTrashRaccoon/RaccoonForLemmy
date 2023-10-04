@@ -14,6 +14,7 @@
     <string name="message_image_loading_error">Errore caricamento immagine</string>
     <string name="message_login_successful">🎉 Login effettuato con successo! 🎉</string>
     <string name="message_empty_list">Nessun elemento da visualizzare</string>
+    <string name="message_operation_successful">Operazione completata con successo</string>
 
     <string name="button_confirm">Conferma</string>
     <string name="button_reset">Reset</string>
@@ -78,6 +79,7 @@
 
     <string name="login_field_instance_name">Nome istanza</string>
     <string name="login_field_user_name">Nome utente (o email)</string>
+    <string name="community_detail_block">Blocca</string>
     <string name="login_field_password">Password</string>
     <string name="login_field_token">TOTP 2FA token</string>
     <string name="login_field_label_optional">(opzionale)</string>

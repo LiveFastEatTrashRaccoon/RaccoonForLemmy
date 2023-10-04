@@ -125,6 +125,8 @@ class UserDetailViewModel(
             is UserDetailMviModel.Intent.SharePost -> share(
                 post = uiState.value.posts[intent.index],
             )
+
+            UserDetailMviModel.Intent.Block -> blockUser()
         }
     }
 
@@ -537,6 +539,22 @@ class UserDetailViewModel(
         val url = post.shareUrl
         if (url.isNotEmpty()) {
             shareHelper.share(url, "text/plain")
+        }
+    }
+
+    private fun blockUser() {
+        mvi.updateState { it.copy(asyncInProgress = true) }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val userId = user.id
+                val auth = identityRepository.authToken.value
+                userRepository.block(userId, true, auth).getOrThrow()
+                mvi.emitEffect(UserDetailMviModel.Effect.BlockSuccess)
+            } catch (e: Throwable) {
+                mvi.emitEffect(UserDetailMviModel.Effect.BlockError(e.message))
+            } finally {
+                mvi.updateState { it.copy(asyncInProgress = false) }
+            }
         }
     }
 }

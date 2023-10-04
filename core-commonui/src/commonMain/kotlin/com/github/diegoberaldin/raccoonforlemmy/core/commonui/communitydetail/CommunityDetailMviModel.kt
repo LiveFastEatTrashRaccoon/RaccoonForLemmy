@@ -21,12 +21,14 @@ interface CommunityDetailMviModel :
         data object Unsubscribe : Intent
         data class DeletePost(val id: Int) : Intent
         data class SharePost(val index: Int) : Intent
+        data object Block : Intent
     }
 
     data class UiState(
         val community: CommunityModel = CommunityModel(),
         val isLogged: Boolean = false,
         val refreshing: Boolean = false,
+        val asyncInProgress: Boolean = false,
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,
         val sortType: SortType = SortType.Active,
@@ -37,5 +39,8 @@ interface CommunityDetailMviModel :
         val postLayout: PostLayout = PostLayout.Card,
     )
 
-    sealed interface Effect
+    sealed interface Effect {
+        data object BlockSuccess : Effect
+        data class BlockError(val message: String?) : Effect
+    }
 }

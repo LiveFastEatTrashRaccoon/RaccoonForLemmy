@@ -36,11 +36,13 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,6 +67,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.Comm
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
@@ -83,6 +86,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class CommunityDetailScreen(
     private val community: CommunityModel,
@@ -100,6 +105,9 @@ class CommunityDetailScreen(
         }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val snackbarHostState = remember { SnackbarHostState() }
+        val genericError = stringResource(MR.strings.message_generic_error)
+        val successMessage = stringResource(MR.strings.message_operation_successful)
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val isOnOtherInstance = otherInstance.isNotEmpty()
@@ -123,6 +131,20 @@ class CommunityDetailScreen(
             onDispose {
                 notificationCenter.removeObserver(key)
             }
+        }
+
+        LaunchedEffect(model) {
+            model.effects.onEach {
+                when (it) {
+                    is CommunityDetailMviModel.Effect.BlockError -> {
+                        snackbarHostState.showSnackbar(it.message ?: genericError)
+                    }
+
+                    CommunityDetailMviModel.Effect.BlockSuccess -> {
+                        snackbarHostState.showSnackbar(successMessage)
+                    }
+                }
+            }.launchIn(this)
         }
 
         val stateCommunity = uiState.community
@@ -232,8 +254,10 @@ class CommunityDetailScreen(
                     model.reduce(CommunityDetailMviModel.Intent.Refresh)
                 })
                 Box(
-                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .nestedScroll(fabNestedScrollConnection).padding(padding)
+                    modifier = Modifier
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .nestedScroll(fabNestedScrollConnection)
+                        .padding(padding)
                         .pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn {
@@ -243,9 +267,14 @@ class CommunityDetailScreen(
                                 options = listOf(
                                     stringResource(MR.strings.community_detail_info),
                                     stringResource(MR.strings.community_detail_instance_info),
+                                    stringResource(MR.strings.community_detail_block),
                                 ),
                                 onOptionSelected = { optionIdx ->
                                     when (optionIdx) {
+                                        2 -> {
+                                            model.reduce(CommunityDetailMviModel.Intent.Block)
+                                        }
+
                                         1 -> {
                                             navigator?.push(
                                                 InstanceInfoScreen(
@@ -469,6 +498,10 @@ class CommunityDetailScreen(
                         backgroundColor = MaterialTheme.colorScheme.background,
                         contentColor = MaterialTheme.colorScheme.onBackground,
                     )
+
+                    if (uiState.asyncInProgress) {
+                        ProgressHud()
+                    }
                 }
             }
         }

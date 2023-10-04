@@ -18,20 +18,30 @@ import androidx.compose.material.icons.filled.Padding
 import androidx.compose.material.icons.filled.Reply
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.Bookmarks
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.DateTime
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -40,6 +50,8 @@ import dev.icerock.moko.resources.compose.stringResource
 fun UserHeader(
     user: UserModel,
     onOpenBookmarks: (() -> Unit)? = null,
+    options: List<String> = emptyList(),
+    onOptionSelected: ((Int) -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier.padding(Spacing.xs),
@@ -59,6 +71,44 @@ fun UserHeader(
         Row(
             modifier = Modifier.align(Alignment.TopEnd)
         ) {
+            // options menu
+            if (options.isNotEmpty()) {
+                var optionsExpanded by remember { mutableStateOf(false) }
+                var optionsOffset by remember { mutableStateOf(Offset.Zero) }
+                Icon(
+                    modifier = Modifier.onGloballyPositioned {
+                        optionsOffset = it.positionInParent()
+                    }.onClick {
+                        optionsExpanded = true
+                    },
+                    imageVector = Icons.Outlined.MoreVert,
+                    contentDescription = null,
+                )
+                CustomDropDown(
+                    expanded = optionsExpanded,
+                    onDismiss = {
+                        optionsExpanded = false
+                    },
+                    offset = DpOffset(
+                        x = optionsOffset.x.toLocalDp(),
+                        y = optionsOffset.y.toLocalDp(),
+                    ),
+                ) {
+                    options.forEachIndexed { idx, option ->
+                        Text(
+                            modifier = Modifier.padding(
+                                horizontal = Spacing.m,
+                                vertical = Spacing.xs,
+                            ).onClick {
+                                optionsExpanded = false
+                                onOptionSelected?.invoke(idx)
+                            },
+                            text = option,
+                        )
+                    }
+                }
+            }
+
             // open bookmarks button
             if (onOpenBookmarks != null) {
                 Icon(

@@ -104,6 +104,8 @@ class CommunityDetailViewModel(
             is CommunityDetailMviModel.Intent.SharePost -> share(
                 post = uiState.value.posts[intent.index],
             )
+
+            CommunityDetailMviModel.Intent.Block -> blockCommunity()
         }
     }
 
@@ -361,6 +363,22 @@ class CommunityDetailViewModel(
         val url = post.shareUrl
         if (url.isNotEmpty()) {
             shareHelper.share(url, "text/plain")
+        }
+    }
+
+    private fun blockCommunity() {
+        mvi.updateState { it.copy(asyncInProgress = true) }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val communityId = community.id
+                val auth = identityRepository.authToken.value
+                communityRepository.block(communityId, true, auth).getOrThrow()
+                mvi.emitEffect(CommunityDetailMviModel.Effect.BlockSuccess)
+            } catch (e: Throwable) {
+                mvi.emitEffect(CommunityDetailMviModel.Effect.BlockError(e.message))
+            } finally {
+                mvi.updateState { it.copy(asyncInProgress = false) }
+            }
         }
     }
 }

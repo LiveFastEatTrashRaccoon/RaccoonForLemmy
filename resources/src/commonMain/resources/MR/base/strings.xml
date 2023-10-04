@@ -18,6 +18,7 @@
     <string name="message_image_loading_error">Image loading error</string>
     <string name="message_login_successful">🎉 Login successful! 🎉</string>
     <string name="message_empty_list">No items to display</string>
+    <string name="message_operation_successful">Operation completed succcessfully</string>
 
     <string name="button_confirm">Confirm</string>
     <string name="button_reset">Reset</string>
@@ -126,6 +127,7 @@
 
     <string name="community_detail_info">Community info</string>
     <string name="community_detail_instance_info">Instance details</string>
+    <string name="community_detail_block">Block</string>
     <string name="instance_detail_title">Instance: %1$s</string>
     <string name="instance_detail_communities">Communities</string>
 

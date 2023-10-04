@@ -110,26 +110,29 @@ class CreatePostScreen(
             }.launchIn(this)
         }
 
-        Scaffold(topBar = {
-            TopAppBar(
-                title = {
-                    Column(
-                        modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.s),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        BottomSheetHandle()
-                        Text(
-                            text = stringResource(MR.strings.create_post_title),
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
-                },
-            )
-        }, snackbarHost = {
-            SnackbarHost(snackbarHostState)
-        }) { padding ->
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Column(
+                            modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
+                            verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            BottomSheetHandle()
+                            Text(
+                                text = stringResource(MR.strings.create_post_title),
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
+                    },
+                )
+            },
+            snackbarHost = {
+                SnackbarHost(snackbarHostState)
+            }
+        ) { padding ->
             val focusManager = LocalFocusManager.current
             val keyboardScrollConnection = remember {
                 object : NestedScrollConnection {

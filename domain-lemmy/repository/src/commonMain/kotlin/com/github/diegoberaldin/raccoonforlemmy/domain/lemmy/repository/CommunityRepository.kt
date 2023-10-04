@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository
 
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.BlockCommunityForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommunityView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.FollowCommunityForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SubscribedType
@@ -125,6 +126,15 @@ class CommunityRepository(
         val response = services.community.follow(data)
         response.body()?.communityView?.toModel()
     }.getOrNull()
+
+    suspend fun block(id: Int, blocked: Boolean, auth: String?): Result<Unit> = runCatching {
+        val data = BlockCommunityForm(
+            communityId = id,
+            block = blocked,
+            auth = auth.orEmpty(),
+        )
+        services.community.block(data)
+    }
 }
 
 private fun CommunityView.toModel() = community.toModel().copy(

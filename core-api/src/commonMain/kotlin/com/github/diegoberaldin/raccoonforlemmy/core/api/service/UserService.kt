@@ -1,5 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.api.service
 
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.BlockPersonForm
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.BlockPersonResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentReplyResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentSortType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetPersonDetailsResponse
@@ -59,4 +61,8 @@ interface UserService {
     @POST("comment/mark_as_read")
     @Headers("Content-Type: application/json")
     suspend fun markCommentReplyAsRead(@Body form: MarkCommentReplyAsReadForm): Response<CommentReplyResponse>
+
+    @POST("user/block")
+    @Headers("Content-Type: application/json")
+    suspend fun blockPerson(@Body form: BlockPersonForm): Response<BlockPersonResponse>
 }

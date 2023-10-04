@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository
 
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.BlockPersonForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkAllAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkCommentReplyAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkPersonMentionAsReadForm
@@ -195,5 +196,14 @@ class UserRepository(
             auth = auth.orEmpty(),
         )
         serviceProvider.user.markCommentReplyAsRead(data)
+    }
+
+    suspend fun block(id: Int, blocked: Boolean, auth: String? = null): Result<Unit> = runCatching {
+        val data = BlockPersonForm(
+            personId = id,
+            block = blocked,
+            auth = auth.orEmpty(),
+        )
+        serviceProvider.user.blockPerson(data)
     }
 }
