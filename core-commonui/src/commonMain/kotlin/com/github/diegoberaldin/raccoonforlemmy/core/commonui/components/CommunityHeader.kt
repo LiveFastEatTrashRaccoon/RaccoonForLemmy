@@ -36,14 +36,12 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
-import com.github.diegoberaldin.raccoonforlemmy.resources.MR
-import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun CommunityHeader(
     community: CommunityModel,
-    onOpenCommunityInfo: (() -> Unit)? = null,
-    onOpenInstanceInfo: (() -> Unit)? = null,
+    options: List<String> = emptyList(),
+    onOptionSelected: ((Int) -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier.fillMaxWidth().aspectRatio(4.5f).padding(Spacing.xs),
@@ -59,107 +57,105 @@ fun CommunityHeader(
             )
         }
 
-        var optionsExpanded by remember { mutableStateOf(false) }
-        var optionsOffset by remember { mutableStateOf(Offset.Zero) }
-        Icon(
-            modifier = Modifier.align(Alignment.TopEnd)
-                .onGloballyPositioned {
-                    optionsOffset = it.positionInParent()
-                }.onClick {
-                    optionsExpanded = true
-                },
-            imageVector = Icons.Outlined.Info,
-            contentDescription = null,
-        )
-        CustomDropDown(
-            expanded = optionsExpanded,
-            onDismiss = {
-                optionsExpanded = false
-            },
-            offset = DpOffset(
-                x = optionsOffset.x.toLocalDp(),
-                y = (-50).dp,
-            ),
-        ) {
-            Text(
-                modifier = Modifier.padding(
-                    horizontal = Spacing.m,
-                    vertical = Spacing.xs,
-                ).onClick {
-                    optionsExpanded = false
-                    onOpenCommunityInfo?.invoke()
-                },
-                text = stringResource(MR.strings.community_detail_info),
-            )
-            Text(
-                modifier = Modifier.padding(
-                    horizontal = Spacing.m,
-                    vertical = Spacing.xs,
-                ).onClick {
-                    optionsExpanded = false
-                    onOpenInstanceInfo?.invoke()
-                },
-                text = stringResource(MR.strings.community_detail_instance_info),
-            )
-        }
-
         Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Spacing.m)
+            modifier = Modifier.align(Alignment.TopEnd)
         ) {
-            // avatar
-            val communityIcon = community.icon.orEmpty()
-            val avatarSize = 60.dp
-            if (communityIcon.isNotEmpty()) {
-                CustomImage(
-                    modifier = Modifier.padding(Spacing.xxxs).size(avatarSize)
-                        .clip(RoundedCornerShape(avatarSize / 2)),
-                    url = communityIcon,
-                    quality = FilterQuality.Low,
+            if (options.isNotEmpty()) {
+                var optionsExpanded by remember { mutableStateOf(false) }
+                var optionsOffset by remember { mutableStateOf(Offset.Zero) }
+                Icon(
+                    modifier = Modifier.onGloballyPositioned {
+                        optionsOffset = it.positionInParent()
+                    }.onClick {
+                        optionsExpanded = true
+                    },
+                    imageVector = Icons.Outlined.Info,
                     contentDescription = null,
-                    contentScale = ContentScale.FillBounds,
                 )
-            } else {
-                Box(
-                    modifier = Modifier.padding(Spacing.xxxs).size(avatarSize).background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(avatarSize / 2),
+                CustomDropDown(
+                    expanded = optionsExpanded,
+                    onDismiss = {
+                        optionsExpanded = false
+                    },
+                    offset = DpOffset(
+                        x = optionsOffset.x.toLocalDp(),
+                        y = optionsOffset.y.toLocalDp(),
+                        // y = (-50).dp,
                     ),
-                    contentAlignment = Alignment.Center,
                 ) {
-                    Text(
-                        text = community.name.firstOrNull()?.toString().orEmpty().uppercase(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
+                    options.forEachIndexed { idx, option ->
+                        Text(
+                            modifier = Modifier.padding(
+                                horizontal = Spacing.m,
+                                vertical = Spacing.xs,
+                            ).onClick {
+                                optionsExpanded = false
+                                onOptionSelected?.invoke(idx)
+                            },
+                            text = option,
+                        )
+                    }
                 }
             }
+        }
+    }
 
-            // textual data
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Spacing.s),
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(Spacing.m)
+    ) {
+        // avatar
+        val communityIcon = community.icon.orEmpty()
+        val avatarSize = 60.dp
+        if (communityIcon.isNotEmpty()) {
+            CustomImage(
+                modifier = Modifier.padding(Spacing.xxxs).size(avatarSize)
+                    .clip(RoundedCornerShape(avatarSize / 2)),
+                url = communityIcon,
+                quality = FilterQuality.Low,
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds,
+            )
+        } else {
+            Box(
+                modifier = Modifier.padding(Spacing.xxxs).size(avatarSize).background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(avatarSize / 2),
+                ),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = community.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-
-                Text(
-                    modifier = Modifier.padding(horizontal = Spacing.s),
-                    text = buildString {
-                        append(community.name)
-                        if (community.host.isNotEmpty()) {
-                            append("@${community.host}")
-                        }
-                    },
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleSmall,
+                    text = community.name.firstOrNull()?.toString().orEmpty().uppercase(),
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
             }
+        }
+
+        // textual data
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Spacing.s),
+        ) {
+            Text(
+                text = community.name,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+
+            Text(
+                modifier = Modifier.padding(horizontal = Spacing.s),
+                text = buildString {
+                    append(community.name)
+                    if (community.host.isNotEmpty()) {
+                        append("@${community.host}")
+                    }
+                },
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
         }
     }
 }

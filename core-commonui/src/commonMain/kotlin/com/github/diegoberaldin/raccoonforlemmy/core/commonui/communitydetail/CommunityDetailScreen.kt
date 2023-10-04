@@ -240,17 +240,26 @@ class CommunityDetailScreen(
                         item {
                             CommunityHeader(
                                 community = stateCommunity,
-                                onOpenCommunityInfo = {
-                                    bottomSheetNavigator.show(
-                                        CommunityInfoScreen(stateCommunity),
-                                    )
-                                },
-                                onOpenInstanceInfo = {
-                                    navigator?.push(
-                                        InstanceInfoScreen(
-                                            url = stateCommunity.instanceUrl,
-                                        ),
-                                    )
+                                options = listOf(
+                                    stringResource(MR.strings.community_detail_info),
+                                    stringResource(MR.strings.community_detail_instance_info),
+                                ),
+                                onOptionSelected = { optionIdx ->
+                                    when (optionIdx) {
+                                        1 -> {
+                                            navigator?.push(
+                                                InstanceInfoScreen(
+                                                    url = stateCommunity.instanceUrl,
+                                                ),
+                                            )
+                                        }
+
+                                        else -> {
+                                            bottomSheetNavigator.show(
+                                                CommunityInfoScreen(stateCommunity),
+                                            )
+                                        }
+                                    }
                                 },
                             )
                         }
