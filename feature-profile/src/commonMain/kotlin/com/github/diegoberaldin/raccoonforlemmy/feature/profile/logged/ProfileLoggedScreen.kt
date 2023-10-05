@@ -244,7 +244,9 @@ internal object ProfileLoggedScreen : Tab {
                                         )
                                     },
                                     comment = comment,
+                                    hideCommunity = false,
                                     hideAuthor = true,
+                                    hideIndent = true,
                                     onUpVote = {
                                         model.reduce(
                                             ProfileLoggedMviModel.Intent.UpVoteComment(

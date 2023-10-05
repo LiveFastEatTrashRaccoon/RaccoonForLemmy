@@ -348,6 +348,7 @@ class ExploreScreen : Screen {
                                                 )
                                             },
                                             comment = result,
+                                            hideIndent = true,
                                             onUpVote = {
                                                 model.reduce(
                                                     ExploreMviModel.Intent.UpVoteComment(

@@ -226,6 +226,7 @@ internal class ProfileSavedScreen(
                             itemsIndexed(uiState.comments) { idx, comment ->
                                 CommentCard(
                                     comment = comment,
+                                    hideIndent = true,
                                     onUpVote = {
                                         model.reduce(
                                             ProfileSavedMviModel.Intent.UpVoteComment(

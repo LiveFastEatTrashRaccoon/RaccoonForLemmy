@@ -478,6 +478,9 @@ class UserDetailScreen(
                                             )
                                         },
                                         comment = comment,
+                                        hideCommunity = false,
+                                        hideAuthor = true,
+                                        hideIndent = true,
                                         onSave = if (isOnOtherInstance) {
                                             null
                                         } else {

@@ -37,6 +37,8 @@ fun CommentCard(
     background: Color = MaterialTheme.colorScheme.background,
     modifier: Modifier = Modifier,
     hideAuthor: Boolean = false,
+    hideCommunity: Boolean = true,
+    hideIndent: Boolean = false,
     options: List<String> = emptyList(),
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
@@ -67,7 +69,7 @@ fun CommentCard(
             )
             Box(
                 modifier = Modifier.padding(
-                    start = (10 * comment.depth).dp
+                    start = if (hideIndent) 0.dp else (10 * comment.depth).dp
                 ),
             ) {
                 Column(
@@ -83,6 +85,7 @@ fun CommentCard(
                 ) {
                     CommunityAndCreatorInfo(
                         creator = comment.creator.takeIf { !hideAuthor },
+                        community = comment.community.takeIf { !hideCommunity },
                         onOpenCreator = onOpenCreator,
                         onOpenCommunity = onOpenCommunity,
                     )
@@ -105,12 +108,14 @@ fun CommentCard(
                         onOptionSelected = onOptionSelected,
                     )
                 }
-                Box(
-                    modifier = Modifier
-                        .width(barWidth)
-                        .height(commentHeight.toLocalDp())
-                        .background(color = barColor)
-                )
+                if (!hideIndent) {
+                    Box(
+                        modifier = Modifier
+                            .width(barWidth)
+                            .height(commentHeight.toLocalDp())
+                            .background(color = barColor)
+                    )
+                }
             }
             Box(
                 modifier = Modifier

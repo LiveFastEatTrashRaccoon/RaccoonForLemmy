@@ -165,7 +165,9 @@ class CreateCommentScreen(
                     when {
                         originalComment != null -> {
                             CommentCard(
-                                modifier = referenceModifier, comment = originalComment
+                                modifier = referenceModifier,
+                                comment = originalComment,
+                                hideIndent = true,
                             )
                             Divider()
                         }
