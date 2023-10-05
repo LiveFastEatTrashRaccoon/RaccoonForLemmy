@@ -303,6 +303,7 @@ class PostDetailViewModel(
             post = post,
             voted = newValue,
         )
+        mvi.updateState { it.copy(post = newPost) }
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -334,6 +335,7 @@ class PostDetailViewModel(
             post = post,
             downVoted = newValue,
         )
+        mvi.updateState { it.copy(post = newPost) }
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -365,6 +367,7 @@ class PostDetailViewModel(
             post = post,
             saved = newValue,
         )
+        mvi.updateState { it.copy(post = newPost) }
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
