@@ -1,0 +1,4 @@
+- feat: multi-community support
+- enhancement: reduce vibration interval
+- fix: comment layout in user detail and profile tabs
+- fix: comment highlight not working from own profile
