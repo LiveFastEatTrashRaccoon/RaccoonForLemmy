@@ -58,11 +58,7 @@ class PostDetailViewModel(
 
     override fun onStarted() {
         mvi.onStarted()
-        mvi.updateState {
-            it.copy(
-                post = post,
-            )
-        }
+
         mvi.scope?.launch {
             themeRepository.postLayout.onEach { layout ->
                 mvi.updateState { it.copy(postLayout = layout) }
@@ -88,23 +84,28 @@ class PostDetailViewModel(
             }
             if (post.title.isEmpty()) {
                 // empty post must be loaded
-                postRepository.get(post.id)?.also { updatedPost ->
+                val updatedPost = postRepository.get(post.id)
+                if (updatedPost != null) {
                     mvi.updateState {
                         it.copy(
                             post = updatedPost,
                         )
                     }
                 }
+            } else {
+                mvi.updateState {
+                    it.copy(
+                        post = post,
+                    )
+                }
             }
-            mvi.scope?.launch {
-                if (highlightCommentId != null) {
-                    val auth = identityRepository.authToken.value
-                    val comment = commentRepository.getBy(highlightCommentId, auth)
-                    highlightCommentPath = comment?.path
-                }
-                if (mvi.uiState.value.comments.isEmpty()) {
-                    refresh()
-                }
+            if (highlightCommentId != null) {
+                val auth = identityRepository.authToken.value
+                val comment = commentRepository.getBy(highlightCommentId, auth)
+                highlightCommentPath = comment?.path
+            }
+            if (mvi.uiState.value.comments.isEmpty()) {
+                refresh()
             }
         }
     }
@@ -140,7 +141,12 @@ class PostDetailViewModel(
 
     override fun reduce(intent: PostDetailMviModel.Intent) {
         when (intent) {
-            PostDetailMviModel.Intent.LoadNextPage -> loadNextPage()
+            PostDetailMviModel.Intent.LoadNextPage -> {
+                if (!uiState.value.initial) {
+                    loadNextPage()
+                }
+            }
+
             PostDetailMviModel.Intent.Refresh -> refresh()
             PostDetailMviModel.Intent.RefreshPost -> refreshPost()
             PostDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
@@ -242,6 +248,7 @@ class PostDetailViewModel(
                     loading = false,
                     canFetchMore = canFetchMore,
                     refreshing = false,
+                    initial = false,
                 )
             }
             if (highlightCommentPath != null && !commentWasHighlighted) {

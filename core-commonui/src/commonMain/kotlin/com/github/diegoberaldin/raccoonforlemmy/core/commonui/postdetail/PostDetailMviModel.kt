@@ -33,6 +33,7 @@ interface PostDetailMviModel :
         val post: PostModel = PostModel(),
         val refreshing: Boolean = false,
         val loading: Boolean = false,
+        val initial: Boolean = true,
         val canFetchMore: Boolean = true,
         val sortType: SortType = SortType.New,
         val comments: List<CommentModel> = emptyList(),
