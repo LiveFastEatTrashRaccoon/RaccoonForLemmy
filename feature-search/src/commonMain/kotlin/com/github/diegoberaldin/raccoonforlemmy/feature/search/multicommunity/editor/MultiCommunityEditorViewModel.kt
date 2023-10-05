@@ -75,18 +75,21 @@ class MultiCommunityEditorViewModel(
         mvi.updateState { it.copy(searchText = value) }
         debounceJob = mvi.scope?.launch(Dispatchers.IO) {
             delay(1_000)
-            filterCommunities()
+            mvi.updateState {
+                val filtered = filterCommunities()
+                it.copy(communities = filtered)
+            }
         }
     }
 
-    private fun filterCommunities() {
+    private fun filterCommunities(): List<Pair<CommunityModel, Boolean>> {
         val searchText = uiState.value.searchText
-        val filtered = if (searchText.isNotEmpty()) {
+        val res = if (searchText.isNotEmpty()) {
             communities.filter { it.first.name.contains(searchText) }
         } else {
             communities
         }
-        mvi.updateState { it.copy(communities = filtered) }
+        return res
     }
 
     private fun selectImage(index: Int?) {
@@ -99,18 +102,24 @@ class MultiCommunityEditorViewModel(
     }
 
     private fun toggleCommunity(index: Int) {
-        mvi.updateState { state ->
-            val newCommunities = state.communities.mapIndexed { idx, item ->
-                if (idx == index) {
-                    item.first to !item.second
-                } else {
-                    item
-                }
+        val toggledCommunity = uiState.value.communities[index]
+        val newCommunities = communities.map { item ->
+            if (item.first.id == toggledCommunity.first.id) {
+                item.first to !item.second
+            } else {
+                item
             }
-            val availableIcons =
-                newCommunities.filter { i -> i.second }.mapNotNull { i -> i.first.icon }
+        }
+        val availableIcons = newCommunities.filter { i ->
+            i.second
+        }.mapNotNull { i ->
+            i.first.icon
+        }
+        communities = newCommunities
+        val filtered = filterCommunities()
+        mvi.updateState { state ->
             state.copy(
-                communities = newCommunities,
+                communities = filtered,
                 availableIcons = availableIcons,
             )
         }
