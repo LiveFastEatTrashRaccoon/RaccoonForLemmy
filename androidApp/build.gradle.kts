@@ -11,8 +11,8 @@ android {
         applicationId = "com.github.diegoberaldin.raccoonforlemmy.android"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 24
-        versionName = "1.0.0-beta14"
+        versionCode = 25
+        versionName = "1.0.0-beta15"
 
         buildConfigField(
             "String",

@@ -1,0 +1,5 @@
+- feat: block users and communities
+- fix: open post and highlight comment even when nested
+- fix: post not updated in detail after vote and save
+- enhancement: headers in settings
+- enhancement: more realistic placeholders
