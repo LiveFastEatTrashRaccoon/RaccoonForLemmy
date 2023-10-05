@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,6 +22,8 @@ android {
             "\"diego.beraldin+raccoon4lemmy@gmail.com\""
         )
         buildConfigField("String", "CRASH_REPORT_SUBJECT", "\"Crash report\"")
+
+        archivesName.set("RaccoonForLemmy")
     }
     buildFeatures {
         compose = true
