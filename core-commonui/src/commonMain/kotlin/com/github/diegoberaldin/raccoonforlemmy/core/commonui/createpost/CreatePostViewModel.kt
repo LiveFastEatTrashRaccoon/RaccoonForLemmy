@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.StringUtils.isValidUrl
@@ -11,6 +12,8 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR.strings.message_mis
 import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class CreatePostViewModel(
@@ -19,8 +22,18 @@ class CreatePostViewModel(
     private val mvi: DefaultMviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val postRepository: PostRepository,
+    private val themeRepository: ThemeRepository,
 ) : ScreenModel,
     MviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect> by mvi {
+
+    override fun onStarted() {
+        mvi.onStarted()
+        mvi.scope?.launch {
+            themeRepository.postLayout.onEach { layout ->
+                mvi.updateState { it.copy(postLayout = layout) }
+            }.launchIn(this)
+        }
+    }
 
     override fun reduce(intent: CreatePostMviModel.Intent) {
         when (intent) {

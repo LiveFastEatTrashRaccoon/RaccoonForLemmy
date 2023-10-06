@@ -1,7 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,7 +53,7 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardBody
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCreatePostViewModel
@@ -321,18 +320,18 @@ class CreatePostScreen(
                         }
                     )
                 } else {
-                    Box(
-                        modifier = Modifier
-                            .height(500.dp)
-                            .fillMaxWidth()
-                    ) {
-                        PostCardBody(
-                            modifier = Modifier
-                                .padding(Spacing.s)
-                                .verticalScroll(rememberScrollState()),
-                            text = uiState.body,
-                        )
-                    }
+                    val post = PostModel(
+                        text = uiState.body,
+                        title = uiState.title,
+                        url = uiState.url,
+                        thumbnailUrl = uiState.url,
+                    )
+
+                    PostCard(
+                        post = post,
+                        postLayout = uiState.postLayout,
+                        withOverflowBlurred = false,
+                    )
                 }
 
                 Spacer(Modifier.height(Spacing.xxl))

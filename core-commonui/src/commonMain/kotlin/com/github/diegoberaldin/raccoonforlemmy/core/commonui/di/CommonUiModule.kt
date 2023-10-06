@@ -109,6 +109,7 @@ val commonUiModule = module {
             editedPostId = params[1],
             identityRepository = get(),
             postRepository = get(),
+            themeRepository = get(),
         )
     }
     factory {

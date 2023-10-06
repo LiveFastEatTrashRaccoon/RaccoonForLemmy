@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import dev.icerock.moko.resources.desc.StringDesc
 
@@ -42,6 +43,7 @@ interface CreatePostMviModel :
         val nsfw: Boolean = false,
         val loading: Boolean = false,
         val section: CreatePostSection = CreatePostSection.Edit,
+        val postLayout: PostLayout = PostLayout.Card,
     )
 
     sealed interface Effect {
