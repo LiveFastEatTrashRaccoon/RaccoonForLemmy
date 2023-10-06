@@ -212,6 +212,7 @@ class PostListScreen : Screen {
                                             },
                                             post = post,
                                             postLayout = uiState.postLayout,
+                                            separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                             options = buildList {
                                                 add(stringResource(MR.strings.post_action_share))
                                                 if (post.creator?.id == uiState.currentUserId) {

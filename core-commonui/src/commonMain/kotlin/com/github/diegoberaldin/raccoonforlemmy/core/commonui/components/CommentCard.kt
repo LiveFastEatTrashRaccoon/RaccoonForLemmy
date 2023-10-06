@@ -36,6 +36,7 @@ fun CommentCard(
     comment: CommentModel,
     background: Color = MaterialTheme.colorScheme.background,
     modifier: Modifier = Modifier,
+    separateUpAndDownVotes: Boolean = false,
     hideAuthor: Boolean = false,
     hideCommunity: Boolean = true,
     hideIndent: Boolean = false,
@@ -95,6 +96,9 @@ fun CommentCard(
                     PostCardFooter(
                         modifier = Modifier.padding(top = Spacing.xxs),
                         score = comment.score,
+                        separateUpAndDownVotes = separateUpAndDownVotes,
+                        upvotes = comment.upvotes,
+                        downvotes = comment.downvotes,
                         saved = comment.saved,
                         upVoted = comment.myVote > 0,
                         downVoted = comment.myVote < 0,

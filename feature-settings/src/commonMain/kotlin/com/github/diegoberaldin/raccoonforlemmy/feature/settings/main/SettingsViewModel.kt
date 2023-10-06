@@ -96,6 +96,7 @@ class SettingsViewModel(
                 openUrlsInExternalBrowser = settings.openUrlsInExternalBrowser,
                 enableSwipeActions = settings.enableSwipeActions,
                 crashReportEnabled = crashReportConfiguration.isEnabled(),
+                separateUpAndDownVotes = settings.separateUpAndDownVotes,
                 appVersion = AppInfo.versionCode,
             )
         }
@@ -159,6 +160,10 @@ class SettingsViewModel(
             is SettingsMviModel.Intent.ChangeCrashReportEnabled -> {
                 changeCrashReportEnabled(intent.value)
             }
+
+            is SettingsMviModel.Intent.ChangeSeparateUpAndDownVotes -> changeSeparateUpAndDownVotes(
+                intent.value
+            )
         }
     }
 
@@ -305,6 +310,16 @@ class SettingsViewModel(
     private fun changeCrashReportEnabled(value: Boolean) {
         crashReportConfiguration.setEnabled(value)
         mvi.updateState { it.copy(crashReportEnabled = value) }
+    }
+
+    private fun changeSeparateUpAndDownVotes(value: Boolean) {
+        mvi.updateState { it.copy(separateUpAndDownVotes = value) }
+        mvi.scope?.launch {
+            val settings = settingsRepository.currentSettings.value.copy(
+                separateUpAndDownVotes = value
+            )
+            saveSettings(settings)
+        }
     }
 
     private suspend fun saveSettings(settings: SettingsModel) {

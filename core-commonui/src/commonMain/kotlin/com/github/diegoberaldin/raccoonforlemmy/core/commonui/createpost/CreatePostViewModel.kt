@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.StringUtils.isValidUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
@@ -23,6 +24,7 @@ class CreatePostViewModel(
     private val identityRepository: IdentityRepository,
     private val postRepository: PostRepository,
     private val themeRepository: ThemeRepository,
+    private val settingsRepository: SettingsRepository,
 ) : ScreenModel,
     MviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect> by mvi {
 
@@ -31,6 +33,13 @@ class CreatePostViewModel(
         mvi.scope?.launch {
             themeRepository.postLayout.onEach { layout ->
                 mvi.updateState { it.copy(postLayout = layout) }
+            }.launchIn(this)
+            settingsRepository.currentSettings.onEach { settings ->
+                mvi.updateState {
+                    it.copy(
+                        separateUpAndDownVotes = settings.separateUpAndDownVotes,
+                    )
+                }
             }.launchIn(this)
         }
     }

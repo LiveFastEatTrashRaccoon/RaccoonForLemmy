@@ -18,4 +18,5 @@ data class SettingsModel(
     val enableSwipeActions: Boolean = true,
     val customSeedColor: Int? = null,
     val postLayout: Int = 0,
+    val separateUpAndDownVotes: Boolean = false,
 ) : JavaSerializable

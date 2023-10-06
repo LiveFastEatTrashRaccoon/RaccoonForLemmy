@@ -168,6 +168,7 @@ class CreateCommentScreen(
                                 modifier = referenceModifier,
                                 comment = originalComment,
                                 hideIndent = true,
+                                separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                             )
                             Divider()
                         }
@@ -178,6 +179,7 @@ class CreateCommentScreen(
                                 postLayout = uiState.postLayout,
                                 post = originalPost,
                                 blurNsfw = false,
+                                separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                             )
                             Divider()
                         }

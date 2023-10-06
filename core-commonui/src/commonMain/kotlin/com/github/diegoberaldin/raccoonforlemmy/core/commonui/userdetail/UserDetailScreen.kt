@@ -325,14 +325,16 @@ class UserDetailScreen(
                                     )
                                 },
                                 content = {
-                                    PostCard(modifier = Modifier.onClick {
-                                        navigator?.push(
-                                            PostDetailScreen(post),
-                                        )
-                                    },
+                                    PostCard(
+                                        modifier = Modifier.onClick {
+                                            navigator?.push(
+                                                PostDetailScreen(post),
+                                            )
+                                        },
                                         post = post,
                                         postLayout = uiState.postLayout,
                                         blurNsfw = uiState.blurNsfw,
+                                        separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                         options = buildList {
                                             add(stringResource(MR.strings.post_action_share))
                                         },
@@ -478,6 +480,7 @@ class UserDetailScreen(
                                             )
                                         },
                                         comment = comment,
+                                        separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                         hideCommunity = false,
                                         hideAuthor = true,
                                         hideIndent = true,

@@ -45,6 +45,7 @@ fun PostCard(
     post: PostModel,
     hideAuthor: Boolean = false,
     postLayout: PostLayout = PostLayout.Card,
+    separateUpAndDownVotes: Boolean = false,
     withOverflowBlurred: Boolean = true,
     blurNsfw: Boolean = true,
     options: List<String> = emptyList(),
@@ -86,6 +87,7 @@ fun PostCard(
                         else -> MaterialTheme.colorScheme.background
                     },
                     withOverflowBlurred = withOverflowBlurred,
+                    separateUpAndDownVotes = separateUpAndDownVotes,
                     blurNsfw = blurNsfw,
                     options = options,
                     onOpenCommunity = onOpenCommunity,
@@ -102,6 +104,7 @@ fun PostCard(
                     post = post,
                     hideAuthor = hideAuthor,
                     blurNsfw = blurNsfw,
+                    separateUpAndDownVotes = separateUpAndDownVotes,
                     options = options,
                     onOpenCommunity = onOpenCommunity,
                     onOpenCreator = onOpenCreator,
@@ -121,8 +124,9 @@ fun PostCard(
 private fun CompactPost(
     modifier: Modifier = Modifier,
     post: PostModel,
-    hideAuthor: Boolean = false,
+    hideAuthor: Boolean,
     blurNsfw: Boolean,
+    separateUpAndDownVotes: Boolean,
     options: List<String> = emptyList(),
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
     onOpenCreator: ((UserModel) -> Unit)? = null,
@@ -162,6 +166,7 @@ private fun CompactPost(
         }
         PostCardFooter(
             comments = post.comments,
+            separateUpAndDownVotes = separateUpAndDownVotes,
             score = post.score,
             upVoted = post.myVote > 0,
             downVoted = post.myVote < 0,
@@ -181,9 +186,10 @@ private fun CompactPost(
 private fun ExtendedPost(
     modifier: Modifier = Modifier,
     post: PostModel,
-    hideAuthor: Boolean = false,
+    hideAuthor: Boolean,
     blurNsfw: Boolean,
-    withOverflowBlurred: Boolean = true,
+    separateUpAndDownVotes: Boolean,
+    withOverflowBlurred: Boolean,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     options: List<String> = emptyList(),
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
@@ -257,7 +263,10 @@ private fun ExtendedPost(
         }
         PostCardFooter(
             comments = post.comments,
+            separateUpAndDownVotes = separateUpAndDownVotes,
             score = post.score,
+            upvotes = post.upvotes,
+            downvotes = post.downvotes,
             upVoted = post.myVote > 0,
             downVoted = post.myVote < 0,
             saved = post.saved,

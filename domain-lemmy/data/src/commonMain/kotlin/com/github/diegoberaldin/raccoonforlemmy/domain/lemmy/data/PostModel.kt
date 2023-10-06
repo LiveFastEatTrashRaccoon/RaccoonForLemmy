@@ -7,6 +7,8 @@ data class PostModel(
     val title: String = "",
     val text: String = "",
     val score: Int = 0,
+    val upvotes: Int = 0,
+    val downvotes: Int = 0,
     val comments: Int = 0,
     val thumbnailUrl: String? = null,
     val url: String? = null,

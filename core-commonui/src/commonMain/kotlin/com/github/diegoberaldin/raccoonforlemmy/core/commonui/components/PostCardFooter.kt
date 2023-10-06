@@ -41,9 +41,12 @@ import dev.icerock.moko.resources.compose.stringResource
 @Composable
 fun PostCardFooter(
     modifier: Modifier = Modifier,
+    separateUpAndDownVotes: Boolean = false,
     comments: Int? = null,
     date: String? = null,
-    score: Int,
+    score: Int = 0,
+    upvotes: Int = 0,
+    downvotes: Int = 0,
     saved: Boolean = false,
     upVoted: Boolean = false,
     downVoted: Boolean = false,
@@ -168,7 +171,15 @@ fun PostCardFooter(
                 ),
             )
             Text(
-                text = "$score",
+                text = buildString {
+                    if (separateUpAndDownVotes) {
+                        append(upvotes)
+                        append(" / ")
+                        append(downvotes)
+                    } else {
+                        append(score)
+                    }
+                },
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onBackground,
             )

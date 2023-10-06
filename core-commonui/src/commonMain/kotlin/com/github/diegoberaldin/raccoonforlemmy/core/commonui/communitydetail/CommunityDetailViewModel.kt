@@ -62,6 +62,7 @@ class CommunityDetailViewModel(
                         blurNsfw = settings.blurNsfw,
                         swipeActionsEnabled = settings.enableSwipeActions,
                         sortType = settings.defaultPostSortType.toSortType(),
+                        separateUpAndDownVotes = settings.separateUpAndDownVotes,
                     )
                 }
             }.launchIn(this)

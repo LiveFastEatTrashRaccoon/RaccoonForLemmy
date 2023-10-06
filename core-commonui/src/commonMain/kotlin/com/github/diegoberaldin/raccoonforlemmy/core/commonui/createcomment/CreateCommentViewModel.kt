@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
@@ -26,6 +27,7 @@ class CreateCommentViewModel(
     private val commentRepository: CommentRepository,
     private val postRepository: PostRepository,
     private val themeRepository: ThemeRepository,
+    private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect> by mvi {
@@ -35,6 +37,13 @@ class CreateCommentViewModel(
         mvi.scope?.launch {
             themeRepository.postLayout.onEach { layout ->
                 mvi.updateState { it.copy(postLayout = layout) }
+            }.launchIn(this)
+            settingsRepository.currentSettings.onEach { settings ->
+                mvi.updateState {
+                    it.copy(
+                        separateUpAndDownVotes = settings.separateUpAndDownVotes,
+                    )
+                }
             }.launchIn(this)
         }
     }

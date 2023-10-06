@@ -78,6 +78,14 @@ class PostRepository(
             !voted -> post.score - 1
             else -> post.score
         },
+        upvotes = when {
+            voted -> post.upvotes + 1
+            else -> post.upvotes - 1
+        },
+        downvotes = when {
+            post.myVote < 0 -> post.downvotes - 1
+            else -> post.downvotes
+        }
     )
 
     suspend fun upVote(post: PostModel, auth: String, voted: Boolean) = runCatching {
@@ -97,6 +105,14 @@ class PostRepository(
             !downVoted -> post.score + 1
             else -> post.score
         },
+        downvotes = when {
+            downVoted -> post.downvotes + 1
+            else -> post.downvotes - 1
+        },
+        upvotes = when {
+            post.myVote > 0 -> post.upvotes - 1
+            else -> post.upvotes
+        }
     )
 
     suspend fun downVote(post: PostModel, auth: String, downVoted: Boolean) = runCatching {

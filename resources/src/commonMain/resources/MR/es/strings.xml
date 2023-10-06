@@ -121,6 +121,8 @@
     <string name="settings_color_pink">Rosa chillón</string>
     <string name="settings_color_gray">Hormigón</string>
     <string name="settings_enable_crash_report">Activar notificación de accidentes</string>
+    <string name="settings_separate_up_and_downvotes">Distinguir votos positivos / negativos
+    </string>
     <string name="settings_section_appearance">Aspecto</string>
     <string name="settings_section_feed">Publicaciones y comentarios</string>
     <string name="settings_section_behaviour">Comportamiento</string>

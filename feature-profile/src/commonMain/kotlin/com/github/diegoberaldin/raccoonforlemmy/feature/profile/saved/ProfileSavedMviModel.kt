@@ -32,6 +32,7 @@ interface ProfileSavedMviModel :
         val posts: List<PostModel> = emptyList(),
         val comments: List<CommentModel> = emptyList(),
         val postLayout: PostLayout = PostLayout.Card,
+        val separateUpAndDownVotes: Boolean = false,
     )
 
     sealed interface Effect

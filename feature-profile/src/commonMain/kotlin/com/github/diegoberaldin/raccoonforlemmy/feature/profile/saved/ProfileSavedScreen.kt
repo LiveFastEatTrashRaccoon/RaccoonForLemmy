@@ -169,6 +169,7 @@ internal class ProfileSavedScreen(
                                     },
                                     post = post,
                                     postLayout = uiState.postLayout,
+                                    separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                     blurNsfw = uiState.blurNsfw,
                                     onOpenCommunity = { community ->
                                         navigator?.push(
@@ -226,6 +227,7 @@ internal class ProfileSavedScreen(
                             itemsIndexed(uiState.comments) { idx, comment ->
                                 CommentCard(
                                     comment = comment,
+                                    separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                     hideIndent = true,
                                     onUpVote = {
                                         model.reduce(

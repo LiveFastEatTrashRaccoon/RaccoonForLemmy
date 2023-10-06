@@ -40,6 +40,7 @@ interface UserDetailMviModel :
         val blurNsfw: Boolean = true,
         val swipeActionsEnabled: Boolean = true,
         val postLayout: PostLayout = PostLayout.Card,
+        val separateUpAndDownVotes: Boolean = false,
     )
 
     sealed interface Effect {

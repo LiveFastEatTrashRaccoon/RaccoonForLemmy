@@ -77,6 +77,7 @@ class ExploreViewModel(
                 mvi.updateState {
                     it.copy(
                         blurNsfw = settings.blurNsfw,
+                        separateUpAndDownVotes = settings.separateUpAndDownVotes,
                     )
                 }
             }.launchIn(this)

@@ -69,6 +69,7 @@ class PostDetailViewModel(
                     it.copy(
                         swipeActionsEnabled = settings.enableSwipeActions,
                         sortType = settings.defaultPostSortType.toSortType(),
+                        separateUpAndDownVotes = settings.separateUpAndDownVotes,
                     )
                 }
             }.launchIn(this)

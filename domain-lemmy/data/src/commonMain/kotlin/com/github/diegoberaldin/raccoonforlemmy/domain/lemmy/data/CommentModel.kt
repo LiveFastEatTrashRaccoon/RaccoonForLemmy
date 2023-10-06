@@ -9,6 +9,8 @@ data class CommentModel(
     val community: CommunityModel? = null,
     val creator: UserModel? = null,
     val score: Int = 0,
+    val upvotes: Int = 0,
+    val downvotes: Int = 0,
     val myVote: Int = 0,
     val saved: Boolean = false,
     val publishDate: String? = null,

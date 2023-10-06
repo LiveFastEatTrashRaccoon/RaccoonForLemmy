@@ -99,6 +99,7 @@ val commonUiModule = module {
             commentRepository = get(),
             postRepository = get(),
             themeRepository = get(),
+            settingsRepository = get(),
             notificationCenter = get(),
         )
     }
@@ -110,6 +111,7 @@ val commonUiModule = module {
             identityRepository = get(),
             postRepository = get(),
             themeRepository = get(),
+            settingsRepository = get(),
         )
     }
     factory {

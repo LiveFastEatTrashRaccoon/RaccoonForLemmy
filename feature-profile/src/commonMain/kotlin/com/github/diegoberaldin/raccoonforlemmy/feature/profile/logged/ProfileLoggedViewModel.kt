@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.ShareHelper
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -32,6 +33,7 @@ class ProfileLoggedViewModel(
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
     private val themeRepository: ThemeRepository,
+    private val settingsRepository: SettingsRepository,
     private val shareHelper: ShareHelper,
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
@@ -72,6 +74,13 @@ class ProfileLoggedViewModel(
                     )
                 }
                 refresh()
+            }.launchIn(this)
+            settingsRepository.currentSettings.onEach { settings ->
+                mvi.updateState {
+                    it.copy(
+                        separateUpAndDownVotes = settings.separateUpAndDownVotes
+                    )
+                }
             }.launchIn(this)
 
             if (uiState.value.posts.isEmpty()) {

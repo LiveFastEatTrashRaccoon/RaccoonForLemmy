@@ -220,6 +220,19 @@ class SettingsScreen : Screen {
                         },
                     )
 
+                    // separate upvotes and downvotes
+                    SettingsSwitchRow(
+                        title = stringResource(MR.strings.settings_separate_up_and_downvotes),
+                        value = uiState.separateUpAndDownVotes,
+                        onValueChanged = { value ->
+                            model.reduce(
+                                SettingsMviModel.Intent.ChangeSeparateUpAndDownVotes(
+                                    value
+                                )
+                            )
+                        }
+                    )
+
                     // navigation bar titles
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_navigation_bar_titles_visible),

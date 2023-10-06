@@ -276,6 +276,7 @@ class ExploreScreen : Screen {
                                             },
                                             post = result,
                                             postLayout = uiState.postLayout,
+                                            separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                             blurNsfw = uiState.blurNsfw,
                                             onOpenCommunity = { community ->
                                                 navigator?.push(
@@ -348,6 +349,7 @@ class ExploreScreen : Screen {
                                                 )
                                             },
                                             comment = result,
+                                            separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                             hideIndent = true,
                                             onUpVote = {
                                                 model.reduce(

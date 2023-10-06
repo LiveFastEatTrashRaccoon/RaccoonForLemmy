@@ -331,6 +331,7 @@ class CreatePostScreen(
                         post = post,
                         postLayout = uiState.postLayout,
                         withOverflowBlurred = false,
+                        separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                     )
                 }
 

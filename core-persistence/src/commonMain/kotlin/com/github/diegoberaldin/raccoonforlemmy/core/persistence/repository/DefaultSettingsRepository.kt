@@ -24,6 +24,7 @@ private object KeyStoreKeys {
     const val EnableSwipeActions = "enableSwipeActions"
     const val CustomSeedColor = "customPrimaryColor"
     const val PostLayout = "postLayout"
+    const val SeparateUpAndDownVotes = "separateUpAndDownVotes"
 }
 
 internal class DefaultSettingsRepository(
@@ -53,6 +54,7 @@ internal class DefaultSettingsRepository(
                 customSeedColor = settings.customSeedColor?.toLong(),
                 account_id = accountId,
                 postLayout = settings.postLayout.toLong(),
+                separateUpAndDownVotes = if (settings.separateUpAndDownVotes) 1 else 0,
             )
         }
 
@@ -75,6 +77,7 @@ internal class DefaultSettingsRepository(
                     enableSwipeActions = keyStore[KeyStoreKeys.EnableSwipeActions, true],
                     customSeedColor = if (!keyStore.containsKey(KeyStoreKeys.CustomSeedColor)) null else keyStore[KeyStoreKeys.CustomSeedColor, 0],
                     postLayout = keyStore[KeyStoreKeys.PostLayout, 0],
+                    separateUpAndDownVotes = keyStore[KeyStoreKeys.SeparateUpAndDownVotes, false],
                 )
             } else {
                 db.settingsQueries.getBy(accountId)
@@ -109,6 +112,7 @@ internal class DefaultSettingsRepository(
                     keyStore.save(KeyStoreKeys.CustomSeedColor, settings.customSeedColor)
                 }
                 keyStore.save(KeyStoreKeys.PostLayout, settings.postLayout)
+                keyStore.save(KeyStoreKeys.SeparateUpAndDownVotes, settings.separateUpAndDownVotes)
             } else {
                 db.settingsQueries.update(
                     theme = settings.theme?.toLong(),
@@ -125,6 +129,7 @@ internal class DefaultSettingsRepository(
                     enableSwipeActions = if (settings.enableSwipeActions) 1L else 0L,
                     customSeedColor = settings.customSeedColor?.toLong(),
                     postLayout = settings.postLayout.toLong(),
+                    separateUpAndDownVotes = if (settings.separateUpAndDownVotes) 1L else 0L,
                     account_id = accountId,
                 )
             }
@@ -151,4 +156,5 @@ private fun SettingsEntity.toModel() = SettingsModel(
     enableSwipeActions = enableSwipeActions != 0L,
     customSeedColor = customSeedColor?.toInt(),
     postLayout = postLayout.toInt(),
+    separateUpAndDownVotes = separateUpAndDownVotes != 0L,
 )

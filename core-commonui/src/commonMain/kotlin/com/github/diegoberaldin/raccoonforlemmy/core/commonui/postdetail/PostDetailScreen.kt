@@ -249,6 +249,7 @@ class PostDetailScreen(
                                     post = statePost,
                                     postLayout = uiState.postLayout,
                                     withOverflowBlurred = false,
+                                    separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                     blurNsfw = false,
                                     onOpenCommunity = { community ->
                                         navigator?.push(
@@ -392,6 +393,7 @@ class PostDetailScreen(
                                                 MaterialTheme.colorScheme.background
                                             },
                                             comment = comment,
+                                            separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                             options = buildList {
                                                 if (comment.creator?.id == uiState.currentUserId) {
                                                     add(stringResource(MR.strings.post_action_edit))
