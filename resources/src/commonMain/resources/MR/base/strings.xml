@@ -8,6 +8,9 @@
     <string name="navigation_search">Explore</string>
     <string name="navigation_settings">Settings</string>
 
+    <string name="navigation_drawer_anonymous">Anonymous</string>
+    <string name="navigation_drawer_title_subscriptions">Subscriptions</string>
+
     <string name="language_en" translatable="false">English</string>
     <string name="language_it" translatable="false">Italiano</string>
     <string name="language_es" translatable="false">Español</string>
@@ -171,4 +174,6 @@
     <string name="multi_community_editor_name">Name</string>
     <string name="multi_community_editor_icon">Icon</string>
     <string name="multi_community_editor_communities">Communities</string>
+
+    <string name="dialog_title_change_instance">Change instance</string>
 </resources>

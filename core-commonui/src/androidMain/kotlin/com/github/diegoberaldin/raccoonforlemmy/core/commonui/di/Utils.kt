@@ -5,6 +5,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.Comm
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
@@ -21,6 +23,10 @@ actual fun getNavigationCoordinator(): NavigationCoordinator {
     return res
 }
 
+actual fun getDrawerCoordinator(): DrawerCoordinator {
+    val res: DrawerCoordinator by inject(DrawerCoordinator::class.java)
+    return res
+}
 
 actual fun getPostDetailViewModel(
     post: PostModel,
@@ -100,5 +106,10 @@ actual fun getInboxChatViewModel(otherUserId: Int): InboxChatViewModel {
             parametersOf(otherUserId)
         },
     )
+    return res
+}
+
+actual fun getModalDrawerViewModel(): ModalDrawerViewModel {
+    val res: ModalDrawerViewModel by inject(ModalDrawerViewModel::class.java)
     return res
 }

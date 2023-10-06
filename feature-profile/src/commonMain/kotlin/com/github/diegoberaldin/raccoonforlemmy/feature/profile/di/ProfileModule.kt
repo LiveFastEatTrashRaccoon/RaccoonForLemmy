@@ -29,6 +29,7 @@ val profileTabModule = module {
             accountRepository = get(),
             identityRepository = get(),
             siteRepository = get(),
+            communityRepository = get(),
         )
     }
     factory {

@@ -32,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,6 +53,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
@@ -69,6 +71,7 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class PostListScreen : Screen {
 
@@ -97,7 +100,8 @@ class PostListScreen : Screen {
                 }
             }.launchIn(this)
         }
-
+        val drawerCoordinator = remember { getDrawerCoordinator() }
+        val scope = rememberCoroutineScope()
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
             topBar = {
@@ -106,6 +110,11 @@ class PostListScreen : Screen {
                     listingType = uiState.listingType,
                     sortType = uiState.sortType,
                     scrollBehavior = scrollBehavior,
+                    onHamburgerTapped = {
+                        scope.launch {
+                            drawerCoordinator.toggleDrawer()
+                        }
+                    },
                     onSelectListingType = {
                         val sheet = ListingTypeBottomSheet(
                             isLogged = uiState.isLogged,

@@ -3,8 +3,12 @@ package com.github.diegoberaldin.raccoonforlemmy
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.BottomAppBar
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,11 +30,17 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerEvent
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerContent
 import com.github.diegoberaldin.raccoonforlemmy.di.getMainViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptions.ManageSubscriptionsScreen
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.detail.MultiCommunityScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.SearchTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
 import com.github.diegoberaldin.raccoonforlemmy.ui.navigation.TabNavigationItem
@@ -45,6 +55,8 @@ internal class MainScreen : Screen {
         val themeRepository = remember { getThemeRepository() }
         var bottomBarHeightPx by remember { mutableStateOf(0f) }
         val navigationCoordinator = remember { getNavigationCoordinator() }
+        val drawerCoordinator = remember { getDrawerCoordinator() }
+        val navigator = remember { navigationCoordinator.getRootNavigator() }
         val model = rememberScreenModel { getMainViewModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
@@ -78,35 +90,69 @@ internal class MainScreen : Screen {
             }
         }
 
-        TabNavigator(HomeTab) {
-            Scaffold(
-                content = {
-                    CurrentTab()
-                },
-                bottomBar = {
-                    val titleVisible by themeRepository.navItemTitles.collectAsState()
-                    BottomAppBar(
-                        modifier = Modifier
-                            .onGloballyPositioned {
-                                bottomBarHeightPx = it.size.toSize().height
-                            }
-                            .offset {
-                                IntOffset(
-                                    x = 0,
-                                    y = -uiState.bottomBarOffsetHeightPx.roundToInt()
-                                )
-                            },
-                        contentPadding = PaddingValues(0.dp),
-                        backgroundColor = MaterialTheme.colorScheme.background,
-                    ) {
-                        TabNavigationItem(HomeTab, withText = titleVisible)
-                        TabNavigationItem(SearchTab, withText = titleVisible)
-                        TabNavigationItem(ProfileTab, withText = titleVisible)
-                        TabNavigationItem(InboxTab, withText = titleVisible)
-                        TabNavigationItem(SettingsTab, withText = titleVisible)
+
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        LaunchedEffect(drawerCoordinator) {
+            drawerCoordinator.toggleEvents.onEach { evt ->
+                when (evt) {
+                    DrawerEvent.Toggled -> {
+                        drawerState.apply {
+                            if (isClosed) open() else close()
+                        }
                     }
-                },
-            )
+
+                    is DrawerEvent.OpenCommunity -> {
+                        navigator?.push(CommunityDetailScreen(evt.community))
+                    }
+
+                    is DrawerEvent.OpenMultiCommunity -> {
+                        navigator?.push(MultiCommunityScreen(evt.community))
+                    }
+
+                    DrawerEvent.ManageSubscriptions -> {
+                        navigator?.push(ManageSubscriptionsScreen())
+                    }
+                }
+            }.launchIn(this)
+        }
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                ModalDrawerSheet {
+                    TabNavigator(ModalDrawerContent)
+                }
+            }
+        ) {
+            TabNavigator(HomeTab) {
+                Scaffold(
+                    content = {
+                        CurrentTab()
+                    },
+                    bottomBar = {
+                        val titleVisible by themeRepository.navItemTitles.collectAsState()
+                        BottomAppBar(
+                            modifier = Modifier
+                                .onGloballyPositioned {
+                                    bottomBarHeightPx = it.size.toSize().height
+                                }
+                                .offset {
+                                    IntOffset(
+                                        x = 0,
+                                        y = -uiState.bottomBarOffsetHeightPx.roundToInt()
+                                    )
+                                },
+                            contentPadding = PaddingValues(0.dp),
+                            backgroundColor = MaterialTheme.colorScheme.background,
+                        ) {
+                            TabNavigationItem(HomeTab, withText = titleVisible)
+                            TabNavigationItem(SearchTab, withText = titleVisible)
+                            TabNavigationItem(ProfileTab, withText = titleVisible)
+                            TabNavigationItem(InboxTab, withText = titleVisible)
+                            TabNavigationItem(SettingsTab, withText = titleVisible)
+                        }
+                    },
+                )
+            }
         }
     }
 }

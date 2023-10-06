@@ -8,6 +8,9 @@
     <string name="navigation_search">Esplora</string>
     <string name="navigation_settings">Impostazioni</string>
 
+    <string name="navigation_drawer_anonymous">Anonimo</string>
+    <string name="navigation_drawer_title_subscriptions">Iscrizioni</string>
+
     <string name="message_generic_error">Errore generico</string>
     <string name="message_missing_field">Campo obbligatorio</string>
     <string name="message_invalid_field">Campo non valido</string>
@@ -168,4 +171,6 @@
     <string name="multi_community_editor_name">Nome</string>
     <string name="multi_community_editor_icon">Icona</string>
     <string name="multi_community_editor_communities">Comunità</string>
+
+    <string name="dialog_title_change_instance">Cambia istanza</string>
 </resources>

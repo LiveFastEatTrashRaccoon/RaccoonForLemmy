@@ -11,6 +11,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.Crea
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DefaultDrawerCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoMviModel
@@ -26,6 +30,9 @@ import org.koin.dsl.module
 val commonUiModule = module {
     single<NavigationCoordinator> {
         DefaultNavigationCoordinator()
+    }
+    single<DrawerCoordinator> {
+        DefaultDrawerCoordinator()
     }
     factory { params ->
         PostDetailViewModel(
@@ -130,6 +137,17 @@ val commonUiModule = module {
             userRepository = get(),
             messageRepository = get(),
             notificationCenter = get(),
+        )
+    }
+    factory {
+        ModalDrawerViewModel(
+            mvi = DefaultMviModel(ModalDrawerMviModel.UiState()),
+            apiConfigurationRepository = get(),
+            siteRepository = get(),
+            identityRepository = get(),
+            accountRepository = get(),
+            communityRepository = get(),
+            multiCommunityRepository = get(),
         )
     }
 }

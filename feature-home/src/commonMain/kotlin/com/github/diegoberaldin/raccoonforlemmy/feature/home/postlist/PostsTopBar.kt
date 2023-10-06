@@ -1,12 +1,13 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,8 +34,9 @@ internal fun PostsTopBar(
     currentInstance: String,
     listingType: ListingType?,
     sortType: SortType?,
-    onSelectListingType: () -> Unit,
-    onSelectSortType: () -> Unit,
+    onSelectListingType: (() -> Unit)? = null,
+    onSelectSortType: (() -> Unit)? = null,
+    onHamburgerTapped: (() -> Unit)? = null,
 ) {
     TopAppBar(
         scrollBehavior = scrollBehavior,
@@ -42,23 +44,39 @@ internal fun PostsTopBar(
             scrolledContainerColor = MaterialTheme.colorScheme.background,
         ),
         navigationIcon = {
-            if (listingType != null) {
-                Image(
-                    modifier = Modifier.onClick {
-                        onSelectListingType()
-                    },
-                    imageVector = listingType.toIcon(),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                )
-            } else {
-                Box(modifier = Modifier.size(24.dp))
+            when {
+                onHamburgerTapped != null -> {
+                    Image(
+                        modifier = Modifier.onClick {
+                            onHamburgerTapped()
+                        },
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                    )
+                }
+
+                listingType != null -> {
+                    Image(
+                        modifier = Modifier.onClick {
+                            onSelectListingType?.invoke()
+                        },
+                        imageVector = listingType.toIcon(),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                    )
+                }
+
+                else -> {
+                    Box(modifier = Modifier.size(24.dp))
+                }
             }
         },
         title = {
             Column(
-                modifier = Modifier.padding(horizontal = Spacing.s),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                modifier = Modifier.padding(horizontal = Spacing.s).onClick {
+                    onSelectListingType?.invoke()
+                },
             ) {
                 Text(
                     text = listingType?.toReadableName().orEmpty(),
@@ -99,7 +117,7 @@ internal fun PostsTopBar(
                 if (sortType != null) {
                     Image(
                         modifier = Modifier.onClick {
-                            onSelectSortType()
+                            onSelectSortType?.invoke()
                         },
                         imageVector = sortType.toIcon(),
                         contentDescription = null,

@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase.LoginUseCase
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.desc.desc
@@ -19,6 +20,7 @@ class LoginBottomSheetViewModel(
     private val identityRepository: IdentityRepository,
     private val accountRepository: AccountRepository,
     private val siteRepository: SiteRepository,
+    private val communityRepository: CommunityRepository,
 ) : ScreenModel,
     MviModel<LoginBottomSheetMviModel.Intent, LoginBottomSheetMviModel.UiState, LoginBottomSheetMviModel.Effect> by mvi {
 
@@ -102,6 +104,24 @@ class LoginBottomSheetViewModel(
 
         mvi.scope?.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
+
+            val res = runCatching {
+                communityRepository.getAllInInstance(
+                    instance = instance,
+                    page = 1,
+                    limit = 1
+                )
+            }.getOrElse { emptyList() }
+            if (res.isEmpty()) {
+                mvi.updateState {
+                    it.copy(
+                        instanceNameError = MR.strings.message_invalid_field.desc(),
+                        loading = false,
+                    )
+                }
+                return@launch
+            }
+
             val result = login(
                 instance = instance,
                 username = username,

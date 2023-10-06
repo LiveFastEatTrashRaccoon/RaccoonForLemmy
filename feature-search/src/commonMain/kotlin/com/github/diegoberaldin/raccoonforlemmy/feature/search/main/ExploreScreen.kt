@@ -35,6 +35,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -60,6 +61,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
@@ -77,9 +79,9 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultTy
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getExploreViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptions.ManageSubscriptionsScreen
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.launch
 
 class ExploreScreen : Screen {
 
@@ -93,6 +95,8 @@ class ExploreScreen : Screen {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val notificationCenter = remember { getNotificationCenter() }
+        val drawerCoordinator = remember { getDrawerCoordinator() }
+        val scope = rememberCoroutineScope()
         val focusManager = LocalFocusManager.current
         val keyboardScrollConnection = remember {
             object : NestedScrollConnection {
@@ -111,11 +115,10 @@ class ExploreScreen : Screen {
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
             topBar = {
-                CommunityTopBar(
+                ExploreTopBar(
                     scrollBehavior = scrollBehavior,
                     listingType = uiState.listingType,
                     sortType = uiState.sortType,
-                    isLogged = uiState.isLogged,
                     onSelectListingType = {
                         focusManager.clearFocus()
                         val sheet = ListingTypeBottomSheet(
@@ -142,10 +145,11 @@ class ExploreScreen : Screen {
                         }, key, NotificationCenterContractKeys.ChangeSortType)
                         bottomSheetNavigator.show(sheet)
                     },
-                    onSettings = {
-                        val sheet = ManageSubscriptionsScreen()
-                        navigator?.push(sheet)
-                    },
+                    onHamburgerTapped = {
+                        scope.launch {
+                            drawerCoordinator.toggleDrawer()
+                        }
+                    }
                 )
             },
         ) { padding ->

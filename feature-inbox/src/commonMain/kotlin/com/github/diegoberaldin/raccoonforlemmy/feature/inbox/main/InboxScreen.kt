@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DoneAll
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -19,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -32,6 +34,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.InboxTypeSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -48,6 +51,7 @@ import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 object InboxScreen : Tab {
     override val options: TabOptions
@@ -64,6 +68,8 @@ object InboxScreen : Tab {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val notificationCenter = remember { getNotificationCenter() }
+        val drawerCoordinator = remember { getDrawerCoordinator() }
+        val scope = rememberCoroutineScope()
         DisposableEffect(key) {
             onDispose {
                 notificationCenter.removeObserver(key)
@@ -80,13 +86,23 @@ object InboxScreen : Tab {
                 }
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
+                    navigationIcon = {
+                        Image(
+                            modifier = Modifier.onClick {
+                                scope.launch {
+                                    drawerCoordinator.toggleDrawer()
+                                }
+                            },
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                        )
+                    },
                     title = {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                        ) {
+                        Column(modifier = Modifier.padding(horizontal = Spacing.s)) {
                             Text(
                                 text = title,
-                                style = MaterialTheme.typography.titleLarge,
+                                style = MaterialTheme.typography.titleMedium,
                             )
                             val text = when (uiState.unreadOnly) {
                                 true -> stringResource(MR.strings.inbox_listing_type_unread)

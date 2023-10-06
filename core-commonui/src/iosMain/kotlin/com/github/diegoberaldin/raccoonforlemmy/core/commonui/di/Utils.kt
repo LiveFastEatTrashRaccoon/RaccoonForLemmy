@@ -5,6 +5,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.Comm
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
@@ -18,6 +20,8 @@ import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
 actual fun getNavigationCoordinator() = CommonUiViewModelHelper.navigationCoordinator
+
+actual fun getDrawerCoordinator() = CommonUiViewModelHelper.drawerCoordinator
 
 actual fun getPostDetailViewModel(
     post: PostModel,
@@ -59,10 +63,14 @@ actual fun getZoomableImageViewModel(): ZoomableImageViewModel =
 actual fun getInboxChatViewModel(otherUserId: Int) =
     CommonUiViewModelHelper.getChatViewModel(otherUserId)
 
+actual fun getModalDrawerViewModel() = CommonUiViewModelHelper.modalDrawerViewModel
+
 object CommonUiViewModelHelper : KoinComponent {
 
     val navigationCoordinator: NavigationCoordinator by inject()
+    val drawerCoordinator: DrawerCoordinator by inject()
     val zoomableImageModel: ZoomableImageViewModel by inject()
+    val modalDrawerViewModel: ModalDrawerViewModel by inject()
 
     fun getPostDetailModel(post: PostModel, highlightCommentId: Int?): PostDetailViewModel {
         val model: PostDetailViewModel by inject(

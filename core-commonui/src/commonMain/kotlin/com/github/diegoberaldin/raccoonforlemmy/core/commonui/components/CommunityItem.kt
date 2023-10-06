@@ -23,12 +23,13 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 fun CommunityItem(
     community: CommunityModel,
     modifier: Modifier = Modifier,
+    small: Boolean = false,
 ) {
     val title = community.title
     val communityName = community.name
     val communityIcon = community.icon.orEmpty()
     val communityHost = community.host
-    val iconSize = 30.dp
+    val iconSize = if (small) 24.dp else 30.dp
     Row(
         modifier = modifier.padding(
             vertical = Spacing.xs,

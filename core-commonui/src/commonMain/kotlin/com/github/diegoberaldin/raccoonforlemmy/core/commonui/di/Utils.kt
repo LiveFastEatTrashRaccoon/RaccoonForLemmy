@@ -5,6 +5,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.Comm
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
@@ -15,6 +17,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
 expect fun getNavigationCoordinator(): NavigationCoordinator
+
+expect fun getDrawerCoordinator(): DrawerCoordinator
 
 expect fun getPostDetailViewModel(
     post: PostModel,
@@ -53,3 +57,5 @@ expect fun getCreatePostViewModel(
 expect fun getZoomableImageViewModel(): ZoomableImageViewModel
 
 expect fun getInboxChatViewModel(otherUserId: Int): InboxChatViewModel
+
+expect fun getModalDrawerViewModel(): ModalDrawerViewModel

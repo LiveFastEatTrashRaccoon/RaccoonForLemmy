@@ -23,10 +23,11 @@ import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.MultiCommu
 fun MultiCommunityItem(
     community: MultiCommunityModel,
     modifier: Modifier = Modifier,
+    small: Boolean = false,
 ) {
     val title = community.name
     val communityIcon = community.icon.orEmpty()
-    val iconSize = 30.dp
+    val iconSize = if (small) 24.dp else 30.dp
     Row(
         modifier = modifier.padding(
             vertical = Spacing.xs,
