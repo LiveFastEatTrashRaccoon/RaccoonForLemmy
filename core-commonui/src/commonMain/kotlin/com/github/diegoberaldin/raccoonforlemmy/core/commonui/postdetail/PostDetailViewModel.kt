@@ -235,6 +235,15 @@ class PostDetailViewModel(
                 processCommentsToGetNestedOrder(
                     items = it,
                 )
+            }.let {
+                if (refreshing) {
+                    it
+                } else {
+                    it.filter { c1 ->
+                        // prevents accidental duplication
+                        currentState.comments.none { c2 -> c1.id == c2.id }
+                    }
+                }
             }
             currentPage++
             val canFetchMore = commentList.size >= CommentRepository.DEFAULT_PAGE_SIZE

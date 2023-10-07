@@ -165,15 +165,23 @@ class PostListViewModel(
                 page = currentPage,
                 type = type,
                 sort = sort,
-            )
+            ).let {
+                if (refreshing) {
+                    it
+                } else {
+                    // prevents accidental duplication
+                    it.filter { p1 ->
+                        currentState.posts.none { p2 -> p2.id == p1.id }
+                    }
+                }
+            }
             currentPage++
             val canFetchMore = postList.size >= PostRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {
                 val newPosts = if (refreshing) {
                     postList
                 } else {
-                    // prevents accidental duplication
-                    it.posts + postList.filter { p -> it.posts.none { e -> e.id == p.id } }
+                    it.posts + postList
                 }.filter { post ->
                     if (includeNsfw) {
                         true
