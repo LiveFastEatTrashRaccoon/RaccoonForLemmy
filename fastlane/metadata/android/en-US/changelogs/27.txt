@@ -1,0 +1,5 @@
+- feat: optional separation of upvotes and downvotes for posts and comments
+- feat: drawer navigation to quickly access subscriptions and saved items
+- feat: possibility to change instance for anonymous users
+- fix: prevent accidental comment duplication
+- enhancement: post preview with image and background in create/edit screen
