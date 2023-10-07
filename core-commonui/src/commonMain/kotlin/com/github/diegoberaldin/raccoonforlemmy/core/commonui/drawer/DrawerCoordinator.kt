@@ -9,6 +9,7 @@ sealed interface DrawerEvent {
     data class OpenCommunity(val community: CommunityModel) : DrawerEvent
     data class OpenMultiCommunity(val community: MultiCommunityModel) : DrawerEvent
     data object ManageSubscriptions : DrawerEvent
+    data object OpenBookmarks : DrawerEvent
 }
 
 interface DrawerCoordinator {

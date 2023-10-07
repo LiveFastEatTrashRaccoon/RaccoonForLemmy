@@ -10,6 +10,7 @@
 
     <string name="navigation_drawer_anonymous">Anonymous</string>
     <string name="navigation_drawer_title_subscriptions">Subscriptions</string>
+    <string name="navigation_drawer_title_bookmarks">Saved</string>
 
     <string name="language_en" translatable="false">English</string>
     <string name="language_it" translatable="false">Italiano</string>
@@ -69,7 +70,6 @@
     <string name="explore_result_type_communities">Communities</string>
     <string name="explore_result_type_users">Users</string>
     <string name="explore_search_placeholder">Search</string>
-    <string name="explore_title_manage_subscriptions">Manage subscriptions</string>
 
     <string name="profile_not_logged_message">You are currently not logged in.\nPlease add an
         account to continue.
@@ -82,7 +82,6 @@
     <string name="profile_million_short">m</string>
     <string name="profile_section_posts">Posts</string>
     <string name="profile_section_comments">Comments</string>
-    <string name="profile_section_saved">Saved</string>
 
     <string name="login_field_instance_name">Instance name</string>
     <string name="login_field_user_name">Username (or email)</string>

@@ -11,6 +11,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -63,6 +64,9 @@ actual fun getZoomableImageViewModel(): ZoomableImageViewModel =
 actual fun getInboxChatViewModel(otherUserId: Int) =
     CommonUiViewModelHelper.getChatViewModel(otherUserId)
 
+actual fun getSavedItemsViewModel(): SavedItemsViewModel =
+    CommonUiViewModelHelper.savedItemsViewModel
+
 actual fun getModalDrawerViewModel() = CommonUiViewModelHelper.modalDrawerViewModel
 
 object CommonUiViewModelHelper : KoinComponent {
@@ -70,6 +74,7 @@ object CommonUiViewModelHelper : KoinComponent {
     val navigationCoordinator: NavigationCoordinator by inject()
     val drawerCoordinator: DrawerCoordinator by inject()
     val zoomableImageModel: ZoomableImageViewModel by inject()
+    val savedItemsViewModel: SavedItemsViewModel by inject()
     val modalDrawerViewModel: ModalDrawerViewModel by inject()
 
     fun getPostDetailModel(post: PostModel, highlightCommentId: Int?): PostDetailViewModel {

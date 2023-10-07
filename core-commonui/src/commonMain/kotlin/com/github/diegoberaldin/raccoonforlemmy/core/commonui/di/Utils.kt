@@ -11,6 +11,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -57,5 +58,7 @@ expect fun getCreatePostViewModel(
 expect fun getZoomableImageViewModel(): ZoomableImageViewModel
 
 expect fun getInboxChatViewModel(otherUserId: Int): InboxChatViewModel
+
+expect fun getSavedItemsViewModel(): SavedItemsViewModel
 
 expect fun getModalDrawerViewModel(): ModalDrawerViewModel

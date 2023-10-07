@@ -10,6 +10,7 @@
 
     <string name="navigation_drawer_anonymous">Anónimo</string>
     <string name="navigation_drawer_title_subscriptions">Subscripciones</string>
+    <string name="navigation_drawer_title_bookmarks">Guardados</string>
 
     <string name="message_generic_error">Error genérico</string>
     <string name="message_missing_field">Campo obligatorio</string>
@@ -65,7 +66,6 @@
     <string name="explore_result_type_communities">Comunidades</string>
     <string name="explore_result_type_users">Usuarios</string>
     <string name="explore_search_placeholder">Búsqueda</string>
-    <string name="explore_title_manage_subscriptions">Gestionar subscripciones</string>
 
     <string name="profile_not_logged_message">Acceso no efectuado.\nAñadir una cuenta para
         continuar.
@@ -78,7 +78,6 @@
     <string name="profile_million_short">m</string>
     <string name="profile_section_posts">Publicaciones</string>
     <string name="profile_section_comments">Comentarios</string>
-    <string name="profile_section_saved">Guardados</string>
 
     <string name="login_field_instance_name">Nombre instancia</string>
     <string name="login_field_user_name">Nombre de usuario (o email)</string>

@@ -35,6 +35,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordi
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerContent
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsScreen
 import com.github.diegoberaldin.raccoonforlemmy.di.getMainViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
@@ -111,6 +112,10 @@ internal class MainScreen : Screen {
 
                     DrawerEvent.ManageSubscriptions -> {
                         navigator?.push(ManageSubscriptionsScreen())
+                    }
+
+                    DrawerEvent.OpenBookmarks -> {
+                        navigator?.push(SavedItemsScreen())
                     }
                 }
             }.launchIn(this)

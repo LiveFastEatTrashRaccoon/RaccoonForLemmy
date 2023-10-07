@@ -1,19 +1,20 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.profile.saved
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems
 
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
-interface ProfileSavedMviModel :
-    MviModel<ProfileSavedMviModel.Intent, ProfileSavedMviModel.UiState, ProfileSavedMviModel.Effect> {
+interface SavedItemsMviModel :
+    MviModel<SavedItemsMviModel.Intent, SavedItemsMviModel.UiState, SavedItemsMviModel.Effect> {
 
     sealed interface Intent {
         data object Refresh : Intent
         data object LoadNextPage : Intent
         data class ChangeSort(val value: SortType) : Intent
-        data class ChangeSection(val section: ProfileSavedSection) : Intent
+        data class ChangeSection(val section: SavedItemsSection) : Intent
         data class UpVotePost(val index: Int, val feedback: Boolean = false) : Intent
         data class DownVotePost(val index: Int, val feedback: Boolean = false) : Intent
         data class SavePost(val index: Int, val feedback: Boolean = false) : Intent
@@ -23,7 +24,8 @@ interface ProfileSavedMviModel :
     }
 
     data class UiState(
-        val section: ProfileSavedSection = ProfileSavedSection.Posts,
+        val section: SavedItemsSection = SavedItemsSection.Posts,
+        val user: UserModel? = null,
         val refreshing: Boolean = false,
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,
