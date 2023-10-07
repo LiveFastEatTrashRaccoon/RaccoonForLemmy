@@ -9,8 +9,6 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.profile.main.ProfileMain
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.main.ProfileMainViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.manageaccounts.ManageAccountsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.manageaccounts.ManageAccountsViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.saved.ProfileSavedMviModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.saved.ProfileSavedViewModel
 import org.koin.dsl.module
 
 val profileTabModule = module {
@@ -45,20 +43,6 @@ val profileTabModule = module {
             shareHelper = get(),
             notificationCenter = get(),
             hapticFeedback = get(),
-        )
-    }
-    factory { params ->
-        ProfileSavedViewModel(
-            mvi = DefaultMviModel(ProfileSavedMviModel.UiState()),
-            user = params[0],
-            identityRepository = get(),
-            userRepository = get(),
-            postRepository = get(),
-            commentRepository = get(),
-            themeRepository = get(),
-            settingsRepository = get(),
-            hapticFeedback = get(),
-            notificationCenter = get(),
         )
     }
     factory {

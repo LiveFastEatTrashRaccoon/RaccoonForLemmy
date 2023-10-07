@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.profile.saved
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -35,9 +35,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
@@ -47,6 +46,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getSavedItemsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
@@ -56,27 +56,16 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotific
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileSavedViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
-internal class ProfileSavedScreen(
-    private val user: UserModel,
-) : Tab {
-
-    override val options: TabOptions
-        @Composable get() {
-            return TabOptions(0u, "")
-        }
+class SavedItemsScreen : Screen {
 
     @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model = rememberScreenModel {
-            getProfileSavedViewModel(user = user)
-        }
+        val model = rememberScreenModel { getSavedItemsViewModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
@@ -89,7 +78,10 @@ internal class ProfileSavedScreen(
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
                     title = {
-                        Text(stringResource(MR.strings.profile_section_saved))
+                        Text(
+                            modifier = Modifier.padding(horizontal = Spacing.s),
+                            text = stringResource(MR.strings.navigation_drawer_title_bookmarks),
+                        )
                     },
                     actions = {
                         Image(
@@ -103,7 +95,7 @@ internal class ProfileSavedScreen(
                                 )
                                 notificationCenter.addObserver({
                                     (it as? SortType)?.also { sortType ->
-                                        model.reduce(ProfileSavedMviModel.Intent.ChangeSort(sortType))
+                                        model.reduce(SavedItemsMviModel.Intent.ChangeSort(sortType))
                                     }
                                 }, key, NotificationCenterContractKeys.ChangeSortType)
                                 bottomSheetNavigator.show(sheet)
@@ -139,19 +131,19 @@ internal class ProfileSavedScreen(
                         stringResource(MR.strings.profile_section_comments),
                     ),
                     currentSection = when (uiState.section) {
-                        ProfileSavedSection.Comments -> 1
+                        SavedItemsSection.Comments -> 1
                         else -> 0
                     },
                     onSectionSelected = {
                         val section = when (it) {
-                            1 -> ProfileSavedSection.Comments
-                            else -> ProfileSavedSection.Posts
+                            1 -> SavedItemsSection.Comments
+                            else -> SavedItemsSection.Posts
                         }
-                        model.reduce(ProfileSavedMviModel.Intent.ChangeSection(section))
+                        model.reduce(SavedItemsMviModel.Intent.ChangeSection(section))
                     },
                 )
                 val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
-                    model.reduce(ProfileSavedMviModel.Intent.Refresh)
+                    model.reduce(SavedItemsMviModel.Intent.Refresh)
                 })
                 Box(
                     modifier = Modifier.fillMaxWidth().pullRefresh(pullRefreshState),
@@ -159,7 +151,7 @@ internal class ProfileSavedScreen(
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = Spacing.xxxs),
                     ) {
-                        if (uiState.section == ProfileSavedSection.Posts) {
+                        if (uiState.section == SavedItemsSection.Posts) {
                             itemsIndexed(uiState.posts) { idx, post ->
                                 PostCard(
                                     modifier = Modifier.onClick {
@@ -177,13 +169,13 @@ internal class ProfileSavedScreen(
                                         )
                                     },
                                     onOpenCreator = { u ->
-                                        if (u.id != user.id) {
+                                        if (u.id != uiState.user?.id) {
                                             navigator?.push(UserDetailScreen(u))
                                         }
                                     },
                                     onUpVote = {
                                         model.reduce(
-                                            ProfileSavedMviModel.Intent.UpVotePost(
+                                            SavedItemsMviModel.Intent.UpVotePost(
                                                 index = idx,
                                                 feedback = true,
                                             ),
@@ -191,7 +183,7 @@ internal class ProfileSavedScreen(
                                     },
                                     onDownVote = {
                                         model.reduce(
-                                            ProfileSavedMviModel.Intent.DownVotePost(
+                                            SavedItemsMviModel.Intent.DownVotePost(
                                                 index = idx,
                                                 feedback = true,
                                             ),
@@ -199,7 +191,7 @@ internal class ProfileSavedScreen(
                                     },
                                     onSave = {
                                         model.reduce(
-                                            ProfileSavedMviModel.Intent.SavePost(
+                                            SavedItemsMviModel.Intent.SavePost(
                                                 index = idx,
                                                 feedback = true,
                                             ),
@@ -231,7 +223,7 @@ internal class ProfileSavedScreen(
                                     hideIndent = true,
                                     onUpVote = {
                                         model.reduce(
-                                            ProfileSavedMviModel.Intent.UpVoteComment(
+                                            SavedItemsMviModel.Intent.UpVoteComment(
                                                 index = idx,
                                                 feedback = true,
                                             ),
@@ -239,7 +231,7 @@ internal class ProfileSavedScreen(
                                     },
                                     onDownVote = {
                                         model.reduce(
-                                            ProfileSavedMviModel.Intent.DownVoteComment(
+                                            SavedItemsMviModel.Intent.DownVoteComment(
                                                 index = idx,
                                                 feedback = true,
                                             ),
@@ -247,7 +239,7 @@ internal class ProfileSavedScreen(
                                     },
                                     onSave = {
                                         model.reduce(
-                                            ProfileSavedMviModel.Intent.SaveComment(
+                                            SavedItemsMviModel.Intent.SaveComment(
                                                 index = idx,
                                                 feedback = true,
                                             ),
@@ -269,7 +261,7 @@ internal class ProfileSavedScreen(
                         }
                         item {
                             if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                                model.reduce(ProfileSavedMviModel.Intent.LoadNextPage)
+                                model.reduce(SavedItemsMviModel.Intent.LoadNextPage)
                             }
                             if (uiState.loading && !uiState.refreshing) {
                                 Box(

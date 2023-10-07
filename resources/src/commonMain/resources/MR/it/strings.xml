@@ -10,6 +10,7 @@
 
     <string name="navigation_drawer_anonymous">Anonimo</string>
     <string name="navigation_drawer_title_subscriptions">Iscrizioni</string>
+    <string name="navigation_drawer_title_bookmarks">Salvati</string>
 
     <string name="message_generic_error">Errore generico</string>
     <string name="message_missing_field">Campo obbligatorio</string>
@@ -65,7 +66,6 @@
     <string name="explore_result_type_communities">Comunità</string>
     <string name="explore_result_type_users">Utenti</string>
     <string name="explore_search_placeholder">Ricerca</string>
-    <string name="explore_title_manage_subscriptions">Gestione iscrizioni</string>
 
     <string name="profile_not_logged_message">Login non effettuato.\nAggiungi un account per
         continuare.
@@ -78,7 +78,6 @@
     <string name="profile_million_short">m</string>
     <string name="profile_section_posts">Post</string>
     <string name="profile_section_comments">Commenti</string>
-    <string name="profile_section_saved">Salvati</string>
 
     <string name="login_field_instance_name">Nome istanza</string>
     <string name="login_field_user_name">Nome utente (o email)</string>

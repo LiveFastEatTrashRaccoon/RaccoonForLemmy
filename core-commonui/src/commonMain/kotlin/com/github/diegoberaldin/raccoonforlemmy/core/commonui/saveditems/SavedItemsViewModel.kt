@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.profile.saved
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
@@ -12,9 +12,9 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.Ident
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -22,10 +22,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ProfileSavedViewModel(
-    private val mvi: DefaultMviModel<ProfileSavedMviModel.Intent, ProfileSavedMviModel.UiState, ProfileSavedMviModel.Effect>,
-    private val user: UserModel,
+class SavedItemsViewModel(
+    private val mvi: DefaultMviModel<SavedItemsMviModel.Intent, SavedItemsMviModel.UiState, SavedItemsMviModel.Effect>,
     private val identityRepository: IdentityRepository,
+    private val siteRepository: SiteRepository,
     private val userRepository: UserRepository,
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
@@ -34,7 +34,7 @@ class ProfileSavedViewModel(
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
 ) : ScreenModel,
-    MviModel<ProfileSavedMviModel.Intent, ProfileSavedMviModel.UiState, ProfileSavedMviModel.Effect> by mvi {
+    MviModel<SavedItemsMviModel.Intent, SavedItemsMviModel.UiState, SavedItemsMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1
 
@@ -70,42 +70,42 @@ class ProfileSavedViewModel(
         }
     }
 
-    override fun reduce(intent: ProfileSavedMviModel.Intent) {
+    override fun reduce(intent: SavedItemsMviModel.Intent) {
         when (intent) {
-            ProfileSavedMviModel.Intent.LoadNextPage -> loadNextPage()
-            ProfileSavedMviModel.Intent.Refresh -> refresh()
-            is ProfileSavedMviModel.Intent.ChangeSection -> changeSection(intent.section)
-            is ProfileSavedMviModel.Intent.DownVoteComment -> toggleDownVoteComment(
+            SavedItemsMviModel.Intent.LoadNextPage -> loadNextPage()
+            SavedItemsMviModel.Intent.Refresh -> refresh()
+            is SavedItemsMviModel.Intent.ChangeSection -> changeSection(intent.section)
+            is SavedItemsMviModel.Intent.DownVoteComment -> toggleDownVoteComment(
                 comment = uiState.value.comments[intent.index],
                 feedback = intent.feedback,
             )
 
-            is ProfileSavedMviModel.Intent.DownVotePost -> toggleDownVotePost(
+            is SavedItemsMviModel.Intent.DownVotePost -> toggleDownVotePost(
                 post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 
-            is ProfileSavedMviModel.Intent.SaveComment -> toggleSaveComment(
+            is SavedItemsMviModel.Intent.SaveComment -> toggleSaveComment(
                 comment = uiState.value.comments[intent.index],
                 feedback = intent.feedback,
             )
 
-            is ProfileSavedMviModel.Intent.SavePost -> toggleSavePost(
+            is SavedItemsMviModel.Intent.SavePost -> toggleSavePost(
                 post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 
-            is ProfileSavedMviModel.Intent.UpVoteComment -> toggleUpVoteComment(
+            is SavedItemsMviModel.Intent.UpVoteComment -> toggleUpVoteComment(
                 comment = uiState.value.comments[intent.index],
                 feedback = intent.feedback,
             )
 
-            is ProfileSavedMviModel.Intent.UpVotePost -> toggleUpVotePost(
+            is SavedItemsMviModel.Intent.UpVotePost -> toggleUpVotePost(
                 post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
 
-            is ProfileSavedMviModel.Intent.ChangeSort -> applySortType(intent.value)
+            is SavedItemsMviModel.Intent.ChangeSort -> applySortType(intent.value)
         }
     }
 
@@ -129,10 +129,11 @@ class ProfileSavedViewModel(
         mvi.scope?.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
+            val user = siteRepository.getCurrentUser(auth.orEmpty()) ?: return@launch
             val refreshing = currentState.refreshing
             val section = currentState.section
             val sortType = currentState.sortType
-            if (section == ProfileSavedSection.Posts) {
+            if (section == SavedItemsSection.Posts) {
                 val postList = userRepository.getSavedPosts(
                     auth = auth,
                     id = user.id,
@@ -202,7 +203,7 @@ class ProfileSavedViewModel(
         mvi.updateState { it.copy(posts = it.posts.filter { post -> post.id != id }) }
     }
 
-    private fun changeSection(section: ProfileSavedSection) {
+    private fun changeSection(section: SavedItemsSection) {
         currentPage = 1
         mvi.updateState {
             it.copy(

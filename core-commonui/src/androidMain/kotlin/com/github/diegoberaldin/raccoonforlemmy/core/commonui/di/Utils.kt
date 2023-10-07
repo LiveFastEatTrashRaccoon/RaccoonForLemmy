@@ -11,6 +11,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -105,6 +106,13 @@ actual fun getInboxChatViewModel(otherUserId: Int): InboxChatViewModel {
         parameters = {
             parametersOf(otherUserId)
         },
+    )
+    return res
+}
+
+actual fun getSavedItemsViewModel(): SavedItemsViewModel {
+    val res: SavedItemsViewModel by inject(
+        clazz = SavedItemsViewModel::class.java,
     )
     return res
 }

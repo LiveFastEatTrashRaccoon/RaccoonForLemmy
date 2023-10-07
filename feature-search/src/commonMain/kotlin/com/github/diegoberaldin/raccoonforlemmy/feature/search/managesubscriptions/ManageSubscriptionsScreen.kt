@@ -70,7 +70,8 @@ class ManageSubscriptionsScreen : Screen {
                 TopAppBar(
                     title = {
                         Text(
-                            text = stringResource(MR.strings.explore_title_manage_subscriptions),
+                            modifier = Modifier.padding(horizontal = Spacing.s),
+                            text = stringResource(MR.strings.navigation_drawer_title_subscriptions),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },

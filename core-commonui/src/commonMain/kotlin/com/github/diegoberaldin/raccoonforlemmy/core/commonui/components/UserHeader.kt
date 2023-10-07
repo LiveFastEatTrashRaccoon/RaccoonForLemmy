@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Padding
 import androidx.compose.material.icons.filled.Reply
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +48,6 @@ import dev.icerock.moko.resources.compose.stringResource
 @Composable
 fun UserHeader(
     user: UserModel,
-    onOpenBookmarks: (() -> Unit)? = null,
     options: List<String> = emptyList(),
     onOptionSelected: ((Int) -> Unit)? = null,
 ) {
@@ -107,17 +105,6 @@ fun UserHeader(
                         )
                     }
                 }
-            }
-
-            // open bookmarks button
-            if (onOpenBookmarks != null) {
-                Icon(
-                    modifier = Modifier.onClick {
-                        onOpenBookmarks.invoke()
-                    },
-                    imageVector = Icons.Outlined.Bookmarks,
-                    contentDescription = null,
-                )
             }
         }
 

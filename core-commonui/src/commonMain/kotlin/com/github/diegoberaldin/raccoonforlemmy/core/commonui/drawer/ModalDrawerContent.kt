@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -236,10 +237,20 @@ object ModalDrawerContent : Tab {
                         verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
                         if (user != null) {
+                            val additionalIconSize = 18.dp
                             item {
                                 Row(
                                     modifier = Modifier.fillMaxWidth()
-                                        .padding(horizontal = Spacing.s),
+                                        .padding(
+                                            horizontal = Spacing.s,
+                                            vertical = Spacing.xs,
+                                        )
+                                        .onClick {
+                                            scope.launch {
+                                                coordinator.toggleDrawer()
+                                                coordinator.sendEvent(DrawerEvent.ManageSubscriptions)
+                                            }
+                                        },
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Text(
@@ -248,14 +259,38 @@ object ModalDrawerContent : Tab {
                                         color = MaterialTheme.colorScheme.onBackground,
                                     )
                                     Spacer(modifier = Modifier.weight(1f))
-                                    androidx.compose.material.Icon(
-                                        modifier = Modifier.onClick {
+                                    Icon(
+                                        modifier = Modifier.size(additionalIconSize),
+                                        imageVector = Icons.Default.ManageAccounts,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onBackground,
+                                    )
+                                }
+                            }
+                            item {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth()
+                                        .padding(
+                                            horizontal = Spacing.s,
+                                            vertical = Spacing.xs,
+                                        )
+                                        .onClick {
                                             scope.launch {
                                                 coordinator.toggleDrawer()
-                                                coordinator.sendEvent(DrawerEvent.ManageSubscriptions)
+                                                coordinator.sendEvent(DrawerEvent.OpenBookmarks)
                                             }
                                         },
-                                        imageVector = Icons.Default.ManageAccounts,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        text = stringResource(MR.strings.navigation_drawer_title_bookmarks),
+                                        style = MaterialTheme.typography.titleLarge,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                    )
+                                    Spacer(modifier = Modifier.weight(1f))
+                                    Icon(
+                                        modifier = Modifier.size(additionalIconSize),
+                                        imageVector = Icons.Default.Bookmarks,
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.onBackground,
                                     )

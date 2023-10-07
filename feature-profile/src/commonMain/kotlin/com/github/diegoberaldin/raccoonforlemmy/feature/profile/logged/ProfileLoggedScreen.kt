@@ -50,7 +50,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotific
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileLoggedViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.saved.ProfileSavedScreen
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -95,14 +94,7 @@ internal object ProfileLoggedScreen : Tab {
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                             ) {
-                                UserHeader(
-                                    user = user,
-                                    onOpenBookmarks = {
-                                        navigator?.push(
-                                            ProfileSavedScreen(user = user),
-                                        )
-                                    },
-                                )
+                                UserHeader(user = user)
                                 SectionSelector(
                                     titles = listOf(
                                         stringResource(MR.strings.profile_section_posts),
