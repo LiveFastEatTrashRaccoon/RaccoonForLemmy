@@ -225,13 +225,13 @@ class PostDetailViewModel(
             val auth = identityRepository.authToken.value
             val refreshing = currentState.refreshing
             val sort = currentState.sortType
-            val commentList = commentRepository.getAll(
+            val itemList = commentRepository.getAll(
                 auth = auth,
                 postId = post.id,
                 page = currentPage,
                 sort = sort,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
-            ).let {
+            )?.let {
                 processCommentsToGetNestedOrder(
                     items = it,
                 )
@@ -239,24 +239,25 @@ class PostDetailViewModel(
                 if (refreshing) {
                     it
                 } else {
-                    it.filter { c1 ->
+                    it?.filter { c1 ->
                         // prevents accidental duplication
                         currentState.comments.none { c2 -> c1.id == c2.id }
                     }
                 }
             }
-            currentPage++
-            val canFetchMore = commentList.size >= CommentRepository.DEFAULT_PAGE_SIZE
+            if (!itemList.isNullOrEmpty()) {
+                currentPage++
+            }
             mvi.updateState {
                 val newcomments = if (refreshing) {
-                    commentList
+                    itemList.orEmpty()
                 } else {
-                    it.comments + commentList
+                    it.comments + itemList.orEmpty()
                 }
                 it.copy(
                     comments = newcomments,
                     loading = false,
-                    canFetchMore = canFetchMore,
+                    canFetchMore = itemList?.isEmpty() != true,
                     refreshing = false,
                     initial = false,
                 )
@@ -288,7 +289,7 @@ class PostDetailViewModel(
                 parentId = parentId,
                 sort = sort,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
-            ).let {
+            )?.let {
                 processCommentsToGetNestedOrder(
                     items = it,
                     ancestorId = parentId.toString(),
@@ -297,7 +298,7 @@ class PostDetailViewModel(
             val newList = uiState.value.comments.let { list ->
                 val index = list.indexOfFirst { c -> c.id == parentId }
                 list.toMutableList().apply {
-                    addAll(index + 1, fetchResult)
+                    addAll(index + 1, fetchResult.orEmpty())
                 }.toList()
             }
             mvi.updateState { it.copy(comments = newList) }

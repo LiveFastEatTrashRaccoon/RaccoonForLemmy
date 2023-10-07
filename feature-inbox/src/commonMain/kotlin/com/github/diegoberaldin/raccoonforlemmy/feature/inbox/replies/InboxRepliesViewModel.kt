@@ -142,23 +142,22 @@ class InboxRepliesViewModel(
                 page = currentPage,
                 unreadOnly = unreadOnly,
                 sort = SortType.New,
-            ).map {
+            )?.map {
                 val isOwnPost = it.post.creator?.id == currentUserId
                 it.copy(isOwnPost = isOwnPost)
             }
 
             currentPage++
-            val canFetchMore = itemList.size >= CommentRepository.DEFAULT_PAGE_SIZE
             mvi.updateState {
                 val newItems = if (refreshing) {
-                    itemList
+                    itemList.orEmpty()
                 } else {
-                    it.replies + itemList
+                    it.replies + itemList.orEmpty()
                 }
                 it.copy(
                     replies = newItems,
                     loading = false,
-                    canFetchMore = canFetchMore,
+                    canFetchMore = itemList?.isEmpty() != true,
                     refreshing = false,
                     initial = false,
                 )
@@ -285,9 +284,9 @@ class InboxRepliesViewModel(
         val auth = identityRepository.authToken.value
         val unreadCount = if (!auth.isNullOrEmpty()) {
             val mentionCount =
-                userRepository.getMentions(auth, page = 1, limit = 50).count()
+                userRepository.getMentions(auth, page = 1, limit = 50).orEmpty().count()
             val replyCount =
-                userRepository.getReplies(auth, page = 1, limit = 50).count()
+                userRepository.getReplies(auth, page = 1, limit = 50).orEmpty().count()
             mentionCount + replyCount
         } else {
             0

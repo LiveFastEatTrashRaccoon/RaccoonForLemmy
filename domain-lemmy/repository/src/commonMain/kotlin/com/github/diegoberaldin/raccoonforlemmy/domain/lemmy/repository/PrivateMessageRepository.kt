@@ -14,7 +14,7 @@ class PrivateMessageRepository(
         page: Int,
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         unreadOnly: Boolean = true,
-    ): List<PrivateMessageModel> = runCatching {
+    ): List<PrivateMessageModel>? = runCatching {
         val response = serviceProvider.privateMessages.getPrivateMessages(
             auth = auth,
             limit = limit,
@@ -23,7 +23,7 @@ class PrivateMessageRepository(
         )
         val dto = response.body() ?: return@runCatching emptyList()
         dto.privateMessages.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun create(
         message: String,

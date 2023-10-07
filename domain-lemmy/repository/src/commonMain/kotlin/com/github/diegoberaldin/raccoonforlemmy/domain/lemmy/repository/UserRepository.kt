@@ -69,7 +69,7 @@ class UserRepository(
         page: Int,
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
-    ): List<PostModel> = runCatching {
+    ): List<PostModel>? = runCatching {
         val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
@@ -79,7 +79,7 @@ class UserRepository(
         )
         val dto = response.body() ?: return@runCatching emptyList()
         dto.posts.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun getSavedPosts(
         id: Int,
@@ -87,7 +87,7 @@ class UserRepository(
         page: Int,
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
-    ): List<PostModel> = runCatching {
+    ): List<PostModel>? = runCatching {
         val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
@@ -98,7 +98,7 @@ class UserRepository(
         )
         val dto = response.body() ?: return@runCatching emptyList()
         dto.posts.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun getComments(
         id: Int,
@@ -106,7 +106,7 @@ class UserRepository(
         page: Int,
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
-    ): List<CommentModel> = runCatching {
+    ): List<CommentModel>? = runCatching {
         val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
@@ -116,7 +116,7 @@ class UserRepository(
         )
         val dto = response.body() ?: return@runCatching emptyList()
         dto.comments.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun getSavedComments(
         id: Int,
@@ -124,7 +124,7 @@ class UserRepository(
         page: Int,
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
-    ): List<CommentModel> = runCatching {
+    ): List<CommentModel>? = runCatching {
         val response = serviceProvider.user.getDetails(
             auth = auth,
             personId = id,
@@ -135,7 +135,7 @@ class UserRepository(
         )
         val dto = response.body() ?: return@runCatching emptyList()
         dto.comments.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun getMentions(
         auth: String? = null,
@@ -143,7 +143,7 @@ class UserRepository(
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.New,
         unreadOnly: Boolean = true,
-    ): List<PersonMentionModel> = runCatching {
+    ): List<PersonMentionModel>? = runCatching {
         val response = serviceProvider.user.getMentions(
             auth = auth,
             limit = limit,
@@ -153,7 +153,7 @@ class UserRepository(
         )
         val dto = response.body() ?: return@runCatching emptyList()
         dto.mentions.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun getReplies(
         auth: String? = null,
@@ -161,7 +161,7 @@ class UserRepository(
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.New,
         unreadOnly: Boolean = true,
-    ): List<PersonMentionModel> = runCatching {
+    ): List<PersonMentionModel>? = runCatching {
         val response = serviceProvider.user.getReplies(
             auth = auth,
             limit = limit,
@@ -171,7 +171,7 @@ class UserRepository(
         )
         val dto = response.body() ?: return@runCatching emptyList()
         dto.replies.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun readAll(
         auth: String? = null,

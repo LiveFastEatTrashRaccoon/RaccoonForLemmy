@@ -199,7 +199,7 @@ class ExploreViewModel(
         val sortType = currentState.sortType
         val resultType = currentState.resultType
         val settings = settingsRepository.currentSettings.value
-        val items = communityRepository.getAll(
+        val itemList = communityRepository.getAll(
             query = searchText,
             auth = auth,
             resultType = resultType,
@@ -208,12 +208,11 @@ class ExploreViewModel(
             sortType = sortType,
         )
         currentPage++
-        val canFetchMore = items.size >= PostRepository.DEFAULT_PAGE_SIZE
         mvi.updateState {
             val newItems = if (refreshing) {
-                items
+                itemList.orEmpty()
             } else {
-                it.results + items
+                it.results + itemList.orEmpty()
             }.filter { community ->
                 if (settings.includeNsfw) {
                     true
@@ -224,7 +223,7 @@ class ExploreViewModel(
             it.copy(
                 results = newItems,
                 loading = false,
-                canFetchMore = canFetchMore,
+                canFetchMore = itemList?.isEmpty() != true,
                 refreshing = false,
             )
         }

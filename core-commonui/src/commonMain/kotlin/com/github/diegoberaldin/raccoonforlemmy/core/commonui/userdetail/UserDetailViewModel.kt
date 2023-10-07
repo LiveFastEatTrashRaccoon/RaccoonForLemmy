@@ -186,7 +186,7 @@ class UserDetailViewModel(
             val section = currentState.section
             val userId = currentState.user.id
             if (section == UserDetailSection.Posts) {
-                val postList = userRepository.getPosts(
+                val itemList = userRepository.getPosts(
                     auth = auth,
                     id = userId,
                     page = currentPage,
@@ -200,44 +200,42 @@ class UserDetailViewModel(
                         id = userId,
                         page = currentPage,
                         sort = currentState.sortType,
-                    )
+                    ).orEmpty()
                 } else {
                     currentState.comments
                 }
-                val canFetchMore = postList.size >= PostRepository.DEFAULT_PAGE_SIZE
                 mvi.updateState {
                     val newPosts = if (refreshing) {
-                        postList
+                        itemList.orEmpty()
                     } else {
-                        it.posts + postList
+                        it.posts + itemList.orEmpty()
                     }
                     it.copy(
                         posts = newPosts,
                         comments = comments,
                         loading = false,
-                        canFetchMore = canFetchMore,
+                        canFetchMore = itemList?.isEmpty() != true,
                         refreshing = false,
                     )
                 }
             } else {
-                val commentList = userRepository.getComments(
+                val itemList = userRepository.getComments(
                     auth = auth,
                     id = userId,
                     page = currentPage,
                     sort = currentState.sortType,
                 )
 
-                val canFetchMore = commentList.size >= PostRepository.DEFAULT_PAGE_SIZE
                 mvi.updateState {
                     val newcomments = if (refreshing) {
-                        commentList
+                        itemList.orEmpty()
                     } else {
-                        it.comments + commentList
+                        it.comments + itemList.orEmpty()
                     }
                     it.copy(
                         comments = newcomments,
                         loading = false,
-                        canFetchMore = canFetchMore,
+                        canFetchMore = itemList?.isEmpty() != true,
                         refreshing = false,
                     )
                 }

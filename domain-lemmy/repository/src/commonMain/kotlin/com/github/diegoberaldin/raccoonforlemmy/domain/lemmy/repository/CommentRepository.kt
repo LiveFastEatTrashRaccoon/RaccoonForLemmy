@@ -29,7 +29,7 @@ class CommentRepository(
         type: ListingType = ListingType.All,
         sort: SortType = SortType.New,
         maxDepth: Int = 1,
-    ): List<CommentModel> = runCatching {
+    ): List<CommentModel>? = runCatching {
         val response = services.comment.getAll(
             auth = auth,
             postId = postId,
@@ -41,7 +41,7 @@ class CommentRepository(
         )
         val dto = response.body()?.comments ?: emptyList()
         dto.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun getBy(id: Int, auth: String?): CommentModel? = runCatching {
         services.comment.getBy(id, auth).body()?.commentView?.toModel()
@@ -54,7 +54,7 @@ class CommentRepository(
         type: ListingType = ListingType.All,
         sort: SortType = SortType.New,
         maxDepth: Int = 1,
-    ): List<CommentModel> = runCatching {
+    ): List<CommentModel>? = runCatching {
         val response = services.comment.getAll(
             auth = auth,
             parentId = parentId,
@@ -65,7 +65,7 @@ class CommentRepository(
         )
         val dto = response.body()?.comments ?: emptyList()
         dto.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     fun asUpVoted(comment: CommentModel, voted: Boolean) = comment.copy(
         myVote = if (voted) 1 else 0,

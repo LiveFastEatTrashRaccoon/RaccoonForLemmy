@@ -32,7 +32,7 @@ class PostRepository(
         type: ListingType = ListingType.Local,
         sort: SortType = SortType.Active,
         communityId: Int? = null,
-    ): List<PostModel> = runCatching {
+    ): List<PostModel>? = runCatching {
         val response = services.post.getAll(
             auth = auth,
             communityId = communityId,
@@ -43,7 +43,7 @@ class PostRepository(
         )
         val dto = response.body()?.posts ?: emptyList()
         dto.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun getAllInInstance(
         instance: String,
@@ -52,7 +52,7 @@ class PostRepository(
         type: ListingType = ListingType.Local,
         sort: SortType = SortType.Active,
         communityId: Int? = null,
-    ): List<PostModel> = runCatching {
+    ): List<PostModel>? = runCatching {
         customServices.changeInstance(instance)
         val response = customServices.post.getAll(
             communityId = communityId,
@@ -63,7 +63,7 @@ class PostRepository(
         )
         val dto = response.body()?.posts ?: emptyList()
         dto.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun get(id: Int, auth: String? = null): PostModel? = runCatching {
         val dto = services.post.get(auth, id).body()?.postView

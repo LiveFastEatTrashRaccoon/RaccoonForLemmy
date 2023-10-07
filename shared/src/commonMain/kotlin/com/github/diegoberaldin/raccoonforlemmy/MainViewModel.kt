@@ -28,9 +28,9 @@ class MainViewModel(
                     val unreadCount = if (logged == true) {
                         val auth = identityRepository.authToken.value
                         val mentionCount =
-                            userRepository.getMentions(auth, page = 1, limit = 50).count()
+                            userRepository.getMentions(auth, page = 1, limit = 50).orEmpty().count()
                         val replyCount =
-                            userRepository.getReplies(auth, page = 1, limit = 50).count()
+                            userRepository.getReplies(auth, page = 1, limit = 50).orEmpty().count()
                         mentionCount + replyCount
                     } else {
                         0

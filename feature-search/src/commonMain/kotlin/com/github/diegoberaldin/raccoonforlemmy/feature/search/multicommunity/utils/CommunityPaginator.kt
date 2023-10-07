@@ -30,7 +30,7 @@ internal class CommunityPaginator(
             sort = sort,
             communityId = communityId,
         )
-        canFetchMore = result.size >= PostRepository.DEFAULT_PAGE_SIZE
-        return result
+        canFetchMore = result?.isEmpty() != true
+        return result.orEmpty()
     }
 }

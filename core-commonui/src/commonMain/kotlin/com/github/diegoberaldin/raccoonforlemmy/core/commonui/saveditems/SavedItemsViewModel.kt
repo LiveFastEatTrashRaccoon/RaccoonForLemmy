@@ -134,49 +134,52 @@ class SavedItemsViewModel(
             val section = currentState.section
             val sortType = currentState.sortType
             if (section == SavedItemsSection.Posts) {
-                val postList = userRepository.getSavedPosts(
+                val itemList = userRepository.getSavedPosts(
                     auth = auth,
                     id = user.id,
                     page = currentPage,
                     sort = sortType,
                 )
-                val canFetchMore = postList.size >= PostRepository.DEFAULT_PAGE_SIZE
+                if (!itemList.isNullOrEmpty()) {
+                    currentPage++
+                }
                 mvi.updateState {
                     val newPosts = if (refreshing) {
-                        postList
+                        itemList.orEmpty()
                     } else {
-                        it.posts + postList
+                        it.posts + itemList.orEmpty()
                     }
                     it.copy(
                         posts = newPosts,
                         loading = false,
-                        canFetchMore = canFetchMore,
+                        canFetchMore = itemList?.isEmpty() != true,
                         refreshing = false,
                     )
                 }
             } else {
-                val commentList = userRepository.getSavedComments(
+                val itemList = userRepository.getSavedComments(
                     auth = auth,
                     id = user.id,
                     page = currentPage,
                     sort = sortType,
                 )
-                val canFetchMore = commentList.size >= PostRepository.DEFAULT_PAGE_SIZE
+                if (!itemList.isNullOrEmpty()) {
+                    currentPage++
+                }
                 mvi.updateState {
                     val newComments = if (refreshing) {
-                        commentList
+                        itemList.orEmpty()
                     } else {
-                        it.comments + commentList
+                        it.comments + itemList.orEmpty()
                     }
                     it.copy(
                         comments = newComments,
                         loading = false,
-                        canFetchMore = canFetchMore,
+                        canFetchMore = itemList?.isEmpty() != true,
                         refreshing = false,
                     )
                 }
             }
-            currentPage++
         }
     }
 

@@ -6,7 +6,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
@@ -103,26 +102,27 @@ class InboxMessagesViewModel(
                 auth = auth,
                 page = currentPage,
                 unreadOnly = unreadOnly,
-            ).groupBy {
+            )?.groupBy {
                 val creatorId = it.creator?.id ?: 0
                 val recipientId = it.recipient?.id ?: 0
                 listOf(creatorId, recipientId).sorted().toString()
-            }.mapNotNull {
+            }?.mapNotNull {
                 val messages = it.value.sortedBy { m -> m.publishDate }
                 messages.lastOrNull()
             }
-            currentPage++
-            val canFetchMore = itemList.size >= CommentRepository.DEFAULT_PAGE_SIZE
+            if (!itemList.isNullOrEmpty()) {
+                currentPage++
+            }
             mvi.updateState {
                 val newItems = if (refreshing) {
-                    itemList
+                    itemList.orEmpty()
                 } else {
-                    it.chats + itemList
+                    it.chats + itemList.orEmpty()
                 }
                 it.copy(
                     chats = newItems,
                     loading = false,
-                    canFetchMore = canFetchMore,
+                    canFetchMore = itemList?.isEmpty() != true,
                     refreshing = false,
                     initial = false,
                 )
@@ -135,9 +135,9 @@ class InboxMessagesViewModel(
             val auth = identityRepository.authToken.value
             val unreadCount = if (!auth.isNullOrEmpty()) {
                 val mentionCount =
-                    userRepository.getMentions(auth, page = 1, limit = 50).count()
+                    userRepository.getMentions(auth, page = 1, limit = 50).orEmpty().count()
                 val replyCount =
-                    userRepository.getReplies(auth, page = 1, limit = 50).count()
+                    userRepository.getReplies(auth, page = 1, limit = 50).orEmpty().count()
                 mentionCount + replyCount
             } else {
                 0

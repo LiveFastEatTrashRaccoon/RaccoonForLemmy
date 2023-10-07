@@ -160,12 +160,12 @@ class PostListViewModel(
             val sort = currentState.sortType ?: SortType.Active
             val refreshing = currentState.refreshing
             val includeNsfw = settingsRepository.currentSettings.value.includeNsfw
-            val postList = postRepository.getAll(
+            val itemList = postRepository.getAll(
                 auth = auth,
                 page = currentPage,
                 type = type,
                 sort = sort,
-            ).let {
+            )?.let {
                 if (refreshing) {
                     it
                 } else {
@@ -175,13 +175,14 @@ class PostListViewModel(
                     }
                 }
             }
-            currentPage++
-            val canFetchMore = postList.size >= PostRepository.DEFAULT_PAGE_SIZE
+            if (!itemList.isNullOrEmpty()) {
+                currentPage++
+            }
             mvi.updateState {
                 val newPosts = if (refreshing) {
-                    postList
+                    itemList.orEmpty()
                 } else {
-                    it.posts + postList
+                    it.posts + itemList.orEmpty()
                 }.filter { post ->
                     if (includeNsfw) {
                         true
@@ -192,7 +193,7 @@ class PostListViewModel(
                 it.copy(
                     posts = newPosts,
                     loading = false,
-                    canFetchMore = canFetchMore,
+                    canFetchMore = itemList?.isEmpty() != true,
                     refreshing = false,
                 )
             }

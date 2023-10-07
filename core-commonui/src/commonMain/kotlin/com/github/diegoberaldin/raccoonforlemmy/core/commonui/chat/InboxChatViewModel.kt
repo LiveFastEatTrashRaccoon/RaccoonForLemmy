@@ -6,7 +6,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
@@ -93,28 +92,29 @@ class InboxChatViewModel(
                 auth = auth,
                 page = currentPage,
                 unreadOnly = false,
-            ).filter {
+            )?.filter {
                 it.creator?.id == otherUserId || it.recipient?.id == otherUserId
-            }.onEach {
+            }?.onEach {
                 if (!it.read) {
                     launch {
                         markAsRead(true, it.id)
                     }
                 }
             }
-            currentPage++
-            val canFetchMore = itemList.size >= CommentRepository.DEFAULT_PAGE_SIZE
+            if (!itemList.isNullOrEmpty()) {
+                currentPage++
+            }
 
             mvi.updateState {
                 val newItems = if (refreshing) {
-                    itemList
+                    itemList.orEmpty()
                 } else {
-                    it.messages + itemList
+                    it.messages + itemList.orEmpty()
                 }
                 it.copy(
                     messages = newItems,
                     loading = false,
-                    canFetchMore = canFetchMore,
+                    canFetchMore = itemList?.isEmpty() != true,
                     refreshing = false,
                 )
             }

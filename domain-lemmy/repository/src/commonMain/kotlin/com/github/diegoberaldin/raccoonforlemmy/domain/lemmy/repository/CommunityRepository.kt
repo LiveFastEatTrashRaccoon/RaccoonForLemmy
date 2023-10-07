@@ -29,7 +29,7 @@ class CommunityRepository(
         listingType: ListingType = ListingType.All,
         sortType: SortType = SortType.Active,
         resultType: SearchResultType = SearchResultType.All,
-    ): List<Any> = runCatching {
+    ): List<Any>? = runCatching {
         val response = services.search.search(
             q = query,
             auth = auth,
@@ -47,7 +47,7 @@ class CommunityRepository(
 
         // returns everything
         posts + comments + communities + users
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun getAllInInstance(
         instance: String = "",
@@ -55,7 +55,7 @@ class CommunityRepository(
         page: Int,
         limit: Int = DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.Active,
-    ): List<CommunityModel> = runCatching {
+    ): List<CommunityModel>? = runCatching {
         customServices.changeInstance(instance)
         val response = customServices.community.getAll(
             auth = auth,
@@ -66,7 +66,7 @@ class CommunityRepository(
         response?.communities?.map {
             it.toModel()
         }.orEmpty()
-    }.getOrElse { emptyList() }
+    }.getOrNull()
 
     suspend fun getSubscribed(
         auth: String? = null,

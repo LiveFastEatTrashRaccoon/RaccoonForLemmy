@@ -13,7 +13,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.shareUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
@@ -168,18 +167,19 @@ class CommunityDetailViewModel(
                     sort = sort,
                 )
             }
-            currentPage++
-            val canFetchMore = itemList.size >= CommentRepository.DEFAULT_PAGE_SIZE
+            if (!itemList.isNullOrEmpty()) {
+                currentPage++
+            }
             mvi.updateState {
                 val newItems = if (refreshing) {
-                    itemList
+                    itemList.orEmpty()
                 } else {
-                    it.posts + itemList
+                    it.posts + itemList.orEmpty()
                 }
                 it.copy(
                     posts = newItems,
                     loading = false,
-                    canFetchMore = canFetchMore,
+                    canFetchMore = itemList?.isEmpty() != true,
                     refreshing = false,
                 )
             }

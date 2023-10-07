@@ -98,13 +98,11 @@ class ModalDrawerViewModel(
 
         mvi.scope?.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(changeInstanceloading = true) }
-            val res = runCatching {
-                communityRepository.getAllInInstance(
-                    instance = instanceName,
-                    page = 1,
-                    limit = 1
-                )
-            }.getOrElse { emptyList() }
+            val res = communityRepository.getAllInInstance(
+                instance = instanceName,
+                page = 1,
+                limit = 1
+            ) ?: emptyList()
             if (res.isEmpty()) {
                 mvi.updateState {
                     it.copy(

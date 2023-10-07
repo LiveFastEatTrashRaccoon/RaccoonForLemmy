@@ -4,7 +4,6 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
@@ -72,18 +71,19 @@ class InstanceInfoViewModel(
                 page = currentPage,
                 limit = 50,
             )
-            currentPage++
-            val canFetchMore = itemList.size >= CommentRepository.DEFAULT_PAGE_SIZE
+            if (!itemList.isNullOrEmpty()) {
+                currentPage++
+            }
             mvi.updateState {
                 val newItems = if (refreshing) {
-                    itemList.filter { e -> e.instanceUrl == url }
+                    itemList?.filter { e -> e.instanceUrl == url }.orEmpty()
                 } else {
-                    it.communities + itemList.filter { e -> e.instanceUrl == url }
+                    it.communities + itemList?.filter { e -> e.instanceUrl == url }.orEmpty()
                 }
                 it.copy(
                     communities = newItems,
                     loading = false,
-                    canFetchMore = canFetchMore,
+                    canFetchMore = itemList?.isEmpty() != true,
                     refreshing = false,
                 )
             }
