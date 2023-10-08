@@ -125,3 +125,12 @@ about experimenting and learning.
 
 - get it on [Obtanium](https://github.com/ImranR98/Obtainium/releases) by simply adding this
   repo `https://github.com/diegoberaldin/RaccoonForLemmy`
+
+## Want to leave your feedback or report a bug?
+
+- open an issue on this
+  project's [issue tracker](https://github.com/diegoberaldin/RaccoonForLemmy/issues) to report bugs
+  or request new features
+- create a post on the project's on [community](https://lemmy.world/c/raccoonforlemmy) on
+  Lemmy.world for broader questions, opinions, personal feedback, suggestions, insults or whatever
+  you feel like writing
