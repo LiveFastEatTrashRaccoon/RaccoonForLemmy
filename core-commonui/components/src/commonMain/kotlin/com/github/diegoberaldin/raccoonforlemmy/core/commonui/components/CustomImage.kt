@@ -14,6 +14,7 @@ expect fun CustomImage(
     modifier: Modifier = Modifier,
     url: String,
     autoload: Boolean = true,
+    loadButtonContent: @Composable (() -> Unit)? = null,
     contentDescription: String? = null,
     quality: FilterQuality = FilterQuality.Medium,
     contentScale: ContentScale = ContentScale.Fit,

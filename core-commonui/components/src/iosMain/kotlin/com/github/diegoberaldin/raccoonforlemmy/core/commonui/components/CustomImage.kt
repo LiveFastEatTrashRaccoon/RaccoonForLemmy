@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import io.kamel.image.KamelImage
@@ -25,6 +26,7 @@ actual fun CustomImage(
     modifier: Modifier,
     url: String,
     autoload: Boolean,
+    loadButtonContent: @Composable (() -> Unit)?,
     contentDescription: String?,
     quality: FilterQuality,
     contentScale: ContentScale,
@@ -63,7 +65,15 @@ actual fun CustomImage(
                     shouldBeRendered = true
                 },
             ) {
-                Text(text = stringResource(MR.strings.button_load))
+                if (loadButtonContent != null) {
+                    loadButtonContent?.invoke()
+                } else {
+                    Text(
+                        text = stringResource(MR.strings.button_load),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
     }

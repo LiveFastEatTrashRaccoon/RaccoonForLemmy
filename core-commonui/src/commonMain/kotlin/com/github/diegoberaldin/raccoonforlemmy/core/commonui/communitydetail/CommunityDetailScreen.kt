@@ -296,6 +296,9 @@ class CommunityDetailScreen(
                                 },
                             )
                         }
+                        item {
+                            Spacer(modifier = Modifier.height(Spacing.m))
+                        }
                         if (uiState.posts.isEmpty() && uiState.loading) {
                             items(5) {
                                 PostCardPlaceholder(

@@ -1,8 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -23,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomImage
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.DateTime
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -71,26 +70,15 @@ internal fun ChatCard(
                 contentScale = ContentScale.FillBounds,
             )
         } else {
-            Box(
-                modifier = Modifier
-                    .padding(Spacing.xxxs)
-                    .size(iconSize)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(iconSize / 2),
-                    ).onClick {
-                        if (user != null) {
-                            onOpenUser?.invoke(user)
-                        }
-                    },
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = creatorName.firstOrNull()?.toString().orEmpty().uppercase(),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
+            PlaceholderImage(
+                modifier = Modifier.onClick {
+                    if (user != null) {
+                        onOpenUser?.invoke(user)
+                    }
+                },
+                size = iconSize,
+                title = creatorName,
+            )
         }
 
         Column(

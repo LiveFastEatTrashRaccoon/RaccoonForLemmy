@@ -64,6 +64,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.MultiCommunityItem
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getModalDrawerViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
@@ -255,19 +256,10 @@ private fun DrawerHeader(
                     contentScale = ContentScale.FillBounds,
                 )
             } else {
-                Box(
-                    modifier = Modifier.padding(Spacing.xxxs).size(avatarSize).background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(avatarSize / 2),
-                    ),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = user.name.firstOrNull()?.toString().orEmpty().uppercase(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                }
+                PlaceholderImage(
+                    size = avatarSize,
+                    title = user.name,
+                )
             }
 
             Column(
@@ -298,19 +290,10 @@ private fun DrawerHeader(
             }
         } else {
             val anonymousTitle = stringResource(MR.strings.navigation_drawer_anonymous)
-            Box(
-                modifier = Modifier.padding(Spacing.xxxs).size(avatarSize).background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(avatarSize / 2),
-                ),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = anonymousTitle.firstOrNull()?.toString().orEmpty().uppercase(),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
+            PlaceholderImage(
+                size = avatarSize,
+                title = anonymousTitle,
+            )
             Column(
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
             ) {

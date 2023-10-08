@@ -24,7 +24,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 fun CommunityAndCreatorInfo(
     modifier: Modifier = Modifier,
     autoLoadImages: Boolean = true,
-    small: Boolean = false,
     community: CommunityModel? = null,
     creator: UserModel? = null,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
@@ -36,45 +35,69 @@ fun CommunityAndCreatorInfo(
     val creatorName = creator?.name.orEmpty()
     val creatorAvatar = creator?.avatar.orEmpty()
     val creatorHost = creator?.host.orEmpty()
-    val iconSize = if (small) 20.dp else 32.dp
+    val iconSize = 32.dp
 
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s)
     ) {
-        if (communityIcon.isNotEmpty() && autoLoadImages) {
-            CustomImage(
-                modifier = Modifier
-                    .onClick {
+        if (communityIcon.isNotEmpty()) {
+            if (autoLoadImages) {
+                CustomImage(
+                    modifier = Modifier
+                        .onClick {
+                            if (community != null) {
+                                onOpenCommunity?.invoke(community)
+                            }
+                        }
+                        .padding(Spacing.xxxs)
+                        .size(iconSize)
+                        .clip(RoundedCornerShape(iconSize / 2)),
+                    url = communityIcon,
+                    quality = FilterQuality.Low,
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                )
+            } else {
+                PlaceholderImage(
+                    modifier = Modifier.onClick {
                         if (community != null) {
                             onOpenCommunity?.invoke(community)
                         }
-                    }
-                    .padding(Spacing.xxxs)
-                    .size(iconSize)
-                    .clip(RoundedCornerShape(iconSize / 2)),
-                url = communityIcon,
-                quality = FilterQuality.Low,
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-            )
-        } else if (creatorAvatar.isNotEmpty() && autoLoadImages) {
-            CustomImage(
-                modifier = Modifier
-                    .onClick {
+                    },
+                    size = 32.dp,
+                    title = communityName,
+                )
+            }
+        } else if (creatorAvatar.isNotEmpty()) {
+            if (autoLoadImages) {
+                CustomImage(
+                    modifier = Modifier
+                        .onClick {
+                            if (creator != null) {
+                                onOpenCreator?.invoke(creator)
+                            }
+                        }
+                        .padding(Spacing.xxxs)
+                        .size(iconSize)
+                        .clip(RoundedCornerShape(iconSize / 2)),
+                    url = creatorAvatar,
+                    quality = FilterQuality.Low,
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                )
+            } else {
+                PlaceholderImage(
+                    modifier = Modifier.onClick {
                         if (creator != null) {
                             onOpenCreator?.invoke(creator)
                         }
-                    }
-                    .padding(Spacing.xxxs)
-                    .size(iconSize)
-                    .clip(RoundedCornerShape(iconSize / 2)),
-                url = creatorAvatar,
-                quality = FilterQuality.Low,
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-            )
+                    },
+                    size = iconSize,
+                    title = creatorName,
+                )
+            }
         }
         Column(
             modifier = Modifier.padding(vertical = Spacing.xxxs),

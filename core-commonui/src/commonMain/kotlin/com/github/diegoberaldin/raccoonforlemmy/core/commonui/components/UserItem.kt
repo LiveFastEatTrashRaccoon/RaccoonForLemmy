@@ -1,8 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -47,20 +45,10 @@ fun UserItem(
                 contentScale = ContentScale.FillBounds,
             )
         } else {
-            Box(
-                modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(iconSize / 2),
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = name.firstOrNull()?.toString().orEmpty().uppercase(),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
+            PlaceholderImage(
+                size = iconSize,
+                title = name,
+            )
         }
 
         Text(

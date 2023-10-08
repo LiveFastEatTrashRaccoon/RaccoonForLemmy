@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
@@ -146,7 +149,6 @@ private fun CompactPost(
         verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
     ) {
         CommunityAndCreatorInfo(
-            small = true,
             community = post.community,
             creator = post.creator.takeIf { !hideAuthor },
             onOpenCommunity = onOpenCommunity,
@@ -163,6 +165,9 @@ private fun CompactPost(
                 maxHeight = Dp.Unspecified,
                 imageUrl = post.imageUrl,
                 autoLoadImages = autoLoadImages,
+                loadButtonContent = @Composable {
+                    Icon(imageVector = Icons.Default.Download, contentDescription = null)
+                },
                 blurred = blurNsfw && post.nsfw,
                 onImageClick = onImageClick,
             )

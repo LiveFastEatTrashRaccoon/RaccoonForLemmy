@@ -241,6 +241,7 @@ class UserDetailScreen(
                         ) {
                             UserHeader(
                                 user = uiState.user,
+                                autoLoadImages = uiState.autoLoadImages,
                                 options = listOf(stringResource(MR.strings.community_detail_block)),
                                 onOpenImage = { url ->
                                     navigator?.push(ZoomableImageScreen(url))

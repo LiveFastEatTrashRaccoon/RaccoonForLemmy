@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -133,24 +132,10 @@ fun UserHeader(
                     contentScale = ContentScale.FillBounds,
                 )
             } else {
-                Box(
-                    modifier = Modifier
-                        .padding(Spacing.xxxs)
-                        .size(avatarSize)
-                        .background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(avatarSize / 2),
-                        ),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = user.name.firstOrNull()?.toString()
-                            .orEmpty()
-                            .uppercase(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                }
+                PlaceholderImage(
+                    size = avatarSize,
+                    title = user.name,
+                )
             }
 
             // textual data

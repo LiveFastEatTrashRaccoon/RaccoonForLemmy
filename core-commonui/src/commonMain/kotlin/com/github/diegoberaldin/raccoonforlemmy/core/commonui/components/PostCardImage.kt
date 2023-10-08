@@ -26,6 +26,7 @@ fun PostCardImage(
     modifier: Modifier = Modifier,
     imageUrl: String,
     autoLoadImages: Boolean = true,
+    loadButtonContent: @Composable (() -> Unit)? = null,
     minHeight: Dp = 200.dp,
     maxHeight: Dp = Dp.Unspecified,
     blurred: Boolean = false,
@@ -41,6 +42,7 @@ fun PostCardImage(
                 },
             url = imageUrl,
             autoload = autoLoadImages,
+            loadButtonContent = loadButtonContent,
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
             onFailure = {

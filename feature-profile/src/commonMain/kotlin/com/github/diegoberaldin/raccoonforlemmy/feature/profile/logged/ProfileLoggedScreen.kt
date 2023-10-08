@@ -96,6 +96,7 @@ internal object ProfileLoggedScreen : Tab {
                             ) {
                                 UserHeader(
                                     user = user,
+                                    autoLoadImages = uiState.autoLoadImages,
                                     onOpenImage = { url ->
                                         navigator?.push(ZoomableImageScreen(url))
                                     },
