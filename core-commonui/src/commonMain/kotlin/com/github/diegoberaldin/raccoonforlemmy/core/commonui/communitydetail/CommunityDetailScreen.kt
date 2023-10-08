@@ -181,7 +181,7 @@ class CommunityDetailScreen(
                                 contentDescription = null,
                                 colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
                             )
-                            Spacer(Modifier.width(Spacing.s))
+                            Spacer(Modifier.width(Spacing.m))
                         }
 
                         // sort button

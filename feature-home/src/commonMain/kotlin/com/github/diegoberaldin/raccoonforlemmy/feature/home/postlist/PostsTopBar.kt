@@ -3,9 +3,10 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -94,36 +95,35 @@ internal fun PostsTopBar(
             }
         },
         actions = {
-            Row {
-                val additionalLabel = when (sortType) {
-                    SortType.Top.Day -> stringResource(MR.strings.home_sort_type_top_day_short)
-                    SortType.Top.Month -> stringResource(MR.strings.home_sort_type_top_month_short)
-                    SortType.Top.Past12Hours -> stringResource(MR.strings.home_sort_type_top_12_hours_short)
-                    SortType.Top.Past6Hours -> stringResource(MR.strings.home_sort_type_top_6_hours_short)
-                    SortType.Top.PastHour -> stringResource(MR.strings.home_sort_type_top_hour_short)
-                    SortType.Top.Week -> stringResource(MR.strings.home_sort_type_top_week_short)
-                    SortType.Top.Year -> stringResource(MR.strings.home_sort_type_top_year_short)
-                    else -> ""
-                }
-                if (additionalLabel.isNotEmpty()) {
-                    Text(
-                        text = buildString {
-                            append("(")
-                            append(additionalLabel)
-                            append(")")
-                        }
-                    )
-                }
-                if (sortType != null) {
-                    Image(
-                        modifier = Modifier.onClick {
-                            onSelectSortType?.invoke()
-                        },
-                        imageVector = sortType.toIcon(),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                    )
-                }
+            val additionalLabel = when (sortType) {
+                SortType.Top.Day -> stringResource(MR.strings.home_sort_type_top_day_short)
+                SortType.Top.Month -> stringResource(MR.strings.home_sort_type_top_month_short)
+                SortType.Top.Past12Hours -> stringResource(MR.strings.home_sort_type_top_12_hours_short)
+                SortType.Top.Past6Hours -> stringResource(MR.strings.home_sort_type_top_6_hours_short)
+                SortType.Top.PastHour -> stringResource(MR.strings.home_sort_type_top_hour_short)
+                SortType.Top.Week -> stringResource(MR.strings.home_sort_type_top_week_short)
+                SortType.Top.Year -> stringResource(MR.strings.home_sort_type_top_year_short)
+                else -> ""
+            }
+            if (additionalLabel.isNotEmpty()) {
+                Text(
+                    text = buildString {
+                        append("(")
+                        append(additionalLabel)
+                        append(")")
+                    }
+                )
+                Spacer(modifier = Modifier.width(Spacing.s))
+            }
+            if (sortType != null) {
+                Image(
+                    modifier = Modifier.onClick {
+                        onSelectSortType?.invoke()
+                    },
+                    imageVector = sortType.toIcon(),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                )
             }
         },
     )

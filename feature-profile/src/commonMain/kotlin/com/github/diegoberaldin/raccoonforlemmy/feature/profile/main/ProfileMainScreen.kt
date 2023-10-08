@@ -109,7 +109,7 @@ internal object ProfileMainScreen : Tab {
                                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                             )
 
-                            Spacer(modifier = Modifier.width(Spacing.s))
+                            Spacer(modifier = Modifier.width(Spacing.m))
 
                             Image(
                                 modifier = Modifier.onClick {

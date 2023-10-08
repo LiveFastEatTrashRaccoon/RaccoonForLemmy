@@ -107,7 +107,7 @@ internal fun ExploreTopBar(
                         append(")")
                     }
                 )
-                Spacer(modifier = Modifier.width(Spacing.xs))
+                Spacer(modifier = Modifier.width(Spacing.s))
             }
 
             Image(
