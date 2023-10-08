@@ -30,6 +30,7 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.androidx.activity)
+                implementation(libs.ktor.android)
             }
         }
         val commonMain by getting {

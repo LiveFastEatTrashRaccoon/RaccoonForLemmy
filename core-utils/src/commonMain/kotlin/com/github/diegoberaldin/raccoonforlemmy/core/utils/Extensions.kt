@@ -7,7 +7,6 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
 import io.ktor.client.request.prepareGet
 import io.ktor.http.contentLength
 import io.ktor.utils.io.ByteReadChannel
@@ -47,7 +46,8 @@ fun Int.getPrettyNumber(
 }
 
 suspend fun GalleryHelper.download(url: String): ByteArray = withContext(Dispatchers.IO) {
-    val client = HttpClient(CIO)
+    val factory = provideHttpClientEngineFactory()
+    val client = HttpClient(factory)
     client.prepareGet(url).execute { httpResponse ->
         val channel: ByteReadChannel = httpResponse.body()
         var result = byteArrayOf()

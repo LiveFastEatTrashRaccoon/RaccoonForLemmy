@@ -8,6 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.service.PrivateMessageS
 import com.github.diegoberaldin.raccoonforlemmy.core.api.service.SearchService
 import com.github.diegoberaldin.raccoonforlemmy.core.api.service.SiteService
 import com.github.diegoberaldin.raccoonforlemmy.core.api.service.UserService
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.provideHttpClientEngineFactory
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
@@ -53,7 +54,10 @@ internal class DefaultServiceProvider : ServiceProvider {
         private set
 
     private val baseUrl: String get() = "https://$currentInstance/api/$VERSION/"
-    private val client = HttpClient {
+
+    private val factory = provideHttpClientEngineFactory()
+
+    private val client = HttpClient(factory) {
         defaultRequest {
             url {
                 host = currentInstance
@@ -61,6 +65,8 @@ internal class DefaultServiceProvider : ServiceProvider {
         }
         install(HttpTimeout) {
             requestTimeoutMillis = 600_000
+            connectTimeoutMillis = 30_000
+            socketTimeoutMillis = 30_000
         }
         install(Logging) {
             logger = defaultLogger
