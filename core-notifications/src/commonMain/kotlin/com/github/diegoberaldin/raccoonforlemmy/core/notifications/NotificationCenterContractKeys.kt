@@ -2,7 +2,6 @@ package com.github.diegoberaldin.raccoonforlemmy.core.notifications
 
 object NotificationCenterContractKeys {
     const val ChangeSortType = "changeSortType"
-    const val ChangeCommentSortType = "changeCommentSortType"
     const val ChangeFeedType = "changeFeedType"
     const val ChangeInboxType = "changeInboxType"
     const val ChangeTheme = "changeTheme"

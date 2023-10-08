@@ -68,7 +68,7 @@ class PostDetailViewModel(
                 mvi.updateState {
                     it.copy(
                         swipeActionsEnabled = settings.enableSwipeActions,
-                        sortType = settings.defaultPostSortType.toSortType(),
+                        sortType = settings.defaultCommentSortType.toSortType(),
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
                         autoLoadImages = settings.autoLoadImages,
                     )

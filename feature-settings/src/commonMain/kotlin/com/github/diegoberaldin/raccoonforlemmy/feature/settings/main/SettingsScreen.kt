@@ -336,7 +336,7 @@ class SettingsScreen : Screen {
                                         )
                                     )
                                 }
-                            }, key, NotificationCenterContractKeys.ChangeCommentSortType)
+                            }, key, NotificationCenterContractKeys.ChangeSortType)
                             bottomSheetNavigator.show(sheet)
                         },
                     )
