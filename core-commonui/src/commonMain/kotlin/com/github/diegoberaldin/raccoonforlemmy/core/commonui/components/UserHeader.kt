@@ -50,6 +50,7 @@ fun UserHeader(
     user: UserModel,
     options: List<String> = emptyList(),
     onOptionSelected: ((Int) -> Unit)? = null,
+    onOpenImage: ((String) -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier.padding(Spacing.xs),
@@ -121,7 +122,10 @@ fun UserHeader(
                     modifier = Modifier
                         .padding(Spacing.xxxs)
                         .size(avatarSize)
-                        .clip(RoundedCornerShape(avatarSize / 2)),
+                        .clip(RoundedCornerShape(avatarSize / 2))
+                        .onClick {
+                            onOpenImage?.invoke(userAvatar)
+                        },
                     url = userAvatar,
                     quality = FilterQuality.Low,
                     contentDescription = null,

@@ -239,15 +239,20 @@ class UserDetailScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                         ) {
-                            UserHeader(user = uiState.user,
+                            UserHeader(
+                                user = uiState.user,
                                 options = listOf(stringResource(MR.strings.community_detail_block)),
-                                onOptionSelected = {
-                                    when (it) {
+                                onOpenImage = { url ->
+                                    navigator?.push(ZoomableImageScreen(url))
+                                },
+                                onOptionSelected = { optionIdx ->
+                                    when (optionIdx) {
                                         else -> {
                                             model.reduce(UserDetailMviModel.Intent.Block)
                                         }
                                     }
-                                })
+                                },
+                            )
                             SectionSelector(
                                 titles = listOf(
                                     stringResource(MR.strings.profile_section_posts),

@@ -42,6 +42,7 @@ fun CommunityHeader(
     community: CommunityModel,
     options: List<String> = emptyList(),
     onOptionSelected: ((Int) -> Unit)? = null,
+    onOpenImage: ((String) -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier.fillMaxWidth().aspectRatio(4.5f).padding(Spacing.xs),
@@ -110,8 +111,13 @@ fun CommunityHeader(
         val avatarSize = 60.dp
         if (communityIcon.isNotEmpty()) {
             CustomImage(
-                modifier = Modifier.padding(Spacing.xxxs).size(avatarSize)
-                    .clip(RoundedCornerShape(avatarSize / 2)),
+                modifier = Modifier
+                    .padding(Spacing.xxxs)
+                    .size(avatarSize)
+                    .clip(RoundedCornerShape(avatarSize / 2))
+                    .onClick {
+                        onOpenImage?.invoke(communityIcon)
+                    },
                 url = communityIcon,
                 quality = FilterQuality.Low,
                 contentDescription = null,

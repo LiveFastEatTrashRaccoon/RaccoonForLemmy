@@ -94,7 +94,12 @@ internal object ProfileLoggedScreen : Tab {
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                             ) {
-                                UserHeader(user = user)
+                                UserHeader(
+                                    user = user,
+                                    onOpenImage = { url ->
+                                        navigator?.push(ZoomableImageScreen(url))
+                                    },
+                                )
                                 SectionSelector(
                                     titles = listOf(
                                         stringResource(MR.strings.profile_section_posts),

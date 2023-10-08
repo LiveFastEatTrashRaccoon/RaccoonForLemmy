@@ -16,13 +16,13 @@ internal fun SettingsRow(
     title: String,
     value: String,
     modifier: Modifier = Modifier,
-    onTap: () -> Unit = {},
+    onTap: (() -> Unit)? = null,
 ) {
     Row(
         modifier = modifier
             .padding(vertical = Spacing.s, horizontal = Spacing.m)
             .onClick {
-                onTap()
+                onTap?.invoke()
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {

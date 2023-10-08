@@ -269,6 +269,9 @@ class CommunityDetailScreen(
                                     stringResource(MR.strings.community_detail_instance_info),
                                     stringResource(MR.strings.community_detail_block),
                                 ),
+                                onOpenImage = { url ->
+                                    navigator?.push(ZoomableImageScreen(url))
+                                },
                                 onOptionSelected = { optionIdx ->
                                     when (optionIdx) {
                                         2 -> {

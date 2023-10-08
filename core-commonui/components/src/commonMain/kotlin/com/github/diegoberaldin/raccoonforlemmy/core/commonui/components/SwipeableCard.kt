@@ -41,9 +41,9 @@ fun SwipeableCard(
     content: @Composable () -> Unit,
     swipeContent: @Composable (DismissDirection) -> Unit,
     backgroundColor: @Composable (DismissValue) -> Color,
-    onGestureBegin: (() -> Unit) = {},
-    onDismissToEnd: (() -> Unit) = {},
-    onDismissToStart: (() -> Unit) = {},
+    onGestureBegin: (() -> Unit)? = null,
+    onDismissToEnd: (() -> Unit)? = null,
+    onDismissToStart: (() -> Unit)? = null,
 ) {
     if (enabled) {
         var width by remember { mutableStateOf(0f) }
@@ -51,11 +51,11 @@ fun SwipeableCard(
             confirmStateChange = {
                 when (it) {
                     DismissValue.DismissedToEnd -> {
-                        onDismissToEnd()
+                        onDismissToEnd?.invoke()
                     }
 
                     DismissValue.DismissedToStart -> {
-                        onDismissToStart()
+                        onDismissToStart?.invoke()
                     }
 
                     else -> Unit
@@ -74,7 +74,7 @@ fun SwipeableCard(
                 }
             }.stateIn(this).onEach { willDismissDirection ->
                 if (willDismissDirection != null) {
-                    onGestureBegin()
+                    onGestureBegin?.invoke()
                 }
             }.launchIn(this)
         }
