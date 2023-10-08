@@ -66,6 +66,7 @@ class ColorBottomSheet : Screen {
                 Color(0xFFFF66600) to stringResource(MR.strings.settings_color_orange),
                 Color(0xFFFC0FC0) to stringResource(MR.strings.settings_color_pink),
                 Color(0xFF303B47) to stringResource(MR.strings.settings_color_gray),
+                Color(0xFFd7d7d7) to stringResource(MR.strings.settings_color_white),
                 null to stringResource(MR.strings.button_reset),
             )
             Column(

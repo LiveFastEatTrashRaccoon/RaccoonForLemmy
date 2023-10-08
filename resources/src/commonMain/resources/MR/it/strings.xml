@@ -124,6 +124,7 @@
     <string name="settings_color_orange">Aranciata</string>
     <string name="settings_color_pink">Rosa shocking</string>
     <string name="settings_color_gray">Cemento</string>
+    <string name="settings_color_white">Ghiaccio</string>
     <string name="settings_enable_crash_report">Abilitare segnalazioni di crash</string>
     <string name="settings_separate_up_and_downvotes">Distingui voti positivi / negativi</string>
     <string name="settings_auto_load_images">Carica immagini automaticamente</string>

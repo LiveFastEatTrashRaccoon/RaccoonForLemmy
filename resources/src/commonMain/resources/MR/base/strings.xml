@@ -126,6 +126,7 @@
     <string name="settings_color_orange">Orance juice</string>
     <string name="settings_color_pink">Shocking pink</string>
     <string name="settings_color_gray">Concrete</string>
+    <string name="settings_color_white">Ice</string>
     <string name="settings_enable_crash_report">Enable crash reporting</string>
     <string name="settings_separate_up_and_downvotes">Separate upvotes / downvotes</string>
     <string name="settings_auto_load_images">Automatically load images</string>

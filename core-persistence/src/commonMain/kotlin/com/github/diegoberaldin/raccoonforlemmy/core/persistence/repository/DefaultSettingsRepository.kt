@@ -65,7 +65,9 @@ internal class DefaultSettingsRepository(
             if (accountId == null) {
                 // anonymous user, reading from keystore
                 SettingsModel(
-                    theme = keyStore[KeyStoreKeys.UiTheme, 0],
+                    theme = if (keyStore.containsKey(KeyStoreKeys.UiTheme)) {
+                        keyStore[KeyStoreKeys.UiTheme, 0]
+                    } else null,
                     contentFontScale = keyStore[KeyStoreKeys.ContentFontScale, 1f],
                     locale = keyStore[KeyStoreKeys.Locale, ""].takeIf { it.isNotEmpty() },
                     defaultListingType = keyStore[KeyStoreKeys.DefaultListingType, 0],
