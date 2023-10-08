@@ -61,7 +61,9 @@ fun MultiCommunityItem(
                 )
             }
         }
-        Column {
+        Column(
+            modifier = Modifier.padding(start = Spacing.xs),
+        ) {
             Text(
                 modifier = Modifier.padding(vertical = Spacing.s),
                 text = buildString {

@@ -65,7 +65,9 @@ fun CommunityItem(
                 )
             }
         }
-        Column {
+        Column(
+            modifier = Modifier.padding(start = Spacing.xs),
+        ) {
             Text(
                 text = buildString {
                     append(title)

@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.ImeAction
@@ -66,9 +67,11 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.MultiCo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getModalDrawerViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.localized
 import dev.icerock.moko.resources.compose.stringResource
+import dev.icerock.moko.resources.desc.StringDesc
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -80,7 +83,7 @@ object ModalDrawerContent : Tab {
             return TabOptions(0u, "")
         }
 
-    @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
         val model = rememberScreenModel { getModalDrawerViewModel() }
@@ -104,115 +107,14 @@ object ModalDrawerContent : Tab {
         Column(
             modifier = Modifier.fillMaxWidth(0.75f)
         ) {
-            // header
-            val user = uiState.user
-            val avatarSize = 52.dp
-            Row(
-                modifier = Modifier.padding(
-                    top = Spacing.m,
-                    start = Spacing.s,
-                    end = Spacing.s,
-                    bottom = Spacing.s,
-                ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Spacing.m)
-            ) {
-                if (user != null) {
-                    // avatar
-                    val userAvatar = user.avatar.orEmpty()
-                    if (userAvatar.isNotEmpty()) {
-                        CustomImage(
-                            modifier = Modifier.padding(Spacing.xxxs).size(avatarSize)
-                                .clip(RoundedCornerShape(avatarSize / 2)),
-                            url = userAvatar,
-                            autoload = uiState.autoLoadImages,
-                            quality = FilterQuality.Low,
-                            contentDescription = null,
-                            contentScale = ContentScale.FillBounds,
-                        )
-                    } else {
-                        Box(
-                            modifier = Modifier.padding(Spacing.xxxs).size(avatarSize).background(
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(avatarSize / 2),
-                            ),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(
-                                text = user.name.firstOrNull()?.toString().orEmpty().uppercase(),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-                    }
-
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
-                    ) {
-                        Text(
-                            text = buildString {
-                                if (user.displayName.isNotEmpty()) {
-                                    append(user.displayName)
-                                } else {
-                                    append(user.name)
-                                }
-                            },
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                        Text(
-                            text = buildString {
-                                append(user.name)
-                                append("@")
-                                append(user.host)
-                            },
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
-                } else {
-                    val anonymousTitle = stringResource(MR.strings.navigation_drawer_anonymous)
-                    Box(
-                        modifier = Modifier.padding(Spacing.xxxs).size(avatarSize).background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(avatarSize / 2),
-                        ),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = anonymousTitle.firstOrNull()?.toString().orEmpty().uppercase(),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                        )
-                    }
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
-                    ) {
-                        Text(
-                            text = anonymousTitle,
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                        Row {
-                            Text(
-                                text = uiState.instance.orEmpty(),
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-                            Icon(
-                                modifier = Modifier.onClick {
-                                    changeInstanceDialogOpen = true
-                                },
-                                imageVector = Icons.Default.ArrowDropDown,
-                                contentDescription = null,
-                            )
-                        }
-                    }
-                }
-            }
+            DrawerHeader(
+                user = uiState.user,
+                instance = uiState.instance,
+                autoLoadImages = uiState.autoLoadImages,
+                onOpenChangeInstance = {
+                    changeInstanceDialogOpen = true
+                },
+            )
 
             Divider(
                 modifier = Modifier.padding(
@@ -234,68 +136,29 @@ object ModalDrawerContent : Tab {
                     ),
                 ) {
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.xxs),
                         verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
-                        if (user != null) {
-                            val additionalIconSize = 18.dp
+                        if (uiState.user != null) {
                             item {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth()
-                                        .padding(
-                                            horizontal = Spacing.s,
-                                            vertical = Spacing.xs,
-                                        )
-                                        .onClick {
-                                            scope.launch {
-                                                coordinator.toggleDrawer()
-                                                coordinator.sendEvent(DrawerEvent.ManageSubscriptions)
-                                            }
-                                        },
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Text(
-                                        text = stringResource(MR.strings.navigation_drawer_title_subscriptions),
-                                        style = MaterialTheme.typography.titleLarge,
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    Icon(
-                                        modifier = Modifier.size(additionalIconSize),
-                                        imageVector = Icons.Default.ManageAccounts,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                }
+                                DrawerShortcut(title = stringResource(MR.strings.navigation_drawer_title_subscriptions),
+                                    icon = Icons.Default.ManageAccounts,
+                                    onSelected = {
+                                        scope.launch {
+                                            coordinator.toggleDrawer()
+                                            coordinator.sendEvent(DrawerEvent.ManageSubscriptions)
+                                        }
+                                    })
                             }
                             item {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth()
-                                        .padding(
-                                            horizontal = Spacing.s,
-                                            vertical = Spacing.xs,
-                                        )
-                                        .onClick {
-                                            scope.launch {
-                                                coordinator.toggleDrawer()
-                                                coordinator.sendEvent(DrawerEvent.OpenBookmarks)
-                                            }
-                                        },
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Text(
-                                        text = stringResource(MR.strings.navigation_drawer_title_bookmarks),
-                                        style = MaterialTheme.typography.titleLarge,
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    Icon(
-                                        modifier = Modifier.size(additionalIconSize),
-                                        imageVector = Icons.Default.Bookmarks,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                }
+                                DrawerShortcut(title = stringResource(MR.strings.navigation_drawer_title_bookmarks),
+                                    icon = Icons.Default.Bookmarks,
+                                    onSelected = {
+                                        scope.launch {
+                                            coordinator.toggleDrawer()
+                                            coordinator.sendEvent(DrawerEvent.OpenBookmarks)
+                                        }
+                                    })
                             }
                         }
 
@@ -342,71 +205,246 @@ object ModalDrawerContent : Tab {
         }
 
         if (changeInstanceDialogOpen) {
-            AlertDialog(
-                onDismissRequest = {
+            ChangeInstanceDialog(
+                instanceName = uiState.changeInstanceName,
+                instanceNameError = uiState.changeInstanceNameError,
+                loading = uiState.changeInstanceloading,
+                onClose = {
                     changeInstanceDialogOpen = false
                 },
-            ) {
-                Column(
-                    modifier = Modifier
-                        .background(color = MaterialTheme.colorScheme.surface)
-                        .padding(Spacing.s),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                onChangeInstanceName = { value ->
+                    model.reduce(ModalDrawerMviModel.Intent.ChangeInstanceName(value))
+                },
+                onSubmit = {
+                    model.reduce(ModalDrawerMviModel.Intent.SubmitChangeInstance)
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun DrawerHeader(
+    user: UserModel? = null,
+    instance: String? = null,
+    autoLoadImages: Boolean = true,
+    onOpenChangeInstance: (() -> Unit)? = null,
+) {
+    val avatarSize = 52.dp
+    Row(
+        modifier = Modifier.padding(
+            top = Spacing.m,
+            start = Spacing.s,
+            end = Spacing.s,
+            bottom = Spacing.s,
+        ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(Spacing.m)
+    ) {
+        if (user != null) {
+            // avatar
+            val userAvatar = user.avatar.orEmpty()
+            if (userAvatar.isNotEmpty()) {
+                CustomImage(
+                    modifier = Modifier.padding(Spacing.xxxs).size(avatarSize)
+                        .clip(RoundedCornerShape(avatarSize / 2)),
+                    url = userAvatar,
+                    autoload = autoLoadImages,
+                    quality = FilterQuality.Low,
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                )
+            } else {
+                Box(
+                    modifier = Modifier.padding(Spacing.xxxs).size(avatarSize).background(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(avatarSize / 2),
+                    ),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = stringResource(MR.strings.dialog_title_change_instance),
-                        style = MaterialTheme.typography.titleLarge
+                        text = user.name.firstOrNull()?.toString().orEmpty().uppercase(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
                     )
-                    TextField(
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                        ),
-                        label = {
-                            Text(text = stringResource(MR.strings.login_field_instance_name))
-                        },
-                        singleLine = true,
-                        value = uiState.changeInstanceName,
-                        isError = uiState.changeInstanceNameError != null,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email,
-                            autoCorrect = false,
-                            imeAction = ImeAction.Next,
-                        ),
-                        onValueChange = { value ->
-                            model.reduce(ModalDrawerMviModel.Intent.ChangeInstanceName(value))
-                        },
-                        supportingText = {
-                            if (uiState.changeInstanceNameError != null) {
-                                Text(
-                                    text = uiState.changeInstanceNameError?.localized().orEmpty(),
-                                    color = MaterialTheme.colorScheme.error,
-                                )
-                            }
-                        },
-                    )
+                }
+            }
 
-                    Button(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        onClick = {
-                            model.reduce(ModalDrawerMviModel.Intent.SubmitChangeInstance)
-                        },
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.s),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            if (uiState.changeInstanceloading) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(20.dp),
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                )
-                            }
-                            Text(stringResource(MR.strings.button_confirm))
+            Column(
+                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+            ) {
+                Text(
+                    text = buildString {
+                        if (user.displayName.isNotEmpty()) {
+                            append(user.displayName)
+                        } else {
+                            append(user.name)
                         }
+                    },
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Text(
+                    text = buildString {
+                        append(user.name)
+                        append("@")
+                        append(user.host)
+                    },
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+            }
+        } else {
+            val anonymousTitle = stringResource(MR.strings.navigation_drawer_anonymous)
+            Box(
+                modifier = Modifier.padding(Spacing.xxxs).size(avatarSize).background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(avatarSize / 2),
+                ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = anonymousTitle.firstOrNull()?.toString().orEmpty().uppercase(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
+            }
+            Column(
+                verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+            ) {
+                Text(
+                    text = anonymousTitle,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Row {
+                    Text(
+                        text = instance.orEmpty(),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(
+                        modifier = Modifier.onClick {
+                            onOpenChangeInstance?.invoke()
+                        },
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = null,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DrawerShortcut(
+    title: String,
+    icon: ImageVector,
+    onSelected: (() -> Unit)? = null,
+) {
+    val additionalIconSize = 20.dp
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(
+            horizontal = Spacing.s,
+            vertical = Spacing.xs,
+        ).onClick {
+            onSelected?.invoke()
+        },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+    ) {
+        Icon(
+            modifier = Modifier
+                .padding(Spacing.xxs)
+                .size(additionalIconSize),
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onBackground,
+        )
+        Text(
+            modifier = Modifier.padding(start = Spacing.xs),
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ChangeInstanceDialog(
+    instanceName: String = "",
+    loading: Boolean = false,
+    instanceNameError: StringDesc? = null,
+    onChangeInstanceName: ((String) -> Unit)? = null,
+    onClose: (() -> Unit)? = null,
+    onSubmit: (() -> Unit)? = null,
+) {
+    AlertDialog(
+        onDismissRequest = {
+            onClose?.invoke()
+        },
+    ) {
+        Column(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface)
+                .padding(Spacing.s),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+        ) {
+            Text(
+                text = stringResource(MR.strings.dialog_title_change_instance),
+                style = MaterialTheme.typography.titleLarge
+            )
+            TextField(
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                ),
+                label = {
+                    Text(text = stringResource(MR.strings.login_field_instance_name))
+                },
+                singleLine = true,
+                value = instanceName,
+                isError = instanceNameError != null,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    autoCorrect = false,
+                    imeAction = ImeAction.Next,
+                ),
+                onValueChange = { value ->
+                    onChangeInstanceName?.invoke(value)
+                },
+                supportingText = {
+                    if (instanceNameError != null) {
+                        Text(
+                            text = instanceNameError?.localized().orEmpty(),
+                            color = MaterialTheme.colorScheme.error,
+                        )
                     }
+                },
+            )
+
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = {
+                    onSubmit?.invoke()
+                },
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (loading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
+                    }
+                    Text(stringResource(MR.strings.button_confirm))
                 }
             }
         }
