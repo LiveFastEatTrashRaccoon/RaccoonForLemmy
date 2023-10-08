@@ -33,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,17 +47,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.FontScale
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.scaleFactor
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityItem
@@ -106,7 +101,7 @@ object ModalDrawerContent : Tab {
         }
 
         Column(
-            modifier = Modifier.fillMaxWidth(0.75f)
+            modifier = Modifier.fillMaxWidth(0.9f)
         ) {
             DrawerHeader(
                 user = uiState.user,
@@ -130,69 +125,62 @@ object ModalDrawerContent : Tab {
             Box(
                 modifier = Modifier.weight(1f).pullRefresh(pullRefreshState),
             ) {
-                CompositionLocalProvider(
-                    LocalDensity provides Density(
-                        density = LocalDensity.current.density,
-                        fontScale = FontScale.Small.scaleFactor,
-                    ),
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.xxs),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                 ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.xxs),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                    ) {
-                        if (uiState.user != null) {
-                            item {
-                                DrawerShortcut(title = stringResource(MR.strings.navigation_drawer_title_subscriptions),
-                                    icon = Icons.Default.ManageAccounts,
-                                    onSelected = {
-                                        scope.launch {
-                                            coordinator.toggleDrawer()
-                                            coordinator.sendEvent(DrawerEvent.ManageSubscriptions)
-                                        }
-                                    })
-                            }
-                            item {
-                                DrawerShortcut(title = stringResource(MR.strings.navigation_drawer_title_bookmarks),
-                                    icon = Icons.Default.Bookmarks,
-                                    onSelected = {
-                                        scope.launch {
-                                            coordinator.toggleDrawer()
-                                            coordinator.sendEvent(DrawerEvent.OpenBookmarks)
-                                        }
-                                    })
-                            }
+                    if (uiState.user != null) {
+                        item {
+                            DrawerShortcut(title = stringResource(MR.strings.navigation_drawer_title_subscriptions),
+                                icon = Icons.Default.ManageAccounts,
+                                onSelected = {
+                                    scope.launch {
+                                        coordinator.toggleDrawer()
+                                        coordinator.sendEvent(DrawerEvent.ManageSubscriptions)
+                                    }
+                                })
                         }
+                        item {
+                            DrawerShortcut(title = stringResource(MR.strings.navigation_drawer_title_bookmarks),
+                                icon = Icons.Default.Bookmarks,
+                                onSelected = {
+                                    scope.launch {
+                                        coordinator.toggleDrawer()
+                                        coordinator.sendEvent(DrawerEvent.OpenBookmarks)
+                                    }
+                                })
+                        }
+                    }
 
-                        itemsIndexed(uiState.multiCommunities) { _, community ->
-                            MultiCommunityItem(
-                                modifier = Modifier.fillMaxWidth().onClick {
-                                    scope.launch {
-                                        coordinator.toggleDrawer()
-                                        coordinator.sendEvent(
-                                            DrawerEvent.OpenMultiCommunity(community),
-                                        )
-                                    }
-                                },
-                                community = community,
-                                small = true,
-                                autoLoadImages = uiState.autoLoadImages,
-                            )
-                        }
-                        itemsIndexed(uiState.communities) { _, community ->
-                            CommunityItem(
-                                modifier = Modifier.fillMaxWidth().onClick {
-                                    scope.launch {
-                                        coordinator.toggleDrawer()
-                                        coordinator.sendEvent(
-                                            DrawerEvent.OpenCommunity(community),
-                                        )
-                                    }
-                                },
-                                community = community,
-                                small = true,
-                                autoLoadImages = uiState.autoLoadImages,
-                            )
-                        }
+                    itemsIndexed(uiState.multiCommunities) { _, community ->
+                        MultiCommunityItem(
+                            modifier = Modifier.fillMaxWidth().onClick {
+                                scope.launch {
+                                    coordinator.toggleDrawer()
+                                    coordinator.sendEvent(
+                                        DrawerEvent.OpenMultiCommunity(community),
+                                    )
+                                }
+                            },
+                            community = community,
+                            small = true,
+                            autoLoadImages = uiState.autoLoadImages,
+                        )
+                    }
+                    itemsIndexed(uiState.communities) { _, community ->
+                        CommunityItem(
+                            modifier = Modifier.fillMaxWidth().onClick {
+                                scope.launch {
+                                    coordinator.toggleDrawer()
+                                    coordinator.sendEvent(
+                                        DrawerEvent.OpenCommunity(community),
+                                    )
+                                }
+                            },
+                            community = community,
+                            small = true,
+                            autoLoadImages = uiState.autoLoadImages,
+                        )
                     }
                 }
                 PullRefreshIndicator(
