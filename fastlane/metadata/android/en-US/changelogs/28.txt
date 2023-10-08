@@ -1,0 +1,4 @@
+- feat: possibility to disable image loading
+- feat: possibility to open community icons and user avatars
+- fix: pagination for posts and comments
+- enhancement: improved navigation drawer layout
