@@ -43,6 +43,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 fun PostCard(
     modifier: Modifier = Modifier,
     post: PostModel,
+    autoLoadImages: Boolean = true,
     hideAuthor: Boolean = false,
     postLayout: PostLayout = PostLayout.Card,
     separateUpAndDownVotes: Boolean = false,
@@ -88,6 +89,7 @@ fun PostCard(
                     },
                     withOverflowBlurred = withOverflowBlurred,
                     separateUpAndDownVotes = separateUpAndDownVotes,
+                    autoLoadImages = autoLoadImages,
                     blurNsfw = blurNsfw,
                     options = options,
                     onOpenCommunity = onOpenCommunity,
@@ -105,6 +107,7 @@ fun PostCard(
                     hideAuthor = hideAuthor,
                     blurNsfw = blurNsfw,
                     separateUpAndDownVotes = separateUpAndDownVotes,
+                    autoLoadImages = autoLoadImages,
                     options = options,
                     onOpenCommunity = onOpenCommunity,
                     onOpenCreator = onOpenCreator,
@@ -124,6 +127,7 @@ fun PostCard(
 private fun CompactPost(
     modifier: Modifier = Modifier,
     post: PostModel,
+    autoLoadImages: Boolean = true,
     hideAuthor: Boolean,
     blurNsfw: Boolean,
     separateUpAndDownVotes: Boolean,
@@ -147,6 +151,7 @@ private fun CompactPost(
             creator = post.creator.takeIf { !hideAuthor },
             onOpenCommunity = onOpenCommunity,
             onOpenCreator = onOpenCreator,
+            autoLoadImages = autoLoadImages,
         )
         Row(
             verticalAlignment = Alignment.Top,
@@ -157,11 +162,14 @@ private fun CompactPost(
                 minHeight = Dp.Unspecified,
                 maxHeight = Dp.Unspecified,
                 imageUrl = post.imageUrl,
+                autoLoadImages = autoLoadImages,
                 blurred = blurNsfw && post.nsfw,
                 onImageClick = onImageClick,
             )
             PostCardTitle(
-                modifier = Modifier.weight(1f), text = post.title
+                modifier = Modifier.weight(1f),
+                text = post.title,
+                autoLoadImages = autoLoadImages,
             )
         }
         PostCardFooter(
@@ -186,6 +194,7 @@ private fun CompactPost(
 private fun ExtendedPost(
     modifier: Modifier = Modifier,
     post: PostModel,
+    autoLoadImages: Boolean = true,
     hideAuthor: Boolean,
     blurNsfw: Boolean,
     separateUpAndDownVotes: Boolean,
@@ -211,12 +220,15 @@ private fun ExtendedPost(
             creator = post.creator.takeIf { !hideAuthor },
             onOpenCommunity = onOpenCommunity,
             onOpenCreator = onOpenCreator,
+            autoLoadImages = autoLoadImages,
         )
         PostCardTitle(
             modifier = Modifier.padding(
                 vertical = Spacing.xs,
                 horizontal = Spacing.xs,
-            ), text = post.title
+            ),
+            text = post.title,
+            autoLoadImages = autoLoadImages,
         )
 
         PostCardImage(
@@ -224,6 +236,7 @@ private fun ExtendedPost(
             imageUrl = post.imageUrl,
             blurred = blurNsfw && post.nsfw,
             onImageClick = onImageClick,
+            autoLoadImages = autoLoadImages,
         )
         Box {
             val maxHeight = 200.dp
@@ -240,6 +253,7 @@ private fun ExtendedPost(
                     textHeightPx = it.size.toSize().height
                 },
                 text = post.text,
+                autoLoadImages = autoLoadImages,
             )
             if (withOverflowBlurred && textHeightPx >= maxHeightPx) {
                 Box(

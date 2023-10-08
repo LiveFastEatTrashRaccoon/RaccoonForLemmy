@@ -21,6 +21,7 @@ interface CreateCommentMviModel :
         val textError: StringDesc? = null,
         val loading: Boolean = false,
         val section: CreatePostSection = CreatePostSection.Edit,
+        val autoLoadImages: Boolean = true,
     )
 
     sealed interface Effect {

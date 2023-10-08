@@ -32,6 +32,7 @@ import dev.icerock.moko.resources.compose.stringResource
 @Composable
 internal fun ChatCard(
     user: UserModel?,
+    autoLoadImages: Boolean = true,
     lastMessage: String,
     lastMessageDate: String? = null,
     modifier: Modifier = Modifier,
@@ -65,6 +66,7 @@ internal fun ChatCard(
                     },
                 quality = FilterQuality.Low,
                 url = creatorAvatar,
+                autoload = autoLoadImages,
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
             )

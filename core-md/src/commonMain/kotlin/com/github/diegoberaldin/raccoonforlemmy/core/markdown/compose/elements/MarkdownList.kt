@@ -31,6 +31,7 @@ private fun MarkdownListItems(
     node: ASTNode,
     style: TextStyle = LocalMarkdownTypography.current.list,
     level: Int = 0,
+    autoLoadImages: Boolean = true,
     item: @Composable (child: ASTNode) -> Unit,
 ) {
     val listDp = LocalMarkdownPadding.current.list
@@ -47,13 +48,39 @@ private fun MarkdownListItems(
                 MarkdownElementTypes.LIST_ITEM -> {
                     item(child)
                     when (child.children.last().type) {
-                        ORDERED_LIST -> MarkdownOrderedList(content, child, style, level + 1)
-                        UNORDERED_LIST -> MarkdownBulletList(content, child, style, level + 1)
+                        ORDERED_LIST -> MarkdownOrderedList(
+                            content = content,
+                            node = child,
+                            style = style,
+                            level = level + 1,
+                            autoLoadImages = autoLoadImages,
+                        )
+
+                        UNORDERED_LIST -> MarkdownBulletList(
+                            content = content,
+                            node = child,
+                            style = style,
+                            level = level + 1,
+                            autoLoadImages = autoLoadImages,
+                        )
                     }
                 }
 
-                ORDERED_LIST -> MarkdownOrderedList(content, child, style, level + 1)
-                UNORDERED_LIST -> MarkdownBulletList(content, child, style, level + 1)
+                ORDERED_LIST -> MarkdownOrderedList(
+                    content = content,
+                    node = child,
+                    style = style,
+                    level = level + 1,
+                    autoLoadImages = autoLoadImages,
+                )
+
+                UNORDERED_LIST -> MarkdownBulletList(
+                    content = content,
+                    node = child,
+                    style = style,
+                    level = level + 1,
+                    autoLoadImages = autoLoadImages,
+                )
             }
         }
     }
@@ -65,10 +92,17 @@ internal fun MarkdownOrderedList(
     node: ASTNode,
     style: TextStyle = LocalMarkdownTypography.current.ordered,
     level: Int = 0,
+    autoLoadImages: Boolean = true,
     onOpenUrl: ((String) -> Unit)? = null,
 ) {
     val orderedListHandler = LocalOrderedListHandler.current
-    MarkdownListItems(content, node, style, level) { child ->
+    MarkdownListItems(
+        content = content,
+        node = node,
+        style = style,
+        level = level,
+        autoLoadImages = autoLoadImages,
+    ) { child ->
         Row(Modifier.fillMaxWidth()) {
             Text(
                 text = orderedListHandler.transform(
@@ -86,7 +120,8 @@ internal fun MarkdownOrderedList(
                 text,
                 Modifier.padding(bottom = 4.dp),
                 style = style,
-                onOpenUrl = onOpenUrl
+                onOpenUrl = onOpenUrl,
+                autoLoadImages = autoLoadImages,
             )
         }
     }
@@ -98,10 +133,17 @@ internal fun MarkdownBulletList(
     node: ASTNode,
     style: TextStyle = LocalMarkdownTypography.current.bullet,
     level: Int = 0,
+    autoLoadImages: Boolean = true,
     onOpenUrl: ((String) -> Unit)? = null,
 ) {
     val bulletHandler = LocalBulletListHandler.current
-    MarkdownListItems(content, node, style, level) { child ->
+    MarkdownListItems(
+        content = content,
+        node = node,
+        style = style,
+        level = level,
+        autoLoadImages = autoLoadImages,
+    ) { child ->
         Row(Modifier.fillMaxWidth()) {
             Text(
                 bulletHandler.transform(
@@ -119,7 +161,8 @@ internal fun MarkdownBulletList(
                 text,
                 Modifier.padding(bottom = 4.dp),
                 style = style,
-                onOpenUrl = onOpenUrl
+                onOpenUrl = onOpenUrl,
+                autoLoadImages = autoLoadImages,
             )
         }
     }

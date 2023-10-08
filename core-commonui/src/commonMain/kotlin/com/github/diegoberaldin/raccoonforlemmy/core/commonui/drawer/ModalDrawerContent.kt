@@ -125,6 +125,7 @@ object ModalDrawerContent : Tab {
                             modifier = Modifier.padding(Spacing.xxxs).size(avatarSize)
                                 .clip(RoundedCornerShape(avatarSize / 2)),
                             url = userAvatar,
+                            autoload = uiState.autoLoadImages,
                             quality = FilterQuality.Low,
                             contentDescription = null,
                             contentScale = ContentScale.FillBounds,
@@ -310,6 +311,7 @@ object ModalDrawerContent : Tab {
                                 },
                                 community = community,
                                 small = true,
+                                autoLoadImages = uiState.autoLoadImages,
                             )
                         }
                         itemsIndexed(uiState.communities) { _, community ->
@@ -324,6 +326,7 @@ object ModalDrawerContent : Tab {
                                 },
                                 community = community,
                                 small = true,
+                                autoLoadImages = uiState.autoLoadImages,
                             )
                         }
                     }

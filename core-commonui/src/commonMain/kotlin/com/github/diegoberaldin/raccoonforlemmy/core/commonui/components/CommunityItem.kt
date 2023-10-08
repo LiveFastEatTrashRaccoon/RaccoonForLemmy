@@ -24,6 +24,7 @@ fun CommunityItem(
     community: CommunityModel,
     modifier: Modifier = Modifier,
     small: Boolean = false,
+    autoLoadImages: Boolean = true,
 ) {
     val title = community.title
     val communityName = community.name
@@ -38,9 +39,11 @@ fun CommunityItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
-        if (communityIcon.isNotEmpty()) {
+        if (communityIcon.isNotEmpty() && autoLoadImages) {
             CustomImage(
-                modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
+                modifier = Modifier
+                    .padding(Spacing.xxxs)
+                    .size(iconSize)
                     .clip(RoundedCornerShape(iconSize / 2)),
                 url = communityIcon,
                 contentDescription = null,

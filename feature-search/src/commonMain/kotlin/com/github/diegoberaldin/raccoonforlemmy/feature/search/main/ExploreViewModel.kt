@@ -78,6 +78,7 @@ class ExploreViewModel(
                     it.copy(
                         blurNsfw = settings.blurNsfw,
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
+                        autoLoadImages = settings.autoLoadImages,
                     )
                 }
             }.launchIn(this)

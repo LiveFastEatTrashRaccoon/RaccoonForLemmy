@@ -24,6 +24,7 @@ fun MultiCommunityItem(
     community: MultiCommunityModel,
     modifier: Modifier = Modifier,
     small: Boolean = false,
+    autoLoadImages: Boolean = true,
 ) {
     val title = community.name
     val communityIcon = community.icon.orEmpty()
@@ -36,7 +37,7 @@ fun MultiCommunityItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
-        if (communityIcon.isNotEmpty()) {
+        if (communityIcon.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
                     .clip(RoundedCornerShape(iconSize / 2)),

@@ -3,11 +3,14 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class InstanceInfoViewModel(
@@ -16,6 +19,7 @@ class InstanceInfoViewModel(
     private val siteRepository: SiteRepository,
     private val communityRepository: CommunityRepository,
     private val identityRepository: IdentityRepository,
+    private val settingsRepository: SettingsRepository,
 ) : ScreenModel,
     MviModel<InstanceInfoMviModel.Intent, InstanceInfoMviModel.UiState, InstanceInfoMviModel.Effect> by mvi {
 
@@ -24,6 +28,10 @@ class InstanceInfoViewModel(
     override fun onStarted() {
         mvi.onStarted()
         mvi.scope?.launch(Dispatchers.IO) {
+            settingsRepository.currentSettings.onEach { settings ->
+                mvi.updateState { it.copy(autoLoadImages = settings.autoLoadImages) }
+            }.launchIn(this)
+
             val metadata = siteRepository.getMetadata(url)
             if (metadata != null) {
                 mvi.updateState {

@@ -22,6 +22,7 @@
 
     <string name="button_confirm">Conferma</string>
     <string name="button_reset">Reset</string>
+    <string name="button_load">Carica</string>
 
     <string name="home_listing_type_all">Tutti</string>
     <string name="home_listing_type_local">Locali</string>
@@ -125,6 +126,7 @@
     <string name="settings_color_gray">Cemento</string>
     <string name="settings_enable_crash_report">Abilitare segnalazioni di crash</string>
     <string name="settings_separate_up_and_downvotes">Distingui voti positivi / negativi</string>
+    <string name="settings_auto_load_images">Carica immagini automaticamente</string>
     <string name="settings_section_appearance">Aspetto interfaccia</string>
     <string name="settings_section_feed">Post e commenti</string>
     <string name="settings_section_behaviour">Comportamento</string>

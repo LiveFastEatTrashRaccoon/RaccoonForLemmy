@@ -36,6 +36,7 @@ import dev.icerock.moko.resources.compose.stringResource
 fun ZoomableImage(
     modifier: Modifier = Modifier,
     url: String,
+    autoLoadImages: Boolean = false,
 ) {
 
     var size by remember { mutableStateOf(Size.Zero) }
@@ -78,6 +79,7 @@ fun ZoomableImage(
                     translationY = offsetY,
                 ),
             url = url,
+            autoload = autoLoadImages,
             contentDescription = null,
             onFailure = {
                 Text(

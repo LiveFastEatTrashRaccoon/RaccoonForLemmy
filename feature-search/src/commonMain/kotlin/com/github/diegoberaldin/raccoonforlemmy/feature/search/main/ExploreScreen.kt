@@ -268,6 +268,7 @@ class ExploreScreen : Screen {
                                                 )
                                             },
                                             community = result,
+                                            autoLoadImages = uiState.autoLoadImages,
                                         )
                                     }
 
@@ -281,6 +282,7 @@ class ExploreScreen : Screen {
                                             post = result,
                                             postLayout = uiState.postLayout,
                                             separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                            autoLoadImages = uiState.autoLoadImages,
                                             blurNsfw = uiState.blurNsfw,
                                             onOpenCommunity = { community ->
                                                 navigator?.push(
@@ -354,6 +356,7 @@ class ExploreScreen : Screen {
                                             },
                                             comment = result,
                                             separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                            autoLoadImages = uiState.autoLoadImages,
                                             hideIndent = true,
                                             onUpVote = {
                                                 model.reduce(

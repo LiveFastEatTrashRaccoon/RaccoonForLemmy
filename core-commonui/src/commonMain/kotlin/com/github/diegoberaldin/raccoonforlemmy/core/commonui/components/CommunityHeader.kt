@@ -40,6 +40,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 @Composable
 fun CommunityHeader(
     community: CommunityModel,
+    autoLoadImages: Boolean = true,
     options: List<String> = emptyList(),
     onOptionSelected: ((Int) -> Unit)? = null,
     onOpenImage: ((String) -> Unit)? = null,
@@ -49,7 +50,7 @@ fun CommunityHeader(
     ) {
         // banner
         val banner = community.banner.orEmpty()
-        if (banner.isNotEmpty()) {
+        if (banner.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier = Modifier.fillMaxSize(),
                 url = banner,
@@ -109,7 +110,7 @@ fun CommunityHeader(
         // avatar
         val communityIcon = community.icon.orEmpty()
         val avatarSize = 60.dp
-        if (communityIcon.isNotEmpty()) {
+        if (communityIcon.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier = Modifier
                     .padding(Spacing.xxxs)

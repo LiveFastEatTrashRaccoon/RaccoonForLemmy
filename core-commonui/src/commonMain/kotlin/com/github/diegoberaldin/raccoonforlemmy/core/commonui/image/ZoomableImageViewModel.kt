@@ -3,20 +3,33 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.image
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.DateTime
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.GalleryHelper
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.ShareHelper
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.download
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ZoomableImageViewModel(
     private val mvi: DefaultMviModel<ZoomableImageMviModel.Intent, ZoomableImageMviModel.UiState, ZoomableImageMviModel.Effect>,
+    private val settingsRepository: SettingsRepository,
     private val shareHelper: ShareHelper,
     private val galleryHelper: GalleryHelper,
 ) : ScreenModel,
     MviModel<ZoomableImageMviModel.Intent, ZoomableImageMviModel.UiState, ZoomableImageMviModel.Effect> by mvi {
+
+    override fun onStarted() {
+        mvi.onStarted()
+        mvi.scope?.launch {
+            settingsRepository.currentSettings.onEach { settings ->
+                mvi.updateState { it.copy(autoLoadImages = settings.autoLoadImages) }
+            }.launchIn(this)
+        }
+    }
 
     override fun reduce(intent: ZoomableImageMviModel.Intent) {
         when (intent) {

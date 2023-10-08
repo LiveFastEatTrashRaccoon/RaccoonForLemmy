@@ -166,6 +166,7 @@ class ManageSubscriptionsScreen : Screen {
                                             )
                                         },
                                     community = community,
+                                    autoLoadImages = uiState.autoLoadImages,
                                 )
                             },
                         )
@@ -217,6 +218,7 @@ class ManageSubscriptionsScreen : Screen {
                                             )
                                         },
                                     community = community,
+                                    autoLoadImages = uiState.autoLoadImages,
                                 )
                             },
                         )

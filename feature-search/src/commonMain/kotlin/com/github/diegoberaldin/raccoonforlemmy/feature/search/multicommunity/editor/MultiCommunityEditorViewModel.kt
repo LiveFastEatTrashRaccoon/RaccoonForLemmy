@@ -8,6 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.MultiCommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.MultiCommunityRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
@@ -17,6 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class MultiCommunityEditorViewModel(
@@ -26,6 +29,7 @@ class MultiCommunityEditorViewModel(
     private val communityRepository: CommunityRepository,
     private val multiCommunityRepository: MultiCommunityRepository,
     private val accountRepository: AccountRepository,
+    private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<MultiCommunityEditorMviModel.Intent, MultiCommunityEditorMviModel.UiState, MultiCommunityEditorMviModel.Effect> by mvi {
@@ -35,6 +39,11 @@ class MultiCommunityEditorViewModel(
 
     override fun onStarted() {
         mvi.onStarted()
+        mvi.scope?.launch {
+            settingsRepository.currentSettings.onEach { settings ->
+                mvi.updateState { it.copy(autoLoadImages = settings.autoLoadImages) }
+            }.launchIn(this)
+        }
         if (communities.isEmpty()) {
             populate()
         }

@@ -18,6 +18,7 @@ interface InboxMessagesMviModel :
         val unreadOnly: Boolean = true,
         val currentUserId: Int = 0,
         val chats: List<PrivateMessageModel> = emptyList(),
+        val autoLoadImages: Boolean = true,
     )
 
     sealed interface Effect {

@@ -67,6 +67,7 @@ class InboxMentionsViewModel(
                 mvi.updateState {
                     it.copy(
                         swipeActionsEnabled = settings.enableSwipeActions,
+                        autoLoadImages = settings.autoLoadImages,
                     )
                 }
             }.launchIn(this)

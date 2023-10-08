@@ -38,6 +38,7 @@ class CreatePostViewModel(
                 mvi.updateState {
                     it.copy(
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
+                        autoLoadImages = settings.autoLoadImages,
                     )
                 }
             }.launchIn(this)

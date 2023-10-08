@@ -50,6 +50,7 @@ val profileTabModule = module {
             mvi = DefaultMviModel(ManageAccountsMviModel.UiState()),
             accountRepository = get(),
             switchAccount = get(),
+            settingsRepository = get(),
         )
     }
 }

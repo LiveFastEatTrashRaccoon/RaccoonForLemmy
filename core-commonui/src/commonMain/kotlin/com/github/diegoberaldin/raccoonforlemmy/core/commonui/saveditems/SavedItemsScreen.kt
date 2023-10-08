@@ -162,6 +162,7 @@ class SavedItemsScreen : Screen {
                                     post = post,
                                     postLayout = uiState.postLayout,
                                     separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                    autoLoadImages = uiState.autoLoadImages,
                                     blurNsfw = uiState.blurNsfw,
                                     onOpenCommunity = { community ->
                                         navigator?.push(
@@ -220,6 +221,7 @@ class SavedItemsScreen : Screen {
                                 CommentCard(
                                     comment = comment,
                                     separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                    autoLoadImages = uiState.autoLoadImages,
                                     hideIndent = true,
                                     onUpVote = {
                                         model.reduce(

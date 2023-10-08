@@ -16,6 +16,7 @@ interface ModalDrawerMviModel :
 
     data class UiState(
         val user: UserModel? = null,
+        val autoLoadImages: Boolean = true,
         val refreshing: Boolean = false,
         val instance: String? = null,
         val communities: List<CommunityModel> = emptyList(),

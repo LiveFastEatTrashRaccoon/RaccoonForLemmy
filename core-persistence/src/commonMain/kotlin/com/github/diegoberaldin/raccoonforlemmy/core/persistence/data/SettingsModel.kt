@@ -19,4 +19,5 @@ data class SettingsModel(
     val customSeedColor: Int? = null,
     val postLayout: Int = 0,
     val separateUpAndDownVotes: Boolean = false,
+    val autoLoadImages: Boolean = true,
 ) : JavaSerializable

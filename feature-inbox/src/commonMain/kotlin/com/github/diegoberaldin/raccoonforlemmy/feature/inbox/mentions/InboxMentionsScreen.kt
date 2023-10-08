@@ -160,6 +160,7 @@ class InboxMentionsScreen : Tab {
                                 mention = mention,
                                 postLayout = uiState.postLayout,
                                 type = InboxCardType.Mention,
+                                autoLoadImages = uiState.autoLoadImages,
                                 onOpenPost = { post ->
                                     navigator?.push(
                                         PostDetailScreen(

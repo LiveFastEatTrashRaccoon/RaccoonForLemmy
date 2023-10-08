@@ -25,6 +25,7 @@ interface InboxRepliesMviModel :
         val replies: List<PersonMentionModel> = emptyList(),
         val postLayout: PostLayout = PostLayout.Card,
         val swipeActionsEnabled: Boolean = true,
+        val autoLoadImages: Boolean = true,
     )
 
     sealed interface Effect {

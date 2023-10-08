@@ -23,6 +23,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 @Composable
 fun CommunityAndCreatorInfo(
     modifier: Modifier = Modifier,
+    autoLoadImages: Boolean = true,
     small: Boolean = false,
     community: CommunityModel? = null,
     creator: UserModel? = null,
@@ -42,7 +43,7 @@ fun CommunityAndCreatorInfo(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s)
     ) {
-        if (communityIcon.isNotEmpty()) {
+        if (communityIcon.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier = Modifier
                     .onClick {
@@ -58,7 +59,7 @@ fun CommunityAndCreatorInfo(
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
             )
-        } else if (creatorAvatar.isNotEmpty()) {
+        } else if (creatorAvatar.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier = Modifier
                     .onClick {

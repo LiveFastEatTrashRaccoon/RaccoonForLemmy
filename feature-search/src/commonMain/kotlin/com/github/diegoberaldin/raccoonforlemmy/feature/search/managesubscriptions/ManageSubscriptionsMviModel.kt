@@ -17,6 +17,7 @@ interface ManageSubscriptionsMviModel :
         val refreshing: Boolean = false,
         val multiCommunities: List<MultiCommunityModel> = emptyList(),
         val communities: List<CommunityModel> = emptyList(),
+        val autoLoadImages: Boolean = true,
     )
 
     sealed interface Effect

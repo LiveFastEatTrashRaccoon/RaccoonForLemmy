@@ -264,6 +264,7 @@ class CommunityDetailScreen(
                         item {
                             CommunityHeader(
                                 community = stateCommunity,
+                                autoLoadImages = uiState.autoLoadImages,
                                 options = listOf(
                                     stringResource(MR.strings.community_detail_info),
                                     stringResource(MR.strings.community_detail_instance_info),
@@ -368,6 +369,7 @@ class CommunityDetailScreen(
                                         post = post,
                                         postLayout = uiState.postLayout,
                                         separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                        autoLoadImages = uiState.autoLoadImages,
                                         options = buildList {
                                             add(stringResource(MR.strings.post_action_share))
                                             if (post.creator?.id == uiState.currentUserId && !isOnOtherInstance) {

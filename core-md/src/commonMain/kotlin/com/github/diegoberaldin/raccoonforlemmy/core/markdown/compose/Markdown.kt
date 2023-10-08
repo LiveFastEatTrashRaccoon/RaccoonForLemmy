@@ -61,6 +61,7 @@ fun Markdown(
     flavour: MarkdownFlavourDescriptor = GFMFlavourDescriptor(),
     onOpenUrl: ((String) -> Unit)? = null,
     inlineImages: Boolean = true,
+    autoLoadImages: Boolean = true,
     onOpenImage: ((String) -> Unit)? = null,
 ) {
     val matches = Regex("::: spoiler (?<title>.*?)\\n(?<content>.*?)\\n:::\\n").findAll(content)
@@ -102,6 +103,7 @@ fun Markdown(
                         content = mangledContent,
                         onOpenUrl = onOpenUrl,
                         inlineImages = inlineImages,
+                        autoLoadImages = autoLoadImages,
                         onOpenImage = onOpenImage,
                     )
                 ) {
@@ -110,6 +112,7 @@ fun Markdown(
                             content = mangledContent,
                             onOpenUrl = onOpenUrl,
                             inlineImages = inlineImages,
+                            autoLoadImages = autoLoadImages,
                             onOpenImage = onOpenImage,
                         )
                     }
@@ -124,6 +127,7 @@ private fun ASTNode.handleElement(
     content: String,
     onOpenUrl: ((String) -> Unit)? = null,
     inlineImages: Boolean = true,
+    autoLoadImages: Boolean = true,
     onOpenImage: ((String) -> Unit)? = null,
 ): Boolean {
     val typography = LocalMarkdownTypography.current
@@ -156,6 +160,7 @@ private fun ASTNode.handleElement(
             style = typography.paragraph,
             onOpenUrl = onOpenUrl,
             inlineImages = inlineImages,
+            autoLoadImages = autoLoadImages,
             onOpenImage = onOpenImage,
         )
 
@@ -164,7 +169,7 @@ private fun ASTNode.handleElement(
                 content,
                 this@handleElement,
                 style = typography.ordered,
-                onOpenUrl = onOpenUrl
+                onOpenUrl = onOpenUrl,
             )
         }
 
@@ -177,7 +182,7 @@ private fun ASTNode.handleElement(
             )
         }
 
-        IMAGE -> MarkdownImage(content, this)
+        IMAGE -> MarkdownImage(content, this, autoLoadImages)
         LINK_DEFINITION -> {
             val linkLabel =
                 findChildOfType(MarkdownElementTypes.LINK_LABEL)?.getTextInNode(content)?.toString()

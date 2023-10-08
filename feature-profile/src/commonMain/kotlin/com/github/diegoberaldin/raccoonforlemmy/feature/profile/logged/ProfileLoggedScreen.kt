@@ -147,6 +147,7 @@ internal object ProfileLoggedScreen : Tab {
                                     post = post,
                                     postLayout = uiState.postLayout,
                                     separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                    autoLoadImages = uiState.autoLoadImages,
                                     hideAuthor = true,
                                     blurNsfw = false,
                                     options = buildList {
@@ -243,6 +244,7 @@ internal object ProfileLoggedScreen : Tab {
                                     },
                                     comment = comment,
                                     separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                    autoLoadImages = uiState.autoLoadImages,
                                     hideCommunity = false,
                                     hideAuthor = true,
                                     hideIndent = true,

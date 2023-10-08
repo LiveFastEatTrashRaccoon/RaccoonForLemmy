@@ -45,6 +45,7 @@ interface CreatePostMviModel :
         val section: CreatePostSection = CreatePostSection.Edit,
         val postLayout: PostLayout = PostLayout.Card,
         val separateUpAndDownVotes: Boolean = false,
+        val autoLoadImages: Boolean = true,
     )
 
     sealed interface Effect {

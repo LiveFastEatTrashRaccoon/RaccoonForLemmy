@@ -13,6 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 expect fun CustomImage(
     modifier: Modifier = Modifier,
     url: String,
+    autoload: Boolean = true,
     contentDescription: String? = null,
     quality: FilterQuality = FilterQuality.Medium,
     contentScale: ContentScale = ContentScale.Fit,

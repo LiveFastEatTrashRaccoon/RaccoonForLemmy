@@ -5,12 +5,15 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class InboxChatViewModel(
@@ -20,6 +23,7 @@ class InboxChatViewModel(
     private val siteRepository: SiteRepository,
     private val messageRepository: PrivateMessageRepository,
     private val userRepository: UserRepository,
+    private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
     MviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.SideEffect> by mvi {
@@ -43,6 +47,9 @@ class InboxChatViewModel(
             launch(Dispatchers.IO) {
                 val auth = identityRepository.authToken.value.orEmpty()
 
+                settingsRepository.currentSettings.onEach { settings ->
+                    mvi.updateState { it.copy(autoLoadImages = settings.autoLoadImages) }
+                }.launchIn(this)
                 launch {
                     val currentUserId = siteRepository.getCurrentUser(auth)?.id ?: 0
                     mvi.updateState { it.copy(currentUserId = currentUserId) }

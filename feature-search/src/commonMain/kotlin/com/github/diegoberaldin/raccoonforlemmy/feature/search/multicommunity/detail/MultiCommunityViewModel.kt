@@ -63,6 +63,7 @@ class MultiCommunityViewModel(
                         blurNsfw = settings.blurNsfw,
                         swipeActionsEnabled = settings.enableSwipeActions,
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
+                        autoLoadImages = settings.autoLoadImages,
                     )
                 }
             }.launchIn(this)

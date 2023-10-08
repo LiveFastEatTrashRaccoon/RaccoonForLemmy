@@ -25,6 +25,7 @@ import dev.icerock.moko.resources.compose.stringResource
 fun PostCardImage(
     modifier: Modifier = Modifier,
     imageUrl: String,
+    autoLoadImages: Boolean = true,
     minHeight: Dp = 200.dp,
     maxHeight: Dp = Dp.Unspecified,
     blurred: Boolean = false,
@@ -39,6 +40,7 @@ fun PostCardImage(
                     onImageClick?.invoke(imageUrl)
                 },
             url = imageUrl,
+            autoload = autoLoadImages,
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
             onFailure = {

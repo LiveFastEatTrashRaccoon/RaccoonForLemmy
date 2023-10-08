@@ -96,6 +96,7 @@ val commonUiModule = module {
             siteRepository = get(),
             communityRepository = get(),
             identityRepository = get(),
+            settingsRepository = get(),
         )
     }
     factory { params ->
@@ -128,6 +129,7 @@ val commonUiModule = module {
             mvi = DefaultMviModel(ZoomableImageMviModel.UiState()),
             shareHelper = get(),
             galleryHelper = get(),
+            settingsRepository = get(),
         )
     }
     factory { params ->
@@ -139,6 +141,7 @@ val commonUiModule = module {
             userRepository = get(),
             messageRepository = get(),
             notificationCenter = get(),
+            settingsRepository = get(),
         )
     }
     factory {
@@ -164,6 +167,7 @@ val commonUiModule = module {
             accountRepository = get(),
             communityRepository = get(),
             multiCommunityRepository = get(),
+            settingsRepository = get(),
         )
     }
 }

@@ -23,6 +23,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 fun UserItem(
     user: UserModel,
     modifier: Modifier = Modifier,
+    autoLoadImages: Boolean = true,
 ) {
     val name = user.name
     val avatar = user.avatar.orEmpty()
@@ -36,7 +37,7 @@ fun UserItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
-        if (avatar.isNotEmpty()) {
+        if (avatar.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier = Modifier.padding(Spacing.xxxs).size(iconSize)
                     .clip(RoundedCornerShape(iconSize / 2)),

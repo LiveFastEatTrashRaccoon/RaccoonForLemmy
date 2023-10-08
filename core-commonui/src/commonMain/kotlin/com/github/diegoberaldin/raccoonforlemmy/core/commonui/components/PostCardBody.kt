@@ -18,6 +18,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsR
 fun PostCardBody(
     modifier: Modifier = Modifier,
     text: String,
+    autoLoadImages: Boolean = true,
 ) {
     val uriHandler = LocalUriHandler.current
     val navigator = remember { getNavigationCoordinator().getRootNavigator() }
@@ -44,6 +45,7 @@ fun PostCardBody(
                 backgroundCode = MaterialTheme.colorScheme.background,
             ),
             inlineImages = false,
+            autoLoadImages = autoLoadImages,
             onOpenUrl = { url ->
                 handleUrl(
                     url = url,

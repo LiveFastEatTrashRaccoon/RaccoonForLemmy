@@ -61,6 +61,7 @@ val inboxTabModule = module {
             coordinator = get(),
             notificationCenter = get(),
             userRepository = get(),
+            settingsRepository = get(),
         )
     }
 }

@@ -153,6 +153,7 @@ class InstanceInfoScreen(
                                     )
                                 },
                                 community = it,
+                                autoLoadImages = uiState.autoLoadImages,
                             )
                         }
                     }

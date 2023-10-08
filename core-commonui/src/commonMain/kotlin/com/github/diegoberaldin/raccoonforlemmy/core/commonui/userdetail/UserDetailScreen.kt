@@ -340,6 +340,7 @@ class UserDetailScreen(
                                         postLayout = uiState.postLayout,
                                         blurNsfw = uiState.blurNsfw,
                                         separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                        autoLoadImages = uiState.autoLoadImages,
                                         options = buildList {
                                             add(stringResource(MR.strings.post_action_share))
                                         },
@@ -486,6 +487,7 @@ class UserDetailScreen(
                                         },
                                         comment = comment,
                                         separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                        autoLoadImages = uiState.autoLoadImages,
                                         hideCommunity = false,
                                         hideAuthor = true,
                                         hideIndent = true,

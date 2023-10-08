@@ -37,6 +37,7 @@ interface ExploreMviModel :
         val resultType: SearchResultType = SearchResultType.All,
         val postLayout: PostLayout = PostLayout.Card,
         val separateUpAndDownVotes: Boolean = false,
+        val autoLoadImages: Boolean = true,
     )
 
     sealed interface Effect

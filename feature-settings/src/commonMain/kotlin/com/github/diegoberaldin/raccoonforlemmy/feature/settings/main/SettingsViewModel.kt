@@ -97,6 +97,7 @@ class SettingsViewModel(
                 enableSwipeActions = settings.enableSwipeActions,
                 crashReportEnabled = crashReportConfiguration.isEnabled(),
                 separateUpAndDownVotes = settings.separateUpAndDownVotes,
+                autoLoadImages = settings.autoLoadImages,
                 appVersion = AppInfo.versionCode,
             )
         }
@@ -164,6 +165,8 @@ class SettingsViewModel(
             is SettingsMviModel.Intent.ChangeSeparateUpAndDownVotes -> changeSeparateUpAndDownVotes(
                 intent.value
             )
+
+            is SettingsMviModel.Intent.ChangeAutoLoadImages -> changeAutoLoadImages(intent.value)
         }
     }
 
@@ -317,6 +320,16 @@ class SettingsViewModel(
         mvi.scope?.launch {
             val settings = settingsRepository.currentSettings.value.copy(
                 separateUpAndDownVotes = value
+            )
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeAutoLoadImages(value: Boolean) {
+        mvi.updateState { it.copy(autoLoadImages = value) }
+        mvi.scope?.launch {
+            val settings = settingsRepository.currentSettings.value.copy(
+                autoLoadImages = value
             )
             saveSettings(settings)
         }

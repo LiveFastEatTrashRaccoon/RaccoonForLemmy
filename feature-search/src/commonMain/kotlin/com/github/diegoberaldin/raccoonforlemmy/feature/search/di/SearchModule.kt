@@ -37,6 +37,7 @@ val searchTabModule = module {
             multiCommunityRepository = get(),
             hapticFeedback = get(),
             notificationCenter = get(),
+            settingsRepository = get(),
         )
     }
     factory { params ->
@@ -67,6 +68,7 @@ val searchTabModule = module {
             accountRepository = get(),
             multiCommunityRepository = get(),
             notificationCenter = get(),
+            settingsRepository = get(),
         )
     }
 }

@@ -50,6 +50,7 @@ internal fun MarkdownText(
     style: TextStyle = LocalMarkdownTypography.current.text,
     onOpenUrl: ((String) -> Unit)? = null,
     inlineImages: Boolean = true,
+    autoLoadImages: Boolean = true,
     onOpenImage: ((String) -> Unit)? = null,
 ) {
     MarkdownText(
@@ -58,6 +59,7 @@ internal fun MarkdownText(
         style = style,
         onOpenUrl = onOpenUrl,
         inlineImages = inlineImages,
+        autoLoadImages = autoLoadImages,
         onOpenImage = onOpenImage,
     )
 }
@@ -69,6 +71,7 @@ internal fun MarkdownText(
     style: TextStyle = LocalMarkdownTypography.current.text,
     onOpenUrl: ((String) -> Unit)? = null,
     inlineImages: Boolean = true,
+    autoLoadImages: Boolean = true,
     onOpenImage: ((String) -> Unit)? = null,
 ) {
     val referenceLinkHandler = LocalReferenceLinkHandler.current
@@ -125,6 +128,7 @@ internal fun MarkdownText(
                                         onOpenImage?.invoke(imageUrl)
                                     },
                                 url = link,
+                                autoload = autoLoadImages,
                                 quality = FilterQuality.Low,
                                 contentDescription = null,
                                 contentScale = ContentScale.FillWidth,
@@ -178,6 +182,7 @@ internal fun MarkdownText(
                         onOpenImage?.invoke(imageUrl)
                     },
                 url = imageUrl,
+                autoload = autoLoadImages,
                 quality = FilterQuality.Low,
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,

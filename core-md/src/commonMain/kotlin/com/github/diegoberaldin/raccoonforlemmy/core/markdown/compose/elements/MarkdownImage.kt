@@ -24,13 +24,14 @@ import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 
 @Composable
-internal fun MarkdownImage(content: String, node: ASTNode) {
+internal fun MarkdownImage(content: String, node: ASTNode, autoLoadImages: Boolean = true) {
     val link =
         node.findChildOfTypeRecursive(MarkdownElementTypes.LINK_DESTINATION)?.getTextInNode(content)
             ?.toString() ?: return
 
     CustomImage(
         url = link,
+        autoload = autoLoadImages,
         quality = FilterQuality.Medium,
         contentDescription = null,
         contentScale = ContentScale.FillWidth,

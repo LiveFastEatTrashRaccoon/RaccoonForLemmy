@@ -16,6 +16,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsR
 @Composable
 fun PostCardTitle(
     text: String,
+    autoLoadImages: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     val uriHandler = LocalUriHandler.current
@@ -27,6 +28,7 @@ fun PostCardTitle(
     Markdown(
         modifier = modifier,
         content = text.replace("&amp;", "&"),
+        autoLoadImages = autoLoadImages,
         typography = markdownTypography(
             h1 = MaterialTheme.typography.titleLarge,
             h2 = MaterialTheme.typography.titleLarge,

@@ -112,6 +112,7 @@ class InboxMessagesScreen : Tab {
                         }
                         ChatCard(
                             user = otherUser,
+                            autoLoadImages = uiState.autoLoadImages,
                             lastMessage = chat.content.orEmpty(),
                             lastMessageDate = chat.publishDate,
                             onOpenUser = { user ->

@@ -70,6 +70,7 @@ class InboxRepliesViewModel(
                 mvi.updateState {
                     it.copy(
                         swipeActionsEnabled = settings.enableSwipeActions,
+                        autoLoadImages = settings.autoLoadImages,
                     )
                 }
             }.launchIn(this)

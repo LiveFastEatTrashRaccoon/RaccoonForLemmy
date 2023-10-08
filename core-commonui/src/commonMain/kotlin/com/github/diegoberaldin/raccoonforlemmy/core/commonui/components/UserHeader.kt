@@ -48,6 +48,7 @@ import dev.icerock.moko.resources.compose.stringResource
 @Composable
 fun UserHeader(
     user: UserModel,
+    autoLoadImages: Boolean = true,
     options: List<String> = emptyList(),
     onOptionSelected: ((Int) -> Unit)? = null,
     onOpenImage: ((String) -> Unit)? = null,
@@ -57,7 +58,7 @@ fun UserHeader(
     ) {
         // banner
         val banner = user.banner.orEmpty()
-        if (banner.isNotEmpty()) {
+        if (banner.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier = Modifier.fillMaxWidth().aspectRatio(4.5f),
                 url = banner,
@@ -117,7 +118,7 @@ fun UserHeader(
             // avatar
             val userAvatar = user.avatar.orEmpty()
             val avatarSize = 60.dp
-            if (userAvatar.isNotEmpty()) {
+            if (userAvatar.isNotEmpty() && autoLoadImages) {
                 CustomImage(
                     modifier = Modifier
                         .padding(Spacing.xxxs)

@@ -88,10 +88,10 @@ class ZoomableImageScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     ZoomableImage(
-                        url = url
+                        url = url,
+                        autoLoadImages = uiState.autoLoadImages,
                     )
                 }
-
             }
         )
 

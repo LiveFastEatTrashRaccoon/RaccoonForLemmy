@@ -250,6 +250,7 @@ class PostDetailScreen(
                                     postLayout = uiState.postLayout,
                                     withOverflowBlurred = false,
                                     separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                    autoLoadImages = uiState.autoLoadImages,
                                     blurNsfw = false,
                                     onOpenCommunity = { community ->
                                         navigator?.push(
@@ -394,6 +395,7 @@ class PostDetailScreen(
                                             },
                                             comment = comment,
                                             separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                            autoLoadImages = uiState.autoLoadImages,
                                             options = buildList {
                                                 if (comment.creator?.id == uiState.currentUserId) {
                                                     add(stringResource(MR.strings.post_action_edit))

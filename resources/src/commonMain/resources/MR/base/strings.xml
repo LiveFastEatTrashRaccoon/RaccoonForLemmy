@@ -26,6 +26,7 @@
 
     <string name="button_confirm">Confirm</string>
     <string name="button_reset">Reset</string>
+    <string name="button_load">Load</string>
 
     <string name="home_listing_type_all">All</string>
     <string name="home_listing_type_local">Local</string>
@@ -127,6 +128,7 @@
     <string name="settings_color_gray">Concrete</string>
     <string name="settings_enable_crash_report">Enable crash reporting</string>
     <string name="settings_separate_up_and_downvotes">Separate upvotes / downvotes</string>
+    <string name="settings_auto_load_images">Automatically load images</string>
     <string name="settings_section_appearance">Look and feel</string>
     <string name="settings_section_feed">Posts and comments</string>
     <string name="settings_section_behaviour">Behaviour</string>

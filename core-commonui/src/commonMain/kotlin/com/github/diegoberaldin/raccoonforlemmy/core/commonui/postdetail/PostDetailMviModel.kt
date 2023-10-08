@@ -41,6 +41,7 @@ interface PostDetailMviModel :
         val swipeActionsEnabled: Boolean = true,
         val postLayout: PostLayout = PostLayout.Card,
         val separateUpAndDownVotes: Boolean = false,
+        val autoLoadImages: Boolean = true,
     )
 
     sealed interface Effect {

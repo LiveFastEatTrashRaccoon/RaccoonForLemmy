@@ -9,7 +9,10 @@ interface ZoomableImageMviModel :
         data class SaveToGallery(val url: String) : Intent
     }
 
-    data class UiState(val loading: Boolean = false)
+    data class UiState(
+        val loading: Boolean = false,
+        val autoLoadImages: Boolean = true,
+    )
 
     sealed interface Effect
 }

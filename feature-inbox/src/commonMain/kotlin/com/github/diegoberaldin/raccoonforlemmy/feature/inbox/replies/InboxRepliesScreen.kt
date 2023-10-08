@@ -189,6 +189,7 @@ class InboxRepliesScreen : Tab {
                                     mention = mention,
                                     postLayout = uiState.postLayout,
                                     type = InboxCardType.Reply,
+                                    autoLoadImages = uiState.autoLoadImages,
                                     onOpenPost = { post ->
                                         navigator?.push(
                                             PostDetailScreen(

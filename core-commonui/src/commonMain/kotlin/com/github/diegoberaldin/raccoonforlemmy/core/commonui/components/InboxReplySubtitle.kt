@@ -34,6 +34,7 @@ import dev.icerock.moko.resources.compose.stringResource
 @Composable
 fun InboxReplySubtitle(
     modifier: Modifier = Modifier,
+    autoLoadImages: Boolean = true,
     creator: UserModel? = null,
     community: CommunityModel? = null,
     date: String? = null,
@@ -71,7 +72,7 @@ fun InboxReplySubtitle(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
-                        if (creatorAvatar.isNotEmpty()) {
+                        if (creatorAvatar.isNotEmpty() && autoLoadImages) {
                             CustomImage(
                                 modifier = Modifier
                                     .padding(Spacing.xxxs)
@@ -113,7 +114,7 @@ fun InboxReplySubtitle(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
-                        if (communityIcon.isNotEmpty()) {
+                        if (communityIcon.isNotEmpty() && autoLoadImages) {
                             CustomImage(
                                 modifier = Modifier
                                     .padding(Spacing.xxxs)

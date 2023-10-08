@@ -40,6 +40,7 @@ fun CommentCard(
     hideAuthor: Boolean = false,
     hideCommunity: Boolean = true,
     hideIndent: Boolean = false,
+    autoLoadImages: Boolean = true,
     options: List<String> = emptyList(),
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
@@ -87,11 +88,13 @@ fun CommentCard(
                     CommunityAndCreatorInfo(
                         creator = comment.creator.takeIf { !hideAuthor },
                         community = comment.community.takeIf { !hideCommunity },
+                        autoLoadImages = autoLoadImages,
                         onOpenCreator = onOpenCreator,
                         onOpenCommunity = onOpenCommunity,
                     )
                     PostCardBody(
                         text = comment.text,
+                        autoLoadImages = autoLoadImages,
                     )
                     PostCardFooter(
                         modifier = Modifier.padding(top = Spacing.xxs),

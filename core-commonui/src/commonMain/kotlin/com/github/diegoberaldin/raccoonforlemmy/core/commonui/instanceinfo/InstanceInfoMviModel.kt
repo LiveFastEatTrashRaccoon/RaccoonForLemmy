@@ -16,6 +16,7 @@ interface InstanceInfoMviModel :
         val description: String = "",
         val canFetchMore: Boolean = true,
         val refreshing: Boolean = false,
+        val autoLoadImages: Boolean = true,
         val loading: Boolean = false,
         val communities: List<CommunityModel> = emptyList(),
     )

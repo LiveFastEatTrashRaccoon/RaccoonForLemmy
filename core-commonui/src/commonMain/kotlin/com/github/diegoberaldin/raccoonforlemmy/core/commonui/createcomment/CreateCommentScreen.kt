@@ -169,6 +169,7 @@ class CreateCommentScreen(
                                 comment = originalComment,
                                 hideIndent = true,
                                 separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                autoLoadImages = uiState.autoLoadImages,
                             )
                             Divider()
                         }
@@ -180,6 +181,7 @@ class CreateCommentScreen(
                                 post = originalPost,
                                 blurNsfw = false,
                                 separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                autoLoadImages = uiState.autoLoadImages,
                             )
                             Divider()
                         }
@@ -268,6 +270,7 @@ class CreateCommentScreen(
                                 .padding(Spacing.s)
                                 .verticalScroll(rememberScrollState()),
                             text = uiState.text,
+                            autoLoadImages = uiState.autoLoadImages,
                         )
                     }
                 }

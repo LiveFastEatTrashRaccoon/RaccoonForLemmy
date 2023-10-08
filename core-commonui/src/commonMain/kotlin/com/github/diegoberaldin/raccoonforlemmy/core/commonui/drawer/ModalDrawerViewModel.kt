@@ -5,6 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.MultiCommunityRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
@@ -26,6 +27,7 @@ class ModalDrawerViewModel(
     private val multiCommunityRepository: MultiCommunityRepository,
     private val siteRepository: SiteRepository,
     private val apiConfigurationRepository: ApiConfigurationRepository,
+    private val settingsRepository: SettingsRepository,
 ) : ScreenModel,
     MviModel<ModalDrawerMviModel.Intent, ModalDrawerMviModel.UiState, ModalDrawerMviModel.Effect> by mvi {
 
@@ -45,6 +47,9 @@ class ModalDrawerViewModel(
             }.launchIn(this)
             identityRepository.authToken.drop(1).onEach { _ ->
                 refresh()
+            }.launchIn(this)
+            settingsRepository.currentSettings.onEach { settings ->
+                mvi.updateState { it.copy(autoLoadImages = settings.autoLoadImages) }
             }.launchIn(this)
         }
         if (uiState.value.communities.isEmpty()) {

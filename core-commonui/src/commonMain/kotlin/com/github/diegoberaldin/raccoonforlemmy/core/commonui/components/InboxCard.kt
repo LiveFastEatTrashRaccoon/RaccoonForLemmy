@@ -37,6 +37,7 @@ sealed interface InboxCardType {
 fun InboxCard(
     mention: PersonMentionModel,
     type: InboxCardType,
+    autoLoadImages: Boolean = true,
     postLayout: PostLayout = PostLayout.Card,
     onOpenPost: (PostModel) -> Unit,
     onOpenCreator: (UserModel) -> Unit,
@@ -79,6 +80,7 @@ fun InboxCard(
                         horizontal = Spacing.xs,
                     ),
                     text = mention.comment.text,
+                    autoLoadImages = autoLoadImages,
                 )
                 InboxReplySubtitle(
                     modifier = Modifier.padding(
@@ -86,6 +88,7 @@ fun InboxCard(
                     ),
                     creator = mention.creator,
                     community = mention.community,
+                    autoLoadImages = autoLoadImages,
                     date = mention.publishDate,
                     score = mention.score,
                     upVoted = mention.myVote > 0,

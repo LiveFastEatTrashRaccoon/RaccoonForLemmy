@@ -371,6 +371,19 @@ class SettingsScreen : Screen {
                         }
                     )
 
+                    // image loading
+                    SettingsSwitchRow(
+                        title = stringResource(MR.strings.settings_auto_load_images),
+                        value = uiState.autoLoadImages,
+                        onValueChanged = { value ->
+                            model.reduce(
+                                SettingsMviModel.Intent.ChangeAutoLoadImages(
+                                    value
+                                )
+                            )
+                        }
+                    )
+
                     SettingsHeader(
                         icon = Icons.Default.Shield,
                         title = stringResource(MR.strings.settings_section_nsfw),

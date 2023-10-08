@@ -28,6 +28,7 @@ interface SettingsMviModel :
         data class ChangeCustomSeedColor(val value: Color?) : Intent
         data class ChangeCrashReportEnabled(val value: Boolean) : Intent
         data class ChangeSeparateUpAndDownVotes(val value: Boolean) : Intent
+        data class ChangeAutoLoadImages(val value: Boolean) : Intent
     }
 
     data class UiState(
@@ -49,6 +50,7 @@ interface SettingsMviModel :
         val enableSwipeActions: Boolean = true,
         val crashReportEnabled: Boolean = false,
         val separateUpAndDownVotes: Boolean = false,
+        val autoLoadImages: Boolean = false,
         val appVersion: String = "",
     )
 

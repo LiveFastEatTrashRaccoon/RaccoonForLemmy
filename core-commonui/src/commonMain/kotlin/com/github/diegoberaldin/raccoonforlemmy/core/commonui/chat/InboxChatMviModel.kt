@@ -20,6 +20,7 @@ interface InboxChatMviModel :
         val otherUserAvatar: String? = null,
         val messages: List<PrivateMessageModel> = emptyList(),
         val newMessageContent: String = "",
+        val autoLoadImages: Boolean = true,
     )
 
     sealed interface SideEffect

@@ -25,6 +25,7 @@ private object KeyStoreKeys {
     const val CustomSeedColor = "customPrimaryColor"
     const val PostLayout = "postLayout"
     const val SeparateUpAndDownVotes = "separateUpAndDownVotes"
+    const val AutoLoadImages = "autoLoadImages"
 }
 
 internal class DefaultSettingsRepository(
@@ -55,6 +56,7 @@ internal class DefaultSettingsRepository(
                 account_id = accountId,
                 postLayout = settings.postLayout.toLong(),
                 separateUpAndDownVotes = if (settings.separateUpAndDownVotes) 1 else 0,
+                autoLoadImages = if (settings.autoLoadImages) 1 else 0,
             )
         }
 
@@ -78,6 +80,7 @@ internal class DefaultSettingsRepository(
                     customSeedColor = if (!keyStore.containsKey(KeyStoreKeys.CustomSeedColor)) null else keyStore[KeyStoreKeys.CustomSeedColor, 0],
                     postLayout = keyStore[KeyStoreKeys.PostLayout, 0],
                     separateUpAndDownVotes = keyStore[KeyStoreKeys.SeparateUpAndDownVotes, false],
+                    autoLoadImages = keyStore[KeyStoreKeys.AutoLoadImages, true],
                 )
             } else {
                 db.settingsQueries.getBy(accountId)
@@ -113,6 +116,7 @@ internal class DefaultSettingsRepository(
                 }
                 keyStore.save(KeyStoreKeys.PostLayout, settings.postLayout)
                 keyStore.save(KeyStoreKeys.SeparateUpAndDownVotes, settings.separateUpAndDownVotes)
+                keyStore.save(KeyStoreKeys.AutoLoadImages, settings.autoLoadImages)
             } else {
                 db.settingsQueries.update(
                     theme = settings.theme?.toLong(),
@@ -130,6 +134,7 @@ internal class DefaultSettingsRepository(
                     customSeedColor = settings.customSeedColor?.toLong(),
                     postLayout = settings.postLayout.toLong(),
                     separateUpAndDownVotes = if (settings.separateUpAndDownVotes) 1L else 0L,
+                    autoLoadImages = if (settings.autoLoadImages) 1L else 0L,
                     account_id = accountId,
                 )
             }
@@ -157,4 +162,5 @@ private fun SettingsEntity.toModel() = SettingsModel(
     customSeedColor = customSeedColor?.toInt(),
     postLayout = postLayout.toInt(),
     separateUpAndDownVotes = separateUpAndDownVotes != 0L,
+    autoLoadImages = autoLoadImages != 0L,
 )

@@ -332,6 +332,7 @@ class CreatePostScreen(
                         postLayout = uiState.postLayout,
                         withOverflowBlurred = false,
                         separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                        autoLoadImages = uiState.autoLoadImages,
                     )
                 }
 

@@ -3,6 +3,8 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,11 +17,14 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 actual fun CustomImage(
     modifier: Modifier,
     url: String,
+    autoload: Boolean,
     contentDescription: String?,
     quality: FilterQuality,
     contentScale: ContentScale,
@@ -30,44 +35,55 @@ actual fun CustomImage(
     onLoading: @Composable (BoxScope.(Float?) -> Unit)?,
     onFailure: @Composable (BoxScope.(Throwable) -> Unit)?,
 ) {
-    var painterState: AsyncImagePainter.State by remember {
-        mutableStateOf(AsyncImagePainter.State.Empty)
-    }
+    var shouldBeRendered by remember(autoload) { mutableStateOf(autoload) }
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
-        AsyncImage(
-            modifier = Modifier.fillMaxSize(),
-            model = url,
-            contentDescription = contentDescription,
-            filterQuality = quality,
-            contentScale = contentScale,
-            alignment = alignment,
-            alpha = alpha,
-            colorFilter = colorFilter,
-            onLoading = {
-                painterState = it
-            },
-            onError = {
-                painterState = it
-            },
-            onSuccess = {
-                painterState = it
+        if (shouldBeRendered) {
+            var painterState: AsyncImagePainter.State by remember {
+                mutableStateOf(AsyncImagePainter.State.Empty)
             }
-        )
+            AsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = url,
+                contentDescription = contentDescription,
+                filterQuality = quality,
+                contentScale = contentScale,
+                alignment = alignment,
+                alpha = alpha,
+                colorFilter = colorFilter,
+                onLoading = {
+                    painterState = it
+                },
+                onError = {
+                    painterState = it
+                },
+                onSuccess = {
+                    painterState = it
+                }
+            )
 
-        when (val state = painterState) {
-            AsyncImagePainter.State.Empty -> Unit
-            is AsyncImagePainter.State.Error -> {
-                onFailure?.invoke(this, state.result.throwable)
+            when (val state = painterState) {
+                AsyncImagePainter.State.Empty -> Unit
+                is AsyncImagePainter.State.Error -> {
+                    onFailure?.invoke(this, state.result.throwable)
+                }
+
+                is AsyncImagePainter.State.Loading -> {
+                    onLoading?.invoke(this, null)
+                }
+
+                else -> Unit
             }
-
-            is AsyncImagePainter.State.Loading -> {
-                onLoading?.invoke(this, null)
+        } else {
+            Button(
+                onClick = {
+                    shouldBeRendered = true
+                },
+            ) {
+                Text(text = stringResource(MR.strings.button_load))
             }
-
-            else -> Unit
         }
     }
 }

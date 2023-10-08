@@ -5,15 +5,19 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.AccountModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase.SwitchAccountUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ManageAccountsViewModel(
     private val mvi: DefaultMviModel<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect>,
     private val accountRepository: AccountRepository,
+    private val settingsRepository: SettingsRepository,
     private val switchAccount: SwitchAccountUseCase,
 ) : ScreenModel,
     MviModel<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect> by mvi {
@@ -23,6 +27,10 @@ class ManageAccountsViewModel(
 
         if (uiState.value.accounts.isEmpty()) {
             mvi.scope?.launch {
+                settingsRepository.currentSettings.onEach { settings ->
+                    mvi.updateState { it.copy(autoLoadImages = settings.autoLoadImages) }
+                }.launchIn(this)
+
                 val accounts = accountRepository.getAll()
                 mvi.updateState { it.copy(accounts = accounts) }
             }

@@ -5,6 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
@@ -23,6 +24,7 @@ class InboxMessagesViewModel(
     private val siteRepository: SiteRepository,
     private val messageRepository: PrivateMessageRepository,
     private val userRepository: UserRepository,
+    private val settingsRepository: SettingsRepository,
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
 ) : ScreenModel,
@@ -52,6 +54,9 @@ class InboxMessagesViewModel(
                 if (it != uiState.value.unreadOnly) {
                     changeUnreadOnly(it)
                 }
+            }.launchIn(this)
+            settingsRepository.currentSettings.onEach { settings ->
+                mvi.updateState { it.copy(autoLoadImages = settings.autoLoadImages) }
             }.launchIn(this)
             launch(Dispatchers.IO) {
                 val auth = identityRepository.authToken.value.orEmpty()

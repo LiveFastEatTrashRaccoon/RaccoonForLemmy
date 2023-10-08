@@ -180,40 +180,42 @@ class MultiCommunityEditorScreen(
                         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
                     ) {
                         val iconSize = 40.dp
-                        itemsIndexed(uiState.availableIcons) { idx, url ->
-                            val selected = url == uiState.icon
-                            CustomImage(
-                                modifier = Modifier
-                                    .size(iconSize)
-                                    .clip(RoundedCornerShape(iconSize / 2))
-                                    .let {
-                                        if (selected) {
-                                            it.border(
-                                                width = 1.dp,
-                                                color = MaterialTheme.colorScheme.primary,
-                                                shape = CircleShape,
-                                            ).padding(1.dp).border(
-                                                width = 1.dp,
-                                                color = MaterialTheme.colorScheme.onPrimary,
-                                                shape = CircleShape,
-                                            ).padding(1.dp).border(
-                                                width = 1.dp,
-                                                color = MaterialTheme.colorScheme.primary,
-                                                shape = CircleShape,
+                        if (uiState.autoLoadImages) {
+                            itemsIndexed(uiState.availableIcons) { idx, url ->
+                                val selected = url == uiState.icon
+                                CustomImage(
+                                    modifier = Modifier
+                                        .size(iconSize)
+                                        .clip(RoundedCornerShape(iconSize / 2))
+                                        .let {
+                                            if (selected) {
+                                                it.border(
+                                                    width = 1.dp,
+                                                    color = MaterialTheme.colorScheme.primary,
+                                                    shape = CircleShape,
+                                                ).padding(1.dp).border(
+                                                    width = 1.dp,
+                                                    color = MaterialTheme.colorScheme.onPrimary,
+                                                    shape = CircleShape,
+                                                ).padding(1.dp).border(
+                                                    width = 1.dp,
+                                                    color = MaterialTheme.colorScheme.primary,
+                                                    shape = CircleShape,
+                                                )
+                                            } else {
+                                                it
+                                            }
+                                        }.onClick {
+                                            model.reduce(
+                                                MultiCommunityEditorMviModel.Intent.SelectImage(
+                                                    idx,
+                                                )
                                             )
-                                        } else {
-                                            it
-                                        }
-                                    }.onClick {
-                                        model.reduce(
-                                            MultiCommunityEditorMviModel.Intent.SelectImage(
-                                                idx,
-                                            )
-                                        )
-                                    },
-                                url = url,
-                                contentScale = ContentScale.FillBounds,
-                            )
+                                        },
+                                    url = url,
+                                    contentScale = ContentScale.FillBounds,
+                                )
+                            }
                         }
                         item {
                             val selected = uiState.icon == null

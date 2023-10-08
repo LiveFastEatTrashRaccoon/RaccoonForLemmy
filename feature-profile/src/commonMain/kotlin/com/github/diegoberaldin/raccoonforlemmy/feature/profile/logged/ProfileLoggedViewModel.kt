@@ -78,7 +78,8 @@ class ProfileLoggedViewModel(
             settingsRepository.currentSettings.onEach { settings ->
                 mvi.updateState {
                     it.copy(
-                        separateUpAndDownVotes = settings.separateUpAndDownVotes
+                        separateUpAndDownVotes = settings.separateUpAndDownVotes,
+                        autoLoadImages = settings.autoLoadImages,
                     )
                 }
             }.launchIn(this)

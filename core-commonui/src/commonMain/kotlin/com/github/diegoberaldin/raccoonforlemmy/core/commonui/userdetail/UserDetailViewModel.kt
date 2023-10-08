@@ -75,6 +75,7 @@ class UserDetailViewModel(
                         swipeActionsEnabled = settings.enableSwipeActions,
                         sortType = settings.defaultPostSortType.toSortType(),
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
+                        autoLoadImages = settings.autoLoadImages,
                     )
                 }
             }.launchIn(this)
