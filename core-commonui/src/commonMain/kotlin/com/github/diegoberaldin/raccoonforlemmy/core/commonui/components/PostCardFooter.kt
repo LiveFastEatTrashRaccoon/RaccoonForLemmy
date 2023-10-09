@@ -29,6 +29,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -171,13 +173,43 @@ fun PostCardFooter(
                 ),
             )
             Text(
-                text = buildString {
+                text = buildAnnotatedString {
                     if (separateUpAndDownVotes) {
-                        append(upvotes)
+                        val upvoteText = upvotes.toString()
+                        append(upvoteText)
+                        if (upVoted) {
+                            addStyle(
+                                style = SpanStyle(color = MaterialTheme.colorScheme.surfaceTint),
+                                start = 0,
+                                end = upvoteText.length
+                            )
+                        }
                         append(" / ")
-                        append(downvotes)
+                        val downvoteText = downvotes.toString()
+                        append(downvoteText)
+                        if (downVoted) {
+                            addStyle(
+                                style = SpanStyle(color = MaterialTheme.colorScheme.surfaceTint),
+                                start = upvoteText.length + 3,
+                                end = upvoteText.length + 3 + downvoteText.length
+                            )
+                        }
                     } else {
-                        append(score)
+                        val text = score.toString()
+                        append(text)
+                        if (upVoted) {
+                            addStyle(
+                                style = SpanStyle(color = MaterialTheme.colorScheme.surfaceTint),
+                                start = 0,
+                                end = text.length
+                            )
+                        } else if (downVoted) {
+                            addStyle(
+                                style = SpanStyle(color = MaterialTheme.colorScheme.tertiary),
+                                start = 0,
+                                end = length
+                            )
+                        }
                     }
                 },
                 style = MaterialTheme.typography.labelLarge,

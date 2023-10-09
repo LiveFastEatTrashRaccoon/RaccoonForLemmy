@@ -181,6 +181,8 @@ private fun CompactPost(
             comments = post.comments,
             separateUpAndDownVotes = separateUpAndDownVotes,
             score = post.score,
+            upvotes = post.upvotes,
+            downvotes = post.downvotes,
             upVoted = post.myVote > 0,
             downVoted = post.myVote < 0,
             saved = post.saved,
