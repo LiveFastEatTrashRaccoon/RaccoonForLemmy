@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 internal class DefaultThemeRepository : ThemeRepository {
 
     override val state = MutableStateFlow<ThemeState>(ThemeState.Light)
+    override val uiFontScale = MutableStateFlow(1f)
     override val contentFontScale = MutableStateFlow(1f)
     override val navItemTitles = MutableStateFlow(false)
     override val dynamicColors = MutableStateFlow(false)
@@ -17,6 +18,10 @@ internal class DefaultThemeRepository : ThemeRepository {
 
     override fun changeTheme(value: ThemeState) {
         state.value = value
+    }
+
+    override fun changeUiFontScale(value: Float) {
+        uiFontScale.value = value
     }
 
     override fun changeContentFontScale(value: Float) {

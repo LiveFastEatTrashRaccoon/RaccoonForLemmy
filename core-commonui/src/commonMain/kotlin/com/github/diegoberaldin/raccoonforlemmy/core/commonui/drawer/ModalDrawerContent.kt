@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityItem
@@ -65,9 +66,12 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getModalDrawerV
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import dev.icerock.moko.resources.compose.localized
 import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.StringDesc
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -90,6 +94,11 @@ object ModalDrawerContent : Tab {
         var changeInstanceDialogOpen by remember {
             mutableStateOf(false)
         }
+        val languageRepository = remember { getLanguageRepository() }
+        val themeRepository = remember { getThemeRepository() }
+        val lang by languageRepository.currentLanguage.collectAsState()
+        val uiFontSize = themeRepository.uiFontScale.collectAsState()
+
         LaunchedEffect(model) {
             model.effects.onEach { evt ->
                 when (evt) {
@@ -100,9 +109,23 @@ object ModalDrawerContent : Tab {
             }.launchIn(this)
         }
 
+        var uiFontSizeWorkaround by remember { mutableStateOf(true) }
+        LaunchedEffect(themeRepository) {
+            themeRepository.uiFontScale.drop(1).onEach {
+                uiFontSizeWorkaround = false
+                delay(50)
+                uiFontSizeWorkaround = true
+            }.launchIn(this)
+        }
+        if (!uiFontSizeWorkaround) {
+            return
+        }
+
         Column(
             modifier = Modifier.fillMaxWidth(0.9f)
         ) {
+            LaunchedEffect(lang) {}
+
             DrawerHeader(
                 user = uiState.user,
                 instance = uiState.instance,

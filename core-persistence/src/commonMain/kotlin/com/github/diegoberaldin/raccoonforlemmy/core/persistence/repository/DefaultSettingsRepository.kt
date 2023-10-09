@@ -1,7 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.DatabaseProvider
-import com.github.diegoberaldin.raccoonforlemmy.core.persistence.SettingsEntity
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.GetBy
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 
 private object KeyStoreKeys {
     const val UiTheme = "uiTheme"
+    const val UiFontScale = "uiFontSize"
     const val ContentFontScale = "contentFontSize"
     const val Locale = "locale"
     const val DefaultListingType = "defaultListingType"
@@ -41,6 +42,7 @@ internal class DefaultSettingsRepository(
         withContext(Dispatchers.IO) {
             db.settingsQueries.create(
                 theme = settings.theme?.toLong(),
+                uiFontScale = settings.uiFontScale.toDouble(),
                 contentFontScale = settings.contentFontScale.toDouble(),
                 locale = settings.locale,
                 defaultListingType = settings.defaultListingType.toLong(),
@@ -68,6 +70,7 @@ internal class DefaultSettingsRepository(
                     theme = if (keyStore.containsKey(KeyStoreKeys.UiTheme)) {
                         keyStore[KeyStoreKeys.UiTheme, 0]
                     } else null,
+                    uiFontScale = keyStore[KeyStoreKeys.UiFontScale, 1f],
                     contentFontScale = keyStore[KeyStoreKeys.ContentFontScale, 1f],
                     locale = keyStore[KeyStoreKeys.Locale, ""].takeIf { it.isNotEmpty() },
                     defaultListingType = keyStore[KeyStoreKeys.DefaultListingType, 0],
@@ -85,8 +88,9 @@ internal class DefaultSettingsRepository(
                     autoLoadImages = keyStore[KeyStoreKeys.AutoLoadImages, true],
                 )
             } else {
-                db.settingsQueries.getBy(accountId)
-                    .executeAsOneOrNull()?.toModel() ?: SettingsModel()
+                val entity = db.settingsQueries.getBy(accountId).executeAsOneOrNull()
+                val result = entity?.toModel()
+                result ?: SettingsModel()
             }
         }
 
@@ -97,6 +101,7 @@ internal class DefaultSettingsRepository(
                 if (settings.theme != null) {
                     keyStore.save(KeyStoreKeys.UiTheme, settings.theme)
                 }
+                keyStore.save(KeyStoreKeys.UiFontScale, settings.uiFontScale)
                 keyStore.save(KeyStoreKeys.ContentFontScale, settings.contentFontScale)
                 if (!settings.locale.isNullOrEmpty()) {
                     keyStore.save(KeyStoreKeys.Locale, settings.locale)
@@ -122,6 +127,7 @@ internal class DefaultSettingsRepository(
             } else {
                 db.settingsQueries.update(
                     theme = settings.theme?.toLong(),
+                    uiFontScale = settings.uiFontScale.toDouble(),
                     contentFontScale = settings.contentFontScale.toDouble(),
                     locale = settings.locale,
                     defaultListingType = settings.defaultListingType.toLong(),
@@ -147,9 +153,10 @@ internal class DefaultSettingsRepository(
     }
 }
 
-private fun SettingsEntity.toModel() = SettingsModel(
+private fun GetBy.toModel() = SettingsModel(
     id = id,
     theme = theme?.toInt(),
+    uiFontScale = uiFontScale.toFloat(),
     contentFontScale = contentFontScale.toFloat(),
     locale = locale,
     defaultListingType = defaultListingType.toInt(),

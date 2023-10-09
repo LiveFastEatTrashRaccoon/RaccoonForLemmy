@@ -5,6 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.JavaSerializable
 data class SettingsModel(
     val id: Long? = null,
     val theme: Int? = null,
+    val uiFontScale: Float = 1f,
     val contentFontScale: Float = 1f,
     val locale: String? = null,
     val defaultListingType: Int = 0,
@@ -12,7 +13,7 @@ data class SettingsModel(
     val defaultCommentSortType: Int = 3,
     val includeNsfw: Boolean = true,
     val blurNsfw: Boolean = true,
-    val navigationTitlesVisible: Boolean = false,
+    val navigationTitlesVisible: Boolean = true,
     val dynamicColors: Boolean = false,
     val openUrlsInExternalBrowser: Boolean = false,
     val enableSwipeActions: Boolean = true,

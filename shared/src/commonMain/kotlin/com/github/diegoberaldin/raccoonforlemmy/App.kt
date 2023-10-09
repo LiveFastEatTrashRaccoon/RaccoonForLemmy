@@ -12,6 +12,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -23,6 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -96,11 +99,13 @@ fun App() {
             changeCustomSeedColor(settings.customSeedColor?.let { Color(it) })
             changePostLayout(settings.postLayout.toPostLayout())
             changeContentFontScale(settings.contentFontScale)
+            changeUiFontScale(settings.uiFontScale)
         }
     }
     val currentTheme by themeRepository.state.collectAsState()
     val useDynamicColors by themeRepository.dynamicColors.collectAsState()
     val fontScale by themeRepository.contentFontScale.collectAsState()
+    val uiFontScale by themeRepository.uiFontScale.collectAsState()
     val navigationCoordinator = remember { getNavigationCoordinator() }
 
     AppTheme(
@@ -111,39 +116,46 @@ fun App() {
         val lang by languageRepository.currentLanguage.collectAsState()
         LaunchedEffect(lang) {}
 
-        BottomSheetNavigator(
-            sheetShape = RoundedCornerShape(topStart = CornerSize.xl, topEnd = CornerSize.xl),
-            sheetBackgroundColor = MaterialTheme.colorScheme.background,
+        CompositionLocalProvider(
+            LocalDensity provides Density(
+                density = LocalDensity.current.density,
+                fontScale = uiFontScale,
+            ),
         ) {
-            Navigator(
-                screen = MainScreen(),
-                onBackPressed = {
-                    val callback = navigationCoordinator.getCanGoBackCallback()
-                    callback?.let { it() } ?: true
-                }
+            BottomSheetNavigator(
+                sheetShape = RoundedCornerShape(topStart = CornerSize.xl, topEnd = CornerSize.xl),
+                sheetBackgroundColor = MaterialTheme.colorScheme.background,
             ) {
-                val navigator = LocalNavigator.current
-                navigationCoordinator.setRootNavigator(navigator)
-                if (hasBeenInitialized) {
-                    CurrentScreen()
-                } else {
-                    // loading screen
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(top = 24.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                Navigator(
+                    screen = MainScreen(),
+                    onBackPressed = {
+                        val callback = navigationCoordinator.getCanGoBackCallback()
+                        callback?.let { it() } ?: true
+                    }
+                ) {
+                    val navigator = LocalNavigator.current
+                    navigationCoordinator.setRootNavigator(navigator)
+                    if (hasBeenInitialized) {
+                        CurrentScreen()
+                    } else {
+                        // loading screen
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
                         ) {
-                            Image(
-                                painter = painterResource(MR.images.icon),
-                                contentDescription = null,
-                            )
-                            CircularProgressIndicator(
-                                color = MaterialTheme.colorScheme.onPrimary,
-                            )
+                            Column(
+                                modifier = Modifier.padding(top = 24.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                            ) {
+                                Image(
+                                    painter = painterResource(MR.images.icon),
+                                    contentDescription = null,
+                                )
+                                CircularProgressIndicator(
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                )
+                            }
                         }
                     }
                 }

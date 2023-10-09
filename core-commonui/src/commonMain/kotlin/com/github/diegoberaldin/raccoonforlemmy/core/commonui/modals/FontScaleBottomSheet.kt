@@ -26,7 +26,17 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
-class FontScaleBottomSheet : Screen {
+class FontScaleBottomSheet(
+    private val values: List<FontScale> = listOf(
+        FontScale.Largest,
+        FontScale.Larger,
+        FontScale.Large,
+        FontScale.Normal,
+        FontScale.Small,
+        FontScale.Smaller,
+        FontScale.Smallest,
+    ),
+) : Screen {
 
     @Composable
     override fun Content() {
@@ -51,15 +61,6 @@ class FontScaleBottomSheet : Screen {
                     text = stringResource(MR.strings.settings_content_font_scale),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground,
-                )
-                val values = listOf(
-                    FontScale.Largest,
-                    FontScale.Larger,
-                    FontScale.Large,
-                    FontScale.Normal,
-                    FontScale.Small,
-                    FontScale.Smaller,
-                    FontScale.Smallest,
                 )
                 Column(
                     modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),

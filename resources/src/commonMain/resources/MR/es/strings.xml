@@ -91,6 +91,7 @@
     <string name="settings_theme_light">Claro</string>
     <string name="settings_theme_black">Oscuro (AMOLED)</string>
     <string name="settings_language">Idioma</string>
+    <string name="settings_ui_font_scale">Tamaño de texto interfaz</string>
     <string name="settings_content_font_scale">Tamaño de texto de contenidos</string>
     <string name="settings_content_font_largest">Máximo</string>
     <string name="settings_content_font_larger">Más grande</string>

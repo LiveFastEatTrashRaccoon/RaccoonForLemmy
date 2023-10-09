@@ -8,18 +8,16 @@ import kotlinx.coroutines.flow.StateFlow
 interface ThemeRepository {
 
     val state: StateFlow<ThemeState>
-
+    val uiFontScale: StateFlow<Float>
     val contentFontScale: StateFlow<Float>
-
     val navItemTitles: StateFlow<Boolean>
-
     val dynamicColors: StateFlow<Boolean>
-
     val customSeedColor: StateFlow<Color?>
-
     val postLayout: StateFlow<PostLayout>
 
     fun changeTheme(value: ThemeState)
+
+    fun changeUiFontScale(value: Float)
 
     fun changeContentFontScale(value: Float)
 

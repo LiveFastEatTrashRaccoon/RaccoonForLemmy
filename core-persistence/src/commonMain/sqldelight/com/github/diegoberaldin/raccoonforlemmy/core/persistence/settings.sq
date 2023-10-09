@@ -1,6 +1,7 @@
 CREATE TABLE SettingsEntity (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     theme INTEGER DEFAULT NULL,
+    uiFontScale REAL NOT NULL DEFAULT 1,
     contentFontScale REAL NOT NULL DEFAULT 1,
     locale TEXT DEFAULT NULL,
     defaultListingType INTEGER NOT NULL DEFAULT 0,
@@ -24,6 +25,7 @@ CREATE TABLE SettingsEntity (
 create:
 INSERT OR IGNORE INTO SettingsEntity (
     theme,
+    uiFontScale,
     contentFontScale,
     locale,
     defaultListingType,
@@ -57,12 +59,14 @@ INSERT OR IGNORE INTO SettingsEntity (
     ?,
     ?,
     ?,
+    ?,
     ?
 );
 
 update:
 UPDATE SettingsEntity
 SET theme = ?,
+    uiFontScale = ?,
     contentFontScale = ?,
     locale = ?,
     defaultListingType = ?,
@@ -81,6 +85,24 @@ SET theme = ?,
 WHERE account_id = ?;
 
 getBy:
-SELECT *
+SELECT
+    id,
+    theme,
+    uiFontScale,
+    contentFontScale,
+    locale,
+    defaultListingType,
+    defaultPostSortType,
+    defaultCommentSortType,
+    includeNsfw,
+    blurNsfw,
+    navigationTitlesVisible,
+    dynamicColors,
+    openUrlsInExternalBrowser,
+    enableSwipeActions,
+    customSeedColor,
+    postLayout,
+    separateUpAndDownVotes,
+    autoLoadImages
 FROM SettingsEntity
 WHERE account_id = ?;

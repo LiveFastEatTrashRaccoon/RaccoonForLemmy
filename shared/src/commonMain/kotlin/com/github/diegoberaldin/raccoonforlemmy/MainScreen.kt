@@ -10,6 +10,7 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,6 +22,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -45,6 +48,8 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.de
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.SearchTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
 import com.github.diegoberaldin.raccoonforlemmy.ui.navigation.TabNavigationItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.roundToInt
@@ -61,6 +66,7 @@ internal class MainScreen : Screen {
         val model = rememberScreenModel { getMainViewModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val uiFontScale by themeRepository.uiFontScale.collectAsState()
 
         LaunchedEffect(model) {
             model.effects.onEach {
@@ -134,26 +140,43 @@ internal class MainScreen : Screen {
                         CurrentTab()
                     },
                     bottomBar = {
-                        val titleVisible by themeRepository.navItemTitles.collectAsState()
-                        BottomAppBar(
-                            modifier = Modifier
-                                .onGloballyPositioned {
-                                    bottomBarHeightPx = it.size.toSize().height
-                                }
-                                .offset {
-                                    IntOffset(
-                                        x = 0,
-                                        y = -uiState.bottomBarOffsetHeightPx.roundToInt()
-                                    )
-                                },
-                            contentPadding = PaddingValues(0.dp),
-                            backgroundColor = MaterialTheme.colorScheme.background,
+                        CompositionLocalProvider(
+                            LocalDensity provides Density(
+                                density = LocalDensity.current.density,
+                                fontScale = uiFontScale,
+                            ),
                         ) {
-                            TabNavigationItem(HomeTab, withText = titleVisible)
-                            TabNavigationItem(SearchTab, withText = titleVisible)
-                            TabNavigationItem(ProfileTab, withText = titleVisible)
-                            TabNavigationItem(InboxTab, withText = titleVisible)
-                            TabNavigationItem(SettingsTab, withText = titleVisible)
+                            val titleVisible by themeRepository.navItemTitles.collectAsState()
+                            var uiFontSizeWorkaround by remember { mutableStateOf(true) }
+                            LaunchedEffect(themeRepository) {
+                                themeRepository.uiFontScale.drop(1).onEach {
+                                    uiFontSizeWorkaround = false
+                                    delay(50)
+                                    uiFontSizeWorkaround = true
+                                }.launchIn(this)
+                            }
+                            if (uiFontSizeWorkaround) {
+                                BottomAppBar(
+                                    modifier = Modifier
+                                        .onGloballyPositioned {
+                                            bottomBarHeightPx = it.size.toSize().height
+                                        }
+                                        .offset {
+                                            IntOffset(
+                                                x = 0,
+                                                y = -uiState.bottomBarOffsetHeightPx.roundToInt()
+                                            )
+                                        },
+                                    contentPadding = PaddingValues(0.dp),
+                                    backgroundColor = MaterialTheme.colorScheme.background,
+                                ) {
+                                    TabNavigationItem(HomeTab, withText = titleVisible)
+                                    TabNavigationItem(SearchTab, withText = titleVisible)
+                                    TabNavigationItem(ProfileTab, withText = titleVisible)
+                                    TabNavigationItem(InboxTab, withText = titleVisible)
+                                    TabNavigationItem(SettingsTab, withText = titleVisible)
+                                }
+                            }
                         }
                     },
                 )

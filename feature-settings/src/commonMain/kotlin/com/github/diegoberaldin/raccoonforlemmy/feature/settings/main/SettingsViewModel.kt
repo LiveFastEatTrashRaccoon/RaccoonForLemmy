@@ -62,7 +62,10 @@ class SettingsViewModel(
                 mvi.updateState { it.copy(currentTheme = currentTheme) }
             }.launchIn(this)
             themeRepository.contentFontScale.onEach { value ->
-                mvi.updateState { it.copy(currentFontScale = value.toFontScale()) }
+                mvi.updateState { it.copy(contentFontScale = value.toFontScale()) }
+            }.launchIn(this)
+            themeRepository.uiFontScale.onEach { value ->
+                mvi.updateState { it.copy(uiFontScale = value.toFontScale()) }
             }.launchIn(this)
             themeRepository.navItemTitles.onEach { value ->
                 mvi.updateState { it.copy(navBarTitlesVisible = value) }
@@ -111,6 +114,10 @@ class SettingsViewModel(
 
             is SettingsMviModel.Intent.ChangeContentFontSize -> {
                 changeContentFontScale(intent.value)
+            }
+
+            is SettingsMviModel.Intent.ChangeUiFontSize -> {
+                changeUiFontScale(intent.value)
             }
 
             is SettingsMviModel.Intent.ChangeLanguage -> {
@@ -175,6 +182,16 @@ class SettingsViewModel(
         mvi.scope?.launch {
             val settings = settingsRepository.currentSettings.value.copy(
                 theme = value.toInt()
+            )
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeUiFontScale(value: Float) {
+        themeRepository.changeUiFontScale(value)
+        mvi.scope?.launch {
+            val settings = settingsRepository.currentSettings.value.copy(
+                uiFontScale = value
             )
             saveSettings(settings)
         }

@@ -13,6 +13,7 @@ interface SettingsMviModel :
 
     sealed interface Intent {
         data class ChangeTheme(val value: ThemeState) : Intent
+        data class ChangeUiFontSize(val value: Float) : Intent
         data class ChangeContentFontSize(val value: Float) : Intent
         data class ChangeLanguage(val value: String) : Intent
         data class ChangeDefaultListingType(val value: ListingType) : Intent
@@ -35,7 +36,8 @@ interface SettingsMviModel :
         val isLogged: Boolean = false,
         val currentTheme: ThemeState = ThemeState.Light,
         val customSeedColor: Color? = null,
-        val currentFontScale: FontScale = FontScale.Normal,
+        val uiFontScale: FontScale = FontScale.Normal,
+        val contentFontScale: FontScale = FontScale.Normal,
         val lang: String = "",
         val postLayout: PostLayout = PostLayout.Card,
         val defaultListingType: ListingType = ListingType.Local,

@@ -25,11 +25,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -37,10 +39,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.FontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
@@ -69,6 +73,10 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageReposito
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
 import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.desc
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class SettingsScreen : Screen {
@@ -89,12 +97,25 @@ class SettingsScreen : Screen {
                 notificationCenter.removeObserver(key)
             }
         }
+        val languageRepository = remember { getLanguageRepository() }
+        val lang by languageRepository.currentLanguage.collectAsState()
+
+        var uiFontSizeWorkaround by remember { mutableStateOf(true) }
+        val themeRepository = remember { getThemeRepository() }
+        LaunchedEffect(themeRepository) {
+            themeRepository.uiFontScale.drop(1).onEach {
+                uiFontSizeWorkaround = false
+                delay(50)
+                uiFontSizeWorkaround = true
+            }.launchIn(this)
+        }
+        if (!uiFontSizeWorkaround) {
+            return
+        }
 
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
             topBar = {
-                val languageRepository = remember { getLanguageRepository() }
-                val lang by languageRepository.currentLanguage.collectAsState()
                 val title by remember(lang) {
                     mutableStateOf(staticString(MR.strings.navigation_settings.desc()))
                 }
@@ -206,8 +227,31 @@ class SettingsScreen : Screen {
 
                     // font scale
                     SettingsRow(
+                        title = stringResource(MR.strings.settings_ui_font_scale),
+                        value = uiState.uiFontScale.toReadableName(),
+                        onTap = {
+                            val sheet = FontScaleBottomSheet(
+                                values = listOf(
+                                    FontScale.Large,
+                                    FontScale.Normal,
+                                    FontScale.Small,
+                                ),
+                            )
+                            notificationCenter.addObserver({ result ->
+                                (result as? Float)?.also { value ->
+                                    model.reduce(
+                                        SettingsMviModel.Intent.ChangeUiFontSize(
+                                            value
+                                        )
+                                    )
+                                }
+                            }, key, NotificationCenterContractKeys.ChangeFontSize)
+                            bottomSheetNavigator.show(sheet)
+                        },
+                    )
+                    SettingsRow(
                         title = stringResource(MR.strings.settings_content_font_scale),
-                        value = uiState.currentFontScale.toReadableName(),
+                        value = uiState.contentFontScale.toReadableName(),
                         onTap = {
                             val sheet = FontScaleBottomSheet()
                             notificationCenter.addObserver({ result ->
