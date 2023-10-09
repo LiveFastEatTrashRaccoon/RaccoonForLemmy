@@ -75,6 +75,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.Crea
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
@@ -322,6 +323,11 @@ class PostDetailScreen(
 
                                             else -> model.reduce(PostDetailMviModel.Intent.SharePost)
                                         }
+                                    },
+                                    onImageClick = { url ->
+                                        navigator?.push(
+                                            ZoomableImageScreen(url),
+                                        )
                                     },
                                 )
                                 if (uiState.postLayout != PostLayout.Card) {
