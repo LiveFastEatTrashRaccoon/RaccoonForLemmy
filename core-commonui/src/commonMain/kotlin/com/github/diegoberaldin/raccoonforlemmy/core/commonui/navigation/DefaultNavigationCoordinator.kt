@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 internal class DefaultNavigationCoordinator : NavigationCoordinator {
 
     override val onDoubleTabSelection = MutableSharedFlow<Tab>()
+    override val deeplinkUrl = MutableSharedFlow<String>()
 
     private var connection: NestedScrollConnection? = null
     private var navigator: Navigator? = null
@@ -39,6 +40,12 @@ internal class DefaultNavigationCoordinator : NavigationCoordinator {
             scope.launch {
                 onDoubleTabSelection.emit(tab)
             }
+        }
+    }
+
+    override fun submitDeeplink(url: String) {
+        scope.launch {
+            deeplinkUrl.emit(url)
         }
     }
 

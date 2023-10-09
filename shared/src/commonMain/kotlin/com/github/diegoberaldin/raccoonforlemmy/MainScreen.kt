@@ -23,6 +23,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -34,11 +35,13 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.handleUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerContent
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.di.getMainViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
@@ -67,6 +70,9 @@ internal class MainScreen : Screen {
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val uiFontScale by themeRepository.uiFontScale.collectAsState()
+        val uriHandler = LocalUriHandler.current
+        val settingsRepository = remember { getSettingsRepository() }
+        val settings by settingsRepository.currentSettings.collectAsState()
 
         LaunchedEffect(model) {
             model.effects.onEach {
@@ -94,6 +100,16 @@ internal class MainScreen : Screen {
             navigationCoordinator.apply {
                 setBottomBarScrollConnection(scrollConnection)
                 setCurrentSection(HomeTab)
+
+                // handles deep link urls
+                deeplinkUrl.onEach {
+                    handleUrl(
+                        url = it,
+                        uriHandler = uriHandler,
+                        navigator = navigator,
+                        openExternal = settings.openUrlsInExternalBrowser,
+                    )
+                }.launchIn(this@LaunchedEffect)
             }
         }
 
