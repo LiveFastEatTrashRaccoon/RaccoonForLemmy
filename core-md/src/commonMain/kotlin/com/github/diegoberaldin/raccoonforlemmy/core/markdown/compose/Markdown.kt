@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -52,10 +53,22 @@ import org.intellij.markdown.parser.MarkdownParser
  * https://github.com/mikepenz/multiplatform-markdown-renderer
  */
 @Composable
-fun Markdown(
+fun CustomMarkdown(
     content: String,
-    colors: MarkdownColors = markdownColor(),
-    typography: MarkdownTypography = markdownTypography(),
+    colors: MarkdownColors = markdownColor(
+        text = MaterialTheme.colorScheme.onBackground,
+        backgroundCode = MaterialTheme.colorScheme.background,
+    ),
+    typography: MarkdownTypography = markdownTypography(
+        h1 = MaterialTheme.typography.titleLarge,
+        h2 = MaterialTheme.typography.titleLarge,
+        h3 = MaterialTheme.typography.titleMedium,
+        h4 = MaterialTheme.typography.titleMedium,
+        h5 = MaterialTheme.typography.titleSmall,
+        h6 = MaterialTheme.typography.titleSmall,
+        text = MaterialTheme.typography.bodyMedium,
+        paragraph = MaterialTheme.typography.bodyMedium,
+    ),
     padding: MarkdownPadding = markdownPadding(),
     modifier: Modifier = Modifier.fillMaxSize(),
     flavour: MarkdownFlavourDescriptor = GFMFlavourDescriptor(),
@@ -88,7 +101,7 @@ fun Markdown(
         } else {
             append(content)
         }
-    }
+    }.replace("&amp;", "&")
 
     CompositionLocalProvider(
         LocalReferenceLinkHandler provides ReferenceLinkHandlerImpl(),
@@ -166,8 +179,8 @@ private fun ASTNode.handleElement(
 
         ORDERED_LIST -> Column(modifier = Modifier) {
             MarkdownOrderedList(
-                content,
-                this@handleElement,
+                content = content,
+                node = this@handleElement,
                 style = typography.ordered,
                 onOpenUrl = onOpenUrl,
             )
@@ -175,14 +188,19 @@ private fun ASTNode.handleElement(
 
         UNORDERED_LIST -> Column(modifier = Modifier) {
             MarkdownBulletList(
-                content,
-                this@handleElement,
+                content = content,
+                node = this@handleElement,
                 style = typography.bullet,
                 onOpenUrl = onOpenUrl
             )
         }
 
-        IMAGE -> MarkdownImage(content, this, autoLoadImages)
+        IMAGE -> MarkdownImage(
+            content = content,
+            node = this,
+            autoLoadImages = autoLoadImages
+        )
+
         LINK_DEFINITION -> {
             val linkLabel =
                 findChildOfType(MarkdownElementTypes.LINK_LABEL)?.getTextInNode(content)?.toString()
