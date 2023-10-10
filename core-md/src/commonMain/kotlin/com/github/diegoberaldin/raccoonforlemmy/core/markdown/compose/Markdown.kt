@@ -101,7 +101,9 @@ fun CustomMarkdown(
         } else {
             append(content)
         }
-    }.replace("&amp;", "&")
+    }
+        .replace("&amp;", "&")
+        .replace("&nbsp;", " ")
 
     CompositionLocalProvider(
         LocalReferenceLinkHandler provides ReferenceLinkHandlerImpl(),
