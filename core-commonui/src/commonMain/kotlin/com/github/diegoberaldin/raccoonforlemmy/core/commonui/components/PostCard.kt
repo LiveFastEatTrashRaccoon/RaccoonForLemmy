@@ -156,11 +156,19 @@ private fun CompactPost(
             autoLoadImages = autoLoadImages,
         )
         Row(
+            modifier = Modifier.padding(horizontal = Spacing.s),
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs)
         ) {
+            PostCardTitle(
+                modifier = Modifier.weight(0.75f),
+                text = post.title,
+                autoLoadImages = autoLoadImages,
+            )
             PostCardImage(
-                modifier = Modifier.weight(0.2f).clip(RoundedCornerShape(CornerSize.s)),
+                modifier = Modifier
+                    .weight(0.25f)
+                    .clip(RoundedCornerShape(CornerSize.s)),
                 minHeight = Dp.Unspecified,
                 maxHeight = Dp.Unspecified,
                 imageUrl = post.imageUrl,
@@ -170,11 +178,6 @@ private fun CompactPost(
                 },
                 blurred = blurNsfw && post.nsfw,
                 onImageClick = onImageClick,
-            )
-            PostCardTitle(
-                modifier = Modifier.weight(1f),
-                text = post.title,
-                autoLoadImages = autoLoadImages,
             )
         }
         PostCardFooter(
