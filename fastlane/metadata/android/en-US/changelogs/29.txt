@@ -1,0 +1,11 @@
+- feat: compatibility with MastodonRedirect (experimental)
+- feat: change UI font; layout improvements
+- enhancement: improve dark theme; fix: inherit system theme
+- enhancement: visibility of own vote
+- enhancement: splash screen
+- enhancement: Markdown rendering
+- fix: open zoomable image from post detail
+- fix: TSLException preventing instance validation
+- fix: change comment sort type
+- fix: image load button in compact mode; enhancement: placeholder icons
+- fix: multi-community pagination
