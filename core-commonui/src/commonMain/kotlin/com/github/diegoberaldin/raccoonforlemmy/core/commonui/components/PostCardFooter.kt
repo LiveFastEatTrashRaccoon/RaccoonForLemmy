@@ -189,7 +189,7 @@ fun PostCardFooter(
                         append(downvoteText)
                         if (downVoted) {
                             addStyle(
-                                style = SpanStyle(color = MaterialTheme.colorScheme.surfaceTint),
+                                style = SpanStyle(color = MaterialTheme.colorScheme.tertiary),
                                 start = upvoteText.length + 3,
                                 end = upvoteText.length + 3 + downvoteText.length
                             )
