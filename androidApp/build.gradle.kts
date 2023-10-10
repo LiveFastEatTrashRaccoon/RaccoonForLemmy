@@ -59,10 +59,6 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.android)
 
-    implementation(libs.acra.core)
-    implementation(libs.acra.mail)
-    implementation(libs.acra.notification)
-
     implementation(projects.shared)
     implementation(projects.coreUtils)
     implementation(projects.coreCommonui)

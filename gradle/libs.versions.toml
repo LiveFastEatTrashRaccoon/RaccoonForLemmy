@@ -1,5 +1,4 @@
 [versions]
-acra = "5.11.2"
 androidx_activity = "1.7.2"
 androidx_crypto = "1.0.0"
 android_gradle = "8.1.1"
@@ -62,10 +61,6 @@ moko_gradle = { module = "dev.icerock.moko:resources-generator", version.ref = "
 moko_resources = { module = "dev.icerock.moko:resources", version.ref = "moko.resources" }
 moko_resources_compose = { module = "dev.icerock.moko:resources-compose", version.ref = "moko.resources" }
 moko_resources_test = { module = "dev.icerock.moko:resources-test", version.ref = "moko.resources" }
-
-acra_core = { module = "ch.acra:acra-core", version.ref = "acra" }
-acra_mail = { module = "ch.acra:acra-mail", version.ref = "acra" }
-acra_notification = { module = "ch.acra:acra-notification", version.ref = "acra" }
 
 voyager_navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager_bottomsheet = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }

@@ -5,12 +5,16 @@ import org.koin.core.module.Module
 interface CrashReportConfiguration {
 
     companion object {
-        const val PREFERENCES_NAME = "AcraPreferences"
+        const val PREFERENCES_NAME = "CrashReportPreferences"
     }
 
     fun isEnabled(): Boolean
 
     fun setEnabled(value: Boolean)
+}
+
+interface CrashReportWriter {
+    fun write(reportText: String)
 }
 
 expect val crashReportModule: Module
