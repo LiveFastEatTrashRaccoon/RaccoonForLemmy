@@ -130,14 +130,14 @@ class MultiCommunityViewModel(
             val postList = paginator.loadNextPage(
                 auth = auth,
                 sort = sort,
+                currentIds = if (refreshing) emptyList() else currentState.posts.map { it.id }
             )
             val canFetchMore = paginator.canFetchMore
             mvi.updateState {
                 val newPosts = if (refreshing) {
                     postList
                 } else {
-                    // prevents accidental duplication
-                    it.posts + postList.filter { p -> it.posts.none { e -> e.id == p.id } }
+                    it.posts + postList
                 }.filter { post ->
                     if (includeNsfw) {
                         true

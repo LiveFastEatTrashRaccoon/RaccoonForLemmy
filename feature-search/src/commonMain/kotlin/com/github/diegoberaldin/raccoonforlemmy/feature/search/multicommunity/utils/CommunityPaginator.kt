@@ -21,6 +21,7 @@ internal class CommunityPaginator(
     suspend fun loadNextPage(
         auth: String?,
         sort: SortType,
+        currentIds: List<Int>,
     ): List<PostModel> {
         val result = postRepository.getAll(
             auth = auth,
@@ -29,7 +30,13 @@ internal class CommunityPaginator(
             type = ListingType.All,
             sort = sort,
             communityId = communityId,
-        )
+        )?.filter {
+            // prevents accidental duplication
+            it.id !in currentIds
+        }
+        if (!result.isNullOrEmpty()) {
+            currentPage++
+        }
         canFetchMore = result?.isEmpty() != true
         return result.orEmpty()
     }

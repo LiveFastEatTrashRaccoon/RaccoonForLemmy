@@ -28,12 +28,14 @@ class DefaultMultiCommunityPaginator(
     override suspend fun loadNextPage(
         auth: String?,
         sort: SortType,
+        currentIds: List<Int>,
     ): List<PostModel> = buildList {
         for (paginator in paginators) {
             if (paginator.canFetchMore) {
                 val elements = paginator.loadNextPage(
                     auth = auth,
                     sort = sort,
+                    currentIds = currentIds,
                 )
                 addAll(elements)
             }

@@ -11,5 +11,6 @@ interface MultiCommunityPaginator {
     suspend fun loadNextPage(
         auth: String? = null,
         sort: SortType,
+        currentIds: List<Int> = emptyList(),
     ): List<PostModel>
 }
