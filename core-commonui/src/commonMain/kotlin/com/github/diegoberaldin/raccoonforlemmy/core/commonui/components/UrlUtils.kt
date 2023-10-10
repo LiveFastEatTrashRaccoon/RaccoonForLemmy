@@ -14,11 +14,40 @@ fun handleUrl(
     uriHandler: UriHandler,
     navigator: Navigator? = null,
 ) {
-    val community = extractCommunity(url)
-    val user = extractUser(url)
+    val matches = Regex("https?://(?<instance>.*?)(?<pathAndQuery>/.*)").findAll(url)
+    var instance = ""
+    val mangledUrl = buildString {
+        if (matches.count() > 0) {
+            val match = matches.iterator().next()
+            val value = match.groups["pathAndQuery"]?.value.orEmpty()
+            instance = match.groups["instance"]?.value.orEmpty()
+            if (value.isNotEmpty()) {
+                append(value)
+            } else {
+                append(url)
+            }
+        } else {
+            append(url)
+        }
+    }
+    val community = extractCommunity(mangledUrl)?.let {
+        if (it.host.isEmpty()) {
+            it.copy(host = instance)
+        } else {
+            it
+        }
+    }
+    val user = extractUser(mangledUrl)?.let {
+        if (it.host.isEmpty()) {
+            it.copy(host = instance)
+        } else {
+            it
+        }
+    }
+
     when {
-        community != null -> {
-            navigator?.push(
+        community != null && navigator != null -> {
+            navigator.push(
                 CommunityDetailScreen(
                     community = community,
                     otherInstance = community.host
@@ -26,8 +55,8 @@ fun handleUrl(
             )
         }
 
-        user != null -> {
-            navigator?.push(
+        user != null && navigator != null -> {
+            navigator.push(
                 UserDetailScreen(
                     user = user,
                     otherInstance = user.host
@@ -39,9 +68,11 @@ fun handleUrl(
             uriHandler.openUri(url)
         }
 
-        else -> {
-            navigator?.push(WebViewScreen(url))
+        navigator != null -> {
+            navigator.push(WebViewScreen(url))
         }
+
+        else -> Unit
     }
 }
 

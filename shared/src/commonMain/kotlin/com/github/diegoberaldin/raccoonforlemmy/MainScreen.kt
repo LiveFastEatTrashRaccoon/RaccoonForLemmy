@@ -51,10 +51,12 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.de
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.SearchTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
 import com.github.diegoberaldin.raccoonforlemmy.ui.navigation.TabNavigationItem
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 internal class MainScreen : Screen {
@@ -100,19 +102,8 @@ internal class MainScreen : Screen {
             navigationCoordinator.apply {
                 setBottomBarScrollConnection(scrollConnection)
                 setCurrentSection(HomeTab)
-
-                // handles deep link urls
-                deeplinkUrl.onEach {
-                    handleUrl(
-                        url = it,
-                        uriHandler = uriHandler,
-                        navigator = navigator,
-                        openExternal = settings.openUrlsInExternalBrowser,
-                    )
-                }.launchIn(this@LaunchedEffect)
             }
         }
-
 
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         LaunchedEffect(drawerCoordinator) {
@@ -144,7 +135,8 @@ internal class MainScreen : Screen {
         }
         ModalNavigationDrawer(
             drawerState = drawerState,
-            drawerContent = {
+            drawerContent =
+            {
                 ModalDrawerSheet {
                     TabNavigator(ModalDrawerContent)
                 }
@@ -197,6 +189,20 @@ internal class MainScreen : Screen {
                     },
                 )
             }
+        }
+
+        // handles deep link URLs
+        LaunchedEffect(navigator, navigationCoordinator) {
+            navigationCoordinator.deeplinkUrl.onEach {
+                withContext(Dispatchers.Main) {
+                    handleUrl(
+                        url = it,
+                        uriHandler = uriHandler,
+                        navigator = navigator,
+                        openExternal = settings.openUrlsInExternalBrowser,
+                    )
+                }
+            }.launchIn(this)
         }
     }
 }
