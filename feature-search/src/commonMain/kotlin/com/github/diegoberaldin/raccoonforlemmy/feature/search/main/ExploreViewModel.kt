@@ -16,6 +16,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
@@ -214,11 +215,11 @@ class ExploreViewModel(
                 itemList.orEmpty()
             } else {
                 it.results + itemList.orEmpty()
-            }.filter { community ->
+            }.filter { item ->
                 if (settings.includeNsfw) {
                     true
                 } else {
-                    isSafeForWork(community)
+                    isSafeForWork(item)
                 }
             }
             it.copy(
@@ -232,6 +233,9 @@ class ExploreViewModel(
 
     private fun isSafeForWork(element: Any): Boolean = when (element) {
         is CommunityModel -> element.nsfw
+        is PostModel -> element.nsfw
+        is CommentModel -> true
+        is UserModel -> true
         else -> false
     }
 

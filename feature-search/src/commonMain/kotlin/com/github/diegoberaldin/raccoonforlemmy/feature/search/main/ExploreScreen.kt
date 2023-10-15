@@ -423,13 +423,6 @@ class ExploreScreen : Screen {
                                             user = result,
                                         )
                                     }
-
-                                    else -> {
-                                        Text(
-                                            modifier = Modifier.padding(Spacing.s),
-                                            text = "Unknown result type: ${result::class.simpleName}"
-                                        )
-                                    }
                                 }
                             }
                         }
