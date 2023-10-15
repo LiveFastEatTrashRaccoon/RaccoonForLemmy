@@ -196,8 +196,8 @@ class InboxRepliesViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newComment = commentRepository.asUpVoted(
-            comment = mention.comment,
+        val newMention = commentRepository.asUpVoted(
+            mention = mention,
             voted = newValue,
         )
         mvi.updateState {
@@ -206,7 +206,7 @@ class InboxRepliesViewModel(
                     if (m.comment.id != mention.comment.id) {
                         m
                     } else {
-                        m.copy(myVote = newComment.myVote)
+                        newMention
                     }
                 },
             )
@@ -227,7 +227,7 @@ class InboxRepliesViewModel(
                             if (m.comment.id != mention.comment.id) {
                                 m
                             } else {
-                                m.copy(myVote = mention.myVote)
+                                mention
                             }
                         },
                     )
@@ -244,14 +244,17 @@ class InboxRepliesViewModel(
         if (feedback) {
             hapticFeedback.vibrate()
         }
-        val newComment = commentRepository.asDownVoted(mention.comment, newValue)
+        val newMention = commentRepository.asDownVoted(
+            mention = mention,
+            downVoted = newValue
+        )
         mvi.updateState {
             it.copy(
                 replies = it.replies.map { m ->
                     if (m.comment.id != mention.comment.id) {
                         m
                     } else {
-                        m.copy(myVote = newComment.myVote)
+                        newMention
                     }
                 },
             )
@@ -272,7 +275,7 @@ class InboxRepliesViewModel(
                             if (m.comment.id != mention.comment.id) {
                                 m
                             } else {
-                                m.copy(myVote = mention.myVote)
+                                mention
                             }
                         },
                     )

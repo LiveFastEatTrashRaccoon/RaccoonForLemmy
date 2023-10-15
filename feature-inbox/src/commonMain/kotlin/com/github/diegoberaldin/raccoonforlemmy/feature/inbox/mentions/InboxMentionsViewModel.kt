@@ -194,7 +194,10 @@ class InboxMentionsViewModel(
                     if (m.comment.id != mention.comment.id) {
                         m
                     } else {
-                        m.copy(myVote = newComment.myVote)
+                        m.copy(
+                            myVote = newComment.myVote,
+                            score = newComment.score,
+                        )
                     }
                 },
             )
@@ -215,7 +218,7 @@ class InboxMentionsViewModel(
                             if (m.comment.id != mention.comment.id) {
                                 m
                             } else {
-                                m.copy(myVote = mention.myVote)
+                                mention
                             }
                         },
                     )
@@ -239,7 +242,10 @@ class InboxMentionsViewModel(
                     if (m.comment.id != mention.comment.id) {
                         m
                     } else {
-                        m.copy(myVote = newComment.myVote)
+                        m.copy(
+                            myVote = newComment.myVote,
+                            score = newComment.score
+                        )
                     }
                 },
             )
@@ -260,7 +266,7 @@ class InboxMentionsViewModel(
                             if (m.comment.id != mention.comment.id) {
                                 m
                             } else {
-                                m.copy(myVote = mention.myVote)
+                                mention
                             }
                         },
                     )

@@ -8,6 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SaveCommentForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toCommentDto
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toDto
@@ -85,6 +86,16 @@ class CommentRepository(
         }
     )
 
+    fun asUpVoted(mention: PersonMentionModel, voted: Boolean) = mention.copy(
+        myVote = if (voted) 1 else 0,
+        score = when {
+            voted && mention.myVote < 0 -> mention.score + 2
+            voted -> mention.score + 1
+            !voted -> mention.score - 1
+            else -> mention.score
+        },
+    )
+
     suspend fun upVote(comment: CommentModel, auth: String, voted: Boolean) {
         val data = CreateCommentLikeForm(
             commentId = comment.id,
@@ -110,6 +121,16 @@ class CommentRepository(
             comment.myVote > 0 -> comment.upvotes - 1
             else -> comment.upvotes
         }
+    )
+
+    fun asDownVoted(mention: PersonMentionModel, downVoted: Boolean) = mention.copy(
+        myVote = if (downVoted) -1 else 0,
+        score = when {
+            downVoted && mention.myVote > 0 -> mention.score - 2
+            downVoted -> mention.score - 1
+            !downVoted -> mention.score + 1
+            else -> mention.score
+        },
     )
 
     suspend fun downVote(comment: CommentModel, auth: String, downVoted: Boolean) = runCatching {
