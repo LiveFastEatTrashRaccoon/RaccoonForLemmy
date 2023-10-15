@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,21 +38,22 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 @Composable
 fun CommunityHeader(
     community: CommunityModel,
+    modifier: Modifier = Modifier,
     autoLoadImages: Boolean = true,
     options: List<String> = emptyList(),
     onOptionSelected: ((Int) -> Unit)? = null,
     onOpenImage: ((String) -> Unit)? = null,
 ) {
     Box(
-        modifier = Modifier.fillMaxWidth().aspectRatio(4.5f).padding(Spacing.xs),
+        modifier = modifier.fillMaxWidth().padding(Spacing.s),
     ) {
         // banner
         val banner = community.banner.orEmpty()
         if (banner.isNotEmpty() && autoLoadImages) {
             CustomImage(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth().aspectRatio(4.5f),
                 url = banner,
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.FillWidth,
                 contentDescription = null,
             )
         }
@@ -99,60 +99,60 @@ fun CommunityHeader(
                 }
             }
         }
-    }
 
-    Row(
-        modifier = Modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(Spacing.m)
-    ) {
-        // avatar
-        val communityIcon = community.icon.orEmpty()
-        val avatarSize = 60.dp
-        if (communityIcon.isNotEmpty() && autoLoadImages) {
-            CustomImage(
-                modifier = Modifier
-                    .padding(Spacing.xxxs)
-                    .size(avatarSize)
-                    .clip(RoundedCornerShape(avatarSize / 2))
-                    .onClick {
-                        onOpenImage?.invoke(communityIcon)
-                    },
-                url = communityIcon,
-                quality = FilterQuality.Low,
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-            )
-        } else {
-            PlaceholderImage(
-                size = avatarSize,
-                title = community.name,
-            )
-        }
-
-        // textual data
-        Column(
-            verticalArrangement = Arrangement.spacedBy(Spacing.s),
+        Row(
+            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Spacing.m)
         ) {
-            Text(
-                text = community.name,
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
+            // avatar
+            val communityIcon = community.icon.orEmpty()
+            val avatarSize = 60.dp
+            if (communityIcon.isNotEmpty() && autoLoadImages) {
+                CustomImage(
+                    modifier = Modifier
+                        .padding(Spacing.xxxs)
+                        .size(avatarSize)
+                        .clip(RoundedCornerShape(avatarSize / 2))
+                        .onClick {
+                            onOpenImage?.invoke(communityIcon)
+                        },
+                    url = communityIcon,
+                    quality = FilterQuality.Low,
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                )
+            } else {
+                PlaceholderImage(
+                    size = avatarSize,
+                    title = community.name,
+                )
+            }
 
-            Text(
-                modifier = Modifier.padding(horizontal = Spacing.s),
-                text = buildString {
-                    append(community.name)
-                    if (community.host.isNotEmpty()) {
-                        append("@${community.host}")
-                    }
-                },
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
+            // textual data
+            Column(
+                verticalArrangement = Arrangement.spacedBy(Spacing.s),
+            ) {
+                Text(
+                    text = community.name,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+
+                Text(
+                    modifier = Modifier.padding(horizontal = Spacing.s),
+                    text = buildString {
+                        append(community.name)
+                        if (community.host.isNotEmpty()) {
+                            append("@${community.host}")
+                        }
+                    },
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+            }
         }
     }
 }

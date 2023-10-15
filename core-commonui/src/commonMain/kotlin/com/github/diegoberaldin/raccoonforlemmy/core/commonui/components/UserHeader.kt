@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -47,13 +46,14 @@ import dev.icerock.moko.resources.compose.stringResource
 @Composable
 fun UserHeader(
     user: UserModel,
+    modifier: Modifier = Modifier,
     autoLoadImages: Boolean = true,
     options: List<String> = emptyList(),
     onOptionSelected: ((Int) -> Unit)? = null,
     onOpenImage: ((String) -> Unit)? = null,
 ) {
     Box(
-        modifier = Modifier.padding(Spacing.xs),
+        modifier = modifier.fillMaxWidth().padding(Spacing.s),
     ) {
         // banner
         val banner = user.banner.orEmpty()
@@ -62,7 +62,7 @@ fun UserHeader(
                 modifier = Modifier.fillMaxWidth().aspectRatio(4.5f),
                 url = banner,
                 quality = FilterQuality.Low,
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.FillWidth,
                 contentDescription = null,
             )
         }
@@ -110,7 +110,7 @@ fun UserHeader(
         }
 
         Row(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.m)
         ) {
