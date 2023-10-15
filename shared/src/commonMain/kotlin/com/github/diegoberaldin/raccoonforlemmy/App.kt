@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -39,7 +40,11 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepos
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getCommmunityFromUrl
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getUserFromUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getAccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
@@ -126,8 +131,31 @@ fun App() {
                 sheetShape = RoundedCornerShape(topStart = CornerSize.xl, topEnd = CornerSize.xl),
                 sheetBackgroundColor = MaterialTheme.colorScheme.background,
             ) {
+                val screens: List<Screen> = remember(navigationCoordinator.deeplinkUrl) {
+                    val url = navigationCoordinator.deeplinkUrl.value.orEmpty()
+                    val community = getCommmunityFromUrl(url)
+                    val user = getUserFromUrl(url)
+                    buildList {
+                        add(MainScreen())
+                        if (community != null) {
+                            add(
+                                CommunityDetailScreen(
+                                    community = community,
+                                    otherInstance = community.host
+                                )
+                            )
+                        } else if (user != null) {
+                            add(
+                                UserDetailScreen(
+                                    user = user,
+                                    otherInstance = user.host
+                                )
+                            )
+                        }
+                    }
+                }
                 Navigator(
-                    screen = MainScreen(),
+                    screens = screens,
                     onBackPressed = {
                         val callback = navigationCoordinator.getCanGoBackCallback()
                         callback?.let { it() } ?: true

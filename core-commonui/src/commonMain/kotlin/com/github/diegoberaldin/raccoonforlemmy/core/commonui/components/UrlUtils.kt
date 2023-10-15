@@ -8,42 +8,34 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.web.WebViewScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
+fun getCommmunityFromUrl(url: String): CommunityModel? {
+    val (normalizedUrl, instance) = normalizeUrl(url)
+    val res = extractCommunity(normalizedUrl)
+    return if (res != null && res.host.isEmpty()) {
+        res.copy(host = instance)
+    } else {
+        res
+    }
+}
+
+fun getUserFromUrl(url: String): UserModel? {
+    val (normalizedUrl, instance) = normalizeUrl(url)
+    val res = extractUser(normalizedUrl)
+    return if (res != null && res.host.isEmpty()) {
+        res.copy(host = instance)
+    } else {
+        res
+    }
+}
+
 fun handleUrl(
     url: String,
     openExternal: Boolean,
     uriHandler: UriHandler,
     navigator: Navigator? = null,
 ) {
-    val matches = Regex("https?://(?<instance>.*?)(?<pathAndQuery>/.*)").findAll(url)
-    var instance = ""
-    val mangledUrl = buildString {
-        if (matches.count() > 0) {
-            val match = matches.iterator().next()
-            val value = match.groups["pathAndQuery"]?.value.orEmpty()
-            instance = match.groups["instance"]?.value.orEmpty()
-            if (value.isNotEmpty()) {
-                append(value)
-            } else {
-                append(url)
-            }
-        } else {
-            append(url)
-        }
-    }
-    val community = extractCommunity(mangledUrl)?.let {
-        if (it.host.isEmpty()) {
-            it.copy(host = instance)
-        } else {
-            it
-        }
-    }
-    val user = extractUser(mangledUrl)?.let {
-        if (it.host.isEmpty()) {
-            it.copy(host = instance)
-        } else {
-            it
-        }
-    }
+    val community = getCommmunityFromUrl(url)
+    val user = getUserFromUrl(url)
 
     when {
         community != null && navigator != null -> {
@@ -74,6 +66,26 @@ fun handleUrl(
 
         else -> Unit
     }
+}
+
+private fun normalizeUrl(url: String): Pair<String, String> {
+    val matches = Regex("https?://(?<instance>.*?)(?<pathAndQuery>/.*)").findAll(url)
+    var instance = ""
+    val res = buildString {
+        if (matches.count() > 0) {
+            val match = matches.iterator().next()
+            val value = match.groups["pathAndQuery"]?.value.orEmpty()
+            instance = match.groups["instance"]?.value.orEmpty()
+            if (value.isNotEmpty()) {
+                append(value)
+            } else {
+                append(url)
+            }
+        } else {
+            append(url)
+        }
+    }
+    return res to instance
 }
 
 private fun extractCommunity(url: String): CommunityModel? = when {

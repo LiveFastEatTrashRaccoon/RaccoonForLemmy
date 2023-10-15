@@ -190,19 +190,5 @@ internal class MainScreen : Screen {
                 )
             }
         }
-
-        // handles deep link URLs
-        LaunchedEffect(navigator, navigationCoordinator) {
-            navigationCoordinator.deeplinkUrl.onEach {
-                withContext(Dispatchers.Main) {
-                    handleUrl(
-                        url = it,
-                        uriHandler = uriHandler,
-                        navigator = navigator,
-                        openExternal = settings.openUrlsInExternalBrowser,
-                    )
-                }
-            }.launchIn(this)
-        }
     }
 }

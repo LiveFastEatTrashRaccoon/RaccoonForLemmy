@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface NavigationCoordinator {
 
-    val deeplinkUrl: SharedFlow<String>
+    val deeplinkUrl: StateFlow<String?>
     val onDoubleTabSelection: SharedFlow<Tab>
     val inboxUnread: StateFlow<Int>
 
     fun setCurrentSection(tab: Tab)
 
-    fun submitDeeplink(url: String)
+    fun submitDeeplink(url: String?)
 
     fun setRootNavigator(value: Navigator?)
 
