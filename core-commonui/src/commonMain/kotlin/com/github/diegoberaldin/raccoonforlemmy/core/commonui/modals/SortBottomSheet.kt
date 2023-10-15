@@ -206,6 +206,12 @@ internal class SortBottomSheetTop(
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onBackground,
                         )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Image(
+                            imageVector = value.toIcon(),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                        )
                     }
                 }
             }

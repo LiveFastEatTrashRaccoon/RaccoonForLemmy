@@ -21,6 +21,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepo
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -92,6 +93,29 @@ class PostListViewModel(
                     )
                 }
             }.launchIn(this)
+
+            settingsRepository.currentSettings
+                .map { it.defaultListingType }
+                .distinctUntilChanged()
+                .onEach { listingType ->
+                    mvi.updateState {
+                        it.copy(
+                            listingType = listingType.toListingType(),
+                        )
+                    }
+                    refresh()
+                }.launchIn(this)
+            settingsRepository.currentSettings
+                .map { it.defaultPostSortType }
+                .distinctUntilChanged()
+                .onEach { sortType ->
+                    mvi.updateState {
+                        it.copy(
+                            sortType = sortType.toSortType(),
+                        )
+                    }
+                    refresh()
+                }.launchIn(this)
         }
 
         mvi.scope?.launch(Dispatchers.IO) {
