@@ -34,7 +34,9 @@ class ZoomableImageViewModel(
     override fun reduce(intent: ZoomableImageMviModel.Intent) {
         when (intent) {
             is ZoomableImageMviModel.Intent.Share -> {
-                shareHelper.share(intent.url, "image/*")
+                runCatching {
+                    shareHelper.share(intent.url, "image/*")
+                }
             }
 
             is ZoomableImageMviModel.Intent.SaveToGallery -> downloadAndSave(intent.url)
@@ -51,6 +53,7 @@ class ZoomableImageViewModel(
                     s.substring(idx).takeIf { it.isNotEmpty() } ?: ".jpeg"
                 }
                 galleryHelper.saveToGallery(bytes, "${DateTime.epochMillis()}.$extension")
+                mvi.emitEffect(ZoomableImageMviModel.Effect.ShareSuccess)
             } catch (e: Throwable) {
                 e.printStackTrace()
             } finally {

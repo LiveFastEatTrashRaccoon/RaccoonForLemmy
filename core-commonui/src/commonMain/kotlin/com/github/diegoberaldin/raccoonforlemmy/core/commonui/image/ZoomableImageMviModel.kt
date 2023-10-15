@@ -14,5 +14,7 @@ interface ZoomableImageMviModel :
         val autoLoadImages: Boolean = true,
     )
 
-    sealed interface Effect
+    sealed interface Effect {
+        data object ShareSuccess : Effect
+    }
 }

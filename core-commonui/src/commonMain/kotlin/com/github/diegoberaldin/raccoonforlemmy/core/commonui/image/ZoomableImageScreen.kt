@@ -14,8 +14,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -31,6 +34,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Zoomabl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getZoomableImageViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class ZoomableImageScreen(
     private val url: String,
@@ -42,7 +49,18 @@ class ZoomableImageScreen(
         val model = rememberScreenModel { getZoomableImageViewModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val snackbarHostState = remember { SnackbarHostState() }
+        val successMessage = stringResource(MR.strings.message_operation_successful)
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
+        LaunchedEffect(model) {
+            model.effects.onEach {
+                when (it) {
+                    ZoomableImageMviModel.Effect.ShareSuccess -> {
+                        snackbarHostState.showSnackbar(successMessage)
+                    }
+                }
+            }.launchIn(this)
+        }
 
         Scaffold(
             topBar = {
@@ -78,6 +96,9 @@ class ZoomableImageScreen(
                         )
                     }
                 )
+            },
+            snackbarHost = {
+                SnackbarHost(snackbarHostState)
             },
             content = { paddingValues ->
                 Box(
