@@ -34,7 +34,8 @@ internal fun MarkdownBlockQuote(
     ) {
         val text = buildAnnotatedString {
             pushStyle(style.toSpanStyle())
-            append(node.getTextInNode(content).toString())
+            val text = node.getTextInNode(content).toString().replace("> ", "")
+            append(text)
             pop()
         }
         Text(text)
