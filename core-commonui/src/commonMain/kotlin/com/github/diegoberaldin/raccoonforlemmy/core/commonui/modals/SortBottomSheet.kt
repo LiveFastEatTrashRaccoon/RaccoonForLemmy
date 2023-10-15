@@ -44,9 +44,9 @@ class SortBottomSheet(
         SortType.New,
         SortType.NewComments,
         SortType.MostComments,
-        SortType.Top.Generic,
         SortType.Old,
         SortType.Controversial,
+        SortType.Top.Generic,
     ),
     private val expandTop: Boolean = false,
 ) : Screen {

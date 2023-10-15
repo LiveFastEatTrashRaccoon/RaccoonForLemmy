@@ -1,7 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CardMembership
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Cottage
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.runtime.Composable
@@ -28,7 +28,7 @@ fun Int.toListingType() = when (this) {
 
 fun ListingType.toIcon() = when (this) {
     ListingType.Local -> Icons.Default.Cottage
-    ListingType.Subscribed -> Icons.Default.CardMembership
+    ListingType.Subscribed -> Icons.Default.Book
     else -> Icons.Default.Public
 }
 
