@@ -1,0 +1,11 @@
+- feat: custom theme color with RGB picker
+- feat: save logs to file (remove ACRA)
+- fix: color for downvotes in split view
+- fix: deep link (for Lemmy redirect)
+- fix: score updated in mentions and replies
+- fix: remove "> " prefix from Markdown block quotes
+- fix: layout of community and user header
+- enhancement: image on the right in compact mode
+- enhancement: snackbar after saving to gallery
+- enhancement: update feed and sort type icon
+- enhancement: apply feed and sort type from settings
