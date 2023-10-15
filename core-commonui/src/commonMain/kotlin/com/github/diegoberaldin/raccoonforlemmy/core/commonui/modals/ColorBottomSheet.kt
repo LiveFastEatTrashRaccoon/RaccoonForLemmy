@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,13 +13,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
@@ -26,6 +33,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -36,6 +44,8 @@ class ColorBottomSheet : Screen {
     override fun Content() {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val notificationCenter = remember { getNotificationCenter() }
+        var customPickerDialogOpened by remember { mutableStateOf(false) }
+        val settingsRepository = remember { getSettingsRepository() }
         Column(
             modifier = Modifier.padding(
                 top = Spacing.s,
@@ -57,6 +67,7 @@ class ColorBottomSheet : Screen {
                     color = MaterialTheme.colorScheme.onBackground,
                 )
             }
+            val customText = stringResource(MR.strings.settings_color_custom)
             val values: List<Pair<Color?, String>> = listOf(
                 Color(0xFF001F7D) to stringResource(MR.strings.settings_color_blue),
                 Color(0xFF36B3B3) to stringResource(MR.strings.settings_color_aquamarine),
@@ -67,6 +78,7 @@ class ColorBottomSheet : Screen {
                 Color(0xFFFC0FC0) to stringResource(MR.strings.settings_color_pink),
                 Color(0xFF303B47) to stringResource(MR.strings.settings_color_gray),
                 Color(0xFFd7d7d7) to stringResource(MR.strings.settings_color_white),
+                null to customText,
                 null to stringResource(MR.strings.button_reset),
             )
             Column(
@@ -74,32 +86,68 @@ class ColorBottomSheet : Screen {
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
             ) {
                 for (value in values) {
+                    val text = value.second
+                    val isChooseCustom = text == customText
                     Row(
                         modifier = Modifier.padding(
                             horizontal = Spacing.s,
                             vertical = Spacing.s,
                         ).fillMaxWidth().onClick {
-                            notificationCenter.getObserver(NotificationCenterContractKeys.ChangeColor)
-                                ?.also {
-                                    it.invoke(value.first ?: Unit)
-                                }
-                            bottomSheetNavigator.hide()
+                            if (!isChooseCustom) {
+                                notificationCenter.getObserver(NotificationCenterContractKeys.ChangeColor)
+                                    ?.also {
+                                        it.invoke(value.first ?: Unit)
+                                    }
+                                bottomSheetNavigator.hide()
+                            } else {
+                                customPickerDialogOpened = true
+                            }
                         },
                     ) {
                         Text(
-                            text = value.second,
+                            text = text,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onBackground,
                         )
                         Spacer(modifier = Modifier.weight(1f))
-                        Box(
-                            modifier = Modifier.size(36.dp).background(
-                                color = value.first ?: Color.Transparent, shape = CircleShape
+
+                        if (!isChooseCustom) {
+                            Box(
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .background(
+                                        color = value.first ?: Color.Transparent,
+                                        shape = CircleShape
+                                    )
                             )
-                        )
+                        } else {
+                            Image(
+                                imageVector = Icons.Default.ChevronRight,
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                            )
+                        }
                     }
                 }
             }
+        }
+
+        if (customPickerDialogOpened) {
+            val current =
+                settingsRepository.currentSettings.value.customSeedColor?.let { Color(it) }
+            ColorPickerDialog(
+                initialValue = current ?: MaterialTheme.colorScheme.primary,
+                onClose = {
+                    customPickerDialogOpened = false
+                },
+                onSubmit = { color ->
+                    notificationCenter.getObserver(NotificationCenterContractKeys.ChangeColor)
+                        ?.also {
+                            it.invoke(color)
+                        }
+                    bottomSheetNavigator.hide()
+                }
+            )
         }
     }
 }

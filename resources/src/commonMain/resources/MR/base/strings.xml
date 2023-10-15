@@ -128,6 +128,7 @@
     <string name="settings_color_pink">Shocking pink</string>
     <string name="settings_color_gray">Concrete</string>
     <string name="settings_color_white">Ice</string>
+    <string name="settings_color_custom">Custom</string>
     <string name="settings_enable_crash_report">Enable crash reporting</string>
     <string name="settings_separate_up_and_downvotes">Separate upvotes / downvotes</string>
     <string name="settings_auto_load_images">Automatically load images</string>
@@ -136,6 +137,12 @@
     <string name="settings_section_behaviour">Behaviour</string>
     <string name="settings_section_nsfw">NSFW</string>
     <string name="settings_section_debug">Debug</string>
+
+    <string name="settings_color_dialog_title">Pick a color</string>
+    <string name="settings_color_dialog_alpha">A</string>
+    <string name="settings_color_dialog_red">R</string>
+    <string name="settings_color_dialog_green">G</string>
+    <string name="settings_color_dialog_blue">B</string>
 
     <string name="community_detail_info">Community info</string>
     <string name="community_detail_instance_info">Instance details</string>

@@ -126,6 +126,7 @@
     <string name="settings_color_pink">Rosa shocking</string>
     <string name="settings_color_gray">Cemento</string>
     <string name="settings_color_white">Ghiaccio</string>
+    <string name="settings_color_custom">Personalizzato</string>
     <string name="settings_enable_crash_report">Abilitare segnalazioni di crash</string>
     <string name="settings_separate_up_and_downvotes">Distingui voti positivi / negativi</string>
     <string name="settings_auto_load_images">Carica immagini automaticamente</string>
@@ -134,6 +135,12 @@
     <string name="settings_section_behaviour">Comportamento</string>
     <string name="settings_section_nsfw">NSFW</string>
     <string name="settings_section_debug">Debug</string>
+
+    <string name="settings_color_dialog_title">Seleziona un colore</string>
+    <string name="settings_color_dialog_alpha">A</string>
+    <string name="settings_color_dialog_red">R</string>
+    <string name="settings_color_dialog_green">G</string>
+    <string name="settings_color_dialog_blue">B</string>
 
     <string name="community_detail_info">Info comunità</string>
     <string name="community_detail_instance_info">Dettagli istanza</string>

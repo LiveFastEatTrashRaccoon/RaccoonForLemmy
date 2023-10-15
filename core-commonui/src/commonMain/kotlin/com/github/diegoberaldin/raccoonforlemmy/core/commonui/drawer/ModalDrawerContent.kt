@@ -390,7 +390,7 @@ private fun ChangeInstanceDialog(
         ) {
             Text(
                 text = stringResource(MR.strings.dialog_title_change_instance),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
             )
             TextField(
                 colors = TextFieldDefaults.colors(

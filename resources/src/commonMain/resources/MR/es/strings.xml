@@ -125,6 +125,7 @@
     <string name="settings_color_pink">Rosa chillón</string>
     <string name="settings_color_gray">Hormigón</string>
     <string name="settings_color_white">Hielo</string>
+    <string name="settings_color_custom">Personalizado</string>
     <string name="settings_enable_crash_report">Activar notificación de accidentes</string>
     <string name="settings_separate_up_and_downvotes">Distinguir votos positivos / negativos
     </string>
@@ -134,6 +135,12 @@
     <string name="settings_section_behaviour">Comportamiento</string>
     <string name="settings_section_nsfw">NSFW</string>
     <string name="settings_section_debug">Debug</string>
+
+    <string name="settings_color_dialog_title">Elegir un color</string>
+    <string name="settings_color_dialog_alpha">A</string>
+    <string name="settings_color_dialog_red">R</string>
+    <string name="settings_color_dialog_green">G</string>
+    <string name="settings_color_dialog_blue">B</string>
 
     <string name="community_detail_info">Info comunidad</string>
     <string name="community_detail_instance_info">Detalles instancia</string>
