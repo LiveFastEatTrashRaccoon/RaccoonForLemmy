@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import org.koin.dsl.module
@@ -12,12 +13,15 @@ class DefaultHapticFeedback(
     @SuppressLint("MissingPermission")
     override fun vibrate() {
         val vibrator = context.getSystemService(Vibrator::class.java)
-        vibrator.vibrate(
+        val effect = if (Build.VERSION.SDK_INT >= 29) {
+            VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
+        } else {
             VibrationEffect.createOneShot(
-                15L,
+                10L,
                 VibrationEffect.DEFAULT_AMPLITUDE,
             )
-        )
+        }
+        vibrator.vibrate(effect)
     }
 }
 
