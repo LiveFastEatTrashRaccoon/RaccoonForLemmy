@@ -139,7 +139,6 @@ fun App() {
                     val user = getUserFromUrl(url)
                     val postAndInstance = getPostFromUrl(url)
                     buildList {
-                        add(MainScreen())
                         if (community != null) {
                             add(
                                 CommunityDetailScreen(
@@ -162,6 +161,8 @@ fun App() {
                                     otherInstance = otherInstance,
                                 )
                             )
+                        } else {
+                            add(MainScreen())
                         }
                     }
                 }
