@@ -24,48 +24,38 @@ class CommunityRepository(
     suspend fun getAll(
         query: String = "",
         auth: String? = null,
+        instance: String? = null,
         page: Int,
         limit: Int = DEFAULT_PAGE_SIZE,
         listingType: ListingType = ListingType.All,
         sortType: SortType = SortType.Active,
         resultType: SearchResultType = SearchResultType.All,
     ): List<Any>? = runCatching {
-        val response = services.search.search(
-            q = query,
-            auth = auth,
-            page = page,
-            limit = limit,
-            type = resultType.toDto(),
-            listingType = listingType.toDto(),
-            sort = sortType.toDto(),
-        ).body()
-
-        val posts = response?.posts?.map { it.toModel() }.orEmpty()
-        val comments = response?.comments?.map { it.toModel() }.orEmpty()
-        val communities = response?.communities?.map { it.toModel() }.orEmpty()
-        val users = response?.users?.map { it.toModel() }.orEmpty()
-
-        // returns everything
-        posts + comments + communities + users
-    }.getOrNull()
-
-    suspend fun getAllInInstance(
-        instance: String = "",
-        auth: String? = null,
-        page: Int,
-        limit: Int = DEFAULT_PAGE_SIZE,
-        sort: SortType = SortType.Active,
-    ): List<CommunityModel>? = runCatching {
-        customServices.changeInstance(instance)
-        val response = customServices.community.getAll(
-            auth = auth,
-            page = page,
-            limit = limit,
-            sort = sort.toDto(),
-        ).body()
-        response?.communities?.map {
-            it.toModel()
-        }.orEmpty()
+        if (instance.isNullOrEmpty()) {
+            val response = services.search.search(
+                q = query,
+                auth = auth,
+                page = page,
+                limit = limit,
+                type = resultType.toDto(),
+                listingType = listingType.toDto(),
+                sort = sortType.toDto(),
+            ).body()
+            val posts = response?.posts?.map { it.toModel() }.orEmpty()
+            val comments = response?.comments?.map { it.toModel() }.orEmpty()
+            val communities = response?.communities?.map { it.toModel() }.orEmpty()
+            val users = response?.users?.map { it.toModel() }.orEmpty()
+            // returns everything
+            posts + comments + communities + users
+        } else {
+            customServices.changeInstance(instance)
+            val response = customServices.community.getAll(
+                page = page,
+                limit = limit,
+                sort = sortType.toDto(),
+            ).body()
+            response?.communities?.map { it.toModel() }.orEmpty()
+        }
     }.getOrNull()
 
     suspend fun getSubscribed(
@@ -79,25 +69,21 @@ class CommunityRepository(
         auth: String? = null,
         id: Int? = null,
         name: String? = null,
+        instance: String? = null,
     ): CommunityModel? = runCatching {
-        val response = services.community.get(
-            auth = auth,
-            id = id,
-            name = name,
-        ).body()
-        response?.communityView?.toModel()
-    }.getOrNull()
-
-    suspend fun getInInstance(
-        auth: String? = null,
-        name: String? = null,
-        instance: String,
-    ): CommunityModel? = runCatching {
-        customServices.changeInstance(instance)
-        val response = customServices.community.get(
-            auth = auth,
-            name = name,
-        ).body()
+        val response = if (instance.isNullOrEmpty()) {
+            services.community.get(
+                auth = auth,
+                id = id,
+                name = name,
+            ).body()
+        } else {
+            customServices.changeInstance(instance)
+            customServices.community.get(
+                auth = auth,
+                name = name,
+            ).body()
+        }
         response?.communityView?.toModel()
     }.getOrNull()
 

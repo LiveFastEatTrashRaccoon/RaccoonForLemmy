@@ -103,7 +103,7 @@ class ModalDrawerViewModel(
 
         mvi.scope?.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(changeInstanceloading = true) }
-            val res = communityRepository.getAllInInstance(
+            val res = communityRepository.getAll(
                 instance = instanceName,
                 page = 1,
                 limit = 1

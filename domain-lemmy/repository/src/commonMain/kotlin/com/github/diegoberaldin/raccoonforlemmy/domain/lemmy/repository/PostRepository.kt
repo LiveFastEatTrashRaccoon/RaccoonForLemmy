@@ -32,41 +32,42 @@ class PostRepository(
         type: ListingType = ListingType.Local,
         sort: SortType = SortType.Active,
         communityId: Int? = null,
+        instance: String? = null,
     ): List<PostModel>? = runCatching {
-        val response = services.post.getAll(
-            auth = auth,
-            communityId = communityId,
-            page = page,
-            limit = limit,
-            type = type.toDto(),
-            sort = sort.toDto(),
-        )
+        val response = if (instance.isNullOrEmpty()) {
+            services.post.getAll(
+                auth = auth,
+                communityId = communityId,
+                page = page,
+                limit = limit,
+                type = type.toDto(),
+                sort = sort.toDto(),
+            )
+        } else {
+            customServices.changeInstance(instance)
+            customServices.post.getAll(
+                communityId = communityId,
+                page = page,
+                limit = limit,
+                type = type.toDto(),
+                sort = sort.toDto(),
+            )
+        }
         val dto = response.body()?.posts ?: emptyList()
         dto.map { it.toModel() }
     }.getOrNull()
 
-    suspend fun getAllInInstance(
-        instance: String,
-        page: Int,
-        limit: Int = DEFAULT_PAGE_SIZE,
-        type: ListingType = ListingType.Local,
-        sort: SortType = SortType.Active,
-        communityId: Int? = null,
-    ): List<PostModel>? = runCatching {
-        customServices.changeInstance(instance)
-        val response = customServices.post.getAll(
-            communityId = communityId,
-            page = page,
-            limit = limit,
-            type = type.toDto(),
-            sort = sort.toDto(),
-        )
-        val dto = response.body()?.posts ?: emptyList()
-        dto.map { it.toModel() }
-    }.getOrNull()
-
-    suspend fun get(id: Int, auth: String? = null): PostModel? = runCatching {
-        val dto = services.post.get(auth, id).body()?.postView
+    suspend fun get(
+        id: Int,
+        auth: String? = null,
+        instance: String? = null,
+    ): PostModel? = runCatching {
+        val dto = if (instance.isNullOrEmpty()) {
+            services.post.get(auth, id).body()?.postView
+        } else {
+            customServices.changeInstance(instance)
+            customServices.post.get(id = id).body()?.postView
+        }
         dto?.toModel()
     }.getOrNull()
 

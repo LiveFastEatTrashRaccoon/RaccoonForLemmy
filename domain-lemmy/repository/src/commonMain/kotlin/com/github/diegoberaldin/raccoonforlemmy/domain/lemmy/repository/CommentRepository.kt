@@ -16,6 +16,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.to
 
 class CommentRepository(
     private val services: ServiceProvider,
+    private val customServices: ServiceProvider,
 ) {
     companion object {
         const val DEFAULT_PAGE_SIZE = 20
@@ -25,45 +26,76 @@ class CommentRepository(
     suspend fun getAll(
         postId: Int,
         auth: String? = null,
+        instance: String? = null,
         page: Int,
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         type: ListingType = ListingType.All,
         sort: SortType = SortType.New,
         maxDepth: Int = 1,
     ): List<CommentModel>? = runCatching {
-        val response = services.comment.getAll(
-            auth = auth,
-            postId = postId,
-            page = page,
-            limit = limit,
-            type = type.toDto(),
-            sort = sort.toCommentDto(),
-            maxDepth = maxDepth,
-        )
+        val response = if (instance.isNullOrEmpty()) {
+            services.comment.getAll(
+                auth = auth,
+                postId = postId,
+                page = page,
+                limit = limit,
+                type = type.toDto(),
+                sort = sort.toCommentDto(),
+                maxDepth = maxDepth,
+            )
+        } else {
+            customServices.changeInstance(instance)
+            customServices.comment.getAll(
+                postId = postId,
+                page = page,
+                limit = limit,
+                type = type.toDto(),
+                sort = sort.toCommentDto(),
+                maxDepth = maxDepth,
+            )
+        }
         val dto = response.body()?.comments ?: emptyList()
         dto.map { it.toModel() }
     }.getOrNull()
 
-    suspend fun getBy(id: Int, auth: String?): CommentModel? = runCatching {
-        services.comment.getBy(id, auth).body()?.commentView?.toModel()
-    }.getOrNull()
+    suspend fun getBy(id: Int, auth: String?, instance: String? = null): CommentModel? =
+        runCatching {
+            if (instance.isNullOrEmpty()) {
+                services.comment.getBy(id, auth).body()
+            } else {
+                customServices.changeInstance(instance)
+                customServices.comment.getBy(id).body()
+            }?.commentView?.toModel()
+        }.getOrNull()
 
     suspend fun getChildren(
         parentId: Int,
         auth: String? = null,
+        instance: String? = null,
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         type: ListingType = ListingType.All,
         sort: SortType = SortType.New,
         maxDepth: Int = 1,
     ): List<CommentModel>? = runCatching {
-        val response = services.comment.getAll(
-            auth = auth,
-            parentId = parentId,
-            limit = limit,
-            type = type.toDto(),
-            sort = sort.toCommentDto(),
-            maxDepth = maxDepth,
-        )
+        val response = if (instance.isNullOrEmpty()) {
+            services.comment.getAll(
+                auth = auth,
+                parentId = parentId,
+                limit = limit,
+                type = type.toDto(),
+                sort = sort.toCommentDto(),
+                maxDepth = maxDepth,
+            )
+        } else {
+            customServices.changeInstance(instance)
+            customServices.comment.getAll(
+                parentId = parentId,
+                limit = limit,
+                type = type.toDto(),
+                sort = sort.toCommentDto(),
+                maxDepth = maxDepth,
+            )
+        }
         val dto = response.body()?.comments ?: emptyList()
         dto.map { it.toModel() }
     }.getOrNull()
