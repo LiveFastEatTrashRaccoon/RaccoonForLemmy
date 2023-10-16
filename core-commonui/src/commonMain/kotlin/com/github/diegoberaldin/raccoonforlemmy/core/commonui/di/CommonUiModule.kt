@@ -40,7 +40,8 @@ val commonUiModule = module {
         PostDetailViewModel(
             mvi = DefaultMviModel(PostDetailMviModel.UiState()),
             post = params[0],
-            highlightCommentId = params[1],
+            otherInstance = params[1],
+            highlightCommentId = params[2],
             identityRepository = get(),
             siteRepository = get(),
             postRepository = get(),

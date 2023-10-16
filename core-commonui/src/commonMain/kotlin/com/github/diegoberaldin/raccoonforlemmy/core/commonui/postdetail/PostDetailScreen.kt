@@ -91,6 +91,7 @@ import kotlinx.coroutines.flow.onEach
 
 class PostDetailScreen(
     private val post: PostModel,
+    private val otherInstance: String = "",
     private val highlightCommentId: Int? = null,
 ) : Screen {
 
@@ -98,10 +99,17 @@ class PostDetailScreen(
     @Composable
     override fun Content() {
         val model = rememberScreenModel(
-            post.id.toString() + highlightCommentId.toString()
-        ) { getPostDetailViewModel(post, highlightCommentId) }
+            tag = post.id.toString() + highlightCommentId.toString()
+        ) {
+            getPostDetailViewModel(
+                post = post,
+                highlightCommentId = highlightCommentId,
+                otherInstance = otherInstance,
+            )
+        }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val isOnOtherInstance = otherInstance.isNotEmpty()
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -193,7 +201,7 @@ class PostDetailScreen(
             },
             floatingActionButton = {
                 AnimatedVisibility(
-                    visible = isFabVisible.value,
+                    visible = isFabVisible.value && !isOnOtherInstance,
                     enter = slideInVertically(
                         initialOffsetY = { it * 2 },
                     ),
@@ -231,8 +239,7 @@ class PostDetailScreen(
                 Box(
                     modifier = Modifier.padding(padding)
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .nestedScroll(fabNestedScrollConnection)
-                        .pullRefresh(pullRefreshState),
+                        .nestedScroll(fabNestedScrollConnection).pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
                         state = lazyListState
@@ -265,24 +272,28 @@ class PostDetailScreen(
                                     },
                                     options = buildList {
                                         add(stringResource(MR.strings.post_action_share))
-                                        if (statePost.creator?.id == uiState.currentUserId) {
+                                        if (statePost.creator?.id == uiState.currentUserId && !isOnOtherInstance) {
                                             add(stringResource(MR.strings.post_action_edit))
                                             add(stringResource(MR.strings.comment_action_delete))
                                         }
                                     },
                                     onUpVote = {
-                                        model.reduce(
-                                            PostDetailMviModel.Intent.UpVotePost(
-                                                feedback = true,
-                                            ),
-                                        )
+                                        if (!isOnOtherInstance) {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.UpVotePost(
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        }
                                     },
                                     onDownVote = {
-                                        model.reduce(
-                                            PostDetailMviModel.Intent.DownVotePost(
-                                                feedback = true,
-                                            ),
-                                        )
+                                        if (!isOnOtherInstance) {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.DownVotePost(
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        }
                                     },
                                     onSave = {
                                         model.reduce(
@@ -293,14 +304,16 @@ class PostDetailScreen(
                                         )
                                     },
                                     onReply = {
-                                        val screen = CreateCommentScreen(
-                                            originalPost = statePost,
-                                        )
-                                        notificationCenter.addObserver({
-                                            model.reduce(PostDetailMviModel.Intent.Refresh)
-                                            model.reduce(PostDetailMviModel.Intent.RefreshPost)
-                                        }, key, NotificationCenterContractKeys.CommentCreated)
-                                        bottomSheetNavigator.show(screen)
+                                        if (!isOnOtherInstance) {
+                                            val screen = CreateCommentScreen(
+                                                originalPost = statePost,
+                                            )
+                                            notificationCenter.addObserver({
+                                                model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                model.reduce(PostDetailMviModel.Intent.RefreshPost)
+                                            }, key, NotificationCenterContractKeys.CommentCreated)
+                                            bottomSheetNavigator.show(screen)
+                                        }
                                     },
                                     onOptionSelected = { idx ->
                                         when (idx) {
@@ -357,7 +370,7 @@ class PostDetailScreen(
                             ) {
                                 SwipeableCard(
                                     modifier = Modifier.fillMaxWidth(),
-                                    enabled = uiState.swipeActionsEnabled,
+                                    enabled = uiState.swipeActionsEnabled && !isOnOtherInstance,
                                     backgroundColor = {
                                         when (it) {
                                             DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
@@ -390,15 +403,14 @@ class PostDetailScreen(
                                         )
                                     },
                                     content = {
-                                        CommentCard(
-                                            background = if (comment.id == highlightCommentId) {
-                                                MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
-                                                    .copy(
-                                                        alpha = 0.75f
-                                                    )
-                                            } else {
-                                                MaterialTheme.colorScheme.background
-                                            },
+                                        CommentCard(background = if (comment.id == highlightCommentId) {
+                                            MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
+                                                .copy(
+                                                    alpha = 0.75f
+                                                )
+                                        } else {
+                                            MaterialTheme.colorScheme.background
+                                        },
                                             comment = comment,
                                             separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                             autoLoadImages = uiState.autoLoadImages,
@@ -409,49 +421,60 @@ class PostDetailScreen(
                                                 }
                                             },
                                             onUpVote = {
-                                                model.reduce(
-                                                    PostDetailMviModel.Intent.UpVoteComment(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
+                                                if (!isOnOtherInstance) {
+                                                    model.reduce(
+                                                        PostDetailMviModel.Intent.UpVoteComment(
+                                                            index = idx,
+                                                            feedback = true,
+                                                        ),
+                                                    )
+                                                }
                                             },
                                             onDownVote = {
-                                                model.reduce(
-                                                    PostDetailMviModel.Intent.DownVoteComment(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
+                                                if (!isOnOtherInstance) {
+                                                    model.reduce(
+                                                        PostDetailMviModel.Intent.DownVoteComment(
+                                                            index = idx,
+                                                            feedback = true,
+                                                        ),
+                                                    )
+                                                }
                                             },
                                             onSave = {
-                                                model.reduce(
-                                                    PostDetailMviModel.Intent.SaveComment(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
+                                                if (!isOnOtherInstance) {
+                                                    model.reduce(
+                                                        PostDetailMviModel.Intent.SaveComment(
+                                                            index = idx,
+                                                            feedback = true,
+                                                        ),
+                                                    )
+                                                }
                                             },
                                             onReply = {
-                                                val screen = CreateCommentScreen(
-                                                    originalPost = statePost,
-                                                    originalComment = comment,
-                                                )
-                                                notificationCenter.addObserver(
-                                                    {
-                                                        model.reduce(PostDetailMviModel.Intent.Refresh)
-                                                        model.reduce(PostDetailMviModel.Intent.RefreshPost)
-                                                    },
-                                                    key,
-                                                    NotificationCenterContractKeys.CommentCreated
-                                                )
-                                                bottomSheetNavigator.show(screen)
+                                                if (!isOnOtherInstance) {
+                                                    val screen = CreateCommentScreen(
+                                                        originalPost = statePost,
+                                                        originalComment = comment,
+                                                    )
+                                                    notificationCenter.addObserver(
+                                                        {
+                                                            model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                            model.reduce(PostDetailMviModel.Intent.RefreshPost)
+                                                        },
+                                                        key,
+                                                        NotificationCenterContractKeys.CommentCreated
+                                                    )
+                                                    bottomSheetNavigator.show(screen)
+                                                }
                                             },
                                             onOpenCreator = {
                                                 val user = comment.creator
                                                 if (user != null) {
                                                     navigator?.push(
-                                                        UserDetailScreen(user),
+                                                        UserDetailScreen(
+                                                            user = user,
+                                                            otherInstance = otherInstance,
+                                                        ),
                                                     )
                                                 }
                                             },
@@ -459,7 +482,10 @@ class PostDetailScreen(
                                                 val community = comment.community
                                                 if (community != null) {
                                                     navigator?.push(
-                                                        CommunityDetailScreen(community),
+                                                        CommunityDetailScreen(
+                                                            community = community,
+                                                            otherInstance = otherInstance,
+                                                        ),
                                                     )
                                                 }
                                             },
@@ -487,8 +513,7 @@ class PostDetailScreen(
                                                         )
                                                     }
                                                 }
-                                            }
-                                        )
+                                            })
                                     },
                                 )
                                 Divider(

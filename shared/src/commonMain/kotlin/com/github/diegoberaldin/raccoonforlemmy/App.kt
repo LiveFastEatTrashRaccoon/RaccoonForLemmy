@@ -42,8 +42,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getCommmunityFromUrl
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getPostFromUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getUserFromUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getAccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
@@ -135,20 +137,29 @@ fun App() {
                     val url = navigationCoordinator.deeplinkUrl.value.orEmpty()
                     val community = getCommmunityFromUrl(url)
                     val user = getUserFromUrl(url)
+                    val postAndInstance = getPostFromUrl(url)
                     buildList {
                         add(MainScreen())
                         if (community != null) {
                             add(
                                 CommunityDetailScreen(
                                     community = community,
-                                    otherInstance = community.host
+                                    otherInstance = community.host,
                                 )
                             )
                         } else if (user != null) {
                             add(
                                 UserDetailScreen(
                                     user = user,
-                                    otherInstance = user.host
+                                    otherInstance = user.host,
+                                )
+                            )
+                        } else if (postAndInstance != null) {
+                            val (post, otherInstance) = postAndInstance
+                            add(
+                                PostDetailScreen(
+                                    post = post,
+                                    otherInstance = otherInstance,
                                 )
                             )
                         }

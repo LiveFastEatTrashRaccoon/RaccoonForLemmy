@@ -116,7 +116,7 @@ class CommunityDetailViewModel(
         val auth = identityRepository.authToken.value
         mvi.scope?.launch(Dispatchers.IO) {
             val refreshedCommunity = if (otherInstance.isNotEmpty()) {
-                communityRepository.getInInstance(
+                communityRepository.get(
                     auth = auth,
                     name = community.name,
                     instance = otherInstance,
@@ -154,7 +154,7 @@ class CommunityDetailViewModel(
             val sort = currentState.sortType
             val communityId = currentState.community.id
             val itemList = if (otherInstance.isNotEmpty()) {
-                postRepository.getAllInInstance(
+                postRepository.getAll(
                     instance = otherInstance,
                     communityId = communityId,
                     page = currentPage,

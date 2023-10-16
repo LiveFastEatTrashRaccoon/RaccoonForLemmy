@@ -26,9 +26,10 @@ actual fun getDrawerCoordinator() = CommonUiViewModelHelper.drawerCoordinator
 
 actual fun getPostDetailViewModel(
     post: PostModel,
+    otherInstance: String,
     highlightCommentId: Int?,
 ): PostDetailViewModel =
-    CommonUiViewModelHelper.getPostDetailModel(post, highlightCommentId)
+    CommonUiViewModelHelper.getPostDetailModel(post, otherInstance, highlightCommentId)
 
 actual fun getCommunityDetailViewModel(
     community: CommunityModel,
@@ -77,9 +78,13 @@ object CommonUiViewModelHelper : KoinComponent {
     val savedItemsViewModel: SavedItemsViewModel by inject()
     val modalDrawerViewModel: ModalDrawerViewModel by inject()
 
-    fun getPostDetailModel(post: PostModel, highlightCommentId: Int?): PostDetailViewModel {
+    fun getPostDetailModel(
+        post: PostModel,
+        otherInstance: String,
+        highlightCommentId: Int?,
+    ): PostDetailViewModel {
         val model: PostDetailViewModel by inject(
-            parameters = { parametersOf(post, highlightCommentId) },
+            parameters = { parametersOf(post, otherInstance, highlightCommentId) },
         )
         return model
     }

@@ -23,6 +23,7 @@ expect fun getDrawerCoordinator(): DrawerCoordinator
 
 expect fun getPostDetailViewModel(
     post: PostModel,
+    otherInstance: String = "",
     highlightCommentId: Int? = null,
 ): PostDetailViewModel
 

@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 class PostDetailViewModel(
     private val mvi: DefaultMviModel<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect>,
     private val post: PostModel,
+    private val otherInstance: String,
     private val highlightCommentId: Int?,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
@@ -86,7 +87,12 @@ class PostDetailViewModel(
             }
             if (post.title.isEmpty()) {
                 // empty post must be loaded
-                val updatedPost = postRepository.get(post.id)
+                val auth = identityRepository.authToken.value
+                val updatedPost = postRepository.get(
+                    id = post.id,
+                    auth = auth,
+                    instance = otherInstance,
+                )
                 if (updatedPost != null) {
                     mvi.updateState {
                         it.copy(
@@ -103,7 +109,11 @@ class PostDetailViewModel(
             }
             if (highlightCommentId != null) {
                 val auth = identityRepository.authToken.value
-                val comment = commentRepository.getBy(highlightCommentId, auth)
+                val comment = commentRepository.getBy(
+                    id = highlightCommentId,
+                    auth = auth,
+                    instance = otherInstance,
+                )
                 highlightCommentPath = comment?.path
             }
             if (mvi.uiState.value.comments.isEmpty()) {
@@ -199,7 +209,11 @@ class PostDetailViewModel(
     private fun refreshPost() {
         mvi.scope?.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value
-            val updatedPost = postRepository.get(id = post.id, auth = auth) ?: post
+            val updatedPost = postRepository.get(
+                id = post.id,
+                auth = auth,
+                instance = otherInstance,
+            ) ?: post
             mvi.updateState {
                 it.copy(
                     post = updatedPost,
@@ -229,6 +243,7 @@ class PostDetailViewModel(
             val itemList = commentRepository.getAll(
                 auth = auth,
                 postId = post.id,
+                instance = otherInstance,
                 page = currentPage,
                 sort = sort,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
@@ -288,6 +303,7 @@ class PostDetailViewModel(
             val fetchResult = commentRepository.getChildren(
                 auth = auth,
                 parentId = parentId,
+                instance = otherInstance,
                 sort = sort,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
             )?.let {

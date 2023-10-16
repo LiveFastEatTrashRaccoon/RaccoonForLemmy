@@ -31,11 +31,12 @@ actual fun getDrawerCoordinator(): DrawerCoordinator {
 
 actual fun getPostDetailViewModel(
     post: PostModel,
+    otherInstance: String,
     highlightCommentId: Int?,
 ): PostDetailViewModel {
     val res: PostDetailViewModel by inject(
         clazz = PostDetailViewModel::class.java,
-        parameters = { parametersOf(post, highlightCommentId) },
+        parameters = { parametersOf(post, otherInstance, highlightCommentId) },
     )
     return res
 }

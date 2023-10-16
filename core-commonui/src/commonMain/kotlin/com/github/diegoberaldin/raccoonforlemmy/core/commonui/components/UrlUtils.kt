@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.Co
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.web.WebViewScreen
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
 fun getCommmunityFromUrl(url: String): CommunityModel? {
@@ -25,6 +26,16 @@ fun getUserFromUrl(url: String): UserModel? {
         res.copy(host = instance)
     } else {
         res
+    }
+}
+
+fun getPostFromUrl(url: String): Pair<PostModel, String>? {
+    val (normalizedUrl, instance) = normalizeUrl(url)
+    val post = extractPost(normalizedUrl)
+    return if (post != null && instance != null) {
+        post to instance
+    } else {
+        null
     }
 }
 
@@ -139,4 +150,17 @@ private fun extractUser(url: String): UserModel? = when {
     }
 
     else -> null
+}
+
+private fun extractPost(url: String): PostModel? {
+    val regex = Regex("/post/(?<postId>.*$)")
+    val match = regex.find(url)
+    val id = match
+        ?.let { it.groups["postId"]?.value.orEmpty() }
+        ?.let { runCatching { it.toInt() }.getOrNull() }
+    return if (id != null) {
+        PostModel(id = id)
+    } else {
+        null
+    }
 }

@@ -148,116 +148,111 @@ class CommunityDetailScreen(
         }
 
         val stateCommunity = uiState.community
-        Scaffold(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background)
-                .padding(Spacing.xs),
-            topBar = {
-                TopAppBar(
-                    scrollBehavior = scrollBehavior,
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = stateCommunity.name,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+        Scaffold(modifier = Modifier.background(MaterialTheme.colorScheme.background)
+            .padding(Spacing.xs), topBar = {
+            TopAppBar(
+                scrollBehavior = scrollBehavior,
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = stateCommunity.name,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                },
+                actions = {
+                    // subscribe button
+                    if (!isOnOtherInstance && uiState.isLogged) {
+                        Image(
+                            modifier = Modifier.onClick {
+                                when (stateCommunity.subscribed) {
+                                    true -> model.reduce(CommunityDetailMviModel.Intent.Unsubscribe)
+                                    false -> model.reduce(CommunityDetailMviModel.Intent.Subscribe)
+                                    else -> Unit
+                                }
+                            },
+                            imageVector = when (stateCommunity.subscribed) {
+                                true -> Icons.Outlined.CheckCircle
+                                false -> Icons.Outlined.AddCircleOutline
+                                else -> Icons.Outlined.Pending
+                            },
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
                         )
-                    },
-                    actions = {
-                        // subscribe button
-                        if (!isOnOtherInstance && uiState.isLogged) {
-                            Image(
-                                modifier = Modifier.onClick {
-                                    when (stateCommunity.subscribed) {
-                                        true -> model.reduce(CommunityDetailMviModel.Intent.Unsubscribe)
-                                        false -> model.reduce(CommunityDetailMviModel.Intent.Subscribe)
-                                        else -> Unit
-                                    }
-                                },
-                                imageVector = when (stateCommunity.subscribed) {
-                                    true -> Icons.Outlined.CheckCircle
-                                    false -> Icons.Outlined.AddCircleOutline
-                                    else -> Icons.Outlined.Pending
-                                },
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
-                            )
-                            Spacer(Modifier.width(Spacing.m))
-                        }
+                        Spacer(Modifier.width(Spacing.m))
+                    }
 
-                        // sort button
-                        Image(
-                            modifier = Modifier.onClick {
-                                val sheet = SortBottomSheet(
-                                    expandTop = true,
-                                )
-                                notificationCenter.addObserver({
-                                    (it as? SortType)?.also { sortType ->
-                                        model.reduce(
-                                            CommunityDetailMviModel.Intent.ChangeSort(
-                                                sortType
-                                            )
+                    // sort button
+                    Image(
+                        modifier = Modifier.onClick {
+                            val sheet = SortBottomSheet(
+                                expandTop = true,
+                            )
+                            notificationCenter.addObserver({
+                                (it as? SortType)?.also { sortType ->
+                                    model.reduce(
+                                        CommunityDetailMviModel.Intent.ChangeSort(
+                                            sortType
                                         )
-                                    }
-                                }, key, NotificationCenterContractKeys.ChangeSortType)
-                                bottomSheetNavigator.show(sheet)
-                            },
-                            imageVector = uiState.sortType.toIcon(),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                                    )
+                                }
+                            }, key, NotificationCenterContractKeys.ChangeSortType)
+                            bottomSheetNavigator.show(sheet)
+                        },
+                        imageVector = uiState.sortType.toIcon(),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                    )
+                },
+                navigationIcon = {
+                    Image(
+                        modifier = Modifier.onClick {
+                            navigator?.pop()
+                        },
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                    )
+                },
+            )
+        }, floatingActionButton = {
+            AnimatedVisibility(
+                visible = isFabVisible.value,
+                enter = slideInVertically(
+                    initialOffsetY = { it * 2 },
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { it * 2 },
+                ),
+            ) {
+                FloatingActionButton(
+                    backgroundColor = MaterialTheme.colorScheme.secondary,
+                    shape = CircleShape,
+                    onClick = {
+                        val screen = CreatePostScreen(
+                            communityId = stateCommunity.id,
                         )
+                        notificationCenter.addObserver({
+                            model.reduce(CommunityDetailMviModel.Intent.Refresh)
+                        }, key, NotificationCenterContractKeys.PostCreated)
+                        bottomSheetNavigator.show(screen)
                     },
-                    navigationIcon = {
-                        Image(
-                            modifier = Modifier.onClick {
-                                navigator?.pop()
-                            },
-                            imageVector = Icons.Default.ArrowBack,
+                    content = {
+                        Icon(
+                            imageVector = Icons.Default.Add,
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )
                     },
                 )
-            },
-            floatingActionButton = {
-                AnimatedVisibility(
-                    visible = isFabVisible.value,
-                    enter = slideInVertically(
-                        initialOffsetY = { it * 2 },
-                    ),
-                    exit = slideOutVertically(
-                        targetOffsetY = { it * 2 },
-                    ),
-                ) {
-                    FloatingActionButton(
-                        backgroundColor = MaterialTheme.colorScheme.secondary,
-                        shape = CircleShape,
-                        onClick = {
-                            val screen = CreatePostScreen(
-                                communityId = stateCommunity.id,
-                            )
-                            notificationCenter.addObserver({
-                                model.reduce(CommunityDetailMviModel.Intent.Refresh)
-                            }, key, NotificationCenterContractKeys.PostCreated)
-                            bottomSheetNavigator.show(screen)
-                        },
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = null,
-                            )
-                        },
-                    )
-                }
-            }) { padding ->
+            }
+        }) { padding ->
             if (uiState.currentUserId != null) {
                 val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                     model.reduce(CommunityDetailMviModel.Intent.Refresh)
                 })
                 Box(
-                    modifier = Modifier
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .nestedScroll(fabNestedScrollConnection)
-                        .padding(padding)
+                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .nestedScroll(fabNestedScrollConnection).padding(padding)
                         .pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn {
@@ -314,15 +309,7 @@ class CommunityDetailScreen(
                         itemsIndexed(uiState.posts) { idx, post ->
                             SwipeableCard(
                                 modifier = Modifier.fillMaxWidth(),
-                                enabled = uiState.swipeActionsEnabled,
-                                directions = if (isOnOtherInstance) {
-                                    emptySet()
-                                } else {
-                                    setOf(
-                                        DismissDirection.StartToEnd,
-                                        DismissDirection.EndToStart,
-                                    )
-                                },
+                                enabled = uiState.swipeActionsEnabled && !isOnOtherInstance,
                                 backgroundColor = {
                                     when (it) {
                                         DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
@@ -355,12 +342,14 @@ class CommunityDetailScreen(
                                     )
                                 },
                                 content = {
-                                    PostCard(
-                                        modifier = Modifier.onClick {
-                                            navigator?.push(
-                                                PostDetailScreen(post),
-                                            )
-                                        },
+                                    PostCard(modifier = Modifier.onClick {
+                                        navigator?.push(
+                                            PostDetailScreen(
+                                                post = post,
+                                                otherInstance = otherInstance,
+                                            ),
+                                        )
+                                    },
                                         onOpenCreator = { user ->
                                             navigator?.push(
                                                 UserDetailScreen(
@@ -384,10 +373,8 @@ class CommunityDetailScreen(
                                             stateCommunity.nsfw -> false
                                             else -> uiState.blurNsfw
                                         },
-                                        onUpVote = if (isOnOtherInstance) {
-                                            null
-                                        } else {
-                                            {
+                                        onUpVote = {
+                                            if (!isOnOtherInstance) {
                                                 model.reduce(
                                                     CommunityDetailMviModel.Intent.UpVotePost(
                                                         index = idx,
@@ -396,10 +383,8 @@ class CommunityDetailScreen(
                                                 )
                                             }
                                         },
-                                        onDownVote = if (isOnOtherInstance) {
-                                            null
-                                        } else {
-                                            {
+                                        onDownVote = {
+                                            if (!isOnOtherInstance) {
                                                 model.reduce(
                                                     CommunityDetailMviModel.Intent.DownVotePost(
                                                         index = idx,
@@ -408,10 +393,8 @@ class CommunityDetailScreen(
                                                 )
                                             }
                                         },
-                                        onSave = if (isOnOtherInstance) {
-                                            null
-                                        } else {
-                                            {
+                                        onSave = {
+                                            if (!isOnOtherInstance) {
                                                 model.reduce(
                                                     CommunityDetailMviModel.Intent.SavePost(
                                                         index = idx,
@@ -420,10 +403,8 @@ class CommunityDetailScreen(
                                                 )
                                             }
                                         },
-                                        onReply = if (isOnOtherInstance) {
-                                            null
-                                        } else {
-                                            {
+                                        onReply = {
+                                            if (!isOnOtherInstance) {
                                                 val screen = CreateCommentScreen(
                                                     originalPost = post,
                                                 )
@@ -469,8 +450,7 @@ class CommunityDetailScreen(
                                                     CommunityDetailMviModel.Intent.SharePost(idx)
                                                 )
                                             }
-                                        }
-                                    )
+                                        })
                                 },
                             )
                             if (uiState.postLayout != PostLayout.Card) {
