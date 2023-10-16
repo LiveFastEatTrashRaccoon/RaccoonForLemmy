@@ -88,6 +88,7 @@ fun CommentCard(
                     CommunityAndCreatorInfo(
                         creator = comment.creator.takeIf { !hideAuthor },
                         community = comment.community.takeIf { !hideCommunity },
+                        indicatorExpanded = comment.expanded,
                         autoLoadImages = autoLoadImages,
                         onOpenCreator = onOpenCreator,
                         onOpenCommunity = onOpenCommunity,

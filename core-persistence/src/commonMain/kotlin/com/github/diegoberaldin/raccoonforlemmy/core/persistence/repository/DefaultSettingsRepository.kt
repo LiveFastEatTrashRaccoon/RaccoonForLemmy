@@ -28,6 +28,7 @@ private object KeyStoreKeys {
     const val PostLayout = "postLayout"
     const val SeparateUpAndDownVotes = "separateUpAndDownVotes"
     const val AutoLoadImages = "autoLoadImages"
+    const val AutoExpandComments = "autoExpandComments"
 }
 
 internal class DefaultSettingsRepository(
@@ -61,6 +62,7 @@ internal class DefaultSettingsRepository(
                 postLayout = settings.postLayout.toLong(),
                 separateUpAndDownVotes = if (settings.separateUpAndDownVotes) 1 else 0,
                 autoLoadImages = if (settings.autoLoadImages) 1 else 0,
+                autoExpandComments = if (settings.autoExpandComments) 1 else 0,
             )
         }
 
@@ -89,6 +91,7 @@ internal class DefaultSettingsRepository(
                     postLayout = keyStore[KeyStoreKeys.PostLayout, 0],
                     separateUpAndDownVotes = keyStore[KeyStoreKeys.SeparateUpAndDownVotes, false],
                     autoLoadImages = keyStore[KeyStoreKeys.AutoLoadImages, true],
+                    autoExpandComments = keyStore[KeyStoreKeys.AutoExpandComments, true],
                 )
             } else {
                 val entity = db.settingsQueries.getBy(accountId).executeAsOneOrNull()
@@ -128,6 +131,7 @@ internal class DefaultSettingsRepository(
                 keyStore.save(KeyStoreKeys.PostLayout, settings.postLayout)
                 keyStore.save(KeyStoreKeys.SeparateUpAndDownVotes, settings.separateUpAndDownVotes)
                 keyStore.save(KeyStoreKeys.AutoLoadImages, settings.autoLoadImages)
+                keyStore.save(KeyStoreKeys.AutoExpandComments, settings.autoExpandComments)
             } else {
                 db.settingsQueries.update(
                     theme = settings.theme?.toLong(),
@@ -148,6 +152,7 @@ internal class DefaultSettingsRepository(
                     postLayout = settings.postLayout.toLong(),
                     separateUpAndDownVotes = if (settings.separateUpAndDownVotes) 1L else 0L,
                     autoLoadImages = if (settings.autoLoadImages) 1L else 0L,
+                    autoExpandComments = if (settings.autoExpandComments) 1L else 0L,
                     account_id = accountId,
                 )
             }
@@ -178,4 +183,5 @@ private fun GetBy.toModel() = SettingsModel(
     postLayout = postLayout.toInt(),
     separateUpAndDownVotes = separateUpAndDownVotes != 0L,
     autoLoadImages = autoLoadImages != 0L,
+    autoExpandComments = autoExpandComments != 0L,
 )

@@ -44,6 +44,7 @@ class PostDetailViewModel(
     private var currentPage: Int = 1
     private var highlightCommentPath: String? = null
     private var commentWasHighlighted = false
+    private var expandedTopLevelComments = mutableListOf<Int>()
 
     init {
         notificationCenter.addObserver({
@@ -165,7 +166,7 @@ class PostDetailViewModel(
             is PostDetailMviModel.Intent.ChangeSort -> applySortType(intent.value)
 
             is PostDetailMviModel.Intent.DownVoteComment -> toggleDownVoteComment(
-                comment = uiState.value.comments[intent.index],
+                comment = uiState.value.comments.first { it.id == intent.commentId },
                 feedback = intent.feedback,
             )
 
@@ -175,7 +176,7 @@ class PostDetailViewModel(
             )
 
             is PostDetailMviModel.Intent.SaveComment -> toggleSaveComment(
-                comment = uiState.value.comments[intent.index],
+                comment = uiState.value.comments.first { it.id == intent.commentId },
                 feedback = intent.feedback,
             )
 
@@ -185,7 +186,7 @@ class PostDetailViewModel(
             )
 
             is PostDetailMviModel.Intent.UpVoteComment -> toggleUpVoteComment(
-                comment = uiState.value.comments[intent.index],
+                comment = uiState.value.comments.first { it.id == intent.commentId },
                 feedback = intent.feedback,
             )
 
@@ -198,11 +199,16 @@ class PostDetailViewModel(
                 loadMoreComments(intent.parentId)
             }
 
-            is PostDetailMviModel.Intent.DeleteComment -> deleteComment(intent.id)
+            is PostDetailMviModel.Intent.DeleteComment -> deleteComment(intent.commentId)
             PostDetailMviModel.Intent.DeletePost -> deletePost()
             PostDetailMviModel.Intent.SharePost -> share(
                 post = uiState.value.post,
             )
+
+            is PostDetailMviModel.Intent.ToggleExpandComment -> {
+                val comment = uiState.value.comments.first { it.id == intent.commentId }
+                toggleExpanded(comment)
+            }
         }
     }
 
@@ -234,6 +240,7 @@ class PostDetailViewModel(
             mvi.updateState { it.copy(refreshing = false) }
             return
         }
+        val autoExpandComments = settingsRepository.currentSettings.value.autoExpandComments
 
         mvi.scope?.launch(Dispatchers.IO) {
             mvi.updateState { it.copy(loading = true) }
@@ -247,11 +254,9 @@ class PostDetailViewModel(
                 page = currentPage,
                 sort = sort,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
-            )?.let {
-                processCommentsToGetNestedOrder(
-                    items = it,
-                )
-            }.let {
+            )?.processCommentsToGetNestedOrder(
+                ancestorId = null,
+            ).let {
                 if (refreshing) {
                     it
                 } else {
@@ -260,7 +265,16 @@ class PostDetailViewModel(
                         currentState.comments.none { c2 -> c1.id == c2.id }
                     }
                 }
-            }
+            }?.let {
+                if (autoExpandComments) {
+                    expandedTopLevelComments =
+                        it.filter { c -> c.depth == 0 }.map { c -> c.id }.toMutableList()
+                }
+                it
+            }?.applyExpansionFilter(
+                expandedTopLevelCommentIds = expandedTopLevelComments,
+            )
+
             if (!itemList.isNullOrEmpty()) {
                 currentPage++
             }
@@ -277,6 +291,7 @@ class PostDetailViewModel(
                     refreshing = false,
                     initial = false,
                 )
+
             }
             if (highlightCommentPath != null && !commentWasHighlighted) {
                 downloadUntilHighlight()
@@ -296,6 +311,7 @@ class PostDetailViewModel(
     }
 
     private fun loadMoreComments(parentId: Int, loadUntilHighlight: Boolean = false) {
+        val autoExpandComments = settingsRepository.currentSettings.value.autoExpandComments
         mvi.scope?.launch(Dispatchers.IO) {
             val currentState = mvi.uiState.value
             val auth = identityRepository.authToken.value
@@ -306,18 +322,24 @@ class PostDetailViewModel(
                 instance = otherInstance,
                 sort = sort,
                 maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
+            )?.processCommentsToGetNestedOrder(
+                ancestorId = parentId.toString(),
             )?.let {
-                processCommentsToGetNestedOrder(
-                    items = it,
-                    ancestorId = parentId.toString(),
-                )
-            }
+                if (autoExpandComments) {
+                    expandedTopLevelComments =
+                        it.filter { c -> c.depth == 0 }.map { c -> c.id }.toMutableList()
+                }
+                it
+            }?.applyExpansionFilter(
+                expandedTopLevelCommentIds = expandedTopLevelComments,
+            )
             val newList = uiState.value.comments.let { list ->
                 val index = list.indexOfFirst { c -> c.id == parentId }
                 list.toMutableList().apply {
                     addAll(index + 1, fetchResult.orEmpty())
                 }.toList()
             }
+
             mvi.updateState { it.copy(comments = newList) }
             if (loadUntilHighlight) {
                 // start indirect recursion
@@ -589,6 +611,24 @@ class PostDetailViewModel(
             shareHelper.share(url, "text/plain")
         }
     }
+
+    private fun toggleExpanded(comment: CommentModel) {
+        if (comment.depth > 0) {
+            return
+        }
+        val id = comment.id
+        if (expandedTopLevelComments.contains(id)) {
+            expandedTopLevelComments -= id
+        } else {
+            expandedTopLevelComments += id
+        }
+        mvi.updateState {
+            val newComments = it.comments.applyExpansionFilter(
+                expandedTopLevelCommentIds = expandedTopLevelComments,
+            )
+            it.copy(comments = newComments)
+        }
+    }
 }
 
 
@@ -626,13 +666,12 @@ private fun linearize(node: Node, list: MutableList<CommentModel>) {
     }
 }
 
-private fun processCommentsToGetNestedOrder(
-    items: List<CommentModel>,
+private fun List<CommentModel>.processCommentsToGetNestedOrder(
     ancestorId: String? = null,
 ): List<CommentModel> {
     val root = Node(null)
     // reconstructs the tree
-    for (c in items) {
+    for (c in this) {
         val parentId = c.parentId
         if (parentId == ancestorId) {
             root.children += Node(c)
@@ -649,4 +688,18 @@ private fun processCommentsToGetNestedOrder(
     linearize(root, result)
 
     return result.reversed().toList()
+}
+
+private fun List<CommentModel>.applyExpansionFilter(
+    expandedTopLevelCommentIds: List<Int>,
+): List<CommentModel> = map { comment ->
+    val visible = comment.depth == 0 || expandedTopLevelCommentIds.any { e ->
+        e == comment.path.split(".")[1].toInt()
+    }
+    val indicatorExpanded = when {
+        comment.depth > 0 -> null
+        (comment.comments ?: 0) == 0 -> null
+        else -> expandedTopLevelCommentIds.contains(comment.id)
+    }
+    comment.copy(visible = visible, expanded = indicatorExpanded)
 }

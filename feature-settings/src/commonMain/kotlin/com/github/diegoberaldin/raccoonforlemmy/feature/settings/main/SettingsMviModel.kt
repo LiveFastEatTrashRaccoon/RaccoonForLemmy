@@ -32,6 +32,7 @@ interface SettingsMviModel :
         data class ChangeCrashReportEnabled(val value: Boolean) : Intent
         data class ChangeSeparateUpAndDownVotes(val value: Boolean) : Intent
         data class ChangeAutoLoadImages(val value: Boolean) : Intent
+        data class ChangeAutoExpandComments(val value: Boolean) : Intent
     }
 
     data class UiState(
@@ -56,6 +57,7 @@ interface SettingsMviModel :
         val crashReportEnabled: Boolean = false,
         val separateUpAndDownVotes: Boolean = false,
         val autoLoadImages: Boolean = false,
+        val autoExpandComments: Boolean = false,
         val appVersion: String = "",
     )
 

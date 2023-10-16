@@ -22,4 +22,5 @@ data class SettingsModel(
     val postLayout: Int = 0,
     val separateUpAndDownVotes: Boolean = false,
     val autoLoadImages: Boolean = true,
+    val autoExpandComments: Boolean = true,
 ) : JavaSerializable

@@ -18,12 +18,11 @@ interface PostDetailMviModel :
         data class UpVotePost(val feedback: Boolean = false) : Intent
         data class DownVotePost(val feedback: Boolean = false) : Intent
         data class SavePost(val post: PostModel, val feedback: Boolean = false) : Intent
-        data class UpVoteComment(val index: Int, val feedback: Boolean = false) : Intent
-        data class DownVoteComment(val index: Int, val feedback: Boolean = false) :
-            Intent
-
-        data class SaveComment(val index: Int, val feedback: Boolean = false) : Intent
-        data class DeleteComment(val id: Int) : Intent
+        data class UpVoteComment(val commentId: Int, val feedback: Boolean = false) : Intent
+        data class DownVoteComment(val commentId: Int, val feedback: Boolean = false) : Intent
+        data class SaveComment(val commentId: Int, val feedback: Boolean = false) : Intent
+        data class ToggleExpandComment(val commentId: Int) : Intent
+        data class DeleteComment(val commentId: Int) : Intent
         data object DeletePost : Intent
         data object HapticIndication : Intent
         data object SharePost : Intent

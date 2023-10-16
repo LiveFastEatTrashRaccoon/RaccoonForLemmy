@@ -133,6 +133,7 @@
     <string name="settings_enable_crash_report">Enable crash reporting</string>
     <string name="settings_separate_up_and_downvotes">Separate upvotes / downvotes</string>
     <string name="settings_auto_load_images">Automatically load images</string>
+    <string name="settings_auto_expand_comments">Automatically expand comments</string>
     <string name="settings_section_appearance">Look and feel</string>
     <string name="settings_section_feed">Posts and comments</string>
     <string name="settings_section_behaviour">Behaviour</string>

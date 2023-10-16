@@ -105,6 +105,7 @@ class SettingsViewModel(
                 crashReportEnabled = crashReportConfiguration.isEnabled(),
                 separateUpAndDownVotes = settings.separateUpAndDownVotes,
                 autoLoadImages = settings.autoLoadImages,
+                autoExpandComments = settings.autoExpandComments,
                 appVersion = AppInfo.versionCode,
             )
         }
@@ -182,6 +183,7 @@ class SettingsViewModel(
             )
 
             is SettingsMviModel.Intent.ChangeAutoLoadImages -> changeAutoLoadImages(intent.value)
+            is SettingsMviModel.Intent.ChangeAutoExpandComments -> changeAutoExpandComments(intent.value)
         }
     }
 
@@ -373,6 +375,16 @@ class SettingsViewModel(
         mvi.scope?.launch {
             val settings = settingsRepository.currentSettings.value.copy(
                 autoLoadImages = value
+            )
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeAutoExpandComments(value: Boolean) {
+        mvi.updateState { it.copy(autoExpandComments = value) }
+        mvi.scope?.launch {
+            val settings = settingsRepository.currentSettings.value.copy(
+                autoExpandComments = value
             )
             saveSettings(settings)
         }

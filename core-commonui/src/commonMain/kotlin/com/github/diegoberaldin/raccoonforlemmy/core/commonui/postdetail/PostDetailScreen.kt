@@ -1,8 +1,11 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,7 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
@@ -95,7 +98,10 @@ class PostDetailScreen(
     private val highlightCommentId: Int? = null,
 ) : Screen {
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+    @OptIn(
+        ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,
+        ExperimentalFoundationApi::class
+    )
     @Composable
     override fun Content() {
         val model = rememberScreenModel(
@@ -359,7 +365,8 @@ class PostDetailScreen(
                                 )
                             }
                         }
-                        itemsIndexed(uiState.comments) { idx, comment ->
+                        items(uiState.comments, key = { it.id }) { comment ->
+                            val commentId = comment.id
                             val themeRepository = remember { getThemeRepository() }
                             val fontScale by themeRepository.contentFontScale.collectAsState()
                             CompositionLocalProvider(
@@ -368,136 +375,110 @@ class PostDetailScreen(
                                     fontScale = fontScale,
                                 ),
                             ) {
-                                SwipeableCard(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    enabled = uiState.swipeActionsEnabled && !isOnOtherInstance,
-                                    backgroundColor = {
-                                        when (it) {
-                                            DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
-                                            DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
-                                            DismissValue.Default -> Color.Transparent
-                                        }
-                                    },
-                                    onGestureBegin = {
-                                        model.reduce(PostDetailMviModel.Intent.HapticIndication)
-                                    },
-                                    onDismissToStart = {
-                                        model.reduce(
-                                            PostDetailMviModel.Intent.UpVoteComment(idx),
-                                        )
-                                    },
-                                    onDismissToEnd = {
-                                        model.reduce(
-                                            PostDetailMviModel.Intent.DownVoteComment(idx),
-                                        )
-                                    },
-                                    swipeContent = { direction ->
-                                        val icon = when (direction) {
-                                            DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
-                                            DismissDirection.EndToStart -> Icons.Default.ArrowCircleUp
-                                        }
-                                        Icon(
-                                            imageVector = icon,
-                                            contentDescription = null,
-                                            tint = Color.White,
-                                        )
-                                    },
-                                    content = {
-                                        CommentCard(background = if (comment.id == highlightCommentId) {
-                                            MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
-                                                .copy(
-                                                    alpha = 0.75f
-                                                )
-                                        } else {
-                                            MaterialTheme.colorScheme.background
+                                AnimatedVisibility(
+                                    visible = comment.visible,
+                                    exit = fadeOut(),
+                                    enter = fadeIn(),
+
+                                    ) {
+                                    SwipeableCard(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        enabled = uiState.swipeActionsEnabled && !isOnOtherInstance,
+                                        backgroundColor = {
+                                            when (it) {
+                                                DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
+                                                DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
+                                                DismissValue.Default -> Color.Transparent
+                                            }
                                         },
-                                            comment = comment,
-                                            separateUpAndDownVotes = uiState.separateUpAndDownVotes,
-                                            autoLoadImages = uiState.autoLoadImages,
-                                            options = buildList {
-                                                if (comment.creator?.id == uiState.currentUserId) {
-                                                    add(stringResource(MR.strings.post_action_edit))
-                                                    add(stringResource(MR.strings.comment_action_delete))
-                                                }
-                                            },
-                                            onUpVote = {
-                                                if (!isOnOtherInstance) {
+                                        onGestureBegin = {
+                                            model.reduce(PostDetailMviModel.Intent.HapticIndication)
+                                        },
+                                        onDismissToStart = {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.UpVoteComment(commentId),
+                                            )
+                                        },
+                                        onDismissToEnd = {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.DownVoteComment(commentId),
+                                            )
+                                        },
+                                        swipeContent = { direction ->
+                                            val icon = when (direction) {
+                                                DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
+                                                DismissDirection.EndToStart -> Icons.Default.ArrowCircleUp
+                                            }
+                                            Icon(
+                                                imageVector = icon,
+                                                contentDescription = null,
+                                                tint = Color.White,
+                                            )
+                                        },
+                                        content = {
+                                            CommentCard(
+                                                modifier = Modifier.onClick {
                                                     model.reduce(
-                                                        PostDetailMviModel.Intent.UpVoteComment(
-                                                            index = idx,
-                                                            feedback = true,
-                                                        ),
-                                                    )
-                                                }
-                                            },
-                                            onDownVote = {
-                                                if (!isOnOtherInstance) {
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.DownVoteComment(
-                                                            index = idx,
-                                                            feedback = true,
-                                                        ),
-                                                    )
-                                                }
-                                            },
-                                            onSave = {
-                                                if (!isOnOtherInstance) {
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.SaveComment(
-                                                            index = idx,
-                                                            feedback = true,
-                                                        ),
-                                                    )
-                                                }
-                                            },
-                                            onReply = {
-                                                if (!isOnOtherInstance) {
-                                                    val screen = CreateCommentScreen(
-                                                        originalPost = statePost,
-                                                        originalComment = comment,
-                                                    )
-                                                    notificationCenter.addObserver(
-                                                        {
-                                                            model.reduce(PostDetailMviModel.Intent.Refresh)
-                                                            model.reduce(PostDetailMviModel.Intent.RefreshPost)
-                                                        },
-                                                        key,
-                                                        NotificationCenterContractKeys.CommentCreated
-                                                    )
-                                                    bottomSheetNavigator.show(screen)
-                                                }
-                                            },
-                                            onOpenCreator = {
-                                                val user = comment.creator
-                                                if (user != null) {
-                                                    navigator?.push(
-                                                        UserDetailScreen(
-                                                            user = user,
-                                                            otherInstance = otherInstance,
-                                                        ),
-                                                    )
-                                                }
-                                            },
-                                            onOpenCommunity = {
-                                                val community = comment.community
-                                                if (community != null) {
-                                                    navigator?.push(
-                                                        CommunityDetailScreen(
-                                                            community = community,
-                                                            otherInstance = otherInstance,
-                                                        ),
-                                                    )
-                                                }
-                                            },
-                                            onOptionSelected = { idx ->
-                                                when (idx) {
-                                                    1 -> model.reduce(
-                                                        PostDetailMviModel.Intent.DeleteComment(
-                                                            comment.id
+                                                        PostDetailMviModel.Intent.ToggleExpandComment(
+                                                            commentId,
                                                         )
                                                     )
-
-                                                    else -> {
+                                                },
+                                                background = if (comment.id == highlightCommentId) {
+                                                    MaterialTheme.colorScheme.surfaceColorAtElevation(
+                                                        5.dp
+                                                    )
+                                                        .copy(
+                                                            alpha = 0.75f
+                                                        )
+                                                } else {
+                                                    MaterialTheme.colorScheme.background
+                                                },
+                                                comment = comment,
+                                                separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                                autoLoadImages = uiState.autoLoadImages,
+                                                options = buildList {
+                                                    if (comment.creator?.id == uiState.currentUserId) {
+                                                        add(stringResource(MR.strings.post_action_edit))
+                                                        add(stringResource(MR.strings.comment_action_delete))
+                                                    }
+                                                },
+                                                onUpVote = {
+                                                    if (!isOnOtherInstance) {
+                                                        model.reduce(
+                                                            PostDetailMviModel.Intent.UpVoteComment(
+                                                                commentId = commentId,
+                                                                feedback = true,
+                                                            ),
+                                                        )
+                                                    }
+                                                },
+                                                onDownVote = {
+                                                    if (!isOnOtherInstance) {
+                                                        model.reduce(
+                                                            PostDetailMviModel.Intent.DownVoteComment(
+                                                                commentId = commentId,
+                                                                feedback = true,
+                                                            ),
+                                                        )
+                                                    }
+                                                },
+                                                onSave = {
+                                                    if (!isOnOtherInstance) {
+                                                        model.reduce(
+                                                            PostDetailMviModel.Intent.SaveComment(
+                                                                commentId = commentId,
+                                                                feedback = true,
+                                                            ),
+                                                        )
+                                                    }
+                                                },
+                                                onReply = {
+                                                    if (!isOnOtherInstance) {
+                                                        val screen = CreateCommentScreen(
+                                                            originalPost = statePost,
+                                                            originalComment = comment,
+                                                        )
                                                         notificationCenter.addObserver(
                                                             {
                                                                 model.reduce(PostDetailMviModel.Intent.Refresh)
@@ -506,24 +487,67 @@ class PostDetailScreen(
                                                             key,
                                                             NotificationCenterContractKeys.CommentCreated
                                                         )
-                                                        bottomSheetNavigator.show(
-                                                            CreateCommentScreen(
-                                                                editedComment = comment,
-                                                            )
+                                                        bottomSheetNavigator.show(screen)
+                                                    }
+                                                },
+                                                onOpenCreator = {
+                                                    val user = comment.creator
+                                                    if (user != null) {
+                                                        navigator?.push(
+                                                            UserDetailScreen(
+                                                                user = user,
+                                                                otherInstance = otherInstance,
+                                                            ),
                                                         )
                                                     }
-                                                }
-                                            })
-                                    },
-                                )
-                                Divider(
-                                    modifier = Modifier.padding(vertical = Spacing.xxxs),
-                                    thickness = 0.25.dp
-                                )
+                                                },
+                                                onOpenCommunity = {
+                                                    val community = comment.community
+                                                    if (community != null) {
+                                                        navigator?.push(
+                                                            CommunityDetailScreen(
+                                                                community = community,
+                                                                otherInstance = otherInstance,
+                                                            ),
+                                                        )
+                                                    }
+                                                },
+                                                onOptionSelected = { idx ->
+                                                    when (idx) {
+                                                        1 -> model.reduce(
+                                                            PostDetailMviModel.Intent.DeleteComment(
+                                                                comment.id
+                                                            )
+                                                        )
+
+                                                        else -> {
+                                                            notificationCenter.addObserver(
+                                                                {
+                                                                    model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                                    model.reduce(PostDetailMviModel.Intent.RefreshPost)
+                                                                },
+                                                                key,
+                                                                NotificationCenterContractKeys.CommentCreated
+                                                            )
+                                                            bottomSheetNavigator.show(
+                                                                CreateCommentScreen(
+                                                                    editedComment = comment,
+                                                                )
+                                                            )
+                                                        }
+                                                    }
+                                                })
+                                        },
+                                    )
+                                    Divider(
+                                        modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                        thickness = 0.25.dp
+                                    )
+                                }
                             }
                             val hasMoreComments = (comment.comments ?: 0) > 0
                             val isNextCommentOfHigherDepth =
-                                idx < uiState.comments.lastIndex && uiState.comments[idx + 1].depth < comment.depth
+                                commentId < uiState.comments.lastIndex && uiState.comments[commentId + 1].depth < comment.depth
                             if (hasMoreComments && isNextCommentOfHigherDepth) {
                                 Row {
                                     Spacer(modifier = Modifier.weight(1f))

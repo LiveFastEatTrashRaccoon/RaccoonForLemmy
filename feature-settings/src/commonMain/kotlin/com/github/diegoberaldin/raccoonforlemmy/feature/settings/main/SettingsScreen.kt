@@ -162,6 +162,7 @@ class SettingsScreen : Screen {
                         icon = Icons.Default.Palette,
                         title = stringResource(MR.strings.settings_section_appearance),
                     )
+
                     // language
                     SettingsRow(
                         title = stringResource(MR.strings.settings_language),
@@ -176,6 +177,7 @@ class SettingsScreen : Screen {
                             bottomSheetNavigator.show(sheet)
                         },
                     )
+
                     // theme
                     SettingsRow(
                         title = stringResource(MR.strings.settings_ui_theme),
@@ -336,6 +338,7 @@ class SettingsScreen : Screen {
                         icon = Icons.Default.Tune,
                         title = stringResource(MR.strings.settings_section_feed),
                     )
+
                     // default listing type
                     SettingsRow(
                         title = stringResource(MR.strings.settings_default_listing_type),
@@ -409,6 +412,7 @@ class SettingsScreen : Screen {
                         icon = Icons.Default.SettingsApplications,
                         title = stringResource(MR.strings.settings_section_behaviour),
                     )
+
                     // swipe actions
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_enable_swipe_actions),
@@ -435,6 +439,19 @@ class SettingsScreen : Screen {
                         }
                     )
 
+                    // auto-expand comments
+                    SettingsSwitchRow(
+                        title = stringResource(MR.strings.settings_auto_expand_comments),
+                        value = uiState.autoExpandComments,
+                        onValueChanged = { value ->
+                            model.reduce(
+                                SettingsMviModel.Intent.ChangeAutoExpandComments(
+                                    value
+                                )
+                            )
+                        }
+                    )
+
                     // image loading
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_auto_load_images),
@@ -452,6 +469,7 @@ class SettingsScreen : Screen {
                         icon = Icons.Default.Shield,
                         title = stringResource(MR.strings.settings_section_nsfw),
                     )
+
                     // NSFW options
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_include_nsfw),
@@ -472,6 +490,7 @@ class SettingsScreen : Screen {
                         icon = Icons.Default.BugReport,
                         title = stringResource(MR.strings.settings_section_debug),
                     )
+
                     // enable crash report
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_enable_crash_report),

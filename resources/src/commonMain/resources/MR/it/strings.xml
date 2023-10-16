@@ -131,6 +131,7 @@
     <string name="settings_enable_crash_report">Abilitare segnalazioni di crash</string>
     <string name="settings_separate_up_and_downvotes">Distingui voti positivi / negativi</string>
     <string name="settings_auto_load_images">Carica immagini automaticamente</string>
+    <string name="settings_auto_expand_comments">Espandi commenti automaticamente</string>
     <string name="settings_section_appearance">Aspetto interfaccia</string>
     <string name="settings_section_feed">Post e commenti</string>
     <string name="settings_section_behaviour">Comportamento</string>

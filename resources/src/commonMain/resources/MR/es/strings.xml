@@ -131,6 +131,7 @@
     <string name="settings_separate_up_and_downvotes">Distinguir votos positivos / negativos
     </string>
     <string name="settings_auto_load_images">Cargar imágenes automáticamente</string>
+    <string name="settings_auto_expand_comments">Expandir comentarios automáticamente</string>
     <string name="settings_section_appearance">Aspecto</string>
     <string name="settings_section_feed">Publicaciones y comentarios</string>
     <string name="settings_section_behaviour">Comportamiento</string>

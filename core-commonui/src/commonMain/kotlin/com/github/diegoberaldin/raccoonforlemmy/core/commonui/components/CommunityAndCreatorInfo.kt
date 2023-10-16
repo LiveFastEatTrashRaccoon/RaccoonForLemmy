@@ -3,9 +3,14 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +28,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 @Composable
 fun CommunityAndCreatorInfo(
     modifier: Modifier = Modifier,
+    indicatorExpanded: Boolean? = null,
     autoLoadImages: Boolean = true,
     community: CommunityModel? = null,
     creator: UserModel? = null,
@@ -132,6 +138,23 @@ fun CommunityAndCreatorInfo(
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground,
+                )
+            }
+        }
+        if (indicatorExpanded != null) {
+            Spacer(modifier = Modifier.weight(1f))
+            val modifier = Modifier.padding(end = Spacing.xs)
+            if (indicatorExpanded) {
+                Icon(
+                    modifier = modifier,
+                    imageVector = Icons.Default.ExpandLess,
+                    contentDescription = null,
+                )
+            } else {
+                Icon(
+                    modifier = modifier,
+                    imageVector = Icons.Default.ExpandMore,
+                    contentDescription = null,
                 )
             }
         }
