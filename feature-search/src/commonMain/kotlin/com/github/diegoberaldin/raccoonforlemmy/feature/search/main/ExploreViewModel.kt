@@ -102,6 +102,7 @@ class ExploreViewModel(
                 )
             }
             mvi.scope?.launch(Dispatchers.IO) {
+                mvi.emitEffect(ExploreMviModel.Effect.BackToTop)
                 refresh()
             }
         }
@@ -162,6 +163,7 @@ class ExploreViewModel(
         mvi.updateState { it.copy(searchText = value) }
         debounceJob = mvi.scope?.launch(Dispatchers.IO) {
             delay(1_000)
+            mvi.emitEffect(ExploreMviModel.Effect.BackToTop)
             refresh()
         }
     }
@@ -169,6 +171,7 @@ class ExploreViewModel(
     private fun changeListingType(value: ListingType) {
         mvi.updateState { it.copy(listingType = value) }
         mvi.scope?.launch(Dispatchers.IO) {
+            mvi.emitEffect(ExploreMviModel.Effect.BackToTop)
             refresh()
         }
     }
@@ -176,6 +179,7 @@ class ExploreViewModel(
     private fun changeSortType(value: SortType) {
         mvi.updateState { it.copy(sortType = value) }
         mvi.scope?.launch(Dispatchers.IO) {
+            mvi.emitEffect(ExploreMviModel.Effect.BackToTop)
             refresh()
         }
     }
@@ -183,6 +187,7 @@ class ExploreViewModel(
     private fun changeResultType(value: SearchResultType) {
         mvi.updateState { it.copy(resultType = value) }
         mvi.scope?.launch(Dispatchers.IO) {
+            mvi.emitEffect(ExploreMviModel.Effect.BackToTop)
             refresh()
         }
     }

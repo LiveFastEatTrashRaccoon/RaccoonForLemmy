@@ -110,6 +110,9 @@ class PostListViewModel(
                         sortType = settings.defaultPostSortType.toSortType(),
                     )
                 }
+                mvi.scope?.launch {
+                    mvi.emitEffect(PostListMviModel.Effect.BackToTop)
+                }
                 refresh()
             }
         }
@@ -207,11 +210,17 @@ class PostListViewModel(
 
     private fun applySortType(value: SortType) {
         mvi.updateState { it.copy(sortType = value) }
+        mvi.scope?.launch {
+            mvi.emitEffect(PostListMviModel.Effect.BackToTop)
+        }
         refresh()
     }
 
     private fun applyListingType(value: ListingType) {
         mvi.updateState { it.copy(listingType = value) }
+        mvi.scope?.launch {
+            mvi.emitEffect(PostListMviModel.Effect.BackToTop)
+        }
         refresh()
     }
 

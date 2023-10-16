@@ -100,6 +100,15 @@ class PostListScreen : Screen {
                 }
             }.launchIn(this)
         }
+        LaunchedEffect(model) {
+            model.effects.onEach {
+                when (it) {
+                    PostListMviModel.Effect.BackToTop -> {
+                        lazyListState.scrollToItem(0)
+                    }
+                }
+            }.launchIn(this)
+        }
         val drawerCoordinator = remember { getDrawerCoordinator() }
         val scope = rememberCoroutineScope()
         Scaffold(

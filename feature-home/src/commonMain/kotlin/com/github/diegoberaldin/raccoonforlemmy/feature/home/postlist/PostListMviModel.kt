@@ -40,5 +40,7 @@ interface PostListMviModel :
         val autoLoadImages: Boolean = true,
     )
 
-    sealed interface Effect
+    sealed interface Effect {
+        data object BackToTop : Effect
+    }
 }

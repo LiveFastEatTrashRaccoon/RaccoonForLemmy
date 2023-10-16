@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -32,6 +33,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -81,6 +83,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getExploreViewModel
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ExploreScreen : Screen {
@@ -110,6 +114,16 @@ class ExploreScreen : Screen {
             onDispose {
                 notificationCenter.removeObserver(key)
             }
+        }
+        val lazyListState = rememberLazyListState()
+        LaunchedEffect(model) {
+            model.effects.onEach {
+                when (it) {
+                    ExploreMviModel.Effect.BackToTop -> {
+                        lazyListState.scrollToItem(0)
+                    }
+                }
+            }.launchIn(this)
         }
 
         Scaffold(
@@ -237,7 +251,9 @@ class ExploreScreen : Screen {
                 Box(
                     modifier = Modifier.padding(Spacing.xxs).pullRefresh(pullRefreshState),
                 ) {
-                    LazyColumn {
+                    LazyColumn(
+                        state = lazyListState,
+                    ) {
                         if (uiState.results.isEmpty() && uiState.loading) {
                             items(5) {
                                 PostCardPlaceholder(
