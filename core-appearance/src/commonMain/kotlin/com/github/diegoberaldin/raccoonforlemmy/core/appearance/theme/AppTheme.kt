@@ -5,25 +5,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 
 @Composable
 fun AppTheme(
-    theme: ThemeState,
+    theme: UiTheme,
     contentFontScale: Float,
     useDynamicColors: Boolean,
     content: @Composable () -> Unit,
 ) {
     val repository = remember {
         val res = getThemeRepository()
-        res.changeTheme(theme)
+        res.changeUiTheme(theme)
         res.changeContentFontScale(contentFontScale)
         res
     }
 
-    val themeState by repository.state.collectAsState()
+    val themeState by repository.uiTheme.collectAsState()
     val customSeedColor by repository.customSeedColor.collectAsState()
 
     val colorSchemeProvider = remember { getColorSchemeProvider() }
@@ -32,6 +32,9 @@ fun AppTheme(
         dynamic = useDynamicColors,
         customSeed = customSeedColor,
     )
+
+    val fontFamily by repository.uiFontFamily.collectAsState()
+    val typography = getTypography(fontFamily)
 
     MaterialTheme(
         colorScheme = colorScheme,

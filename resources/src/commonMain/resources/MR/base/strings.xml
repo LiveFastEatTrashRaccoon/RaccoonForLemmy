@@ -96,6 +96,7 @@
     <string name="settings_theme_black">Pure black</string>
     <string name="settings_language">Language</string>
     <string name="settings_ui_font_scale">UI text size</string>
+    <string name="settings_ui_font_family">UI font</string>
     <string name="settings_content_font_scale">Content text size</string>
     <string name="settings_content_font_largest">Double extra large</string>
     <string name="settings_content_font_larger">Extra large</string>

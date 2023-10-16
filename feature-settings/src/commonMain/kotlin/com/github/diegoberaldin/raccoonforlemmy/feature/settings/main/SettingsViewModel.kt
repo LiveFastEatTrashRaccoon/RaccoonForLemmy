@@ -4,7 +4,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiFontFamily
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toFontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
@@ -58,8 +59,11 @@ class SettingsViewModel(
     override fun onStarted() {
         mvi.onStarted()
         mvi.scope?.launch(Dispatchers.Main) {
-            themeRepository.state.onEach { currentTheme ->
-                mvi.updateState { it.copy(currentTheme = currentTheme) }
+            themeRepository.uiTheme.onEach { currentTheme ->
+                mvi.updateState { it.copy(uiTheme = currentTheme) }
+            }.launchIn(this)
+            themeRepository.uiFontFamily.onEach { fontFamily ->
+                mvi.updateState { it.copy(uiFontFamily = fontFamily) }
             }.launchIn(this)
             themeRepository.contentFontScale.onEach { value ->
                 mvi.updateState { it.copy(contentFontScale = value.toFontScale()) }
@@ -108,8 +112,12 @@ class SettingsViewModel(
 
     override fun reduce(intent: SettingsMviModel.Intent) {
         when (intent) {
-            is SettingsMviModel.Intent.ChangeTheme -> {
+            is SettingsMviModel.Intent.ChangeUiTheme -> {
                 changeTheme(intent.value)
+            }
+
+            is SettingsMviModel.Intent.ChangeUiFontFamily -> {
+                changeFontFamily(intent.value)
             }
 
             is SettingsMviModel.Intent.ChangeContentFontSize -> {
@@ -177,11 +185,21 @@ class SettingsViewModel(
         }
     }
 
-    private fun changeTheme(value: ThemeState) {
-        themeRepository.changeTheme(value)
+    private fun changeTheme(value: UiTheme) {
+        themeRepository.changeUiTheme(value)
         mvi.scope?.launch {
             val settings = settingsRepository.currentSettings.value.copy(
                 theme = value.toInt()
+            )
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeFontFamily(value: UiFontFamily) {
+        themeRepository.changeUiFontFamily(value)
+        mvi.scope?.launch {
+            val settings = settingsRepository.currentSettings.value.copy(
+                uiFontFamily = value.toInt()
             )
             saveSettings(settings)
         }

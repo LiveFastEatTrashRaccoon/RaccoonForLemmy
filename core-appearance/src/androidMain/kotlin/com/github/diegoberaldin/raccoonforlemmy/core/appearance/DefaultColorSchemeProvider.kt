@@ -6,7 +6,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.ui.graphics.Color
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.BlackColors
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.DarkColors
@@ -22,11 +22,11 @@ internal class DefaultColorSchemeProvider(private val context: Context) : ColorS
         }
 
     override fun getColorScheme(
-        theme: ThemeState,
+        theme: UiTheme,
         dynamic: Boolean,
         customSeed: Color?,
     ): ColorScheme = when (theme) {
-        ThemeState.Dark -> {
+        UiTheme.Dark -> {
             when {
                 dynamic -> {
                     dynamicDarkColorScheme(context)
@@ -42,7 +42,7 @@ internal class DefaultColorSchemeProvider(private val context: Context) : ColorS
             }
         }
 
-        ThemeState.Black -> {
+        UiTheme.Black -> {
             when {
                 dynamic -> {
                     dynamicDarkColorScheme(context).blackify()

@@ -5,6 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.JavaSerializable
 data class SettingsModel(
     val id: Long? = null,
     val theme: Int? = null,
+    val uiFontFamily: Int = 0,
     val uiFontScale: Float = 1f,
     val contentFontScale: Float = 1f,
     val locale: String? = null,

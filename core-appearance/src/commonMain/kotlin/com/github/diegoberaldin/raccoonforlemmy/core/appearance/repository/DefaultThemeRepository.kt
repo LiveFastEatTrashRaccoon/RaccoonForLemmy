@@ -2,13 +2,15 @@ package com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository
 
 import androidx.compose.ui.graphics.Color
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiFontFamily
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
 internal class DefaultThemeRepository : ThemeRepository {
 
-    override val state = MutableStateFlow<ThemeState>(ThemeState.Light)
+    override val uiTheme = MutableStateFlow<UiTheme>(UiTheme.Light)
+    override val uiFontFamily = MutableStateFlow<UiFontFamily>(UiFontFamily.TitilliumWeb)
     override val uiFontScale = MutableStateFlow(1f)
     override val contentFontScale = MutableStateFlow(1f)
     override val navItemTitles = MutableStateFlow(false)
@@ -16,8 +18,12 @@ internal class DefaultThemeRepository : ThemeRepository {
     override val customSeedColor = MutableStateFlow<Color?>(null)
     override val postLayout = MutableStateFlow<PostLayout>(PostLayout.Card)
 
-    override fun changeTheme(value: ThemeState) {
-        state.value = value
+    override fun changeUiTheme(value: UiTheme) {
+        uiTheme.value = value
+    }
+
+    override fun changeUiFontFamily(value: UiFontFamily) {
+        uiFontFamily.value = value
     }
 
     override fun changeUiFontScale(value: Float) {

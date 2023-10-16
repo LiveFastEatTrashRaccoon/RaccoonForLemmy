@@ -41,7 +41,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.FontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiFontFamily
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
@@ -49,6 +50,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ColorBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.FontFamilyBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.FontScaleBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.LanguageBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
@@ -177,12 +179,12 @@ class SettingsScreen : Screen {
                     // theme
                     SettingsRow(
                         title = stringResource(MR.strings.settings_ui_theme),
-                        value = uiState.currentTheme.toReadableName(),
+                        value = uiState.uiTheme.toReadableName(),
                         onTap = {
                             val sheet = ThemeBottomSheet()
                             notificationCenter.addObserver({ result ->
-                                (result as? ThemeState)?.also { value ->
-                                    model.reduce(SettingsMviModel.Intent.ChangeTheme(value))
+                                (result as? UiTheme)?.also { value ->
+                                    model.reduce(SettingsMviModel.Intent.ChangeUiTheme(value))
                                 }
                             }, key, NotificationCenterContractKeys.ChangeTheme)
                             bottomSheetNavigator.show(sheet)
@@ -209,7 +211,7 @@ class SettingsScreen : Screen {
                     SettingsColorRow(
                         title = stringResource(MR.strings.settings_custom_seed_color),
                         value = uiState.customSeedColor ?: colorSchemeProvider.getColorScheme(
-                            theme = uiState.currentTheme,
+                            theme = uiState.uiTheme,
                             dynamic = uiState.dynamicColors,
                         ).primary,
                         onTap = {
@@ -225,6 +227,24 @@ class SettingsScreen : Screen {
                         },
                     )
 
+                    // font family
+                    SettingsRow(
+                        title = stringResource(MR.strings.settings_ui_font_family),
+                        value = uiState.uiFontFamily.toReadableName(),
+                        onTap = {
+                            val sheet = FontFamilyBottomSheet()
+                            notificationCenter.addObserver({ result ->
+                                (result as? UiFontFamily)?.also { value ->
+                                    model.reduce(
+                                        SettingsMviModel.Intent.ChangeUiFontFamily(
+                                            value
+                                        )
+                                    )
+                                }
+                            }, key, NotificationCenterContractKeys.ChangeFontFamily)
+                            bottomSheetNavigator.show(sheet)
+                        },
+                    )
                     // font scale
                     SettingsRow(
                         title = stringResource(MR.strings.settings_ui_font_scale),

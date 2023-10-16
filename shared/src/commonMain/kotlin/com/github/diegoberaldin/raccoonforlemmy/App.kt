@@ -32,10 +32,11 @@ import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toPostLayout
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toUiFontFamily
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toUiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
@@ -72,9 +73,9 @@ fun App() {
         hasBeenInitialized = true
     }
     val defaultTheme = if (isSystemInDarkTheme()) {
-        ThemeState.Dark.toInt()
+        UiTheme.Dark.toInt()
     } else {
-        ThemeState.Light.toInt()
+        UiTheme.Light.toInt()
     }
 
     val defaultLocale = stringResource(MR.strings.lang)
@@ -100,16 +101,17 @@ fun App() {
     val themeRepository = remember { getThemeRepository() }
     LaunchedEffect(settings) {
         with(themeRepository) {
-            changeTheme((settings.theme ?: defaultTheme).toThemeState())
+            changeUiTheme((settings.theme ?: defaultTheme).toUiTheme())
             changeNavItemTitles(settings.navigationTitlesVisible)
             changeDynamicColors(settings.dynamicColors)
             changeCustomSeedColor(settings.customSeedColor?.let { Color(it) })
             changePostLayout(settings.postLayout.toPostLayout())
             changeContentFontScale(settings.contentFontScale)
             changeUiFontScale(settings.uiFontScale)
+            changeUiFontFamily(settings.uiFontFamily.toUiFontFamily())
         }
     }
-    val currentTheme by themeRepository.state.collectAsState()
+    val currentTheme by themeRepository.uiTheme.collectAsState()
     val useDynamicColors by themeRepository.dynamicColors.collectAsState()
     val fontScale by themeRepository.contentFontScale.collectAsState()
     val uiFontScale by themeRepository.uiFontScale.collectAsState()

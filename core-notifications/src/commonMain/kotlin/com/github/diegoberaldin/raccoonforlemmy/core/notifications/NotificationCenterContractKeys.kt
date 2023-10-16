@@ -6,6 +6,7 @@ object NotificationCenterContractKeys {
     const val ChangeInboxType = "changeInboxType"
     const val ChangeTheme = "changeTheme"
     const val ChangeFontSize = "changeFontSize"
+    const val ChangeFontFamily = "changeFontFamily"
     const val ChangeLanguage = "changeLanguage"
     const val ChangePostLayout = "changePostLayout"
     const val Logout = "logout"

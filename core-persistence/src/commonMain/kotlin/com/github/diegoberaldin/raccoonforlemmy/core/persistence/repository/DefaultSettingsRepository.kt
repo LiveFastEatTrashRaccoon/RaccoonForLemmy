@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 
 private object KeyStoreKeys {
     const val UiTheme = "uiTheme"
+    const val UiFontFamily = "uiFontFamily"
     const val UiFontScale = "uiFontSize"
     const val ContentFontScale = "contentFontSize"
     const val Locale = "locale"
@@ -43,6 +44,7 @@ internal class DefaultSettingsRepository(
             db.settingsQueries.create(
                 theme = settings.theme?.toLong(),
                 uiFontScale = settings.uiFontScale.toDouble(),
+                uiFontFamily = settings.uiFontFamily.toLong(),
                 contentFontScale = settings.contentFontScale.toDouble(),
                 locale = settings.locale,
                 defaultListingType = settings.defaultListingType.toLong(),
@@ -71,6 +73,7 @@ internal class DefaultSettingsRepository(
                         keyStore[KeyStoreKeys.UiTheme, 0]
                     } else null,
                     uiFontScale = keyStore[KeyStoreKeys.UiFontScale, 1f],
+                    uiFontFamily = keyStore[KeyStoreKeys.UiFontFamily, 1],
                     contentFontScale = keyStore[KeyStoreKeys.ContentFontScale, 1f],
                     locale = keyStore[KeyStoreKeys.Locale, ""].takeIf { it.isNotEmpty() },
                     defaultListingType = keyStore[KeyStoreKeys.DefaultListingType, 0],
@@ -102,6 +105,7 @@ internal class DefaultSettingsRepository(
                     keyStore.save(KeyStoreKeys.UiTheme, settings.theme)
                 }
                 keyStore.save(KeyStoreKeys.UiFontScale, settings.uiFontScale)
+                keyStore.save(KeyStoreKeys.UiFontFamily, settings.uiFontFamily)
                 keyStore.save(KeyStoreKeys.ContentFontScale, settings.contentFontScale)
                 if (!settings.locale.isNullOrEmpty()) {
                     keyStore.save(KeyStoreKeys.Locale, settings.locale)
@@ -128,6 +132,7 @@ internal class DefaultSettingsRepository(
                 db.settingsQueries.update(
                     theme = settings.theme?.toLong(),
                     uiFontScale = settings.uiFontScale.toDouble(),
+                    uiFontFamily = settings.uiFontFamily.toLong(),
                     contentFontScale = settings.contentFontScale.toDouble(),
                     locale = settings.locale,
                     defaultListingType = settings.defaultListingType.toLong(),
@@ -157,6 +162,7 @@ private fun GetBy.toModel() = SettingsModel(
     id = id,
     theme = theme?.toInt(),
     uiFontScale = uiFontScale.toFloat(),
+    uiFontFamily = uiFontFamily.toInt(),
     contentFontScale = contentFontScale.toFloat(),
     locale = locale,
     defaultListingType = defaultListingType.toInt(),

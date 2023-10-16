@@ -93,6 +93,7 @@
     <string name="settings_theme_black">Scuro (AMOLED)</string>
     <string name="settings_language">Lingua</string>
     <string name="settings_ui_font_scale">Dimensione testo UI</string>
+    <string name="settings_ui_font_family">Font UI</string>
     <string name="settings_content_font_scale">Dimensione testo contenuti</string>
     <string name="settings_content_font_largest">Grandissimo</string>
     <string name="settings_content_font_larger">Più grande</string>

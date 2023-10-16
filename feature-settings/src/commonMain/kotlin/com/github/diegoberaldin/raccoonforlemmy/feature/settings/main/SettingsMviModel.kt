@@ -3,7 +3,8 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.settings.main
 import androidx.compose.ui.graphics.Color
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.FontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.ThemeState
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiFontFamily
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
@@ -12,8 +13,9 @@ interface SettingsMviModel :
     MviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect> {
 
     sealed interface Intent {
-        data class ChangeTheme(val value: ThemeState) : Intent
+        data class ChangeUiTheme(val value: UiTheme) : Intent
         data class ChangeUiFontSize(val value: Float) : Intent
+        data class ChangeUiFontFamily(val value: UiFontFamily) : Intent
         data class ChangeContentFontSize(val value: Float) : Intent
         data class ChangeLanguage(val value: String) : Intent
         data class ChangeDefaultListingType(val value: ListingType) : Intent
@@ -34,7 +36,8 @@ interface SettingsMviModel :
 
     data class UiState(
         val isLogged: Boolean = false,
-        val currentTheme: ThemeState = ThemeState.Light,
+        val uiTheme: UiTheme = UiTheme.Light,
+        val uiFontFamily: UiFontFamily = UiFontFamily.TitilliumWeb,
         val customSeedColor: Color? = null,
         val uiFontScale: FontScale = FontScale.Normal,
         val contentFontScale: FontScale = FontScale.Normal,
