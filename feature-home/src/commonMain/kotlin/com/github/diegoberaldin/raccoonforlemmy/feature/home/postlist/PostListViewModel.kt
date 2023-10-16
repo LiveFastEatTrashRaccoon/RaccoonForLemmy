@@ -21,7 +21,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepo
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -42,6 +41,7 @@ class PostListViewModel(
     MviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1
+    private var firstLoad = true
 
     init {
         notificationCenter.addObserver({
@@ -57,6 +57,10 @@ class PostListViewModel(
         notificationCenter.addObserver({
             handleLogout()
         }, this::class.simpleName.orEmpty(), NotificationCenterContractKeys.Logout)
+        notificationCenter.addObserver({
+            // apply new feed and sort type
+            firstLoad = true
+        }, this::class.simpleName.orEmpty(), NotificationCenterContractKeys.ResetContents)
     }
 
     fun finalize() {
@@ -94,36 +98,12 @@ class PostListViewModel(
                 }
             }.launchIn(this)
 
-            settingsRepository.currentSettings
-                .map { it.defaultListingType }
-                .distinctUntilChanged()
-                .onEach { listingType ->
-                    mvi.updateState {
-                        it.copy(
-                            listingType = listingType.toListingType(),
-                        )
-                    }
-                    refresh()
-                }.launchIn(this)
-            settingsRepository.currentSettings
-                .map { it.defaultPostSortType }
-                .distinctUntilChanged()
-                .onEach { sortType ->
-                    mvi.updateState {
-                        it.copy(
-                            sortType = sortType.toSortType(),
-                        )
-                    }
-                    refresh()
-                }.launchIn(this)
-        }
-
-        mvi.scope?.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value.orEmpty()
             val user = siteRepository.getCurrentUser(auth)
+            val settings = settingsRepository.currentSettings.value
             mvi.updateState { it.copy(currentUserId = user?.id ?: 0) }
-            if (uiState.value.posts.isEmpty()) {
-                val settings = settingsRepository.currentSettings.value
+            if (firstLoad) {
+                firstLoad = false
                 mvi.updateState {
                     it.copy(
                         listingType = settings.defaultListingType.toListingType(),

@@ -26,7 +26,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -48,11 +47,16 @@ class ExploreViewModel(
 
     private var currentPage: Int = 1
     private var debounceJob: Job? = null
+    private var firstLoad = true
 
     init {
         notificationCenter.addObserver({
             handleLogout()
         }, this::class.simpleName.orEmpty(), NotificationCenterContractKeys.Logout)
+        notificationCenter.addObserver({
+            // apply new feed and sort type
+            firstLoad = true
+        }, this::class.simpleName.orEmpty(), NotificationCenterContractKeys.ResetContents)
     }
 
     fun finalize() {
@@ -84,31 +88,10 @@ class ExploreViewModel(
                     )
                 }
             }.launchIn(this)
-            settingsRepository.currentSettings
-                .map { it.defaultListingType }
-                .distinctUntilChanged()
-                .onEach { listingType ->
-                    mvi.updateState {
-                        it.copy(
-                            listingType = listingType.toListingType(),
-                        )
-                    }
-                    refresh()
-                }.launchIn(this)
-            settingsRepository.currentSettings
-                .map { it.defaultPostSortType }
-                .distinctUntilChanged()
-                .onEach { sortType ->
-                    mvi.updateState {
-                        it.copy(
-                            sortType = sortType.toSortType(),
-                        )
-                    }
-                    refresh()
-                }.launchIn(this)
         }
 
-        if (mvi.uiState.value.results.isEmpty()) {
+        if (firstLoad) {
+            firstLoad = false
             val settings = settingsRepository.currentSettings.value
             val listingType = settings.defaultListingType.toListingType()
             val sortType = settings.defaultPostSortType.toSortType()

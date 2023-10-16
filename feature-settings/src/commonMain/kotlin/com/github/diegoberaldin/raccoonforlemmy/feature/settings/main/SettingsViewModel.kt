@@ -224,6 +224,10 @@ class SettingsViewModel(
                 defaultListingType = value.toInt()
             )
             saveSettings(settings)
+            notificationCenter.getAllObservers(NotificationCenterContractKeys.ResetContents)
+                .forEach {
+                    it.invoke(Unit)
+                }
         }
     }
 
@@ -234,6 +238,10 @@ class SettingsViewModel(
                 defaultPostSortType = value.toInt()
             )
             saveSettings(settings)
+            notificationCenter.getAllObservers(NotificationCenterContractKeys.ResetContents)
+                .forEach {
+                    it.invoke(Unit)
+                }
         }
     }
 
