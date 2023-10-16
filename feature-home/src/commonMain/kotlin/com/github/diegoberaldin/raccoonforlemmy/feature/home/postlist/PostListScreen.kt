@@ -13,6 +13,7 @@ import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -344,6 +346,17 @@ class PostListScreen : Screen {
                                         color = MaterialTheme.colorScheme.primary,
                                     )
                                 }
+                            }
+                        }
+                        if (uiState.posts.isEmpty() && !uiState.loading) {
+                            item {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
+                                    textAlign = TextAlign.Center,
+                                    text = stringResource(MR.strings.message_empty_list),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
                             }
                         }
                         item {

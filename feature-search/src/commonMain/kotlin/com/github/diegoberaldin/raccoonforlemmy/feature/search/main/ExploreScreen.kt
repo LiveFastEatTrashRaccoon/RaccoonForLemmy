@@ -47,6 +47,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -456,6 +457,18 @@ class ExploreScreen : Screen {
                                         color = MaterialTheme.colorScheme.primary,
                                     )
                                 }
+                            }
+                        }
+
+                        if (uiState.results.isEmpty() && !uiState.loading) {
+                            item {
+                                androidx.compose.material.Text(
+                                    modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
+                                    textAlign = TextAlign.Center,
+                                    text = stringResource(MR.strings.message_empty_list),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
                             }
                         }
 
