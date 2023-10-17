@@ -219,6 +219,14 @@ class SavedItemsScreen : Screen {
                         } else {
                             itemsIndexed(uiState.comments) { idx, comment ->
                                 CommentCard(
+                                    modifier = Modifier.onClick {
+                                        navigator?.push(
+                                            PostDetailScreen(
+                                                post = PostModel(id = comment.postId),
+                                                highlightCommentId = comment.id,
+                                            ),
+                                        )
+                                    },
                                     comment = comment,
                                     separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                     autoLoadImages = uiState.autoLoadImages,
