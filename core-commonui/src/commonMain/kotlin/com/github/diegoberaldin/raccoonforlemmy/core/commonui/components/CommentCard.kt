@@ -119,6 +119,7 @@ fun CommentCard(
                 if (!hideIndent) {
                     Box(
                         modifier = Modifier
+                            .padding(top = Spacing.xs)
                             .width(barWidth)
                             .height(commentHeight.toLocalDp())
                             .background(color = barColor)
