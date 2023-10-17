@@ -19,6 +19,7 @@ data class PostModel(
     val myVote: Int = 0,
     val publishDate: String? = null,
     val nsfw: Boolean = false,
+    val crossPosts: List<PostModel> = emptyList(),
 ) : JavaSerializable
 
 

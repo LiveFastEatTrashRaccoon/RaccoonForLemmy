@@ -5,10 +5,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,7 +61,11 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -99,8 +105,9 @@ class PostDetailScreen(
 ) : Screen {
 
     @OptIn(
-        ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,
-        ExperimentalFoundationApi::class
+        ExperimentalMaterial3Api::class,
+        ExperimentalMaterialApi::class,
+        ExperimentalLayoutApi::class
     )
     @Composable
     override fun Content() {
@@ -356,6 +363,48 @@ class PostDetailScreen(
                                 }
                             }
                         }
+                        if (statePost.crossPosts.isNotEmpty()) {
+                            item {
+                                FlowRow(
+                                    modifier = Modifier.padding(
+                                        top = Spacing.xxs,
+                                        bottom = Spacing.s,
+                                    ),
+                                    horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                                ) {
+                                    Text(
+                                        text = stringResource(MR.strings.post_detail_cross_posts),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                    )
+                                    statePost.crossPosts.forEachIndexed { index, crossPost ->
+                                        val community = crossPost.community
+                                        if (community != null) {
+                                            val string = buildAnnotatedString {
+                                                withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
+                                                    append(community.name)
+                                                    append("@")
+                                                    append(community.host)
+                                                }
+                                                if (index < statePost.crossPosts.lastIndex) {
+                                                    append(", ")
+                                                }
+                                            }
+                                            Text(
+                                                modifier = Modifier.onClick {
+                                                    navigator?.push(
+                                                        CommunityDetailScreen(
+                                                            community = community
+                                                        )
+                                                    )
+                                                },
+                                                text = string,
+                                                style = MaterialTheme.typography.bodyMedium,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         if (uiState.comments.isEmpty() && uiState.loading) {
                             items(5) {
                                 CommentCardPlaceholder()
@@ -427,10 +476,9 @@ class PostDetailScreen(
                                                 background = if (comment.id == highlightCommentId) {
                                                     MaterialTheme.colorScheme.surfaceColorAtElevation(
                                                         5.dp
+                                                    ).copy(
+                                                        alpha = 0.75f
                                                     )
-                                                        .copy(
-                                                            alpha = 0.75f
-                                                        )
                                                 } else {
                                                     MaterialTheme.colorScheme.background
                                                 },

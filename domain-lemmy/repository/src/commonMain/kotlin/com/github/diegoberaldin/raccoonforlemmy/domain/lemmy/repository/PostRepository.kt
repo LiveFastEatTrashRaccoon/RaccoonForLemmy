@@ -62,13 +62,16 @@ class PostRepository(
         auth: String? = null,
         instance: String? = null,
     ): PostModel? = runCatching {
-        val dto = if (instance.isNullOrEmpty()) {
-            services.post.get(auth, id).body()?.postView
+        val response = if (instance.isNullOrEmpty()) {
+            services.post.get(auth, id).body()
         } else {
             customServices.changeInstance(instance)
-            customServices.post.get(id = id).body()?.postView
+            customServices.post.get(id = id).body()
         }
-        dto?.toModel()
+        val dto = response?.postView
+        dto?.toModel()?.copy(
+            crossPosts = response.crossPosts.map { it.toModel() }
+        )
     }.getOrNull()
 
     fun asUpVoted(post: PostModel, voted: Boolean) = post.copy(

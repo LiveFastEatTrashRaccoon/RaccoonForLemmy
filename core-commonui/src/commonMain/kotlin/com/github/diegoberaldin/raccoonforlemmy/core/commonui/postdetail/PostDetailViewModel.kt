@@ -61,7 +61,7 @@ class PostDetailViewModel(
     override fun onStarted() {
         mvi.onStarted()
 
-        mvi.scope?.launch {
+        mvi.scope?.launch(Dispatchers.Main) {
             themeRepository.postLayout.onEach { layout ->
                 mvi.updateState { it.copy(postLayout = layout) }
             }.launchIn(this)
@@ -77,6 +77,9 @@ class PostDetailViewModel(
                 }
             }.launchIn(this)
 
+        }
+
+        mvi.scope?.launch(Dispatchers.IO) {
             if (uiState.value.currentUserId == null) {
                 val auth = identityRepository.authToken.value.orEmpty()
                 val user = siteRepository.getCurrentUser(auth)
@@ -86,28 +89,23 @@ class PostDetailViewModel(
                     )
                 }
             }
-            if (post.title.isEmpty()) {
-                // empty post must be loaded
-                val auth = identityRepository.authToken.value
-                val updatedPost = postRepository.get(
-                    id = post.id,
-                    auth = auth,
-                    instance = otherInstance,
-                )
-                if (updatedPost != null) {
-                    mvi.updateState {
-                        it.copy(
-                            post = updatedPost,
-                        )
-                    }
-                }
-            } else {
+
+            mvi.updateState {
+                it.copy(post = post)
+            }
+
+            val auth = identityRepository.authToken.value
+            val updatedPost = postRepository.get(
+                id = post.id,
+                auth = auth,
+                instance = otherInstance,
+            )
+            if (updatedPost != null) {
                 mvi.updateState {
-                    it.copy(
-                        post = post,
-                    )
+                    it.copy(post = updatedPost)
                 }
             }
+
             if (highlightCommentId != null) {
                 val auth = identityRepository.authToken.value
                 val comment = commentRepository.getBy(
@@ -221,9 +219,7 @@ class PostDetailViewModel(
                 instance = otherInstance,
             ) ?: post
             mvi.updateState {
-                it.copy(
-                    post = updatedPost,
-                )
+                it.copy(post = updatedPost)
             }
         }
     }

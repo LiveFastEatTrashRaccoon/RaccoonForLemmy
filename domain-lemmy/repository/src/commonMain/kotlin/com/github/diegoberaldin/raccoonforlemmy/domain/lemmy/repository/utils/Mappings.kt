@@ -110,7 +110,7 @@ internal fun PostView.toModel() = PostModel(
     myVote = myVote ?: 0,
     publishDate = post.published,
     nsfw = post.nsfw,
-    embedVideoUrl = post.embedVideoUrl
+    embedVideoUrl = post.embedVideoUrl,
 )
 
 internal fun CommentView.toModel() = CommentModel(
