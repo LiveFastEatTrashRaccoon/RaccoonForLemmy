@@ -29,6 +29,7 @@ private object KeyStoreKeys {
     const val SeparateUpAndDownVotes = "separateUpAndDownVotes"
     const val AutoLoadImages = "autoLoadImages"
     const val AutoExpandComments = "autoExpandComments"
+    const val FullHeightImages = "fullHeightImages"
 }
 
 internal class DefaultSettingsRepository(
@@ -63,6 +64,7 @@ internal class DefaultSettingsRepository(
                 separateUpAndDownVotes = if (settings.separateUpAndDownVotes) 1 else 0,
                 autoLoadImages = if (settings.autoLoadImages) 1 else 0,
                 autoExpandComments = if (settings.autoExpandComments) 1 else 0,
+                fullHeightImages = if (settings.fullHeightImages) 1 else 0,
             )
         }
 
@@ -92,6 +94,7 @@ internal class DefaultSettingsRepository(
                     separateUpAndDownVotes = keyStore[KeyStoreKeys.SeparateUpAndDownVotes, false],
                     autoLoadImages = keyStore[KeyStoreKeys.AutoLoadImages, true],
                     autoExpandComments = keyStore[KeyStoreKeys.AutoExpandComments, true],
+                    fullHeightImages = keyStore[KeyStoreKeys.FullHeightImages, true],
                 )
             } else {
                 val entity = db.settingsQueries.getBy(accountId).executeAsOneOrNull()
@@ -132,6 +135,7 @@ internal class DefaultSettingsRepository(
                 keyStore.save(KeyStoreKeys.SeparateUpAndDownVotes, settings.separateUpAndDownVotes)
                 keyStore.save(KeyStoreKeys.AutoLoadImages, settings.autoLoadImages)
                 keyStore.save(KeyStoreKeys.AutoExpandComments, settings.autoExpandComments)
+                keyStore.save(KeyStoreKeys.FullHeightImages, settings.fullHeightImages)
             } else {
                 db.settingsQueries.update(
                     theme = settings.theme?.toLong(),
@@ -153,6 +157,7 @@ internal class DefaultSettingsRepository(
                     separateUpAndDownVotes = if (settings.separateUpAndDownVotes) 1L else 0L,
                     autoLoadImages = if (settings.autoLoadImages) 1L else 0L,
                     autoExpandComments = if (settings.autoExpandComments) 1L else 0L,
+                    fullHeightImages = if (settings.fullHeightImages) 1L else 0L,
                     account_id = accountId,
                 )
             }
@@ -184,4 +189,5 @@ private fun GetBy.toModel() = SettingsModel(
     separateUpAndDownVotes = separateUpAndDownVotes != 0L,
     autoLoadImages = autoLoadImages != 0L,
     autoExpandComments = autoExpandComments != 0L,
+    fullHeightImages = fullHeightImages != 0L,
 )

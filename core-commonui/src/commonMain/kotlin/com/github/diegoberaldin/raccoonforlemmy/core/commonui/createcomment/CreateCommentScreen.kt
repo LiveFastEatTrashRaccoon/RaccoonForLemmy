@@ -178,6 +178,7 @@ class CreateCommentScreen(
                             PostCard(
                                 modifier = referenceModifier,
                                 postLayout = uiState.postLayout,
+                                fullHeightImage = uiState.fullHeightImages,
                                 post = originalPost,
                                 limitBodyHeight = true,
                                 blurNsfw = false,

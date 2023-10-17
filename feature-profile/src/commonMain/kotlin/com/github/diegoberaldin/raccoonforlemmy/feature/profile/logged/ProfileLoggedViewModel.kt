@@ -80,6 +80,7 @@ class ProfileLoggedViewModel(
                     it.copy(
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
                         autoLoadImages = settings.autoLoadImages,
+                        fullHeightImages = settings.fullHeightImages,
                     )
                 }
             }.launchIn(this)

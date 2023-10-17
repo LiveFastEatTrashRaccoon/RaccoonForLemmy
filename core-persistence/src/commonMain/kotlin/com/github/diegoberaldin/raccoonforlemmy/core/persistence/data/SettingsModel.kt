@@ -20,6 +20,7 @@ data class SettingsModel(
     val enableSwipeActions: Boolean = true,
     val customSeedColor: Int? = null,
     val postLayout: Int = 0,
+    val fullHeightImages: Boolean = true,
     val separateUpAndDownVotes: Boolean = false,
     val autoLoadImages: Boolean = true,
     val autoExpandComments: Boolean = true,

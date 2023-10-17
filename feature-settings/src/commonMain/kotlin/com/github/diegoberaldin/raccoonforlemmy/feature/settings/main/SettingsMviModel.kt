@@ -33,6 +33,7 @@ interface SettingsMviModel :
         data class ChangeSeparateUpAndDownVotes(val value: Boolean) : Intent
         data class ChangeAutoLoadImages(val value: Boolean) : Intent
         data class ChangeAutoExpandComments(val value: Boolean) : Intent
+        data class ChangeFullHeightImages(val value: Boolean) : Intent
     }
 
     data class UiState(
@@ -58,6 +59,7 @@ interface SettingsMviModel :
         val separateUpAndDownVotes: Boolean = false,
         val autoLoadImages: Boolean = false,
         val autoExpandComments: Boolean = false,
+        val fullHeightImages: Boolean = false,
         val appVersion: String = "",
     )
 

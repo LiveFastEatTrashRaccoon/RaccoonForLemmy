@@ -269,6 +269,7 @@ class PostDetailScreen(
                                 PostCard(
                                     post = statePost,
                                     postLayout = uiState.postLayout,
+                                    fullHeightImage = uiState.fullHeightImages,
                                     includeFullBody = true,
                                     separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                     autoLoadImages = uiState.autoLoadImages,

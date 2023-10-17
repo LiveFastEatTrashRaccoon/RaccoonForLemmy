@@ -138,6 +138,7 @@
     <string name="settings_section_behaviour">Comportamento</string>
     <string name="settings_section_nsfw">NSFW</string>
     <string name="settings_section_debug">Debug</string>
+    <string name="settings_full_height_images">Altezza completa immagini</string>
 
     <string name="settings_color_dialog_title">Seleziona un colore</string>
     <string name="settings_color_dialog_alpha">A</string>

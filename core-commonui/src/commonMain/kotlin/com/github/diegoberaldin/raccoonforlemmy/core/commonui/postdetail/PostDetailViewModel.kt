@@ -73,6 +73,7 @@ class PostDetailViewModel(
                         sortType = settings.defaultCommentSortType.toSortType(),
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
                         autoLoadImages = settings.autoLoadImages,
+                        fullHeightImages = settings.fullHeightImages,
                     )
                 }
             }.launchIn(this)

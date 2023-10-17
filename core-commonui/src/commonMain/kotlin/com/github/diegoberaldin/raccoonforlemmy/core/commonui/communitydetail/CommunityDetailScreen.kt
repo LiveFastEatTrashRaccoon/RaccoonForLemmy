@@ -360,6 +360,7 @@ class CommunityDetailScreen(
                                         },
                                         post = post,
                                         postLayout = uiState.postLayout,
+                                        fullHeightImage = uiState.fullHeightImages,
                                         separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                         autoLoadImages = uiState.autoLoadImages,
                                         options = buildList {

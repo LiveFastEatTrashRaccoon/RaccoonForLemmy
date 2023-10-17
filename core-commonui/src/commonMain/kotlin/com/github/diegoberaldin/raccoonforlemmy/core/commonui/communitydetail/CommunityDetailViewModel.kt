@@ -61,6 +61,7 @@ class CommunityDetailViewModel(
                         blurNsfw = settings.blurNsfw,
                         swipeActionsEnabled = settings.enableSwipeActions,
                         sortType = settings.defaultPostSortType.toSortType(),
+                        fullHeightImages = settings.fullHeightImages,
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
                         autoLoadImages = settings.autoLoadImages,
                     )

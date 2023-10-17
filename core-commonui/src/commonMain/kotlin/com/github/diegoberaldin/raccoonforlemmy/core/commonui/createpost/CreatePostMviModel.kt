@@ -44,6 +44,7 @@ interface CreatePostMviModel :
         val loading: Boolean = false,
         val section: CreatePostSection = CreatePostSection.Edit,
         val postLayout: PostLayout = PostLayout.Card,
+        val fullHeightImages: Boolean = true,
         val separateUpAndDownVotes: Boolean = false,
         val autoLoadImages: Boolean = true,
     )

@@ -64,6 +64,7 @@ class MultiCommunityViewModel(
                         swipeActionsEnabled = settings.enableSwipeActions,
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
                         autoLoadImages = settings.autoLoadImages,
+                        fullHeightImages = settings.fullHeightImages,
                     )
                 }
             }.launchIn(this)

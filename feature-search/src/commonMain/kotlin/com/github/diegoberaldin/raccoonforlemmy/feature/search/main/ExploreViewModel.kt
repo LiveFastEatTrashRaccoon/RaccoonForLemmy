@@ -85,6 +85,7 @@ class ExploreViewModel(
                         blurNsfw = settings.blurNsfw,
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
                         autoLoadImages = settings.autoLoadImages,
+                        fullHeightImages = settings.fullHeightImages,
                     )
                 }
             }.launchIn(this)

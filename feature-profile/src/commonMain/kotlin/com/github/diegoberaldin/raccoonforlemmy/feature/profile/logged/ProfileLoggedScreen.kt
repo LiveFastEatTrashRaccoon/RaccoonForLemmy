@@ -147,6 +147,7 @@ internal object ProfileLoggedScreen : Tab {
                                     },
                                     post = post,
                                     postLayout = uiState.postLayout,
+                                    fullHeightImage = uiState.fullHeightImages,
                                     separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                     autoLoadImages = uiState.autoLoadImages,
                                     hideAuthor = true,

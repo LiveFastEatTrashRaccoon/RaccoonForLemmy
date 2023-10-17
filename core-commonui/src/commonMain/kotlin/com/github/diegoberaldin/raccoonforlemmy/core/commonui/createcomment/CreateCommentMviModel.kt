@@ -16,6 +16,7 @@ interface CreateCommentMviModel :
 
     data class UiState(
         val postLayout: PostLayout = PostLayout.Card,
+        val fullHeightImages: Boolean = true,
         val separateUpAndDownVotes: Boolean = false,
         val text: String = "",
         val textError: StringDesc? = null,

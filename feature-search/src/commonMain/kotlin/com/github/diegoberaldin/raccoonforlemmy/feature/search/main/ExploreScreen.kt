@@ -307,6 +307,7 @@ class ExploreScreen : Screen {
                                             },
                                             post = result,
                                             postLayout = uiState.postLayout,
+                                            fullHeightImage = uiState.fullHeightImages,
                                             separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                             autoLoadImages = uiState.autoLoadImages,
                                             blurNsfw = uiState.blurNsfw,

@@ -36,6 +36,7 @@ interface ExploreMviModel :
         val results: List<Any> = emptyList(),
         val resultType: SearchResultType = SearchResultType.All,
         val postLayout: PostLayout = PostLayout.Card,
+        val fullHeightImages: Boolean = true,
         val separateUpAndDownVotes: Boolean = false,
         val autoLoadImages: Boolean = true,
     )

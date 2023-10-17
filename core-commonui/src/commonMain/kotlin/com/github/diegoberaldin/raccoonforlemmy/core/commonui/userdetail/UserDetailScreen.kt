@@ -339,6 +339,7 @@ class UserDetailScreen(
                                         },
                                         post = post,
                                         postLayout = uiState.postLayout,
+                                        fullHeightImage = uiState.fullHeightImages,
                                         blurNsfw = uiState.blurNsfw,
                                         separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                         autoLoadImages = uiState.autoLoadImages,

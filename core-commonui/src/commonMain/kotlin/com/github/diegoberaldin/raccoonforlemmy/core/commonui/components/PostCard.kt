@@ -51,6 +51,7 @@ fun PostCard(
     postLayout: PostLayout = PostLayout.Card,
     separateUpAndDownVotes: Boolean = false,
     includeFullBody: Boolean = false,
+    fullHeightImage: Boolean = true,
     limitBodyHeight: Boolean = false,
     blurNsfw: Boolean = true,
     options: List<String> = emptyList(),
@@ -95,6 +96,8 @@ fun PostCard(
                     limitBodyHeight = limitBodyHeight,
                     separateUpAndDownVotes = separateUpAndDownVotes,
                     autoLoadImages = autoLoadImages,
+                    roundedCornerImage = postLayout == PostLayout.Card,
+                    fullHeightImage = fullHeightImage,
                     blurNsfw = blurNsfw,
                     options = options,
                     onOpenCommunity = onOpenCommunity,
@@ -212,6 +215,8 @@ private fun ExtendedPost(
     separateUpAndDownVotes: Boolean = false,
     showBody: Boolean = false,
     limitBodyHeight: Boolean = false,
+    fullHeightImage: Boolean = true,
+    roundedCornerImage: Boolean = true,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     options: List<String> = emptyList(),
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
@@ -245,7 +250,19 @@ private fun ExtendedPost(
         )
 
         PostCardImage(
-            modifier = Modifier.clip(RoundedCornerShape(CornerSize.xl)),
+            modifier = Modifier.let {
+                if (roundedCornerImage) {
+                    it.clip(RoundedCornerShape(CornerSize.xl))
+                } else {
+                    it
+                }
+            }.let {
+                if (fullHeightImage) {
+                    it
+                } else {
+                    it.heightIn(max = 200.dp)
+                }
+            },
             imageUrl = post.imageUrl,
             blurred = blurNsfw && post.nsfw,
             onImageClick = onImageClick,

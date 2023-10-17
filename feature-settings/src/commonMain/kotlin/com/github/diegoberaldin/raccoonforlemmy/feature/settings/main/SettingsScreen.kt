@@ -321,6 +321,19 @@ class SettingsScreen : Screen {
                         }
                     )
 
+                    // full height images
+                    SettingsSwitchRow(
+                        title = stringResource(MR.strings.settings_full_height_images),
+                        value = uiState.fullHeightImages,
+                        onValueChanged = { value ->
+                            model.reduce(
+                                SettingsMviModel.Intent.ChangeFullHeightImages(
+                                    value
+                                )
+                            )
+                        }
+                    )
+
                     // navigation bar titles
                     SettingsSwitchRow(
                         title = stringResource(MR.strings.settings_navigation_bar_titles_visible),

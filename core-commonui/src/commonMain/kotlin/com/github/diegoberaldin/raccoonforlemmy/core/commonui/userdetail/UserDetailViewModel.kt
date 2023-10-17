@@ -76,6 +76,7 @@ class UserDetailViewModel(
                         sortType = settings.defaultPostSortType.toSortType(),
                         separateUpAndDownVotes = settings.separateUpAndDownVotes,
                         autoLoadImages = settings.autoLoadImages,
+                        fullHeightImages = settings.fullHeightImages,
                     )
                 }
             }.launchIn(this)

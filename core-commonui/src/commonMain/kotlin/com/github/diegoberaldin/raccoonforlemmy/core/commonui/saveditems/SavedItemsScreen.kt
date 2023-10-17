@@ -161,6 +161,7 @@ class SavedItemsScreen : Screen {
                                     },
                                     post = post,
                                     postLayout = uiState.postLayout,
+                                    fullHeightImage = uiState.fullHeightImages,
                                     separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                     autoLoadImages = uiState.autoLoadImages,
                                     blurNsfw = uiState.blurNsfw,
