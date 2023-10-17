@@ -82,6 +82,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultTy
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.di.getExploreViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.ExploreTab
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
@@ -96,7 +97,8 @@ class ExploreScreen : Screen {
         val model = rememberScreenModel { getExploreViewModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
-        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
+        val navigationCoordinator = remember { getNavigationCoordinator() }
+        val navigator = remember { navigationCoordinator.getRootNavigator() }
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val notificationCenter = remember { getNotificationCenter() }
@@ -117,6 +119,13 @@ class ExploreScreen : Screen {
             }
         }
         val lazyListState = rememberLazyListState()
+        LaunchedEffect(navigator) {
+            navigationCoordinator.onDoubleTabSelection.onEach { tab ->
+                if (tab == ExploreTab) {
+                    lazyListState.scrollToItem(0)
+                }
+            }.launchIn(this)
+        }
         LaunchedEffect(model) {
             model.effects.onEach {
                 when (it) {

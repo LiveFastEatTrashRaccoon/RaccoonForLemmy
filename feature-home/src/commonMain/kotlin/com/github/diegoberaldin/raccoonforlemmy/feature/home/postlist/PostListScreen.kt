@@ -85,8 +85,8 @@ class PostListScreen : Screen {
         val uiState by model.uiState.collectAsState()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-        val bottomNavCoordinator = remember { getNavigationCoordinator() }
-        val navigator = remember { bottomNavCoordinator.getRootNavigator() }
+        val navigationCoordinator = remember { getNavigationCoordinator() }
+        val navigator = remember { navigationCoordinator.getRootNavigator() }
         val notificationCenter = remember { getNotificationCenter() }
         DisposableEffect(key) {
             onDispose {
@@ -96,7 +96,7 @@ class PostListScreen : Screen {
 
         val lazyListState = rememberLazyListState()
         LaunchedEffect(navigator) {
-            bottomNavCoordinator.onDoubleTabSelection.onEach { tab ->
+            navigationCoordinator.onDoubleTabSelection.onEach { tab ->
                 if (tab == HomeTab) {
                     lazyListState.scrollToItem(0)
                 }
@@ -162,7 +162,7 @@ class PostListScreen : Screen {
                         .padding(padding)
                         .fillMaxWidth()
                         .nestedScroll(scrollBehavior.nestedScrollConnection).let {
-                            val connection = bottomNavCoordinator.getBottomBarScrollConnection()
+                            val connection = navigationCoordinator.getBottomBarScrollConnection()
                             if (connection != null) {
                                 it.nestedScroll(connection)
                             } else it

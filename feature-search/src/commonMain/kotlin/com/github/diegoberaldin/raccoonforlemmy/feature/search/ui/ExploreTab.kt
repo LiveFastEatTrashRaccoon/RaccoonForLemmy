@@ -16,7 +16,7 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageReposito
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
 import dev.icerock.moko.resources.desc.desc
 
-object SearchTab : Tab {
+object ExploreTab : Tab {
 
     override val options: TabOptions
         @Composable get() {

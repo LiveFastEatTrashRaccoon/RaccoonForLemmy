@@ -35,7 +35,6 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.handleUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerEvent
@@ -48,15 +47,13 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptions.ManageSubscriptionsScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.detail.MultiCommunityScreen
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.SearchTab
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.ExploreTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
 import com.github.diegoberaldin.raccoonforlemmy.ui.navigation.TabNavigationItem
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 internal class MainScreen : Screen {
@@ -179,7 +176,7 @@ internal class MainScreen : Screen {
                                     backgroundColor = MaterialTheme.colorScheme.background,
                                 ) {
                                     TabNavigationItem(HomeTab, withText = titleVisible)
-                                    TabNavigationItem(SearchTab, withText = titleVisible)
+                                    TabNavigationItem(ExploreTab, withText = titleVisible)
                                     TabNavigationItem(ProfileTab, withText = titleVisible)
                                     TabNavigationItem(InboxTab, withText = titleVisible)
                                     TabNavigationItem(SettingsTab, withText = titleVisible)
