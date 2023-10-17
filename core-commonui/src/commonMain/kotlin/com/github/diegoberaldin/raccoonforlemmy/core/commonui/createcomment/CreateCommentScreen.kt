@@ -179,6 +179,7 @@ class CreateCommentScreen(
                                 modifier = referenceModifier,
                                 postLayout = uiState.postLayout,
                                 post = originalPost,
+                                limitBodyHeight = true,
                                 blurNsfw = false,
                                 separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                 autoLoadImages = uiState.autoLoadImages,

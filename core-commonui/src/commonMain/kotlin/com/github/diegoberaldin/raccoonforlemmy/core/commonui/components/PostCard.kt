@@ -50,7 +50,8 @@ fun PostCard(
     hideAuthor: Boolean = false,
     postLayout: PostLayout = PostLayout.Card,
     separateUpAndDownVotes: Boolean = false,
-    withOverflowBlurred: Boolean = true,
+    includeFullBody: Boolean = false,
+    limitBodyHeight: Boolean = false,
     blurNsfw: Boolean = true,
     options: List<String> = emptyList(),
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
@@ -90,7 +91,8 @@ fun PostCard(
                         PostLayout.Card -> MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
                         else -> MaterialTheme.colorScheme.background
                     },
-                    withOverflowBlurred = withOverflowBlurred,
+                    showBody = includeFullBody || postLayout == PostLayout.Full,
+                    limitBodyHeight = limitBodyHeight,
                     separateUpAndDownVotes = separateUpAndDownVotes,
                     autoLoadImages = autoLoadImages,
                     blurNsfw = blurNsfw,
@@ -205,10 +207,11 @@ private fun ExtendedPost(
     modifier: Modifier = Modifier,
     post: PostModel,
     autoLoadImages: Boolean = true,
-    hideAuthor: Boolean,
-    blurNsfw: Boolean,
-    separateUpAndDownVotes: Boolean,
-    withOverflowBlurred: Boolean,
+    hideAuthor: Boolean = false,
+    blurNsfw: Boolean = true,
+    separateUpAndDownVotes: Boolean = false,
+    showBody: Boolean = false,
+    limitBodyHeight: Boolean = false,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     options: List<String> = emptyList(),
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
@@ -248,35 +251,37 @@ private fun ExtendedPost(
             onImageClick = onImageClick,
             autoLoadImages = autoLoadImages,
         )
-        Box {
-            val maxHeight = 200.dp
-            val maxHeightPx = maxHeight.toLocalPixel()
-            var textHeightPx by remember { mutableStateOf(0f) }
-            PostCardBody(
-                modifier = Modifier.let {
-                    if (withOverflowBlurred) {
-                        it.heightIn(max = maxHeight)
-                    } else {
-                        it
-                    }
-                }.padding(horizontal = Spacing.xs).onGloballyPositioned {
-                    textHeightPx = it.size.toSize().height
-                },
-                text = post.text,
-                autoLoadImages = autoLoadImages,
-            )
-            if (withOverflowBlurred && textHeightPx >= maxHeightPx) {
-                Box(
-                    modifier = Modifier.height(Spacing.xxl).fillMaxWidth()
-                        .align(Alignment.BottomCenter).background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    backgroundColor,
+        if (showBody) {
+            Box {
+                val maxHeight = 200.dp
+                val maxHeightPx = maxHeight.toLocalPixel()
+                var textHeightPx by remember { mutableStateOf(0f) }
+                PostCardBody(
+                    modifier = Modifier.let {
+                        if (limitBodyHeight) {
+                            it.heightIn(max = maxHeight)
+                        } else {
+                            it
+                        }
+                    }.padding(horizontal = Spacing.xs).onGloballyPositioned {
+                        textHeightPx = it.size.toSize().height
+                    },
+                    text = post.text,
+                    autoLoadImages = autoLoadImages,
+                )
+                if (limitBodyHeight && textHeightPx >= maxHeightPx) {
+                    Box(
+                        modifier = Modifier.height(Spacing.xxl).fillMaxWidth()
+                            .align(Alignment.BottomCenter).background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        backgroundColor,
+                                    ),
                                 ),
                             ),
-                        ),
-                )
+                    )
+                }
             }
         }
         if (post.url != post.imageUrl) {
