@@ -1,11 +1,13 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import dev.icerock.moko.resources.desc.StringDesc
 
 interface CreatePostMviModel :
-    MviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect> {
+    MviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect>,
+    ScreenModel {
 
     sealed interface Intent {
         data class SetTitle(val value: String) : Intent

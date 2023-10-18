@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.main
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
@@ -42,7 +41,7 @@ class ExploreViewModel(
     private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
-) : ScreenModel,
+) : ExploreMviModel,
     MviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1

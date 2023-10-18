@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.main
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -7,7 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultTy
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 
 interface ExploreMviModel :
-    MviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect> {
+    MviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect>, ScreenModel {
     sealed interface Intent {
         data object Refresh : Intent
         data object LoadNextPage : Intent

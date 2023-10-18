@@ -1,14 +1,14 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di
 
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.InboxMessagesViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main.InboxMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions.InboxMentionsMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages.InboxMessagesMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies.InboxRepliesMviModel
 
-expect fun getInboxViewModel(): InboxViewModel
+expect fun getInboxViewModel(): InboxMviModel
 
-expect fun getInboxRepliesViewModel(): InboxRepliesViewModel
+expect fun getInboxRepliesViewModel(): InboxRepliesMviModel
 
-expect fun getInboxMentionsViewModel(): InboxMentionsViewModel
+expect fun getInboxMentionsViewModel(): InboxMentionsMviModel
 
-expect fun getInboxMessagesViewModel(): InboxMessagesViewModel
+expect fun getInboxMessagesViewModel(): InboxMessagesMviModel

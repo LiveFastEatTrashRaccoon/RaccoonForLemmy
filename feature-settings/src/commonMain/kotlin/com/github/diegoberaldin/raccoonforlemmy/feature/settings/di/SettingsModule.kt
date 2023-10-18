@@ -6,7 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.settings.main.SettingsVi
 import org.koin.dsl.module
 
 val settingsTabModule = module {
-    factory {
+    factory<SettingsMviModel> {
         SettingsViewModel(
             mvi = DefaultMviModel(
                 SettingsMviModel.UiState(),

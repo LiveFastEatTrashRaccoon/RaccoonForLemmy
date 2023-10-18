@@ -1,10 +1,12 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.profile.login
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import dev.icerock.moko.resources.desc.StringDesc
 
 interface LoginBottomSheetMviModel :
-    MviModel<LoginBottomSheetMviModel.Intent, LoginBottomSheetMviModel.UiState, LoginBottomSheetMviModel.Effect> {
+    MviModel<LoginBottomSheetMviModel.Intent, LoginBottomSheetMviModel.UiState, LoginBottomSheetMviModel.Effect>,
+    ScreenModel {
     sealed interface Intent {
         data class SetInstanceName(val value: String) : Intent
         data class SetUsername(val value: String) : Intent

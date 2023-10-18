@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
@@ -8,7 +9,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
 interface UserDetailMviModel :
-    MviModel<UserDetailMviModel.Intent, UserDetailMviModel.UiState, UserDetailMviModel.Effect> {
+    MviModel<UserDetailMviModel.Intent, UserDetailMviModel.UiState, UserDetailMviModel.Effect>,
+    ScreenModel {
 
     sealed interface Intent {
         data class ChangeSort(val value: SortType) : Intent

@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.profile.logged
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
@@ -37,7 +36,7 @@ class ProfileLoggedViewModel(
     private val shareHelper: ShareHelper,
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
-) : ScreenModel,
+) : ProfileLoggedMviModel,
     MviModel<ProfileLoggedMviModel.Intent, ProfileLoggedMviModel.UiState, ProfileLoggedMviModel.Effect> by mvi {
 
     private var currentPage = 1

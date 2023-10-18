@@ -1,27 +1,27 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.profile.di
 
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.logged.ProfileLoggedViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheetViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.main.ProfileMainViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.manageaccounts.ManageAccountsViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.logged.ProfileLoggedMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.login.LoginBottomSheetMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.main.ProfileMainMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.manageaccounts.ManageAccountsMviModel
 import org.koin.java.KoinJavaComponent.inject
 
-actual fun getProfileScreenModel(): ProfileMainViewModel {
-    val res: ProfileMainViewModel by inject(ProfileMainViewModel::class.java)
+actual fun getProfileScreenModel(): ProfileMainMviModel {
+    val res: ProfileMainMviModel by inject(ProfileMainMviModel::class.java)
     return res
 }
 
-actual fun getLoginBottomSheetViewModel(): LoginBottomSheetViewModel {
-    val res: LoginBottomSheetViewModel by inject(LoginBottomSheetViewModel::class.java)
+actual fun getLoginBottomSheetViewModel(): LoginBottomSheetMviModel {
+    val res: LoginBottomSheetMviModel by inject(LoginBottomSheetMviModel::class.java)
     return res
 }
 
-actual fun getProfileLoggedViewModel(): ProfileLoggedViewModel {
-    val res: ProfileLoggedViewModel by inject(ProfileLoggedViewModel::class.java)
+actual fun getProfileLoggedViewModel(): ProfileLoggedMviModel {
+    val res: ProfileLoggedMviModel by inject(ProfileLoggedMviModel::class.java)
     return res
 }
 
-actual fun getManageAccountsViewModel(): ManageAccountsViewModel {
-    val res: ManageAccountsViewModel by inject(ManageAccountsViewModel::class.java)
+actual fun getManageAccountsViewModel(): ManageAccountsMviModel {
+    val res: ManageAccountsMviModel by inject(ManageAccountsMviModel::class.java)
     return res
 }

@@ -17,7 +17,7 @@ val inboxTabModule = module {
     single<InboxCoordinator> {
         DefaultInboxCoordinator()
     }
-    factory {
+    factory<InboxMviModel> {
         InboxViewModel(
             mvi = DefaultMviModel(InboxMviModel.UiState()),
             identityRepository = get(),
@@ -25,7 +25,7 @@ val inboxTabModule = module {
             coordinator = get(),
         )
     }
-    factory {
+    factory<InboxRepliesMviModel> {
         InboxRepliesViewModel(
             mvi = DefaultMviModel(InboxRepliesMviModel.UiState()),
             userRepository = get(),
@@ -39,7 +39,7 @@ val inboxTabModule = module {
             notificationCenter = get(),
         )
     }
-    factory {
+    factory<InboxMentionsMviModel> {
         InboxMentionsViewModel(
             mvi = DefaultMviModel(InboxMentionsMviModel.UiState()),
             userRepository = get(),
@@ -52,7 +52,7 @@ val inboxTabModule = module {
             notificationCenter = get(),
         )
     }
-    factory {
+    factory<InboxMessagesMviModel> {
         InboxMessagesViewModel(
             mvi = DefaultMviModel(InboxMessagesMviModel.UiState()),
             identityRepository = get(),

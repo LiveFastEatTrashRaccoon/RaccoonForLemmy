@@ -1,9 +1,9 @@
 package com.github.diegoberaldin.raccoonforlemmy.di
 
-import com.github.diegoberaldin.raccoonforlemmy.MainViewModel
+import com.github.diegoberaldin.raccoonforlemmy.MainScreenMviModel
 import org.koin.java.KoinJavaComponent.inject
 
-actual fun getMainViewModel(): MainViewModel {
-    val res: MainViewModel by inject(MainViewModel::class.java)
+actual fun getMainViewModel(): MainScreenMviModel {
+    val res: MainScreenMviModel by inject(MainScreenMviModel::class.java)
     return res
 }

@@ -1,5 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.settings.di
 
-import com.github.diegoberaldin.raccoonforlemmy.feature.settings.main.SettingsViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.main.SettingsMviModel
 
-expect fun getSettingsScreenModel(): SettingsViewModel
+expect fun getSettingsScreenModel(): SettingsMviModel

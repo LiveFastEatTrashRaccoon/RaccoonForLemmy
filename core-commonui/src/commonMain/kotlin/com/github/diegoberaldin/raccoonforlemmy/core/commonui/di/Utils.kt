@@ -1,18 +1,18 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerCoordinator
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -25,41 +25,41 @@ expect fun getPostDetailViewModel(
     post: PostModel,
     otherInstance: String = "",
     highlightCommentId: Int? = null,
-): PostDetailViewModel
+): PostDetailMviModel
 
 expect fun getCommunityDetailViewModel(
     community: CommunityModel,
     otherInstance: String = "",
-): CommunityDetailViewModel
+): CommunityDetailMviModel
 
 expect fun getCommunityInfoViewModel(
     community: CommunityModel,
-): CommunityInfoViewModel
+): CommunityInfoMviModel
 
 expect fun getUserDetailViewModel(
     user: UserModel,
     otherInstance: String = "",
-): UserDetailViewModel
+): UserDetailMviModel
 
 expect fun getInstanceInfoViewModel(
     url: String,
-): InstanceInfoViewModel
+): InstanceInfoMviModel
 
 expect fun getCreateCommentViewModel(
     postId: Int? = null,
     parentId: Int? = null,
     editedCommentId: Int? = null,
-): CreateCommentViewModel
+): CreateCommentMviModel
 
 expect fun getCreatePostViewModel(
     communityId: Int?,
     editedPostId: Int?,
-): CreatePostViewModel
+): CreatePostMviModel
 
-expect fun getZoomableImageViewModel(): ZoomableImageViewModel
+expect fun getZoomableImageViewModel(): ZoomableImageMviModel
 
-expect fun getInboxChatViewModel(otherUserId: Int): InboxChatViewModel
+expect fun getInboxChatViewModel(otherUserId: Int): InboxChatMviModel
 
-expect fun getSavedItemsViewModel(): SavedItemsViewModel
+expect fun getSavedItemsViewModel(): SavedItemsMviModel
 
-expect fun getModalDrawerViewModel(): ModalDrawerViewModel
+expect fun getModalDrawerViewModel(): ModalDrawerMviModel

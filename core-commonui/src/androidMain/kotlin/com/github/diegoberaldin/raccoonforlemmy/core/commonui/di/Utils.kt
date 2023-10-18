@@ -1,18 +1,18 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.di
 
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerCoordinator
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -33,9 +33,9 @@ actual fun getPostDetailViewModel(
     post: PostModel,
     otherInstance: String,
     highlightCommentId: Int?,
-): PostDetailViewModel {
-    val res: PostDetailViewModel by inject(
-        clazz = PostDetailViewModel::class.java,
+): PostDetailMviModel {
+    val res: PostDetailMviModel by inject(
+        clazz = PostDetailMviModel::class.java,
         parameters = { parametersOf(post, otherInstance, highlightCommentId) },
     )
     return res
@@ -44,33 +44,33 @@ actual fun getPostDetailViewModel(
 actual fun getCommunityDetailViewModel(
     community: CommunityModel,
     otherInstance: String,
-): CommunityDetailViewModel {
-    val res: CommunityDetailViewModel by inject(
-        clazz = CommunityDetailViewModel::class.java,
+): CommunityDetailMviModel {
+    val res: CommunityDetailMviModel by inject(
+        clazz = CommunityDetailMviModel::class.java,
         parameters = { parametersOf(community, otherInstance) },
     )
     return res
 }
 
-actual fun getCommunityInfoViewModel(community: CommunityModel): CommunityInfoViewModel {
-    val res: CommunityInfoViewModel by inject(
-        clazz = CommunityInfoViewModel::class.java,
+actual fun getCommunityInfoViewModel(community: CommunityModel): CommunityInfoMviModel {
+    val res: CommunityInfoMviModel by inject(
+        clazz = CommunityInfoMviModel::class.java,
         parameters = { parametersOf(community) },
     )
     return res
 }
 
-actual fun getInstanceInfoViewModel(url: String): InstanceInfoViewModel {
-    val res: InstanceInfoViewModel by inject(
-        clazz = InstanceInfoViewModel::class.java,
+actual fun getInstanceInfoViewModel(url: String): InstanceInfoMviModel {
+    val res: InstanceInfoMviModel by inject(
+        clazz = InstanceInfoMviModel::class.java,
         parameters = { parametersOf(url) },
     )
     return res
 }
 
-actual fun getUserDetailViewModel(user: UserModel, otherInstance: String): UserDetailViewModel {
-    val res: UserDetailViewModel by inject(
-        clazz = UserDetailViewModel::class.java,
+actual fun getUserDetailViewModel(user: UserModel, otherInstance: String): UserDetailMviModel {
+    val res: UserDetailMviModel by inject(
+        clazz = UserDetailMviModel::class.java,
         parameters = { parametersOf(user, otherInstance) },
     )
     return res
@@ -80,30 +80,30 @@ actual fun getCreateCommentViewModel(
     postId: Int?,
     parentId: Int?,
     editedCommentId: Int?,
-): CreateCommentViewModel {
-    val res: CreateCommentViewModel by inject(
-        clazz = CreateCommentViewModel::class.java,
+): CreateCommentMviModel {
+    val res: CreateCommentMviModel by inject(
+        clazz = CreateCommentMviModel::class.java,
         parameters = { parametersOf(postId, parentId, editedCommentId) }
     )
     return res
 }
 
-actual fun getCreatePostViewModel(communityId: Int?, editedPostId: Int?): CreatePostViewModel {
-    val res: CreatePostViewModel by inject(
-        clazz = CreatePostViewModel::class.java,
+actual fun getCreatePostViewModel(communityId: Int?, editedPostId: Int?): CreatePostMviModel {
+    val res: CreatePostMviModel by inject(
+        clazz = CreatePostMviModel::class.java,
         parameters = { parametersOf(communityId, editedPostId) }
     )
     return res
 }
 
-actual fun getZoomableImageViewModel(): ZoomableImageViewModel {
-    val res: ZoomableImageViewModel by inject(ZoomableImageViewModel::class.java)
+actual fun getZoomableImageViewModel(): ZoomableImageMviModel {
+    val res: ZoomableImageMviModel by inject(ZoomableImageMviModel::class.java)
     return res
 }
 
-actual fun getInboxChatViewModel(otherUserId: Int): InboxChatViewModel {
-    val res: InboxChatViewModel by inject(
-        InboxChatViewModel::class.java,
+actual fun getInboxChatViewModel(otherUserId: Int): InboxChatMviModel {
+    val res: InboxChatMviModel by inject(
+        InboxChatMviModel::class.java,
         parameters = {
             parametersOf(otherUserId)
         },
@@ -111,14 +111,14 @@ actual fun getInboxChatViewModel(otherUserId: Int): InboxChatViewModel {
     return res
 }
 
-actual fun getSavedItemsViewModel(): SavedItemsViewModel {
-    val res: SavedItemsViewModel by inject(
-        clazz = SavedItemsViewModel::class.java,
+actual fun getSavedItemsViewModel(): SavedItemsMviModel {
+    val res: SavedItemsMviModel by inject(
+        clazz = SavedItemsMviModel::class.java,
     )
     return res
 }
 
-actual fun getModalDrawerViewModel(): ModalDrawerViewModel {
-    val res: ModalDrawerViewModel by inject(ModalDrawerViewModel::class.java)
+actual fun getModalDrawerViewModel(): ModalDrawerMviModel {
+    val res: ModalDrawerMviModel by inject(ModalDrawerMviModel::class.java)
     return res
 }

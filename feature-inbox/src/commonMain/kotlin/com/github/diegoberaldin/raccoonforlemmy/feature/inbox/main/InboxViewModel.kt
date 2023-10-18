@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -18,7 +17,7 @@ class InboxViewModel(
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
     private val coordinator: InboxCoordinator,
-) : ScreenModel,
+) : InboxMviModel,
     MviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect> by mvi {
 
     override fun onStarted() {

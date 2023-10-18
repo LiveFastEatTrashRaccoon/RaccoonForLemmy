@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
@@ -39,7 +38,7 @@ class PostDetailViewModel(
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
 ) : MviModel<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect> by mvi,
-    ScreenModel {
+    PostDetailMviModel {
 
     private var currentPage: Int = 1
     private var highlightCommentPath: String? = null

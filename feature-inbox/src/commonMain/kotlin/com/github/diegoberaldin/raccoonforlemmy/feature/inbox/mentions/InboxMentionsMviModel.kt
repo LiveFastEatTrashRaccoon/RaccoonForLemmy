@@ -1,11 +1,13 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 
 interface InboxMentionsMviModel :
-    MviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect> {
+    MviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect>,
+    ScreenModel {
 
     sealed interface Intent {
         data object Refresh : Intent

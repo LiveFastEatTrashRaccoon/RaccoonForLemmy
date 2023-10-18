@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
@@ -28,7 +27,7 @@ class ModalDrawerViewModel(
     private val siteRepository: SiteRepository,
     private val apiConfigurationRepository: ApiConfigurationRepository,
     private val settingsRepository: SettingsRepository,
-) : ScreenModel,
+) : ModalDrawerMviModel,
     MviModel<ModalDrawerMviModel.Intent, ModalDrawerMviModel.UiState, ModalDrawerMviModel.Effect> by mvi {
 
     override fun onStarted() {

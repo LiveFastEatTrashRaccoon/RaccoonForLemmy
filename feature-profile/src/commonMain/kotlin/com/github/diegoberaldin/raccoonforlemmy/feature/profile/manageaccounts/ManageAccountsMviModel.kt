@@ -1,10 +1,12 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.profile.manageaccounts
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.AccountModel
 
 interface ManageAccountsMviModel :
-    MviModel<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect> {
+    MviModel<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect>,
+    ScreenModel {
     sealed interface Intent {
         data class SwitchAccount(val index: Int) : Intent
     }

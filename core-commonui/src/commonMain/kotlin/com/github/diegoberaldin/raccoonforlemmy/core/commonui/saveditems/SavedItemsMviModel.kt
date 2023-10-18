@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
@@ -8,7 +9,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
 interface SavedItemsMviModel :
-    MviModel<SavedItemsMviModel.Intent, SavedItemsMviModel.UiState, SavedItemsMviModel.Effect> {
+    MviModel<SavedItemsMviModel.Intent, SavedItemsMviModel.UiState, SavedItemsMviModel.Effect>,
+    ScreenModel {
 
     sealed interface Intent {
         data object Refresh : Intent

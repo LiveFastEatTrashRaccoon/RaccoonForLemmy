@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -27,7 +26,7 @@ class InboxMessagesViewModel(
     private val settingsRepository: SettingsRepository,
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
-) : ScreenModel,
+) : InboxMessagesMviModel,
     MviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1

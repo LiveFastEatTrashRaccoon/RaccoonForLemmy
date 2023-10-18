@@ -13,8 +13,8 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.ut
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.utils.MultiCommunityPaginator
 import org.koin.dsl.module
 
-val searchTabModule = module {
-    factory {
+val exploreTabModule = module {
+    factory<ExploreMviModel> {
         ExploreViewModel(
             mvi = DefaultMviModel(ExploreMviModel.UiState()),
             apiConfigRepository = get(),
@@ -28,7 +28,7 @@ val searchTabModule = module {
             hapticFeedback = get(),
         )
     }
-    factory {
+    factory<ManageSubscriptionsMviModel> {
         ManageSubscriptionsViewModel(
             mvi = DefaultMviModel(ManageSubscriptionsMviModel.UiState()),
             identityRepository = get(),
@@ -40,7 +40,7 @@ val searchTabModule = module {
             settingsRepository = get(),
         )
     }
-    factory { params ->
+    factory<MultiCommunityMviModel> { params ->
         MultiCommunityViewModel(
             mvi = DefaultMviModel(MultiCommunityMviModel.UiState()),
             community = params[0],
@@ -59,7 +59,7 @@ val searchTabModule = module {
             postRepository = get(),
         )
     }
-    factory { params ->
+    factory<MultiCommunityEditorMviModel> { params ->
         MultiCommunityEditorViewModel(
             mvi = DefaultMviModel(MultiCommunityEditorMviModel.UiState()),
             editedCommunity = params[0],

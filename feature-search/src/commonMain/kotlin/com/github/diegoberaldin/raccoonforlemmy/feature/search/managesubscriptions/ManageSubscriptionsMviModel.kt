@@ -1,11 +1,13 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptions
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.MultiCommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 
 interface ManageSubscriptionsMviModel :
-    MviModel<ManageSubscriptionsMviModel.Intent, ManageSubscriptionsMviModel.UiState, ManageSubscriptionsMviModel.Effect> {
+    MviModel<ManageSubscriptionsMviModel.Intent, ManageSubscriptionsMviModel.UiState, ManageSubscriptionsMviModel.Effect>,
+    ScreenModel {
     sealed interface Intent {
         data object Refresh : Intent
         data object HapticIndication : Intent

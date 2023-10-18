@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptions
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -28,7 +27,7 @@ class ManageSubscriptionsViewModel(
     private val settingsRepository: SettingsRepository,
     private val hapticFeedback: HapticFeedback,
     private val notificationCenter: NotificationCenter,
-) : ScreenModel,
+) : ManageSubscriptionsMviModel,
     MviModel<ManageSubscriptionsMviModel.Intent, ManageSubscriptionsMviModel.UiState, ManageSubscriptionsMviModel.Effect> by mvi {
 
     init {

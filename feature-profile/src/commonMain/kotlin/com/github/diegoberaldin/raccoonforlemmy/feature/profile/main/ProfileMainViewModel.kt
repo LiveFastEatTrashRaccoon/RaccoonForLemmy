@@ -1,9 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.profile.main
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
-import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase.LogoutUseCase
 import kotlinx.coroutines.flow.launchIn
@@ -15,8 +13,7 @@ class ProfileMainViewModel(
     private val mvi: DefaultMviModel<ProfileMainMviModel.Intent, ProfileMainMviModel.UiState, ProfileMainMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val logout: LogoutUseCase,
-    private val settingsRepository: SettingsRepository,
-) : ScreenModel,
+) : ProfileMainMviModel,
     MviModel<ProfileMainMviModel.Intent, ProfileMainMviModel.UiState, ProfileMainMviModel.Effect> by mvi {
 
     override fun onStarted() {

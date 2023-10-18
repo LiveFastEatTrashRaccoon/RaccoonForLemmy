@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.profile.login
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
@@ -22,7 +21,7 @@ class LoginBottomSheetViewModel(
     private val accountRepository: AccountRepository,
     private val siteRepository: SiteRepository,
     private val communityRepository: CommunityRepository,
-) : ScreenModel,
+) : LoginBottomSheetMviModel,
     MviModel<LoginBottomSheetMviModel.Intent, LoginBottomSheetMviModel.UiState, LoginBottomSheetMviModel.Effect> by mvi {
 
     override fun reduce(intent: LoginBottomSheetMviModel.Intent) {

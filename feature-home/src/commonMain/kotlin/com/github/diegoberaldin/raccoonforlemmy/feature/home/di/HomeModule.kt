@@ -12,7 +12,7 @@ val homeTabModule = module {
         repositoryModule,
         commonUiModule,
     )
-    factory {
+    factory<PostListMviModel> {
         PostListViewModel(
             mvi = DefaultMviModel(PostListMviModel.UiState()),
             postRepository = get(),

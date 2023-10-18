@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.detail
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
@@ -34,7 +33,7 @@ class MultiCommunityViewModel(
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
     private val paginator: MultiCommunityPaginator,
-) : ScreenModel,
+) : MultiCommunityMviModel,
     MviModel<MultiCommunityMviModel.Intent, MultiCommunityMviModel.UiState, MultiCommunityMviModel.Effect> by mvi {
 
     init {

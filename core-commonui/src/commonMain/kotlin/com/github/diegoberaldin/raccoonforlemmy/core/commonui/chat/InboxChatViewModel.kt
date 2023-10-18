@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
@@ -25,7 +24,7 @@ class InboxChatViewModel(
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
-) : ScreenModel,
+) : InboxChatMviModel,
     MviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.SideEffect> by mvi {
 
 

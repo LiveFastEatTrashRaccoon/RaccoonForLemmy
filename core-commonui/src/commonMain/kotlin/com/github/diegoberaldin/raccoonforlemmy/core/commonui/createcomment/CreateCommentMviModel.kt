@@ -1,12 +1,14 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostSection
 import dev.icerock.moko.resources.desc.StringDesc
 
 interface CreateCommentMviModel :
-    MviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect> {
+    MviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect>,
+    ScreenModel {
 
     sealed interface Intent {
         data class SetText(val value: String) : Intent

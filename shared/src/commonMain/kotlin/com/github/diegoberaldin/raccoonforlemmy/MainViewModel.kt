@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -16,7 +15,7 @@ class MainViewModel(
     private val mvi: DefaultMviModel<MainScreenMviModel.Intent, MainScreenMviModel.UiState, MainScreenMviModel.Effect>,
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
-) : ScreenModel,
+) : MainScreenMviModel,
     MviModel<MainScreenMviModel.Intent, MainScreenMviModel.UiState, MainScreenMviModel.Effect> by mvi {
 
     override fun onStarted() {

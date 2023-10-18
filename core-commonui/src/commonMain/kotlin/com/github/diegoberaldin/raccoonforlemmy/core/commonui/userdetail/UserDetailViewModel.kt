@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
@@ -38,7 +37,7 @@ class UserDetailViewModel(
     private val hapticFeedback: HapticFeedback,
     private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
-) : ScreenModel,
+) : UserDetailMviModel,
     MviModel<UserDetailMviModel.Intent, UserDetailMviModel.UiState, UserDetailMviModel.Effect> by mvi {
 
     private var currentPage = 1

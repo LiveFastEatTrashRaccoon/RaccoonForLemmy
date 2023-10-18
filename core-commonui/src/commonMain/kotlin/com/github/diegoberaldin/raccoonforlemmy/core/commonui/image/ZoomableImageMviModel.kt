@@ -1,9 +1,11 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.image
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 
 interface ZoomableImageMviModel :
-    MviModel<ZoomableImageMviModel.Intent, ZoomableImageMviModel.UiState, ZoomableImageMviModel.Effect> {
+    MviModel<ZoomableImageMviModel.Intent, ZoomableImageMviModel.UiState, ZoomableImageMviModel.Effect>,
+    ScreenModel {
     sealed interface Intent {
         data class Share(val url: String) : Intent
         data class SaveToGallery(val url: String) : Intent

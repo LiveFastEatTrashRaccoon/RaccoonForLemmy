@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.image
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -19,7 +18,7 @@ class ZoomableImageViewModel(
     private val settingsRepository: SettingsRepository,
     private val shareHelper: ShareHelper,
     private val galleryHelper: GalleryHelper,
-) : ScreenModel,
+) : ZoomableImageMviModel,
     MviModel<ZoomableImageMviModel.Intent, ZoomableImageMviModel.UiState, ZoomableImageMviModel.Effect> by mvi {
 
     override fun onStarted() {

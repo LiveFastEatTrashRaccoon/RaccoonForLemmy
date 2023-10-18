@@ -1,11 +1,13 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.editor
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import dev.icerock.moko.resources.desc.StringDesc
 
 interface MultiCommunityEditorMviModel :
-    MviModel<MultiCommunityEditorMviModel.Intent, MultiCommunityEditorMviModel.UiState, MultiCommunityEditorMviModel.Effect> {
+    MviModel<MultiCommunityEditorMviModel.Intent, MultiCommunityEditorMviModel.UiState, MultiCommunityEditorMviModel.Effect>,
+    ScreenModel {
     sealed interface Intent {
         data class SetName(val value: String) : Intent
         data class SetSearch(val value: String) : Intent

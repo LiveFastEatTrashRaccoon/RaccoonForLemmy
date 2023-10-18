@@ -1,10 +1,12 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 
 interface InstanceInfoMviModel :
-    MviModel<InstanceInfoMviModel.Intent, InstanceInfoMviModel.UiState, InstanceInfoMviModel.Effect> {
+    MviModel<InstanceInfoMviModel.Intent, InstanceInfoMviModel.UiState, InstanceInfoMviModel.Effect>,
+    ScreenModel {
 
     sealed interface Intent {
         data object Refresh : Intent

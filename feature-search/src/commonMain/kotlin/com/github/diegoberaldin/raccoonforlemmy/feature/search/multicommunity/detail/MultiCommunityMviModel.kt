@@ -1,12 +1,14 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.detail
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 
 interface MultiCommunityMviModel :
-    MviModel<MultiCommunityMviModel.Intent, MultiCommunityMviModel.UiState, MultiCommunityMviModel.Effect> {
+    MviModel<MultiCommunityMviModel.Intent, MultiCommunityMviModel.UiState, MultiCommunityMviModel.Effect>,
+    ScreenModel {
     sealed interface Intent {
         data object Refresh : Intent
         data object LoadNextPage : Intent

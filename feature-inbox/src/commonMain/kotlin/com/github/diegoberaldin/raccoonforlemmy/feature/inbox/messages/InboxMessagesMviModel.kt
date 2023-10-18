@@ -1,10 +1,12 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.messages
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
 
 interface InboxMessagesMviModel :
-    MviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect> {
+    MviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect>,
+    ScreenModel {
     sealed interface Intent {
         data object Refresh : Intent
         data object LoadNextPage : Intent

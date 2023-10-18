@@ -6,7 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import org.koin.dsl.module
 
 internal val internalSharedModule = module {
-    factory {
+    factory<MainScreenMviModel> {
         MainViewModel(
             mvi = DefaultMviModel(MainScreenMviModel.UiState()),
             identityRepository = get(),

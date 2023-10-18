@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.mentions
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
@@ -31,7 +30,7 @@ class InboxMentionsViewModel(
     private val hapticFeedback: HapticFeedback,
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
-) : ScreenModel,
+) : InboxMentionsMviModel,
     MviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1

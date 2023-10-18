@@ -1,10 +1,12 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
 
 interface InboxChatMviModel :
-    MviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.SideEffect> {
+    MviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.SideEffect>,
+    ScreenModel {
     sealed interface Intent {
         data object LoadNextPage : Intent
         data class SetNewMessageContent(val value: String) : Intent

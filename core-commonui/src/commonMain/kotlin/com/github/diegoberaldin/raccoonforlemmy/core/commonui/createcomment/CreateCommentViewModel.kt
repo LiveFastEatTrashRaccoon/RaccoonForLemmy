@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
@@ -29,7 +28,7 @@ class CreateCommentViewModel(
     private val themeRepository: ThemeRepository,
     private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
-) : ScreenModel,
+) : CreateCommentMviModel,
     MviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect> by mvi {
 
     override fun onStarted() {

@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -22,7 +21,7 @@ class InstanceInfoViewModel(
     private val communityRepository: CommunityRepository,
     private val identityRepository: IdentityRepository,
     private val settingsRepository: SettingsRepository,
-) : ScreenModel,
+) : InstanceInfoMviModel,
     MviModel<InstanceInfoMviModel.Intent, InstanceInfoMviModel.UiState, InstanceInfoMviModel.Effect> by mvi {
 
     private var currentPage = 1

@@ -36,7 +36,7 @@ val commonUiModule = module {
     single<DrawerCoordinator> {
         DefaultDrawerCoordinator()
     }
-    factory { params ->
+    factory<PostDetailMviModel> { params ->
         PostDetailViewModel(
             mvi = DefaultMviModel(PostDetailMviModel.UiState()),
             post = params[0],
@@ -53,7 +53,7 @@ val commonUiModule = module {
             hapticFeedback = get(),
         )
     }
-    factory { params ->
+    factory<CommunityDetailMviModel> { params ->
         CommunityDetailViewModel(
             mvi = DefaultMviModel(CommunityDetailMviModel.UiState()),
             community = params[0],
@@ -68,13 +68,13 @@ val commonUiModule = module {
             hapticFeedback = get(),
         )
     }
-    factory { params ->
+    factory<CommunityInfoMviModel> { params ->
         CommunityInfoViewModel(
             mvi = DefaultMviModel(CommunityInfoMviModel.UiState()),
             community = params[0],
         )
     }
-    factory { params ->
+    factory<UserDetailMviModel> { params ->
         UserDetailViewModel(
             mvi = DefaultMviModel(UserDetailMviModel.UiState()),
             user = params[0],
@@ -90,7 +90,7 @@ val commonUiModule = module {
             notificationCenter = get(),
         )
     }
-    factory {
+    factory<InstanceInfoMviModel> {
         InstanceInfoViewModel(
             mvi = DefaultMviModel(InstanceInfoMviModel.UiState()),
             url = it[0],
@@ -100,7 +100,7 @@ val commonUiModule = module {
             settingsRepository = get(),
         )
     }
-    factory { params ->
+    factory<CreateCommentMviModel> { params ->
         CreateCommentViewModel(
             mvi = DefaultMviModel(CreateCommentMviModel.UiState()),
             postId = params[0],
@@ -114,7 +114,7 @@ val commonUiModule = module {
             notificationCenter = get(),
         )
     }
-    factory { params ->
+    factory<CreatePostMviModel> { params ->
         CreatePostViewModel(
             mvi = DefaultMviModel(CreatePostMviModel.UiState()),
             communityId = params[0],
@@ -125,7 +125,7 @@ val commonUiModule = module {
             settingsRepository = get(),
         )
     }
-    factory {
+    factory<ZoomableImageMviModel> {
         ZoomableImageViewModel(
             mvi = DefaultMviModel(ZoomableImageMviModel.UiState()),
             shareHelper = get(),
@@ -133,7 +133,7 @@ val commonUiModule = module {
             settingsRepository = get(),
         )
     }
-    factory { params ->
+    factory<InboxChatMviModel> { params ->
         InboxChatViewModel(
             otherUserId = params[0],
             mvi = DefaultMviModel(InboxChatMviModel.UiState()),
@@ -145,7 +145,7 @@ val commonUiModule = module {
             settingsRepository = get(),
         )
     }
-    factory {
+    factory<SavedItemsMviModel> {
         SavedItemsViewModel(
             mvi = DefaultMviModel(SavedItemsMviModel.UiState()),
             identityRepository = get(),
@@ -159,7 +159,7 @@ val commonUiModule = module {
             notificationCenter = get(),
         )
     }
-    factory {
+    factory<ModalDrawerMviModel> {
         ModalDrawerViewModel(
             mvi = DefaultMviModel(ModalDrawerMviModel.UiState()),
             apiConfigurationRepository = get(),

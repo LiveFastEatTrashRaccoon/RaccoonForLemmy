@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
@@ -37,7 +36,7 @@ class PostListViewModel(
     private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
-) : ScreenModel,
+) : PostListMviModel,
     MviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect> by mvi {
 
     private var currentPage: Int = 1

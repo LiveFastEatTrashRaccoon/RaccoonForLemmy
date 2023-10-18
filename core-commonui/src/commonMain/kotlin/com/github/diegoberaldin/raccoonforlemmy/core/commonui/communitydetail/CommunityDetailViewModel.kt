@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
@@ -35,7 +34,7 @@ class CommunityDetailViewModel(
     private val shareHelper: ShareHelper,
     private val hapticFeedback: HapticFeedback,
 ) : MviModel<CommunityDetailMviModel.Intent, CommunityDetailMviModel.UiState, CommunityDetailMviModel.Effect> by mvi,
-    ScreenModel {
+    CommunityDetailMviModel {
 
     private var currentPage: Int = 1
 

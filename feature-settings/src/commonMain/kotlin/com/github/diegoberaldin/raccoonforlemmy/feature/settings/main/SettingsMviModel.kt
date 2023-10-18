@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.settings.main
 
 import androidx.compose.ui.graphics.Color
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.FontScale
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiFontFamily
@@ -10,7 +11,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 
 interface SettingsMviModel :
-    MviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect> {
+    MviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect>,
+    ScreenModel {
 
     sealed interface Intent {
         data class ChangeUiTheme(val value: UiTheme) : Intent

@@ -2,7 +2,6 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.settings.main
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiFontFamily
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
@@ -41,7 +40,7 @@ class SettingsViewModel(
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
     private val crashReportConfiguration: CrashReportConfiguration,
-) : ScreenModel,
+) : SettingsMviModel,
     MviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect> by mvi {
 
     init {
