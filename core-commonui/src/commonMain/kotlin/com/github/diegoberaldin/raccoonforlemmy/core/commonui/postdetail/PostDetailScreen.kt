@@ -480,22 +480,28 @@ class PostDetailScreen(
                                         },
                                         content = {
                                             CommentCard(
-                                                modifier = Modifier.onClick {
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.ToggleExpandComment(
-                                                            commentId,
+                                                modifier = Modifier
+                                                    .background(MaterialTheme.colorScheme.background)
+                                                    .let {
+                                                        if (comment.id == highlightCommentId) {
+                                                            it.background(
+                                                                MaterialTheme.colorScheme.surfaceColorAtElevation(
+                                                                    5.dp
+                                                                ).copy(
+                                                                    alpha = 0.75f
+                                                                )
+                                                            )
+                                                        } else {
+                                                            it
+                                                        }
+                                                    }
+                                                    .onClick {
+                                                        model.reduce(
+                                                            PostDetailMviModel.Intent.ToggleExpandComment(
+                                                                commentId,
+                                                            )
                                                         )
-                                                    )
-                                                },
-                                                background = if (comment.id == highlightCommentId) {
-                                                    MaterialTheme.colorScheme.surfaceColorAtElevation(
-                                                        5.dp
-                                                    ).copy(
-                                                        alpha = 0.75f
-                                                    )
-                                                } else {
-                                                    MaterialTheme.colorScheme.background
-                                                },
+                                                    },
                                                 comment = comment,
                                                 separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                                 autoLoadImages = uiState.autoLoadImages,

@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
@@ -34,7 +33,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentR
 @Composable
 fun CommentCard(
     comment: CommentModel,
-    background: Color = MaterialTheme.colorScheme.background,
     modifier: Modifier = Modifier,
     separateUpAndDownVotes: Boolean = false,
     hideAuthor: Boolean = false,
@@ -59,7 +57,7 @@ fun CommentCard(
         ),
     ) {
         Column(
-            modifier = modifier.background(background)
+            modifier = modifier
         ) {
             var commentHeight by remember { mutableStateOf(0f) }
             val barWidth = 2.dp
