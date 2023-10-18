@@ -15,16 +15,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -46,6 +46,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -66,6 +67,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatScre
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCardPlaceholder
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
@@ -89,6 +92,7 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class UserDetailScreen(
     private val user: UserModel,
@@ -103,6 +107,8 @@ class UserDetailScreen(
         }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val lazyListState = rememberLazyListState()
+        val scope = rememberCoroutineScope()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = stringResource(MR.strings.message_generic_error)
         val successMessage = stringResource(MR.strings.message_operation_successful)
@@ -205,19 +211,28 @@ class UserDetailScreen(
                         targetOffsetY = { it * 2 },
                     ),
                 ) {
-                    FloatingActionButton(
-                        shape = CircleShape,
-                        backgroundColor = MaterialTheme.colorScheme.secondary,
-                        onClick = {
-                            val screen = InboxChatScreen(otherUserId = user.id)
-                            navigator?.push(screen)
-                        },
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.Chat,
-                                contentDescription = null,
+                    FloatingActionButtonMenu(
+                        items = buildList {
+                            this += FloatingActionButtonMenuItem(
+                                icon = Icons.Default.ArrowUpward,
+                                text = stringResource(MR.strings.action_back_to_top),
+                                onSelected = {
+                                    scope.launch {
+                                        lazyListState.scrollToItem(0)
+                                    }
+                                },
                             )
-                        },
+                            if (!isOnOtherInstance) {
+                                this += FloatingActionButtonMenuItem(
+                                    icon = Icons.Default.Chat,
+                                    text = stringResource(MR.strings.action_chat),
+                                    onSelected = {
+                                        val screen = InboxChatScreen(otherUserId = user.id)
+                                        navigator?.push(screen)
+                                    },
+                                )
+                            }
+                        }
                     )
                 }
             },
@@ -233,7 +248,9 @@ class UserDetailScreen(
                     .nestedScroll(fabNestedScrollConnection).padding(padding)
                     .pullRefresh(pullRefreshState),
             ) {
-                LazyColumn {
+                LazyColumn(
+                    state = lazyListState,
+                ) {
                     item {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,

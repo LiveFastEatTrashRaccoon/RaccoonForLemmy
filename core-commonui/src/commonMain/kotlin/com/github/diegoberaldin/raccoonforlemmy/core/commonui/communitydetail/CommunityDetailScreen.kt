@@ -14,17 +14,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Reply
 import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Pending
@@ -47,6 +47,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -65,6 +66,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityHeader
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
@@ -88,6 +91,7 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class CommunityDetailScreen(
     private val community: CommunityModel,
@@ -105,6 +109,8 @@ class CommunityDetailScreen(
         }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
+        val lazyListState = rememberLazyListState()
+        val scope = rememberCoroutineScope()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = stringResource(MR.strings.message_generic_error)
         val successMessage = stringResource(MR.strings.message_operation_successful)
@@ -225,24 +231,33 @@ class CommunityDetailScreen(
                     targetOffsetY = { it * 2 },
                 ),
             ) {
-                FloatingActionButton(
-                    backgroundColor = MaterialTheme.colorScheme.secondary,
-                    shape = CircleShape,
-                    onClick = {
-                        val screen = CreatePostScreen(
-                            communityId = stateCommunity.id,
+                FloatingActionButtonMenu(
+                    items = buildList {
+                        this += FloatingActionButtonMenuItem(
+                            icon = Icons.Default.ArrowUpward,
+                            text = stringResource(MR.strings.action_back_to_top),
+                            onSelected = {
+                                scope.launch {
+                                    lazyListState.scrollToItem(0)
+                                }
+                            },
                         )
-                        notificationCenter.addObserver({
-                            model.reduce(CommunityDetailMviModel.Intent.Refresh)
-                        }, key, NotificationCenterContractKeys.PostCreated)
-                        bottomSheetNavigator.show(screen)
-                    },
-                    content = {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = null,
-                        )
-                    },
+                        if (!isOnOtherInstance) {
+                            this += FloatingActionButtonMenuItem(
+                                icon = Icons.Default.Reply,
+                                text = stringResource(MR.strings.action_reply),
+                                onSelected = {
+                                    val screen = CreatePostScreen(
+                                        communityId = stateCommunity.id,
+                                    )
+                                    notificationCenter.addObserver({
+                                        model.reduce(CommunityDetailMviModel.Intent.Refresh)
+                                    }, key, NotificationCenterContractKeys.PostCreated)
+                                    bottomSheetNavigator.show(screen)
+                                },
+                            )
+                        }
+                    }
                 )
             }
         }) { padding ->
@@ -255,7 +270,9 @@ class CommunityDetailScreen(
                         .nestedScroll(fabNestedScrollConnection).padding(padding)
                         .pullRefresh(pullRefreshState),
                 ) {
-                    LazyColumn {
+                    LazyColumn(
+                        state = lazyListState,
+                    ) {
                         item {
                             CommunityHeader(
                                 community = stateCommunity,

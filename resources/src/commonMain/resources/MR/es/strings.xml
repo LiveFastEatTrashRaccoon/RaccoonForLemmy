@@ -151,6 +151,9 @@
     <string name="community_detail_block">Bloquear</string>
     <string name="instance_detail_title">Instancia: %1$s</string>
     <string name="instance_detail_communities">Comunidades</string>
+    <string name="action_back_to_top">Volver arriba</string>
+    <string name="action_reply">Responder</string>
+    <string name="action_chat">Enviar mensaje</string>
 
     <string name="inbox_not_logged_message">Acceso no efectuado.\nAñadir una cuenta en la pantalla
         Perfil para acceder a los mensajes.

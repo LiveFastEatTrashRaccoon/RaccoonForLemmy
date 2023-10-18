@@ -20,16 +20,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Reply
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -52,6 +51,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -78,6 +78,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCardPlaceholder
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
@@ -97,6 +99,7 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class PostDetailScreen(
     private val post: PostModel,
@@ -147,6 +150,7 @@ class PostDetailScreen(
             }
         }
         val lazyListState = rememberLazyListState()
+        val scope = rememberCoroutineScope()
         LaunchedEffect(model) {
             model.effects.onEach { evt ->
                 when (evt) {
@@ -214,7 +218,7 @@ class PostDetailScreen(
             },
             floatingActionButton = {
                 AnimatedVisibility(
-                    visible = isFabVisible.value && !isOnOtherInstance,
+                    visible = isFabVisible.value,
                     enter = slideInVertically(
                         initialOffsetY = { it * 2 },
                     ),
@@ -222,25 +226,34 @@ class PostDetailScreen(
                         targetOffsetY = { it * 2 },
                     ),
                 ) {
-                    FloatingActionButton(
-                        shape = CircleShape,
-                        backgroundColor = MaterialTheme.colorScheme.secondary,
-                        onClick = {
-                            val screen = CreateCommentScreen(
-                                originalPost = statePost,
+                    FloatingActionButtonMenu(
+                        items = buildList {
+                            this += FloatingActionButtonMenuItem(
+                                icon = Icons.Default.ArrowUpward,
+                                text = stringResource(MR.strings.action_back_to_top),
+                                onSelected = {
+                                    scope.launch {
+                                        lazyListState.scrollToItem(0)
+                                    }
+                                },
                             )
-                            notificationCenter.addObserver({
-                                model.reduce(PostDetailMviModel.Intent.Refresh)
-                                model.reduce(PostDetailMviModel.Intent.RefreshPost)
-                            }, key, NotificationCenterContractKeys.CommentCreated)
-                            bottomSheetNavigator.show(screen)
-                        },
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.Reply,
-                                contentDescription = null,
-                            )
-                        },
+                            if (!isOnOtherInstance) {
+                                this += FloatingActionButtonMenuItem(
+                                    icon = Icons.Default.Reply,
+                                    text = stringResource(MR.strings.action_reply),
+                                    onSelected = {
+                                        val screen = CreateCommentScreen(
+                                            originalPost = statePost,
+                                        )
+                                        notificationCenter.addObserver({
+                                            model.reduce(PostDetailMviModel.Intent.Refresh)
+                                            model.reduce(PostDetailMviModel.Intent.RefreshPost)
+                                        }, key, NotificationCenterContractKeys.CommentCreated)
+                                        bottomSheetNavigator.show(screen)
+                                    },
+                                )
+                            }
+                        }
                     )
                 }
             },

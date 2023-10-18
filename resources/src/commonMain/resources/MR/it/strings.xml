@@ -150,6 +150,9 @@
     <string name="community_detail_instance_info">Dettagli istanza</string>
     <string name="instance_detail_title">Istanza: %1$s</string>
     <string name="instance_detail_communities">Comunità</string>
+    <string name="action_back_to_top">Torna su</string>
+    <string name="action_reply">Rispondi</string>
+    <string name="action_chat">Invia messaggio</string>
 
     <string name="inbox_not_logged_message">Login non effettuato.\nAggiungi un account dalla
         schermata Profilo per accedere alla inbox.
