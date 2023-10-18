@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
@@ -28,6 +29,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 @Composable
 fun CommunityAndCreatorInfo(
     modifier: Modifier = Modifier,
+    iconSize: Dp = 32.dp,
     indicatorExpanded: Boolean? = null,
     autoLoadImages: Boolean = true,
     community: CommunityModel? = null,
@@ -41,7 +43,6 @@ fun CommunityAndCreatorInfo(
     val creatorName = creator?.name.orEmpty()
     val creatorAvatar = creator?.avatar.orEmpty()
     val creatorHost = creator?.host.orEmpty()
-    val iconSize = 32.dp
 
     Row(
         modifier = modifier,

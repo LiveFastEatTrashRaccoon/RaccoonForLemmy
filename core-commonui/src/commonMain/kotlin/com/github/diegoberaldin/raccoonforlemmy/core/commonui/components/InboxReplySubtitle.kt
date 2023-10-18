@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.DateTime
@@ -37,6 +38,7 @@ fun InboxReplySubtitle(
     autoLoadImages: Boolean = true,
     creator: UserModel? = null,
     community: CommunityModel? = null,
+    iconSize: Dp = 20.dp,
     date: String? = null,
     score: Int,
     upVoted: Boolean = false,
@@ -54,7 +56,6 @@ fun InboxReplySubtitle(
         val creatorName = creator?.name.orEmpty()
         val creatorAvatar = creator?.avatar.orEmpty()
         val creatorHost = creator?.host.orEmpty()
-        val iconSize = 16.dp
         if (communityName.isNotEmpty() || creatorName.isNotEmpty()) {
             Row(
                 modifier = modifier.padding(vertical = Spacing.xs),

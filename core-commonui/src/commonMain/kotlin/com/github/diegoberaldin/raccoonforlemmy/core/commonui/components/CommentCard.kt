@@ -86,6 +86,8 @@ fun CommentCard(
                         }
                 ) {
                     CommunityAndCreatorInfo(
+                        modifier = Modifier.padding(top = Spacing.xs),
+                        iconSize = 20.dp,
                         creator = comment.creator.takeIf { !hideAuthor },
                         community = comment.community.takeIf { !hideCommunity },
                         indicatorExpanded = comment.expanded,
