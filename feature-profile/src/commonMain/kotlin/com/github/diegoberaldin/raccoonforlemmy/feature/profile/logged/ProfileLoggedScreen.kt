@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.profile.logged
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -236,14 +237,16 @@ internal object ProfileLoggedScreen : Tab {
                             }
                             itemsIndexed(uiState.comments) { idx, comment ->
                                 CommentCard(
-                                    modifier = Modifier.onClick {
-                                        navigator?.push(
-                                            PostDetailScreen(
-                                                post = PostModel(id = comment.postId),
-                                                highlightCommentId = comment.id,
-                                            ),
-                                        )
-                                    },
+                                    modifier = Modifier
+                                        .background(MaterialTheme.colorScheme.background)
+                                        .onClick {
+                                            navigator?.push(
+                                                PostDetailScreen(
+                                                    post = PostModel(id = comment.postId),
+                                                    highlightCommentId = comment.id,
+                                                ),
+                                            )
+                                        },
                                     comment = comment,
                                     separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                     autoLoadImages = uiState.autoLoadImages,

@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -373,14 +374,16 @@ class ExploreScreen : Screen {
 
                                     is CommentModel -> {
                                         CommentCard(
-                                            modifier = Modifier.onClick {
-                                                navigator?.push(
-                                                    PostDetailScreen(
-                                                        post = PostModel(id = result.postId),
-                                                        highlightCommentId = result.id,
-                                                    ),
-                                                )
-                                            },
+                                            modifier = Modifier
+                                                .background(MaterialTheme.colorScheme.background)
+                                                .onClick {
+                                                    navigator?.push(
+                                                        PostDetailScreen(
+                                                            post = PostModel(id = result.postId),
+                                                            highlightCommentId = result.id,
+                                                        ),
+                                                    )
+                                                },
                                             comment = result,
                                             separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                             autoLoadImages = uiState.autoLoadImages,

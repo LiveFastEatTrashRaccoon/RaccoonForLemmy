@@ -350,11 +350,10 @@ class UserDetailScreen(
                                 content = {
                                     PostCard(
                                         modifier = Modifier.onClick {
-                                            navigator?.push(
-                                                PostDetailScreen(post),
-                                            )
+                                            navigator?.push(PostDetailScreen(post = post))
                                         },
                                         post = post,
+                                        hideAuthor = true,
                                         postLayout = uiState.postLayout,
                                         fullHeightImage = uiState.fullHeightImages,
                                         blurNsfw = uiState.blurNsfw,
@@ -400,9 +399,7 @@ class UserDetailScreen(
                                             }
                                         },
                                         onOpenCommunity = { community ->
-                                            navigator?.push(
-                                                CommunityDetailScreen(community),
-                                            )
+                                            navigator?.push(CommunityDetailScreen(community))
                                         },
                                         onReply = if (isOnOtherInstance) {
                                             null
@@ -496,14 +493,16 @@ class UserDetailScreen(
                                 },
                                 content = {
                                     CommentCard(
-                                        modifier = Modifier.onClick {
-                                            navigator?.push(
-                                                PostDetailScreen(
-                                                    post = PostModel(id = comment.postId),
-                                                    highlightCommentId = comment.id,
+                                        modifier = Modifier
+                                            .background(MaterialTheme.colorScheme.background)
+                                            .onClick {
+                                                navigator?.push(
+                                                    PostDetailScreen(
+                                                        post = PostModel(id = comment.postId),
+                                                        highlightCommentId = comment.id,
+                                                    )
                                                 )
-                                            )
-                                        },
+                                            },
                                         comment = comment,
                                         separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                         autoLoadImages = uiState.autoLoadImages,
@@ -564,8 +563,8 @@ class UserDetailScreen(
                                                 bottomSheetNavigator.show(screen)
                                             }
                                         },
-                                        onOpenCommunity = {
-                                            navigator?.push(CommunityDetailScreen(it))
+                                        onOpenCommunity = { community ->
+                                            navigator?.push(CommunityDetailScreen(community))
                                         },
                                     )
                                     Divider(
