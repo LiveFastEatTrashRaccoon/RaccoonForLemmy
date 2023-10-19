@@ -3,11 +3,10 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,43 +50,59 @@ fun FloatingActionButtonMenu(
     var fabExpanded by remember { mutableStateOf(false) }
     val fabRotation by animateFloatAsState(if (fabExpanded) 45f else 0f)
     val enterTransition = remember {
-        expandVertically(
-            expandFrom = Alignment.Bottom,
-            animationSpec = tween(150, easing = FastOutSlowInEasing)
-        ) + fadeIn(
+        fadeIn(
             initialAlpha = 0.3f,
             animationSpec = tween(150, easing = FastOutSlowInEasing)
         )
     }
     val exitTransition = remember {
-        shrinkVertically(
-            shrinkTowards = Alignment.Bottom,
-            animationSpec = tween(150, easing = FastOutSlowInEasing)
-        ) + fadeOut(
+        fadeOut(
             animationSpec = tween(150, easing = FastOutSlowInEasing)
         )
+    }
+    val numberOfItems by animateIntAsState(
+        targetValue = if (fabExpanded) items.size else 0,
+        animationSpec = tween(250 * items.size)
+    )
+    val indices: List<Int> = if (numberOfItems == 0) {
+        emptyList()
+    } else {
+        buildList {
+            for (i in 0 until numberOfItems) {
+                add(items.size - i - 1)
+            }
+        }
     }
     Column(
         horizontalAlignment = Alignment.End,
     ) {
-        AnimatedVisibility(
-            visible = fabExpanded,
-            enter = enterTransition,
-            exit = exitTransition
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+            horizontalAlignment = Alignment.End,
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Spacing.xs)
-            ) {
-                Spacer(modifier = Modifier.height(Spacing.m))
-                for (item in items) {
+            Spacer(modifier = Modifier.height(Spacing.m))
+            items.forEachIndexed { idx, item ->
+                AnimatedVisibility(
+                    visible = idx in indices,
+                    enter = enterTransition,
+                    exit = exitTransition
+                ) {
                     Row(
                         modifier = Modifier.onClick {
                             fabExpanded = false
                             item.onSelected?.invoke()
-                        },
+                        }.padding(end = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xxs)
                     ) {
+                        Text(
+                            modifier = Modifier.background(
+                                color = MaterialTheme.colorScheme.background,
+                                shape = RoundedCornerShape(CornerSize.s),
+                            ).padding(vertical = Spacing.xs, horizontal = Spacing.s),
+                            text = item.text,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
                         Icon(
                             modifier = Modifier
                                 .size(26.dp)
@@ -98,18 +113,10 @@ fun FloatingActionButtonMenu(
                             imageVector = item.icon,
                             contentDescription = null,
                         )
-                        Text(
-                            modifier = Modifier.background(
-                                color = MaterialTheme.colorScheme.background,
-                                shape = RoundedCornerShape(CornerSize.s),
-                            ).padding(vertical = Spacing.xs, horizontal = Spacing.s),
-                            text = item.text,
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
                     }
                 }
-                Spacer(modifier = Modifier.height(Spacing.xxs))
             }
+            Spacer(modifier = Modifier.height(Spacing.xxs))
         }
         FloatingActionButton(
             shape = CircleShape,

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -39,6 +40,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatScre
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxMessagesViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
@@ -59,7 +61,14 @@ class InboxMessagesScreen : Tab {
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val navigator = remember { navigationCoordinator.getRootNavigator() }
-
+        val lazyListState = rememberLazyListState()
+        LaunchedEffect(navigationCoordinator) {
+            navigationCoordinator.onDoubleTabSelection.onEach {
+                if (it == InboxTab) {
+                    lazyListState.scrollToItem(0)
+                }
+            }.launchIn(this)
+        }
         LaunchedEffect(model) {
             model.effects.onEach { effect ->
                 when (effect) {
@@ -78,6 +87,7 @@ class InboxMessagesScreen : Tab {
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
+                state = lazyListState,
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 if (uiState.chats.isEmpty() && uiState.initial) {

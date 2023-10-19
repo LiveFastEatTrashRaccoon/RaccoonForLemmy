@@ -26,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -84,7 +85,8 @@ class PostListScreen : Screen {
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val topAppBarState = rememberTopAppBarState()
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val navigator = remember { navigationCoordinator.getRootNavigator() }
         val notificationCenter = remember { getNotificationCenter() }
@@ -99,6 +101,8 @@ class PostListScreen : Screen {
             navigationCoordinator.onDoubleTabSelection.onEach { tab ->
                 if (tab == HomeTab) {
                     lazyListState.scrollToItem(0)
+                    topAppBarState.heightOffset = 0f
+                    topAppBarState.contentOffset = 0f
                 }
             }.launchIn(this)
         }

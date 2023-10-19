@@ -24,8 +24,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -39,6 +39,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -115,7 +116,8 @@ class UserDetailScreen(
         val isOnOtherInstance = otherInstance.isNotEmpty()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val topAppBarState = rememberTopAppBarState()
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val notificationCenter = remember { getNotificationCenter() }
         val isFabVisible = remember { mutableStateOf(true) }
         val fabNestedScrollConnection = remember {
@@ -214,11 +216,13 @@ class UserDetailScreen(
                     FloatingActionButtonMenu(
                         items = buildList {
                             this += FloatingActionButtonMenuItem(
-                                icon = Icons.Default.ArrowUpward,
+                                icon = Icons.Default.ExpandLess,
                                 text = stringResource(MR.strings.action_back_to_top),
                                 onSelected = {
                                     scope.launch {
                                         lazyListState.scrollToItem(0)
+                                        topAppBarState.heightOffset = 0f
+                                        topAppBarState.contentOffset = 0f
                                     }
                                 },
                             )

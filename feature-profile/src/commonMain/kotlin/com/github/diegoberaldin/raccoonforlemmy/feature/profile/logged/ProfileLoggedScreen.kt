@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -21,6 +22,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -51,8 +53,11 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotific
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileLoggedViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 internal object ProfileLoggedScreen : Tab {
 
@@ -74,8 +79,17 @@ internal object ProfileLoggedScreen : Tab {
             val uiState by model.uiState.collectAsState()
             val user = uiState.user
             val notificationCenter = remember { getNotificationCenter() }
-            val navigator = remember { getNavigationCoordinator().getRootNavigator() }
+            val navigationCoordinator = remember { getNavigationCoordinator() }
+            val navigator = remember { navigationCoordinator.getRootNavigator() }
             val bottomSheetNavigator = LocalBottomSheetNavigator.current
+            val lazyListState = rememberLazyListState()
+            LaunchedEffect(navigator) {
+                navigationCoordinator.onDoubleTabSelection.onEach { tab ->
+                    if (tab == ProfileTab) {
+                        lazyListState.scrollToItem(0)
+                    }
+                }.launchIn(this)
+            }
             DisposableEffect(key) {
                 onDispose {
                     notificationCenter.removeObserver(key)
@@ -89,7 +103,9 @@ internal object ProfileLoggedScreen : Tab {
                 Box(
                     modifier = Modifier.pullRefresh(pullRefreshState),
                 ) {
-                    LazyColumn {
+                    LazyColumn(
+                        state = lazyListState,
+                    ) {
                         item {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,

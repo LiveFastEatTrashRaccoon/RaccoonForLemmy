@@ -31,6 +31,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -101,7 +102,8 @@ class ExploreScreen : Screen {
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val navigator = remember { navigationCoordinator.getRootNavigator() }
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val topAppBarState = rememberTopAppBarState()
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val notificationCenter = remember { getNotificationCenter() }
         val drawerCoordinator = remember { getDrawerCoordinator() }
         val scope = rememberCoroutineScope()
@@ -124,6 +126,8 @@ class ExploreScreen : Screen {
             navigationCoordinator.onDoubleTabSelection.onEach { tab ->
                 if (tab == ExploreTab) {
                     lazyListState.scrollToItem(0)
+                    topAppBarState.heightOffset = 0f
+                    topAppBarState.contentOffset = 0f
                 }
             }.launchIn(this)
         }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
@@ -55,6 +56,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.di.getInboxRepliesViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
@@ -74,7 +76,14 @@ class InboxRepliesScreen : Tab {
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val navigator = remember { navigationCoordinator.getRootNavigator() }
-
+        val lazyListState = rememberLazyListState()
+        LaunchedEffect(navigationCoordinator) {
+            navigationCoordinator.onDoubleTabSelection.onEach {
+                if (it == InboxTab) {
+                    lazyListState.scrollToItem(0)
+                }
+            }.launchIn(this)
+        }
         LaunchedEffect(model) {
             model.effects.onEach { effect ->
                 when (effect) {
@@ -93,6 +102,7 @@ class InboxRepliesScreen : Tab {
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
+                state = lazyListState,
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 if (uiState.replies.isEmpty() && uiState.initial) {

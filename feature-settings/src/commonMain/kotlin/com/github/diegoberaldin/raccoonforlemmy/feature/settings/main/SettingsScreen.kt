@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -49,6 +50,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepos
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ColorBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.FontFamilyBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.FontScaleBottomSheet
@@ -90,10 +92,23 @@ class SettingsScreen : Screen {
         model.bindToLifecycle(SettingsTab.key)
         val uiState by model.uiState.collectAsState()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val topAppBarState = rememberTopAppBarState()
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val notificationCenter = remember { getNotificationCenter() }
         val drawerCoordinator = remember { getDrawerCoordinator() }
         val scope = rememberCoroutineScope()
+        val navigationCoordinator = remember { getNavigationCoordinator() }
+        val navigator = remember { navigationCoordinator.getRootNavigator() }
+        val scrollState = rememberScrollState()
+        LaunchedEffect(navigator) {
+            navigationCoordinator.onDoubleTabSelection.onEach { tab ->
+                if (tab == SettingsTab) {
+                    scrollState.scrollTo(0)
+                    topAppBarState.heightOffset = 0f
+                    topAppBarState.contentOffset = 0f
+                }
+            }.launchIn(this)
+        }
         DisposableEffect(key) {
             onDispose {
                 notificationCenter.removeObserver(key)
@@ -153,9 +168,7 @@ class SettingsScreen : Screen {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .verticalScroll(
-                            rememberScrollState()
-                        ),
+                        .verticalScroll(scrollState),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     SettingsHeader(
