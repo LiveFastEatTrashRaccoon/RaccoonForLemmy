@@ -10,7 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -32,6 +36,7 @@ import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
+import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toPostLayout
@@ -45,12 +50,18 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.Co
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getCommmunityFromUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getPostFromUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getUserFromUrl
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerEvent
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerContent
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getAccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptions.ManageSubscriptionsScreen
+import com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.detail.MultiCommunityScreen
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import dev.icerock.moko.resources.compose.painterResource
@@ -168,35 +179,74 @@ fun App() {
                         }
                     }
                 }
-                Navigator(
-                    screens = screens,
-                    onBackPressed = {
-                        val callback = navigationCoordinator.getCanGoBackCallback()
-                        callback?.let { it() } ?: true
+                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                val drawerCoordinator = remember { getDrawerCoordinator() }
+                LaunchedEffect(drawerCoordinator) {
+                    drawerCoordinator.toggleEvents.onEach { evt ->
+                        val navigator = navigationCoordinator.getRootNavigator()
+                        when (evt) {
+                            DrawerEvent.Toggled -> {
+                                drawerState.apply {
+                                    if (isClosed) open() else close()
+                                }
+                            }
+
+                            is DrawerEvent.OpenCommunity -> {
+                                navigator?.push(CommunityDetailScreen(evt.community))
+                            }
+
+                            is DrawerEvent.OpenMultiCommunity -> {
+                                navigator?.push(MultiCommunityScreen(evt.community))
+                            }
+
+                            DrawerEvent.ManageSubscriptions -> {
+                                navigator?.push(ManageSubscriptionsScreen())
+                            }
+
+                            DrawerEvent.OpenBookmarks -> {
+                                navigator?.push(SavedItemsScreen())
+                            }
+                        }
+                    }.launchIn(this)
+                }
+                ModalNavigationDrawer(
+                    drawerState = drawerState,
+                    drawerContent = {
+                        ModalDrawerSheet {
+                            TabNavigator(ModalDrawerContent)
+                        }
                     }
                 ) {
-                    val navigator = LocalNavigator.current
-                    navigationCoordinator.setRootNavigator(navigator)
-                    if (hasBeenInitialized) {
-                        CurrentScreen()
-                    } else {
-                        // loading screen
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(top = 24.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                    Navigator(
+                        screens = screens,
+                        onBackPressed = {
+                            val callback = navigationCoordinator.getCanGoBackCallback()
+                            callback?.let { it() } ?: true
+                        }
+                    ) {
+                        val navigator = LocalNavigator.current
+                        navigationCoordinator.setRootNavigator(navigator)
+                        if (hasBeenInitialized) {
+                            CurrentScreen()
+                        } else {
+                            // loading screen
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
                             ) {
-                                Image(
-                                    painter = painterResource(MR.images.icon),
-                                    contentDescription = null,
-                                )
-                                CircularProgressIndicator(
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                )
+                                Column(
+                                    modifier = Modifier.padding(top = 24.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                                ) {
+                                    Image(
+                                        painter = painterResource(MR.images.icon),
+                                        contentDescription = null,
+                                    )
+                                    CircularProgressIndicator(
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                    )
+                                }
                             }
                         }
                     }

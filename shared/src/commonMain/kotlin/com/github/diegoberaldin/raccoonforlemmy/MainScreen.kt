@@ -3,12 +3,8 @@ package com.github.diegoberaldin.raccoonforlemmy
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.BottomAppBar
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -23,7 +19,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -34,19 +29,11 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.DrawerEvent
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerContent
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.di.getMainViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptions.ManageSubscriptionsScreen
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.detail.MultiCommunityScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.ExploreTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
 import com.github.diegoberaldin.raccoonforlemmy.ui.navigation.TabNavigationItem
@@ -63,15 +50,10 @@ internal class MainScreen : Screen {
         val themeRepository = remember { getThemeRepository() }
         var bottomBarHeightPx by remember { mutableStateOf(0f) }
         val navigationCoordinator = remember { getNavigationCoordinator() }
-        val drawerCoordinator = remember { getDrawerCoordinator() }
-        val navigator = remember { navigationCoordinator.getRootNavigator() }
         val model = rememberScreenModel { getMainViewModel() }
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val uiFontScale by themeRepository.uiFontScale.collectAsState()
-        val uriHandler = LocalUriHandler.current
-        val settingsRepository = remember { getSettingsRepository() }
-        val settings by settingsRepository.currentSettings.collectAsState()
 
         LaunchedEffect(model) {
             model.effects.onEach {
@@ -102,94 +84,57 @@ internal class MainScreen : Screen {
             }
         }
 
-        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-        LaunchedEffect(drawerCoordinator) {
-            drawerCoordinator.toggleEvents.onEach { evt ->
-                when (evt) {
-                    DrawerEvent.Toggled -> {
-                        drawerState.apply {
-                            if (isClosed) open() else close()
-                        }
-                    }
-
-                    is DrawerEvent.OpenCommunity -> {
-                        navigator?.push(CommunityDetailScreen(evt.community))
-                    }
-
-                    is DrawerEvent.OpenMultiCommunity -> {
-                        navigator?.push(MultiCommunityScreen(evt.community))
-                    }
-
-                    DrawerEvent.ManageSubscriptions -> {
-                        navigator?.push(ManageSubscriptionsScreen())
-                    }
-
-                    DrawerEvent.OpenBookmarks -> {
-                        navigator?.push(SavedItemsScreen())
-                    }
-                }
-            }.launchIn(this)
-        }
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            drawerContent = {
-                ModalDrawerSheet {
-                    TabNavigator(ModalDrawerContent)
-                }
+        TabNavigator(HomeTab) {
+            LaunchedEffect(it.current) {
+                // when the current tab chanes, reset the bottom bar offset to the default value
+                model.reduce(MainScreenMviModel.Intent.SetBottomBarOffsetHeightPx(0f))
             }
-        ) {
-            TabNavigator(HomeTab) {
-                LaunchedEffect(it.current) {
-                    // when the current tab chanes, reset the bottom bar offset to the default value
-                    model.reduce(MainScreenMviModel.Intent.SetBottomBarOffsetHeightPx(0f))
-                }
 
-                Scaffold(
-                    content = {
-                        CurrentTab()
-                    },
-                    bottomBar = {
-                        CompositionLocalProvider(
-                            LocalDensity provides Density(
-                                density = LocalDensity.current.density,
-                                fontScale = uiFontScale,
-                            ),
-                        ) {
-                            val titleVisible by themeRepository.navItemTitles.collectAsState()
-                            var uiFontSizeWorkaround by remember { mutableStateOf(true) }
-                            LaunchedEffect(themeRepository) {
-                                themeRepository.uiFontScale.drop(1).onEach {
-                                    uiFontSizeWorkaround = false
-                                    delay(50)
-                                    uiFontSizeWorkaround = true
-                                }.launchIn(this)
-                            }
-                            if (uiFontSizeWorkaround) {
-                                BottomAppBar(
-                                    modifier = Modifier
-                                        .onGloballyPositioned {
-                                            bottomBarHeightPx = it.size.toSize().height
-                                        }
-                                        .offset {
-                                            IntOffset(
-                                                x = 0,
-                                                y = -uiState.bottomBarOffsetHeightPx.roundToInt()
-                                            )
-                                        },
-                                    contentPadding = PaddingValues(0.dp),
-                                    backgroundColor = MaterialTheme.colorScheme.background,
-                                ) {
-                                    TabNavigationItem(HomeTab, withText = titleVisible)
-                                    TabNavigationItem(ExploreTab, withText = titleVisible)
-                                    TabNavigationItem(ProfileTab, withText = titleVisible)
-                                    TabNavigationItem(InboxTab, withText = titleVisible)
-                                    TabNavigationItem(SettingsTab, withText = titleVisible)
-                                }
+            Scaffold(
+                content = {
+                    CurrentTab()
+                },
+                bottomBar = {
+                    CompositionLocalProvider(
+                        LocalDensity provides Density(
+                            density = LocalDensity.current.density,
+                            fontScale = uiFontScale,
+                        ),
+                    ) {
+                        val titleVisible by themeRepository.navItemTitles.collectAsState()
+                        var uiFontSizeWorkaround by remember { mutableStateOf(true) }
+                        LaunchedEffect(themeRepository) {
+                            themeRepository.uiFontScale.drop(1).onEach {
+                                uiFontSizeWorkaround = false
+                                delay(50)
+                                uiFontSizeWorkaround = true
+                            }.launchIn(this)
+                        }
+                        if (uiFontSizeWorkaround) {
+                            BottomAppBar(
+                                modifier = Modifier
+                                    .onGloballyPositioned {
+                                        bottomBarHeightPx = it.size.toSize().height
+                                    }
+                                    .offset {
+                                        IntOffset(
+                                            x = 0,
+                                            y = -uiState.bottomBarOffsetHeightPx.roundToInt()
+                                        )
+                                    },
+                                contentPadding = PaddingValues(0.dp),
+                                backgroundColor = MaterialTheme.colorScheme.background,
+                            ) {
+                                TabNavigationItem(HomeTab, withText = titleVisible)
+                                TabNavigationItem(ExploreTab, withText = titleVisible)
+                                TabNavigationItem(ProfileTab, withText = titleVisible)
+                                TabNavigationItem(InboxTab, withText = titleVisible)
+                                TabNavigationItem(SettingsTab, withText = titleVisible)
                             }
                         }
-                    },
-                )
-            }
+                    }
+                },
+            )
         }
     }
 }

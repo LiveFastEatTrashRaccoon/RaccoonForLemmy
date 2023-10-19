@@ -97,7 +97,6 @@ object ModalDrawerContent : Tab {
         val languageRepository = remember { getLanguageRepository() }
         val themeRepository = remember { getThemeRepository() }
         val lang by languageRepository.currentLanguage.collectAsState()
-        val uiFontSize = themeRepository.uiFontScale.collectAsState()
 
         LaunchedEffect(model) {
             model.effects.onEach { evt ->
@@ -415,7 +414,7 @@ private fun ChangeInstanceDialog(
                 supportingText = {
                     if (instanceNameError != null) {
                         Text(
-                            text = instanceNameError?.localized().orEmpty(),
+                            text = instanceNameError.localized(),
                             color = MaterialTheme.colorScheme.error,
                         )
                     }

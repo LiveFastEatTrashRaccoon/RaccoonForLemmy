@@ -13,7 +13,6 @@ import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -43,16 +42,11 @@ class ModalDrawerViewModel(
                 mvi.updateState {
                     it.copy(user = user)
                 }
-            }.launchIn(this)
-            identityRepository.authToken.drop(1).onEach { _ ->
                 refresh()
             }.launchIn(this)
             settingsRepository.currentSettings.onEach { settings ->
                 mvi.updateState { it.copy(autoLoadImages = settings.autoLoadImages) }
             }.launchIn(this)
-        }
-        if (uiState.value.communities.isEmpty()) {
-            refresh()
         }
     }
 
