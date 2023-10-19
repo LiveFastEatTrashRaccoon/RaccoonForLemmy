@@ -249,7 +249,6 @@ class PostDetailViewModel(
                 instance = otherInstance,
                 page = currentPage,
                 sort = sort,
-                maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
             )?.processCommentsToGetNestedOrder(
                 ancestorId = null,
             ).let {
@@ -317,7 +316,6 @@ class PostDetailViewModel(
                 parentId = parentId,
                 instance = otherInstance,
                 sort = sort,
-                maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
             )?.processCommentsToGetNestedOrder(
                 ancestorId = parentId.toString(),
             )?.let {
@@ -326,9 +324,7 @@ class PostDetailViewModel(
                         it.filter { c -> c.depth == 0 }.map { c -> c.id }.toMutableList()
                 }
                 it
-            }?.applyExpansionFilter(
-                expandedTopLevelCommentIds = expandedTopLevelComments,
-            )
+            }
             val newList = uiState.value.comments.let { list ->
                 val index = list.indexOfFirst { c -> c.id == parentId }
                 list.toMutableList().apply {

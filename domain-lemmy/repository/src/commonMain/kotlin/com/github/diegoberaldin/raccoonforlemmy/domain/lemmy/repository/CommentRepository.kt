@@ -28,10 +28,10 @@ class CommentRepository(
         auth: String? = null,
         instance: String? = null,
         page: Int,
-        limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
+        limit: Int = DEFAULT_PAGE_SIZE,
         type: ListingType = ListingType.All,
         sort: SortType = SortType.New,
-        maxDepth: Int = 1,
+        maxDepth: Int = MAX_COMMENT_DEPTH,
     ): List<CommentModel>? = runCatching {
         val response = if (instance.isNullOrEmpty()) {
             services.comment.getAll(

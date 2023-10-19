@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
@@ -432,7 +432,7 @@ class PostDetailScreen(
                                 )
                             }
                         }
-                        items(uiState.comments, key = { it.id }) { comment ->
+                        itemsIndexed(uiState.comments, key = { _, c -> c.id }) { idx, comment ->
                             val commentId = comment.id
                             val themeRepository = remember { getThemeRepository() }
                             val fontScale by themeRepository.contentFontScale.collectAsState()
@@ -608,7 +608,8 @@ class PostDetailScreen(
                                                             )
                                                         }
                                                     }
-                                                })
+                                                }
+                                            )
                                         },
                                     )
                                     Divider(
@@ -618,9 +619,9 @@ class PostDetailScreen(
                                 }
                             }
                             val hasMoreComments = (comment.comments ?: 0) > 0
-                            val isNextCommentOfHigherDepth =
-                                commentId < uiState.comments.lastIndex && uiState.comments[commentId + 1].depth < comment.depth
-                            if (hasMoreComments && isNextCommentOfHigherDepth) {
+                            val isNextCommentNotChild =
+                                idx < uiState.comments.lastIndex && uiState.comments[idx + 1].depth <= comment.depth
+                            if (hasMoreComments && isNextCommentNotChild) {
                                 Row {
                                     Spacer(modifier = Modifier.weight(1f))
                                     Button(onClick = {
@@ -632,7 +633,6 @@ class PostDetailScreen(
                                     }) {
                                         Text(
                                             text = stringResource(MR.strings.post_detail_load_more_comments),
-                                            style = MaterialTheme.typography.labelMedium,
                                         )
                                     }
                                     Spacer(modifier = Modifier.weight(1f))
