@@ -24,7 +24,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.Reply
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Pending
@@ -244,8 +244,8 @@ class CommunityDetailScreen(
                         )
                         if (!isOnOtherInstance) {
                             this += FloatingActionButtonMenuItem(
-                                icon = Icons.Default.Reply,
-                                text = stringResource(MR.strings.action_reply),
+                                icon = Icons.Default.Create,
+                                text = stringResource(MR.strings.action_create_post),
                                 onSelected = {
                                     val screen = CreatePostScreen(
                                         communityId = stateCommunity.id,

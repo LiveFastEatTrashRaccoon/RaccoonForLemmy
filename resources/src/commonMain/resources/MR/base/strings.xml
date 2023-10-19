@@ -156,6 +156,7 @@
     <string name="instance_detail_communities">Communities</string>
     <string name="action_back_to_top">Back to top</string>
     <string name="action_reply">Reply</string>
+    <string name="action_create_post">Create post</string>
     <string name="action_chat">Send message</string>
 
     <string name="inbox_not_logged_message">You are currently not logged in.\nPlease add an account

@@ -12,6 +12,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -74,9 +76,9 @@ fun FloatingActionButtonMenu(
             exit = exitTransition
         ) {
             Column(
-                modifier = Modifier.padding(bottom = Spacing.m),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs)
             ) {
+                Spacer(modifier = Modifier.height(Spacing.m))
                 for (item in items) {
                     Row(
                         modifier = Modifier.onClick {
@@ -92,7 +94,7 @@ fun FloatingActionButtonMenu(
                                 .background(
                                     color = MaterialTheme.colorScheme.secondary,
                                     shape = CircleShape
-                                ).padding(Spacing.xs),
+                                ).padding(6.dp),
                             imageVector = item.icon,
                             contentDescription = null,
                         )
@@ -106,6 +108,7 @@ fun FloatingActionButtonMenu(
                         )
                     }
                 }
+                Spacer(modifier = Modifier.height(Spacing.xxs))
             }
         }
         FloatingActionButton(
