@@ -1,5 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.utils
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.dsl.module
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
@@ -16,4 +18,10 @@ actual val shareHelperModule = module {
     single<ShareHelper> {
         DefaultShareHelper()
     }
+}
+
+actual fun getShareHelper(): ShareHelper = ShareHelperInjectHelper.shareHelper
+
+private object ShareHelperInjectHelper : KoinComponent {
+    val shareHelper: ShareHelper by inject()
 }

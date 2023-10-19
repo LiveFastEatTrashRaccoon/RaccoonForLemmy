@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
@@ -20,6 +22,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomWebView
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.rememberWebViewNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.getShareHelper
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
 
 class WebViewScreen(
@@ -30,6 +33,7 @@ class WebViewScreen(
     override fun Content() {
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        var shareHelper = remember { getShareHelper() }
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -45,6 +49,16 @@ class WebViewScreen(
                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         )
                     },
+                    actions = {
+                        Icon(
+                            modifier = Modifier.onClick {
+                                shareHelper.share(url, "text/plain")
+                            },
+                            imageVector = Icons.Default.Share,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
                 )
             },
         ) { paddingValues ->

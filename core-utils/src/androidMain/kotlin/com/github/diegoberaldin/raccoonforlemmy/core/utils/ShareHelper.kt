@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.utils
 import android.content.Context
 import android.content.Intent
 import org.koin.dsl.module
+import org.koin.java.KoinJavaComponent.inject
 
 class DefaultShareHelper(
     private val context: Context,
@@ -27,4 +28,9 @@ actual val shareHelperModule = module {
             context = get(),
         )
     }
+}
+
+actual fun getShareHelper(): ShareHelper {
+    val res: ShareHelper by inject(ShareHelper::class.java)
+    return res
 }

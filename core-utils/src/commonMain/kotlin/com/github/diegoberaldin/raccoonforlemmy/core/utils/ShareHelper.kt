@@ -7,3 +7,5 @@ interface ShareHelper {
 }
 
 expect val shareHelperModule: Module
+
+expect fun getShareHelper(): ShareHelper
