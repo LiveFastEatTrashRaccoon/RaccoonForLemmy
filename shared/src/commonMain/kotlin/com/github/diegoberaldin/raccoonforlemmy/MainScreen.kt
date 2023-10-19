@@ -132,14 +132,18 @@ internal class MainScreen : Screen {
         }
         ModalNavigationDrawer(
             drawerState = drawerState,
-            drawerContent =
-            {
+            drawerContent = {
                 ModalDrawerSheet {
                     TabNavigator(ModalDrawerContent)
                 }
             }
         ) {
             TabNavigator(HomeTab) {
+                LaunchedEffect(it.current) {
+                    // when the current tab chanes, reset the bottom bar offset to the default value
+                    model.reduce(MainScreenMviModel.Intent.SetBottomBarOffsetHeightPx(0f))
+                }
+
                 Scaffold(
                     content = {
                         CurrentTab()

@@ -230,12 +230,7 @@ class MultiCommunityScreen(
                 modifier = Modifier
                     .padding(padding)
                     .fillMaxWidth()
-                    .nestedScroll(scrollBehavior.nestedScrollConnection).let {
-                        val connection = bottomNavCoordinator.getBottomBarScrollConnection()
-                        if (connection != null) {
-                            it.nestedScroll(connection)
-                        } else it
-                    }
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
                     .nestedScroll(fabNestedScrollConnection)
                     .pullRefresh(pullRefreshState),
             ) {
