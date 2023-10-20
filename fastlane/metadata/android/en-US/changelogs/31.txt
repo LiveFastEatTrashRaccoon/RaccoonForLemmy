@@ -1,0 +1,16 @@
+- share URL from web view
+- back to top from FAB menu
+- new color names
+- full-height images
+- change UI font
+- show cross-posts (#58)
+- expand/collapse comments (#37)
+- navigation drawer reload
+- bottom bar height on section change
+- top bar color on scroll
+- open detail screens (post, community, user)
+- post detail from Mastodon Redirect
+- back to top after changing feed/sort type
+- separate votes in inbox
+- card and full post layout
+- better haptic feedback
