@@ -67,6 +67,7 @@ class InboxMentionsViewModel(
                     it.copy(
                         swipeActionsEnabled = settings.enableSwipeActions,
                         autoLoadImages = settings.autoLoadImages,
+                        separateUpAndDownVotes = settings.separateUpAndDownVotes,
                     )
                 }
             }.launchIn(this)

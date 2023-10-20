@@ -200,6 +200,7 @@ class InboxRepliesScreen : Tab {
                                     postLayout = uiState.postLayout,
                                     type = InboxCardType.Reply,
                                     autoLoadImages = uiState.autoLoadImages,
+                                    separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                     onOpenPost = { post ->
                                         navigator?.push(
                                             PostDetailScreen(

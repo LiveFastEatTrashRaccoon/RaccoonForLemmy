@@ -22,6 +22,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -40,7 +42,10 @@ fun InboxReplySubtitle(
     community: CommunityModel? = null,
     iconSize: Dp = 20.dp,
     date: String? = null,
-    score: Int,
+    score: Int = 0,
+    upvotes: Int = 0,
+    downvotes: Int = 0,
+    separateUpAndDownVotes: Boolean = false,
     upVoted: Boolean = false,
     downVoted: Boolean = false,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
@@ -198,7 +203,47 @@ fun InboxReplySubtitle(
                 ),
             )
             Text(
-                text = "$score",
+                text = buildAnnotatedString {
+                    if (separateUpAndDownVotes) {
+                        val upvoteText = upvotes.toString()
+                        append(upvoteText)
+                        if (upVoted) {
+                            addStyle(
+                                style = SpanStyle(color = MaterialTheme.colorScheme.surfaceTint),
+                                start = 0,
+                                end = upvoteText.length
+                            )
+                        }
+                        append(" / ")
+                        val downvoteText = downvotes.toString()
+                        append(downvoteText)
+                        if (downVoted) {
+                            addStyle(
+                                style = SpanStyle(color = MaterialTheme.colorScheme.tertiary),
+                                start = upvoteText.length + 3,
+                                end = upvoteText.length + 3 + downvoteText.length
+                            )
+                        }
+                    } else {
+                        val text = score.toString()
+                        append(text)
+                        if (upVoted) {
+                            addStyle(
+                                style = SpanStyle(color = MaterialTheme.colorScheme.surfaceTint),
+                                start = 0,
+                                end = text.length
+                            )
+                        } else if (downVoted) {
+                            addStyle(
+                                style = SpanStyle(color = MaterialTheme.colorScheme.tertiary),
+                                start = 0,
+                                end = length
+                            )
+                        }
+                    }
+                },
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onBackground,
             )
             Image(
                 modifier = buttonModifier

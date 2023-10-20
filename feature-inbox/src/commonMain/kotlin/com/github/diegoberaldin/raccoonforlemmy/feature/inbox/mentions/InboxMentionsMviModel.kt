@@ -28,6 +28,7 @@ interface InboxMentionsMviModel :
         val swipeActionsEnabled: Boolean = true,
         val postLayout: PostLayout = PostLayout.Card,
         val autoLoadImages: Boolean = true,
+        val separateUpAndDownVotes: Boolean = true,
     )
 
     sealed interface Effect {

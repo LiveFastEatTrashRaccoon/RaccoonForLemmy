@@ -171,6 +171,7 @@ class InboxMentionsScreen : Tab {
                                 postLayout = uiState.postLayout,
                                 type = InboxCardType.Mention,
                                 autoLoadImages = uiState.autoLoadImages,
+                                separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                 onOpenPost = { post ->
                                     navigator?.push(
                                         PostDetailScreen(

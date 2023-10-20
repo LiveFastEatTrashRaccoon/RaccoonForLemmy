@@ -9,6 +9,8 @@ data class PersonMentionModel(
     val comment: CommentModel,
     val community: CommunityModel,
     val score: Int,
+    val upvotes: Int,
+    val downvotes: Int,
     val myVote: Int,
     val saved: Boolean,
     val isOwnPost: Boolean = false,

@@ -126,6 +126,14 @@ class CommentRepository(
             !voted -> mention.score - 1
             else -> mention.score
         },
+        upvotes = when {
+            voted -> mention.upvotes + 1
+            else -> mention.upvotes - 1
+        },
+        downvotes = when {
+            mention.myVote < 0 -> mention.downvotes - 1
+            else -> mention.downvotes
+        }
     )
 
     suspend fun upVote(comment: CommentModel, auth: String, voted: Boolean) {
@@ -163,6 +171,14 @@ class CommentRepository(
             !downVoted -> mention.score + 1
             else -> mention.score
         },
+        downvotes = when {
+            downVoted -> mention.downvotes + 1
+            else -> mention.downvotes - 1
+        },
+        upvotes = when {
+            mention.myVote > 0 -> mention.upvotes - 1
+            else -> mention.upvotes
+        }
     )
 
     suspend fun downVote(comment: CommentModel, auth: String, downVoted: Boolean) = runCatching {

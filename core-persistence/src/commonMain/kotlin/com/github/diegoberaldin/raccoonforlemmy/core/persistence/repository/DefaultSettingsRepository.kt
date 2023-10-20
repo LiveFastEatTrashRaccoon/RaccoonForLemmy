@@ -77,7 +77,7 @@ internal class DefaultSettingsRepository(
                         keyStore[KeyStoreKeys.UiTheme, 0]
                     } else null,
                     uiFontScale = keyStore[KeyStoreKeys.UiFontScale, 1f],
-                    uiFontFamily = keyStore[KeyStoreKeys.UiFontFamily, 1],
+                    uiFontFamily = keyStore[KeyStoreKeys.UiFontFamily, 0],
                     contentFontScale = keyStore[KeyStoreKeys.ContentFontScale, 1f],
                     locale = keyStore[KeyStoreKeys.Locale, ""].takeIf { it.isNotEmpty() },
                     defaultListingType = keyStore[KeyStoreKeys.DefaultListingType, 0],

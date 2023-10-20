@@ -387,6 +387,8 @@ class PostDetailScreen(
                                     modifier = Modifier.padding(
                                         top = Spacing.xxs,
                                         bottom = Spacing.s,
+                                        start = Spacing.s,
+                                        end = Spacing.s,
                                     ),
                                     horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
                                 ) {

@@ -172,6 +172,8 @@ internal fun PersonMentionView.toModel() = PersonMentionModel(
     myVote = myVote ?: 0,
     saved = saved,
     publishDate = personMention.published,
+    upvotes = counts.upvotes,
+    downvotes = counts.downvotes,
 )
 
 internal fun CommentReplyView.toModel() = PersonMentionModel(
@@ -206,6 +208,8 @@ internal fun CommentReplyView.toModel() = PersonMentionModel(
     myVote = myVote ?: 0,
     saved = saved,
     publishDate = commentReply.published,
+    upvotes = counts.upvotes,
+    downvotes = counts.downvotes,
 )
 
 internal fun PrivateMessageView.toModel() = PrivateMessageModel(
