@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomWebView
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.rememberWebViewNavigator
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.getShareHelper
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
@@ -34,6 +35,15 @@ class WebViewScreen(
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         var shareHelper = remember { getShareHelper() }
+        val drawerCoordinator = remember { getDrawerCoordinator() }
+
+        DisposableEffect(key) {
+            drawerCoordinator.setGesturesEnabled(false)
+            onDispose {
+                drawerCoordinator.setGesturesEnabled(true)
+            }
+        }
+
         Scaffold(
             topBar = {
                 TopAppBar(

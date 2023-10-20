@@ -209,8 +209,10 @@ fun App() {
                         }
                     }.launchIn(this)
                 }
+                val drawerGestureEnabled by drawerCoordinator.gesturesEnabled.collectAsState()
                 ModalNavigationDrawer(
                     drawerState = drawerState,
+                    gesturesEnabled = drawerGestureEnabled,
                     drawerContent = {
                         ModalDrawerSheet {
                             TabNavigator(ModalDrawerContent)
