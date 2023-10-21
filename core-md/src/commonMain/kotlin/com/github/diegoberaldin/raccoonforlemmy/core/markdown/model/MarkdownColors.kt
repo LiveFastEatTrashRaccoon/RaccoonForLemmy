@@ -13,19 +13,25 @@ interface MarkdownColors {
 
     /** Represents the background color for this [Markdown] component. */
     val backgroundCode: Color
+
+    /** Represents the linl color for this [Markdown] component. */
+    val linkColor: Color
 }
 
 @Immutable
 private class DefaultMarkdownColors(
     override val text: Color,
     override val backgroundCode: Color,
+    override val linkColor: Color,
 ) : MarkdownColors
 
 @Composable
 fun markdownColor(
     text: Color = MaterialTheme.colorScheme.onBackground,
     backgroundCode: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
+    linkColor: Color = MaterialTheme.colorScheme.primary,
 ): MarkdownColors = DefaultMarkdownColors(
     text = text,
     backgroundCode = backgroundCode,
+    linkColor = linkColor,
 )

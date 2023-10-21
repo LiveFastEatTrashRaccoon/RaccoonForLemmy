@@ -113,7 +113,11 @@ internal fun MarkdownOrderedList(
             )
             val text = buildAnnotatedString {
                 pushStyle(style.toSpanStyle())
-                buildMarkdownAnnotatedString(content, child.children.filterNonListTypes())
+                buildMarkdownAnnotatedString(
+                    content = content,
+                    children = child.children.filterNonListTypes(),
+                    linkColor = LocalMarkdownColors.current.linkColor,
+                )
                 pop()
             }
             MarkdownText(
@@ -154,7 +158,11 @@ internal fun MarkdownBulletList(
             )
             val text = buildAnnotatedString {
                 pushStyle(style.toSpanStyle())
-                buildMarkdownAnnotatedString(content, child.children.filterNonListTypes())
+                buildMarkdownAnnotatedString(
+                    content = content,
+                    children = child.children.filterNonListTypes(),
+                    linkColor = LocalMarkdownColors.current.linkColor
+                )
                 pop()
             }
             MarkdownText(
