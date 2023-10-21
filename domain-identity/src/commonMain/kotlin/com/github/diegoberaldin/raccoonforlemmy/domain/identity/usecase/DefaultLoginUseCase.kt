@@ -23,7 +23,7 @@ internal class DefaultLoginUseCase(
         password: String,
         totp2faToken: String?,
     ): Result<Unit> {
-        val oldInstance = apiConfigurationRepository.getInstance()
+        val oldInstance = apiConfigurationRepository.instance.value
         apiConfigurationRepository.changeInstance(instance)
 
         val response = authRepository.login(

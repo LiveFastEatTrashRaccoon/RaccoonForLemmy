@@ -107,7 +107,6 @@ class PostDetailViewModel(
             }
 
             if (highlightCommentId != null) {
-                val auth = identityRepository.authToken.value
                 val comment = commentRepository.getBy(
                     id = highlightCommentId,
                     auth = auth,

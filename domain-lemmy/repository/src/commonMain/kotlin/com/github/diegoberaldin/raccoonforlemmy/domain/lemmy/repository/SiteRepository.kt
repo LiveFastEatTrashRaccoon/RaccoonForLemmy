@@ -9,10 +9,10 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.to
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toModel
 
 class SiteRepository(
-    private val serviceProvider: ServiceProvider,
+    private val services: ServiceProvider,
 ) {
     suspend fun getCurrentUser(auth: String): UserModel? = runCatching {
-        val response = serviceProvider.site.get(
+        val response = services.site.get(
             auth = auth,
             authHeader = auth.toAuthHeader(),
         )
@@ -28,14 +28,14 @@ class SiteRepository(
             instanceId = id,
             block = blocked,
         )
-        serviceProvider.site.block(
+        services.site.block(
             authHeader = auth.toAuthHeader(),
             form = data,
         )
     }
 
     suspend fun getMetadata(url: String): MetadataModel? = runCatching {
-        val response = serviceProvider.site.getSiteMetadata(
+        val response = services.site.getSiteMetadata(
             url = url,
         )
         response.body()?.metadata?.toModel()

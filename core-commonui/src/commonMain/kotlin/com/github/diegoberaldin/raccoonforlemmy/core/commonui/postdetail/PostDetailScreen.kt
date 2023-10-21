@@ -127,7 +127,8 @@ class PostDetailScreen(
         model.bindToLifecycle(key)
         val uiState by model.uiState.collectAsState()
         val isOnOtherInstance = otherInstance.isNotEmpty()
-        val navigator = remember { getNavigationCoordinator().getRootNavigator() }
+        val navigationCoordinator = remember { getNavigationCoordinator() }
+        val navigator = remember { navigationCoordinator.getRootNavigator() }
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
@@ -207,14 +208,16 @@ class PostDetailScreen(
                         )
                     },
                     navigationIcon = {
-                        Image(
-                            modifier = Modifier.onClick {
-                                navigator?.pop()
-                            },
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        if (navigator?.canPop == true) {
+                            Image(
+                                modifier = Modifier.onClick {
+                                    navigator.pop()
+                                },
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                            )
+                        }
                     },
                 )
             },

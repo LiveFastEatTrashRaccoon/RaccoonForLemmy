@@ -31,9 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
-import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
@@ -47,7 +45,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getCommmunityFromUrl
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getCommunityFromUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getPostFromUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.getUserFromUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
@@ -77,12 +75,20 @@ fun App() {
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     var hasBeenInitialized by remember { mutableStateOf(false) }
-    LaunchedEffect(settingsRepository) {
+    val apiConfigurationRepository = remember { getApiConfigurationRepository() }
+
+    LaunchedEffect(accountRepository) {
         val accountId = accountRepository.getActive()?.id
         val currentSettings = settingsRepository.getSettings(accountId)
         settingsRepository.changeCurrentSettings(currentSettings)
+        val lastActiveAccount = accountRepository.getActive()
+        val lastInstance = lastActiveAccount?.instance
+        if (lastInstance != null) {
+            apiConfigurationRepository.changeInstance(lastInstance)
+        }
         hasBeenInitialized = true
     }
+
     val defaultTheme = if (isSystemInDarkTheme()) {
         UiTheme.Dark.toInt()
     } else {
@@ -99,15 +105,6 @@ fun App() {
     languageRepository.currentLanguage.onEach { lang ->
         StringDesc.localeType = StringDesc.LocaleType.Custom(lang)
     }.launchIn(scope)
-
-    val apiConfigurationRepository = remember { getApiConfigurationRepository() }
-    LaunchedEffect(Unit) {
-        val lastActiveAccount = accountRepository.getActive()
-        val lastInstance = lastActiveAccount?.instance
-        if (lastInstance != null) {
-            apiConfigurationRepository.changeInstance(lastInstance)
-        }
-    }
 
     val themeRepository = remember { getThemeRepository() }
     LaunchedEffect(settings) {
@@ -136,6 +133,73 @@ fun App() {
         val lang by languageRepository.currentLanguage.collectAsState()
         LaunchedEffect(lang) {}
 
+        val url = navigationCoordinator.consumeDeeplink()
+        LaunchedEffect(navigationCoordinator, url) {
+            val community = getCommunityFromUrl(url)
+            val user = getUserFromUrl(url)
+            val postAndInstance = getPostFromUrl(url)
+            val newScreen = when {
+                community != null -> {
+                    CommunityDetailScreen(
+                        community = community,
+                        otherInstance = community.host,
+                    )
+                }
+
+                user != null -> {
+                    UserDetailScreen(
+                        user = user,
+                        otherInstance = user.host,
+                    )
+                }
+
+                postAndInstance != null -> {
+                    val (post, otherInstance) = postAndInstance
+                    PostDetailScreen(
+                        post = post,
+                        otherInstance = otherInstance,
+                    )
+                }
+
+                else -> null
+            }
+            if (newScreen != null) {
+                navigationCoordinator.getRootNavigator()?.push(newScreen)
+            }
+        }
+
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val drawerCoordinator = remember { getDrawerCoordinator() }
+        LaunchedEffect(drawerCoordinator) {
+            drawerCoordinator.toggleEvents.onEach { evt ->
+                val navigator = navigationCoordinator.getRootNavigator()
+                when (evt) {
+                    DrawerEvent.Toggled -> {
+                        drawerState.apply {
+                            if (isClosed) open() else close()
+                        }
+                    }
+
+                    is DrawerEvent.OpenCommunity -> {
+                        navigator?.push(CommunityDetailScreen(evt.community))
+                    }
+
+                    is DrawerEvent.OpenMultiCommunity -> {
+                        navigator?.push(MultiCommunityScreen(evt.community))
+                    }
+
+                    DrawerEvent.ManageSubscriptions -> {
+                        navigator?.push(ManageSubscriptionsScreen())
+                    }
+
+                    DrawerEvent.OpenBookmarks -> {
+                        navigator?.push(SavedItemsScreen())
+                    }
+                }
+            }.launchIn(this)
+        }
+        val drawerGestureEnabled by drawerCoordinator.gesturesEnabled.collectAsState()
+
         CompositionLocalProvider(
             LocalDensity provides Density(
                 density = LocalDensity.current.density,
@@ -143,73 +207,12 @@ fun App() {
             ),
         ) {
             BottomSheetNavigator(
-                sheetShape = RoundedCornerShape(topStart = CornerSize.xl, topEnd = CornerSize.xl),
+                sheetShape = RoundedCornerShape(
+                    topStart = CornerSize.xl,
+                    topEnd = CornerSize.xl
+                ),
                 sheetBackgroundColor = MaterialTheme.colorScheme.background,
             ) {
-                val screens: List<Screen> = remember(navigationCoordinator.deeplinkUrl) {
-                    val url = navigationCoordinator.deeplinkUrl.value.orEmpty()
-                    val community = getCommmunityFromUrl(url)
-                    val user = getUserFromUrl(url)
-                    val postAndInstance = getPostFromUrl(url)
-                    buildList {
-                        if (community != null) {
-                            add(
-                                CommunityDetailScreen(
-                                    community = community,
-                                    otherInstance = community.host,
-                                )
-                            )
-                        } else if (user != null) {
-                            add(
-                                UserDetailScreen(
-                                    user = user,
-                                    otherInstance = user.host,
-                                )
-                            )
-                        } else if (postAndInstance != null) {
-                            val (post, otherInstance) = postAndInstance
-                            add(
-                                PostDetailScreen(
-                                    post = post,
-                                    otherInstance = otherInstance,
-                                )
-                            )
-                        } else {
-                            add(MainScreen())
-                        }
-                    }
-                }
-                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                val drawerCoordinator = remember { getDrawerCoordinator() }
-                LaunchedEffect(drawerCoordinator) {
-                    drawerCoordinator.toggleEvents.onEach { evt ->
-                        val navigator = navigationCoordinator.getRootNavigator()
-                        when (evt) {
-                            DrawerEvent.Toggled -> {
-                                drawerState.apply {
-                                    if (isClosed) open() else close()
-                                }
-                            }
-
-                            is DrawerEvent.OpenCommunity -> {
-                                navigator?.push(CommunityDetailScreen(evt.community))
-                            }
-
-                            is DrawerEvent.OpenMultiCommunity -> {
-                                navigator?.push(MultiCommunityScreen(evt.community))
-                            }
-
-                            DrawerEvent.ManageSubscriptions -> {
-                                navigator?.push(ManageSubscriptionsScreen())
-                            }
-
-                            DrawerEvent.OpenBookmarks -> {
-                                navigator?.push(SavedItemsScreen())
-                            }
-                        }
-                    }.launchIn(this)
-                }
-                val drawerGestureEnabled by drawerCoordinator.gesturesEnabled.collectAsState()
                 ModalNavigationDrawer(
                     drawerState = drawerState,
                     gesturesEnabled = drawerGestureEnabled,
@@ -217,21 +220,19 @@ fun App() {
                         ModalDrawerSheet {
                             TabNavigator(ModalDrawerContent)
                         }
-                    }
+                    },
                 ) {
                     Navigator(
-                        screens = screens,
+                        screen = MainScreen,
                         onBackPressed = {
                             val callback = navigationCoordinator.getCanGoBackCallback()
                             callback?.let { it() } ?: true
                         }
-                    ) {
-                        val navigator = LocalNavigator.current
+                    ) { navigator ->
                         navigationCoordinator.setRootNavigator(navigator)
                         if (hasBeenInitialized) {
                             CurrentScreen()
                         } else {
-                            // loading screen
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center,

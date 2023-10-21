@@ -8,7 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.to
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toModel
 
 class PrivateMessageRepository(
-    private val serviceProvider: ServiceProvider,
+    private val services: ServiceProvider,
 ) {
     suspend fun getAll(
         auth: String? = null,
@@ -16,7 +16,7 @@ class PrivateMessageRepository(
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         unreadOnly: Boolean = true,
     ): List<PrivateMessageModel>? = runCatching {
-        val response = serviceProvider.privateMessages.getPrivateMessages(
+        val response = services.privateMessages.getPrivateMessages(
             authHeader = auth.toAuthHeader(),
             auth = auth,
             limit = limit,
@@ -37,7 +37,7 @@ class PrivateMessageRepository(
             auth = auth.orEmpty(),
             recipientId = recipiendId,
         )
-        serviceProvider.privateMessages.createPrivateMessage(
+        services.privateMessages.createPrivateMessage(
             authHeader = auth.toAuthHeader(),
             form = data,
         )
@@ -53,7 +53,7 @@ class PrivateMessageRepository(
             auth = auth.orEmpty(),
             read = read,
         )
-        serviceProvider.privateMessages.markPrivateMessageAsRead(
+        services.privateMessages.markPrivateMessageAsRead(
             authHeader = auth.toAuthHeader(),
             form = data,
         )

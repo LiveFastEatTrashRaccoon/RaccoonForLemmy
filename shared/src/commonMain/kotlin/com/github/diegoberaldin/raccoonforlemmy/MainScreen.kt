@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.roundToInt
 
-internal class MainScreen : Screen {
+internal object MainScreen : Screen {
 
     @Composable
     override fun Content() {

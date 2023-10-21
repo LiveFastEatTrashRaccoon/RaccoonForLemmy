@@ -1,12 +1,10 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface ApiConfigurationRepository {
 
-    val instance: Flow<String>
-
-    fun getInstance(): String
+    val instance: StateFlow<String>
 
     fun changeInstance(value: String)
 }

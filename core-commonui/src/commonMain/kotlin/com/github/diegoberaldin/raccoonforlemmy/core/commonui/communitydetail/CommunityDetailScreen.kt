@@ -213,14 +213,16 @@ class CommunityDetailScreen(
                     )
                 },
                 navigationIcon = {
-                    Image(
-                        modifier = Modifier.onClick {
-                            navigator?.pop()
-                        },
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                    )
+                    if (navigator?.canPop == true) {
+                        Image(
+                            modifier = Modifier.onClick {
+                                navigator.pop()
+                            },
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                        )
+                    }
                 },
             )
         }, floatingActionButton = {

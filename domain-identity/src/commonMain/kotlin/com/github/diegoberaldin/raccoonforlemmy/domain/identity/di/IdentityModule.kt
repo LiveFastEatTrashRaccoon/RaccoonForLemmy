@@ -12,12 +12,13 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase.DefaultS
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase.LoginUseCase
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase.LogoutUseCase
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase.SwitchAccountUseCase
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val coreIdentityModule = module {
     single<ApiConfigurationRepository> {
         DefaultApiConfigurationRepository(
-            serviceProvider = get(),
+            serviceProvider = get(named("default")),
         )
     }
     single<IdentityRepository> {
@@ -27,7 +28,7 @@ val coreIdentityModule = module {
     }
     single<AuthRepository> {
         DefaultAuthRepository(
-            services = get(),
+            services = get(named("default")),
         )
     }
     single<LoginUseCase> {
@@ -52,7 +53,7 @@ val coreIdentityModule = module {
             identityRepository = get(),
             accountRepository = get(),
             settingsRepository = get(),
-            serviceProvider = get(),
+            serviceProvider = get(named("default")),
             notificationCenter = get(),
         )
     }

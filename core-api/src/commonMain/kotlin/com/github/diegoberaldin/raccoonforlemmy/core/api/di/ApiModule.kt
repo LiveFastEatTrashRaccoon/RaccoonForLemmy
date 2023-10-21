@@ -6,7 +6,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val coreApiModule = module {
-    single<ServiceProvider> {
+    single<ServiceProvider>(named("default")) {
         DefaultServiceProvider()
     }
     single<ServiceProvider>(named("custom")) {

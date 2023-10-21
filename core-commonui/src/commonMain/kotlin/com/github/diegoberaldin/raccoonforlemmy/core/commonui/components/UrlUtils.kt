@@ -9,7 +9,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
-fun getCommmunityFromUrl(url: String): CommunityModel? {
+fun getCommunityFromUrl(url: String?): CommunityModel? {
     val (normalizedUrl, instance) = normalizeUrl(url)
     val res = extractCommunity(normalizedUrl)
     return if (res != null && res.host.isEmpty()) {
@@ -19,7 +19,7 @@ fun getCommmunityFromUrl(url: String): CommunityModel? {
     }
 }
 
-fun getUserFromUrl(url: String): UserModel? {
+fun getUserFromUrl(url: String?): UserModel? {
     val (normalizedUrl, instance) = normalizeUrl(url)
     val res = extractUser(normalizedUrl)
     return if (res != null && res.host.isEmpty()) {
@@ -29,10 +29,10 @@ fun getUserFromUrl(url: String): UserModel? {
     }
 }
 
-fun getPostFromUrl(url: String): Pair<PostModel, String>? {
+fun getPostFromUrl(url: String?): Pair<PostModel, String>? {
     val (normalizedUrl, instance) = normalizeUrl(url)
     val post = extractPost(normalizedUrl)
-    return if (post != null && instance != null) {
+    return if (post != null && instance.isNotEmpty()) {
         post to instance
     } else {
         null
@@ -45,7 +45,7 @@ fun handleUrl(
     uriHandler: UriHandler,
     navigator: Navigator? = null,
 ) {
-    val community = getCommmunityFromUrl(url)
+    val community = getCommunityFromUrl(url)
     val user = getUserFromUrl(url)
 
     when {
@@ -79,8 +79,8 @@ fun handleUrl(
     }
 }
 
-private fun normalizeUrl(url: String): Pair<String, String> {
-    val matches = Regex("https?://(?<instance>.*?)(?<pathAndQuery>/.*)").findAll(url)
+private fun normalizeUrl(url: String?): Pair<String, String> {
+    val matches = Regex("https?://(?<instance>.*?)(?<pathAndQuery>/.*)").findAll(url.orEmpty())
     var instance = ""
     val res = buildString {
         if (matches.count() > 0) {

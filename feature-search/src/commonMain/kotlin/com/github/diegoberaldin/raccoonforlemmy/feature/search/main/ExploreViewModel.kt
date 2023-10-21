@@ -66,7 +66,7 @@ class ExploreViewModel(
         mvi.onStarted()
         mvi.updateState {
             it.copy(
-                instance = apiConfigRepository.getInstance(),
+                instance = apiConfigRepository.instance.value,
             )
         }
         mvi.scope?.launch(Dispatchers.Main) {

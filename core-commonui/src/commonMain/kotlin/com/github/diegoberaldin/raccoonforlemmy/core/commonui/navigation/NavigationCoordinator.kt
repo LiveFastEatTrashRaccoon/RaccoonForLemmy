@@ -3,18 +3,20 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface NavigationCoordinator {
 
-    val deeplinkUrl: StateFlow<String?>
-    val onDoubleTabSelection: SharedFlow<Tab>
+    val onDoubleTabSelection: Flow<Tab>
     val inboxUnread: StateFlow<Int>
+    val deepLinkUrl: StateFlow<String?>
 
     fun setCurrentSection(tab: Tab)
 
-    fun submitDeeplink(url: String?)
+    fun consumeDeeplink(): String?
+
+    fun submitDeeplink(url: String)
 
     fun setRootNavigator(value: Navigator?)
 

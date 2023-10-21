@@ -57,26 +57,6 @@ internal class DefaultServiceProvider : ServiceProvider {
 
     private val factory = provideHttpClientEngineFactory()
 
-    private val client = HttpClient(factory) {
-        defaultRequest {
-            url {
-                host = currentInstance
-            }
-        }
-        install(HttpTimeout) {
-            requestTimeoutMillis = 600_000
-            connectTimeoutMillis = 30_000
-            socketTimeoutMillis = 30_000
-        }
-        install(Logging) {
-            logger = defaultLogger
-            level = LogLevel.ALL
-        }
-        install(ContentNegotiation) {
-            json(Json { isLenient = true; ignoreUnknownKeys = true })
-        }
-    }
-
     init {
         reinitialize()
     }
@@ -87,6 +67,25 @@ internal class DefaultServiceProvider : ServiceProvider {
     }
 
     private fun reinitialize() {
+        val client = HttpClient(factory) {
+            defaultRequest {
+                url {
+                    host = currentInstance
+                }
+            }
+            install(HttpTimeout) {
+                requestTimeoutMillis = 600_000
+                connectTimeoutMillis = 30_000
+                socketTimeoutMillis = 30_000
+            }
+            install(Logging) {
+                logger = defaultLogger
+                level = LogLevel.ALL
+            }
+            install(ContentNegotiation) {
+                json(Json { isLenient = true; ignoreUnknownKeys = true })
+            }
+        }
         val ktorfit = Ktorfit.Builder()
             .baseUrl(baseUrl)
             .httpClient(client)

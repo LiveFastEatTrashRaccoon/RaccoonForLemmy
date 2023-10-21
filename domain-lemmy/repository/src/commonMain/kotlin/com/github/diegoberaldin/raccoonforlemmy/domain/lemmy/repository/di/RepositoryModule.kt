@@ -6,25 +6,42 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepo
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
-import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val repositoryModule = module {
     single {
         PostRepository(
-            services = get(),
+            services = get(named("default")),
             customServices = get(named("custom")),
         )
     }
     single {
         CommunityRepository(
-            services = get(),
+            services = get(named("default")),
             customServices = get(named("custom")),
         )
     }
-    singleOf(::UserRepository)
-    singleOf(::SiteRepository)
-    singleOf(::CommentRepository)
-    singleOf(::PrivateMessageRepository)
+    single {
+        UserRepository(
+            services = get(named("default")),
+            customServices = get(named("custom")),
+        )
+    }
+    single {
+        SiteRepository(
+            services = get(named("default")),
+        )
+    }
+    single {
+        CommentRepository(
+            services = get(named("default")),
+            customServices = get(named("custom")),
+        )
+    }
+    single {
+        PrivateMessageRepository(
+            services = get(named("default")),
+        )
+    }
 }

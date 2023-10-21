@@ -7,12 +7,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.launch
 
 internal class DefaultNavigationCoordinator : NavigationCoordinator {
 
     override val onDoubleTabSelection = MutableSharedFlow<Tab>()
-    override val deeplinkUrl = MutableStateFlow<String?>(null)
+    override val deepLinkUrl = MutableStateFlow<String?>(null)
 
     private var connection: NestedScrollConnection? = null
     private var navigator: Navigator? = null
@@ -43,8 +44,10 @@ internal class DefaultNavigationCoordinator : NavigationCoordinator {
         }
     }
 
-    override fun submitDeeplink(url: String?) {
-        deeplinkUrl.value = url
+    override fun consumeDeeplink(): String? = deepLinkUrl.getAndUpdate { null }
+
+    override fun submitDeeplink(url: String) {
+        deepLinkUrl.value = url
     }
 
     override fun setCanGoBackCallback(value: (() -> Boolean)?) {
