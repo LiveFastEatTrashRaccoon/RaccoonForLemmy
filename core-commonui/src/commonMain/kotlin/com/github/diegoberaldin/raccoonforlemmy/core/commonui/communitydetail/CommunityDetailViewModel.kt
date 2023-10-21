@@ -37,6 +37,7 @@ class CommunityDetailViewModel(
     CommunityDetailMviModel {
 
     private var currentPage: Int = 1
+    private var pageCursor: String? = null
 
     override fun onStarted() {
         mvi.onStarted()
@@ -107,11 +108,13 @@ class CommunityDetailViewModel(
             )
 
             CommunityDetailMviModel.Intent.Block -> blockCommunity()
+            CommunityDetailMviModel.Intent.BlockInstance -> blockInstance()
         }
     }
 
     private fun refresh() {
         currentPage = 1
+        pageCursor = null
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
         val auth = identityRepository.authToken.value
         mvi.scope?.launch(Dispatchers.IO) {
@@ -153,11 +156,12 @@ class CommunityDetailViewModel(
             val refreshing = currentState.refreshing
             val sort = currentState.sortType
             val communityId = currentState.community.id
-            val itemList = if (otherInstance.isNotEmpty()) {
+            val (itemList, nextPage) = if (otherInstance.isNotEmpty()) {
                 postRepository.getAll(
                     instance = otherInstance,
                     communityId = communityId,
                     page = currentPage,
+                    pageCursor = pageCursor,
                     sort = sort,
                 )
             } else {
@@ -165,11 +169,27 @@ class CommunityDetailViewModel(
                     auth = auth,
                     communityId = communityId,
                     page = currentPage,
+                    pageCursor = pageCursor,
                     sort = sort,
                 )
-            }
+            }?.let {
+                if (refreshing) {
+                    it
+                } else {
+                    // prevents accidental duplication
+                    val posts = it.first
+                    it.copy(
+                        first = posts.filter { p1 ->
+                            currentState.posts.none { p2 -> p2.id == p1.id }
+                        },
+                    )
+                }
+            } ?: (null to null)
             if (!itemList.isNullOrEmpty()) {
                 currentPage++
+            }
+            if (nextPage != null) {
+                pageCursor = nextPage
             }
             mvi.updateState {
                 val newItems = if (refreshing) {
@@ -375,6 +395,22 @@ class CommunityDetailViewModel(
                 val communityId = community.id
                 val auth = identityRepository.authToken.value
                 communityRepository.block(communityId, true, auth).getOrThrow()
+                mvi.emitEffect(CommunityDetailMviModel.Effect.BlockSuccess)
+            } catch (e: Throwable) {
+                mvi.emitEffect(CommunityDetailMviModel.Effect.BlockError(e.message))
+            } finally {
+                mvi.updateState { it.copy(asyncInProgress = false) }
+            }
+        }
+    }
+
+    private fun blockInstance() {
+        mvi.updateState { it.copy(asyncInProgress = true) }
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val instanceId = community.instanceId
+                val auth = identityRepository.authToken.value
+                siteRepository.block(instanceId, true, auth).getOrThrow()
                 mvi.emitEffect(CommunityDetailMviModel.Effect.BlockSuccess)
             } catch (e: Throwable) {
                 mvi.emitEffect(CommunityDetailMviModel.Effect.BlockError(e.message))

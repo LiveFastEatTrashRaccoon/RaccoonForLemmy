@@ -9,6 +9,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvide
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toModel
 import io.ktor.client.request.forms.MultiPartFormDataContent
@@ -28,17 +29,20 @@ class PostRepository(
     suspend fun getAll(
         auth: String? = null,
         page: Int,
+        pageCursor: String? = null,
         limit: Int = DEFAULT_PAGE_SIZE,
         type: ListingType = ListingType.Local,
         sort: SortType = SortType.Active,
         communityId: Int? = null,
         instance: String? = null,
-    ): List<PostModel>? = runCatching {
+    ): Pair<List<PostModel>, String?>? = runCatching {
         val response = if (instance.isNullOrEmpty()) {
             services.post.getAll(
+                authHeader = auth.toAuthHeader(),
                 auth = auth,
                 communityId = communityId,
                 page = page,
+                pageCursor = pageCursor,
                 limit = limit,
                 type = type.toDto(),
                 sort = sort.toDto(),
@@ -48,13 +52,15 @@ class PostRepository(
             customServices.post.getAll(
                 communityId = communityId,
                 page = page,
+                pageCursor = pageCursor,
                 limit = limit,
                 type = type.toDto(),
                 sort = sort.toDto(),
             )
         }
-        val dto = response.body()?.posts ?: emptyList()
-        dto.map { it.toModel() }
+        val body = response.body()
+        val posts = body?.posts?.map { it.toModel() } ?: emptyList()
+        posts to body?.nextPage
     }.getOrNull()
 
     suspend fun get(
@@ -63,7 +69,11 @@ class PostRepository(
         instance: String? = null,
     ): PostModel? = runCatching {
         val response = if (instance.isNullOrEmpty()) {
-            services.post.get(auth, id).body()
+            services.post.get(
+                authHeader = auth.toAuthHeader(),
+                auth = auth,
+                id = id,
+            ).body()
         } else {
             customServices.changeInstance(instance)
             customServices.post.get(id = id).body()
@@ -98,7 +108,10 @@ class PostRepository(
             score = if (voted) 1 else 0,
             auth = auth,
         )
-        services.post.like(data)
+        services.post.like(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
     }
 
     fun asDownVoted(post: PostModel, downVoted: Boolean) = post.copy(
@@ -125,7 +138,10 @@ class PostRepository(
             score = if (downVoted) -1 else 0,
             auth = auth,
         )
-        services.post.like(data)
+        services.post.like(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
     }
 
     fun asSaved(post: PostModel, saved: Boolean): PostModel = post.copy(saved = saved)
@@ -136,7 +152,10 @@ class PostRepository(
             save = saved,
             auth = auth,
         )
-        services.post.save(data)
+        services.post.save(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
     }
 
     suspend fun create(
@@ -155,7 +174,10 @@ class PostRepository(
             nsfw = nsfw,
             auth = auth,
         )
-        services.post.create(data)
+        services.post.create(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
     }
 
     suspend fun edit(
@@ -174,7 +196,10 @@ class PostRepository(
             nsfw = nsfw,
             auth = auth,
         )
-        services.post.edit(data)
+        services.post.edit(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
     }
 
     suspend fun delete(id: Int, auth: String) {
@@ -183,7 +208,10 @@ class PostRepository(
             deleted = true,
             auth = auth
         )
-        services.post.delete(data)
+        services.post.delete(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
     }
 
     suspend fun uploadImage(auth: String, bytes: ByteArray): String? = try {
@@ -194,7 +222,12 @@ class PostRepository(
                 append(HttpHeaders.ContentDisposition, "filename=image.jpeg")
             })
         })
-        val images = services.post.uploadImage(url, "jwt=$auth", multipart).body()
+        val images = services.post.uploadImage(
+            url = url,
+            token = "jwt=$auth",
+            authHeader = auth.toAuthHeader(),
+            content = multipart,
+        ).body()
         "$url/${images?.files?.firstOrNull()?.file}"
     } catch (e: Exception) {
         e.printStackTrace()

@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetPostsResponse(
-    @SerialName("posts") val posts: List<PostView>,
-    @SerialName("next_page") val nextPage: String? = null,
+data class BlockSiteForm(
+    @SerialName("instance_id") val instanceId: InstanceId,
+    @SerialName("block") val block: Boolean,
 )
