@@ -7,28 +7,24 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.toSize
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -38,46 +34,44 @@ fun ZoomableImage(
     url: String,
     autoLoadImages: Boolean = false,
 ) {
-
-    var size by remember { mutableStateOf(Size.Zero) }
-    var scale by remember { mutableStateOf(1f) }
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
-    val transformableState = rememberTransformableState { zoom, pan, _ ->
-        scale = (scale * zoom).coerceIn(0.5f, 3f)
-        offsetX = (offsetX + pan.x).coerceIn(-size.width / scale, size.width / scale)
-        offsetY = (offsetY + pan.y).coerceIn(-size.height / scale, size.height / scale)
+    var scale by remember {
+        mutableStateOf(1f)
+    }
+    var offset by remember {
+        mutableStateOf(Offset.Zero)
     }
 
-    LaunchedEffect(transformableState.isTransformInProgress) {
-        if (!transformableState.isTransformInProgress) {
-            if (scale < 1.1f) {
-                scale = 1f
-                offsetX = 0f
-                offsetY = 0f
-            }
-        }
-    }
-
-    Box(
+    BoxWithConstraints(
         modifier = modifier
-            .clip(RectangleShape)
-            .fillMaxSize()
-            .background(Color.Black)
-            .onGloballyPositioned {
-                size = it.size.toSize()
-            }
-            .transformable(transformableState, lockRotationOnZoomPan = true)
     ) {
+        val transformableState =
+            rememberTransformableState { zoomChange, panChange, _ ->
+                scale = (scale * zoomChange).coerceIn(1f, 5f)
+
+                val extraWidth = (scale - 1) * constraints.maxWidth
+                val extraHeight = (scale - 1) * constraints.maxHeight
+
+                val maxX = extraWidth / 2
+                val maxY = extraHeight / 2
+
+                offset = Offset(
+                    x = (offset.x + scale * panChange.x).coerceIn(-maxX, maxX),
+                    y = (offset.y + scale * panChange.y).coerceIn(-maxY, maxY),
+                )
+            }
+
         CustomImage(
             modifier = Modifier
-                .align(Alignment.Center)
+                .clip(RectangleShape)
+                .fillMaxSize()
+                .background(Color.Black)
                 .graphicsLayer(
                     scaleX = scale,
                     scaleY = scale,
-                    translationX = offsetX,
-                    translationY = offsetY,
-                ),
+                    translationX = offset.x,
+                    translationY = offset.y,
+                )
+                .transformable(transformableState),
             url = url,
             autoload = autoLoadImages,
             contentDescription = null,
