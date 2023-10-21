@@ -1,0 +1,5 @@
+ALTER TABLE SettingsEntity
+ADD COLUMN upvoteColor INTEGER DEFAULT NULL;
+
+ALTER TABLE SettingsEntity
+ADD COLUMN downvoteColor INTEGER DEFAULT NULL;

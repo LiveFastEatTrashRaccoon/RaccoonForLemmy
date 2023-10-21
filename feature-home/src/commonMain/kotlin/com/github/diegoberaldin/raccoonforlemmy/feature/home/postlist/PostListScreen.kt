@@ -90,6 +90,11 @@ class PostListScreen : Screen {
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val navigator = remember { navigationCoordinator.getRootNavigator() }
         val notificationCenter = remember { getNotificationCenter() }
+        val themeRepository = remember { getThemeRepository() }
+        val upvoteColor by themeRepository.upvoteColor.collectAsState()
+        val downvoteColor by themeRepository.downvoteColor.collectAsState()
+        val defaultUpvoteColor = MaterialTheme.colorScheme.primary
+        val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
         DisposableEffect(key) {
             onDispose {
                 notificationCenter.removeObserver(key)
@@ -189,7 +194,6 @@ class PostListScreen : Screen {
                             }
                         }
                         itemsIndexed(uiState.posts) { idx, post ->
-                            val themeRepository = remember { getThemeRepository() }
                             val fontScale by themeRepository.contentFontScale.collectAsState()
                             CompositionLocalProvider(
                                 LocalDensity provides Density(
@@ -202,8 +206,12 @@ class PostListScreen : Screen {
                                     enabled = uiState.swipeActionsEnabled,
                                     backgroundColor = {
                                         when (it) {
-                                            DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
-                                            DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
+                                            DismissValue.DismissedToStart -> upvoteColor
+                                                ?: defaultUpvoteColor
+
+                                            DismissValue.DismissedToEnd -> downvoteColor
+                                                ?: defaultDownVoteColor
+
                                             DismissValue.Default -> Color.Transparent
                                         }
                                     },

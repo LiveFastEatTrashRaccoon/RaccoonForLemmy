@@ -19,6 +19,8 @@ data class SettingsModel(
     val openUrlsInExternalBrowser: Boolean = false,
     val enableSwipeActions: Boolean = true,
     val customSeedColor: Int? = null,
+    val upvoteColor: Int? = null,
+    val downvoteColor: Int? = null,
     val postLayout: Int = 0,
     val fullHeightImages: Boolean = true,
     val separateUpAndDownVotes: Boolean = false,

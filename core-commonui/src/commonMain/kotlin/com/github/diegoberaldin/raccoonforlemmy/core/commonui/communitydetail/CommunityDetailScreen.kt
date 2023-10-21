@@ -63,6 +63,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.CommunityInfoScreen
@@ -135,6 +136,11 @@ class CommunityDetailScreen(
             }
         }
         val notificationCenter = remember { getNotificationCenter() }
+        val themeRepository = remember { getThemeRepository() }
+        val upvoteColor by themeRepository.upvoteColor.collectAsState()
+        val downvoteColor by themeRepository.downvoteColor.collectAsState()
+        val defaultUpvoteColor = MaterialTheme.colorScheme.primary
+        val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
         DisposableEffect(key) {
             onDispose {
                 notificationCenter.removeObserver(key)
@@ -335,8 +341,12 @@ class CommunityDetailScreen(
                                 enabled = uiState.swipeActionsEnabled && !isOnOtherInstance,
                                 backgroundColor = {
                                     when (it) {
-                                        DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
-                                        DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
+                                        DismissValue.DismissedToStart -> upvoteColor
+                                            ?: defaultUpvoteColor
+
+                                        DismissValue.DismissedToEnd -> downvoteColor
+                                            ?: defaultDownVoteColor
+
                                         else -> Color.Transparent
                                     }
                                 },

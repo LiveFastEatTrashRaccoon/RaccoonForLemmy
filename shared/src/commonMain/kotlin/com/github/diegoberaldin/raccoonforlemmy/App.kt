@@ -107,6 +107,7 @@ fun App() {
     }.launchIn(scope)
 
     val themeRepository = remember { getThemeRepository() }
+
     LaunchedEffect(settings) {
         with(themeRepository) {
             changeUiTheme((settings.theme ?: defaultTheme).toUiTheme())
@@ -117,6 +118,11 @@ fun App() {
             changeContentFontScale(settings.contentFontScale)
             changeUiFontScale(settings.uiFontScale)
             changeUiFontFamily(settings.uiFontFamily.toUiFontFamily())
+
+            with(themeRepository) {
+                changeUpvoteColor(settings.upvoteColor?.let { Color(it) })
+                changeDownvoteColor(settings.downvoteColor?.let { Color(it) })
+            }
         }
     }
     val currentTheme by themeRepository.uiTheme.collectAsState()

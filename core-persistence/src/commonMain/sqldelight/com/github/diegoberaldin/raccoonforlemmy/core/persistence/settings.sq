@@ -20,6 +20,8 @@ CREATE TABLE SettingsEntity (
     autoLoadImages INTEGER NOT NULL DEFAULT 1,
     autoExpandComments INTEGER NOT NULL DEFAULT 1,
     fullHeightImages INTEGER NOT NULL DEFAULT 1,
+    upvoteColor INTEGER DEFAULT NULL,
+    downvoteColor INTEGER DEFAULT NULL,
     account_id INTEGER,
     FOREIGN KEY (account_id) REFERENCES AccountEntity(id) ON DELETE CASCADE,
     UNIQUE(account_id)
@@ -47,8 +49,12 @@ INSERT OR IGNORE INTO SettingsEntity (
     autoLoadImages,
     autoExpandComments,
     fullHeightImages,
+    upvoteColor,
+    downvoteColor,
     account_id
 ) VALUES (
+    ?,
+    ?,
     ?,
     ?,
     ?,
@@ -93,7 +99,9 @@ SET theme = ?,
     separateUpAndDownVotes = ?,
     autoLoadImages = ?,
     autoExpandComments = ?,
-    fullHeightImages = ?
+    fullHeightImages = ?,
+    upvoteColor = ?,
+    downvoteColor = ?
 WHERE account_id = ?;
 
 getBy:
@@ -118,6 +126,8 @@ SELECT
     separateUpAndDownVotes,
     autoLoadImages,
     autoExpandComments,
-    fullHeightImages
+    fullHeightImages,
+    upvoteColor,
+    downvoteColor
 FROM SettingsEntity
 WHERE account_id = ?;

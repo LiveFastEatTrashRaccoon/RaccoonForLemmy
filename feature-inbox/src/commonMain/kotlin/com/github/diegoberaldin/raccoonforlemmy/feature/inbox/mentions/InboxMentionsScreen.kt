@@ -129,7 +129,7 @@ class InboxMentionsScreen : Tab {
                         enabled = uiState.swipeActionsEnabled,
                         backgroundColor = {
                             when (it) {
-                                DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
+                                DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
                                 DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
                                 else -> Color.Transparent
                             }

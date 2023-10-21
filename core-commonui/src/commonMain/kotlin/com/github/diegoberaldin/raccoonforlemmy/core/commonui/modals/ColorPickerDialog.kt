@@ -37,6 +37,7 @@ fun ColorPickerDialog(
     initialValue: Color = Color.Black,
     onClose: (() -> Unit)? = null,
     onSubmit: ((Color) -> Unit)? = null,
+    onReset: (() -> Unit)? = null,
 ) {
     var currentColor by remember { mutableStateOf(initialValue) }
     AlertDialog(
@@ -143,15 +144,31 @@ fun ColorPickerDialog(
 
             Spacer(modifier = Modifier.height(Spacing.xs))
 
-            Button(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = {
-                    if (initialValue != currentColor) {
-                        onSubmit?.invoke(currentColor)
-                    }
-                },
+            Row(
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(text = stringResource(MR.strings.button_confirm))
+                if (onReset != null) {
+                    Button(
+                        onClick = {
+                            onReset?.invoke()
+                        },
+                    ) {
+                        Text(text = stringResource(MR.strings.button_reset))
+                    }
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    onClick = {
+                        if (initialValue != currentColor) {
+                            onSubmit?.invoke(currentColor)
+                        }
+                    },
+                ) {
+                    Text(text = stringResource(MR.strings.button_confirm))
+                }
+                if (onReset == null) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
         }
     }

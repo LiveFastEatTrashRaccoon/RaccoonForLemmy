@@ -16,6 +16,8 @@ internal class DefaultThemeRepository : ThemeRepository {
     override val navItemTitles = MutableStateFlow(false)
     override val dynamicColors = MutableStateFlow(false)
     override val customSeedColor = MutableStateFlow<Color?>(null)
+    override val upvoteColor = MutableStateFlow<Color?>(null)
+    override val downvoteColor = MutableStateFlow<Color?>(null)
     override val postLayout = MutableStateFlow<PostLayout>(PostLayout.Card)
 
     override fun changeUiTheme(value: UiTheme) {
@@ -73,6 +75,14 @@ internal class DefaultThemeRepository : ThemeRepository {
 
     override fun changeCustomSeedColor(color: Color?) {
         customSeedColor.value = color
+    }
+
+    override fun changeUpvoteColor(color: Color?) {
+        upvoteColor.value = color
+    }
+
+    override fun changeDownvoteColor(color: Color?) {
+        downvoteColor.value = color
     }
 
     override fun changePostLayout(value: PostLayout) {

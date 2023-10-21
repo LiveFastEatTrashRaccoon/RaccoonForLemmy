@@ -102,6 +102,11 @@ class MultiCommunityScreen(
         val bottomNavCoordinator = remember { getNavigationCoordinator() }
         val navigator = remember { bottomNavCoordinator.getRootNavigator() }
         val notificationCenter = remember { getNotificationCenter() }
+        val themeRepository = remember { getThemeRepository() }
+        val upvoteColor by themeRepository.upvoteColor.collectAsState()
+        val downvoteColor by themeRepository.downvoteColor.collectAsState()
+        val defaultUpvoteColor = MaterialTheme.colorScheme.primary
+        val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
         val lazyListState = rememberLazyListState()
         val scope = rememberCoroutineScope()
         val isFabVisible = remember { mutableStateOf(true) }
@@ -263,8 +268,12 @@ class MultiCommunityScreen(
                                 enabled = uiState.swipeActionsEnabled,
                                 backgroundColor = {
                                     when (it) {
-                                        DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
-                                        DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
+                                        DismissValue.DismissedToStart -> upvoteColor
+                                            ?: defaultUpvoteColor
+
+                                        DismissValue.DismissedToEnd -> downvoteColor
+                                            ?: defaultDownVoteColor
+
                                         DismissValue.Default -> Color.Transparent
                                     }
                                 },

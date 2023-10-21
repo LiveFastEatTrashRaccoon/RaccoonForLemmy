@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.DateTime
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
@@ -61,6 +63,11 @@ fun PostCardFooter(
 ) {
     var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
+    val themeRepository = remember { getThemeRepository() }
+    val upvoteColor by themeRepository.upvoteColor.collectAsState()
+    val downvoteColor by themeRepository.downvoteColor.collectAsState()
+    val defaultUpvoteColor = MaterialTheme.colorScheme.primary
+    val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
 
     Box(modifier = modifier) {
         Row(
@@ -166,7 +173,7 @@ fun PostCardFooter(
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
                     color = if (upVoted) {
-                        MaterialTheme.colorScheme.surfaceTint
+                        upvoteColor ?: defaultUpvoteColor
                     } else {
                         MaterialTheme.colorScheme.onSurface
                     },
@@ -179,7 +186,7 @@ fun PostCardFooter(
                         append(upvoteText)
                         if (upVoted) {
                             addStyle(
-                                style = SpanStyle(color = MaterialTheme.colorScheme.surfaceTint),
+                                style = SpanStyle(color = upvoteColor ?: defaultUpvoteColor),
                                 start = 0,
                                 end = upvoteText.length
                             )
@@ -189,7 +196,7 @@ fun PostCardFooter(
                         append(downvoteText)
                         if (downVoted) {
                             addStyle(
-                                style = SpanStyle(color = MaterialTheme.colorScheme.tertiary),
+                                style = SpanStyle(color = downvoteColor ?: defaultDownVoteColor),
                                 start = upvoteText.length + 3,
                                 end = upvoteText.length + 3 + downvoteText.length
                             )
@@ -199,13 +206,13 @@ fun PostCardFooter(
                         append(text)
                         if (upVoted) {
                             addStyle(
-                                style = SpanStyle(color = MaterialTheme.colorScheme.surfaceTint),
+                                style = SpanStyle(color = upvoteColor ?: defaultUpvoteColor),
                                 start = 0,
                                 end = text.length
                             )
                         } else if (downVoted) {
                             addStyle(
-                                style = SpanStyle(color = MaterialTheme.colorScheme.tertiary),
+                                style = SpanStyle(color = downvoteColor ?: defaultDownVoteColor),
                                 start = 0,
                                 end = length
                             )
@@ -224,7 +231,7 @@ fun PostCardFooter(
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
                     color = if (downVoted) {
-                        MaterialTheme.colorScheme.tertiary
+                        downvoteColor ?: defaultDownVoteColor
                     } else {
                         MaterialTheme.colorScheme.onSurface
                     },

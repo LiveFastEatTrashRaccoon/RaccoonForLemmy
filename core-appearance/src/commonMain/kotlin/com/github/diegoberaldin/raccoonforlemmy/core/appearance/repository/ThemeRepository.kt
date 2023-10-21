@@ -15,6 +15,8 @@ interface ThemeRepository {
     val navItemTitles: StateFlow<Boolean>
     val dynamicColors: StateFlow<Boolean>
     val customSeedColor: StateFlow<Color?>
+    val upvoteColor: StateFlow<Color?>
+    val downvoteColor: StateFlow<Color?>
     val postLayout: StateFlow<PostLayout>
 
     fun changeUiTheme(value: UiTheme)
@@ -38,5 +40,8 @@ interface ThemeRepository {
 
     fun changeCustomSeedColor(color: Color?)
 
+    fun changeUpvoteColor(color: Color?)
+
+    fun changeDownvoteColor(color: Color?)
     fun changePostLayout(value: PostLayout)
 }

@@ -30,6 +30,8 @@ private object KeyStoreKeys {
     const val AutoLoadImages = "autoLoadImages"
     const val AutoExpandComments = "autoExpandComments"
     const val FullHeightImages = "fullHeightImages"
+    const val UpvoteColor = "upvoteColor"
+    const val DownVoteColor = "downVoteColor"
 }
 
 internal class DefaultSettingsRepository(
@@ -65,6 +67,8 @@ internal class DefaultSettingsRepository(
                 autoLoadImages = if (settings.autoLoadImages) 1 else 0,
                 autoExpandComments = if (settings.autoExpandComments) 1 else 0,
                 fullHeightImages = if (settings.fullHeightImages) 1 else 0,
+                upvoteColor = settings.upvoteColor?.toLong(),
+                downvoteColor = settings.downvoteColor?.toLong(),
             )
         }
 
@@ -95,6 +99,8 @@ internal class DefaultSettingsRepository(
                     autoLoadImages = keyStore[KeyStoreKeys.AutoLoadImages, true],
                     autoExpandComments = keyStore[KeyStoreKeys.AutoExpandComments, true],
                     fullHeightImages = keyStore[KeyStoreKeys.FullHeightImages, true],
+                    upvoteColor = if (!keyStore.containsKey(KeyStoreKeys.UpvoteColor)) null else keyStore[KeyStoreKeys.UpvoteColor, 0],
+                    downvoteColor = if (!keyStore.containsKey(KeyStoreKeys.DownVoteColor)) null else keyStore[KeyStoreKeys.DownVoteColor, 0],
                 )
             } else {
                 val entity = db.settingsQueries.getBy(accountId).executeAsOneOrNull()
@@ -109,12 +115,16 @@ internal class DefaultSettingsRepository(
                 // anonymous user, storing into keystore
                 if (settings.theme != null) {
                     keyStore.save(KeyStoreKeys.UiTheme, settings.theme)
+                } else {
+                    keyStore.remove(KeyStoreKeys.UiTheme)
                 }
                 keyStore.save(KeyStoreKeys.UiFontScale, settings.uiFontScale)
                 keyStore.save(KeyStoreKeys.UiFontFamily, settings.uiFontFamily)
                 keyStore.save(KeyStoreKeys.ContentFontScale, settings.contentFontScale)
                 if (!settings.locale.isNullOrEmpty()) {
                     keyStore.save(KeyStoreKeys.Locale, settings.locale)
+                } else {
+                    keyStore.remove(KeyStoreKeys.Locale)
                 }
                 keyStore.save(KeyStoreKeys.DefaultListingType, settings.defaultListingType)
                 keyStore.save(KeyStoreKeys.DefaultPostSortType, settings.defaultPostSortType)
@@ -130,12 +140,24 @@ internal class DefaultSettingsRepository(
                 keyStore.save(KeyStoreKeys.EnableSwipeActions, settings.enableSwipeActions)
                 if (settings.customSeedColor != null) {
                     keyStore.save(KeyStoreKeys.CustomSeedColor, settings.customSeedColor)
+                } else {
+                    keyStore.remove(KeyStoreKeys.CustomSeedColor)
                 }
                 keyStore.save(KeyStoreKeys.PostLayout, settings.postLayout)
                 keyStore.save(KeyStoreKeys.SeparateUpAndDownVotes, settings.separateUpAndDownVotes)
                 keyStore.save(KeyStoreKeys.AutoLoadImages, settings.autoLoadImages)
                 keyStore.save(KeyStoreKeys.AutoExpandComments, settings.autoExpandComments)
                 keyStore.save(KeyStoreKeys.FullHeightImages, settings.fullHeightImages)
+                if (settings.upvoteColor != null) {
+                    keyStore.save(KeyStoreKeys.UpvoteColor, settings.upvoteColor)
+                } else {
+                    keyStore.remove(KeyStoreKeys.UpvoteColor)
+                }
+                if (settings.downvoteColor != null) {
+                    keyStore.save(KeyStoreKeys.DownVoteColor, settings.downvoteColor)
+                } else {
+                    keyStore.remove(KeyStoreKeys.DownVoteColor)
+                }
             } else {
                 db.settingsQueries.update(
                     theme = settings.theme?.toLong(),
@@ -159,6 +181,8 @@ internal class DefaultSettingsRepository(
                     autoExpandComments = if (settings.autoExpandComments) 1L else 0L,
                     fullHeightImages = if (settings.fullHeightImages) 1L else 0L,
                     account_id = accountId,
+                    upvoteColor = settings.upvoteColor?.toLong(),
+                    downvoteColor = settings.downvoteColor?.toLong(),
                 )
             }
         }
@@ -190,4 +214,6 @@ private fun GetBy.toModel() = SettingsModel(
     autoLoadImages = autoLoadImages != 0L,
     autoExpandComments = autoExpandComments != 0L,
     fullHeightImages = fullHeightImages != 0L,
+    upvoteColor = upvoteColor?.toInt(),
+    downvoteColor = downvoteColor?.toInt(),
 )

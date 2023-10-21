@@ -52,6 +52,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ColorBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ColorPickerDialog
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.FontFamilyBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.FontScaleBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.LanguageBottomSheet
@@ -129,6 +130,8 @@ class SettingsScreen : Screen {
         if (!uiFontSizeWorkaround) {
             return
         }
+        var upvoteColorDialogOpened by remember { mutableStateOf(false) }
+        var downvoteColorDialogOpened by remember { mutableStateOf(false) }
 
         Scaffold(
             modifier = Modifier.padding(Spacing.xxs),
@@ -239,6 +242,21 @@ class SettingsScreen : Screen {
                                 )
                             }, key, NotificationCenterContractKeys.ChangeColor)
                             bottomSheetNavigator.show(sheet)
+                        },
+                    )
+                    // upvote and downvote colors
+                    SettingsColorRow(
+                        title = stringResource(MR.strings.settings_upvote_color),
+                        value = uiState.upvoteColor ?: MaterialTheme.colorScheme.primary,
+                        onTap = {
+                            upvoteColorDialogOpened = true
+                        },
+                    )
+                    SettingsColorRow(
+                        title = stringResource(MR.strings.settings_downvote_color),
+                        value = uiState.downvoteColor ?: MaterialTheme.colorScheme.tertiary,
+                        onTap = {
+                            downvoteColorDialogOpened = true
                         },
                     )
 
@@ -535,6 +553,47 @@ class SettingsScreen : Screen {
                     Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
             }
+        }
+
+        if (upvoteColorDialogOpened) {
+            val initial = uiState.upvoteColor ?: MaterialTheme.colorScheme.primary
+            ColorPickerDialog(
+                initialValue = initial,
+                onClose = {
+                    upvoteColorDialogOpened = false
+                },
+                onSubmit = { color ->
+                    upvoteColorDialogOpened = false
+                    model.reduce(SettingsMviModel.Intent.ChangeUpvoteColor(color))
+                },
+                onReset = {
+                    upvoteColorDialogOpened = false
+                    val scheme = getColorSchemeProvider().getColorScheme(
+                        theme = uiState.uiTheme,
+                        dynamic = uiState.dynamicColors,
+                        customSeed = uiState.customSeedColor
+                    )
+                    val defaultValue = scheme.primary
+                    model.reduce(SettingsMviModel.Intent.ChangeUpvoteColor(defaultValue))
+                },
+            )
+        }
+        if (downvoteColorDialogOpened) {
+            val initial = uiState.downvoteColor ?: MaterialTheme.colorScheme.tertiary
+            ColorPickerDialog(
+                initialValue = initial,
+                onClose = {
+                    downvoteColorDialogOpened = false
+                },
+                onSubmit = { color ->
+                    downvoteColorDialogOpened = false
+                    model.reduce(SettingsMviModel.Intent.ChangeDownvoteColor(color))
+                },
+                onReset = {
+                    downvoteColorDialogOpened = false
+                    model.reduce(SettingsMviModel.Intent.ChangeDownvoteColor(null))
+                },
+            )
         }
     }
 }

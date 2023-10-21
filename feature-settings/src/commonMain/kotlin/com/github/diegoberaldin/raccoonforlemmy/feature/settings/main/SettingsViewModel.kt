@@ -82,6 +82,12 @@ class SettingsViewModel(
             themeRepository.postLayout.onEach { value ->
                 mvi.updateState { it.copy(postLayout = value) }
             }.launchIn(this)
+            themeRepository.upvoteColor.onEach { value ->
+                mvi.updateState { it.copy(upvoteColor = value) }
+            }.launchIn(this)
+            themeRepository.downvoteColor.onEach { value ->
+                mvi.updateState { it.copy(downvoteColor = value) }
+            }.launchIn(this)
             languageRepository.currentLanguage.onEach { lang ->
                 mvi.updateState { it.copy(lang = lang) }
             }.launchIn(this)
@@ -185,6 +191,8 @@ class SettingsViewModel(
             is SettingsMviModel.Intent.ChangeAutoLoadImages -> changeAutoLoadImages(intent.value)
             is SettingsMviModel.Intent.ChangeAutoExpandComments -> changeAutoExpandComments(intent.value)
             is SettingsMviModel.Intent.ChangeFullHeightImages -> changeFullHeightImages(intent.value)
+            is SettingsMviModel.Intent.ChangeUpvoteColor -> changeUpvoteColor(intent.value)
+            is SettingsMviModel.Intent.ChangeDownvoteColor -> changeDownvoteColor(intent.value)
         }
     }
 
@@ -321,6 +329,26 @@ class SettingsViewModel(
         mvi.scope?.launch {
             val settings = settingsRepository.currentSettings.value.copy(
                 customSeedColor = value?.toArgb()
+            )
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeUpvoteColor(value: Color?) {
+        themeRepository.changeUpvoteColor(value)
+        mvi.scope?.launch {
+            val settings = settingsRepository.currentSettings.value.copy(
+                upvoteColor = value?.toArgb()
+            )
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeDownvoteColor(value: Color?) {
+        themeRepository.changeDownvoteColor(value)
+        mvi.scope?.launch {
+            val settings = settingsRepository.currentSettings.value.copy(
+                downvoteColor = value?.toArgb()
             )
             saveSettings(settings)
         }

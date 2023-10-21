@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.replies
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -142,7 +140,7 @@ class InboxRepliesScreen : Tab {
                             enabled = uiState.swipeActionsEnabled,
                             backgroundColor = {
                                 when (it) {
-                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
+                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
                                     DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
                                     else -> Color.Transparent
                                 }
@@ -171,27 +169,11 @@ class InboxRepliesScreen : Tab {
                                     DismissDirection.StartToEnd -> Icons.Default.MarkChatUnread
                                     DismissDirection.EndToStart -> Icons.Default.MarkChatRead
                                 }
-                                val (iconModifier, iconTint) = when (direction) {
-                                    DismissDirection.StartToEnd -> {
-                                        Modifier.background(
-                                            color = MaterialTheme.colorScheme.onTertiary,
-                                            shape = CircleShape,
-                                        ) to MaterialTheme.colorScheme.tertiary
-                                    }
-
-                                    else -> {
-                                        Modifier.background(
-                                            color = MaterialTheme.colorScheme.onSecondary,
-                                            shape = CircleShape,
-                                        ) to MaterialTheme.colorScheme.secondary
-                                    }
-                                }
-
                                 Icon(
-                                    modifier = iconModifier.padding(Spacing.xs),
+                                    modifier = Modifier.padding(Spacing.xs),
                                     imageVector = icon,
                                     contentDescription = null,
-                                    tint = iconTint,
+                                    tint = Color.White,
                                 )
                             },
                             content = {

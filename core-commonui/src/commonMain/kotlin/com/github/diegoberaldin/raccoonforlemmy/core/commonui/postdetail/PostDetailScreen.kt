@@ -152,6 +152,11 @@ class PostDetailScreen(
                 notificationCenter.removeObserver(key)
             }
         }
+        val themeRepository = remember { getThemeRepository() }
+        val upvoteColor by themeRepository.upvoteColor.collectAsState()
+        val downvoteColor by themeRepository.downvoteColor.collectAsState()
+        val defaultUpvoteColor = MaterialTheme.colorScheme.primary
+        val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
         val lazyListState = rememberLazyListState()
         val scope = rememberCoroutineScope()
         LaunchedEffect(model) {
@@ -458,8 +463,12 @@ class PostDetailScreen(
                                         enabled = uiState.swipeActionsEnabled && !isOnOtherInstance,
                                         backgroundColor = {
                                             when (it) {
-                                                DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
-                                                DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
+                                                DismissValue.DismissedToStart -> upvoteColor
+                                                    ?: defaultUpvoteColor
+
+                                                DismissValue.DismissedToEnd -> downvoteColor
+                                                    ?: defaultDownVoteColor
+
                                                 DismissValue.Default -> Color.Transparent
                                             }
                                         },

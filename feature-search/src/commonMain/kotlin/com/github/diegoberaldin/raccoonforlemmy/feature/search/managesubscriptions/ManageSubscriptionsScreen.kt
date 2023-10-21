@@ -187,8 +187,10 @@ class ManageSubscriptionsScreen : Screen {
                             modifier = Modifier.fillMaxWidth(),
                             backgroundColor = {
                                 when (it) {
-                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
+                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.primary
+
                                     DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
+
                                     else -> Color.Transparent
                                 }
                             },
@@ -249,7 +251,7 @@ class ManageSubscriptionsScreen : Screen {
                             directions = setOf(DismissDirection.EndToStart),
                             backgroundColor = {
                                 when (it) {
-                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.surfaceTint
+                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.tertiary
                                     else -> Color.Transparent
                                 }
                             },
