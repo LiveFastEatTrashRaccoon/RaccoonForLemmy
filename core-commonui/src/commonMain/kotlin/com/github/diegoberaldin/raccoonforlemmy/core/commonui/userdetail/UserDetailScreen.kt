@@ -296,6 +296,7 @@ class UserDetailScreen(
                                     model.reduce(UserDetailMviModel.Intent.ChangeSection(section))
                                 },
                             )
+                            Spacer(modifier = Modifier.height(Spacing.m))
                         }
                     }
                     if (uiState.section == UserDetailSection.Posts) {
