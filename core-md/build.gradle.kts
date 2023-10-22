@@ -8,7 +8,7 @@ plugins {
 kotlin {
     targetHierarchy.default()
 
-    android {
+    androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
@@ -26,6 +26,16 @@ kotlin {
     }
 
     sourceSets {
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.markwon.core)
+                implementation(libs.markwon.strikethrough)
+                implementation(libs.markwon.tables)
+                implementation(libs.markwon.html)
+                implementation(libs.markwon.coil)
+                implementation(libs.coil)
+            }
+        }
         val commonMain by getting {
             dependencies {
                 implementation(libs.koin.core)

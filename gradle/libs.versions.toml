@@ -15,6 +15,7 @@ ktor = "2.3.5"
 ktorfit_gradle = "1.7.0"
 ktorfit_lib = "1.7.0"
 markdown = "0.5.0"
+markwon = "4.6.2"
 materialKolor = "1.2.5"
 moko_resources = "0.23.0"
 multiplatform_settings = "1.0.0"
@@ -36,6 +37,11 @@ coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 markdown = { module = "org.jetbrains:markdown", version.ref = "markdown" }
+markwon_core = { module = "io.noties.markwon:core", version.ref = "markwon" }
+markwon_strikethrough = { module = "io.noties.markwon:ext-strikethrough", version.ref = "markwon" }
+markwon_tables = { module = "io.noties.markwon:ext-tables", version.ref = "markwon" }
+markwon_html = { module = "io.noties.markwon:html", version.ref = "markwon" }
+markwon_coil = { module = "io.noties.markwon:image-coil", version.ref = "markwon" }
 
 multiplatform_settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform.settings" }
 

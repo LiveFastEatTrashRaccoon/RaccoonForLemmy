@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.api.di.coreApiModule
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.coreAppearanceModule
+import com.github.diegoberaldin.raccoonforlemmy.core.markdown.di.markwonModule
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.coreNotificationModule
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.corePersistenceModule
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.corePreferencesModule
@@ -24,6 +25,7 @@ val sharedHelperModule = module {
         coreAppearanceModule,
         corePreferencesModule,
         coreApiModule,
+        markwonModule,
         coreIdentityModule,
         coreNotificationModule,
         corePersistenceModule,

@@ -1,0 +1,40 @@
+package com.github.diegoberaldin.raccoonforlemmy.core.markdown.compose
+
+import android.content.Context
+import coil.Coil
+import com.github.diegoberaldin.raccoonforlemmy.core.markdown.plugins.MarkwonSpoilerPlugin
+import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonConfiguration
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.image.coil.ClickableCoilImagesPlugin
+
+class DefaultMarkwonProvider(
+    context: Context,
+    onOpenUrl: ((String) -> Unit)?,
+    onOpenImage: ((String) -> Unit)?,
+) : MarkwonProvider {
+    override val markwon: Markwon
+
+    init {
+        val loader = Coil.imageLoader(context)
+        markwon = Markwon.builder(context)
+            .usePlugin(StrikethroughPlugin.create())
+            .usePlugin(TablePlugin.create(context))
+            .usePlugin(HtmlPlugin.create())
+            .usePlugin(ClickableCoilImagesPlugin.create(context, loader, onOpenImage))
+            .usePlugin(MarkwonSpoilerPlugin.create(true))
+            .usePlugin(
+                object : AbstractMarkwonPlugin() {
+                    override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
+                        builder.linkResolver { view, link ->
+                            view.cancelPendingInputEvents()
+                            onOpenUrl?.invoke(link)
+                        }
+                    }
+                }
+            ).build()
+    }
+}
