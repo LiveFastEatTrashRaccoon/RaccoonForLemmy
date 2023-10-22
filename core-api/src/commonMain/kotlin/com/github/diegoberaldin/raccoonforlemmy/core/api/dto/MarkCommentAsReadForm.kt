@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MarkCommentReplyAsReadForm(
+data class MarkCommentAsReadForm(
     @SerialName("comment_reply_id")
-    val replyId: CommentReplyId,
+    val replyId: CommentId,
     @SerialName("read")
     val read: Boolean,
     @SerialName("auth")

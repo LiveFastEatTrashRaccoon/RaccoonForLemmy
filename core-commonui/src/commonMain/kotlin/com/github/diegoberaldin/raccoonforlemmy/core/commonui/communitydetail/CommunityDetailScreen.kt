@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.outlined.AddCircleOutline
@@ -231,48 +232,57 @@ class CommunityDetailScreen(
                     }
                 },
             )
-        }, floatingActionButton = {
-            AnimatedVisibility(
-                visible = isFabVisible.value,
-                enter = slideInVertically(
-                    initialOffsetY = { it * 2 },
-                ),
-                exit = slideOutVertically(
-                    targetOffsetY = { it * 2 },
-                ),
-            ) {
-                FloatingActionButtonMenu(
-                    items = buildList {
-                        this += FloatingActionButtonMenuItem(
-                            icon = Icons.Default.ExpandLess,
-                            text = stringResource(MR.strings.action_back_to_top),
-                            onSelected = {
-                                scope.launch {
-                                    lazyListState.scrollToItem(0)
-                                    topAppBarState.heightOffset = 0f
-                                    topAppBarState.contentOffset = 0f
-                                }
-                            },
-                        )
-                        if (!isOnOtherInstance) {
+        },
+            floatingActionButton = {
+                AnimatedVisibility(
+                    visible = isFabVisible.value,
+                    enter = slideInVertically(
+                        initialOffsetY = { it * 2 },
+                    ),
+                    exit = slideOutVertically(
+                        targetOffsetY = { it * 2 },
+                    ),
+                ) {
+                    FloatingActionButtonMenu(
+                        items = buildList {
                             this += FloatingActionButtonMenuItem(
-                                icon = Icons.Default.Create,
-                                text = stringResource(MR.strings.action_create_post),
+                                icon = Icons.Default.ExpandLess,
+                                text = stringResource(MR.strings.action_back_to_top),
                                 onSelected = {
-                                    val screen = CreatePostScreen(
-                                        communityId = stateCommunity.id,
-                                    )
-                                    notificationCenter.addObserver({
-                                        model.reduce(CommunityDetailMviModel.Intent.Refresh)
-                                    }, key, NotificationCenterContractKeys.PostCreated)
-                                    bottomSheetNavigator.show(screen)
+                                    scope.launch {
+                                        lazyListState.scrollToItem(0)
+                                        topAppBarState.heightOffset = 0f
+                                        topAppBarState.contentOffset = 0f
+                                    }
                                 },
                             )
+                            this += FloatingActionButtonMenuItem(
+                                icon = Icons.Default.ClearAll,
+                                text = stringResource(MR.strings.action_clear_read),
+                                onSelected = {
+                                    model.reduce(CommunityDetailMviModel.Intent.ClearRead)
+                                },
+                            )
+                            if (!isOnOtherInstance) {
+                                this += FloatingActionButtonMenuItem(
+                                    icon = Icons.Default.Create,
+                                    text = stringResource(MR.strings.action_create_post),
+                                    onSelected = {
+                                        val screen = CreatePostScreen(
+                                            communityId = stateCommunity.id,
+                                        )
+                                        notificationCenter.addObserver({
+                                            model.reduce(CommunityDetailMviModel.Intent.Refresh)
+                                        }, key, NotificationCenterContractKeys.PostCreated)
+                                        bottomSheetNavigator.show(screen)
+                                    },
+                                )
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
-        }) { padding ->
+        ) { padding ->
             if (uiState.currentUserId != null) {
                 val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
                     model.reduce(CommunityDetailMviModel.Intent.Refresh)
@@ -376,6 +386,11 @@ class CommunityDetailScreen(
                                 },
                                 content = {
                                     PostCard(modifier = Modifier.onClick {
+                                        model.reduce(
+                                            CommunityDetailMviModel.Intent.MarkAsRead(
+                                                idx
+                                            )
+                                        )
                                         navigator?.push(
                                             PostDetailScreen(
                                                 post = post,

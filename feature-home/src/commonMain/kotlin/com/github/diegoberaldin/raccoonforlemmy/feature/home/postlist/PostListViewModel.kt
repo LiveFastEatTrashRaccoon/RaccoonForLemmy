@@ -146,6 +146,12 @@ class PostListViewModel(
             is PostListMviModel.Intent.SharePost -> {
                 share(post = uiState.value.posts[intent.index])
             }
+
+            is PostListMviModel.Intent.MarkAsRead -> {
+                markAsRead(post = uiState.value.posts[intent.index])
+            }
+
+            PostListMviModel.Intent.ClearRead -> clearRead()
         }
     }
 
@@ -261,6 +267,48 @@ class PostListViewModel(
                     auth = auth,
                     voted = newVote,
                 )
+                markAsRead(newPost)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                post
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
+            }
+        }
+    }
+
+    private fun markAsRead(post: PostModel) {
+        if (post.read) {
+            return
+        }
+        val newPost = post.copy(read = true)
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                postRepository.setRead(
+                    read = true,
+                    postId = post.id,
+                    auth = auth,
+                )
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                newPost
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -306,6 +354,7 @@ class PostListViewModel(
                     auth = auth,
                     downVoted = newValue,
                 )
+                markAsRead(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -351,6 +400,7 @@ class PostListViewModel(
                     auth = auth,
                     saved = newValue,
                 )
+                markAsRead(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -405,6 +455,15 @@ class PostListViewModel(
         val url = post.shareUrl
         if (url.isNotEmpty()) {
             shareHelper.share(url, "text/plain")
+        }
+    }
+
+    private fun clearRead() {
+        mvi.updateState {
+            val newPosts = it.posts.filter { e -> !e.read }
+            it.copy(
+                posts = newPosts,
+            )
         }
     }
 }

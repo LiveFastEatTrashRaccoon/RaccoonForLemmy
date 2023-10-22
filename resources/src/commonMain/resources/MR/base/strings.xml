@@ -162,6 +162,7 @@
     <string name="action_reply">Reply</string>
     <string name="action_create_post">Create post</string>
     <string name="action_chat">Send message</string>
+    <string name="action_clear_read">Clear read</string>
 
     <string name="inbox_not_logged_message">You are currently not logged in.\nPlease add an account
         from the profile screen to see your inbox.

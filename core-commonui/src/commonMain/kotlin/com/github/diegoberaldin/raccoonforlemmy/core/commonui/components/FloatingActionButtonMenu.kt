@@ -45,6 +45,7 @@ data class FloatingActionButtonMenuItem(
 
 @Composable
 fun FloatingActionButtonMenu(
+    modifier: Modifier = Modifier,
     items: List<FloatingActionButtonMenuItem> = emptyList(),
 ) {
     var fabExpanded by remember { mutableStateOf(false) }
@@ -74,6 +75,7 @@ fun FloatingActionButtonMenu(
         }
     }
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.End,
     ) {
         Column(
@@ -91,7 +93,7 @@ fun FloatingActionButtonMenu(
                         modifier = Modifier.onClick {
                             fabExpanded = false
                             item.onSelected?.invoke()
-                        }.padding(end = 16.dp),
+                        }.padding(end = 15.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xxs)
                     ) {

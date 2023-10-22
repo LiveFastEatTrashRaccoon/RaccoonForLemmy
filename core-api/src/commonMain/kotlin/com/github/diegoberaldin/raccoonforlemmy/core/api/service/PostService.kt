@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.api.service
 
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentReplyResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreatePostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreatePostLikeForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.DeletePostForm
@@ -7,6 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.EditPostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetPostResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetPostsResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkPostAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.PictrsImages
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.PostResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SavePostForm
@@ -73,6 +75,13 @@ interface PostService {
         @Header("Authorization") authHeader: String? = null,
         @Body form: EditPostForm,
     ): Response<PostResponse>
+
+    @POST("post/mark_as_read")
+    @Headers("Content-Type: application/json")
+    suspend fun markAsRead(
+        @Header("Authorization") authHeader: String? = null,
+        @Body form: MarkPostAsReadForm,
+    ): Response<CommentReplyResponse>
 
     @POST("post/delete")
     @Headers("Content-Type: application/json")

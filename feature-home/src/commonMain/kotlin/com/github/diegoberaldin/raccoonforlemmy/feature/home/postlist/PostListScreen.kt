@@ -1,5 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.home.postlist
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +20,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.ClearAll
+import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -33,11 +38,15 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
@@ -48,9 +57,12 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Dimensions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
@@ -87,6 +99,20 @@ class PostListScreen : Screen {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+        val isFabVisible = remember { mutableStateOf(true) }
+        val fabNestedScrollConnection = remember {
+            object : NestedScrollConnection {
+                override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                    if (available.y < -1) {
+                        isFabVisible.value = false
+                    }
+                    if (available.y > 1) {
+                        isFabVisible.value = true
+                    }
+                    return Offset.Zero
+                }
+            }
+        }
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val navigator = remember { navigationCoordinator.getRootNavigator() }
         val notificationCenter = remember { getNotificationCenter() }
@@ -161,6 +187,41 @@ class PostListScreen : Screen {
                     },
                 )
             },
+            floatingActionButton = {
+                AnimatedVisibility(
+                    visible = isFabVisible.value,
+                    enter = slideInVertically(
+                        initialOffsetY = { it * 2 },
+                    ),
+                    exit = slideOutVertically(
+                        targetOffsetY = { it * 2 },
+                    ),
+                ) {
+                    FloatingActionButtonMenu(
+                        modifier = Modifier.padding(bottom = Dimensions.topBarHeight),
+                        items = buildList {
+                            this += FloatingActionButtonMenuItem(
+                                icon = Icons.Default.ExpandLess,
+                                text = stringResource(MR.strings.action_back_to_top),
+                                onSelected = {
+                                    scope.launch {
+                                        lazyListState.scrollToItem(0)
+                                        topAppBarState.heightOffset = 0f
+                                        topAppBarState.contentOffset = 0f
+                                    }
+                                },
+                            )
+                            this += FloatingActionButtonMenuItem(
+                                icon = Icons.Default.ClearAll,
+                                text = stringResource(MR.strings.action_clear_read),
+                                onSelected = {
+                                    model.reduce(PostListMviModel.Intent.ClearRead)
+                                },
+                            )
+                        }
+                    )
+                }
+            }
         ) { padding ->
             if (uiState.currentUserId != null) {
                 val pullRefreshState = rememberPullRefreshState(uiState.refreshing, {
@@ -176,6 +237,7 @@ class PostListScreen : Screen {
                                 it.nestedScroll(connection)
                             } else it
                         }
+                        .nestedScroll(fabNestedScrollConnection)
                         .pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
@@ -238,6 +300,7 @@ class PostListScreen : Screen {
                                     content = {
                                         PostCard(
                                             modifier = Modifier.onClick {
+                                                model.reduce(PostListMviModel.Intent.MarkAsRead(idx))
                                                 navigator?.push(
                                                     PostDetailScreen(post),
                                                 )

@@ -4,6 +4,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreatePostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreatePostLikeForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.DeletePostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.EditPostForm
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkPostAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SavePostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -197,6 +198,18 @@ class PostRepository(
             auth = auth,
         )
         services.post.edit(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+    }
+
+    suspend fun setRead(read: Boolean, postId: Int, auth: String? = null) = runCatching {
+        val data = MarkPostAsReadForm(
+            postId = postId,
+            read = read,
+            auth = auth.orEmpty(),
+        )
+        services.post.markAsRead(
             authHeader = auth.toAuthHeader(),
             form = data,
         )

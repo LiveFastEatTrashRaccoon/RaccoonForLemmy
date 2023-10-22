@@ -2,7 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.BlockPersonForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkAllAsReadForm
-import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkCommentReplyAsReadForm
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkCommentAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkPersonMentionAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
@@ -205,12 +205,12 @@ class UserRepository(
     }
 
     suspend fun setReplyRead(read: Boolean, replyId: Int, auth: String? = null) = runCatching {
-        val data = MarkCommentReplyAsReadForm(
+        val data = MarkCommentAsReadForm(
             replyId = replyId,
             read = read,
             auth = auth.orEmpty(),
         )
-        services.user.markCommentReplyAsRead(
+        services.comment.markAsRead(
             authHeader = auth.toAuthHeader(),
             form = data,
         )

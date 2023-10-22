@@ -112,6 +112,7 @@ internal fun PostView.toModel() = PostModel(
     publishDate = post.published,
     nsfw = post.nsfw,
     embedVideoUrl = post.embedVideoUrl,
+    read = read,
 )
 
 internal fun CommentView.toModel() = CommentModel(
@@ -160,7 +161,7 @@ internal fun PersonMentionView.toModel() = PersonMentionModel(
         myVote = myVote ?: 0,
         publishDate = post.published,
         nsfw = post.nsfw,
-        embedVideoUrl = post.embedVideoUrl
+        embedVideoUrl = post.embedVideoUrl,
     ),
     comment = CommentModel(
         id = comment.id,

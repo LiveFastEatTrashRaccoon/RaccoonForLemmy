@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.api.service
 
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentReplyResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentSortType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreateCommentForm
@@ -9,6 +10,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.EditCommentForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetCommentResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetCommentsResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkCommentAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SaveCommentForm
 import de.jensklingenberg.ktorfit.Response
 import de.jensklingenberg.ktorfit.http.Body
@@ -70,6 +72,13 @@ interface CommentService {
         @Header("Authorization") authHeader: String? = null,
         @Body form: EditCommentForm,
     ): Response<CommentResponse>
+
+    @POST("comment/mark_as_read")
+    @Headers("Content-Type: application/json")
+    suspend fun markAsRead(
+        @Header("Authorization") authHeader: String? = null,
+        @Body form: MarkCommentAsReadForm,
+    ): Response<CommentReplyResponse>
 
     @POST("comment/delete")
     @Headers("Content-Type: application/json")

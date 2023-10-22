@@ -109,6 +109,11 @@ class CommunityDetailViewModel(
 
             CommunityDetailMviModel.Intent.Block -> blockCommunity()
             CommunityDetailMviModel.Intent.BlockInstance -> blockInstance()
+            is CommunityDetailMviModel.Intent.MarkAsRead -> {
+                markAsRead(uiState.value.posts[intent.index])
+            }
+
+            CommunityDetailMviModel.Intent.ClearRead -> clearRead()
         }
     }
 
@@ -238,6 +243,48 @@ class CommunityDetailViewModel(
                     post = post,
                     voted = newValue,
                 )
+                markAsRead(newPost)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                post
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
+            }
+        }
+    }
+
+    private fun markAsRead(post: PostModel) {
+        if (post.read) {
+            return
+        }
+        val newPost = post.copy(read = true)
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                postRepository.setRead(
+                    read = true,
+                    postId = post.id,
+                    auth = auth,
+                )
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                newPost
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -286,6 +333,7 @@ class CommunityDetailViewModel(
                     post = post,
                     downVoted = newValue,
                 )
+                markAsRead(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -334,6 +382,7 @@ class CommunityDetailViewModel(
                     post = post,
                     saved = newValue,
                 )
+                markAsRead(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -417,6 +466,15 @@ class CommunityDetailViewModel(
             } finally {
                 mvi.updateState { it.copy(asyncInProgress = false) }
             }
+        }
+    }
+
+    private fun clearRead() {
+        mvi.updateState {
+            val newPosts = it.posts.filter { e -> !e.read }
+            it.copy(
+                posts = newPosts,
+            )
         }
     }
 }
