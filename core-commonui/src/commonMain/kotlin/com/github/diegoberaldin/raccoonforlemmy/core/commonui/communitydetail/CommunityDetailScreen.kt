@@ -471,6 +471,11 @@ class CommunityDetailScreen(
                                             }
                                         },
                                         onImageClick = { url ->
+                                            model.reduce(
+                                                CommunityDetailMviModel.Intent.MarkAsRead(
+                                                    idx
+                                                )
+                                            )
                                             navigator?.push(
                                                 ZoomableImageScreen(url),
                                             )

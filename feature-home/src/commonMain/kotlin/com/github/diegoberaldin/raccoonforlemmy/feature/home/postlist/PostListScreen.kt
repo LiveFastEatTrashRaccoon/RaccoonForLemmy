@@ -369,6 +369,7 @@ class PostListScreen : Screen {
                                                 bottomSheetNavigator.show(screen)
                                             },
                                             onImageClick = { url ->
+                                                model.reduce(PostListMviModel.Intent.MarkAsRead(idx))
                                                 navigator?.push(
                                                     ZoomableImageScreen(url),
                                                 )
