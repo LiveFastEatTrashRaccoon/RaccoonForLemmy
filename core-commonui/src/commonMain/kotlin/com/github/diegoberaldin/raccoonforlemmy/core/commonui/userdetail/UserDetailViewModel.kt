@@ -137,6 +137,9 @@ class UserDetailViewModel(
 
     private fun applySortType(value: SortType) {
         mvi.updateState { it.copy(sortType = value) }
+        mvi.scope?.launch {
+            mvi.emitEffect(UserDetailMviModel.Effect.BackToTop)
+        }
     }
 
     private fun changeSection(section: UserDetailSection) {

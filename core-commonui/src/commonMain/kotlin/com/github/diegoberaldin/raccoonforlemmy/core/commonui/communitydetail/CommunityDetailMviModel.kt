@@ -50,5 +50,6 @@ interface CommunityDetailMviModel :
     sealed interface Effect {
         data object BlockSuccess : Effect
         data class BlockError(val message: String?) : Effect
+        data object BackToTop : Effect
     }
 }

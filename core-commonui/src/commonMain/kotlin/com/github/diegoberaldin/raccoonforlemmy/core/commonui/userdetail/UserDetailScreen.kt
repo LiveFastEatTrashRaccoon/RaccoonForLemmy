@@ -158,6 +158,12 @@ class UserDetailScreen(
                     UserDetailMviModel.Effect.BlockSuccess -> {
                         snackbarHostState.showSnackbar(successMessage)
                     }
+
+                    UserDetailMviModel.Effect.BackToTop -> {
+                        scope.launch {
+                            lazyListState.scrollToItem(0)
+                        }
+                    }
                 }
             }.launchIn(this)
         }

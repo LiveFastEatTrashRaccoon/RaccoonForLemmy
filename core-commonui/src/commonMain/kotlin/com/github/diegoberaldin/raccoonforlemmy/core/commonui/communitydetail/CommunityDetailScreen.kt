@@ -162,6 +162,12 @@ class CommunityDetailScreen(
                     CommunityDetailMviModel.Effect.BlockSuccess -> {
                         snackbarHostState.showSnackbar(successMessage)
                     }
+
+                    CommunityDetailMviModel.Effect.BackToTop -> {
+                        scope.launch {
+                            lazyListState.scrollToItem(0)
+                        }
+                    }
                 }
             }.launchIn(this)
         }

@@ -147,6 +147,9 @@ class CommunityDetailViewModel(
 
     private fun applySortType(value: SortType) {
         mvi.updateState { it.copy(sortType = value) }
+        mvi.scope?.launch {
+            mvi.emitEffect(CommunityDetailMviModel.Effect.BackToTop)
+        }
         refresh()
     }
 
