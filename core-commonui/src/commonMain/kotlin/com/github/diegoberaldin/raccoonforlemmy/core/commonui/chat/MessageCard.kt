@@ -24,9 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ScaledContent
-import com.github.diegoberaldin.raccoonforlemmy.core.utils.DateTime
-import com.github.diegoberaldin.raccoonforlemmy.resources.MR
-import dev.icerock.moko.resources.compose.stringResource
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.prettifyDate
 
 @Composable
 internal fun MessageCard(
@@ -111,54 +109,7 @@ internal fun MessageCard(
                                 tint = textColor,
                             )
                             Text(
-                                text = date.let {
-                                    when {
-                                        it.isEmpty() -> it
-                                        !it.endsWith("Z") -> {
-                                            DateTime.getPrettyDate(
-                                                iso8601Timestamp = it + "Z",
-                                                yearLabel = stringResource(
-                                                    MR.strings.profile_year_short
-                                                ),
-                                                monthLabel = stringResource(
-                                                    MR.strings.profile_month_short
-                                                ),
-                                                dayLabel = stringResource(MR.strings.profile_day_short),
-                                                hourLabel = stringResource(
-                                                    MR.strings.post_hour_short
-                                                ),
-                                                minuteLabel = stringResource(
-                                                    MR.strings.post_minute_short
-                                                ),
-                                                secondLabel = stringResource(
-                                                    MR.strings.post_second_short
-                                                ),
-                                            )
-                                        }
-
-                                        else -> {
-                                            DateTime.getPrettyDate(
-                                                iso8601Timestamp = it,
-                                                yearLabel = stringResource(
-                                                    MR.strings.profile_year_short
-                                                ),
-                                                monthLabel = stringResource(
-                                                    MR.strings.profile_month_short
-                                                ),
-                                                dayLabel = stringResource(MR.strings.profile_day_short),
-                                                hourLabel = stringResource(
-                                                    MR.strings.post_hour_short
-                                                ),
-                                                minuteLabel = stringResource(
-                                                    MR.strings.post_minute_short
-                                                ),
-                                                secondLabel = stringResource(
-                                                    MR.strings.post_second_short
-                                                ),
-                                            )
-                                        }
-                                    }
-                                },
+                                text = date.prettifyDate(),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = textColor,
                             )

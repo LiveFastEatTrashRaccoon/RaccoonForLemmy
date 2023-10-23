@@ -154,6 +154,12 @@
 
     <string name="community_detail_info">Community info</string>
     <string name="community_detail_instance_info">Instance details</string>
+    <string name="community_info_posts">posts</string>
+    <string name="community_info_comments">comments</string>
+    <string name="community_info_subscribers">subscribers</string>
+    <string name="community_info_monthly_active_users">active users (month)</string>
+    <string name="community_info_weekly_active_users">active users (week)</string>
+    <string name="community_info_daily_active_users">active users (day)</string>
     <string name="community_detail_block">Block</string>
     <string name="community_detail_block_instance">Block instance</string>
     <string name="instance_detail_title">Instance: %1$s</string>

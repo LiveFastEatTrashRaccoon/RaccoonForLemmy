@@ -153,6 +153,12 @@
 
     <string name="community_detail_info">Info comunità</string>
     <string name="community_detail_instance_info">Dettagli istanza</string>
+    <string name="community_info_posts">post</string>
+    <string name="community_info_comments">commenti</string>
+    <string name="community_info_subscribers">iscritti</string>
+    <string name="community_info_monthly_active_users">utenti attivi (mese)</string>
+    <string name="community_info_weekly_active_users">utenti attivi (settimana)</string>
+    <string name="community_info_daily_active_users">utenti attivi (giorno)</string>
     <string name="instance_detail_title">Istanza: %1$s</string>
     <string name="instance_detail_communities">Comunità</string>
     <string name="action_back_to_top">Torna su</string>

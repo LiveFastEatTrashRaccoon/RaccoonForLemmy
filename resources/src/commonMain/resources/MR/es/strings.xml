@@ -152,6 +152,12 @@
 
     <string name="community_detail_info">Info comunidad</string>
     <string name="community_detail_instance_info">Detalles instancia</string>
+    <string name="community_info_posts">publicaciones</string>
+    <string name="community_info_comments">comentarios</string>
+    <string name="community_info_subscribers">suscriptores</string>
+    <string name="community_info_monthly_active_users">usuarios activos (mes)</string>
+    <string name="community_info_weekly_active_users">usuarios activos (semana)</string>
+    <string name="community_info_daily_active_users">usuarios activos (día)</string>
     <string name="community_detail_block">Bloquear</string>
     <string name="community_detail_block_instance">Bloquear instancia</string>
     <string name="instance_detail_title">Instancia: %1$s</string>

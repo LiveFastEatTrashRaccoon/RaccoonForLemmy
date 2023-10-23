@@ -4,6 +4,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentReplyView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentSortType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.Community
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommunityView
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType.All
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType.Local
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType.Subscribed
@@ -142,6 +143,16 @@ internal fun Community.toModel() = CommunityModel(
     instanceUrl = actorId.communityToInstanceUrl(),
     host = actorId.toHost(),
     nsfw = nsfw,
+    creationDate = published,
+)
+
+internal fun CommunityView.toModel() = community.toModel().copy(
+    monthlyActiveUsers = counts.usersActiveMonth,
+    weeklyActiveUsers = counts.usersActiveWeek,
+    dailyActiveUsers = counts.usersActiveDay,
+    subscribers = counts.subscribers,
+    posts = counts.posts,
+    comments = counts.comments,
 )
 
 internal fun PersonMentionView.toModel() = PersonMentionModel(

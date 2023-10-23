@@ -14,4 +14,11 @@ data class CommunityModel(
     val subscribed: Boolean? = null,
     val instanceUrl: String = "",
     val nsfw: Boolean = false,
+    val monthlyActiveUsers: Int = 0,
+    val weeklyActiveUsers: Int = 0,
+    val dailyActiveUsers: Int = 0,
+    val subscribers: Int = 0,
+    val posts: Int = 0,
+    val comments: Int = 0,
+    val creationDate: String? = null,
 ) : JavaSerializable

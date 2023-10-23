@@ -1,15 +1,19 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarViewMonth
+import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -45,21 +51,38 @@ fun CommunityHeader(
     onOpenImage: ((String) -> Unit)? = null,
 ) {
     Box(
-        modifier = modifier.fillMaxWidth().padding(Spacing.s),
+        modifier = modifier.fillMaxWidth(),
     ) {
         // banner
         val banner = community.banner.orEmpty()
         if (banner.isNotEmpty() && autoLoadImages) {
-            CustomImage(
-                modifier = Modifier.fillMaxWidth().aspectRatio(4.5f),
-                url = banner,
-                contentScale = ContentScale.FillWidth,
-                contentDescription = null,
-            )
+            Box(
+                modifier = Modifier.fillMaxWidth().aspectRatio(4f),
+            ) {
+                CustomImage(
+                    modifier = Modifier.fillMaxSize(),
+                    url = banner,
+                    contentScale = ContentScale.FillBounds,
+                    contentDescription = null,
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    MaterialTheme.colorScheme.background.copy(alpha = 0.95f),
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.background.copy(alpha = 0.75f),
+                                ),
+                            ),
+                        ),
+                )
+            }
         }
 
         Row(
-            modifier = Modifier.align(Alignment.TopEnd)
+            modifier = Modifier.padding(top = Spacing.xs, end = Spacing.s).align(Alignment.TopEnd)
         ) {
             if (options.isNotEmpty()) {
                 var optionsExpanded by remember { mutableStateOf(false) }
@@ -101,7 +124,7 @@ fun CommunityHeader(
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
+            modifier = Modifier.fillMaxWidth().padding(Spacing.s).align(Alignment.Center),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.m)
         ) {
@@ -152,6 +175,38 @@ fun CommunityHeader(
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
+
+                // stats and age
+                val iconSize = 22.dp
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (community.subscribers >= 0) {
+                        Icon(
+                            modifier = Modifier.size(iconSize),
+                            imageVector = Icons.Default.Group,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = community.subscribers.toString(),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
+                    if (community.monthlyActiveUsers >= 0) {
+                        Icon(
+                            modifier = Modifier.size(iconSize),
+                            imageVector = Icons.Default.CalendarViewMonth,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = community.monthlyActiveUsers.toString(),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
+                }
             }
         }
     }
