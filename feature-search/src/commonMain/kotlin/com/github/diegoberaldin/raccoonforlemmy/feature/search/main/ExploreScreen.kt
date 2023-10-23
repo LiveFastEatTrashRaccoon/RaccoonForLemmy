@@ -33,7 +33,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,17 +45,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
@@ -282,181 +278,172 @@ class ExploreScreen : Screen {
                             }
                         }
                         itemsIndexed(uiState.results) { idx, result ->
-                            val themeRepository = remember { getThemeRepository() }
-                            val fontScale by themeRepository.contentFontScale.collectAsState()
-                            CompositionLocalProvider(
-                                LocalDensity provides Density(
-                                    density = LocalDensity.current.density,
-                                    fontScale = fontScale,
-                                ),
-                            ) {
-                                when (result) {
-                                    is CommunityModel -> {
-                                        CommunityItem(
-                                            modifier = Modifier.fillMaxWidth().onClick {
-                                                navigator?.push(
-                                                    CommunityDetailScreen(result),
-                                                )
-                                            },
-                                            community = result,
-                                            autoLoadImages = uiState.autoLoadImages,
-                                        )
-                                    }
+                            when (result) {
+                                is CommunityModel -> {
+                                    CommunityItem(
+                                        modifier = Modifier.fillMaxWidth().onClick {
+                                            navigator?.push(
+                                                CommunityDetailScreen(result),
+                                            )
+                                        },
+                                        community = result,
+                                        autoLoadImages = uiState.autoLoadImages,
+                                    )
+                                }
 
-                                    is PostModel -> {
-                                        PostCard(
-                                            modifier = Modifier.onClick {
-                                                navigator?.push(
-                                                    PostDetailScreen(result),
-                                                )
-                                            },
-                                            post = result,
-                                            postLayout = uiState.postLayout,
-                                            fullHeightImage = uiState.fullHeightImages,
-                                            separateUpAndDownVotes = uiState.separateUpAndDownVotes,
-                                            autoLoadImages = uiState.autoLoadImages,
-                                            blurNsfw = uiState.blurNsfw,
-                                            onOpenCommunity = { community ->
-                                                navigator?.push(
-                                                    CommunityDetailScreen(community),
-                                                )
-                                            },
-                                            onOpenCreator = { user ->
-                                                navigator?.push(
-                                                    UserDetailScreen(user),
-                                                )
-                                            },
-                                            onUpVote = {
-                                                model.reduce(
-                                                    ExploreMviModel.Intent.UpVotePost(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
-                                            },
-                                            onDownVote = {
-                                                model.reduce(
-                                                    ExploreMviModel.Intent.DownVotePost(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
-                                            },
-                                            onSave = {
-                                                model.reduce(
-                                                    ExploreMviModel.Intent.SavePost(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
-                                            },
-                                            onReply = {
-                                                val screen = CreateCommentScreen(
-                                                    originalPost = result,
-                                                )
-                                                notificationCenter.addObserver(
-                                                    {
-                                                        model.reduce(ExploreMviModel.Intent.Refresh)
-                                                    },
-                                                    key,
-                                                    NotificationCenterContractKeys.CommentCreated
-                                                )
-                                                bottomSheetNavigator.show(screen)
-                                            },
-                                            onImageClick = { url ->
-                                                navigator?.push(
-                                                    ZoomableImageScreen(url),
-                                                )
-                                            },
-                                        )
-                                        if (uiState.postLayout != PostLayout.Card) {
-                                            Divider(modifier = Modifier.padding(vertical = Spacing.s))
-                                        } else {
-                                            Spacer(modifier = Modifier.height(Spacing.s))
-                                        }
-                                    }
-
-                                    is CommentModel -> {
-                                        CommentCard(
-                                            modifier = Modifier
-                                                .background(MaterialTheme.colorScheme.background)
-                                                .onClick {
-                                                    navigator?.push(
-                                                        PostDetailScreen(
-                                                            post = PostModel(id = result.postId),
-                                                            highlightCommentId = result.id,
-                                                        ),
-                                                    )
+                                is PostModel -> {
+                                    PostCard(
+                                        modifier = Modifier.onClick {
+                                            navigator?.push(
+                                                PostDetailScreen(result),
+                                            )
+                                        },
+                                        post = result,
+                                        postLayout = uiState.postLayout,
+                                        fullHeightImage = uiState.fullHeightImages,
+                                        separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                        autoLoadImages = uiState.autoLoadImages,
+                                        blurNsfw = uiState.blurNsfw,
+                                        onOpenCommunity = { community ->
+                                            navigator?.push(
+                                                CommunityDetailScreen(community),
+                                            )
+                                        },
+                                        onOpenCreator = { user ->
+                                            navigator?.push(
+                                                UserDetailScreen(user),
+                                            )
+                                        },
+                                        onUpVote = {
+                                            model.reduce(
+                                                ExploreMviModel.Intent.UpVotePost(
+                                                    index = idx,
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        },
+                                        onDownVote = {
+                                            model.reduce(
+                                                ExploreMviModel.Intent.DownVotePost(
+                                                    index = idx,
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        },
+                                        onSave = {
+                                            model.reduce(
+                                                ExploreMviModel.Intent.SavePost(
+                                                    index = idx,
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        },
+                                        onReply = {
+                                            val screen = CreateCommentScreen(
+                                                originalPost = result,
+                                            )
+                                            notificationCenter.addObserver(
+                                                {
+                                                    model.reduce(ExploreMviModel.Intent.Refresh)
                                                 },
-                                            comment = result,
-                                            separateUpAndDownVotes = uiState.separateUpAndDownVotes,
-                                            autoLoadImages = uiState.autoLoadImages,
-                                            hideIndent = true,
-                                            onUpVote = {
-                                                model.reduce(
-                                                    ExploreMviModel.Intent.UpVoteComment(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
-                                            },
-                                            onDownVote = {
-                                                model.reduce(
-                                                    ExploreMviModel.Intent.DownVoteComment(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
-                                            },
-                                            onSave = {
-                                                model.reduce(
-                                                    ExploreMviModel.Intent.SaveComment(
-                                                        index = idx,
-                                                        feedback = true,
-                                                    ),
-                                                )
-                                            },
-                                            onReply = {
-                                                val screen = CreateCommentScreen(
-                                                    originalPost = PostModel(id = result.postId),
-                                                    originalComment = result,
-                                                )
-                                                notificationCenter.addObserver(
-                                                    {
-                                                        model.reduce(ExploreMviModel.Intent.Refresh)
-                                                    },
-                                                    key,
-                                                    NotificationCenterContractKeys.CommentCreated
-                                                )
-                                                bottomSheetNavigator.show(screen)
-                                            },
-                                            onOpenCommunity = {
-                                                navigator?.push(
-                                                    CommunityDetailScreen(it)
-                                                )
-                                            },
-                                            onOpenCreator = {
-                                                navigator?.push(
-                                                    UserDetailScreen(it)
-                                                )
-                                            },
-                                        )
-                                        Divider(
-                                            modifier = Modifier.padding(vertical = Spacing.xxxs),
-                                            thickness = 0.25.dp
-                                        )
+                                                key,
+                                                NotificationCenterContractKeys.CommentCreated
+                                            )
+                                            bottomSheetNavigator.show(screen)
+                                        },
+                                        onImageClick = { url ->
+                                            navigator?.push(
+                                                ZoomableImageScreen(url),
+                                            )
+                                        },
+                                    )
+                                    if (uiState.postLayout != PostLayout.Card) {
+                                        Divider(modifier = Modifier.padding(vertical = Spacing.s))
+                                    } else {
+                                        Spacer(modifier = Modifier.height(Spacing.s))
                                     }
+                                }
 
-                                    is UserModel -> {
-                                        UserItem(
-                                            modifier = Modifier.fillMaxWidth().onClick {
+                                is CommentModel -> {
+                                    CommentCard(
+                                        modifier = Modifier
+                                            .background(MaterialTheme.colorScheme.background)
+                                            .onClick {
                                                 navigator?.push(
-                                                    UserDetailScreen(result),
+                                                    PostDetailScreen(
+                                                        post = PostModel(id = result.postId),
+                                                        highlightCommentId = result.id,
+                                                    ),
                                                 )
                                             },
-                                            user = result,
-                                        )
-                                    }
+                                        comment = result,
+                                        separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                        autoLoadImages = uiState.autoLoadImages,
+                                        hideIndent = true,
+                                        onUpVote = {
+                                            model.reduce(
+                                                ExploreMviModel.Intent.UpVoteComment(
+                                                    index = idx,
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        },
+                                        onDownVote = {
+                                            model.reduce(
+                                                ExploreMviModel.Intent.DownVoteComment(
+                                                    index = idx,
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        },
+                                        onSave = {
+                                            model.reduce(
+                                                ExploreMviModel.Intent.SaveComment(
+                                                    index = idx,
+                                                    feedback = true,
+                                                ),
+                                            )
+                                        },
+                                        onReply = {
+                                            val screen = CreateCommentScreen(
+                                                originalPost = PostModel(id = result.postId),
+                                                originalComment = result,
+                                            )
+                                            notificationCenter.addObserver(
+                                                {
+                                                    model.reduce(ExploreMviModel.Intent.Refresh)
+                                                },
+                                                key,
+                                                NotificationCenterContractKeys.CommentCreated
+                                            )
+                                            bottomSheetNavigator.show(screen)
+                                        },
+                                        onOpenCommunity = {
+                                            navigator?.push(
+                                                CommunityDetailScreen(it)
+                                            )
+                                        },
+                                        onOpenCreator = {
+                                            navigator?.push(
+                                                UserDetailScreen(it)
+                                            )
+                                        },
+                                    )
+                                    Divider(
+                                        modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                        thickness = 0.25.dp
+                                    )
+                                }
+
+                                is UserModel -> {
+                                    UserItem(
+                                        modifier = Modifier.fillMaxWidth().onClick {
+                                            navigator?.push(
+                                                UserDetailScreen(result),
+                                            )
+                                        },
+                                        user = result,
+                                    )
                                 }
                             }
                         }

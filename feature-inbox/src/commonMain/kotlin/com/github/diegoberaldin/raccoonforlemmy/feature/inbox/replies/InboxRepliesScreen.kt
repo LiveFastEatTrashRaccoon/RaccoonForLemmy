@@ -26,7 +26,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,15 +33,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
@@ -127,94 +123,85 @@ class InboxRepliesScreen : Tab {
                     }
                 }
                 itemsIndexed(uiState.replies) { idx, mention ->
-                    val themeRepository = remember { getThemeRepository() }
-                    val fontScale by themeRepository.contentFontScale.collectAsState()
-                    CompositionLocalProvider(
-                        LocalDensity provides Density(
-                            density = LocalDensity.current.density,
-                            fontScale = fontScale,
-                        ),
-                    ) {
-                        SwipeableCard(
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = uiState.swipeActionsEnabled,
-                            backgroundColor = {
-                                when (it) {
-                                    DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
-                                    DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
-                                    else -> Color.Transparent
-                                }
-                            },
-                            onGestureBegin = {
-                                model.reduce(InboxRepliesMviModel.Intent.HapticIndication)
-                            },
-                            onDismissToStart = {
-                                model.reduce(
-                                    InboxRepliesMviModel.Intent.MarkAsRead(
-                                        read = true,
-                                        index = idx,
-                                    ),
-                                )
-                            },
-                            onDismissToEnd = {
-                                model.reduce(
-                                    InboxRepliesMviModel.Intent.MarkAsRead(
-                                        read = false,
-                                        index = idx,
-                                    ),
-                                )
-                            },
-                            swipeContent = { direction ->
-                                val icon = when (direction) {
-                                    DismissDirection.StartToEnd -> Icons.Default.MarkChatUnread
-                                    DismissDirection.EndToStart -> Icons.Default.MarkChatRead
-                                }
-                                Icon(
-                                    modifier = Modifier.padding(Spacing.xs),
-                                    imageVector = icon,
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                )
-                            },
-                            content = {
-                                InboxCard(
-                                    mention = mention,
-                                    postLayout = uiState.postLayout,
-                                    type = InboxCardType.Reply,
-                                    autoLoadImages = uiState.autoLoadImages,
-                                    separateUpAndDownVotes = uiState.separateUpAndDownVotes,
-                                    onOpenPost = { post ->
-                                        navigator?.push(
-                                            PostDetailScreen(
-                                                post = post,
-                                                highlightCommentId = mention.comment.id,
-                                            ),
-                                        )
-                                    },
-                                    onOpenCreator = { user ->
-                                        navigator?.push(
-                                            UserDetailScreen(user),
-                                        )
-                                    },
-                                    onOpenCommunity = { community ->
-                                        navigator?.push(
-                                            CommunityDetailScreen(community),
-                                        )
-                                    },
-                                    onUpVote = {
-                                        model.reduce(InboxRepliesMviModel.Intent.UpVoteComment(idx))
-                                    },
-                                    onDownVote = {
-                                        model.reduce(InboxRepliesMviModel.Intent.DownVoteComment(idx))
-                                    },
-                                )
-                            },
-                        )
-                        if (uiState.postLayout != PostLayout.Card) {
-                            Divider(modifier = Modifier.padding(vertical = Spacing.s))
-                        } else {
-                            Spacer(modifier = Modifier.height(Spacing.s))
-                        }
+                    SwipeableCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = uiState.swipeActionsEnabled,
+                        backgroundColor = {
+                            when (it) {
+                                DismissValue.DismissedToStart -> MaterialTheme.colorScheme.secondary
+                                DismissValue.DismissedToEnd -> MaterialTheme.colorScheme.tertiary
+                                else -> Color.Transparent
+                            }
+                        },
+                        onGestureBegin = {
+                            model.reduce(InboxRepliesMviModel.Intent.HapticIndication)
+                        },
+                        onDismissToStart = {
+                            model.reduce(
+                                InboxRepliesMviModel.Intent.MarkAsRead(
+                                    read = true,
+                                    index = idx,
+                                ),
+                            )
+                        },
+                        onDismissToEnd = {
+                            model.reduce(
+                                InboxRepliesMviModel.Intent.MarkAsRead(
+                                    read = false,
+                                    index = idx,
+                                ),
+                            )
+                        },
+                        swipeContent = { direction ->
+                            val icon = when (direction) {
+                                DismissDirection.StartToEnd -> Icons.Default.MarkChatUnread
+                                DismissDirection.EndToStart -> Icons.Default.MarkChatRead
+                            }
+                            Icon(
+                                modifier = Modifier.padding(Spacing.xs),
+                                imageVector = icon,
+                                contentDescription = null,
+                                tint = Color.White,
+                            )
+                        },
+                        content = {
+                            InboxCard(
+                                mention = mention,
+                                postLayout = uiState.postLayout,
+                                type = InboxCardType.Reply,
+                                autoLoadImages = uiState.autoLoadImages,
+                                separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                onOpenPost = { post ->
+                                    navigator?.push(
+                                        PostDetailScreen(
+                                            post = post,
+                                            highlightCommentId = mention.comment.id,
+                                        ),
+                                    )
+                                },
+                                onOpenCreator = { user ->
+                                    navigator?.push(
+                                        UserDetailScreen(user),
+                                    )
+                                },
+                                onOpenCommunity = { community ->
+                                    navigator?.push(
+                                        CommunityDetailScreen(community),
+                                    )
+                                },
+                                onUpVote = {
+                                    model.reduce(InboxRepliesMviModel.Intent.UpVoteComment(idx))
+                                },
+                                onDownVote = {
+                                    model.reduce(InboxRepliesMviModel.Intent.DownVoteComment(idx))
+                                },
+                            )
+                        },
+                    )
+                    if (uiState.postLayout != PostLayout.Card) {
+                        Divider(modifier = Modifier.padding(vertical = Spacing.s))
+                    } else {
+                        Spacer(modifier = Modifier.height(Spacing.s))
                     }
                 }
                 item {

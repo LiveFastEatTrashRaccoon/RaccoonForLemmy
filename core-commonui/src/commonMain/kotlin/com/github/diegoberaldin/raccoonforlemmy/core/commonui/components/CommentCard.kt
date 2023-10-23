@@ -9,16 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -49,89 +45,83 @@ fun CommentCard(
     onOptionSelected: ((Int) -> Unit)? = null,
 ) {
     val themeRepository = remember { getThemeRepository() }
-    val fontScale by themeRepository.contentFontScale.collectAsState()
-    CompositionLocalProvider(
-        LocalDensity provides Density(
-            density = LocalDensity.current.density,
-            fontScale = fontScale,
-        ),
+    Column(
+        modifier = modifier
     ) {
-        Column(
-            modifier = modifier
+        var commentHeight by remember { mutableStateOf(0f) }
+        val barWidth = 2.dp
+        val barColor = themeRepository.getCommentBarColor(
+            depth = comment.depth,
+            maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
+            startColor = MaterialTheme.colorScheme.primary,
+            endColor = MaterialTheme.colorScheme.background,
+        )
+        Box(
+            modifier = Modifier.padding(
+                start = if (hideIndent) 0.dp else (10 * comment.depth).dp
+            ),
         ) {
-            var commentHeight by remember { mutableStateOf(0f) }
-            val barWidth = 2.dp
-            val barColor = themeRepository.getCommentBarColor(
-                depth = comment.depth,
-                maxDepth = CommentRepository.MAX_COMMENT_DEPTH,
-                startColor = MaterialTheme.colorScheme.primary,
-                endColor = MaterialTheme.colorScheme.background,
-            )
-            Box(
-                modifier = Modifier.padding(
-                    start = if (hideIndent) 0.dp else (10 * comment.depth).dp
-                ),
+            Column(
+                modifier = Modifier
+                    .padding(start = barWidth)
+                    .fillMaxWidth()
+                    .padding(
+                        vertical = Spacing.xxs,
+                        horizontal = Spacing.s,
+                    ).onGloballyPositioned {
+                        commentHeight = it.size.toSize().height
+                    }
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(start = barWidth)
-                        .fillMaxWidth()
-                        .padding(
-                            vertical = Spacing.xxs,
-                            horizontal = Spacing.s,
-                        ).onGloballyPositioned {
-                            commentHeight = it.size.toSize().height
-                        }
-                ) {
-                    CommunityAndCreatorInfo(
-                        modifier = Modifier.padding(top = Spacing.xs),
-                        iconSize = 20.dp,
-                        creator = comment.creator.takeIf { !hideAuthor },
-                        community = comment.community.takeIf { !hideCommunity },
-                        indicatorExpanded = comment.expanded,
-                        autoLoadImages = autoLoadImages,
-                        onOpenCreator = onOpenCreator,
-                        onOpenCommunity = onOpenCommunity,
-                    )
+                CommunityAndCreatorInfo(
+                    modifier = Modifier.padding(top = Spacing.xs),
+                    iconSize = 20.dp,
+                    creator = comment.creator.takeIf { !hideAuthor },
+                    community = comment.community.takeIf { !hideCommunity },
+                    indicatorExpanded = comment.expanded,
+                    autoLoadImages = autoLoadImages,
+                    onOpenCreator = onOpenCreator,
+                    onOpenCommunity = onOpenCommunity,
+                )
+                ScaledContent {
                     PostCardBody(
                         text = comment.text,
                         autoLoadImages = autoLoadImages,
                     )
-                    PostCardFooter(
-                        modifier = Modifier.padding(top = Spacing.xxs),
-                        score = comment.score,
-                        separateUpAndDownVotes = separateUpAndDownVotes,
-                        upvotes = comment.upvotes,
-                        downvotes = comment.downvotes,
-                        saved = comment.saved,
-                        upVoted = comment.myVote > 0,
-                        downVoted = comment.myVote < 0,
-                        comments = comment.comments,
-                        onUpVote = onUpVote,
-                        onDownVote = onDownVote,
-                        onSave = onSave,
-                        onReply = onReply,
-                        date = comment.publishDate,
-                        options = options,
-                        onOptionSelected = onOptionSelected,
-                    )
                 }
-                if (!hideIndent) {
-                    Box(
-                        modifier = Modifier
-                            .padding(top = Spacing.xs)
-                            .width(barWidth)
-                            .height(commentHeight.toLocalDp())
-                            .background(color = barColor)
-                    )
-                }
+                PostCardFooter(
+                    modifier = Modifier.padding(top = Spacing.xxs),
+                    score = comment.score,
+                    separateUpAndDownVotes = separateUpAndDownVotes,
+                    upvotes = comment.upvotes,
+                    downvotes = comment.downvotes,
+                    saved = comment.saved,
+                    upVoted = comment.myVote > 0,
+                    downVoted = comment.myVote < 0,
+                    comments = comment.comments,
+                    onUpVote = onUpVote,
+                    onDownVote = onDownVote,
+                    onSave = onSave,
+                    onReply = onReply,
+                    date = comment.publishDate,
+                    options = options,
+                    onOptionSelected = onOptionSelected,
+                )
             }
-            Box(
-                modifier = Modifier
-                    .height(Dp.Hairline)
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background)
-            )
+            if (!hideIndent) {
+                Box(
+                    modifier = Modifier
+                        .padding(top = Spacing.xs)
+                        .width(barWidth)
+                        .height(commentHeight.toLocalDp())
+                        .background(color = barColor)
+                )
+            }
         }
+        Box(
+            modifier = Modifier
+                .height(Dp.Hairline)
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        )
     }
 }

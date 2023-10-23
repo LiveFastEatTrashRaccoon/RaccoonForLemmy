@@ -51,15 +51,17 @@ fun UserItem(
             )
         }
 
-        Text(
-            text = buildString {
-                append(name)
-                if (host.isNotEmpty()) {
-                    append("@$host")
-                }
-            },
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onBackground,
-        )
+        ScaledContent {
+            Text(
+                text = buildString {
+                    append(name)
+                    if (host.isNotEmpty()) {
+                        append("@$host")
+                    }
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+        }
     }
 }

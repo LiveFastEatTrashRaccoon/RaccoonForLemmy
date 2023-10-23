@@ -29,7 +29,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -41,16 +40,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomImage
@@ -181,23 +177,14 @@ class InboxChatScreen(
                             Spacer(modifier = Modifier.height(Spacing.s))
                         }
                         items(uiState.messages) { message ->
-                            val themeRepository = remember { getThemeRepository() }
-                            val fontScale by themeRepository.contentFontScale.collectAsState()
-                            CompositionLocalProvider(
-                                LocalDensity provides Density(
-                                    density = LocalDensity.current.density,
-                                    fontScale = fontScale,
-                                ),
-                            ) {
-                                val isMyMessage = message.creator?.id == uiState.currentUserId
-                                val content = message.content.orEmpty()
-                                val date = message.publishDate.orEmpty()
-                                MessageCard(
-                                    isMyMessage = isMyMessage,
-                                    content = content,
-                                    date = date,
-                                )
-                            }
+                            val isMyMessage = message.creator?.id == uiState.currentUserId
+                            val content = message.content.orEmpty()
+                            val date = message.publishDate.orEmpty()
+                            MessageCard(
+                                isMyMessage = isMyMessage,
+                                content = content,
+                                date = date,
+                            )
                         }
                         item {
                             if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {

@@ -26,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -34,16 +33,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityItem
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ScaledContent
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getInstanceInfoViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
@@ -107,55 +104,48 @@ class InstanceInfoScreen(
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     item {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = uiState.title,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                            if (uiState.description.isNotEmpty()) {
+                        ScaledContent {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(Spacing.s),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
-                                    text = uiState.description,
-                                    style = MaterialTheme.typography.labelMedium,
+                                    text = uiState.title,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
+                                if (uiState.description.isNotEmpty()) {
+                                    Text(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        text = uiState.description,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(Spacing.xxxs))
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = stringResource(MR.strings.instance_detail_communities),
+                                    style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onBackground,
                                 )
                             }
-                            Spacer(modifier = Modifier.height(Spacing.xxxs))
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = stringResource(MR.strings.instance_detail_communities),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
                         }
                     }
                     items(uiState.communities) {
-                        val themeRepository = remember { getThemeRepository() }
-                        val fontScale by themeRepository.contentFontScale.collectAsState()
-                        CompositionLocalProvider(
-                            LocalDensity provides Density(
-                                density = LocalDensity.current.density,
-                                fontScale = fontScale,
-                            ),
-                        ) {
-                            CommunityItem(
-                                modifier = Modifier.onClick {
-                                    navigator?.push(
-                                        CommunityDetailScreen(
-                                            community = it,
-                                            otherInstance = instanceName,
-                                        ),
-                                    )
-                                },
-                                community = it,
-                                autoLoadImages = uiState.autoLoadImages,
-                            )
-                        }
+                        CommunityItem(
+                            modifier = Modifier.onClick {
+                                navigator?.push(
+                                    CommunityDetailScreen(
+                                        community = it,
+                                        otherInstance = instanceName,
+                                    ),
+                                )
+                            },
+                            community = it,
+                            autoLoadImages = uiState.autoLoadImages,
+                        )
                     }
                     item {
                         if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {

@@ -53,26 +53,28 @@ fun CommunityItem(
                 title = community.name,
             )
         }
-        Column(
-            modifier = Modifier.padding(start = Spacing.xs),
-        ) {
-            Text(
-                text = buildString {
-                    append(title)
-                },
-                style = MaterialTheme.typography.bodyLarge,
-            )
-            Text(
-                text = buildString {
-                    append("!")
-                    append(communityName)
-                    if (communityHost.isNotEmpty()) {
-                        append("@$communityHost")
-                    }
-                },
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
+        ScaledContent {
+            Column(
+                modifier = Modifier.padding(start = Spacing.xs),
+            ) {
+                Text(
+                    text = buildString {
+                        append(title)
+                    },
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Text(
+                    text = buildString {
+                        append("!")
+                        append(communityName)
+                        if (communityHost.isNotEmpty()) {
+                            append("@$communityHost")
+                        }
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+            }
         }
     }
 }

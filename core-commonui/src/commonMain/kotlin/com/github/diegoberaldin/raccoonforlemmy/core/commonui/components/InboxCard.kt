@@ -9,16 +9,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
@@ -46,36 +39,29 @@ fun InboxCard(
     onUpVote: ((CommentModel) -> Unit)? = null,
     onDownVote: ((CommentModel) -> Unit)? = null,
 ) {
-    val themeRepository = remember { getThemeRepository() }
-    val fontScale by themeRepository.contentFontScale.collectAsState()
-    CompositionLocalProvider(
-        LocalDensity provides Density(
-            density = LocalDensity.current.density,
-            fontScale = fontScale,
-        ),
+    Box(
+        modifier = Modifier.let {
+            if (postLayout == PostLayout.Card) {
+                it.padding(horizontal = Spacing.xs)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                        shape = RoundedCornerShape(CornerSize.l),
+                    ).padding(Spacing.s)
+            } else {
+                it.background(MaterialTheme.colorScheme.background)
+            }
+        }.onClick {
+            onOpenPost(mention.post)
+        },
     ) {
-        Box(
-            modifier = Modifier.let {
-                if (postLayout == PostLayout.Card) {
-                    it.padding(horizontal = Spacing.xs)
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                            shape = RoundedCornerShape(CornerSize.l),
-                        ).padding(Spacing.s)
-                } else {
-                    it.background(MaterialTheme.colorScheme.background)
-                }
-            }.onClick {
-                onOpenPost(mention.post)
-            },
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-            ) {
-                InboxCardHeader(
-                    mention = mention,
-                    type = type,
-                )
+            InboxCardHeader(
+                mention = mention,
+                type = type,
+            )
+            ScaledContent {
                 PostCardBody(
                     modifier = Modifier.padding(
                         horizontal = Spacing.xs,
@@ -83,32 +69,32 @@ fun InboxCard(
                     text = mention.comment.text,
                     autoLoadImages = autoLoadImages,
                 )
-                InboxReplySubtitle(
-                    modifier = Modifier.padding(
-                        horizontal = Spacing.xs,
-                    ),
-                    creator = mention.creator,
-                    community = mention.community,
-                    autoLoadImages = autoLoadImages,
-                    date = mention.publishDate,
-                    score = mention.score,
-                    upvotes = mention.upvotes,
-                    downvotes = mention.downvotes,
-                    separateUpAndDownVotes = separateUpAndDownVotes,
-                    upVoted = mention.myVote > 0,
-                    downVoted = mention.myVote < 0,
-                    onOpenCommunity = onOpenCommunity,
-                    onOpenCreator = { user ->
-                        onOpenCreator(user)
-                    },
-                    onUpVote = {
-                        onUpVote?.invoke(mention.comment)
-                    },
-                    onDownVote = {
-                        onDownVote?.invoke(mention.comment)
-                    },
-                )
             }
+            InboxReplySubtitle(
+                modifier = Modifier.padding(
+                    horizontal = Spacing.xs,
+                ),
+                creator = mention.creator,
+                community = mention.community,
+                autoLoadImages = autoLoadImages,
+                date = mention.publishDate,
+                score = mention.score,
+                upvotes = mention.upvotes,
+                downvotes = mention.downvotes,
+                separateUpAndDownVotes = separateUpAndDownVotes,
+                upVoted = mention.myVote > 0,
+                downVoted = mention.myVote < 0,
+                onOpenCommunity = onOpenCommunity,
+                onOpenCreator = { user ->
+                    onOpenCreator(user)
+                },
+                onUpVote = {
+                    onUpVote?.invoke(mention.comment)
+                },
+                onDownVote = {
+                    onDownVote?.invoke(mention.comment)
+                },
+            )
         }
     }
 }

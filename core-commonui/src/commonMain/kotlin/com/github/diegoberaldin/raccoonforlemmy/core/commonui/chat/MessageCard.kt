@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ScaledContent
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.DateTime
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -89,82 +90,84 @@ internal fun MessageCard(
                 )
             ).fillMaxWidth().padding(Spacing.s)
         ) {
-            Column {
-                Text(
-                    text = content,
-                    color = textColor,
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(Spacing.xxxs),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Spacer(modifier = Modifier.weight(1f))
+            ScaledContent {
+                Column {
+                    Text(
+                        text = content,
+                        color = textColor,
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f))
 
-                    if (date.isNotEmpty()) {
-                        val buttonModifier = Modifier.size(22.dp).padding(3.dp)
-                        Icon(
-                            modifier = buttonModifier.padding(1.dp),
-                            imageVector = Icons.Default.Schedule,
-                            contentDescription = null,
-                            tint = textColor,
-                        )
-                        Text(
-                            text = date.let {
-                                when {
-                                    it.isEmpty() -> it
-                                    !it.endsWith("Z") -> {
-                                        DateTime.getPrettyDate(
-                                            iso8601Timestamp = it + "Z",
-                                            yearLabel = stringResource(
-                                                MR.strings.profile_year_short
-                                            ),
-                                            monthLabel = stringResource(
-                                                MR.strings.profile_month_short
-                                            ),
-                                            dayLabel = stringResource(MR.strings.profile_day_short),
-                                            hourLabel = stringResource(
-                                                MR.strings.post_hour_short
-                                            ),
-                                            minuteLabel = stringResource(
-                                                MR.strings.post_minute_short
-                                            ),
-                                            secondLabel = stringResource(
-                                                MR.strings.post_second_short
-                                            ),
-                                        )
-                                    }
+                        if (date.isNotEmpty()) {
+                            val buttonModifier = Modifier.size(22.dp).padding(3.dp)
+                            Icon(
+                                modifier = buttonModifier.padding(1.dp),
+                                imageVector = Icons.Default.Schedule,
+                                contentDescription = null,
+                                tint = textColor,
+                            )
+                            Text(
+                                text = date.let {
+                                    when {
+                                        it.isEmpty() -> it
+                                        !it.endsWith("Z") -> {
+                                            DateTime.getPrettyDate(
+                                                iso8601Timestamp = it + "Z",
+                                                yearLabel = stringResource(
+                                                    MR.strings.profile_year_short
+                                                ),
+                                                monthLabel = stringResource(
+                                                    MR.strings.profile_month_short
+                                                ),
+                                                dayLabel = stringResource(MR.strings.profile_day_short),
+                                                hourLabel = stringResource(
+                                                    MR.strings.post_hour_short
+                                                ),
+                                                minuteLabel = stringResource(
+                                                    MR.strings.post_minute_short
+                                                ),
+                                                secondLabel = stringResource(
+                                                    MR.strings.post_second_short
+                                                ),
+                                            )
+                                        }
 
-                                    else -> {
-                                        DateTime.getPrettyDate(
-                                            iso8601Timestamp = it,
-                                            yearLabel = stringResource(
-                                                MR.strings.profile_year_short
-                                            ),
-                                            monthLabel = stringResource(
-                                                MR.strings.profile_month_short
-                                            ),
-                                            dayLabel = stringResource(MR.strings.profile_day_short),
-                                            hourLabel = stringResource(
-                                                MR.strings.post_hour_short
-                                            ),
-                                            minuteLabel = stringResource(
-                                                MR.strings.post_minute_short
-                                            ),
-                                            secondLabel = stringResource(
-                                                MR.strings.post_second_short
-                                            ),
-                                        )
+                                        else -> {
+                                            DateTime.getPrettyDate(
+                                                iso8601Timestamp = it,
+                                                yearLabel = stringResource(
+                                                    MR.strings.profile_year_short
+                                                ),
+                                                monthLabel = stringResource(
+                                                    MR.strings.profile_month_short
+                                                ),
+                                                dayLabel = stringResource(MR.strings.profile_day_short),
+                                                hourLabel = stringResource(
+                                                    MR.strings.post_hour_short
+                                                ),
+                                                minuteLabel = stringResource(
+                                                    MR.strings.post_minute_short
+                                                ),
+                                                secondLabel = stringResource(
+                                                    MR.strings.post_second_short
+                                                ),
+                                            )
+                                        }
                                     }
-                                }
-                            },
-                            style = MaterialTheme.typography.labelMedium,
-                            color = textColor,
-                        )
-                    } else {
-                        Text(
-                            text = "",
-                            style = MaterialTheme.typography.labelSmall,
-                        )
+                                },
+                                style = MaterialTheme.typography.labelMedium,
+                                color = textColor,
+                            )
+                        } else {
+                            Text(
+                                text = "",
+                                style = MaterialTheme.typography.labelSmall,
+                            )
+                        }
                     }
                 }
             }

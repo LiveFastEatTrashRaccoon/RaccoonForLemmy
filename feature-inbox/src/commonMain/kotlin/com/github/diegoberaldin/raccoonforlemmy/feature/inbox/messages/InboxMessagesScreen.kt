@@ -19,21 +19,17 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.chat.InboxChatScreen
@@ -107,39 +103,30 @@ class InboxMessagesScreen : Tab {
                     }
                 }
                 items(uiState.chats) { chat ->
-                    val themeRepository = remember { getThemeRepository() }
-                    val fontScale by themeRepository.contentFontScale.collectAsState()
-                    CompositionLocalProvider(
-                        LocalDensity provides Density(
-                            density = LocalDensity.current.density,
-                            fontScale = fontScale,
-                        ),
-                    ) {
-                        val otherUser = if (chat.creator?.id == uiState.currentUserId) {
-                            chat.recipient
-                        } else {
-                            chat.creator
-                        }
-                        ChatCard(
-                            user = otherUser,
-                            autoLoadImages = uiState.autoLoadImages,
-                            lastMessage = chat.content.orEmpty(),
-                            lastMessageDate = chat.publishDate,
-                            onOpenUser = { user ->
-                                navigator?.push(
-                                    UserDetailScreen(user)
-                                )
-                            },
-                            onOpen = {
-                                val userId = otherUser?.id
-                                if (userId != null) {
-                                    navigator?.push(
-                                        InboxChatScreen(userId)
-                                    )
-                                }
-                            }
-                        )
+                    val otherUser = if (chat.creator?.id == uiState.currentUserId) {
+                        chat.recipient
+                    } else {
+                        chat.creator
                     }
+                    ChatCard(
+                        user = otherUser,
+                        autoLoadImages = uiState.autoLoadImages,
+                        lastMessage = chat.content.orEmpty(),
+                        lastMessageDate = chat.publishDate,
+                        onOpenUser = { user ->
+                            navigator?.push(
+                                UserDetailScreen(user)
+                            )
+                        },
+                        onOpen = {
+                            val userId = otherUser?.id
+                            if (userId != null) {
+                                navigator?.push(
+                                    InboxChatScreen(userId)
+                                )
+                            }
+                        }
+                    )
                 }
                 item {
                     if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {

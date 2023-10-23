@@ -16,8 +16,6 @@ import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,13 +26,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalPixel
@@ -64,69 +59,60 @@ fun PostCard(
     onImageClick: ((String) -> Unit)? = null,
     onOptionSelected: ((Int) -> Unit)? = null,
 ) {
-    val themeRepository = remember { getThemeRepository() }
-    val fontScale by themeRepository.contentFontScale.collectAsState()
-    CompositionLocalProvider(
-        LocalDensity provides Density(
-            density = LocalDensity.current.density,
-            fontScale = fontScale,
-        ),
-    ) {
-        Box(
-            modifier = modifier.let {
-                if (postLayout == PostLayout.Card) {
-                    it.padding(horizontal = Spacing.xs).background(
-                        color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                        shape = RoundedCornerShape(CornerSize.l),
-                    ).padding(Spacing.s)
-                } else {
-                    it
-                }
-            },
-        ) {
-            if (postLayout != PostLayout.Compact) {
-                ExtendedPost(
-                    post = post,
-                    hideAuthor = hideAuthor,
-                    backgroundColor = when (postLayout) {
-                        PostLayout.Card -> MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
-                        else -> MaterialTheme.colorScheme.background
-                    },
-                    showBody = includeFullBody || postLayout == PostLayout.Full,
-                    limitBodyHeight = limitBodyHeight,
-                    separateUpAndDownVotes = separateUpAndDownVotes,
-                    autoLoadImages = autoLoadImages,
-                    roundedCornerImage = postLayout == PostLayout.Card,
-                    fullHeightImage = fullHeightImage,
-                    blurNsfw = blurNsfw,
-                    options = options,
-                    onOpenCommunity = onOpenCommunity,
-                    onOpenCreator = onOpenCreator,
-                    onUpVote = onUpVote,
-                    onDownVote = onDownVote,
-                    onSave = onSave,
-                    onReply = onReply,
-                    onImageClick = onImageClick,
-                    onOptionSelected = onOptionSelected,
-                )
+    Box(
+        modifier = modifier.let {
+            if (postLayout == PostLayout.Card) {
+                it.padding(horizontal = Spacing.xs).background(
+                    color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                    shape = RoundedCornerShape(CornerSize.l),
+                ).padding(Spacing.s)
             } else {
-                CompactPost(
-                    post = post,
-                    hideAuthor = hideAuthor,
-                    blurNsfw = blurNsfw,
-                    separateUpAndDownVotes = separateUpAndDownVotes,
-                    autoLoadImages = autoLoadImages,
-                    options = options,
-                    onOpenCommunity = onOpenCommunity,
-                    onOpenCreator = onOpenCreator,
-                    onUpVote = onUpVote,
-                    onDownVote = onDownVote,
-                    onSave = onSave,
-                    onReply = onReply,
-                    onImageClick = onImageClick,
-                    onOptionSelected = onOptionSelected,
-                )
+                it
             }
+        },
+    ) {
+        if (postLayout != PostLayout.Compact) {
+            ExtendedPost(
+                post = post,
+                hideAuthor = hideAuthor,
+                backgroundColor = when (postLayout) {
+                    PostLayout.Card -> MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
+                    else -> MaterialTheme.colorScheme.background
+                },
+                showBody = includeFullBody || postLayout == PostLayout.Full,
+                limitBodyHeight = limitBodyHeight,
+                separateUpAndDownVotes = separateUpAndDownVotes,
+                autoLoadImages = autoLoadImages,
+                roundedCornerImage = postLayout == PostLayout.Card,
+                fullHeightImage = fullHeightImage,
+                blurNsfw = blurNsfw,
+                options = options,
+                onOpenCommunity = onOpenCommunity,
+                onOpenCreator = onOpenCreator,
+                onUpVote = onUpVote,
+                onDownVote = onDownVote,
+                onSave = onSave,
+                onReply = onReply,
+                onImageClick = onImageClick,
+                onOptionSelected = onOptionSelected,
+            )
+        } else {
+            CompactPost(
+                post = post,
+                hideAuthor = hideAuthor,
+                blurNsfw = blurNsfw,
+                separateUpAndDownVotes = separateUpAndDownVotes,
+                autoLoadImages = autoLoadImages,
+                options = options,
+                onOpenCommunity = onOpenCommunity,
+                onOpenCreator = onOpenCreator,
+                onUpVote = onUpVote,
+                onDownVote = onDownVote,
+                onSave = onSave,
+                onReply = onReply,
+                onImageClick = onImageClick,
+                onOptionSelected = onOptionSelected,
+            )
         }
     }
 }
@@ -165,11 +151,13 @@ private fun CompactPost(
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs)
         ) {
-            PostCardTitle(
-                modifier = Modifier.weight(0.75f),
-                text = post.title,
-                autoLoadImages = autoLoadImages,
-            )
+            ScaledContent {
+                PostCardTitle(
+                    modifier = Modifier.weight(0.75f),
+                    text = post.title,
+                    autoLoadImages = autoLoadImages,
+                )
+            }
             PostCardImage(
                 modifier = Modifier
                     .weight(0.25f)
@@ -240,14 +228,16 @@ private fun ExtendedPost(
             onOpenCreator = onOpenCreator,
             autoLoadImages = autoLoadImages,
         )
-        PostCardTitle(
-            modifier = Modifier.padding(
-                vertical = Spacing.xs,
-                horizontal = Spacing.xs,
-            ),
-            text = post.title,
-            autoLoadImages = autoLoadImages,
-        )
+        ScaledContent {
+            PostCardTitle(
+                modifier = Modifier.padding(
+                    vertical = Spacing.xs,
+                    horizontal = Spacing.xs,
+                ),
+                text = post.title,
+                autoLoadImages = autoLoadImages,
+            )
+        }
 
         PostCardImage(
             modifier = Modifier.let {
@@ -269,35 +259,37 @@ private fun ExtendedPost(
             autoLoadImages = autoLoadImages,
         )
         if (showBody) {
-            Box {
-                val maxHeight = 200.dp
-                val maxHeightPx = maxHeight.toLocalPixel()
-                var textHeightPx by remember { mutableStateOf(0f) }
-                PostCardBody(
-                    modifier = Modifier.let {
-                        if (limitBodyHeight) {
-                            it.heightIn(max = maxHeight)
-                        } else {
-                            it
-                        }
-                    }.padding(horizontal = Spacing.xs).onGloballyPositioned {
-                        textHeightPx = it.size.toSize().height
-                    },
-                    text = post.text,
-                    autoLoadImages = autoLoadImages,
-                )
-                if (limitBodyHeight && textHeightPx >= maxHeightPx) {
-                    Box(
-                        modifier = Modifier.height(Spacing.xxl).fillMaxWidth()
-                            .align(Alignment.BottomCenter).background(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color.Transparent,
-                                        backgroundColor,
+            ScaledContent {
+                Box {
+                    val maxHeight = 200.dp
+                    val maxHeightPx = maxHeight.toLocalPixel()
+                    var textHeightPx by remember { mutableStateOf(0f) }
+                    PostCardBody(
+                        modifier = Modifier.let {
+                            if (limitBodyHeight) {
+                                it.heightIn(max = maxHeight)
+                            } else {
+                                it
+                            }
+                        }.padding(horizontal = Spacing.xs).onGloballyPositioned {
+                            textHeightPx = it.size.toSize().height
+                        },
+                        text = post.text,
+                        autoLoadImages = autoLoadImages,
+                    )
+                    if (limitBodyHeight && textHeightPx >= maxHeightPx) {
+                        Box(
+                            modifier = Modifier.height(Spacing.xxl).fillMaxWidth()
+                                .align(Alignment.BottomCenter).background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            Color.Transparent,
+                                            backgroundColor,
+                                        ),
                                     ),
                                 ),
-                            ),
-                    )
+                        )
+                    }
                 }
             }
         }

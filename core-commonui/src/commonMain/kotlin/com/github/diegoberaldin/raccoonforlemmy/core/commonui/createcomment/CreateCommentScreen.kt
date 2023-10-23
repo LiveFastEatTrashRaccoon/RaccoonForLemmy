@@ -27,7 +27,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -41,15 +40,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
@@ -150,43 +146,34 @@ class CreateCommentScreen(
                     .nestedScroll(keyboardScrollConnection)
                     .verticalScroll(rememberScrollState()),
             ) {
-                val themeRepository = remember { getThemeRepository() }
-                val fontScale by themeRepository.contentFontScale.collectAsState()
-                CompositionLocalProvider(
-                    LocalDensity provides Density(
-                        density = LocalDensity.current.density,
-                        fontScale = fontScale,
-                    ),
-                ) {
-                    val referenceModifier = Modifier.padding(
-                        horizontal = Spacing.s,
-                        vertical = Spacing.xxs,
-                    )
-                    when {
-                        originalComment != null -> {
-                            CommentCard(
-                                modifier = referenceModifier,
-                                comment = originalComment,
-                                hideIndent = true,
-                                separateUpAndDownVotes = uiState.separateUpAndDownVotes,
-                                autoLoadImages = uiState.autoLoadImages,
-                            )
-                            Divider()
-                        }
+                val referenceModifier = Modifier.padding(
+                    horizontal = Spacing.s,
+                    vertical = Spacing.xxs,
+                )
+                when {
+                    originalComment != null -> {
+                        CommentCard(
+                            modifier = referenceModifier,
+                            comment = originalComment,
+                            hideIndent = true,
+                            separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                            autoLoadImages = uiState.autoLoadImages,
+                        )
+                        Divider()
+                    }
 
-                        originalPost != null -> {
-                            PostCard(
-                                modifier = referenceModifier,
-                                postLayout = uiState.postLayout,
-                                fullHeightImage = uiState.fullHeightImages,
-                                post = originalPost,
-                                limitBodyHeight = true,
-                                blurNsfw = false,
-                                separateUpAndDownVotes = uiState.separateUpAndDownVotes,
-                                autoLoadImages = uiState.autoLoadImages,
-                            )
-                            Divider()
-                        }
+                    originalPost != null -> {
+                        PostCard(
+                            modifier = referenceModifier,
+                            postLayout = uiState.postLayout,
+                            fullHeightImage = uiState.fullHeightImages,
+                            post = originalPost,
+                            limitBodyHeight = true,
+                            blurNsfw = false,
+                            separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                            autoLoadImages = uiState.autoLoadImages,
+                        )
+                        Divider()
                     }
                 }
 
