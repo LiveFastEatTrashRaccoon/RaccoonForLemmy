@@ -20,7 +20,6 @@
     <string name="message_missing_field">Missing field</string>
     <string name="message_invalid_field">Invalid field</string>
     <string name="message_image_loading_error">Image loading error</string>
-    <string name="message_login_successful">🎉 Login successful! 🎉</string>
     <string name="message_empty_list">No items to display</string>
     <string name="message_operation_successful">Operation completed succcessfully</string>
 
@@ -63,10 +62,15 @@
 
     <string name="post_detail_load_more_comments">Load more comments…</string>
     <string name="comment_action_delete">Delete</string>
-    <string name="post_action_share">Share</string>
+    <string name="post_action_share">Share…</string>
     <string name="post_action_edit">Edit</string>
     <string name="post_action_hide">Hide</string>
+    <string name="post_action_report">Report…</string>
     <string name="post_detail_cross_posts">also posted to:</string>
+
+    <string name="create_report_title_post">Report post</string>
+    <string name="create_report_title_comment">Report comment</string>
+    <string name="create_report_placeholder">Report text (optional)</string>
 
     <string name="explore_result_type_all">All</string>
     <string name="explore_result_type_posts">Posts</string>

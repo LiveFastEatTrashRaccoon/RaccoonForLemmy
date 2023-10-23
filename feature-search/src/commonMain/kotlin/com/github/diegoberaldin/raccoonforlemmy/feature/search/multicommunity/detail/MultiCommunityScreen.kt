@@ -73,6 +73,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateReportScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -317,6 +318,7 @@ class MultiCommunityScreen(
                                     options = buildList {
                                         add(stringResource(MR.strings.post_action_share))
                                         add(stringResource(MR.strings.post_action_hide))
+                                        add(stringResource(MR.strings.post_action_report))
                                     },
                                     blurNsfw = uiState.blurNsfw,
                                     onOpenCommunity = { community ->
@@ -374,6 +376,14 @@ class MultiCommunityScreen(
                                     },
                                     onOptionSelected = { optionIdx ->
                                         when (optionIdx) {
+                                            2 -> {
+                                                bottomSheetNavigator.show(
+                                                    CreateReportScreen(
+                                                        postId = post.id
+                                                    )
+                                                )
+                                            }
+
                                             1 -> model.reduce(MultiCommunityMviModel.Intent.Hide(idx))
                                             else -> model.reduce(
                                                 MultiCommunityMviModel.Intent.SharePost(idx)

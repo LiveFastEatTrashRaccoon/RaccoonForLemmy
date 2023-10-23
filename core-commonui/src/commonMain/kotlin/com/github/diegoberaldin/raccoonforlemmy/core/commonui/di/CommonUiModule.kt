@@ -23,6 +23,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.Default
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateReportMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateReportViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
@@ -170,6 +172,16 @@ val commonUiModule = module {
             communityRepository = get(),
             multiCommunityRepository = get(),
             settingsRepository = get(),
+        )
+    }
+    factory<CreateReportMviModel> {
+        CreateReportViewModel(
+            postId = it[0],
+            commentId = it[1],
+            mvi = DefaultMviModel(CreateReportMviModel.UiState()),
+            identityRepository = get(),
+            postRepository = get(),
+            commentRepository = get(),
         )
     }
 }

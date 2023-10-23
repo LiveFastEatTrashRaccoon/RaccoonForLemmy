@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreatePostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreatePostLikeForm
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreatePostReportForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.DeletePostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.EditPostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkPostAsReadForm
@@ -245,5 +246,17 @@ class PostRepository(
     } catch (e: Exception) {
         e.printStackTrace()
         null
+    }
+
+    suspend fun report(postId: Int, reason: String, auth: String) {
+        val data = CreatePostReportForm(
+            postId = postId,
+            reason = reason,
+            auth = auth,
+        )
+        services.post.createReport(
+            form = data,
+            authHeader = auth.toAuthHeader(),
+        )
     }
 }

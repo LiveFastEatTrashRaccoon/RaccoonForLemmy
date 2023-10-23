@@ -84,6 +84,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateReportScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -427,6 +428,7 @@ class CommunityDetailScreen(
                                         options = buildList {
                                             add(stringResource(MR.strings.post_action_share))
                                             add(stringResource(MR.strings.post_action_hide))
+                                            add(stringResource(MR.strings.post_action_report))
                                             if (post.creator?.id == uiState.currentUserId && !isOnOtherInstance) {
                                                 add(stringResource(MR.strings.post_action_edit))
                                                 add(stringResource(MR.strings.comment_action_delete))
@@ -493,13 +495,13 @@ class CommunityDetailScreen(
                                         },
                                         onOptionSelected = { optionIdx ->
                                             when (optionIdx) {
-                                                3 -> model.reduce(
+                                                4 -> model.reduce(
                                                     CommunityDetailMviModel.Intent.DeletePost(
                                                         post.id
                                                     )
                                                 )
 
-                                                2 -> {
+                                                3 -> {
                                                     notificationCenter.addObserver(
                                                         {
                                                             model.reduce(CommunityDetailMviModel.Intent.Refresh)
@@ -510,6 +512,14 @@ class CommunityDetailScreen(
                                                     bottomSheetNavigator.show(
                                                         CreatePostScreen(
                                                             editedPost = post,
+                                                        )
+                                                    )
+                                                }
+
+                                                2 -> {
+                                                    bottomSheetNavigator.show(
+                                                        CreateReportScreen(
+                                                            postId = post.id
                                                         )
                                                     )
                                                 }

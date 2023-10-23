@@ -11,6 +11,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateReportMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -70,6 +71,11 @@ actual fun getSavedItemsViewModel(): SavedItemsMviModel =
 
 actual fun getModalDrawerViewModel(): ModalDrawerMviModel =
     CommonUiViewModelHelper.modalDrawerViewModel
+
+actual fun getCreateReportViewModel(
+    postId: Int?,
+    commentId: Int?,
+): CreateReportMviModel = CommonUiViewModelHelper.getCreateReportModel(postId, commentId)
 
 object CommonUiViewModelHelper : KoinComponent {
 
@@ -142,6 +148,16 @@ object CommonUiViewModelHelper : KoinComponent {
     fun getChatViewModel(otherUserId: Int): InboxChatMviModel {
         val model: InboxChatMviModel by inject(
             parameters = { parametersOf(otherUserId) }
+        )
+        return model
+    }
+
+    fun getCreateReportModel(
+        postId: Int?,
+        commentId: Int?,
+    ): CreateReportMviModel {
+        val model: CreateReportMviModel by inject(
+            parameters = { parametersOf(postId, commentId) }
         )
         return model
     }

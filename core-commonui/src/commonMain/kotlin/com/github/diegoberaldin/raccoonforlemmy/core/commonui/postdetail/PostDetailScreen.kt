@@ -87,6 +87,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCo
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateReportScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -302,6 +303,7 @@ class PostDetailScreen(
                                 },
                                 options = buildList {
                                     add(stringResource(MR.strings.post_action_share))
+                                    add(stringResource(MR.strings.post_action_report))
                                     if (statePost.creator?.id == uiState.currentUserId && !isOnOtherInstance) {
                                         add(stringResource(MR.strings.post_action_edit))
                                         add(stringResource(MR.strings.comment_action_delete))
@@ -347,7 +349,9 @@ class PostDetailScreen(
                                 },
                                 onOptionSelected = { idx ->
                                     when (idx) {
-                                        1 -> {
+                                        3 -> model.reduce(PostDetailMviModel.Intent.DeletePost)
+
+                                        2 -> {
                                             notificationCenter.addObserver(
                                                 {
                                                     model.reduce(PostDetailMviModel.Intent.RefreshPost)
@@ -360,7 +364,9 @@ class PostDetailScreen(
                                             )
                                         }
 
-                                        2 -> model.reduce(PostDetailMviModel.Intent.DeletePost)
+                                        1 -> {
+                                            bottomSheetNavigator.show(CreateReportScreen(postId = statePost.id))
+                                        }
 
                                         else -> model.reduce(PostDetailMviModel.Intent.SharePost)
                                     }
@@ -501,6 +507,7 @@ class PostDetailScreen(
                                             separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                             autoLoadImages = uiState.autoLoadImages,
                                             options = buildList {
+                                                add(stringResource(MR.strings.post_action_report))
                                                 if (comment.creator?.id == uiState.currentUserId) {
                                                     add(stringResource(MR.strings.post_action_edit))
                                                     add(stringResource(MR.strings.comment_action_delete))
@@ -575,15 +582,15 @@ class PostDetailScreen(
                                                     )
                                                 }
                                             },
-                                            onOptionSelected = { idx ->
-                                                when (idx) {
-                                                    1 -> model.reduce(
+                                            onOptionSelected = { optionId ->
+                                                when (optionId) {
+                                                    2 -> model.reduce(
                                                         PostDetailMviModel.Intent.DeleteComment(
                                                             comment.id
                                                         )
                                                     )
 
-                                                    else -> {
+                                                    1 -> {
                                                         notificationCenter.addObserver(
                                                             {
                                                                 model.reduce(PostDetailMviModel.Intent.Refresh)
@@ -595,6 +602,14 @@ class PostDetailScreen(
                                                         bottomSheetNavigator.show(
                                                             CreateCommentScreen(
                                                                 editedComment = comment,
+                                                            )
+                                                        )
+                                                    }
+
+                                                    else -> {
+                                                        bottomSheetNavigator.show(
+                                                            CreateReportScreen(
+                                                                commentId = comment.id
                                                             )
                                                         )
                                                     }

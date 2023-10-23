@@ -1,10 +1,12 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.api.service
 
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentReplyResponse
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentReportResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentSortType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreateCommentForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreateCommentLikeForm
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreateCommentReportForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.DeleteCommentForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.EditCommentForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetCommentResponse
@@ -86,4 +88,11 @@ interface CommentService {
         @Header("Authorization") authHeader: String? = null,
         @Body form: DeleteCommentForm,
     ): Response<CommentResponse>
+
+    @POST("comment/report")
+    @Headers("Content-Type: application/json")
+    suspend fun createReport(
+        @Body form: CreateCommentReportForm,
+        @Header("Authorization") authHeader: String? = null,
+    ): Response<CommentReportResponse>
 }

@@ -11,6 +11,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateReportMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -120,5 +121,15 @@ actual fun getSavedItemsViewModel(): SavedItemsMviModel {
 
 actual fun getModalDrawerViewModel(): ModalDrawerMviModel {
     val res: ModalDrawerMviModel by inject(ModalDrawerMviModel::class.java)
+    return res
+}
+
+actual fun getCreateReportViewModel(
+    postId: Int?,
+    commentId: Int?,
+): CreateReportMviModel {
+    val res: CreateReportMviModel by inject(CreateReportMviModel::class.java, parameters = {
+        parametersOf(postId, commentId)
+    })
     return res
 }

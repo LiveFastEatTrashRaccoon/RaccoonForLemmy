@@ -11,6 +11,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateReportMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -63,3 +64,8 @@ expect fun getInboxChatViewModel(otherUserId: Int): InboxChatMviModel
 expect fun getSavedItemsViewModel(): SavedItemsMviModel
 
 expect fun getModalDrawerViewModel(): ModalDrawerMviModel
+
+expect fun getCreateReportViewModel(
+    postId: Int? = null,
+    commentId: Int? = null,
+): CreateReportMviModel

@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.api.service
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentReplyResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreatePostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreatePostLikeForm
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CreatePostReportForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.DeletePostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.EditPostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetPostResponse
@@ -10,6 +11,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetPostsResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.MarkPostAsReadForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.PictrsImages
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.PostReportResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.PostResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SavePostForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType
@@ -97,4 +99,11 @@ interface PostService {
         @Header("Authorization") authHeader: String? = null,
         @Body content: MultiPartFormDataContent,
     ): Response<PictrsImages>
+
+    @POST("post/report")
+    @Headers("Content-Type: application/json")
+    suspend fun createReport(
+        @Header("Authorization") authHeader: String? = null,
+        @Body form: CreatePostReportForm,
+    ): Response<PostReportResponse>
 }

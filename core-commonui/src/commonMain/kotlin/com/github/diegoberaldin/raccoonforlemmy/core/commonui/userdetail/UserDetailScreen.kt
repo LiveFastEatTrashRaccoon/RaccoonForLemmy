@@ -84,6 +84,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserDetailVi
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateReportScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
@@ -390,6 +391,7 @@ class UserDetailScreen(
                                         autoLoadImages = uiState.autoLoadImages,
                                         options = buildList {
                                             add(stringResource(MR.strings.post_action_share))
+                                            add(stringResource(MR.strings.post_action_report))
                                         },
                                         onUpVote = if (isOnOtherInstance) {
                                             null
@@ -454,6 +456,14 @@ class UserDetailScreen(
                                         },
                                         onOptionSelected = { optionIdx ->
                                             when (optionIdx) {
+                                                1 -> {
+                                                    bottomSheetNavigator.show(
+                                                        CreateReportScreen(
+                                                            postId = post.id
+                                                        )
+                                                    )
+                                                }
+
                                                 else -> model.reduce(
                                                     UserDetailMviModel.Intent.SharePost(idx)
                                                 )
@@ -598,6 +608,20 @@ class UserDetailScreen(
                                         },
                                         onOpenCommunity = { community ->
                                             navigator?.push(CommunityDetailScreen(community))
+                                        },
+                                        options = buildList {
+                                            add(stringResource(MR.strings.post_action_report))
+                                        },
+                                        onOptionSelected = { optionId ->
+                                            when (optionId) {
+                                                else -> {
+                                                    bottomSheetNavigator.show(
+                                                        CreateReportScreen(
+                                                            commentId = comment.id
+                                                        )
+                                                    )
+                                                }
+                                            }
                                         },
                                     )
                                     Divider(
