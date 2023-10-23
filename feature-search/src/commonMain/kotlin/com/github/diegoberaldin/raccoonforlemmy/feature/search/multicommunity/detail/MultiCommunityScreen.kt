@@ -70,6 +70,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
@@ -123,9 +124,12 @@ class MultiCommunityScreen(
                 }
             }
         }
+        val drawerCoordinator = remember { getDrawerCoordinator() }
         DisposableEffect(key) {
+            drawerCoordinator.setGesturesEnabled(false)
             onDispose {
                 notificationCenter.removeObserver(key)
+                drawerCoordinator.setGesturesEnabled(true)
             }
         }
 
