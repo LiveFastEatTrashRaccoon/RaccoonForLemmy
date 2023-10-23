@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -224,6 +225,16 @@ class MultiCommunityScreen(
                                     }
                                 },
                             )
+                            this += FloatingActionButtonMenuItem(
+                                icon = Icons.Default.ClearAll,
+                                text = stringResource(MR.strings.action_clear_read),
+                                onSelected = {
+                                    model.reduce(MultiCommunityMviModel.Intent.ClearRead)
+                                    scope.launch {
+                                        lazyListState.scrollToItem(0)
+                                    }
+                                },
+                            )
                         }
                     )
                 }
@@ -293,6 +304,7 @@ class MultiCommunityScreen(
                             content = {
                                 PostCard(
                                     modifier = Modifier.onClick {
+                                        model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(idx))
                                         navigator?.push(
                                             PostDetailScreen(post),
                                         )
@@ -354,6 +366,7 @@ class MultiCommunityScreen(
                                         bottomSheetNavigator.show(screen)
                                     },
                                     onImageClick = { url ->
+                                        model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(idx))
                                         navigator?.push(
                                             ZoomableImageScreen(url),
                                         )

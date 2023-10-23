@@ -5,8 +5,10 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 
 interface MultiCommunityPaginator {
     val canFetchMore: Boolean
+
     fun setCommunities(ids: List<Int>)
     fun reset()
+    fun setHideReadPosts(value: Boolean)
 
     suspend fun loadNextPage(
         auth: String? = null,

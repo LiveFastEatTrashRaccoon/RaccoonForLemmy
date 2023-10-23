@@ -18,6 +18,8 @@ interface MultiCommunityMviModel :
         data class DownVotePost(val index: Int, val feedback: Boolean = false) : Intent
         data class SavePost(val index: Int, val feedback: Boolean = false) : Intent
         data class SharePost(val index: Int) : Intent
+        data class MarkAsRead(val index: Int) : Intent
+        data object ClearRead : Intent
     }
 
     data class UiState(

@@ -104,6 +104,9 @@ class MultiCommunityViewModel(
                 post = uiState.value.posts[intent.index],
                 feedback = intent.feedback,
             )
+
+            MultiCommunityMviModel.Intent.ClearRead -> clearRead()
+            is MultiCommunityMviModel.Intent.MarkAsRead -> markAsRead(post = uiState.value.posts[intent.index])
         }
     }
 
@@ -188,6 +191,48 @@ class MultiCommunityViewModel(
                     auth = auth,
                     voted = newVote,
                 )
+                markAsRead(newPost)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                post
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
+            }
+        }
+    }
+
+    private fun markAsRead(post: PostModel) {
+        if (post.read) {
+            return
+        }
+        val newPost = post.copy(read = true)
+        mvi.scope?.launch(Dispatchers.IO) {
+            try {
+                val auth = identityRepository.authToken.value.orEmpty()
+                postRepository.setRead(
+                    read = true,
+                    postId = post.id,
+                    auth = auth,
+                )
+                mvi.updateState {
+                    it.copy(
+                        posts = it.posts.map { p ->
+                            if (p.id == post.id) {
+                                newPost
+                            } else {
+                                p
+                            }
+                        },
+                    )
+                }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -233,6 +278,7 @@ class MultiCommunityViewModel(
                     auth = auth,
                     downVoted = newValue,
                 )
+                markAsRead(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -278,6 +324,7 @@ class MultiCommunityViewModel(
                     auth = auth,
                     saved = newValue,
                 )
+                markAsRead(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
                 mvi.updateState {
@@ -313,6 +360,16 @@ class MultiCommunityViewModel(
         val url = post.shareUrl
         if (url.isNotEmpty()) {
             shareHelper.share(url, "text/plain")
+        }
+    }
+
+    private fun clearRead() {
+        paginator.setHideReadPosts(true)
+        mvi.updateState {
+            val newPosts = it.posts.filter { e -> !e.read }
+            it.copy(
+                posts = newPosts,
+            )
         }
     }
 }
