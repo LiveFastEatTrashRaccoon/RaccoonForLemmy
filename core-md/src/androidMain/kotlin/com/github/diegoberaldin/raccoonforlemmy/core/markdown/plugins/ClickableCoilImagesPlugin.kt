@@ -32,7 +32,7 @@ class ClickableCoilImagesPlugin(
             imageLoader: ImageLoader,
             onOpenImage: ((String) -> Unit)? = null,
         ): ClickableCoilImagesPlugin {
-            return create(
+            return ClickableCoilImagesPlugin(
                 object : CoilStore {
                     override fun load(drawable: AsyncDrawable): ImageRequest {
                         return ImageRequest.Builder(context)
@@ -45,16 +45,8 @@ class ClickableCoilImagesPlugin(
                     }
                 },
                 imageLoader,
-                onOpenImage,
+                onOpenImage
             )
-        }
-
-        fun create(
-            coilStore: CoilStore,
-            imageLoader: ImageLoader,
-            onOpenImage: ((String) -> Unit)? = null,
-        ): ClickableCoilImagesPlugin {
-            return ClickableCoilImagesPlugin(coilStore, imageLoader, onOpenImage)
         }
     }
 

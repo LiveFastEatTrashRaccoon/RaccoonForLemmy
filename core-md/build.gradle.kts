@@ -33,6 +33,7 @@ kotlin {
                 implementation(libs.markwon.tables)
                 implementation(libs.markwon.html)
                 implementation(libs.markwon.coil)
+                implementation(libs.markwon.linkify)
                 implementation(libs.coil)
             }
         }

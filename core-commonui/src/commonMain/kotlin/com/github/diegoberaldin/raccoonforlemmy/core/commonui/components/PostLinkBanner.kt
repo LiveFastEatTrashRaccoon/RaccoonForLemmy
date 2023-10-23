@@ -11,8 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,8 +31,6 @@ fun PostLinkBanner(
     val uriHandler = LocalUriHandler.current
     val navigator = remember { getNavigationCoordinator().getRootNavigator() }
     val settingsRepository = remember { getSettingsRepository() }
-    val settings by settingsRepository.currentSettings.collectAsState()
-    val openExternal = settings.openUrlsInExternalBrowser
 
     if (url.isNotEmpty()) {
         Row(
@@ -43,7 +39,7 @@ fun PostLinkBanner(
                     color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f),
                     shape = RoundedCornerShape(CornerSize.l),
                 ).onClick {
-                    if (openExternal) {
+                    if (settingsRepository.currentSettings.value.openUrlsInExternalBrowser) {
                         uriHandler.openUri(url)
                     } else {
                         navigator?.push(WebViewScreen(url))

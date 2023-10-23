@@ -97,8 +97,6 @@ class LoginBottomSheet : Screen {
         val uriHandler = LocalUriHandler.current
         val navigator = remember { getNavigationCoordinator().getRootNavigator() }
         val settingsRepository = remember { getSettingsRepository() }
-        val settings by settingsRepository.currentSettings.collectAsState()
-        val openExternal = settings.openUrlsInExternalBrowser
 
         Column(
             modifier = Modifier.padding(
@@ -129,7 +127,7 @@ class LoginBottomSheet : Screen {
                         bottomSheetNavigator.hide()
                         handleUrl(
                             url = HELP_URL,
-                            openExternal = openExternal,
+                            openExternal = settingsRepository.currentSettings.value.openUrlsInExternalBrowser,
                             uriHandler = uriHandler,
                             navigator = navigator
                         )
