@@ -216,6 +216,9 @@ class PostListScreen : Screen {
                                 text = stringResource(MR.strings.action_clear_read),
                                 onSelected = {
                                     model.reduce(PostListMviModel.Intent.ClearRead)
+                                    scope.launch {
+                                        lazyListState.scrollToItem(0)
+                                    }
                                 },
                             )
                         }

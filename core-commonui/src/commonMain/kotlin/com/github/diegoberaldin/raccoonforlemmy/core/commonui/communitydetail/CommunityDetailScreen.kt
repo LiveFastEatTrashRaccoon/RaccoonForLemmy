@@ -261,6 +261,9 @@ class CommunityDetailScreen(
                                 text = stringResource(MR.strings.action_clear_read),
                                 onSelected = {
                                     model.reduce(CommunityDetailMviModel.Intent.ClearRead)
+                                    scope.launch {
+                                        lazyListState.scrollToItem(0)
+                                    }
                                 },
                             )
                             if (!isOnOtherInstance) {
