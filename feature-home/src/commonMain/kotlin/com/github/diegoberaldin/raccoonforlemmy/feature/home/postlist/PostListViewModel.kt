@@ -42,6 +42,7 @@ class PostListViewModel(
     private var currentPage: Int = 1
     private var pageCursor: String? = null
     private var firstLoad = true
+    private var hideReadPosts = false
 
     init {
         notificationCenter.addObserver({
@@ -158,6 +159,7 @@ class PostListViewModel(
     private fun refresh() {
         currentPage = 1
         pageCursor = null
+        hideReadPosts = false
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
         loadNextPage()
     }
@@ -183,6 +185,12 @@ class PostListViewModel(
                 type = type,
                 sort = sort,
             )?.let {
+                if (hideReadPosts) {
+                    it.copy(first = it.first.filter { p -> !p.read })
+                } else {
+                    it
+                }
+            }?.let {
                 if (refreshing) {
                     it
                 } else {
@@ -459,6 +467,7 @@ class PostListViewModel(
     }
 
     private fun clearRead() {
+        hideReadPosts = true
         mvi.updateState {
             val newPosts = it.posts.filter { e -> !e.read }
             it.copy(

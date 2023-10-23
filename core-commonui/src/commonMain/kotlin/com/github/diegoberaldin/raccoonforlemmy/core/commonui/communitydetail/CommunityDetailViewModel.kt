@@ -38,6 +38,7 @@ class CommunityDetailViewModel(
 
     private var currentPage: Int = 1
     private var pageCursor: String? = null
+    private var hideReadPosts = false
 
     override fun onStarted() {
         mvi.onStarted()
@@ -120,6 +121,7 @@ class CommunityDetailViewModel(
     private fun refresh() {
         currentPage = 1
         pageCursor = null
+        hideReadPosts = false
         mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
         val auth = identityRepository.authToken.value
         mvi.scope?.launch(Dispatchers.IO) {
@@ -177,6 +179,12 @@ class CommunityDetailViewModel(
                     pageCursor = pageCursor,
                     sort = sort,
                 )
+            }?.let {
+                if (hideReadPosts) {
+                    it.copy(first = it.first.filter { p -> !p.read })
+                } else {
+                    it
+                }
             }?.let {
                 if (refreshing) {
                     it
@@ -470,6 +478,7 @@ class CommunityDetailViewModel(
     }
 
     private fun clearRead() {
+        hideReadPosts = true
         mvi.updateState {
             val newPosts = it.posts.filter { e -> !e.read }
             it.copy(
