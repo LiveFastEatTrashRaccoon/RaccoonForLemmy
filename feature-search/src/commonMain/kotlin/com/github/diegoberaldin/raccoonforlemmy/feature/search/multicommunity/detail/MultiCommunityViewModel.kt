@@ -107,6 +107,7 @@ class MultiCommunityViewModel(
 
             MultiCommunityMviModel.Intent.ClearRead -> clearRead()
             is MultiCommunityMviModel.Intent.MarkAsRead -> markAsRead(post = uiState.value.posts[intent.index])
+            is MultiCommunityMviModel.Intent.Hide -> hide(post = uiState.value.posts[intent.index])
         }
     }
 
@@ -371,5 +372,15 @@ class MultiCommunityViewModel(
                 posts = newPosts,
             )
         }
+    }
+
+    private fun hide(post: PostModel) {
+        mvi.updateState {
+            val newPosts = it.posts.filter { e -> e.id != post.id }
+            it.copy(
+                posts = newPosts,
+            )
+        }
+        markAsRead(post)
     }
 }

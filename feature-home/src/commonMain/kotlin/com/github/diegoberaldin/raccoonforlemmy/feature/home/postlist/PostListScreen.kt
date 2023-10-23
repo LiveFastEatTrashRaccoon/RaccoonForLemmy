@@ -305,6 +305,7 @@ class PostListScreen : Screen {
                                         autoLoadImages = uiState.autoLoadImages,
                                         options = buildList {
                                             add(stringResource(MR.strings.post_action_share))
+                                            add(stringResource(MR.strings.post_action_hide))
                                             if (post.creator?.id == uiState.currentUserId) {
                                                 add(stringResource(MR.strings.post_action_edit))
                                                 add(stringResource(MR.strings.comment_action_delete))
@@ -366,13 +367,13 @@ class PostListScreen : Screen {
                                         },
                                         onOptionSelected = { optionIdx ->
                                             when (optionIdx) {
-                                                2 -> model.reduce(
+                                                3 -> model.reduce(
                                                     PostListMviModel.Intent.DeletePost(
                                                         post.id
                                                     )
                                                 )
 
-                                                1 -> {
+                                                2 -> {
                                                     notificationCenter.addObserver(
                                                         {
                                                             model.reduce(PostListMviModel.Intent.Refresh)
@@ -386,6 +387,10 @@ class PostListScreen : Screen {
                                                         )
                                                     )
                                                 }
+
+                                                1 -> model.reduce(
+                                                    PostListMviModel.Intent.Hide(idx)
+                                                )
 
                                                 else -> model.reduce(
                                                     PostListMviModel.Intent.SharePost(idx)

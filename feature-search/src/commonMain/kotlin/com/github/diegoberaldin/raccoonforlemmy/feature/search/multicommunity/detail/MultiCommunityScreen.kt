@@ -316,6 +316,7 @@ class MultiCommunityScreen(
                                     autoLoadImages = uiState.autoLoadImages,
                                     options = buildList {
                                         add(stringResource(MR.strings.post_action_share))
+                                        add(stringResource(MR.strings.post_action_hide))
                                     },
                                     blurNsfw = uiState.blurNsfw,
                                     onOpenCommunity = { community ->
@@ -373,6 +374,7 @@ class MultiCommunityScreen(
                                     },
                                     onOptionSelected = { optionIdx ->
                                         when (optionIdx) {
+                                            1 -> model.reduce(MultiCommunityMviModel.Intent.Hide(idx))
                                             else -> model.reduce(
                                                 MultiCommunityMviModel.Intent.SharePost(idx)
                                             )

@@ -153,6 +153,7 @@ class PostListViewModel(
             }
 
             PostListMviModel.Intent.ClearRead -> clearRead()
+            is PostListMviModel.Intent.Hide -> hide(post = uiState.value.posts[intent.index])
         }
     }
 
@@ -474,5 +475,15 @@ class PostListViewModel(
                 posts = newPosts,
             )
         }
+    }
+
+    private fun hide(post: PostModel) {
+        mvi.updateState {
+            val newPosts = it.posts.filter { e -> e.id != post.id }
+            it.copy(
+                posts = newPosts,
+            )
+        }
+        markAsRead(post)
     }
 }

@@ -115,6 +115,7 @@ class CommunityDetailViewModel(
             }
 
             CommunityDetailMviModel.Intent.ClearRead -> clearRead()
+            is CommunityDetailMviModel.Intent.Hide -> hide(post = uiState.value.posts[intent.index])
         }
     }
 
@@ -488,5 +489,15 @@ class CommunityDetailViewModel(
                 posts = newPosts,
             )
         }
+    }
+
+    private fun hide(post: PostModel) {
+        mvi.updateState {
+            val newPosts = it.posts.filter { e -> e.id != post.id }
+            it.copy(
+                posts = newPosts,
+            )
+        }
+        markAsRead(post)
     }
 }
