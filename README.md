@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://img.shields.io/badge/Kotlin-1.9.10-7f52ff?logo=kotlin" />
   <img src="https://img.shields.io/badge/platforms-Android,iOS-green" />
-  <img src="https://img.shields.io/badge/Jetpack_Compose-1.5.2-3e7fea?logo=jetpackcompose" />
+  <img src="https://img.shields.io/badge/Jetpack_Compose-1.5.3-3e7fea?logo=jetpackcompose" />
   <img src="https://img.shields.io/github/license/diegoberaldin/RaccoonForLemmy" />
 </div>
 
@@ -56,11 +56,13 @@ multiplatform and gradually grew as a fully functional client with many features
 - user profile with one's own posts, comments and saved items;
 - inbox with replies, mentions and direct messages;
 - global search on Lemmy with different result types (all, posts, comments, user, communities);
-- create new posts (with optional images);
-- reply to post and comments;
-- custom appearance (color scheme, font size, post layout);
+- create and edit new posts (with optional images);
+- reply to post and comments (and edit replies);
+- mark posts as read and hide read contents;
+- custom appearance (color scheme, font, text size, post layout);
 - custom localization (more languages to be added in future versions);
-- block users and communities;
+- block users, communities and instances;
+- report post and comments to mods;
 - support for multiple accounts (and multiple instances) with account-specific settings;
 - explore all the communities on a given instance in guest mode;
 - multi-community (aggregation).
@@ -68,11 +70,11 @@ multiplatform and gradually grew as a fully functional client with many features
 Most clients for Lemmy currently offer the first points (with various degrees of completion), so
 there is nothing special about Raccoon for Lemmy, whereas the last ones are less common and are
 directed to more picky users (like me) who like to explore the Lemmy ecosystem and want to be able
-to group feed contents arbitrarily.
+to group feed contents arbitrarily. I also like to be able to customize the appearance of my
+apps, so the ability to change font face or size and colors was of paramount importance to me.
 
 The application is under active development, so expect new features to be added (e.g. video support,
-marking posts as read / hide read posts, etc.) and the layout is going to change and evolve (
-hopefully for the better) over time.
+mod tools, etc.) and the layout is going to change and evolve (hopefully for the better) over time.
 
 ## Why was the project started?
 
@@ -87,16 +89,18 @@ to my taste).
 
 In the third place, I felt that the Android ecosystem of Lemmy apps was a little "poor" with few
 native apps (fewer open source), while the "market" is dominated by iOS and cross platform clients.
-I love Kotlin, I love open source software and I love native development, so there was a "niche"
-that needed to be filled.
+I️ ❤️ Kotlin, I ❤️ Free and Open Source Software and I ❤️ native app development, so there was a
+"niche" that needed to be filled.
 
 Plus, developing a new client was an opportunity to add all the features that I needed and that
-were "scattered" across different apps, e.g. I liked the feature richness of Liftoff (e.g. the
-possibility to explore all the communities of an external instance), the multi-community feature of
-Summit and the polished UI of Thunder and I wished I could have them all in the same app. If I saw a
-feature of Lemmy (e.g. sorting by "Controversial") that not all apps offer, I could add it myself,
-etc. This involves a high level of discretionality and personal taste, I know, but this project _is_
-about experimenting and learning.
+were "scattered" across different apps, e.g. I liked the feature richness
+of [Liftoff](https://github.com/liftoff-app/liftoff) (e.g. the possibility to explore all the
+communities of an external instance), the multi-community feature of
+[Summit](https://github.com/idunnololz/summit-for-lemmy) and the polished UI of
+[Thunder](https://github.com/thunder-app/thunder) and I wished I could have them all in the same
+app. If I saw a feature of Lemmy (e.g. sorting by "Controversial") that not all apps offer, I could
+add it myself, etc. This involves a high level of discretionality and personal taste, I know, but
+this project _is_ all about experimenting and learning.
 
 ## Technologies used:
 
@@ -105,25 +109,28 @@ about experimenting and learning.
 - [Ktor](https://github.com/ktorio/ktor) and [Ktorfit](https://github.com/Foso/Ktorfit) for
   networking in conjunction with kotlinx-serialization for JSON marshalling
 - [Moko resources](https://github.com/icerockdev/moko-resources) for resource management
-- [Kamel](https://github.com/Kamel-Media/Kamel) for lazy image loading
+- [Kamel](https://github.com/Kamel-Media/Kamel) for lazy image loading, but later switched to
+  [Coil](https://github.com/coil-kt/coil) on Android because there was a major bug
 - [Multiplatform settings](https://github.com/russhwolf/multiplatform-settings) for encrypted
   preferences
-- [Markdown](https://github.com/JetBrains/markdown) for markdown parsing
 - [SQLDelight](https://github.com/cashapp/sqldelight)
   and [SQLCipher](https://github.com/sqlcipher/sqlcipher) for local persistence
+- for Markdown rendering, the initial approach involved using
+  [Markdown](https://github.com/JetBrains/markdown) for parsing in conjunction with custom rendering
+  but this approach proved difficult to extend and maintain so on Android the
+  [Markwon](https://github.com/noties/Markwon) library was chosen insted.
 
 ## Credits:
 
-- the `core-api` module is heavily inspired
-  by [Jerboa for Lemmy](https://github.com/dessalines/jerboa)
-- the `core-md` module is taken
-  from [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer)
-  with some adptations _a posteriori_
+- the `core-md` module in the common flavor is heavily inspired by
+  [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) but
+  the Android implementation with Markwon is taken and adapted from
+  [Jerboa for Lemmy](https://github.com/dessalines/jerboa)
 - the UI is inspired by the really great [Thunder](https://github.com/thunder-app/thunder) app
 
 ## Want to try it out?
 
-- get it on [Obtanium](https://github.com/ImranR98/Obtainium/releases) by simply adding this
+- get it on [Obtainium](https://github.com/ImranR98/Obtainium/releases) by simply adding this
   repo `https://github.com/diegoberaldin/RaccoonForLemmy`
 
 ## Want to leave your feedback or report a bug?
@@ -131,6 +138,6 @@ about experimenting and learning.
 - open an issue on this
   project's [issue tracker](https://github.com/diegoberaldin/RaccoonForLemmy/issues) to report bugs
   or request new features
-- create a post on the project's on [community](https://lemmy.world/c/raccoonforlemmy) on
+- create a post on the project's [community](https://lemmy.world/c/raccoonforlemmy) on
   Lemmy.world for broader questions, opinions, personal feedback, suggestions, insults or whatever
   you feel like writing
