@@ -49,5 +49,6 @@ interface PostDetailMviModel :
     sealed interface Effect {
         data object Close : Effect
         data class ScrollToComment(val index: Int) : Effect
+        data object BackToTop : Effect
     }
 }

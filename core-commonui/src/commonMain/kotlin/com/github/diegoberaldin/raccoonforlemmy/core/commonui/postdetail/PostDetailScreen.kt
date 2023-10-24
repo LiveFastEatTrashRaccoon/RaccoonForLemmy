@@ -171,6 +171,12 @@ class PostDetailScreen(
                     is PostDetailMviModel.Effect.ScrollToComment -> {
                         lazyListState.scrollToItem(evt.index)
                     }
+
+                    PostDetailMviModel.Effect.BackToTop -> {
+                        scope.launch {
+                            lazyListState.scrollToItem(0)
+                        }
+                    }
                 }
             }.launchIn(this)
         }
@@ -483,26 +489,27 @@ class PostDetailScreen(
                                         )
                                     },
                                     content = {
-                                        CommentCard(modifier = Modifier.background(MaterialTheme.colorScheme.background)
-                                            .let {
-                                                if (comment.id == highlightCommentId) {
-                                                    it.background(
-                                                        MaterialTheme.colorScheme.surfaceColorAtElevation(
-                                                            5.dp
-                                                        ).copy(
-                                                            alpha = 0.75f
+                                        CommentCard(
+                                            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                                                .let {
+                                                    if (comment.id == highlightCommentId) {
+                                                        it.background(
+                                                            MaterialTheme.colorScheme.surfaceColorAtElevation(
+                                                                5.dp
+                                                            ).copy(
+                                                                alpha = 0.75f
+                                                            )
+                                                        )
+                                                    } else {
+                                                        it
+                                                    }
+                                                }.onClick {
+                                                    model.reduce(
+                                                        PostDetailMviModel.Intent.ToggleExpandComment(
+                                                            commentId,
                                                         )
                                                     )
-                                                } else {
-                                                    it
-                                                }
-                                            }.onClick {
-                                                model.reduce(
-                                                    PostDetailMviModel.Intent.ToggleExpandComment(
-                                                        commentId,
-                                                    )
-                                                )
-                                            },
+                                                },
                                             comment = comment,
                                             separateUpAndDownVotes = uiState.separateUpAndDownVotes,
                                             autoLoadImages = uiState.autoLoadImages,
@@ -614,7 +621,8 @@ class PostDetailScreen(
                                                         )
                                                     }
                                                 }
-                                            })
+                                            },
+                                        )
                                     },
                                 )
                                 Divider(
