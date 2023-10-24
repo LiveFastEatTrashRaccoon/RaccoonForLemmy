@@ -1,0 +1,11 @@
+- feat: spoiler support; markdown rendering improved
+- feat: mark posts as read; hide read posts
+- feat: custom colors for upvotes and downvotes
+- feat: report post and comments
+- feat: hide posts
+- feat: stats in community sidebar
+- fix: change sort type in community and user detail
+- enhancement: improve content font scale
+- enhancement: improve zoomable image screen
+- enhancement: layout improvements
+- chore: support for lemmy 0.19
