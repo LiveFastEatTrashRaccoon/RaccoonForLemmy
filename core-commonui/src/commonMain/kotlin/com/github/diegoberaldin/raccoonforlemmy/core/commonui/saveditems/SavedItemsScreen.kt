@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -286,10 +287,27 @@ class SavedItemsScreen : Screen {
                                     Spacer(modifier = Modifier.height(Spacing.s))
                                 }
                             }
+
+                            if (uiState.posts.isEmpty() && !uiState.loading) {
+                                item {
+                                    androidx.compose.material.Text(
+                                        modifier = Modifier.fillMaxWidth()
+                                            .padding(top = Spacing.xs),
+                                        textAlign = TextAlign.Center,
+                                        text = stringResource(MR.strings.message_empty_list),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                    )
+                                }
+                            }
                         } else {
                             itemsIndexed(uiState.comments) { idx, comment ->
                                 CommentCard(
-                                    modifier = Modifier.onClick {
+                                    comment = comment,
+                                    separateUpAndDownVotes = uiState.separateUpAndDownVotes,
+                                    autoLoadImages = uiState.autoLoadImages,
+                                    hideIndent = true,
+                                    onClick = {
                                         navigator?.push(
                                             PostDetailScreen(
                                                 post = PostModel(id = comment.postId),
@@ -297,10 +315,6 @@ class SavedItemsScreen : Screen {
                                             ),
                                         )
                                     },
-                                    comment = comment,
-                                    separateUpAndDownVotes = uiState.separateUpAndDownVotes,
-                                    autoLoadImages = uiState.autoLoadImages,
-                                    hideIndent = true,
                                     onUpVote = {
                                         model.reduce(
                                             SavedItemsMviModel.Intent.UpVoteComment(
@@ -337,6 +351,19 @@ class SavedItemsScreen : Screen {
                                     modifier = Modifier.padding(vertical = Spacing.xxxs),
                                     thickness = 0.25.dp
                                 )
+                            }
+
+                            if (uiState.comments.isEmpty() && !uiState.loading) {
+                                item {
+                                    androidx.compose.material.Text(
+                                        modifier = Modifier.fillMaxWidth()
+                                            .padding(top = Spacing.xs),
+                                        textAlign = TextAlign.Center,
+                                        text = stringResource(MR.strings.message_empty_list),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                    )
+                                }
                             }
                         }
                         item {
