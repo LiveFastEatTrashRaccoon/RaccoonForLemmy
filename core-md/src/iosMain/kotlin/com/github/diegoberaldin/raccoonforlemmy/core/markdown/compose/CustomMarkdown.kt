@@ -95,7 +95,10 @@ actual fun CustomMarkdown(
         LocalMarkdownColors provides colors,
         LocalMarkdownTypography provides typography,
     ) {
-        Column(modifier.clickable { onClick?.invoke() }) {
+        Column(modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        ) { onClick?.invoke() }) {
             val parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(mangledContent)
             parsedTree.children.forEach { node ->
                 if (!node.handleElement(

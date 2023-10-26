@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -61,7 +62,10 @@ actual fun CustomMarkdown(
             onOpenImage = onOpenImage,
         )
         BoxWithConstraints(
-            modifier = modifier.clickable { onClick?.invoke() }
+            modifier = modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { onClick?.invoke() }
         ) {
             val style = LocalMarkdownTypography.current.text
             val fontScale = LocalDensity.current.fontScale * 1.25f
