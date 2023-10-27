@@ -38,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -64,12 +65,14 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordi
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getSavedItemsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.RawContentDialog
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterContractKeys
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
@@ -107,6 +110,8 @@ class SavedItemsScreen : Screen {
             }
         }
         val drawerCoordinator = remember { getDrawerCoordinator() }
+        var rawContent by remember { mutableStateOf<Any?>(null) }
+
         DisposableEffect(key) {
             drawerCoordinator.setGesturesEnabled(false)
             onDispose {
@@ -280,6 +285,12 @@ class SavedItemsScreen : Screen {
                                             ZoomableImageScreen(url),
                                         )
                                     },
+                                    options = buildList {
+                                        add(stringResource(MR.strings.post_action_see_raw))
+                                    },
+                                    onOptionSelected = {
+                                        rawContent = post
+                                    },
                                 )
                                 if (uiState.postLayout != PostLayout.Card) {
                                     Divider(modifier = Modifier.padding(vertical = Spacing.s))
@@ -346,6 +357,12 @@ class SavedItemsScreen : Screen {
                                         )
                                         bottomSheetNavigator.show(screen)
                                     },
+                                    options = buildList {
+                                        add(stringResource(MR.strings.post_action_see_raw))
+                                    },
+                                    onOptionSelected = {
+                                        rawContent = comment
+                                    },
                                 )
                                 Divider(
                                     modifier = Modifier.padding(vertical = Spacing.xxxs),
@@ -390,6 +407,30 @@ class SavedItemsScreen : Screen {
                         modifier = Modifier.align(Alignment.TopCenter),
                         backgroundColor = MaterialTheme.colorScheme.background,
                         contentColor = MaterialTheme.colorScheme.onBackground,
+                    )
+                }
+            }
+        }
+
+        if (rawContent != null) {
+            when (val content = rawContent) {
+                is PostModel -> {
+                    RawContentDialog(
+                        title = content.title,
+                        url = content.url,
+                        text = content.text,
+                        onDismiss = {
+                            rawContent = null
+                        },
+                    )
+                }
+
+                is CommentModel -> {
+                    RawContentDialog(
+                        text = content.text,
+                        onDismiss = {
+                            rawContent = null
+                        },
                     )
                 }
             }

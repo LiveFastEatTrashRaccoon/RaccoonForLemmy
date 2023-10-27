@@ -8,9 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,12 +37,9 @@ fun RawContentDialog(
     ) {
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .heightIn(max = 600.dp)
                 .background(color = MaterialTheme.colorScheme.surface)
-                .padding(vertical = Spacing.s, horizontal = Spacing.m),
+                .padding(vertical = Spacing.s),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             Text(
                 text = stringResource(MR.strings.dialog_title_raw_content),
@@ -51,64 +47,79 @@ fun RawContentDialog(
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(modifier = Modifier.height(Spacing.s))
-            title?.takeIf { it.trim().isNotEmpty() }?.also {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(MR.strings.dialog_raw_content_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                SelectionContainer {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = it,
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontFamily = FontFamily.Monospace,
-                        ),
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
+            LazyColumn(
+                modifier = Modifier
+                    .padding(vertical = Spacing.s, horizontal = Spacing.m)
+                    .heightIn(max = 400.dp),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs)
+            ) {
+                title?.takeIf { it.trim().isNotEmpty() }?.also {
+                    item {
+                        Column {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(MR.strings.dialog_raw_content_title),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                            SelectionContainer {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = it,
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        fontFamily = FontFamily.Monospace,
+                                    ),
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
+                            }
+                        }
+                    }
+                }
+                url?.takeIf { it.trim().isNotEmpty() }?.also {
+                    item {
+                        Column {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(MR.strings.dialog_raw_content_url),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                            SelectionContainer {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = it,
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontFamily = FontFamily.Monospace,
+                                    ),
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
+                            }
+                        }
+                    }
+                }
+                text?.takeIf { it.trim().isNotEmpty() }?.also {
+                    item {
+                        Column {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(MR.strings.dialog_raw_content_text),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                            SelectionContainer {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = it,
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontFamily = FontFamily.Monospace,
+                                    ),
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
+                            }
+                        }
+                    }
                 }
             }
-            url?.takeIf { it.trim().isNotEmpty() }?.also {
-                Spacer(modifier = Modifier.height(Spacing.xs))
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(MR.strings.dialog_raw_content_url),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                SelectionContainer {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = it,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontFamily = FontFamily.Monospace,
-                        ),
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                }
-            }
-            text?.takeIf { it.trim().isNotEmpty() }?.also {
-                Spacer(modifier = Modifier.height(Spacing.xs))
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(MR.strings.dialog_raw_content_text),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                SelectionContainer {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = it,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontFamily = FontFamily.Monospace,
-                        ),
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(Spacing.s))
             Button(
                 onClick = {
                     onDismiss?.invoke()
