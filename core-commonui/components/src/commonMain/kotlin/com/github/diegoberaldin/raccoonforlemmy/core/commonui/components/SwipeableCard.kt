@@ -21,9 +21,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -45,7 +43,6 @@ fun SwipeableCard(
     onDismissToStart: (() -> Unit)? = null,
 ) {
     if (enabled) {
-        var width by remember { mutableStateOf(0f) }
         val dismissToEndCallback by rememberUpdatedState(onDismissToEnd)
         val dismissToStartCallback by rememberUpdatedState(onDismissToStart)
         val gestureBeginCallback by rememberUpdatedState(onGestureBegin)
@@ -64,6 +61,7 @@ fun SwipeableCard(
                 }
                 false
             },
+            positionalThreshold = { _ -> 80.dp.toPx() }
         )
 
         var notified by remember { mutableStateOf(false) }
@@ -78,26 +76,29 @@ fun SwipeableCard(
             }.launchIn(this)
         }
 
-        SwipeToDismiss(modifier = modifier.onGloballyPositioned {
-            width = it.size.toSize().width
-        }, state = dismissState, directions = directions, background = {
-            val direction = dismissState.dismissDirection ?: DismissDirection.StartToEnd
-            val bgColor by animateColorAsState(
-                backgroundColor(dismissState.targetValue),
-            )
-            val alignment = when (direction) {
-                DismissDirection.StartToEnd -> Alignment.CenterStart
-                DismissDirection.EndToStart -> Alignment.CenterEnd
-            }
-            Box(
-                Modifier.fillMaxSize().background(bgColor).padding(horizontal = 20.dp),
-                contentAlignment = alignment,
-            ) {
-                swipeContent(direction)
-            }
-        }, dismissContent = {
-            content()
-        })
+        SwipeToDismiss(
+            state = dismissState,
+            directions = directions,
+            background = {
+                val direction = dismissState.dismissDirection ?: DismissDirection.StartToEnd
+                val bgColor by animateColorAsState(
+                    backgroundColor(dismissState.targetValue),
+                )
+                val alignment = when (direction) {
+                    DismissDirection.StartToEnd -> Alignment.CenterStart
+                    DismissDirection.EndToStart -> Alignment.CenterEnd
+                }
+                Box(
+                    Modifier.fillMaxSize().background(bgColor).padding(horizontal = 20.dp),
+                    contentAlignment = alignment,
+                ) {
+                    swipeContent(direction)
+                }
+            },
+            dismissContent = {
+                content()
+            },
+        )
     } else {
         content()
     }
