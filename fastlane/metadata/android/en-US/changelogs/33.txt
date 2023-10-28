@@ -1,0 +1,13 @@
+- feat: add formatting bar to editor screens
+- feat: insert images in comment and post body
+- feat: possibility to view raw contents
+- feat: add French l10n
+- fix: navigation and sidebar loading
+- fix: subscription state in community
+- fix: load more comments for deleted items
+- fix: community name and title
+- fix: add messages for empty lists
+- fix: click in textual contents
+- fix: layout improvements
+- chore: update dependencies
+- minor bug fixes and stability improvements
