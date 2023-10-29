@@ -61,7 +61,7 @@ fun SwipeableCard(
                 }
                 false
             },
-            positionalThreshold = { _ -> 80.dp.toPx() }
+            positionalThreshold = { _ -> 50.dp.toPx() }
         )
 
         var notified by remember { mutableStateOf(false) }
@@ -89,7 +89,9 @@ fun SwipeableCard(
                     DismissDirection.EndToStart -> Alignment.CenterEnd
                 }
                 Box(
-                    Modifier.fillMaxSize().background(bgColor).padding(horizontal = 20.dp),
+                    Modifier.fillMaxSize()
+                        .background(bgColor)
+                        .padding(horizontal = 20.dp),
                     contentAlignment = alignment,
                 ) {
                     swipeContent(direction)
