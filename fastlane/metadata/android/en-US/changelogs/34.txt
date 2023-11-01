@@ -1,0 +1,8 @@
+- feat: new comment collapse policy
+- feat: custom text toolbar with search action in raw content dialog
+- fix: support for multiple spoilers in same text block
+- fix: cross post open detail
+- fix: comment sorting
+- fix: inbox data serialization
+- enhancement: cursor position after inserting quotation
+- chore: added new translations
