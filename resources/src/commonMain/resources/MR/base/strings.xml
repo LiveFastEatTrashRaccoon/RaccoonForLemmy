@@ -93,6 +93,7 @@
 	<string name="language_es" translatable="false">Español</string>
 	<string name="language_fr" translatable="false">Français</string>
 	<string name="language_it" translatable="false">Italiano</string>
+	<string name="language_pt" translatable="false">Português</string>
 	<string name="login_field_instance_name">Instance name</string>
 	<string name="login_field_label_optional">(optional)</string>
 	<string name="login_field_password">Password</string>
@@ -144,7 +145,13 @@
 	<string name="profile_section_posts">Posts</string>
 	<string name="profile_thousand_short">k</string>
 	<string name="profile_year_short">y</string>
-	<string name="settings_app_version">App version</string>
+	<string name="settings_about">About this app…</string>
+	<string name="settings_about_app_version">App version</string>
+	<string name="settings_about_changelog">View full changelog</string>
+	<string name="settings_about_report_github">Report a bug (GitHub)</string>
+	<string name="settings_about_report_email">Report a bug (email)</string>
+	<string name="settings_about_view_github">View on GitHub</string>
+	<string name="settings_about_view_lemmy">Lemmy community</string>
 	<string name="settings_auto_expand_comments">Automatically expand comments</string>
 	<string name="settings_auto_load_images">Automatically load images</string>
 	<string name="settings_blur_nsfw">Blur NSFW images</string>
