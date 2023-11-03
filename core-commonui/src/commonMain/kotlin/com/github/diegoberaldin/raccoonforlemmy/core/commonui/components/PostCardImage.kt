@@ -13,11 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -37,10 +39,13 @@ fun PostCardImage(
             modifier = modifier.fillMaxWidth()
                 .heightIn(min = minHeight, max = maxHeight)
                 .blur(radius = if (blurred) 60.dp else 0.dp)
-                .onClick {
-                    onImageClick?.invoke(imageUrl)
-                },
+                .onClick(
+                    rememberCallback {
+                        onImageClick?.invoke(imageUrl)
+                    },
+                ),
             url = imageUrl,
+            quality = FilterQuality.Low,
             autoload = autoLoadImages,
             loadButtonContent = loadButtonContent,
             contentDescription = null,

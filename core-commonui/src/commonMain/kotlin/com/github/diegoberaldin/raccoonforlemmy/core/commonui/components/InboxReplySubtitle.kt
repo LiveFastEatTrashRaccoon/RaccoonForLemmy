@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
@@ -61,7 +62,9 @@ fun InboxReplySubtitle(
     val downvoteColor by themeRepository.downvoteColor.collectAsState()
     val defaultUpvoteColor = MaterialTheme.colorScheme.primary
     val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
-    Column {
+    Column(
+        modifier = modifier,
+    ) {
         val communityName = community?.name.orEmpty()
         val communityIcon = community?.icon.orEmpty()
         val communityHost = community?.host.orEmpty()
@@ -70,7 +73,6 @@ fun InboxReplySubtitle(
         val creatorHost = creator?.host.orEmpty()
         if (communityName.isNotEmpty() || creatorName.isNotEmpty()) {
             Row(
-                modifier = modifier.padding(vertical = Spacing.xs),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
@@ -78,11 +80,13 @@ fun InboxReplySubtitle(
                     Row(
                         modifier = Modifier
                             .weight(1f)
-                            .onClick {
-                                if (creator != null) {
-                                    onOpenCreator?.invoke(creator)
-                                }
-                            },
+                            .onClick(
+                                rememberCallback {
+                                    if (creator != null) {
+                                        onOpenCreator?.invoke(creator)
+                                    }
+                                },
+                            ),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
@@ -117,11 +121,13 @@ fun InboxReplySubtitle(
                     Row(
                         modifier = Modifier
                             .weight(1f)
-                            .onClick {
-                                if (community != null) {
-                                    onOpenCommunity?.invoke(community)
-                                }
-                            },
+                            .onClick(
+                                rememberCallback {
+                                    if (community != null) {
+                                        onOpenCommunity?.invoke(community)
+                                    }
+                                },
+                            ),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
@@ -169,9 +175,11 @@ fun InboxReplySubtitle(
             Spacer(modifier = Modifier.weight(1f))
             Image(
                 modifier = buttonModifier
-                    .onClick {
-                        onUpVote?.invoke()
-                    },
+                    .onClick(
+                        rememberCallback {
+                            onUpVote?.invoke()
+                        },
+                    ),
                 imageVector = Icons.Default.ArrowCircleUp,
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
@@ -227,9 +235,11 @@ fun InboxReplySubtitle(
             )
             Image(
                 modifier = buttonModifier
-                    .onClick {
-                        onDownVote?.invoke()
-                    },
+                    .onClick(
+                        rememberCallback {
+                            onDownVote?.invoke()
+                        },
+                    ),
                 imageVector = Icons.Default.ArrowCircleDown,
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(
