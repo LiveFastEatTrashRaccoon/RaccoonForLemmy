@@ -792,24 +792,24 @@ class PostDetailScreen(
                                             thickness = 0.25.dp
                                         )
                                     }
-                                }
 
-                                // load more button
-                                if (comment.loadMoreButtonVisible) {
-                                    Row {
-                                        Spacer(modifier = Modifier.weight(1f))
-                                        Button(onClick = {
-                                            model.reduce(
-                                                PostDetailMviModel.Intent.FetchMoreComments(
-                                                    parentId = comment.id
+                                    // load more button
+                                    if (comment.loadMoreButtonVisible) {
+                                        Row {
+                                            Spacer(modifier = Modifier.weight(1f))
+                                            Button(onClick = {
+                                                model.reduce(
+                                                    PostDetailMviModel.Intent.FetchMoreComments(
+                                                        parentId = comment.id
+                                                    )
                                                 )
-                                            )
-                                        }) {
-                                            Text(
-                                                text = stringResource(MR.strings.post_detail_load_more_comments),
-                                            )
+                                            }) {
+                                                Text(
+                                                    text = stringResource(MR.strings.post_detail_load_more_comments),
+                                                )
+                                            }
+                                            Spacer(modifier = Modifier.weight(1f))
                                         }
-                                        Spacer(modifier = Modifier.weight(1f))
                                     }
                                 }
                             }
@@ -832,13 +832,38 @@ class PostDetailScreen(
                         }
                         if (uiState.comments.isEmpty() && !uiState.loading && !uiState.initial) {
                             item {
-                                androidx.compose.material.Text(
+                                Text(
                                     modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
                                     textAlign = TextAlign.Center,
                                     text = stringResource(MR.strings.message_empty_comments),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onBackground,
                                 )
+                            }
+                        }
+                        if (uiState.comments.isEmpty() && uiState.post.comments > 0) {
+                            item {
+                                Column {
+                                    Text(
+                                        modifier = Modifier.fillMaxWidth()
+                                            .padding(top = Spacing.xs),
+                                        textAlign = TextAlign.Center,
+                                        text = stringResource(MR.strings.message_error_loading_comments),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                    )
+                                    Row {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Button(onClick = {
+                                            model.reduce(PostDetailMviModel.Intent.Refresh)
+                                        }) {
+                                            Text(
+                                                text = stringResource(MR.strings.button_retry),
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.weight(1f))
+                                    }
+                                }
                             }
                         }
                         item {
