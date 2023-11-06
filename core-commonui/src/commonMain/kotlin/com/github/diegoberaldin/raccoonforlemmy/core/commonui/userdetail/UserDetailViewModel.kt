@@ -251,9 +251,11 @@ class UserDetailViewModel(
                     } else {
                         it.posts + itemList.orEmpty()
                     }
-                    newPosts.forEach { post ->
-                        post.imageUrl.takeIf { i -> i.isNotEmpty() }?.also { url ->
-                            imagePreloadManager.preload(url)
+                    if (uiState.value.autoLoadImages) {
+                        newPosts.forEach { post ->
+                            post.imageUrl.takeIf { i -> i.isNotEmpty() }?.also { url ->
+                                imagePreloadManager.preload(url)
+                            }
                         }
                     }
                     it.copy(

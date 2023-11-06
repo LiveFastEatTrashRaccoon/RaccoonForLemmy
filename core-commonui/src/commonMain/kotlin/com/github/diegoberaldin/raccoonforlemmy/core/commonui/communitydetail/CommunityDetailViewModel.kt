@@ -248,9 +248,11 @@ class CommunityDetailViewModel(
                     true
                 }
             }
-            itemsToAdd.forEach { post ->
-                post.imageUrl.takeIf { i -> i.isNotEmpty() }?.also { url ->
-                    imagePreloadManager.preload(url)
+            if (uiState.value.autoLoadImages) {
+                itemsToAdd.forEach { post ->
+                    post.imageUrl.takeIf { i -> i.isNotEmpty() }?.also { url ->
+                        imagePreloadManager.preload(url)
+                    }
                 }
             }
             mvi.updateState {

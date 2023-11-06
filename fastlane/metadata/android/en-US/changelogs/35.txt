@@ -1,0 +1,12 @@
+- feat: zombie mode (autoscroll)
+- feat: new comment expansion policy
+- feat: option to lock navigation and top bar
+- enhancement: performance fine-tuning
+- enhancement: internal community links
+- enhancement: comment load retry
+- enhancement: change search action in raw content
+- fix: opening detail from explore (and lists in general)
+- fix: pagination and hide read posts
+- chore: update deps
+- chore: new l10ns
+- other minor bug fixes and improvements
