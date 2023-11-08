@@ -97,6 +97,7 @@
     <string name="language_es" translatable="false">Español</string>
     <string name="language_fr" translatable="false">Français</string>
     <string name="language_it" translatable="false">Italiano</string>
+    <string name="language_nl" translatable="false">Nederlands</string>
     <string name="language_pt" translatable="false">Português</string>
     <string name="language_ro" translatable="false">Română</string>
     <string name="login_field_instance_name">Instance name</string>
@@ -198,6 +199,7 @@
     <string name="settings_language">Language</string>
     <string name="settings_navigation_bar_titles_visible">Show navigation bar titles</string>
     <string name="settings_open_url_external">Open URLs in external browser</string>
+    <string name="settings_points_short">pt</string>
     <string name="settings_post_layout">Post layout</string>
     <string name="settings_post_layout_card">Card</string>
     <string name="settings_post_layout_compact">Compact</string>
@@ -217,4 +219,5 @@
     <string name="settings_upvote_color">Upvote color</string>
     <string name="settings_hide_navigation_bar">Hide navigation bar when scrolling</string>
     <string name="settings_zombie_mode_interval">Zombie mode interval duration</string>
+    <string name="settings_zombie_mode_scroll_amount">Zombie mode scroll amount</string>
 </resources>
