@@ -45,6 +45,7 @@ A Kotlin Multiplatform Mobile client for Lemmy.
 </div>
 
 Raccoon for Lemmy is a client for the federated aggregation and discussion platform Lemmy.
+
 The project started as an exercise to play around with Kotlin Multiplatform (KMP) and Compose
 multiplatform and gradually grew as a fully functional client with many features.
 
@@ -60,21 +61,25 @@ multiplatform and gradually grew as a fully functional client with many features
 - reply to post and comments (and edit replies);
 - mark posts as read and hide read contents;
 - custom appearance (color scheme, font, text size, post layout);
-- custom localization (more languages to be added in future versions);
-- block users, communities and instances;
-- report post and comments to mods;
+- custom localization (independent of system settings);
+- block users, communities and instances (the latter requires Lemmy >= 0.19);
+- report post and comments to moderators;
 - support for multiple accounts (and multiple instances) with account-specific settings;
+- lazy scrolling (referred to as "zombie mode");
 - explore all the communities on a given instance in guest mode;
-- multi-community (aggregation).
+- multi-community (community aggregation).
 
 Most clients for Lemmy currently offer the first points (with various degrees of completion), so
 there is nothing special about Raccoon for Lemmy, whereas the last ones are less common and are
 directed to more picky users (like me) who like to explore the Lemmy ecosystem and want to be able
-to group feed contents arbitrarily. I also like to be able to customize the appearance of my
-apps, so the ability to change font face or size and colors was of paramount importance to me.
+to group feed contents arbitrarily.
+
+I also like to be able to customize the appearance of my apps, so the ability to change font face or
+size and colors was of paramount importance to me.
 
 The application is under active development, so expect new features to be added (e.g. video support,
 mod tools, etc.) and the layout is going to change and evolve (hopefully for the better) over time.
+For this, speak up and use your voice if you have feedback, suggestions, requests and so on.
 
 ## Why was the project started?
 
@@ -92,7 +97,7 @@ native apps (fewer open source), while the "market" is dominated by iOS and cros
 I️ ❤️ Kotlin, I ❤️ Free and Open Source Software and I ❤️ native app development, so there was a
 "niche" that needed to be filled.
 
-Plus, developing a new client was an opportunity to add all the features that I needed and that
+Moreover, developing a new client was an opportunity to add all the features that I needed and that
 were "scattered" across different apps, e.g. I liked the feature richness
 of [Liftoff](https://github.com/liftoff-app/liftoff) (e.g. the possibility to explore all the
 communities of an external instance), the multi-community feature of
@@ -133,8 +138,10 @@ this project _is_ all about experimenting and learning.
 This project would not be what it is were it not for the huge amount of patience and dedication
 of early adopters who sent me continous feedback and ideas for improvement after every release.
 
-A special thank to all those who contributed so far, namely:
-rb_c, OverfedRaccoon, …
+A special thank to all those who contributed so far:
+rb_c, OverfedRaccoon, Jailbrick3d, everdred…
+
+(if you want your nickname removed reach out to me).
 
 ## Want to try it out?
 
@@ -149,3 +156,8 @@ rb_c, OverfedRaccoon, …
 - create a post on the project's [community](https://lemmy.world/c/raccoonforlemmy) on
   Lemmy.world for broader questions, opinions, personal feedback, suggestions, insults or whatever
   you feel like writing
+- if you are a translator and want to help out with l10n or submit some corrections but you don't
+  feel confident with repository forks, pull requests, managing resource files, etc. feel free to
+  drop an email.
+
+Every contribution is welcome, everyone's opinion matters.
