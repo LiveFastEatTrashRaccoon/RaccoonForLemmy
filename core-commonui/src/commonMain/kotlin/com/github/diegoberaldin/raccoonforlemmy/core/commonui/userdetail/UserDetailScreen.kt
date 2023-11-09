@@ -69,6 +69,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Comment
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Option
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.OptionId
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
@@ -76,6 +78,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Section
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getFabNestedScrollConnection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
@@ -317,17 +320,24 @@ class UserDetailScreen(
                                 user = uiState.user,
                                 autoLoadImages = uiState.autoLoadImages,
                                 options = listOf(
-                                    stringResource(MR.strings.community_detail_block),
-                                    stringResource(MR.strings.community_detail_block_instance),
+                                    Option(
+                                        OptionId.Block,
+                                        stringResource(MR.strings.community_detail_block)
+                                    ),
+                                    Option(
+                                        OptionId.BlockInstance,
+                                        stringResource(MR.strings.community_detail_block_instance)
+                                    ),
                                 ),
                                 onOpenImage = rememberCallbackArgs { url ->
                                     navigationCoordinator.getRootNavigator()
                                         ?.push(ZoomableImageScreen(url))
                                 },
-                                onOptionSelected = rememberCallbackArgs { optionIdx ->
-                                    when (optionIdx) {
-                                        1 -> model.reduce(UserDetailMviModel.Intent.BlockInstance)
-                                        else -> model.reduce(UserDetailMviModel.Intent.Block)
+                                onOptionSelected = rememberCallbackArgs { optionId ->
+                                    when (optionId) {
+                                        OptionId.BlockInstance -> model.reduce(UserDetailMviModel.Intent.BlockInstance)
+                                        OptionId.Block -> model.reduce(UserDetailMviModel.Intent.Block)
+                                        else -> Unit
                                     }
                                 },
                             )
@@ -482,13 +492,36 @@ class UserDetailScreen(
                                             )
                                         },
                                         options = buildList {
-                                            add(stringResource(MR.strings.post_action_share))
-                                            add(stringResource(MR.strings.post_action_see_raw))
-                                            add(stringResource(MR.strings.post_action_report))
+                                            add(
+                                                Option(
+                                                    OptionId.Share,
+                                                    stringResource(MR.strings.post_action_share)
+                                                )
+                                            )
+                                            add(
+                                                Option(
+                                                    OptionId.SeeRaw,
+                                                    stringResource(MR.strings.post_action_see_raw)
+                                                )
+                                            )
+                                            if (uiState.currentUserId != null) {
+                                                add(
+                                                    Option(
+                                                        OptionId.CrossPost,
+                                                        stringResource(MR.strings.post_action_cross_post)
+                                                    )
+                                                )
+                                                add(
+                                                    Option(
+                                                        OptionId.Report,
+                                                        stringResource(MR.strings.post_action_report)
+                                                    )
+                                                )
+                                            }
                                         },
-                                        onOptionSelected = rememberCallbackArgs { optionIdx ->
-                                            when (optionIdx) {
-                                                2 -> {
+                                        onOptionSelected = rememberCallbackArgs { optionId ->
+                                            when (optionId) {
+                                                OptionId.Report -> {
                                                     navigationCoordinator.getBottomNavigator()
                                                         ?.show(
                                                             CreateReportScreen(
@@ -497,13 +530,22 @@ class UserDetailScreen(
                                                         )
                                                 }
 
-                                                1 -> {
+                                                OptionId.CrossPost -> {
+                                                    navigationCoordinator.getBottomNavigator()
+                                                        ?.show(
+                                                            CreatePostScreen(crossPost = post)
+                                                        )
+                                                }
+
+                                                OptionId.SeeRaw -> {
                                                     rawContent = post
                                                 }
 
-                                                else -> model.reduce(
+                                                OptionId.Share -> model.reduce(
                                                     UserDetailMviModel.Intent.SharePost(post.id)
                                                 )
+
+                                                else -> Unit
                                             }
                                         })
                                 },
@@ -653,12 +695,24 @@ class UserDetailScreen(
                                                 ?.push(CommunityDetailScreen(community))
                                         },
                                         options = buildList {
-                                            add(stringResource(MR.strings.post_action_see_raw))
-                                            add(stringResource(MR.strings.post_action_report))
+                                            add(
+                                                Option(
+                                                    OptionId.SeeRaw,
+                                                    stringResource(MR.strings.post_action_see_raw)
+                                                )
+                                            )
+                                            if (uiState.currentUserId != null) {
+                                                add(
+                                                    Option(
+                                                        OptionId.Report,
+                                                        stringResource(MR.strings.post_action_report)
+                                                    )
+                                                )
+                                            }
                                         },
                                         onOptionSelected = rememberCallbackArgs { optionId ->
                                             when (optionId) {
-                                                1 -> {
+                                                OptionId.Report -> {
                                                     navigationCoordinator.getBottomNavigator()
                                                         ?.show(
                                                             CreateReportScreen(
@@ -667,9 +721,11 @@ class UserDetailScreen(
                                                         )
                                                 }
 
-                                                else -> {
+                                                OptionId.SeeRaw -> {
                                                     rawContent = comment
                                                 }
+
+                                                else -> Unit
                                             }
                                         },
                                     )

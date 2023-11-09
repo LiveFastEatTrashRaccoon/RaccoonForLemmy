@@ -72,6 +72,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communityInfo.Comm
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommunityHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Option
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.OptionId
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
@@ -321,16 +323,18 @@ class CommunityDetailScreen(
                                     }
                                 },
                             )
-                            this += FloatingActionButtonMenuItem(
-                                icon = Icons.Default.ClearAll,
-                                text = stringResource(MR.strings.action_clear_read),
-                                onSelected = rememberCallback {
-                                    model.reduce(CommunityDetailMviModel.Intent.ClearRead)
-                                    scope.launch {
-                                        lazyListState.scrollToItem(0)
-                                    }
-                                },
-                            )
+                            if (uiState.currentUserId != null) {
+                                this += FloatingActionButtonMenuItem(
+                                    icon = Icons.Default.ClearAll,
+                                    text = stringResource(MR.strings.action_clear_read),
+                                    onSelected = rememberCallback {
+                                        model.reduce(CommunityDetailMviModel.Intent.ClearRead)
+                                        scope.launch {
+                                            lazyListState.scrollToItem(0)
+                                        }
+                                    },
+                                )
+                            }
                             if (!isOnOtherInstance) {
                                 this += FloatingActionButtonMenuItem(
                                     icon = Icons.Default.Create,
@@ -378,21 +382,36 @@ class CommunityDetailScreen(
                                     community = uiState.community,
                                     autoLoadImages = uiState.autoLoadImages,
                                     options = listOf(
-                                        stringResource(MR.strings.community_detail_info),
-                                        stringResource(MR.strings.community_detail_instance_info),
-                                        stringResource(MR.strings.community_detail_block),
-                                        stringResource(MR.strings.community_detail_block_instance),
+                                        Option(
+                                            OptionId.Info,
+                                            stringResource(MR.strings.community_detail_info)
+                                        ),
+                                        Option(
+                                            OptionId.InfoInstance,
+                                            stringResource(MR.strings.community_detail_instance_info)
+                                        ),
+                                        Option(
+                                            OptionId.Block,
+                                            stringResource(MR.strings.community_detail_block)
+                                        ),
+                                        Option(
+                                            OptionId.BlockInstance,
+                                            stringResource(MR.strings.community_detail_block_instance)
+                                        ),
                                     ),
                                     onOpenImage = rememberCallbackArgs { url ->
                                         navigationCoordinator.getRootNavigator()
                                             ?.push(ZoomableImageScreen(url))
                                     },
-                                    onOptionSelected = rememberCallbackArgs { optionIdx ->
-                                        when (optionIdx) {
-                                            3 -> model.reduce(CommunityDetailMviModel.Intent.BlockInstance)
-                                            2 -> model.reduce(CommunityDetailMviModel.Intent.Block)
+                                    onOptionSelected = rememberCallbackArgs { optionId ->
+                                        when (optionId) {
+                                            OptionId.BlockInstance -> model.reduce(
+                                                CommunityDetailMviModel.Intent.BlockInstance
+                                            )
 
-                                            1 -> {
+                                            OptionId.Block -> model.reduce(CommunityDetailMviModel.Intent.Block)
+
+                                            OptionId.InfoInstance -> {
                                                 navigationCoordinator.getRootNavigator()?.push(
                                                     InstanceInfoScreen(
                                                         url = uiState.community.instanceUrl,
@@ -400,11 +419,13 @@ class CommunityDetailScreen(
                                                 )
                                             }
 
-                                            else -> {
+                                            OptionId.Info -> {
                                                 navigationCoordinator.getBottomNavigator()?.show(
                                                     CommunityInfoScreen(uiState.community),
                                                 )
                                             }
+
+                                            else -> Unit
                                         }
                                     },
                                 )
@@ -544,54 +565,95 @@ class CommunityDetailScreen(
                                             )
                                         },
                                         options = buildList {
-                                            add(stringResource(MR.strings.post_action_share))
-                                            add(stringResource(MR.strings.post_action_hide))
-                                            add(stringResource(MR.strings.post_action_see_raw))
-                                            add(stringResource(MR.strings.post_action_report))
-                                            if (post.creator?.id == uiState.currentUserId && !isOnOtherInstance) {
-                                                add(stringResource(MR.strings.post_action_edit))
-                                                add(stringResource(MR.strings.comment_action_delete))
-                                            }
-                                        },
-                                        onOptionSelected = rememberCallbackArgs(model) { optionIdx ->
-                                            when (optionIdx) {
-                                                5 -> model.reduce(
-                                                    CommunityDetailMviModel.Intent.DeletePost(
-                                                        post.id
+                                            add(
+                                                Option(
+                                                    OptionId.Share,
+                                                    stringResource(MR.strings.post_action_share)
+                                                )
+                                            )
+                                            if (uiState.currentUserId != null) {
+                                                add(
+                                                    Option(
+                                                        OptionId.Hide,
+                                                        stringResource(MR.strings.post_action_hide)
                                                     )
                                                 )
+                                            }
+                                            add(
+                                                Option(
+                                                    OptionId.SeeRaw,
+                                                    stringResource(MR.strings.post_action_see_raw)
+                                                )
+                                            )
+                                            if (uiState.currentUserId != null) {
+                                                add(
+                                                    Option(
+                                                        OptionId.CrossPost,
+                                                        stringResource(MR.strings.post_action_cross_post)
+                                                    )
+                                                )
+                                                add(
+                                                    Option(
+                                                        OptionId.Report,
+                                                        stringResource(MR.strings.post_action_report)
+                                                    )
+                                                )
+                                            }
+                                            if (post.creator?.id == uiState.currentUserId && !isOnOtherInstance) {
+                                                add(
+                                                    Option(
+                                                        OptionId.Edit,
+                                                        stringResource(MR.strings.post_action_edit)
+                                                    )
+                                                )
+                                                add(
+                                                    Option(
+                                                        OptionId.Delete,
+                                                        stringResource(MR.strings.comment_action_delete)
+                                                    )
+                                                )
+                                            }
+                                        },
+                                        onOptionSelected = rememberCallbackArgs(model) { optionId ->
+                                            when (optionId) {
+                                                OptionId.Delete -> model.reduce(
+                                                    CommunityDetailMviModel.Intent.DeletePost(post.id)
+                                                )
 
-                                                4 -> {
+                                                OptionId.Edit -> {
                                                     navigationCoordinator.getBottomNavigator()
                                                         ?.show(
-                                                            CreatePostScreen(
-                                                                editedPost = post,
-                                                            )
+                                                            CreatePostScreen(editedPost = post)
                                                         )
                                                 }
 
-                                                3 -> {
+                                                OptionId.Report -> {
                                                     navigationCoordinator.getBottomNavigator()
                                                         ?.show(
-                                                            CreateReportScreen(
-                                                                postId = post.id
-                                                            )
+                                                            CreateReportScreen(postId = post.id)
                                                         )
                                                 }
 
-                                                2 -> {
+                                                OptionId.CrossPost -> {
+                                                    navigationCoordinator.getBottomNavigator()
+                                                        ?.show(
+                                                            CreatePostScreen(crossPost = post)
+                                                        )
+                                                }
+
+                                                OptionId.SeeRaw -> {
                                                     rawContent = post
                                                 }
 
-                                                1 -> model.reduce(
-                                                    CommunityDetailMviModel.Intent.Hide(
-                                                        post.id
-                                                    )
+                                                OptionId.Hide -> model.reduce(
+                                                    CommunityDetailMviModel.Intent.Hide(post.id)
                                                 )
 
-                                                else -> model.reduce(
+                                                OptionId.Share -> model.reduce(
                                                     CommunityDetailMviModel.Intent.SharePost(post.id)
                                                 )
+
+                                                else -> Unit
                                             }
                                         })
                                 },

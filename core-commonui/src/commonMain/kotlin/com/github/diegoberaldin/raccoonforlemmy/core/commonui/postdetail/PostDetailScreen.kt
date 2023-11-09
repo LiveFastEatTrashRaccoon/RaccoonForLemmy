@@ -81,6 +81,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Comment
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CommentCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Option
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.OptionId
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
@@ -407,37 +409,76 @@ class PostDetailScreen(
                                     }
                                 },
                                 options = buildList {
-                                    add(stringResource(MR.strings.post_action_share))
-                                    add(stringResource(MR.strings.post_action_see_raw))
-                                    add(stringResource(MR.strings.post_action_report))
+                                    add(
+                                        Option(
+                                            OptionId.Share,
+                                            stringResource(MR.strings.post_action_share)
+                                        )
+                                    )
+                                    add(
+                                        Option(
+                                            OptionId.SeeRaw,
+                                            stringResource(MR.strings.post_action_see_raw)
+                                        )
+                                    )
+                                    if (uiState.currentUserId != null) {
+                                        add(
+                                            Option(
+                                                OptionId.CrossPost,
+                                                stringResource(MR.strings.post_action_cross_post)
+                                            )
+                                        )
+                                        add(
+                                            Option(
+                                                OptionId.Report,
+                                                stringResource(MR.strings.post_action_report)
+                                            )
+                                        )
+                                    }
                                     if (uiState.post.creator?.id == uiState.currentUserId && !isOnOtherInstance) {
-                                        add(stringResource(MR.strings.post_action_edit))
-                                        add(stringResource(MR.strings.comment_action_delete))
+                                        add(
+                                            Option(
+                                                OptionId.Edit,
+                                                stringResource(MR.strings.post_action_edit)
+                                            )
+                                        )
+                                        add(
+                                            Option(
+                                                OptionId.Delete,
+                                                stringResource(MR.strings.comment_action_delete)
+                                            )
+                                        )
                                     }
                                 },
                                 onOptionSelected = rememberCallbackArgs(model) { idx ->
                                     when (idx) {
-                                        4 -> model.reduce(PostDetailMviModel.Intent.DeletePost)
+                                        OptionId.Delete -> model.reduce(PostDetailMviModel.Intent.DeletePost)
 
-                                        3 -> {
+                                        OptionId.Edit -> {
                                             navigationCoordinator.getBottomNavigator()?.show(
-                                                CreatePostScreen(
-                                                    editedPost = uiState.post,
-                                                )
+                                                CreatePostScreen(editedPost = uiState.post)
                                             )
                                         }
 
-                                        2 -> {
+                                        OptionId.Report -> {
                                             navigationCoordinator.getBottomNavigator()?.show(
                                                 CreateReportScreen(postId = uiState.post.id)
                                             )
                                         }
 
-                                        1 -> {
+                                        OptionId.CrossPost -> {
+                                            navigationCoordinator.getBottomNavigator()?.show(
+                                                CreatePostScreen(crossPost = uiState.post)
+                                            )
+                                        }
+
+                                        OptionId.SeeRaw -> {
                                             rawContent = uiState.post
                                         }
 
-                                        else -> model.reduce(PostDetailMviModel.Intent.SharePost)
+                                        OptionId.Share -> model.reduce(PostDetailMviModel.Intent.SharePost)
+
+                                        else -> Unit
                                     }
                                 },
                                 onImageClick = rememberCallbackArgs { url ->
@@ -657,24 +698,44 @@ class PostDetailScreen(
                                                         }
                                                     },
                                                     options = buildList {
-                                                        add(stringResource(MR.strings.post_action_see_raw))
-                                                        add(stringResource(MR.strings.post_action_report))
+                                                        add(
+                                                            Option(
+                                                                OptionId.SeeRaw,
+                                                                stringResource(MR.strings.post_action_see_raw)
+                                                            )
+                                                        )
+                                                        add(
+                                                            Option(
+                                                                OptionId.Report,
+                                                                stringResource(MR.strings.post_action_report)
+                                                            )
+                                                        )
                                                         if (comment.creator?.id == uiState.currentUserId) {
-                                                            add(stringResource(MR.strings.post_action_edit))
-                                                            add(stringResource(MR.strings.comment_action_delete))
+                                                            add(
+                                                                Option(
+                                                                    OptionId.Edit,
+                                                                    stringResource(MR.strings.post_action_edit)
+                                                                )
+                                                            )
+                                                            add(
+                                                                Option(
+                                                                    OptionId.Delete,
+                                                                    stringResource(MR.strings.comment_action_delete)
+                                                                )
+                                                            )
                                                         }
                                                     },
                                                     onOptionSelected = rememberCallbackArgs(
                                                         model
                                                     ) { optionId ->
                                                         when (optionId) {
-                                                            3 -> model.reduce(
+                                                            OptionId.Delete -> model.reduce(
                                                                 PostDetailMviModel.Intent.DeleteComment(
                                                                     comment.id
                                                                 )
                                                             )
 
-                                                            2 -> {
+                                                            OptionId.Edit -> {
                                                                 navigationCoordinator.getBottomNavigator()
                                                                     ?.show(
                                                                         CreateCommentScreen(
@@ -683,7 +744,7 @@ class PostDetailScreen(
                                                                     )
                                                             }
 
-                                                            1 -> {
+                                                            OptionId.Report -> {
                                                                 navigationCoordinator.getBottomNavigator()
                                                                     ?.show(
                                                                         CreateReportScreen(
@@ -692,9 +753,11 @@ class PostDetailScreen(
                                                                     )
                                                             }
 
-                                                            else -> {
+                                                            OptionId.SeeRaw -> {
                                                                 rawContent = comment
                                                             }
+
+                                                            else -> Unit
                                                         }
                                                     },
                                                 )
@@ -762,22 +825,42 @@ class PostDetailScreen(
                                                 }
                                             },
                                             options = buildList {
-                                                add(stringResource(MR.strings.post_action_see_raw))
-                                                add(stringResource(MR.strings.post_action_report))
+                                                add(
+                                                    Option(
+                                                        OptionId.SeeRaw,
+                                                        stringResource(MR.strings.post_action_see_raw)
+                                                    )
+                                                )
+                                                add(
+                                                    Option(
+                                                        OptionId.Report,
+                                                        stringResource(MR.strings.post_action_report)
+                                                    )
+                                                )
                                                 if (comment.creator?.id == uiState.currentUserId) {
-                                                    add(stringResource(MR.strings.post_action_edit))
-                                                    add(stringResource(MR.strings.comment_action_delete))
+                                                    add(
+                                                        Option(
+                                                            OptionId.Edit,
+                                                            stringResource(MR.strings.post_action_edit)
+                                                        )
+                                                    )
+                                                    add(
+                                                        Option(
+                                                            OptionId.Delete,
+                                                            stringResource(MR.strings.comment_action_delete)
+                                                        )
+                                                    )
                                                 }
                                             },
                                             onOptionSelected = rememberCallbackArgs(model) { optionId ->
                                                 when (optionId) {
-                                                    3 -> model.reduce(
+                                                    OptionId.Delete -> model.reduce(
                                                         PostDetailMviModel.Intent.DeleteComment(
                                                             comment.id
                                                         )
                                                     )
 
-                                                    2 -> {
+                                                    OptionId.Edit -> {
                                                         navigationCoordinator.getBottomNavigator()
                                                             ?.show(
                                                                 CreateCommentScreen(
@@ -786,7 +869,7 @@ class PostDetailScreen(
                                                             )
                                                     }
 
-                                                    1 -> {
+                                                    OptionId.Report -> {
                                                         navigationCoordinator.getBottomNavigator()
                                                             ?.show(
                                                                 CreateReportScreen(
@@ -795,9 +878,11 @@ class PostDetailScreen(
                                                             )
                                                     }
 
-                                                    else -> {
+                                                    OptionId.SeeRaw -> {
                                                         rawContent = comment
                                                     }
+
+                                                    else -> Unit
                                                 }
                                             },
                                         )
