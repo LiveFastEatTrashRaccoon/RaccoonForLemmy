@@ -323,7 +323,7 @@ class CommunityDetailScreen(
                                     }
                                 },
                             )
-                            if (uiState.currentUserId != null) {
+                            if (uiState.isLogged && !isOnOtherInstance) {
                                 this += FloatingActionButtonMenuItem(
                                     icon = Icons.Default.ClearAll,
                                     text = stringResource(MR.strings.action_clear_read),
@@ -335,7 +335,7 @@ class CommunityDetailScreen(
                                     },
                                 )
                             }
-                            if (!isOnOtherInstance) {
+                            if (uiState.isLogged && !isOnOtherInstance) {
                                 this += FloatingActionButtonMenuItem(
                                     icon = Icons.Default.Create,
                                     text = stringResource(MR.strings.action_create_post),
@@ -447,7 +447,15 @@ class CommunityDetailScreen(
                         items(uiState.posts, { it.id }) { post ->
                             SwipeableCard(
                                 modifier = Modifier.fillMaxWidth(),
-                                enabled = uiState.swipeActionsEnabled && !isOnOtherInstance,
+                                enabled = uiState.swipeActionsEnabled,
+                                directions = if (!uiState.isLogged || isOnOtherInstance) {
+                                    emptySet()
+                                } else {
+                                    setOf(
+                                        DismissDirection.StartToEnd,
+                                        DismissDirection.EndToStart,
+                                    )
+                                },
                                 backgroundColor = rememberCallbackArgs {
                                     when (it) {
                                         DismissValue.DismissedToStart -> upvoteColor
@@ -516,7 +524,7 @@ class CommunityDetailScreen(
                                             )
                                         },
                                         onUpVote = rememberCallback(model) {
-                                            if (!isOnOtherInstance) {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
                                                 model.reduce(
                                                     CommunityDetailMviModel.Intent.UpVotePost(
                                                         id = post.id,
@@ -526,7 +534,7 @@ class CommunityDetailScreen(
                                             }
                                         },
                                         onDownVote = rememberCallback(model) {
-                                            if (!isOnOtherInstance) {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
                                                 model.reduce(
                                                     CommunityDetailMviModel.Intent.DownVotePost(
                                                         id = post.id,
@@ -536,7 +544,7 @@ class CommunityDetailScreen(
                                             }
                                         },
                                         onSave = rememberCallback(model) {
-                                            if (!isOnOtherInstance) {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
                                                 model.reduce(
                                                     CommunityDetailMviModel.Intent.SavePost(
                                                         id = post.id,
@@ -546,7 +554,7 @@ class CommunityDetailScreen(
                                             }
                                         },
                                         onReply = rememberCallback(model) {
-                                            if (!isOnOtherInstance) {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
                                                 val screen = CreateCommentScreen(
                                                     originalPost = post,
                                                 )
@@ -571,7 +579,7 @@ class CommunityDetailScreen(
                                                     stringResource(MR.strings.post_action_share)
                                                 )
                                             )
-                                            if (uiState.currentUserId != null) {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
                                                 add(
                                                     Option(
                                                         OptionId.Hide,
@@ -585,7 +593,7 @@ class CommunityDetailScreen(
                                                     stringResource(MR.strings.post_action_see_raw)
                                                 )
                                             )
-                                            if (uiState.currentUserId != null) {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
                                                 add(
                                                     Option(
                                                         OptionId.CrossPost,

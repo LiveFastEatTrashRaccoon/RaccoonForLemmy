@@ -320,7 +320,7 @@ class PostDetailScreen(
                                 }
                             },
                         )
-                        if (!isOnOtherInstance) {
+                        if (uiState.isLogged && !isOnOtherInstance) {
                             this += FloatingActionButtonMenuItem(
                                 icon = Icons.Default.Reply,
                                 text = stringResource(MR.strings.action_reply),
@@ -375,7 +375,7 @@ class PostDetailScreen(
                                     )
                                 },
                                 onUpVote = rememberCallback(model) {
-                                    if (!isOnOtherInstance) {
+                                    if (uiState.isLogged && !isOnOtherInstance) {
                                         model.reduce(
                                             PostDetailMviModel.Intent.UpVotePost(
                                                 feedback = true,
@@ -384,7 +384,7 @@ class PostDetailScreen(
                                     }
                                 },
                                 onDownVote = rememberCallback(model) {
-                                    if (!isOnOtherInstance) {
+                                    if (uiState.isLogged && !isOnOtherInstance) {
                                         model.reduce(
                                             PostDetailMviModel.Intent.DownVotePost(
                                                 feedback = true,
@@ -401,7 +401,7 @@ class PostDetailScreen(
                                     )
                                 },
                                 onReply = rememberCallback {
-                                    if (!isOnOtherInstance) {
+                                    if (uiState.isLogged && !isOnOtherInstance) {
                                         val screen = CreateCommentScreen(
                                             originalPost = uiState.post,
                                         )
@@ -421,7 +421,7 @@ class PostDetailScreen(
                                             stringResource(MR.strings.post_action_see_raw)
                                         )
                                     )
-                                    if (uiState.currentUserId != null) {
+                                    if (uiState.isLogged && !isOnOtherInstance) {
                                         add(
                                             Option(
                                                 OptionId.CrossPost,
@@ -565,7 +565,15 @@ class PostDetailScreen(
                                     if (comment.expanded) {
                                         SwipeableCard(
                                             modifier = Modifier.fillMaxWidth(),
-                                            enabled = uiState.swipeActionsEnabled && !isOnOtherInstance,
+                                            enabled = uiState.swipeActionsEnabled,
+                                            directions = if (!uiState.isLogged || isOnOtherInstance) {
+                                                emptySet()
+                                            } else {
+                                                setOf(
+                                                    DismissDirection.StartToEnd,
+                                                    DismissDirection.EndToStart,
+                                                )
+                                            },
                                             backgroundColor = rememberCallbackArgs {
                                                 when (it) {
                                                     DismissValue.DismissedToStart -> upvoteColor
@@ -632,7 +640,7 @@ class PostDetailScreen(
                                                         )
                                                     },
                                                     onUpVote = rememberCallback(model) {
-                                                        if (!isOnOtherInstance) {
+                                                        if (uiState.isLogged && !isOnOtherInstance) {
                                                             model.reduce(
                                                                 PostDetailMviModel.Intent.UpVoteComment(
                                                                     commentId = comment.id,
@@ -642,7 +650,7 @@ class PostDetailScreen(
                                                         }
                                                     },
                                                     onDownVote = rememberCallback(model) {
-                                                        if (!isOnOtherInstance) {
+                                                        if (uiState.isLogged && !isOnOtherInstance) {
                                                             model.reduce(
                                                                 PostDetailMviModel.Intent.DownVoteComment(
                                                                     commentId = comment.id,
@@ -652,7 +660,7 @@ class PostDetailScreen(
                                                         }
                                                     },
                                                     onSave = rememberCallback(model) {
-                                                        if (!isOnOtherInstance) {
+                                                        if (uiState.isLogged && !isOnOtherInstance) {
                                                             model.reduce(
                                                                 PostDetailMviModel.Intent.SaveComment(
                                                                     commentId = comment.id,
@@ -662,7 +670,7 @@ class PostDetailScreen(
                                                         }
                                                     },
                                                     onReply = rememberCallback {
-                                                        if (!isOnOtherInstance) {
+                                                        if (uiState.isLogged && !isOnOtherInstance) {
                                                             val screen = CreateCommentScreen(
                                                                 originalPost = uiState.post,
                                                                 originalComment = comment,
@@ -774,7 +782,7 @@ class PostDetailScreen(
                                                 )
                                             },
                                             onUpVote = rememberCallback(model) {
-                                                if (!isOnOtherInstance) {
+                                                if (uiState.isLogged && !isOnOtherInstance) {
                                                     model.reduce(
                                                         PostDetailMviModel.Intent.UpVoteComment(
                                                             commentId = comment.id,
@@ -784,7 +792,7 @@ class PostDetailScreen(
                                                 }
                                             },
                                             onDownVote = rememberCallback(model) {
-                                                if (!isOnOtherInstance) {
+                                                if (uiState.isLogged && !isOnOtherInstance) {
                                                     model.reduce(
                                                         PostDetailMviModel.Intent.DownVoteComment(
                                                             commentId = comment.id,
@@ -794,7 +802,7 @@ class PostDetailScreen(
                                                 }
                                             },
                                             onSave = rememberCallback(model) {
-                                                if (!isOnOtherInstance) {
+                                                if (uiState.isLogged && !isOnOtherInstance) {
                                                     model.reduce(
                                                         PostDetailMviModel.Intent.SaveComment(
                                                             commentId = comment.id,
@@ -804,7 +812,7 @@ class PostDetailScreen(
                                                 }
                                             },
                                             onReply = rememberCallback(model) {
-                                                if (!isOnOtherInstance) {
+                                                if (uiState.isLogged && !isOnOtherInstance) {
                                                     val screen = CreateCommentScreen(
                                                         originalPost = uiState.post,
                                                         originalComment = comment,

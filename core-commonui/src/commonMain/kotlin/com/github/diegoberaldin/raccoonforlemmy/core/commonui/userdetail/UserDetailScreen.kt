@@ -271,7 +271,7 @@ class UserDetailScreen(
                                     }
                                 },
                             )
-                            if (!isOnOtherInstance) {
+                            if (uiState.isLogged && !isOnOtherInstance) {
                                 this += FloatingActionButtonMenuItem(
                                     icon = Icons.Default.Chat,
                                     text = stringResource(MR.strings.action_chat),
@@ -378,7 +378,7 @@ class UserDetailScreen(
                             SwipeableCard(
                                 modifier = Modifier.fillMaxWidth(),
                                 enabled = uiState.swipeActionsEnabled,
-                                directions = if (isOnOtherInstance) {
+                                directions = if (!uiState.isLogged || isOnOtherInstance) {
                                     emptySet()
                                 } else {
                                     setOf(
@@ -435,7 +435,7 @@ class UserDetailScreen(
                                             navigationCoordinator.getRootNavigator()
                                                 ?.push(PostDetailScreen(post = post))
                                         },
-                                        onUpVote = if (isOnOtherInstance) {
+                                        onUpVote = if (!uiState.isLogged || isOnOtherInstance) {
                                             null
                                         } else {
                                             rememberCallback(model) {
@@ -447,7 +447,7 @@ class UserDetailScreen(
                                                 )
                                             }
                                         },
-                                        onDownVote = if (isOnOtherInstance) {
+                                        onDownVote = if (!uiState.isLogged || isOnOtherInstance) {
                                             null
                                         } else {
                                             rememberCallback(model) {
@@ -459,7 +459,7 @@ class UserDetailScreen(
                                                 )
                                             }
                                         },
-                                        onSave = if (isOnOtherInstance) {
+                                        onSave = if (!uiState.isLogged || isOnOtherInstance) {
                                             null
                                         } else {
                                             rememberCallback(model) {
@@ -475,7 +475,7 @@ class UserDetailScreen(
                                             navigationCoordinator.getRootNavigator()
                                                 ?.push(CommunityDetailScreen(community))
                                         },
-                                        onReply = if (isOnOtherInstance) {
+                                        onReply = if (!uiState.isLogged || isOnOtherInstance) {
                                             null
                                         } else {
                                             rememberCallback {
@@ -504,7 +504,7 @@ class UserDetailScreen(
                                                     stringResource(MR.strings.post_action_see_raw)
                                                 )
                                             )
-                                            if (uiState.currentUserId != null) {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
                                                 add(
                                                     Option(
                                                         OptionId.CrossPost,
@@ -582,7 +582,7 @@ class UserDetailScreen(
                             SwipeableCard(
                                 modifier = Modifier.fillMaxWidth(),
                                 enabled = uiState.swipeActionsEnabled,
-                                directions = if (isOnOtherInstance) {
+                                directions = if (!uiState.isLogged || isOnOtherInstance) {
                                     emptySet()
                                 } else {
                                     setOf(
@@ -642,7 +642,7 @@ class UserDetailScreen(
                                                 )
                                             )
                                         },
-                                        onSave = if (isOnOtherInstance) {
+                                        onSave = if (!uiState.isLogged || isOnOtherInstance) {
                                             null
                                         } else {
                                             rememberCallback(model) {
@@ -654,7 +654,7 @@ class UserDetailScreen(
                                                 )
                                             }
                                         },
-                                        onUpVote = if (isOnOtherInstance) {
+                                        onUpVote = if (!uiState.isLogged || isOnOtherInstance) {
                                             null
                                         } else {
                                             rememberCallback(model) {
@@ -666,7 +666,7 @@ class UserDetailScreen(
                                                 )
                                             }
                                         },
-                                        onDownVote = if (isOnOtherInstance) {
+                                        onDownVote = if (!uiState.isLogged || isOnOtherInstance) {
                                             null
                                         } else {
                                             rememberCallback(model) {
@@ -678,7 +678,7 @@ class UserDetailScreen(
                                                 )
                                             }
                                         },
-                                        onReply = if (isOnOtherInstance) {
+                                        onReply = if (!uiState.isLogged || isOnOtherInstance) {
                                             null
                                         } else {
                                             rememberCallback {
@@ -701,7 +701,7 @@ class UserDetailScreen(
                                                     stringResource(MR.strings.post_action_see_raw)
                                                 )
                                             )
-                                            if (uiState.currentUserId != null) {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
                                                 add(
                                                     Option(
                                                         OptionId.Report,

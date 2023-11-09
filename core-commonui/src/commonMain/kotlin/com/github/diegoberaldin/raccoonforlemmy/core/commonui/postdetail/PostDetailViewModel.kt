@@ -87,6 +87,7 @@ class PostDetailViewModel(
                 mvi.updateState {
                     it.copy(
                         currentUserId = user?.id ?: 0,
+                        isLogged = auth.isNotEmpty(),
                     )
                 }
             }
