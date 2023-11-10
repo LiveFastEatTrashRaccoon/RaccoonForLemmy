@@ -59,6 +59,7 @@ class LanguageBottomSheet : Screen {
                     "fr",
                     "it",
                     "nl",
+                    "pl",
                     "pt",
                     "ro",
                 )
