@@ -263,6 +263,9 @@ class ExploreViewModel(
             } else {
                 isSafeForWork(item)
             }
+        }.filter { r1 ->
+            // prevents accidental duplication
+            currentState.results.none { r2 -> getItemKey(r1) == getItemKey(r2) }
         }
         mvi.updateState {
             val newItems = if (refreshing) {
@@ -584,4 +587,12 @@ class ExploreViewModel(
             }
         }
     }
+}
+
+internal fun getItemKey(result: Any): String = when (result) {
+    is PostModel -> "post" + result.id.toString() + result.updateDate
+    is CommentModel -> "comment" + result.id.toString() + result.updateDate
+    is UserModel -> "user" + result.id.toString()
+    is CommunityModel -> "community" + result.id.toString()
+    else -> ""
 }
