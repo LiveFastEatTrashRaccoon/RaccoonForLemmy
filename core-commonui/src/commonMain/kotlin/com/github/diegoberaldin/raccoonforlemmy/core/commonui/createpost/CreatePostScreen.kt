@@ -151,10 +151,20 @@ class CreatePostScreen(
             val referencePost = editedPost ?: crossPost
             model.reduce(CreatePostMviModel.Intent.SetTitle(referencePost?.title.orEmpty()))
             model.reduce(CreatePostMviModel.Intent.SetUrl(referencePost?.url.orEmpty()))
-            if (communityId != null) {
-                model.reduce(
+            when {
+                communityId != null -> model.reduce(
                     CreatePostMviModel.Intent.SetCommunity(CommunityModel(id = communityId))
                 )
+
+                editedPost != null -> editedPost.community?.id?.also { communityId ->
+                    model.reduce(
+                        CreatePostMviModel.Intent.SetCommunity(
+                            CommunityModel(
+                                id = communityId
+                            )
+                        )
+                    )
+                }
             }
 
             model.effects.onEach { effect ->
@@ -219,6 +229,9 @@ class CreatePostScreen(
                             BottomSheetHandle()
                             Text(
                                 text = when {
+                                    editedPost != null ->
+                                        stringResource(MR.strings.edit_post_title)
+
                                     else ->
                                         stringResource(MR.strings.create_post_title)
                                 },
