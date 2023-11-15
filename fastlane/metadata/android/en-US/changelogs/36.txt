@@ -1,0 +1,13 @@
+- feat: cross posting
+- feat: double tap behaviour
+- feat: sort communities in instance detail
+- feat: new l10ns: Dutch, Polish, Danish
+- enhancement: improvements to zombie mode
+- enhancement: copy setting from anonymous account
+- enhancement: remember instance name in login
+- enhancement: improve post and comment edit
+- enhancement: screen transition animation
+- enhancement: new custom fonts
+- enhancement: improve dropdown layout
+- fix: set content and font size
+- fix: comment expand/collapse

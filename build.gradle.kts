@@ -18,6 +18,11 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
 
+tasks.withType<AbstractArchiveTask>().configureEach {
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
+}
+
 buildscript {
     dependencies {
         classpath(libs.moko.gradle)
