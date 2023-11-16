@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="action_back_to_top">Înapoi la început</string>
-    <string name="action_chat">Trimite mesaj</string>
+    <string name="action_chat">Trimite un mesaj</string>
     <string name="action_clear_read">Ascunde citite</string>
-    <string name="action_create_post">Creează postare</string>
+    <string name="action_create_post">Creează o postare</string>
     <string name="action_reply">Răspunde</string>
     <string name="action_activate_zombie_mode">Activează modul zombie</string>
     <string name="action_deactivate_zombie_mode">Dezactiează modul zombie</string>
@@ -32,17 +32,17 @@
     <string name="create_post_nsfw">NSFW</string>
     <string name="create_post_tab_editor">Editor</string>
     <string name="create_post_tab_preview">Previzualizare</string>
-    <string name="create_post_title">Nou postare</string>
+    <string name="create_post_title">Nouă postare</string>
     <string name="create_post_url">URL</string>
     <string name="create_report_placeholder">Text raportului</string>
-    <string name="create_report_title_comment">Raportează comentariu</string>
-    <string name="create_report_title_post">Raportează postare</string>
+    <string name="create_report_title_comment">Raportează comentariul</string>
+    <string name="create_report_title_post">Raportează postarea</string>
     <string name="dialog_raw_content_text">Text</string>
     <string name="dialog_raw_content_title">Titlu</string>
     <string name="dialog_raw_content_url">URL</string>
     <string name="dialog_title_change_instance">Schimbă instanță</string>
     <string name="dialog_title_raw_content">Conținut brut</string>
-    <string name="dialog_title_select_community">Selectează comunitate</string>
+    <string name="dialog_title_select_community">Selectează o comunitate</string>
     <string name="edit_comment_title">Editează comentariul</string>
     <string name="edit_post_title">Editează postarea</string>
     <string name="explore_result_type_all">Toate</string>
@@ -64,7 +64,7 @@
     <string name="home_sort_type_new">Noi</string>
     <string name="home_sort_type_new_comments">Noi comentări</string>
     <string name="home_sort_type_old">Vechi</string>
-    <string name="home_sort_type_scaled">Proporționale</string>
+    <string name="home_sort_type_scaled">Proporțional</string>
     <string name="home_sort_type_top">Top</string>
     <string name="home_sort_type_top_12_hours">Top ultimelor 12 ore</string>
     <string name="home_sort_type_top_12_hours_short">12h</string>
@@ -72,7 +72,7 @@
     <string name="home_sort_type_top_6_hours_short">6h</string>
     <string name="home_sort_type_top_day">Top zilei</string>
     <string name="home_sort_type_top_day_short">zi</string>
-    <string name="home_sort_type_top_hour">Top ultime ore</string>
+    <string name="home_sort_type_top_hour">Top ultimei ore</string>
     <string name="home_sort_type_top_hour_short">1h</string>
     <string name="home_sort_type_top_month">Top lunii</string>
     <string name="home_sort_type_top_month_short">lună</string>
@@ -86,7 +86,7 @@
     <string name="inbox_item_reply_post">a răspuns postării tale în</string>
     <string name="inbox_listing_type_all">Toate</string>
     <string name="inbox_listing_type_title">Tip de inbox</string>
-    <string name="inbox_listing_type_unread">Necitit</string>
+    <string name="inbox_listing_type_unread">Necitite</string>
     <string name="inbox_action_mark_read">Marchează ca citit</string>
     <string name="inbox_action_mark_unread">Marchează ca necitit</string>
     <string name="inbox_not_logged_message">Momentan nu sunteți autentificat.\nVă rugăm să adăugați
@@ -107,14 +107,14 @@
     <string name="manage_accounts_title">Gestionează conturile</string>
     <string name="manage_subscriptions_header_multicommunities">Multi-comunități</string>
     <string name="manage_subscriptions_header_subscriptions">Abonamente</string>
-    <string name="message_empty_comments">E prea tăcut acolo.\nAți vrea să fiți cel care scrie
+    <string name="message_empty_comments">E prea tăcut aici.\nAi vrea să fii cel care scrie
         primul comentariu?
     </string>
     <string name="message_empty_list">Niciun element de afișat</string>
     <string name="message_error_loading_comments">A apărut o eroare la încărcarea comentariilor.
     </string>
     <string name="message_generic_error">Eroare generică</string>
-    <string name="message_image_loading_error">Eroare de încărcare a imaginii</string>
+    <string name="message_image_loading_error">Eroare la încărcarea imaginii</string>
     <string name="message_invalid_field">Câmp nevalid</string>
     <string name="message_missing_field">Câmp obligatoriu</string>
     <string name="message_operation_successful">Operațiunea s-a încheiat cu succes</string>
@@ -136,8 +136,8 @@
     <string name="post_action_report">Reportează…</string>
     <string name="post_action_see_raw">Vizualizare brută…</string>
     <string name="post_action_share">Partajează…</string>
-    <string name="post_detail_cross_posts">postat și în:</string>
-    <string name="post_detail_load_more_comments">Încărcă mai multe comentări…</string>
+    <string name="post_detail_cross_posts">postată și în:</string>
+    <string name="post_detail_load_more_comments">Încărcă mai multe comentării…</string>
     <string name="post_hour_short">h</string>
     <string name="post_minute_short">m</string>
     <string name="post_second_short">s</string>
@@ -148,7 +148,7 @@
     <string name="profile_not_logged_message">Momentan nu sunteți autentificat.\nVă rugăm să
         adăugați un cont pentru a continua.
     </string>
-    <string name="profile_section_comments">Comentări</string>
+    <string name="profile_section_comments">Comentării</string>
     <string name="profile_section_posts">Postări</string>
     <string name="profile_thousand_short">k</string>
     <string name="profile_year_short">y</string>
@@ -211,7 +211,7 @@
     <string name="settings_section_debug">Depanare</string>
     <string name="settings_section_feed">Postări și comentării</string>
     <string name="settings_section_nsfw">NSFW</string>
-    <string name="settings_separate_up_and_downvotes">Separă voturi pozitive și negative</string>
+    <string name="settings_separate_up_and_downvotes">Distinge voturi pozitive și negative</string>
     <string name="settings_theme_black">Întunecată (AMOLED)</string>
     <string name="settings_theme_dark">Întunecată</string>
     <string name="settings_theme_light">Ușoară</string>
@@ -220,6 +220,6 @@
     <string name="settings_ui_theme">Tema UI</string>
     <string name="settings_upvote_color">Culoare voturilor pozitive</string>
     <string name="settings_hide_navigation_bar">Ascunde bara de navigare la derulare</string>
-    <string name="settings_zombie_mode_interval">Durată intervalului al modului zombie</string>
-    <string name="settings_zombie_mode_scroll_amount">Zombie mode scroll amount</string>
+    <string name="settings_zombie_mode_interval">Durată intervalului modului zombie</string>
+    <string name="settings_zombie_mode_scroll_amount">Extensia de derulare modului zombie</string>
 </resources>
