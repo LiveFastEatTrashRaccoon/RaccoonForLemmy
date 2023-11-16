@@ -99,7 +99,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateRepor
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.github.diegoberaldin.raccoonforlemmy.core.notifications.subscribe
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
@@ -161,15 +160,18 @@ class CommunityDetailScreen(
             }
         }
         LaunchedEffect(notificationCenter) {
-            notificationCenter.subscribe<NotificationCenterEvent.ChangeSortType>().onEach { evt ->
-                CommunityDetailMviModel.Intent.ChangeSort(evt.value)
-            }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)
+                .onEach { evt ->
+                    if (evt.key == key) {
+                        CommunityDetailMviModel.Intent.ChangeSort(evt.value)
+                    }
+                }.launchIn(this)
 
-            notificationCenter.subscribe<NotificationCenterEvent.PostCreated>().onEach {
+            notificationCenter.subscribe(NotificationCenterEvent.PostCreated::class).onEach {
                 model.reduce(CommunityDetailMviModel.Intent.Refresh)
             }.launchIn(this)
 
-            notificationCenter.subscribe<NotificationCenterEvent.CommentCreated>().onEach {
+            notificationCenter.subscribe(NotificationCenterEvent.CommentCreated::class).onEach {
                 model.reduce(CommunityDetailMviModel.Intent.Refresh)
             }.launchIn(this)
         }
@@ -186,6 +188,8 @@ class CommunityDetailScreen(
 
                     CommunityDetailMviModel.Effect.BackToTop -> {
                         lazyListState.scrollToItem(0)
+                        topAppBarState.heightOffset = 0f
+                        topAppBarState.contentOffset = 0f
                     }
 
                     is CommunityDetailMviModel.Effect.ZombieModeTick -> {
@@ -241,6 +245,7 @@ class CommunityDetailScreen(
                             modifier = Modifier.onClick(
                                 onClick = rememberCallback {
                                     val sheet = SortBottomSheet(
+                                        sheetKey = key,
                                         comments = false,
                                         expandTop = true,
                                     )
@@ -403,6 +408,8 @@ class CommunityDetailScreen(
                                         model.reduce(CommunityDetailMviModel.Intent.ClearRead)
                                         scope.launch {
                                             lazyListState.scrollToItem(0)
+                                            topAppBarState.heightOffset = 0f
+                                            topAppBarState.contentOffset = 0f
                                         }
                                     },
                                 )

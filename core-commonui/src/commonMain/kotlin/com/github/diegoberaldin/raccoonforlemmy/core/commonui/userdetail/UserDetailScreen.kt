@@ -96,7 +96,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateReportScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.github.diegoberaldin.raccoonforlemmy.core.notifications.subscribe
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
@@ -154,11 +153,14 @@ class UserDetailScreen(
             }
         }
         LaunchedEffect(notificationCenter) {
-            notificationCenter.subscribe<NotificationCenterEvent.ChangeSortType>().onEach { evt ->
-                model.reduce(UserDetailMviModel.Intent.ChangeSort(evt.value))
-            }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)
+                .onEach { evt ->
+                    if (evt.key == key) {
+                        model.reduce(UserDetailMviModel.Intent.ChangeSort(evt.value))
+                    }
+                }.launchIn(this)
 
-            notificationCenter.subscribe<NotificationCenterEvent.CommentCreated>().onEach {
+            notificationCenter.subscribe(NotificationCenterEvent.CommentCreated::class).onEach {
                 model.reduce(UserDetailMviModel.Intent.Refresh)
             }.launchIn(this)
         }
@@ -210,6 +212,7 @@ class UserDetailScreen(
                             modifier = Modifier.onClick(
                                 onClick = rememberCallback {
                                     val sheet = SortBottomSheet(
+                                        sheetKey = key,
                                         comments = false,
                                         expandTop = true,
                                     )

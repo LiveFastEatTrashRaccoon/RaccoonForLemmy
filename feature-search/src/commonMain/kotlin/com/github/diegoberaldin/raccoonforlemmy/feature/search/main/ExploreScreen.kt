@@ -76,7 +76,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.github.diegoberaldin.raccoonforlemmy.core.notifications.subscribe
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
@@ -126,15 +125,21 @@ class ExploreScreen : Screen {
         val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
 
         LaunchedEffect(notificationCenter) {
-            notificationCenter.subscribe<NotificationCenterEvent.ChangeFeedType>().onEach { evt ->
-                model.reduce(ExploreMviModel.Intent.SetListingType(evt.value))
-            }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeFeedType::class)
+                .onEach { evt ->
+                    if (evt.key == key) {
+                        model.reduce(ExploreMviModel.Intent.SetListingType(evt.value))
+                    }
+                }.launchIn(this)
 
-            notificationCenter.subscribe<NotificationCenterEvent.ChangeSortType>().onEach { evt ->
-                model.reduce(ExploreMviModel.Intent.SetSortType(evt.value))
-            }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)
+                .onEach { evt ->
+                    if (evt.key == key) {
+                        model.reduce(ExploreMviModel.Intent.SetSortType(evt.value))
+                    }
+                }.launchIn(this)
 
-            notificationCenter.subscribe<NotificationCenterEvent.CommentCreated>().onEach {
+            notificationCenter.subscribe(NotificationCenterEvent.CommentCreated::class).onEach {
                 model.reduce(ExploreMviModel.Intent.Refresh)
             }.launchIn(this)
         }
@@ -153,6 +158,8 @@ class ExploreScreen : Screen {
                 when (it) {
                     ExploreMviModel.Effect.BackToTop -> {
                         lazyListState.scrollToItem(0)
+                        topAppBarState.heightOffset = 0f
+                        topAppBarState.contentOffset = 0f
                     }
                 }
             }.launchIn(this)
@@ -168,6 +175,7 @@ class ExploreScreen : Screen {
                     onSelectListingType = rememberCallback {
                         focusManager.clearFocus()
                         val sheet = ListingTypeBottomSheet(
+                            sheetKey = key,
                             isLogged = uiState.isLogged,
                         )
                         navigationCoordinator.showBottomSheet(sheet)
@@ -175,6 +183,7 @@ class ExploreScreen : Screen {
                     onSelectSortType = rememberCallback {
                         focusManager.clearFocus()
                         val sheet = SortBottomSheet(
+                            sheetKey = key,
                             comments = false,
                             expandTop = true,
                         )

@@ -5,7 +5,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.github.diegoberaldin.raccoonforlemmy.core.notifications.subscribe
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
@@ -30,6 +29,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlin.random.Random
 
 class ExploreViewModel(
     private val mvi: DefaultMviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect>,
@@ -77,19 +79,20 @@ class ExploreViewModel(
                     )
                 }
             }.launchIn(this)
-            notificationCenter.subscribe<NotificationCenterEvent.Logout>().onEach {
+            notificationCenter.subscribe(NotificationCenterEvent.Logout::class).onEach {
                 handleLogout()
             }.launchIn(this)
-            notificationCenter.subscribe<NotificationCenterEvent.ResetContents>().onEach {
+            notificationCenter.subscribe(NotificationCenterEvent.ResetContents::class).onEach {
                 // apply feed and sort type
                 firstLoad = true
             }.launchIn(this)
-            notificationCenter.subscribe<NotificationCenterEvent.PostUpdated>().onEach { evt ->
+            notificationCenter.subscribe(NotificationCenterEvent.PostUpdated::class).onEach { evt ->
                 handlePostUpdate(evt.model)
             }.launchIn(this)
-            notificationCenter.subscribe<NotificationCenterEvent.CommentUpdated>().onEach { evt ->
-                handleCommentUpdate(evt.model)
-            }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.CommentUpdated::class)
+                .onEach { evt ->
+                    handleCommentUpdate(evt.model)
+                }.launchIn(this)
         }
 
         if (firstLoad) {
@@ -616,10 +619,15 @@ class ExploreViewModel(
     }
 }
 
+@OptIn(ExperimentalEncodingApi::class)
 internal fun getItemKey(result: Any): String = when (result) {
     is PostModel -> "post" + result.id.toString() + result.updateDate
     is CommentModel -> "comment" + result.id.toString() + result.updateDate
     is UserModel -> "user" + result.id.toString()
     is CommunityModel -> "community" + result.id.toString()
-    else -> ""
+    else -> {
+        val key = ByteArray(64)
+        Random(0).nextBytes(key)
+        Base64.encode(key)
+    }
 }

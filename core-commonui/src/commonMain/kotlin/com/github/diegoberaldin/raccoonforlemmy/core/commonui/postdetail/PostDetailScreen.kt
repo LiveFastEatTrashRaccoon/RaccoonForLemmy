@@ -98,7 +98,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateRepor
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.github.diegoberaldin.raccoonforlemmy.core.notifications.subscribe
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
@@ -165,16 +164,19 @@ class PostDetailScreen(
             }
         }
         LaunchedEffect(notificationCenter) {
-            notificationCenter.subscribe<NotificationCenterEvent.ChangeSortType>().onEach { evt ->
-                model.reduce(PostDetailMviModel.Intent.ChangeSort(evt.value))
-            }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)
+                .onEach { evt ->
+                    if (evt.key == key) {
+                        model.reduce(PostDetailMviModel.Intent.ChangeSort(evt.value))
+                    }
+                }.launchIn(this)
 
-            notificationCenter.subscribe<NotificationCenterEvent.CommentCreated>().onEach {
+            notificationCenter.subscribe(NotificationCenterEvent.CommentCreated::class).onEach {
                 model.reduce(PostDetailMviModel.Intent.Refresh)
                 model.reduce(PostDetailMviModel.Intent.RefreshPost)
             }.launchIn(this)
 
-            notificationCenter.subscribe<NotificationCenterEvent.PostUpdated>().onEach {
+            notificationCenter.subscribe(NotificationCenterEvent.PostUpdated::class).onEach {
                 model.reduce(PostDetailMviModel.Intent.RefreshPost)
             }.launchIn(this)
         }
@@ -217,6 +219,7 @@ class PostDetailScreen(
                             modifier = Modifier.onClick(
                                 onClick = rememberCallback {
                                     val sheet = SortBottomSheet(
+                                        sheetKey = key,
                                         comments = true,
                                         values = listOf(
                                             SortType.Hot,

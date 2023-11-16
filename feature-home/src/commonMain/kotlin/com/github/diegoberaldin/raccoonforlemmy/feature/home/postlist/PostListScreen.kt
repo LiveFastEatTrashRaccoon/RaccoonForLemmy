@@ -78,7 +78,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.report.CreateRepor
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.github.diegoberaldin.raccoonforlemmy.core.notifications.subscribe
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
@@ -131,6 +130,8 @@ class PostListScreen : Screen {
                 when (effect) {
                     PostListMviModel.Effect.BackToTop -> {
                         lazyListState.scrollToItem(0)
+                        topAppBarState.heightOffset = 0f
+                        topAppBarState.contentOffset = 0f
                     }
 
                     is PostListMviModel.Effect.ZombieModeTick -> {
@@ -142,19 +143,25 @@ class PostListScreen : Screen {
             }.launchIn(this)
         }
         LaunchedEffect(notificationCenter) {
-            notificationCenter.subscribe<NotificationCenterEvent.ChangeFeedType>().onEach { evt ->
-                model.reduce(PostListMviModel.Intent.ChangeListing(evt.value))
-            }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeFeedType::class)
+                .onEach { evt ->
+                    if (evt.key == key) {
+                        model.reduce(PostListMviModel.Intent.ChangeListing(evt.value))
+                    }
+                }.launchIn(this)
 
-            notificationCenter.subscribe<NotificationCenterEvent.ChangeSortType>().onEach { evt ->
-                model.reduce(PostListMviModel.Intent.ChangeSort(evt.value))
-            }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)
+                .onEach { evt ->
+                    if (evt.key == key) {
+                        model.reduce(PostListMviModel.Intent.ChangeSort(evt.value))
+                    }
+                }.launchIn(this)
 
-            notificationCenter.subscribe<NotificationCenterEvent.CommentCreated>().onEach {
+            notificationCenter.subscribe(NotificationCenterEvent.CommentCreated::class).onEach {
                 model.reduce(PostListMviModel.Intent.Refresh)
             }.launchIn(this)
 
-            notificationCenter.subscribe<NotificationCenterEvent.PostCreated>().onEach {
+            notificationCenter.subscribe(NotificationCenterEvent.PostCreated::class).onEach {
                 model.reduce(PostListMviModel.Intent.Refresh)
             }.launchIn(this)
         }
@@ -175,11 +182,13 @@ class PostListScreen : Screen {
                     onSelectListingType = rememberCallback {
                         val sheet = ListingTypeBottomSheet(
                             isLogged = uiState.isLogged,
+                            sheetKey = key,
                         )
                         navigationCoordinator.showBottomSheet(sheet)
                     },
                     onSelectSortType = rememberCallback {
                         val sheet = SortBottomSheet(
+                            sheetKey = key,
                             comments = false,
                             expandTop = true,
                         )
@@ -236,6 +245,8 @@ class PostListScreen : Screen {
                                         model.reduce(PostListMviModel.Intent.ClearRead)
                                         scope.launch {
                                             lazyListState.scrollToItem(0)
+                                            topAppBarState.heightOffset = 0f
+                                            topAppBarState.contentOffset = 0f
                                         }
                                     },
                                 )
