@@ -18,27 +18,35 @@ A Kotlin Multiplatform Mobile client for Lemmy.
 <div align="center">
 <table>
   <tr>
-    <td><!-- Home -->
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/01b3f04b-3900-46dc-b835-efc11c89ab63" width="310" />
+    <td>
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/a41fe45c-b1be-44bb-b044-fd6ef38bc205" width="310" alt="home screen" />
     </td>
-    <td><!-- Post detail -->
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/c303237d-b5df-40bd-acc6-419aeed8de10" width="310" />
-    </td>
-  </tr>
-  <tr>
-    <td><!-- Explore -->
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/e836c063-f85c-488d-b26a-5aa14a49ec2b" width="310" />
-    </td>
-    <td><!-- Community detail -->
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/e9174244-e0bf-4bcc-bed5-6332e807ce60" width="310" />
+    <td>
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/a95bfe7b-fdab-4810-a1be-c6baf3270a51" width="310" alt="post detail" />
     </td>
   </tr>
   <tr>
-    <td><!-- Inbox -->
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/1aaff3ac-205b-404d-b83e-ce3f4e267e75" width="310" />
+    <td>
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/621ab6ae-a08d-4a2a-a68b-e1c6924325e9" width="310" alt="explore screen" />
     </td>
-    <td><!-- Settings -->
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/3e5e95bf-d09e-4339-bdaf-4e56dedb2bf3" width="310" />
+    <td>
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/93df3d76-efd0-47c8-a135-c7fae8caf9ca" width="310" alt="community detail" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/103bd28d-f75e-4faa-8805-7ba21dc4a98d" width="310" alt="inbox screen" />
+    </td>
+    <td>
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/d1fff835-11a8-47ed-86c7-c04a531f890e" width="310" alt="settings screen" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/3529a977-3cb8-4465-a828-ee43bf056f77" width="310" alt="community info" />
+    </td>
+    <td>
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/b97f7e7f-57ee-4fe5-8f84-386b2c4ac111" width="310" alt="instance info" />
     </td>
   </tr>
 </table>
