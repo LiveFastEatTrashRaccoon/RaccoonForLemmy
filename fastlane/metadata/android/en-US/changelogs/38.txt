@@ -1,0 +1,4 @@
+- fix: unnecessary reloads of home and explore screens
+- fix: post sorting in community detail
+- fix: minor bug fixes and stability improvements
+- chore: add new l10ns
