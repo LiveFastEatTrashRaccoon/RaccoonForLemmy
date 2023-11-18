@@ -226,5 +226,6 @@
     </string>
     <string name="settings_zombie_mode_interval">Διάρκεια του διαστήματος της λειτουργίας ζόμπι
     </string>
-    <string name="settings_zombie_mode_scroll_amount">Zombie mode scroll amount</string>
+    <string name="settings_zombie_mode_scroll_amount">Ποσότητα της κύλισης της λειτουργίας ζόμπι
+    </string>
 </resources>
