@@ -1,0 +1,4 @@
+- fix: change feed and sort type
+- enhancement: inbox loading
+- fix: minor bug fixes and stability improvements
+- chore: add new l10ns

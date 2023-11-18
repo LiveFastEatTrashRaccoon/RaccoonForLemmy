@@ -53,8 +53,8 @@ class LanguageBottomSheet : Screen {
                 )
                 val values = listOf(
                     "bg",
-                    "cz",
-                    "dk",
+                    "cs",
+                    "da",
                     "de",
                     "el",
                     "en",
