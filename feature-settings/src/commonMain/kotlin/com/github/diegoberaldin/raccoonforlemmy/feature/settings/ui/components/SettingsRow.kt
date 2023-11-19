@@ -38,8 +38,6 @@ internal fun SettingsRow(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
             )
             if (subtitle != null) {
                 Text(
