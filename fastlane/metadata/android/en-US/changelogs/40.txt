@@ -1,0 +1,6 @@
+- feat(posts): mark as read while scrolling
+- feat(posts): quote action in raw content dialog
+- feat(ui): new UI fonts
+- fix(settings): multiline items
+- fix(inbox): open thread and filtering
+- chore(l10n): add  et, lv, lt localizations
