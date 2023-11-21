@@ -2,7 +2,6 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,7 +33,6 @@ object SettingsTab : Tab {
             }
         }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         Navigator(SettingsScreen())
