@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.core.commonui.report
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.createreport
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
