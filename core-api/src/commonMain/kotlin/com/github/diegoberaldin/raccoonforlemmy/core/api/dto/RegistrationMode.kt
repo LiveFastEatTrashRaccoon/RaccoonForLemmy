@@ -4,11 +4,11 @@ import kotlinx.serialization.SerialName
 
 enum class RegistrationMode {
     @SerialName("Closed")
-    CLOSED,
+    Closed,
 
     @SerialName("RequireApplication")
-    REQUIRE_APPLICATION,
+    RequireApplication,
 
     @SerialName("Open")
-    OPEN,
+    Open,
 }

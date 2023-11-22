@@ -1,7 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main
 
 enum class InboxSection {
-    REPLIES,
-    MENTIONS,
-    MESSAGES,
+    Replies,
+    Mentions,
+    Messages,
 }

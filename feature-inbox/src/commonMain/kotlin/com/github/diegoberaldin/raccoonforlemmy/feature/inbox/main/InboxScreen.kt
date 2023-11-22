@@ -178,15 +178,15 @@ object InboxScreen : Tab {
                                 stringResource(MR.strings.inbox_section_messages),
                             ),
                             currentSection = when (uiState.section) {
-                                InboxSection.MENTIONS -> 1
-                                InboxSection.MESSAGES -> 2
+                                InboxSection.Mentions -> 1
+                                InboxSection.Messages -> 2
                                 else -> 0
                             },
                             onSectionSelected = {
                                 val section = when (it) {
-                                    1 -> InboxSection.MENTIONS
-                                    2 -> InboxSection.MESSAGES
-                                    else -> InboxSection.REPLIES
+                                    1 -> InboxSection.Mentions
+                                    2 -> InboxSection.Messages
+                                    else -> InboxSection.Replies
                                 }
                                 model.reduce(InboxMviModel.Intent.ChangeSection(section))
                             },
@@ -204,9 +204,9 @@ object InboxScreen : Tab {
                             LaunchedEffect(model) {
                                 model.uiState.map { it.section }.onEach { section ->
                                     val index = when (section) {
-                                        InboxSection.REPLIES -> 0
-                                        InboxSection.MENTIONS -> 1
-                                        InboxSection.MESSAGES -> 2
+                                        InboxSection.Replies -> 0
+                                        InboxSection.Mentions -> 1
+                                        InboxSection.Messages -> 2
                                     }
                                     navigator.current = screens[index]
                                 }.launchIn(this)

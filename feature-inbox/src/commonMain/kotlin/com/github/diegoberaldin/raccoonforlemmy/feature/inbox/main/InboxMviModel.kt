@@ -14,7 +14,7 @@ interface InboxMviModel :
 
     data class UiState(
         val isLogged: Boolean? = null,
-        val section: InboxSection = InboxSection.REPLIES,
+        val section: InboxSection = InboxSection.Replies,
         val unreadOnly: Boolean = true,
     )
 
