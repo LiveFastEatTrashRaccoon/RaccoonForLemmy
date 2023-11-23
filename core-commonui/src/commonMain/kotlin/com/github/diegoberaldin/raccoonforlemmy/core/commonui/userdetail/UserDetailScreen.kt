@@ -797,7 +797,7 @@ class UserDetailScreen(
 
                         if (uiState.comments.isEmpty() && !uiState.loading) {
                             item {
-                                androidx.compose.material.Text(
+                                Text(
                                     modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
                                     textAlign = TextAlign.Center,
                                     text = stringResource(MR.strings.message_empty_list),
