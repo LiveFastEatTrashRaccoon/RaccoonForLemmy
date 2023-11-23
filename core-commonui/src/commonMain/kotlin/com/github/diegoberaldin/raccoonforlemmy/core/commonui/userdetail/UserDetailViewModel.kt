@@ -190,7 +190,7 @@ class UserDetailViewModel(
                 initial = initial,
             )
         }
-        mvi.scope?.launch {
+        mvi.scope?.launch(Dispatchers.IO) {
             val auth = identityRepository.authToken.value
             val refreshedUser = if (otherInstance.isNotEmpty()) {
                 userRepository.getOnOtherInstance(
@@ -265,6 +265,9 @@ class UserDetailViewModel(
                         refreshing = false,
                     )
                 }
+                if (!itemList.isNullOrEmpty()) {
+                    currentPage++
+                }
             } else {
                 val itemList = userRepository.getComments(
                     auth = auth,
@@ -287,8 +290,10 @@ class UserDetailViewModel(
                         initial = false,
                     )
                 }
+                if (!itemList.isNullOrEmpty()) {
+                    currentPage++
+                }
             }
-            currentPage++
         }
     }
 
