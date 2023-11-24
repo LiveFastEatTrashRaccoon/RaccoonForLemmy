@@ -1,0 +1,8 @@
+- feat: moderation tools (feature/lock/remove posts, distinguish/remove comments, see/resolve reports)
+- fix: user and community detail loading, pagination and back management
+- fix: share URL of posts
+- enhancement: keep screen on in zombie mode
+- enhancement: remove unnecessary actions in inbox
+- enhancement: full timestamp in raw dialog
+- enhancement: reorder custom text toolbar actions
+- enhancement: improved fonts and l10n
