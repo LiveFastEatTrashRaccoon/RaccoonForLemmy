@@ -263,6 +263,7 @@ class UserDetailViewModel(
                         loading = false,
                         canFetchMore = itemList?.isEmpty() != true,
                         refreshing = false,
+                        initial = false,
                     )
                 }
                 if (!itemList.isNullOrEmpty()) {
