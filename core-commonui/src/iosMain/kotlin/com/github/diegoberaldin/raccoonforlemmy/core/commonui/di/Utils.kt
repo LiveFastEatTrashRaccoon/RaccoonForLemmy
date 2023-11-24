@@ -18,6 +18,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.remove.RemoveMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.reportlist.ReportListMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.selectcommunity.SelectCommunityMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
@@ -46,8 +48,9 @@ actual fun getPostDetailViewModel(
     post: PostModel,
     otherInstance: String,
     highlightCommentId: Int?,
+    isModerator: Boolean,
 ): PostDetailMviModel =
-    CommonUiViewModelHelper.getPostDetailModel(post, otherInstance, highlightCommentId)
+    CommonUiViewModelHelper.getPostDetailModel(post, otherInstance, highlightCommentId, isModerator)
 
 actual fun getCommunityDetailViewModel(
     community: CommunityModel,
@@ -96,6 +99,15 @@ actual fun getCreateReportViewModel(
 actual fun getSelectCommunityViewModel(): SelectCommunityMviModel =
     CommonUiViewModelHelper.selectCommunityViewModel
 
+actual fun getRemoveViewModel(
+    postId: Int?,
+    commentId: Int?,
+): RemoveMviModel = CommonUiViewModelHelper.getRemoveModel(postId, commentId)
+
+actual fun getReportListViewModel(
+    communityId: Int,
+): ReportListMviModel = CommonUiViewModelHelper.getReportListViewModel(communityId)
+
 object CommonUiViewModelHelper : KoinComponent {
 
     val navigationCoordinator: NavigationCoordinator by inject()
@@ -110,9 +122,10 @@ object CommonUiViewModelHelper : KoinComponent {
         post: PostModel,
         otherInstance: String,
         highlightCommentId: Int?,
+        isModerator: Boolean,
     ): PostDetailMviModel {
         val model: PostDetailMviModel by inject(
-            parameters = { parametersOf(post, otherInstance, highlightCommentId) },
+            parameters = { parametersOf(post, otherInstance, highlightCommentId, isModerator) },
         )
         return model
     }
@@ -179,6 +192,25 @@ object CommonUiViewModelHelper : KoinComponent {
     ): CreateReportMviModel {
         val model: CreateReportMviModel by inject(
             parameters = { parametersOf(postId, commentId) }
+        )
+        return model
+    }
+
+    fun getRemoveModel(
+        postId: Int?,
+        commentId: Int?,
+    ): RemoveMviModel {
+        val model: RemoveMviModel by inject(
+            parameters = { parametersOf(postId, commentId) }
+        )
+        return model
+    }
+
+    fun getReportListViewModel(
+        communityId: Int,
+    ): ReportListMviModel {
+        val model: ReportListMviModel by inject(
+            parameters = { parametersOf(communityId) }
         )
         return model
     }

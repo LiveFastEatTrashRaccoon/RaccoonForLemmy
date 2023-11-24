@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CreateCommentReportForm(
     @SerialName("comment_id") val commentId: CommentId,
-    @SerialName("reason") val reason: String,
+    @SerialName("reason") val reason: String?,
     @SerialName("auth") val auth: String,
 )

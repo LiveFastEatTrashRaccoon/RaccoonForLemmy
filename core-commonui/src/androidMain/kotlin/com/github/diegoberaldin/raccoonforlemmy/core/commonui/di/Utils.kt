@@ -19,6 +19,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImag
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.instanceinfo.InstanceInfoMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.remove.RemoveMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.reportlist.ReportListMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.selectcommunity.SelectCommunityMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailMviModel
@@ -56,10 +58,11 @@ actual fun getPostDetailViewModel(
     post: PostModel,
     otherInstance: String,
     highlightCommentId: Int?,
+    isModerator: Boolean,
 ): PostDetailMviModel {
     val res: PostDetailMviModel by inject(
         clazz = PostDetailMviModel::class.java,
-        parameters = { parametersOf(post, otherInstance, highlightCommentId) },
+        parameters = { parametersOf(post, otherInstance, highlightCommentId, isModerator) },
     )
     return res
 }
@@ -168,4 +171,23 @@ actual fun getCustomTextToolbar(
         onShare = onShare,
         onQuote = onQuote,
     )
+}
+
+actual fun getRemoveViewModel(
+    postId: Int?,
+    commentId: Int?,
+): RemoveMviModel {
+    val res: RemoveMviModel by inject(RemoveMviModel::class.java, parameters = {
+        parametersOf(postId, commentId)
+    })
+    return res
+}
+
+actual fun getReportListViewModel(
+    communityId: Int,
+): ReportListMviModel {
+    val res: ReportListMviModel by inject(ReportListMviModel::class.java, parameters = {
+        parametersOf(communityId)
+    })
+    return res
 }

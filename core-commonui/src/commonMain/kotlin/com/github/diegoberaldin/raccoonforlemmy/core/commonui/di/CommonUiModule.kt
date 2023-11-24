@@ -27,6 +27,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.Default
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.navigation.NavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.remove.RemoveMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.remove.RemoveViewModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.reportlist.ReportListMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.reportlist.ReportListViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.selectcommunity.SelectCommunityMviModel
@@ -57,6 +61,7 @@ val commonUiModule = module {
             post = params[0],
             otherInstance = params[1],
             highlightCommentId = params[2],
+            isModerator = params[3],
             identityRepository = get(),
             siteRepository = get(),
             postRepository = get(),
@@ -191,10 +196,10 @@ val commonUiModule = module {
             settingsRepository = get(),
         )
     }
-    factory<CreateReportMviModel> {
+    factory<CreateReportMviModel> { params ->
         CreateReportViewModel(
-            postId = it[0],
-            commentId = it[1],
+            postId = params[0],
+            commentId = params[1],
             mvi = DefaultMviModel(CreateReportMviModel.UiState()),
             identityRepository = get(),
             postRepository = get(),
@@ -208,6 +213,29 @@ val commonUiModule = module {
             communityRepository = get(),
             settingsRepository = get(),
             notificationCenter = get(),
+        )
+    }
+    factory<RemoveMviModel> { params ->
+        RemoveViewModel(
+            postId = params[0],
+            commentId = params[1],
+            mvi = DefaultMviModel(RemoveMviModel.UiState()),
+            identityRepository = get(),
+            postRepository = get(),
+            commentRepository = get(),
+            notificationCenter = get(),
+        )
+    }
+    factory<ReportListMviModel> { params ->
+        ReportListViewModel(
+            communityId = params[0],
+            mvi = DefaultMviModel(ReportListMviModel.UiState()),
+            identityRepository = get(),
+            postRepository = get(),
+            commentRepository = get(),
+            themeRepository = get(),
+            settingsRepository = get(),
+            hapticFeedback = get(),
         )
     }
 }
