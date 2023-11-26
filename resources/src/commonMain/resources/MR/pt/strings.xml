@@ -236,7 +236,12 @@
     <string name="report_list_title">Lista de relatórios</string>
     <string name="report_list_type_title">Tipo de lista de relatório</string>
     <string name="report_list_type_all">Todos</string>
-    <string name="report_list_type_unresolved">Não resolvido</string>
-    <string name="report_action_resolve">Resolver</string>
-    <string name="report_action_unresolve">Não resolver</string>
+    <string name="report_list_type_unresolved">Não resolvidos</string>
+    <string name="report_action_resolve">Marcar como resolvido</string>
+    <string name="report_action_unresolve">Marcar como não resolvido</string>
+    <string name="sidebar_not_logged_message">Bem-vindo ao Raccoon for Lemmy!\n\nNo modo anônimo,
+        use o botão suspenso (▼) acima para alterar a instância.\n\nVocê pode fazer login na sua
+        instância em
+        a qualquer momento na tela de perfil.\n\nAproveite o Lemmy!
+    </string>
 </resources>

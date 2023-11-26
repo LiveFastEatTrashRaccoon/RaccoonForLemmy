@@ -250,4 +250,8 @@
     <string name="report_list_type_unresolved">Olöst</string>
     <string name="report_action_resolve">Lös</string>
     <string name="report_action_unresolve">Avlös</string>
+    <string name="sidebar_not_logged_message">Välkommen till Raccoon for Lemmy!\n\nI anonymt läge,
+        använd rullgardinsknappen (▼) ovan för att ändra instans.\n\nDu kan logga in på din
+        förekomst på när som helst från profilskärmen.\n\nNjut av Lemmy!
+    </string>
 </resources>

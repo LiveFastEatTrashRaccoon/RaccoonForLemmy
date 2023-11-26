@@ -229,6 +229,11 @@ object ModalDrawerContent : Tab {
                         contentColor = MaterialTheme.colorScheme.onBackground,
                     )
                 }
+            } else {
+                Text(
+                    modifier = Modifier.padding(horizontal = Spacing.m, vertical = Spacing.s),
+                    text = stringResource(MR.strings.sidebar_not_logged_message),
+                )
             }
         }
 

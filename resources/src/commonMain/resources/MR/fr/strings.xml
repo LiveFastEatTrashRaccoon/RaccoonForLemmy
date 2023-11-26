@@ -242,4 +242,8 @@
     <string name="report_list_type_unresolved">Non résolu</string>
     <string name="report_action_resolve">Résoudre</string>
     <string name="report_action_unresolve">Ne pas résoudre</string>
+    <string name="sidebar_not_logged_message">Bienvenus sur Raccoon pour Lemmy !\n\nEn mode anonyme,
+        utilisez le bouton déroulant (▼) ci-dessus pour changer d\'instance.\n\nVous pouvez vous
+        connecter à votre instance à tout moment depuis l\'écran Profil.\n\nProfitez de Lemmy !
+    </string>
 </resources>

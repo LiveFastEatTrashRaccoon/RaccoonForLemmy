@@ -58,6 +58,7 @@ class PostListViewModel(
                 mvi.updateState {
                     it.copy(instance = instance)
                 }
+                refresh()
             }.launchIn(this)
 
             identityRepository.authToken.map { !it.isNullOrEmpty() }.onEach { isLogged ->

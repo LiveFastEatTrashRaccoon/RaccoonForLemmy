@@ -244,4 +244,8 @@
     <string name="report_list_type_unresolved">No resueltos</string>
     <string name="report_action_resolve">Marcar como resuelto</string>
     <string name="report_action_unresolve">Marcar como no resuelto</string>
+    <string name="sidebar_not_logged_message">¡Bienvenido a Raccoon for Lemmy!\n\nEn modo anónimo,
+        use el botón desplegable (▼) arriba para cambiar la instancia.\n\nPuede iniciar sesión en su
+        instancia en en cualquier momento desde la pantalla Perfil.\n\n¡Disfrute de Lemmy!
+    </string>
 </resources>

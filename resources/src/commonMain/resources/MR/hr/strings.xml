@@ -260,4 +260,8 @@
     <string name="report_list_type_unresolved">Neriješeno</string>
     <string name="report_action_resolve">Riješi</string>
     <string name="report_action_unresolve">Poništi rješavanje</string>
+    <string name="sidebar_not_logged_message">Dobro došli u Raccoon za Lemmyja!\n\nU anonimnom
+        načinu rada, koristite padajući gumb (▼) iznad za promjenu instance.\n\nMožete se prijaviti
+        na svoju instancu na bilo kada sa zaslona profila.\n\nUživajte u Lemmyju!
+    </string>
 </resources>

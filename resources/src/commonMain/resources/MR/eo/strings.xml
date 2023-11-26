@@ -262,4 +262,8 @@
     <string name="report_list_type_unresolved">Nesolvitaj</string>
     <string name="report_action_resolve">Solvi</string>
     <string name="report_action_unresolve">Nesolvi</string>
+    <string name="sidebar_not_logged_message">Bonvenon al Raccoon for Lemmy!\n\nEn anonima reĝimo,
+        uzu la falbutonon (▼) supre por ŝanĝi nodon.\n\nVi povas ensaluti al via instanco ĉe
+        iam ajn de la Profila ekrano.\n\nĜuu Lemmy!
+    </string>
 </resources>

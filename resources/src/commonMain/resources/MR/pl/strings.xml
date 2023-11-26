@@ -240,4 +240,9 @@
     <string name="report_list_type_unresolved">Nierozwiązany</string>
     <string name="report_action_resolve">Rozwiąż</string>
     <string name="report_action_unresolve">Cofnij rozwiązanie</string>
+    <string name="sidebar_not_logged_message">Witamy w Raccoon dla Lemmy\'ego!\n\nW trybie
+        anonimowym
+        użyj przycisku rozwijanego (▼) powyżej, aby zmienić instancję.\n\nMożesz zalogować się do
+        swojej instancji pod adresem w dowolnym momencie na ekranie profilu.\n\nCiesz się Lemmym!
+    </string>
 </resources>
