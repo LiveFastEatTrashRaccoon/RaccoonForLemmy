@@ -23,6 +23,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepo
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -58,6 +59,8 @@ class PostListViewModel(
                 mvi.updateState {
                     it.copy(instance = instance)
                 }
+            }.launchIn(this)
+            apiConfigRepository.instance.drop(1).onEach { instance ->
                 refresh()
             }.launchIn(this)
 
