@@ -1,0 +1,8 @@
+- feat(mod-tools): ban and re-allow users
+- fix(ui): navigation and status bar colors
+- fix(posts): loading in anonymous mode
+- enhancement(l10n): language selection redesign
+- enhancement(ui): reintroduce screen transitions
+- enhancement(ui): startuo initialization
+- chore(l10n): add mt and eo translation
+- chore(deps): update libraries
