@@ -75,18 +75,28 @@ multiplatform and gradually grew as a fully functional client with many features
 - support for multiple accounts (and multiple instances) with account-specific settings;
 - lazy scrolling (referred to as "zombie mode");
 - explore all the communities on a given instance in guest mode;
-- multi-community (community aggregation).
+- multi-community (community aggregation);
+- community moderation tools.
 
 Most clients for Lemmy currently offer the first points (with various degrees of completion), so
 there is nothing special about Raccoon for Lemmy, whereas the last ones are less common and are
 directed to more picky users (like me) who like to explore the Lemmy ecosystem and want to be able
 to group feed contents arbitrarily.
 
-I also like to be able to customize the appearance of my apps, so the ability to change font face or
-size and colors was of paramount importance to me.
+I like to be able to customize the appearance of my apps, so the ability to change font face or
+size and colors was of paramount importance to me. Similarly, I like when I can use an app in my
+native language and change the UI language independently from the system language, so localization
+is a first-class citizen in this project too.
 
-The application is under active development, so expect new features to be added (e.g. video support,
-mod tools, etc.) and the layout is going to change and evolve (hopefully for the better) over time.
+If you are a moderator of a community, it is also good to be able to moderate content from your
+mobile device instead of using the web interface, but in-app moderation is rare in the existing
+clients (and even more so in _open source_ clients). Raccoon For Lemmy is trying to bridge this gap
+and offers some extent of moderation tools (feature post, lock post, distinguish comment, remove
+post/comment, ban users and the ability to revert any of these actions).
+
+The application is under active development, so expect new features to be added and the layout is
+going to change and evolve (hopefully for the better) over time.
+
 For this, speak up and use your voice if you have feedback, suggestions, requests and so on.
 
 ## Why was the project started?
