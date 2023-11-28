@@ -42,7 +42,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -87,7 +86,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.UserHea
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createreport.CreateReportScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getFabNestedScrollConnection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getUserDetailViewModel
@@ -145,17 +143,10 @@ class UserDetailScreen(
         val defaultUpvoteColor = MaterialTheme.colorScheme.primary
         val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
         val navigationCoordinator = remember { getNavigationCoordinator() }
-        val drawerCoordinator = remember { getDrawerCoordinator() }
         var rawContent by remember { mutableStateOf<Any?>(null) }
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
 
-        DisposableEffect(key) {
-            drawerCoordinator.setGesturesEnabled(false)
-            onDispose {
-                drawerCoordinator.setGesturesEnabled(true)
-            }
-        }
         LaunchedEffect(notificationCenter) {
             notificationCenter.resetCache()
             notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)

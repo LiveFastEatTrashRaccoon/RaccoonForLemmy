@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import org.commonmark.node.Image
 import org.commonmark.node.Node
 
+private const val TRIGGER_UPDATE_INTERVAL = 250L
 
 class ClickableImagesPlugin private constructor(
     private val context: Context,
@@ -51,7 +52,7 @@ class ClickableImagesPlugin private constructor(
         super.afterRender(node, visitor)
         scope.launch {
             // trigger a recomposition to have image adapting to final size
-            delay(150)
+            delay(TRIGGER_UPDATE_INTERVAL)
             onTriggerUpdate()
         }
     }

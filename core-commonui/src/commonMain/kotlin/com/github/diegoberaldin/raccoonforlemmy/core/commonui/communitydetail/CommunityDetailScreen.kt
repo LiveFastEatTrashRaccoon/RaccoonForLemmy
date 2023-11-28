@@ -48,7 +48,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -90,7 +89,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.Crea
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createreport.CreateReportScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getCommunityDetailViewModel
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getFabNestedScrollConnection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
@@ -156,18 +154,11 @@ class CommunityDetailScreen(
         val downvoteColor by themeRepository.downvoteColor.collectAsState()
         val defaultUpvoteColor = MaterialTheme.colorScheme.primary
         val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
-        val drawerCoordinator = remember { getDrawerCoordinator() }
         var rawContent by remember { mutableStateOf<Any?>(null) }
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
         val keepScreenOn = rememberKeepScreenOn()
 
-        DisposableEffect(key) {
-            drawerCoordinator.setGesturesEnabled(false)
-            onDispose {
-                drawerCoordinator.setGesturesEnabled(true)
-            }
-        }
         LaunchedEffect(notificationCenter) {
             notificationCenter.resetCache()
             notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)

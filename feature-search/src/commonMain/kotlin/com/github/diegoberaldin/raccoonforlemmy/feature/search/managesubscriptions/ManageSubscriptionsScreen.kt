@@ -37,7 +37,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -58,7 +57,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Floatin
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.MultiCommunityItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getFabNestedScrollConnection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.selectcommunity.CommunityItemPlaceholder
@@ -86,13 +84,6 @@ class ManageSubscriptionsScreen : Screen {
         val scope = rememberCoroutineScope()
         val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
         val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
-        val drawerCoordinator = remember { getDrawerCoordinator() }
-        DisposableEffect(key) {
-            drawerCoordinator.setGesturesEnabled(false)
-            onDispose {
-                drawerCoordinator.setGesturesEnabled(true)
-            }
-        }
 
         Scaffold(
             topBar = {

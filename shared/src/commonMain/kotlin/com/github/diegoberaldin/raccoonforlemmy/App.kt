@@ -253,26 +253,25 @@ fun App() {
             ) { bottomNavigator ->
                 navigationCoordinator.setBottomNavigator(bottomNavigator)
 
-                ModalNavigationDrawer(
-                    drawerState = drawerState,
-                    gesturesEnabled = drawerGestureEnabled,
-                    drawerContent = {
-                        ModalDrawerSheet {
-                            TabNavigator(ModalDrawerContent)
-                        }
+                Navigator(
+                    screen = MainScreen,
+                    onBackPressed = {
+                        val callback = navigationCoordinator.getCanGoBackCallback()
+                        callback?.let { it() } ?: true
                     },
-                ) {
-                    Navigator(
-                        screen = MainScreen,
-                        onBackPressed = {
-                            val callback = navigationCoordinator.getCanGoBackCallback()
-                            callback?.let { it() } ?: true
+                ) { navigator ->
+                    LaunchedEffect(Unit) {
+                        navigationCoordinator.setRootNavigator(navigator)
+                    }
+                    ModalNavigationDrawer(
+                        drawerState = drawerState,
+                        gesturesEnabled = drawerGestureEnabled,
+                        drawerContent = {
+                            ModalDrawerSheet {
+                                TabNavigator(ModalDrawerContent)
+                            }
                         },
-                    ) { navigator ->
-                        LaunchedEffect(Unit) {
-                            navigationCoordinator.setRootNavigator(navigator)
-                        }
-
+                    ) {
                         if (hasBeenInitialized) {
                             SlideTransition(navigator)
                         } else {

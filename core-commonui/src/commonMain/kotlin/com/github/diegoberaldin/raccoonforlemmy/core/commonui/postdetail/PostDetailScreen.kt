@@ -49,7 +49,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -90,7 +89,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Swipeab
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createreport.CreateReportScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getFabNestedScrollConnection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getPostDetailViewModel
@@ -153,7 +151,6 @@ class PostDetailScreen(
         val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
         val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
         val notificationCenter = remember { getNotificationCenter() }
-        val drawerCoordinator = remember { getDrawerCoordinator() }
         val themeRepository = remember { getThemeRepository() }
         val upvoteColor by themeRepository.upvoteColor.collectAsState()
         val downvoteColor by themeRepository.downvoteColor.collectAsState()
@@ -165,12 +162,6 @@ class PostDetailScreen(
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
 
-        DisposableEffect(key) {
-            drawerCoordinator.setGesturesEnabled(false)
-            onDispose {
-                drawerCoordinator.setGesturesEnabled(true)
-            }
-        }
         LaunchedEffect(notificationCenter) {
             notificationCenter.resetCache()
             notificationCenter.subscribe(NotificationCenterEvent.ChangeCommentSortType::class)
