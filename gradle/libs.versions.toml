@@ -12,6 +12,7 @@ gms_gradle = "4.3.15"
 kamel = "0.9.0"
 koin = "3.5.0"
 kotlin = "1.9.21"
+kotlincrypto = "0.3.0"
 kotlinx_coroutines = "1.7.3"
 kotlinx_serialization_json = "1.6.1"
 ksp = "1.9.21-1.0.15"
@@ -86,6 +87,9 @@ voyager_androidx = { module = "cafe.adriel.voyager:voyager-koin", version.ref = 
 sqlcipher = { module = "net.zetetic:android-database-sqlcipher", version.ref = "sqlcipher" }
 sqldelight_android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight_native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
+
+kotlincrypto_bom = { module = "org.kotlincrypto.hash:bom", version.ref = "kotlincrypto" }
+kotlincrypto_md5 = { module = "org.kotlincrypto.hash:md" }
 
 [plugins]
 

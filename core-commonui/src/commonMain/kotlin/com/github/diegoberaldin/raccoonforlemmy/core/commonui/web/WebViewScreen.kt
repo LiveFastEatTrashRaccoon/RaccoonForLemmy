@@ -19,17 +19,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomWebView
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.rememberWebViewNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.md5
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.share.getShareHelper
 
 class WebViewScreen(
     private val url: String,
 ) : Screen {
+
+    override val key: ScreenKey
+        get() = super.key + url.md5()
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {

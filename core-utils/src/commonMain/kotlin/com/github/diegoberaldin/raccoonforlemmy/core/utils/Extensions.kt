@@ -8,6 +8,8 @@ import androidx.compose.ui.unit.Dp
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.fontFamilyResource
 import dev.icerock.moko.resources.compose.stringResource
+import io.ktor.utils.io.core.toByteArray
+import org.kotlincrypto.hash.md.MD5
 import kotlin.math.round
 
 @Composable
@@ -115,5 +117,14 @@ fun Int.getPrettyNumber(
         else -> buildString {
             append(value)
         }
+    }
+}
+
+@OptIn(ExperimentalStdlibApi::class)
+fun String.md5(): String {
+    val digest = MD5()
+    val bytes = digest.digest(toByteArray())
+    return bytes.joinToString {
+        it.toHexString()
     }
 }
