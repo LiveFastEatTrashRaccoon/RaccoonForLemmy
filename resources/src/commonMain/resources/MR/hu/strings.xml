@@ -206,7 +206,7 @@
     </string>
     <string name="settings_default_listing_type">Alapértelmezett feed típus</string>
     <string name="settings_default_post_sort_type">Érvénytelen bejegyzés típus:</string>
-    <string name="settings_downvote_color">Lemondó szavazat színe</string>
+    <string name="settings_downvote_color">Negatív szavazatok színe</string>
     <string name="settings_dynamic_colors">Dinamikus színek használata</string>
     <string name="settings_enable_crash_report">Balesetjelentés engedélyezése</string>
     <string name="settings_enable_double_tap">Dupla koppintásos művelet engedélyezése</string>
@@ -227,15 +227,14 @@
     <string name="settings_section_debug">Hibaelhárítás</string>
     <string name="settings_section_feed">Bejegyzések és megjegyzések</string>
     <string name="settings_section_nsfw">NSFW</string>
-    <string name="settings_separate_up_and_downvotes">Különítse el a felfelé /lefelé szavazókat
-    </string>
+    <string name="settings_separate_up_and_downvotes">Külön pozitív és negatív szavazatokat</string>
     <string name="settings_theme_black">Sötét (AMOLED)</string>
     <string name="settings_theme_dark">Sötét</string>
     <string name="settings_theme_light">Enyhe</string>
     <string name="settings_ui_font_family">Felhasználói felület betűtípusa</string>
     <string name="settings_ui_font_scale">UI szövegméret</string>
     <string name="settings_ui_theme">UI téma</string>
-    <string name="settings_upvote_color">Upvote color</string>
+    <string name="settings_upvote_color">Pozitív szavazatok színe</string>
     <string name="settings_hide_navigation_bar">Navigációs sáv elrejtése görgetés közben</string>
     <string name="settings_zombie_mode_interval">Zombi üzemmód intervallum időtartama</string>
     <string name="settings_zombie_mode_scroll_amount">Zombi mód görgetés mennyisége</string>
