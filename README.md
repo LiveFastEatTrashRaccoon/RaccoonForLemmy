@@ -163,11 +163,26 @@ rb_c, OverfedRaccoon, Jailbrick3d, everdred…
 
 ## Want to try it out?
 
-- get it on [Obtainium](https://github.com/ImranR98/Obtainium/releases) by simply adding this
-  repo `https://github.com/diegoberaldin/RaccoonForLemmy`
+<a href="https://github.com/ImranR98/Obtainium/releases">
+  <img src="https://img.shields.io/badge/Install with:-Obtainium-4d29a0" />
+</a>
 
-On Obtaininum, you can enable the "Include prereleases" switch to get access to the releases that
-are not marked as stable.
+You can use Obtainium by simply adding this repo `https://github.com/diegoberaldin/RaccoonForLemmy`.
+  
+_If you are interested in pre-prod releases, please enable the "Include prereleases" switch in 
+order to install versions not marked as stable._
+
+<a href="https://play.google.com/store/apps/details?id=com.github.diegoberaldin.raccoonforlemmy.android">
+  <img src="https://img.shields.io/badge/Install with:-Google_Play-34a853" />
+</a>
+
+Alternatively, you can use the Play Store. The app is currently only available to a group of selected testers
+(because how closed test channels work on Google Play) so if you want to be added please [write to me](mailto:diego.beraldin@gmail.com)
+specifying the email adress you are logged in on the Play Store with or, if you are on Lemmy
+[reach out to me](https://feddit.it/u/DieguiTux8623) and send me a message with the email address.
+
+_Once we get to at least 20 testers for >= 14 days I'll be able to publish to an open test channel and, later, release a production version._
+
 
 ## Want to leave your feedback or report a bug?
 
