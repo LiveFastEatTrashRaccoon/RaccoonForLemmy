@@ -1,0 +1,9 @@
+- feat(l10n): support for RTL languages
+- fix(domain-lemmy): Lemmy 0.19 compatibility issues
+- fix(ui): crash when opening multiple web pages
+- enhancement(inbox): improve chat and message cards
+- enhancement(ui): change default font
+- enhancement(ui): navigation drawer behaviour
+- enhancement(posts): image loading in comments
+- chore(l10n): add Arabic, improved Hungarian
+- chore(deps): udpate KSP

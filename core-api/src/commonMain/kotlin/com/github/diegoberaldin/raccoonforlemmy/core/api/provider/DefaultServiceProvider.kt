@@ -24,6 +24,7 @@ internal class DefaultServiceProvider : ServiceProvider {
     companion object {
         private const val DEFAULT_INSTANCE = "lemmy.world"
         private const val VERSION = "v3"
+        private const val ENABLE_LOGGING = false
     }
 
     override var currentInstance: String = DEFAULT_INSTANCE
@@ -80,9 +81,11 @@ internal class DefaultServiceProvider : ServiceProvider {
                 connectTimeoutMillis = 30_000
                 socketTimeoutMillis = 30_000
             }
-            install(Logging) {
-                logger = defaultLogger
-                level = LogLevel.ALL
+            if (ENABLE_LOGGING) {
+                install(Logging) {
+                    logger = defaultLogger
+                    level = LogLevel.ALL
+                }
             }
             install(ContentNegotiation) {
                 json(Json { isLenient = true; ignoreUnknownKeys = true })
