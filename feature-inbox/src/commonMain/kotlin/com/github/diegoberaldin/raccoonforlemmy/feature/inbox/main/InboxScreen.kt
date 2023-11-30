@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.inbox.main
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DoneAll
@@ -108,7 +109,17 @@ object InboxScreen : Tab {
                         )
                     },
                     title = {
-                        Column(modifier = Modifier.padding(horizontal = Spacing.s)) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = Spacing.s)
+                                .onClick(
+                                    onClick = rememberCallback {
+                                        val sheet = InboxTypeSheet()
+                                        navigationCoordinator.showBottomSheet(sheet)
+                                    },
+                                )
+                        ) {
                             Text(
                                 text = title,
                                 style = MaterialTheme.typography.titleMedium,
@@ -118,12 +129,6 @@ object InboxScreen : Tab {
                                 else -> stringResource(MR.strings.inbox_listing_type_all)
                             }
                             Text(
-                                modifier = Modifier.onClick(
-                                    onClick = rememberCallback {
-                                        val sheet = InboxTypeSheet()
-                                        navigationCoordinator.showBottomSheet(sheet)
-                                    },
-                                ),
                                 text = text,
                                 style = MaterialTheme.typography.titleSmall,
                             )

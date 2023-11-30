@@ -1,11 +1,10 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.search.main
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -17,7 +16,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.IconSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
@@ -56,7 +54,7 @@ internal fun ExploreTopBar(
                     )
                 }
 
-                listingType != null -> {
+                else -> {
                     Image(
                         modifier = Modifier.onClick(
                             onClick = rememberCallback {
@@ -68,15 +66,12 @@ internal fun ExploreTopBar(
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                     )
                 }
-
-                else -> {
-                    Box(modifier = Modifier.size(IconSize.m))
-                }
             }
         },
         title = {
             Column(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = Spacing.s)
                     .onClick(
                         onClick = rememberCallback {
