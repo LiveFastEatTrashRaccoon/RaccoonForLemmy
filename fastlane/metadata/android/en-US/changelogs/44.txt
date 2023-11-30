@@ -1,0 +1,9 @@
+- feat: formatting and images in chat messages
+- enhancement: splash screen during initialization
+- enhancement: add new font
+- enhancement: inbox UI and loading improvements
+- enhancement: larger clickable area in top bars
+- enhancement: close drawer after changing instance
+- fix: navigation crashes
+- fix: check for messages in unread notification
+- chore: add tr l10n
