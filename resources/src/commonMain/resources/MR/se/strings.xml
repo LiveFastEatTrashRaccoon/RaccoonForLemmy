@@ -97,18 +97,7 @@
     <string name="inbox_section_replies">Svar</string>
     <string name="instance_detail_communities">Communities</string>
     <string name="instance_detail_title">Instans: %1$s</string>
-    <string name="lang">sv</string>
-    <string name="language_de" translatable="false">Deutsch</string>
-    <string name="language_dk" translatable="false">Dansk</string>
-    <string name="language_el" translatable="false">Ελληνικά</string>
-    <string name="language_en" translatable="false">English</string>
-    <string name="language_es" translatable="false">Español</string>
-    <string name="language_fr" translatable="false">Français</string>
-    <string name="language_it" translatable="false">Italiano</string>
-    <string name="language_nl" translatable="false">Nederlands</string>
-    <string name="language_pl" translatable="false">Polski</string>
-    <string name="language_pt" translatable="false">Português</string>
-    <string name="language_ro" translatable="false">Română</string>
+    <string name="lang">se</string>
     <string name="login_field_instance_name">Förekomstnamn</string>
     <string name="login_field_label_optional">(valfri)</string>
     <string name="login_field_password">Lösenord</string>

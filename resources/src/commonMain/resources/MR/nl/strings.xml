@@ -98,14 +98,6 @@
     <string name="instance_detail_communities">Samenleving</string>
     <string name="instance_detail_title">Instantie: %1$s</string>
     <string name="lang">nl</string>
-    <string name="language_de" translatable="false">Deutsch</string>
-    <string name="language_el" translatable="false">Ελληνικά</string>
-    <string name="language_en" translatable="false">English</string>
-    <string name="language_es" translatable="false">Español</string>
-    <string name="language_fr" translatable="false">Français</string>
-    <string name="language_it" translatable="false">Italiano</string>
-    <string name="language_pt" translatable="false">Português</string>
-    <string name="language_ro" translatable="false">Română</string>
     <string name="login_field_instance_name">Instantienaam</string>
     <string name="login_field_label_optional">(optioneel)</string>
     <string name="login_field_password">Wachtwoord</string>
