@@ -96,8 +96,11 @@ internal class DefaultNavigationCoordinator : NavigationCoordinator {
             delay(NAVIGATION_DELAY)
             runCatching {
                 ensureActive()
-                navigator?.push(screen)
-                canPop.value = navigator?.canPop == true
+                // make sure the new screen has a different key than the top of the stack
+                if (screen.key != navigator?.lastItem?.key) {
+                    navigator?.push(screen)
+                    canPop.value = navigator?.canPop == true
+                }
             }
         }
     }
