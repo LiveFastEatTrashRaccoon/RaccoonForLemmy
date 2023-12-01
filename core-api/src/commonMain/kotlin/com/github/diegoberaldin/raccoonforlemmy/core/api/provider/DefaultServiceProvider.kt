@@ -88,7 +88,12 @@ internal class DefaultServiceProvider : ServiceProvider {
                 }
             }
             install(ContentNegotiation) {
-                json(Json { isLenient = true; ignoreUnknownKeys = true })
+                json(
+                    Json {
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    },
+                )
             }
         }
         val ktorfit = Ktorfit.Builder()

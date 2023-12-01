@@ -24,9 +24,7 @@ interface CreatePostMviModel :
 
                 other as ImageSelected
 
-                if (!value.contentEquals(other.value)) return false
-
-                return true
+                return value.contentEquals(other.value)
             }
 
             override fun hashCode(): Int {
@@ -41,9 +39,7 @@ interface CreatePostMviModel :
 
                 other as ImageSelected
 
-                if (!value.contentEquals(other.value)) return false
-
-                return true
+                return value.contentEquals(other.value)
             }
 
             override fun hashCode(): Int {

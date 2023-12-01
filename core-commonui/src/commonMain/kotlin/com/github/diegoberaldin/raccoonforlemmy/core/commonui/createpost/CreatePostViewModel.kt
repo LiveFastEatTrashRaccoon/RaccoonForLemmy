@@ -148,7 +148,7 @@ class CreatePostViewModel(
 
         val communityId = uiState.value.communityId
         val title = uiState.value.title
-        val url = uiState.value.url
+        val url = uiState.value.url.takeIf { it.isNotEmpty() }?.trim()
         val nsfw = uiState.value.nsfw
         var valid = true
         if (title.isEmpty()) {
@@ -167,7 +167,7 @@ class CreatePostViewModel(
             }
             valid = false
         }
-        if (url.isNotEmpty() && !url.isValidUrl()) {
+        if (!url.isNullOrEmpty() && !url.isValidUrl()) {
             mvi.updateState {
                 it.copy(
                     urlError = message_invalid_field.desc(),
