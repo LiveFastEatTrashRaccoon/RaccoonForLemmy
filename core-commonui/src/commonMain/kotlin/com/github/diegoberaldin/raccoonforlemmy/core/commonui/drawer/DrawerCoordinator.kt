@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.MultiCommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 
 sealed interface DrawerEvent {
     data object Toggled : DrawerEvent
@@ -16,7 +17,8 @@ sealed interface DrawerEvent {
 @Stable
 interface DrawerCoordinator {
     val toggleEvents: SharedFlow<DrawerEvent>
-    suspend fun toggleDrawer()
-
-    suspend fun sendEvent(event: DrawerEvent)
+    val gesturesEnabled: StateFlow<Boolean>
+    fun toggleDrawer()
+    fun sendEvent(event: DrawerEvent)
+    fun setGesturesEnabled(value: Boolean)
 }
