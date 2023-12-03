@@ -79,6 +79,7 @@ class LanguageBottomSheet : Screen {
                     "ro",
                     "sk",
                     "sl",
+                    "sq",
                     "fi",
                     "se",
                     "tr",

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="action_back_to_top">Kthehu në krye</string>
+    <string name="action_chat">Dërgoni mesazhin</string>
+    <string name="action_clear_read">Pastro leximin</string>
+    <string name="action_create_post">Krijo një postim</string>
+    <string name="action_reply">Përgjigje</string>
+    <string name="action_activate_zombie_mode">Aktivizo modalitetin zombie</string>
+    <string name="action_deactivate_zombie_mode">Çaktivizo modalitetin zombie</string>
+    <string name="button_close">Mbyllni</string>
+    <string name="button_confirm">Konfirmo</string>
+    <string name="button_load">Ne proces</string>
+    <string name="button_reset">Rivendos</string>
+    <string name="button_retry">Provo përsëri</string>
+    <string name="comment_action_delete">Fshi</string>
+    <string name="community_detail_block">Bllok</string>
+    <string name="community_detail_block_instance">Blloko seancën</string>
+    <string name="community_detail_info">Informacioni i komunitetit</string>
+    <string name="community_detail_instance_info">Detajet e seancës</string>
+    <string name="community_info_comments">komente</string>
+    <string name="community_info_daily_active_users">përdorues aktivë (ditë)</string>
+    <string name="community_info_monthly_active_users">përdorues aktivë (muaj)</string>
+    <string name="community_info_posts">postime</string>
+    <string name="community_info_subscribers">0 abonentë</string>
+    <string name="community_info_weekly_active_users">përdorues aktivë (javë)</string>
+    <string name="create_comment_body">Trupi i komentit</string>
+    <string name="create_comment_title">Koment i ri</string>
+    <string name="create_post_body">Organi i postimit</string>
+    <string name="create_post_community">Komunitet</string>
+    <string name="create_post_cross_post_text">Kryqi i postuar nga:</string>
+    <string name="create_post_name">Titulli i postimit</string>
+    <string name="create_post_nsfw">NSFW</string>
+    <string name="create_post_tab_editor">Redaksia</string>
+    <string name="create_post_tab_preview">Shfaq paraprakisht</string>
+    <string name="create_post_title">Postim i ri</string>
+    <string name="create_post_url">URL</string>
+    <string name="create_report_placeholder">Raporto tekstin (me zgjedhje)</string>
+    <string name="create_report_title_comment">Raporto komentin</string>
+    <string name="create_report_title_post">Raporto postimin</string>
+    <string name="dialog_raw_content_text">Teksti</string>
+    <string name="dialog_raw_content_title">Titulli</string>
+    <string name="dialog_raw_content_url">URL</string>
+    <string name="dialog_title_change_instance">Ndrysho seancën</string>
+    <string name="dialog_title_raw_content">Përmbajtja e papërpunuar</string>
+    <string name="dialog_title_select_community">Zgjidh një komunitet</string>
+    <string name="edit_comment_title">Edito komentin</string>
+    <string name="edit_post_title">Modifiko postimin</string>
+    <string name="explore_result_type_all">Të gjithë</string>
+    <string name="explore_result_type_comments">Komente</string>
+    <string name="explore_result_type_communities">Komunitetet</string>
+    <string name="explore_result_type_posts">Postimet</string>
+    <string name="explore_result_type_users">Përdorues</string>
+    <string name="explore_search_placeholder">Kërko</string>
+    <string name="home_instance_via">%1$s</string>
+    <string name="home_listing_title">Ushqen</string>
+    <string name="home_listing_type_all">Të gjithë</string>
+    <string name="home_listing_type_local">Lokale</string>
+    <string name="home_listing_type_subscribed">I regjistruar</string>
+    <string name="home_sort_title">Ndaj sipas</string>
+    <string name="home_sort_type_active">Aktive</string>
+    <string name="home_sort_type_controversial">Kontravers</string>
+    <string name="home_sort_type_hot">E re</string>
+    <string name="home_sort_type_most_comments">Shumica e komenteve</string>
+    <string name="home_sort_type_new">I ri</string>
+    <string name="home_sort_type_new_comments">Komente të reja</string>
+    <string name="home_sort_type_old">E moshuar...</string>
+    <string name="home_sort_type_scaled">E shkallëzuar</string>
+    <string name="home_sort_type_top">Kryesoret</string>
+    <string name="home_sort_type_top_12_hours">12 orët më të mira</string>
+    <string name="home_sort_type_top_12_hours_short">12h</string>
+    <string name="home_sort_type_top_6_hours">6 orët më të mira</string>
+    <string name="home_sort_type_top_6_hours_short">6h</string>
+    <string name="home_sort_type_top_day">Dita kryesore</string>
+    <string name="home_sort_type_top_day_short">ditë</string>
+    <string name="home_sort_type_top_hour">Ora më e mirë</string>
+    <string name="home_sort_type_top_hour_short">1 orë</string>
+    <string name="home_sort_type_top_month">Muaji më i mirë</string>
+    <string name="home_sort_type_top_month_short">muaji</string>
+    <string name="home_sort_type_top_week">Java e parë</string>
+    <string name="home_sort_type_top_week_short">javë</string>
+    <string name="home_sort_type_top_year">Viti i parë</string>
+    <string name="home_sort_type_top_year_short">viti</string>
+    <string name="inbox_action_mark_read">Shënjo si të lexuar</string>
+    <string name="inbox_action_mark_unread">Shënjo si të palexuar</string>
+    <string name="inbox_chat_message">Mesazh</string>
+    <string name="inbox_item_mention">ju përmenda në</string>
+    <string name="inbox_item_reply_comment">iu përgjigj komentit tënd në</string>
+    <string name="inbox_item_reply_post">iu përgjigj postimit tënd në</string>
+    <string name="inbox_listing_type_all">Të gjithë</string>
+    <string name="inbox_listing_type_title">Lloji i kutisë së mesazheve</string>
+    <string name="inbox_listing_type_unread">Të palexuara</string>
+    <string name="inbox_not_logged_message">Aktualisht nuk ke hyrë.\nShto një llogari nga ekrani i
+        profilit për të parë kutinë tuaj të mesazheve.
+    </string>
+    <string name="inbox_section_mentions">Shënime</string>
+    <string name="inbox_section_messages">Mesazhe</string>
+    <string name="inbox_section_replies">Përgjigjet</string>
+    <string name="instance_detail_communities">Komunitetet</string>
+    <string name="instance_detail_title">Shkalla: %1$s</string>
+    <string name="lang">sq</string>
+    <string name="language_ar" translatable="false">العربية</string>
+    <string name="language_bg" translatable="false">български</string>
+    <string name="language_cs" translatable="false">Čeština</string>
+    <string name="language_da" translatable="false">Dansk</string>
+    <string name="language_de" translatable="false">Deutsch</string>
+    <string name="language_ga" translatable="false">Gaeilge</string>
+    <string name="language_el" translatable="false">Ελληνικά</string>
+    <string name="language_en" translatable="false">English</string>
+    <string name="language_eo" translatable="false">Esperanto</string>
+    <string name="language_es" translatable="false">Español</string>
+    <string name="language_et" translatable="false">Eesti</string>
+    <string name="language_fi" translatable="false">Suomi</string>
+    <string name="language_fr" translatable="false">Français</string>
+    <string name="language_hr" translatable="false">Hrvatski</string>
+    <string name="language_hu" translatable="false">Magyar</string>
+    <string name="language_it" translatable="false">Italiano</string>
+    <string name="language_lt" translatable="false">Lietuvių</string>
+    <string name="language_lv" translatable="false">Latviešu</string>
+    <string name="language_mt" translatable="false">Malti</string>
+    <string name="language_no" translatable="false">Norsk</string>
+    <string name="language_nl" translatable="false">Nederlands</string>
+    <string name="language_pl" translatable="false">Polski</string>
+    <string name="language_pt" translatable="false">Português</string>
+    <string name="language_ro" translatable="false">Română</string>
+    <string name="language_se" translatable="false">Svenska</string>
+    <string name="language_sk" translatable="false">Slovenčina</string>
+    <string name="language_sl" translatable="false">Slovenščina</string>
+    <string name="language_tr" translatable="false">Türkçe</string>
+    <string name="login_field_instance_name">Emri i instancës</string>
+    <string name="login_field_label_optional">(me zgjedhje)</string>
+    <string name="login_field_password">Fjalëkalimi</string>
+    <string name="login_field_token">TOTP 2FA token</string>
+    <string name="login_field_user_name">Emri i përdoruesit ose emaili</string>
+    <string name="manage_accounts_button_add">Shto llogari</string>
+    <string name="manage_accounts_title">Menaxhoni llogaritë</string>
+    <string name="manage_subscriptions_header_multicommunities">Multi-komunitete</string>
+    <string name="manage_subscriptions_header_subscriptions">Abonimet</string>
+    <string name="message_empty_comments">Është shumë e heshtur atje.\nDo të doje të ishe ti ai që
+        shkruan komentin e parë?
+    </string>
+    <string name="message_empty_list">Nuk ka artikuj për t \'u shfaqur</string>
+    <string name="message_error_loading_comments">Ndodhi një gabim gjatë ngarkimit të komenteve.
+    </string>
+    <string name="message_generic_error">Gabim i përgjithshëm</string>
+    <string name="message_image_loading_error">Gabim në ngarkimin e imazhit</string>
+    <string name="message_invalid_field">Fushë e pavlefshme</string>
+    <string name="message_missing_field">Fusha mungon</string>
+    <string name="message_operation_successful">Operacioni u krye me sukses</string>
+    <string name="multi_community_editor_communities">Komunitetet</string>
+    <string name="multi_community_editor_icon">Ikona</string>
+    <string name="multi_community_editor_name">Emri</string>
+    <string name="multi_community_editor_title">Redaktor me shumë komunitete</string>
+    <string name="navigation_drawer_anonymous">Në mënyrë anonime</string>
+    <string name="navigation_drawer_title_bookmarks">Ruajtur</string>
+    <string name="navigation_drawer_title_subscriptions">Abonimet</string>
+    <string name="navigation_home">Postimet</string>
+    <string name="navigation_inbox">Posta e ardhur</string>
+    <string name="navigation_profile">Profili</string>
+    <string name="navigation_search">Eksploroni</string>
+    <string name="navigation_settings">Cilësimet</string>
+    <string name="post_action_cross_post">Postim i tërthortë</string>
+    <string name="post_action_edit">Modifiko</string>
+    <string name="post_action_hide">Fshih</string>
+    <string name="post_action_report">Raporto</string>
+    <string name="post_action_see_raw">Shfaq RAW</string>
+    <string name="post_action_share">Shpërnda</string>
+    <string name="post_detail_cross_posts">postuar edhe në:</string>
+    <string name="post_detail_load_more_comments">Shfaq me shume komente</string>
+    <string name="post_hour_short">h</string>
+    <string name="post_minute_short">m</string>
+    <string name="post_second_short">s</string>
+    <string name="profile_button_login">Hyr</string>
+    <string name="profile_day_short">d</string>
+    <string name="profile_million_short">m</string>
+    <string name="profile_month_short">m</string>
+    <string name="profile_not_logged_message">Aktualisht nuk ke hyrë.\nShto një llogaria për të
+        vazhduar.
+    </string>
+    <string name="profile_section_comments">Komente</string>
+    <string name="profile_section_posts">Postimet</string>
+    <string name="profile_thousand_short">k</string>
+    <string name="profile_year_short">y</string>
+    <string name="settings_about">Rreth këtij aplikacioni</string>
+    <string name="settings_about_app_version">Versioni i aplikacionit</string>
+    <string name="settings_about_changelog">Shfaq regjistrin e plotë të ndryshimeve</string>
+    <string name="settings_about_report_github">Raporto një defekt (GitHub)</string>
+    <string name="settings_about_report_email">Raporto një defekt (email)</string>
+    <string name="settings_about_view_github">Shfaq në GitHub</string>
+    <string name="settings_about_view_lemmy">Komuniteti Lemmy</string>
+    <string name="settings_auto_expand_comments">Zgjero automatikisht komentet</string>
+    <string name="settings_auto_load_images">Ngarko automatikisht imazhet</string>
+    <string name="settings_blur_nsfw">Turbullo imazhet e NSFW</string>
+    <string name="settings_color_aquamarine">🐬 Delfin dëshpërueshëm</string>
+    <string name="settings_color_banana">🦔 Iriq ironik</string>
+    <string name="settings_color_blue">🐳 Balenë bizare</string>
+    <string name="settings_color_custom">Parapërcaktuar</string>
+    <string name="settings_color_dialog_alpha">A</string>
+    <string name="settings_color_dialog_blue">B</string>
+    <string name="settings_color_dialog_green">G</string>
+    <string name="settings_color_dialog_red">R</string>
+    <string name="settings_color_dialog_title">Zgjidh një ngjyrë</string>
+    <string name="settings_color_gray">🦝 Rakun korbi</string>
+    <string name="settings_color_green">🐸 Bretkosë bukurosh</string>
+    <string name="settings_color_orange">🦊 Dhelpra dhomëlindur</string>
+    <string name="settings_color_pink">🦄 Njëbrirësh njollës</string>
+    <string name="settings_color_purple">🐙 Oktapod oqeanik</string>
+    <string name="settings_color_red">🦀 Gaforre gënjeshtar</string>
+    <string name="settings_color_white">🐼 Ariu aventurier</string>
+    <string name="settings_content_font_large">E madhe</string>
+    <string name="settings_content_font_larger">ekstra e madhe</string>
+    <string name="settings_content_font_largest">Dyfish më i madh</string>
+    <string name="settings_content_font_normal">Normale</string>
+    <string name="settings_content_font_scale">Madhësia e tekstit të përmbajtjes</string>
+    <string name="settings_content_font_small">Trupvogël</string>
+    <string name="settings_content_font_smaller">Shumë e vogël</string>
+    <string name="settings_content_font_smallest">Dyfish më i vogël</string>
+    <string name="settings_custom_seed_color">Ngjyra e personalizuar e temës</string>
+    <string name="settings_default_comment_sort_type">Lloji standard i renditjes së komenteve
+    </string>
+    <string name="settings_default_listing_type">Lloji standard i furnizimit</string>
+    <string name="settings_default_post_sort_type">Lloji i paracaktuar i renditjes së postimeve
+    </string>
+    <string name="settings_downvote_color">Ngjyra e votimit të poshtëm</string>
+    <string name="settings_dynamic_colors">Përdor ngjyra dinamike</string>
+    <string name="settings_enable_crash_report">Aktivizo raportimin e aksidenteve</string>
+    <string name="settings_enable_double_tap">Aktivizo veprimin e shtypjes së dyfishtë</string>
+    <string name="settings_enable_swipe_actions">Aktivizo veprimet e rrëshqitjes</string>
+    <string name="settings_full_height_images">Imazhe me lartësi të plotë</string>
+    <string name="settings_include_nsfw">Përfshi përmbajtjen e NSFW</string>
+    <string name="settings_language">Gjuha</string>
+    <string name="settings_navigation_bar_titles_visible">Shfaq titujt e shiritit të navigimit
+    </string>
+    <string name="settings_open_url_external">Hap URL-të në shfletuesin e jashtëm</string>
+    <string name="settings_points_short">length unit</string>
+    <string name="settings_post_layout">Planimetria e postimit</string>
+    <string name="settings_post_layout_card">Karteles</string>
+    <string name="settings_post_layout_compact">Kompakt</string>
+    <string name="settings_post_layout_full">I plotë</string>
+    <string name="settings_section_appearance">SHIKONI DHE NDJENI.</string>
+    <string name="settings_section_behaviour">Sjellja</string>
+    <string name="settings_section_debug">Korrigjo</string>
+    <string name="settings_section_feed">Postime dhe komente</string>
+    <string name="settings_section_nsfw">NSFW</string>
+    <string name="settings_separate_up_and_downvotes">Ndani votat e sipërme/të poshtme</string>
+    <string name="settings_theme_black">E zezë e pastër</string>
+    <string name="settings_theme_dark">E errët</string>
+    <string name="settings_theme_light">Drita</string>
+    <string name="settings_ui_font_family">Shkronja e ndërfaqes së përdoruesit</string>
+    <string name="settings_ui_font_scale">Madhësia e tekstit të ndërfaqes së</string>
+    <string name="settings_ui_theme">Tema e ndërfaqes së përdoruesit</string>
+    <string name="settings_upvote_color">Ngjyra e upvote</string>
+    <string name="settings_hide_navigation_bar">Fshih shiritin e navigimit gjatë lëvizjes</string>
+    <string name="settings_zombie_mode_interval">Kohëzgjatja e intervalit të modalitetit Zombie
+    </string>
+    <string name="settings_zombie_mode_scroll_amount">Shuma e lëvizjes në modalitetin Zombie
+    </string>
+    <string name="settings_mark_as_read_while_scrolling">Shëno postimet si të lexuara gjatë
+        lëvizjes
+    </string>
+    <string name="action_quote">Citim</string>
+    <string name="mod_action_allow">Lejo përdoruesin përsëri</string>
+    <string name="mod_action_ban">Ndalo përdoruesin</string>
+    <string name="mod_action_open_reports">Hap raportet</string>
+    <string name="mod_action_mark_as_featured">Shënoje si të spikatur</string>
+    <string name="mod_action_unmark_as_featured">Ç \'shënjo si të spikatura</string>
+    <string name="mod_action_lock">Bllokim</string>
+    <string name="mod_action_unlock">Zhblloko</string>
+    <string name="mod_action_remove">Hiq</string>
+    <string name="mod_action_mark_as_distinguished">Shënoni si të dalluar</string>
+    <string name="mod_action_unmark_as_distinguished">Hiq shënimin si të dalluar</string>
+    <string name="report_list_title">Lista e raporteve</string>
+    <string name="report_list_type_title">Lloji i listës së raporteve</string>
+    <string name="report_list_type_all">Të gjithë</string>
+    <string name="report_list_type_unresolved">I pazgjidhur</string>
+    <string name="report_action_resolve">Zgjidh</string>
+    <string name="report_action_unresolve">Zgjidhe</string>
+    <string name="sidebar_not_logged_message">Mirë se erdhe në Rakun për Lemmin!\n\nNë modalitetin
+        anonim, përdorni butonin zbritës (▼) më sipër për të ndryshuar instancën.\n\nMund të hyni në
+        intencën tuaj në çdo kohë nga ekrani i Profilit.\n\nGëzohu Lemmy!
+    </string>
+    <string name="settings_default_inbox_type">Lloji i paracaktuar i kutisë së mesazheve</string>
+</resources>
