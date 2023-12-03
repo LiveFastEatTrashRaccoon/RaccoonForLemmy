@@ -111,6 +111,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.containsId
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -281,7 +282,7 @@ class CommunityDetailScreen(
                                     stringResource(MR.strings.community_detail_block_instance)
                                 )
 
-                                if (uiState.isModerator) {
+                                if (uiState.moderators.containsId(uiState.currentUserId)) {
                                     this += Option(
                                         OptionId.OpenReports,
                                         stringResource(MR.strings.mod_action_open_reports)
@@ -552,6 +553,7 @@ class CommunityDetailScreen(
                                 content = {
                                     PostCard(
                                         post = post,
+                                        isFromModerator = uiState.moderators.containsId(post.creator?.id),
                                         postLayout = uiState.postLayout,
                                         fullHeightImage = uiState.fullHeightImages,
                                         separateUpAndDownVotes = uiState.separateUpAndDownVotes,
@@ -570,7 +572,7 @@ class CommunityDetailScreen(
                                                 PostDetailScreen(
                                                     post = post,
                                                     otherInstance = otherInstanceName,
-                                                    isMod = uiState.isModerator,
+                                                    isMod = uiState.moderators.containsId(uiState.currentUserId),
                                                 ),
                                             )
                                         },
@@ -677,7 +679,7 @@ class CommunityDetailScreen(
                                                     stringResource(MR.strings.comment_action_delete),
                                                 )
                                             }
-                                            if (uiState.isModerator) {
+                                            if (uiState.moderators.containsId(uiState.currentUserId)) {
                                                 this += Option(
                                                     OptionId.FeaturePost,
                                                     if (post.featuredCommunity) {
@@ -706,6 +708,21 @@ class CommunityDetailScreen(
                                                         stringResource(MR.strings.mod_action_ban)
                                                     },
                                                 )
+                                                post.creator?.id?.also { creatorId ->
+                                                    if (uiState.currentUserId != creatorId) {
+                                                        this += Option(
+                                                            OptionId.AddMod,
+                                                            if (uiState.moderators.containsId(
+                                                                    creatorId
+                                                                )
+                                                            ) {
+                                                                stringResource(MR.strings.mod_action_remove_mod)
+                                                            } else {
+                                                                stringResource(MR.strings.mod_action_add_mod)
+                                                            },
+                                                        )
+                                                    }
+                                                }
                                             }
                                         },
                                         onOptionSelected = rememberCallbackArgs(model) { optionId ->
@@ -768,6 +785,16 @@ class CommunityDetailScreen(
                                                             postId = post.id,
                                                         )
                                                         navigationCoordinator.showBottomSheet(screen)
+                                                    }
+                                                }
+
+                                                OptionId.AddMod -> {
+                                                    post.creator?.id?.also { userId ->
+                                                        model.reduce(
+                                                            CommunityDetailMviModel.Intent.ModToggleModUser(
+                                                                userId
+                                                            )
+                                                        )
                                                     }
                                                 }
 

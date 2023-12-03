@@ -14,6 +14,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.Ident
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.containsId
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.imageUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
@@ -207,6 +208,10 @@ class CommunityDetailViewModel(
                 ?.also { post ->
                     lock(post = post)
                 }
+
+            is CommunityDetailMviModel.Intent.ModToggleModUser -> {
+                toggleModeratorStatus(intent.id)
+            }
         }
     }
 
@@ -230,15 +235,15 @@ class CommunityDetailViewModel(
                     name = community.name,
                 )
             }
-            val isModerator = communityRepository.getModerators(
+            val moderators = communityRepository.getModerators(
                 auth = auth,
                 id = community.id,
-            ).any { it.id == uiState.value.currentUserId }
+            )
             if (refreshedCommunity != null) {
                 mvi.updateState {
                     it.copy(
                         community = refreshedCommunity,
-                        isModerator = isModerator,
+                        moderators = moderators,
                     )
                 }
             }
@@ -656,6 +661,22 @@ class CommunityDetailViewModel(
             )
             if (newPost != null) {
                 handlePostUpdate(newPost)
+            }
+        }
+    }
+
+    private fun toggleModeratorStatus(userId: Int) {
+        mvi.scope?.launch(Dispatchers.IO) {
+            val isModerator = uiState.value.moderators.containsId(userId)
+            val auth = identityRepository.authToken.value.orEmpty()
+            val newModerators = communityRepository.addModerator(
+                auth = auth,
+                communityId = community.id,
+                added = !isModerator,
+                userId = userId,
+            )
+            mvi.updateState {
+                it.copy(moderators = newModerators)
             }
         }
     }
