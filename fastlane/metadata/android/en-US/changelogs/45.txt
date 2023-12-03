@@ -1,0 +1,5 @@
+- feat: highlight unread items in inbox
+- feat: add setting option for default inbox type
+- enhancement: improved Spanish translation (thanks to u/heyazorin@lemmy.ml)
+- enhancement: improve navigation drawer UI and gesture management
+- chore: add sq l10n

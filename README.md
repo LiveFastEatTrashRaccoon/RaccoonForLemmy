@@ -157,9 +157,9 @@ This project would not be what it is were it not for the huge amount of patience
 of early adopters who sent me continous feedback and ideas for improvement after every release.
 
 A special thank to all those who contributed so far:
-rb_c, OverfedRaccoon, Jailbrick3d, everdred…
-
-(if you want your nickname removed reach out to me).
+- [u/rb_c@discuss.tchncs.de](https://discuss.tchncs.de/u/rb_c)
+- [u/heyazorin@lemmy.ml](https://lemmy.ml/u/heyazorin)
+- all who reported feedback and ideas on the Lemmy community, GitHub issues or email.
 
 ## Want to try it out?
 
