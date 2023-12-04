@@ -1,0 +1,8 @@
+- feat: add/remove moderator
+- feat: highlight posts from moderators
+- feat: support GIFs (in post list and markdown body)
+- feat: percentage format for item votes
+- feat: add Averia Sans Libre; fallback on system font
+- fix: improved lemmy 0.19 compatibility
+- enhancement: floating action button color
+- chore: add new localizations
