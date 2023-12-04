@@ -6,7 +6,7 @@ plugins {
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
+    applyDefaultHierarchyTemplate()
 
     androidTarget {
         compilations.all {
@@ -46,6 +46,7 @@ kotlin {
                 implementation(projects.corePersistence)
                 implementation(projects.coreArchitecture)
                 implementation(projects.coreUtils)
+                implementation(projects.coreNavigation)
                 implementation(projects.coreCommonui)
                 implementation(projects.coreNotifications)
                 implementation(projects.resources)
