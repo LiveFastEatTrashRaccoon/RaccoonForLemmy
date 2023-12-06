@@ -3,6 +3,8 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.reportlist
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -25,6 +27,7 @@ class ReportListViewModel(
     private val themeRepository: ThemeRepository,
     private val settingsRepository: SettingsRepository,
     private val hapticFeedback: HapticFeedback,
+    private val notificationCenter: NotificationCenter,
 ) : ReportListMviModel,
     MviModel<ReportListMviModel.Intent, ReportListMviModel.UiState, ReportListMviModel.Effect> by mvi {
 
@@ -44,6 +47,10 @@ class ReportListViewModel(
                     )
                 }
             }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeReportListType::class)
+                .onEach { evt ->
+                    changeUnresolvedOnly(evt.unresolvedOnly)
+                }.launchIn(this)
 
             if (uiState.value.postReports.isEmpty()) {
                 refresh(initial = true)
@@ -75,14 +82,11 @@ class ReportListViewModel(
     }
 
     private fun changeSection(section: ReportListSection) {
-        currentPage = 1
         mvi.updateState {
             it.copy(
                 section = section,
-                canFetchMore = true,
             )
         }
-        refresh(initial = true)
     }
 
     private fun changeUnresolvedOnly(value: Boolean) {

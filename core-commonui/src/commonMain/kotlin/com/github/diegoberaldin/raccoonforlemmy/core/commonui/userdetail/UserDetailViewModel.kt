@@ -55,6 +55,10 @@ class UserDetailViewModel(
             notificationCenter.subscribe(NotificationCenterEvent.PostUpdated::class).onEach { evt ->
                 handlePostUpdate(evt.model)
             }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)
+                .onEach { evt ->
+                    applySortType(evt.value)
+                }.launchIn(this)
         }
         mvi.updateState {
             it.copy(
@@ -173,14 +177,11 @@ class UserDetailViewModel(
     }
 
     private fun changeSection(section: UserDetailSection) {
-        currentPage = 1
         mvi.updateState {
             it.copy(
                 section = section,
-                canFetchMore = true,
             )
         }
-        refresh(initial = true)
     }
 
     private fun refresh(initial: Boolean = false) {

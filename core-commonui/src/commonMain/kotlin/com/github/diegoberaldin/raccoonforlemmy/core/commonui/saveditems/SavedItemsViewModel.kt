@@ -60,6 +60,10 @@ class SavedItemsViewModel(
             notificationCenter.subscribe(NotificationCenterEvent.PostDeleted::class).onEach { evt ->
                 handlePostDelete(evt.model.id)
             }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)
+                .onEach { evt ->
+                    applySortType(evt.value)
+                }.launchIn(this)
         }
 
         if (mvi.uiState.value.posts.isEmpty()) {
@@ -208,15 +212,11 @@ class SavedItemsViewModel(
     }
 
     private fun changeSection(section: SavedItemsSection) {
-        currentPage = 1
         mvi.updateState {
             it.copy(
                 section = section,
-                canFetchMore = true,
-                refreshing = true,
             )
         }
-        loadNextPage()
     }
 
     private fun toggleUpVotePost(
