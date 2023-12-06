@@ -432,8 +432,6 @@ class CommunityDetailScreen(
                                         }
                                     },
                                 )
-                            }
-                            if (uiState.isLogged && !isOnOtherInstance) {
                                 this += FloatingActionButtonMenuItem(
                                     icon = Icons.Default.Create,
                                     text = stringResource(MR.strings.action_create_post),
@@ -558,6 +556,7 @@ class CommunityDetailScreen(
                                         fullHeightImage = uiState.fullHeightImages,
                                         voteFormat = uiState.voteFormat,
                                         autoLoadImages = uiState.autoLoadImages,
+                                        actionButtonsActive = uiState.isLogged,
                                         blurNsfw = when {
                                             uiState.community.nsfw -> false
                                             else -> uiState.blurNsfw

@@ -240,7 +240,7 @@ class PostListScreen : Screen {
                                     }
                                 },
                             )
-                            if (uiState.currentUserId != null) {
+                            if (uiState.isLogged) {
                                 this += FloatingActionButtonMenuItem(
                                     icon = Icons.Default.ClearAll,
                                     text = stringResource(MR.strings.action_clear_read),
@@ -359,6 +359,7 @@ class PostListScreen : Screen {
                                         fullHeightImage = uiState.fullHeightImages,
                                         voteFormat = uiState.voteFormat,
                                         autoLoadImages = uiState.autoLoadImages,
+                                        actionButtonsActive = uiState.isLogged,
                                         blurNsfw = uiState.blurNsfw,
                                         onClick = rememberCallback(model) {
                                             model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
