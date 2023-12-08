@@ -79,35 +79,59 @@ class SavedItemsViewModel(
             SavedItemsMviModel.Intent.LoadNextPage -> loadNextPage()
             SavedItemsMviModel.Intent.Refresh -> refresh()
             is SavedItemsMviModel.Intent.ChangeSection -> changeSection(intent.section)
-            is SavedItemsMviModel.Intent.DownVoteComment -> toggleDownVoteComment(
-                comment = uiState.value.comments.first { it.id == intent.id },
-                feedback = intent.feedback,
-            )
+            is SavedItemsMviModel.Intent.DownVoteComment -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
+                toggleDownVoteComment(
+                    comment = uiState.value.comments.first { it.id == intent.id },
+                )
+            }
 
-            is SavedItemsMviModel.Intent.DownVotePost -> toggleDownVotePost(
-                post = uiState.value.posts.first { it.id == intent.id },
-                feedback = intent.feedback,
-            )
+            is SavedItemsMviModel.Intent.DownVotePost -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
+                toggleDownVotePost(
+                    post = uiState.value.posts.first { it.id == intent.id },
+                )
+            }
 
-            is SavedItemsMviModel.Intent.SaveComment -> toggleSaveComment(
-                comment = uiState.value.comments.first { it.id == intent.id },
-                feedback = intent.feedback,
-            )
+            is SavedItemsMviModel.Intent.SaveComment -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
+                toggleSaveComment(
+                    comment = uiState.value.comments.first { it.id == intent.id },
+                )
+            }
 
-            is SavedItemsMviModel.Intent.SavePost -> toggleSavePost(
-                post = uiState.value.posts.first { it.id == intent.id },
-                feedback = intent.feedback,
-            )
+            is SavedItemsMviModel.Intent.SavePost -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
+                toggleSavePost(
+                    post = uiState.value.posts.first { it.id == intent.id },
+                )
+            }
 
-            is SavedItemsMviModel.Intent.UpVoteComment -> toggleUpVoteComment(
-                comment = uiState.value.comments.first { it.id == intent.id },
-                feedback = intent.feedback,
-            )
+            is SavedItemsMviModel.Intent.UpVoteComment -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
+                toggleUpVoteComment(
+                    comment = uiState.value.comments.first { it.id == intent.id },
+                )
+            }
 
-            is SavedItemsMviModel.Intent.UpVotePost -> toggleUpVotePost(
-                post = uiState.value.posts.first { it.id == intent.id },
-                feedback = intent.feedback,
-            )
+            is SavedItemsMviModel.Intent.UpVotePost -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
+                toggleUpVotePost(
+                    post = uiState.value.posts.first { it.id == intent.id },
+                )
+            }
 
             is SavedItemsMviModel.Intent.ChangeSort -> applySortType(intent.value)
             is SavedItemsMviModel.Intent.SharePost -> share(
@@ -210,6 +234,20 @@ class SavedItemsViewModel(
         }
     }
 
+    private fun handleCommentUpdate(comment: CommentModel) {
+        mvi.updateState {
+            it.copy(
+                comments = it.comments.map { c ->
+                    if (c.id == comment.id) {
+                        comment
+                    } else {
+                        c
+                    }
+                },
+            )
+        }
+    }
+
     private fun handlePostDelete(id: Int) {
         mvi.updateState { it.copy(posts = it.posts.filter { post -> post.id != id }) }
     }
@@ -222,29 +260,13 @@ class SavedItemsViewModel(
         }
     }
 
-    private fun toggleUpVotePost(
-        post: PostModel,
-        feedback: Boolean,
-    ) {
+    private fun toggleUpVotePost(post: PostModel) {
         val newValue = post.myVote <= 0
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
         val newPost = postRepository.asUpVoted(
             post = post,
             voted = newValue,
         )
-        mvi.updateState {
-            it.copy(
-                posts = it.posts.map { p ->
-                    if (p.id == post.id) {
-                        newPost
-                    } else {
-                        p
-                    }
-                },
-            )
-        }
+        handlePostUpdate(newPost)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -258,44 +280,18 @@ class SavedItemsViewModel(
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                newPost
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }
 
-    private fun toggleDownVotePost(
-        post: PostModel,
-        feedback: Boolean,
-    ) {
+    private fun toggleDownVotePost(post: PostModel) {
         val newValue = post.myVote >= 0
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
         val newPost = postRepository.asDownVoted(
             post = post,
             downVoted = newValue,
         )
-        mvi.updateState {
-            it.copy(
-                posts = it.posts.map { p ->
-                    if (p.id == post.id) {
-                        newPost
-                    } else {
-                        p
-                    }
-                },
-            )
-        }
+        handlePostUpdate(newPost)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -309,44 +305,18 @@ class SavedItemsViewModel(
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                newPost
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }
 
-    private fun toggleSavePost(
-        post: PostModel,
-        feedback: Boolean,
-    ) {
+    private fun toggleSavePost(post: PostModel) {
         val newValue = !post.saved
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
         val newPost = postRepository.asSaved(
             post = post,
             saved = newValue,
         )
-        mvi.updateState {
-            it.copy(
-                posts = it.posts.map { p ->
-                    if (p.id == post.id) {
-                        newPost
-                    } else {
-                        p
-                    }
-                },
-            )
-        }
+        handlePostUpdate(newPost)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -360,44 +330,18 @@ class SavedItemsViewModel(
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                newPost
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }
 
-    private fun toggleUpVoteComment(
-        comment: CommentModel,
-        feedback: Boolean,
-    ) {
+    private fun toggleUpVoteComment(comment: CommentModel) {
         val newValue = comment.myVote <= 0
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
         val newComment = commentRepository.asUpVoted(
             comment = comment,
             voted = newValue,
         )
-        mvi.updateState {
-            it.copy(
-                comments = it.comments.map { c ->
-                    if (c.id == comment.id) {
-                        newComment
-                    } else {
-                        c
-                    }
-                },
-            )
-        }
+        handleCommentUpdate(newComment)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -408,41 +352,15 @@ class SavedItemsViewModel(
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        comments = it.comments.map { c ->
-                            if (c.id == comment.id) {
-                                comment
-                            } else {
-                                c
-                            }
-                        },
-                    )
-                }
+                handleCommentUpdate(comment)
             }
         }
     }
 
-    private fun toggleDownVoteComment(
-        comment: CommentModel,
-        feedback: Boolean,
-    ) {
+    private fun toggleDownVoteComment(comment: CommentModel) {
         val newValue = comment.myVote >= 0
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
         val newComment = commentRepository.asDownVoted(comment, newValue)
-        mvi.updateState {
-            it.copy(
-                comments = it.comments.map { c ->
-                    if (c.id == comment.id) {
-                        newComment
-                    } else {
-                        c
-                    }
-                },
-            )
-        }
+        handleCommentUpdate(newComment)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -453,44 +371,18 @@ class SavedItemsViewModel(
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        comments = it.comments.map { c ->
-                            if (c.id == comment.id) {
-                                comment
-                            } else {
-                                c
-                            }
-                        },
-                    )
-                }
+                handleCommentUpdate(comment)
             }
         }
     }
 
-    private fun toggleSaveComment(
-        comment: CommentModel,
-        feedback: Boolean,
-    ) {
+    private fun toggleSaveComment(comment: CommentModel) {
         val newValue = !comment.saved
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
         val newComment = commentRepository.asSaved(
             comment = comment,
             saved = newValue,
         )
-        mvi.updateState {
-            it.copy(
-                comments = it.comments.map { c ->
-                    if (c.id == comment.id) {
-                        newComment
-                    } else {
-                        c
-                    }
-                },
-            )
-        }
+        handleCommentUpdate(newComment)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -501,17 +393,7 @@ class SavedItemsViewModel(
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        comments = it.comments.map { c ->
-                            if (c.id == comment.id) {
-                                comment
-                            } else {
-                                c
-                            }
-                        },
-                    )
-                }
+                handleCommentUpdate(comment)
             }
         }
     }

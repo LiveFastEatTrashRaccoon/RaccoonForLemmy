@@ -97,27 +97,39 @@ class MultiCommunityViewModel(
     override fun reduce(intent: MultiCommunityMviModel.Intent) {
         when (intent) {
             is MultiCommunityMviModel.Intent.ChangeSort -> applySortType(intent.value)
-            is MultiCommunityMviModel.Intent.DownVotePost -> toggleDownVote(
-                post = uiState.value.posts.first { it.id == intent.id },
-                feedback = intent.feedback,
-            )
+            is MultiCommunityMviModel.Intent.DownVotePost -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
+                toggleDownVote(
+                    post = uiState.value.posts.first { it.id == intent.id },
+                )
+            }
 
             MultiCommunityMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             MultiCommunityMviModel.Intent.LoadNextPage -> loadNextPage()
             MultiCommunityMviModel.Intent.Refresh -> refresh()
-            is MultiCommunityMviModel.Intent.SavePost -> toggleSave(
-                post = uiState.value.posts.first { it.id == intent.id },
-                feedback = intent.feedback,
-            )
+            is MultiCommunityMviModel.Intent.SavePost -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
+                toggleSave(
+                    post = uiState.value.posts.first { it.id == intent.id },
+                )
+            }
 
             is MultiCommunityMviModel.Intent.SharePost -> share(
                 post = uiState.value.posts.first { it.id == intent.id }
             )
 
-            is MultiCommunityMviModel.Intent.UpVotePost -> toggleUpVote(
-                post = uiState.value.posts.first { it.id == intent.id },
-                feedback = intent.feedback,
-            )
+            is MultiCommunityMviModel.Intent.UpVotePost -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
+                toggleUpVote(
+                    post = uiState.value.posts.first { it.id == intent.id },
+                )
+            }
 
             MultiCommunityMviModel.Intent.ClearRead -> clearRead()
             is MultiCommunityMviModel.Intent.MarkAsRead -> markAsRead(
@@ -196,26 +208,13 @@ class MultiCommunityViewModel(
         refresh()
     }
 
-    private fun toggleUpVote(post: PostModel, feedback: Boolean) {
+    private fun toggleUpVote(post: PostModel) {
         val newVote = post.myVote <= 0
         val newPost = postRepository.asUpVoted(
             post = post,
             voted = newVote,
         )
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
-        mvi.updateState {
-            it.copy(
-                posts = it.posts.map { p ->
-                    if (p.id == post.id) {
-                        newPost
-                    } else {
-                        p
-                    }
-                },
-            )
-        }
+        handlePostUpdate(newPost)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -227,17 +226,7 @@ class MultiCommunityViewModel(
                 markAsRead(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }
@@ -255,54 +244,21 @@ class MultiCommunityViewModel(
                     postId = post.id,
                     auth = auth,
                 )
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                newPost
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }
 
-    private fun toggleDownVote(post: PostModel, feedback: Boolean) {
+    private fun toggleDownVote(post: PostModel) {
         val newValue = post.myVote >= 0
         val newPost = postRepository.asDownVoted(
             post = post,
             downVoted = newValue,
         )
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
-        mvi.updateState {
-            it.copy(
-                posts = it.posts.map { p ->
-                    if (p.id == post.id) {
-                        newPost
-                    } else {
-                        p
-                    }
-                },
-            )
-        }
+        handlePostUpdate(newPost)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -314,41 +270,18 @@ class MultiCommunityViewModel(
                 markAsRead(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }
 
-    private fun toggleSave(post: PostModel, feedback: Boolean) {
+    private fun toggleSave(post: PostModel) {
         val newValue = !post.saved
         val newPost = postRepository.asSaved(
             post = post,
             saved = newValue,
         )
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
-        mvi.updateState {
-            it.copy(
-                posts = it.posts.map { p ->
-                    if (p.id == post.id) {
-                        newPost
-                    } else {
-                        p
-                    }
-                },
-            )
-        }
+        handlePostUpdate(newPost)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -360,17 +293,7 @@ class MultiCommunityViewModel(
                 markAsRead(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }

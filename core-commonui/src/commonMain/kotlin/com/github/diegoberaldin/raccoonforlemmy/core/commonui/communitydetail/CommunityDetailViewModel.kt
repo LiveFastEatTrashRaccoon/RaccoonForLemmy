@@ -149,29 +149,29 @@ class CommunityDetailViewModel(
             }
 
             is CommunityDetailMviModel.Intent.DownVotePost -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleDownVotePost(
-                        post = post,
-                        feedback = intent.feedback,
-                    )
+                    toggleDownVotePost(post = post)
                 }
             }
 
             is CommunityDetailMviModel.Intent.SavePost -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleSavePost(
-                        post = post,
-                        feedback = intent.feedback,
-                    )
+                    toggleSavePost(post = post)
                 }
             }
 
             is CommunityDetailMviModel.Intent.UpVotePost -> {
+                if (intent.feedback) {
+                    hapticFeedback.vibrate()
+                }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleUpVotePost(
-                        post = post,
-                        feedback = intent.feedback,
-                    )
+                    toggleUpVotePost(post = post)
                 }
             }
 
@@ -340,29 +340,13 @@ class CommunityDetailViewModel(
         }
     }
 
-    private fun toggleUpVotePost(
-        post: PostModel,
-        feedback: Boolean,
-    ) {
+    private fun toggleUpVotePost(post: PostModel) {
         val newValue = post.myVote <= 0
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
         val newPost = postRepository.asUpVoted(
             post = post,
             voted = newValue,
         )
-        mvi.updateState {
-            it.copy(
-                posts = it.posts.map { p ->
-                    if (p.id == post.id) {
-                        newPost
-                    } else {
-                        p
-                    }
-                },
-            )
-        }
+        handlePostUpdate(newPost)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -377,17 +361,7 @@ class CommunityDetailViewModel(
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }
@@ -405,57 +379,21 @@ class CommunityDetailViewModel(
                     postId = post.id,
                     auth = auth,
                 )
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                newPost
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(newPost)
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }
 
-    private fun toggleDownVotePost(
-        post: PostModel,
-        feedback: Boolean,
-    ) {
+    private fun toggleDownVotePost(post: PostModel) {
         val newValue = post.myVote >= 0
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
         val newPost = postRepository.asDownVoted(
             post = post,
             downVoted = newValue,
         )
-        mvi.updateState {
-            it.copy(
-                posts = it.posts.map { p ->
-                    if (p.id == post.id) {
-                        newPost
-                    } else {
-                        p
-                    }
-                },
-            )
-        }
+        handlePostUpdate(newPost)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -470,44 +408,18 @@ class CommunityDetailViewModel(
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }
 
-    private fun toggleSavePost(
-        post: PostModel,
-        feedback: Boolean,
-    ) {
+    private fun toggleSavePost(post: PostModel) {
         val newValue = !post.saved
-        if (feedback) {
-            hapticFeedback.vibrate()
-        }
         val newPost = postRepository.asSaved(
             post = post,
             saved = newValue,
         )
-        mvi.updateState {
-            it.copy(
-                posts = it.posts.map { p ->
-                    if (p.id == post.id) {
-                        newPost
-                    } else {
-                        p
-                    }
-                },
-            )
-        }
+        handlePostUpdate(newPost)
         mvi.scope?.launch(Dispatchers.IO) {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -522,17 +434,7 @@ class CommunityDetailViewModel(
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
-                mvi.updateState {
-                    it.copy(
-                        posts = it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
-                    )
-                }
+                handlePostUpdate(post)
             }
         }
     }
