@@ -13,6 +13,6 @@
 - enhancement: improve settings defaults (#220)
 - enhancement: profile tab title (#204)
 - enhancement: anonymous mode improvements (#208, #209, #210)
-- enhancement: reply improvemets (#205, #214)
+- enhancement: reply improvements (#205, #214)
 - enhancement: better visual hierarchy (#218)
 - enhancement: feedback for post actions (#200)

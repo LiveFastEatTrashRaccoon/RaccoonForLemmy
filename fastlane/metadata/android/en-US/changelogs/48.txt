@@ -1,0 +1,4 @@
+- fix: controversial and scaled sorting (#248)
+- fix: post title font weight (#251)
+- fix: NSFW filter in explore (#250)
+- fix: comment sort types in settings (#254)
