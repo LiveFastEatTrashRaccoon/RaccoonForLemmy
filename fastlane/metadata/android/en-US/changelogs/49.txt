@@ -1,0 +1,6 @@
+- feat: share option (local or original); closes #258
+- fix: comment sorting; closes #253
+- fix: mark chat read when opening; closes #260
+- fix: post detail in compact mode; closes #265
+- enhancement: clickable comments and links; #closes 259
+- enhancement: title layout; closes #261
