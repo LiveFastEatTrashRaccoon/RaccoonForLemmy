@@ -1,0 +1,12 @@
+- feat: long press on posts to open options #280
+- feat: feed shortcuts in nav drawer #213
+- feat: upvote and downvote themes #270
+- feat: account removal #222
+- feat: search post by title only #275
+- fix: unread count in nav bar #269
+- fix: top-level bar visibility #277
+- fix: community and creator opening in guest mode #287
+- fix: block comment collapse when opening images #286
+- enhancement: improve post action button size #271
+- enhancement: options in subscription management #281
+- enhancement: space between post title and body #288
