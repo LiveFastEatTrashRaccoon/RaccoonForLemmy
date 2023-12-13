@@ -36,11 +36,11 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.IconSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.md_theme_dark_primaryContainer
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 
@@ -56,7 +56,10 @@ fun FloatingActionButtonMenu(
     items: List<FloatingActionButtonMenuItem> = emptyList(),
 ) {
     val themeRepository = remember { getThemeRepository() }
+    val schemeProvider = remember { getColorSchemeProvider() }
+    val seedColor by themeRepository.customSeedColor.collectAsState()
     val theme by themeRepository.uiTheme.collectAsState()
+    val dynamicColors by themeRepository.dynamicColors.collectAsState()
     var fabExpanded by remember { mutableStateOf(false) }
     val fabRotation by animateFloatAsState(if (fabExpanded) 45f else 0f)
     val enterTransition = remember {
@@ -142,8 +145,14 @@ fun FloatingActionButtonMenu(
             Spacer(modifier = Modifier.height(Spacing.xxs))
         }
 
+
         val fabContainerColor = when (theme) {
-            UiTheme.Black -> md_theme_dark_primaryContainer
+            UiTheme.Black -> schemeProvider.getColorScheme(
+                theme = UiTheme.Dark,
+                dynamic = dynamicColors,
+                customSeed = seedColor
+            ).primaryContainer
+
             else -> MaterialTheme.colorScheme.primaryContainer
         }
         FloatingActionButton(
