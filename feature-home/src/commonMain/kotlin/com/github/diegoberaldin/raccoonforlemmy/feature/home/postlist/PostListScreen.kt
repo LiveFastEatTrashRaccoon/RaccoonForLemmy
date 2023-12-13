@@ -316,7 +316,7 @@ class PostListScreen : Screen {
                                         DismissValue.Default -> Color.Transparent
                                     }
                                 },
-                                onGestureBegin = {
+                                onGestureBegin = rememberCallback(model) {
                                     model.reduce(PostListMviModel.Intent.HapticIndication)
                                 },
                                 onDismissToStart = rememberCallback(model) {

@@ -333,7 +333,7 @@ class ExploreScreen : Screen {
                                                 DismissValue.Default -> Color.Transparent
                                             }
                                         },
-                                        onGestureBegin = {
+                                        onGestureBegin = rememberCallback(model) {
                                             model.reduce(ExploreMviModel.Intent.HapticIndication)
                                         },
                                         onDismissToStart = rememberCallback(model) {

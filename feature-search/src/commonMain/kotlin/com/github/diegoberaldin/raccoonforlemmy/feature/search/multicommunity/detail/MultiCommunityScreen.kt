@@ -261,7 +261,7 @@ class MultiCommunityScreen(
                                     DismissValue.Default -> Color.Transparent
                                 }
                             },
-                            onGestureBegin = {
+                            onGestureBegin = rememberCallback(model) {
                                 model.reduce(MultiCommunityMviModel.Intent.HapticIndication)
                             },
                             onDismissToStart = {
