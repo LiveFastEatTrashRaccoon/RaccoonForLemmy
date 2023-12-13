@@ -36,7 +36,7 @@ class FontFamilyBottomSheet(
         UiFontFamily.Dosis,
         UiFontFamily.CharisSIL,
         UiFontFamily.EBGaramond,
-        UiFontFamily.AveriaSansLibre,
+        UiFontFamily.Comfortaa,
         UiFontFamily.Default,
     ),
 ) : Screen {
@@ -90,7 +90,7 @@ class FontFamilyBottomSheet(
                                 UiFontFamily.NotoSans -> fontFamilyResource(MR.fonts.NotoSans.regular)
                                 UiFontFamily.EBGaramond -> fontFamilyResource(MR.fonts.EBGaramond.regular)
                                 UiFontFamily.Dosis -> fontFamilyResource(MR.fonts.Dosis.regular)
-                                UiFontFamily.AveriaSansLibre -> fontFamilyResource(MR.fonts.AveriaSansLibre.regular)
+                                UiFontFamily.Comfortaa -> fontFamilyResource(MR.fonts.Comfortaa.regular)
                                 UiFontFamily.Poppins -> fontFamilyResource(MR.fonts.Poppins.regular)
                                 UiFontFamily.TitilliumWeb -> fontFamilyResource(MR.fonts.TitilliumWeb.regular)
                                 else -> FontFamily.Default
