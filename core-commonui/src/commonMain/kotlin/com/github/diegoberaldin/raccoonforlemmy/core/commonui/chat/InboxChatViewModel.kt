@@ -6,6 +6,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
@@ -59,6 +60,10 @@ class InboxChatViewModel(
                             otherUserAvatar = user?.avatar,
                         )
                     }
+
+                    if (uiState.value.messages.isEmpty()) {
+                        refresh(initial = true)
+                    }
                 }
             }
         }
@@ -66,59 +71,80 @@ class InboxChatViewModel(
 
     override fun reduce(intent: InboxChatMviModel.Intent) {
         when (intent) {
-            InboxChatMviModel.Intent.LoadNextPage -> loadNextPage()
-            is InboxChatMviModel.Intent.SubmitNewMessage -> submitNewMessage(intent.value)
-            is InboxChatMviModel.Intent.ImageSelected -> loadImageAndAppendUrlInBody(intent.value)
+            InboxChatMviModel.Intent.LoadNextPage -> {
+                mvi.scope?.launch(Dispatchers.IO) {
+                    loadNextPage()
+                }
+            }
+
+            is InboxChatMviModel.Intent.SubmitNewMessage -> {
+                submitNewMessage(intent.value)
+            }
+
+            is InboxChatMviModel.Intent.ImageSelected -> {
+                loadImageAndAppendUrlInBody(intent.value)
+            }
+
+            is InboxChatMviModel.Intent.EditMessage -> {
+                uiState.value.messages.firstOrNull { it.id == intent.value }?.also { message ->
+                    startEditingMessage(message)
+                }
+            }
         }
     }
 
-    private fun refresh() {
+    private suspend fun refresh(initial: Boolean = false) {
         currentPage = 1
-        mvi.updateState { it.copy(canFetchMore = true, refreshing = true) }
+        mvi.updateState {
+            it.copy(
+                initial = initial,
+                canFetchMore = true,
+                refreshing = true
+            )
+        }
         loadNextPage()
     }
 
-    private fun loadNextPage() {
+    private suspend fun loadNextPage() {
         val currentState = mvi.uiState.value
         if (!currentState.canFetchMore || currentState.loading) {
             mvi.updateState { it.copy(refreshing = false) }
             return
         }
 
-        mvi.scope?.launch(Dispatchers.IO) {
-            mvi.updateState { it.copy(loading = true) }
-            val auth = identityRepository.authToken.value
-            val refreshing = currentState.refreshing
-            val itemList = messageRepository.getAll(
-                auth = auth,
-                page = currentPage,
-                unreadOnly = false,
-            )?.filter {
-                it.creator?.id == otherUserId || it.recipient?.id == otherUserId
-            }?.onEach {
-                if (!it.read) {
-                    launch {
-                        markAsRead(true, it.id)
-                    }
-                }
+        mvi.updateState { it.copy(loading = true) }
+        val auth = identityRepository.authToken.value
+        val refreshing = currentState.refreshing
+        val itemList = messageRepository.getAll(
+            creatorId = otherUserId,
+            auth = auth,
+            page = currentPage,
+            unreadOnly = false,
+        )?.onEach {
+            if (!it.read) {
+                markAsRead(true, it.id)
             }
-            if (!itemList.isNullOrEmpty()) {
-                currentPage++
-            }
+        }
+        if (!itemList.isNullOrEmpty()) {
+            currentPage++
+        }
 
-            mvi.updateState {
-                val newItems = if (refreshing) {
-                    itemList.orEmpty()
-                } else {
-                    it.messages + itemList.orEmpty()
-                }
-                it.copy(
-                    messages = newItems,
-                    loading = false,
-                    canFetchMore = itemList?.isEmpty() != true,
-                    refreshing = false,
-                )
+        val itemsToAdd = itemList.orEmpty().filter {
+            it.creator?.id == otherUserId || it.recipient?.id == otherUserId
+        }
+        mvi.updateState {
+            val newItems = if (refreshing) {
+                itemsToAdd
+            } else {
+                it.messages + itemsToAdd
             }
+            it.copy(
+                messages = newItems,
+                loading = false,
+                canFetchMore = itemList?.isEmpty() != true,
+                refreshing = false,
+                initial = false,
+            )
         }
     }
 
@@ -153,15 +179,36 @@ class InboxChatViewModel(
         }
     }
 
+    private fun startEditingMessage(message: PrivateMessageModel) {
+        mvi.updateState {
+            it.copy(
+                editedMessageId = message.id,
+            )
+        }
+    }
+
     private fun submitNewMessage(text: String) {
+        val editedMessageId = uiState.value.editedMessageId
         if (text.isNotEmpty()) {
             mvi.scope?.launch {
                 val auth = identityRepository.authToken.value
-                messageRepository.create(
-                    message = text,
-                    auth = auth,
-                    recipiendId = otherUserId,
-                )
+                if (editedMessageId == null) {
+                    messageRepository.create(
+                        message = text,
+                        recipiendId = otherUserId,
+                        auth = auth,
+                    )
+                } else {
+                    messageRepository.edit(
+                        messageId = editedMessageId,
+                        message = text,
+                        auth = auth,
+                    )
+                }
+
+                mvi.updateState {
+                    it.copy(editedMessageId = null)
+                }
                 refresh()
             }
         }

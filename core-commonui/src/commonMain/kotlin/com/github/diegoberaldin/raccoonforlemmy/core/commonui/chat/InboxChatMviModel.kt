@@ -29,10 +29,12 @@ interface InboxChatMviModel :
             }
         }
 
+        data class EditMessage(val value: Int) : Intent
         data class SubmitNewMessage(val value: String) : Intent
     }
 
     data class UiState(
+        val initial: Boolean = true,
         val refreshing: Boolean = false,
         val loading: Boolean = false,
         val canFetchMore: Boolean = true,
@@ -41,6 +43,7 @@ interface InboxChatMviModel :
         val otherUserAvatar: String? = null,
         val messages: List<PrivateMessageModel> = emptyList(),
         val autoLoadImages: Boolean = true,
+        val editedMessageId: Int? = null,
     )
 
     sealed interface Effect {

@@ -56,11 +56,14 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.toTypography
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomImage
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Option
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.OptionId
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.TextFormattingBar
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.di.getInboxChatViewModel
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.gallery.getGalleryHelper
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
@@ -158,7 +161,14 @@ class InboxChatScreen(
                         ),
                         label = {
                             Text(
-                                text = stringResource(MR.strings.inbox_chat_message),
+                                text = buildString {
+                                    append(stringResource(MR.strings.inbox_chat_message))
+                                    if (uiState.editedMessageId != null) {
+                                        append(" (")
+                                        append(stringResource(MR.strings.post_action_edit))
+                                        append(")")
+                                    }
+                                },
                                 style = typography.bodyMedium,
                             )
                         },
@@ -217,6 +227,11 @@ class InboxChatScreen(
                         item {
                             Spacer(modifier = Modifier.height(Spacing.s))
                         }
+                        if (uiState.messages.isEmpty() && uiState.initial) {
+                            items(10) {
+                                MessageCardPlaceholder()
+                            }
+                        }
                         items(uiState.messages) { message ->
                             val isMyMessage = message.creator?.id == uiState.currentUserId
                             val content = message.content.orEmpty()
@@ -225,13 +240,37 @@ class InboxChatScreen(
                                 isMyMessage = isMyMessage,
                                 content = content,
                                 date = date,
+                                options = buildList {
+                                    if (isMyMessage) {
+                                        this += Option(
+                                            OptionId.Edit,
+                                            stringResource(MR.strings.post_action_edit)
+                                        )
+                                    }
+                                },
+                                onOptionSelected = rememberCallbackArgs { optionId ->
+                                    when (optionId) {
+                                        OptionId.Edit -> {
+                                            model.reduce(
+                                                InboxChatMviModel.Intent.EditMessage(
+                                                    message.id
+                                                )
+                                            )
+                                            message.content?.also {
+                                                textFieldValue = TextFieldValue(text = it)
+                                            }
+                                        }
+
+                                        else -> Unit
+                                    }
+                                }
                             )
                         }
                         item {
-                            if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                            if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
                                 model.reduce(InboxChatMviModel.Intent.LoadNextPage)
                             }
-                            if (uiState.loading && !uiState.refreshing) {
+                            if (!uiState.initial && uiState.loading && !uiState.refreshing) {
                                 Box(
                                     modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
                                     contentAlignment = Alignment.Center,
