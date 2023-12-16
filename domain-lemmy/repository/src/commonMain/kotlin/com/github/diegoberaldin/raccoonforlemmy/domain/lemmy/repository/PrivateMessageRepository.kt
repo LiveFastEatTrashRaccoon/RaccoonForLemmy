@@ -32,5 +32,5 @@ interface PrivateMessageRepository {
         messageId: Int,
         auth: String? = null,
         read: Boolean = true,
-    )
+    ): PrivateMessageModel?
 }

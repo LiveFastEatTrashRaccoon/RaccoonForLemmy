@@ -35,7 +35,7 @@ internal class DefaultPrivateMessageRepository(
         message: String,
         auth: String?,
         recipiendId: Int,
-    ) {
+    ): Unit = runCatching {
         val data = CreatePrivateMessageForm(
             content = message,
             auth = auth.orEmpty(),
@@ -44,10 +44,10 @@ internal class DefaultPrivateMessageRepository(
         services.privateMessages.createPrivateMessage(
             authHeader = auth.toAuthHeader(),
             form = data,
-        )
-    }
+        ).let { }
+    }.getOrDefault(Unit)
 
-    override suspend fun edit(messageId: Int, message: String, auth: String?) {
+    override suspend fun edit(messageId: Int, message: String, auth: String?) = runCatching {
         val data = EditPrivateMessageForm(
             content = message,
             auth = auth.orEmpty(),
@@ -56,22 +56,23 @@ internal class DefaultPrivateMessageRepository(
         services.privateMessages.editPrivateMessage(
             authHeader = auth.toAuthHeader(),
             form = data,
-        )
-    }
+        ).let { }
+    }.getOrDefault(Unit)
 
     override suspend fun markAsRead(
         messageId: Int,
         auth: String?,
         read: Boolean,
-    ) {
+    ): PrivateMessageModel? = runCatching {
         val data = MarkPrivateMessageAsReadForm(
             privateMessageId = messageId,
             auth = auth.orEmpty(),
             read = read,
         )
-        services.privateMessages.markPrivateMessageAsRead(
+        val dto = services.privateMessages.markPrivateMessageAsRead(
             authHeader = auth.toAuthHeader(),
             form = data,
         )
-    }
+        return dto.body()?.privateMessageView?.toModel()
+    }.getOrNull()
 }

@@ -143,7 +143,7 @@ class InboxChatViewModel(
                 loading = false,
                 canFetchMore = itemList?.isEmpty() != true,
                 refreshing = false,
-                initial = false,
+                initial = itemsToAdd.isEmpty(),
             )
         }
     }
@@ -151,12 +151,28 @@ class InboxChatViewModel(
     private fun markAsRead(read: Boolean, messageId: Int) {
         val auth = identityRepository.authToken.value
         mvi.scope?.launch(Dispatchers.IO) {
-            messageRepository.markAsRead(
+            val newMessage = messageRepository.markAsRead(
                 read = read,
                 messageId = messageId,
                 auth = auth,
             )
-            refresh()
+            if (newMessage != null) {
+                handleMessageUpdate(newMessage)
+            }
+        }
+    }
+
+    private fun handleMessageUpdate(newMessage: PrivateMessageModel) {
+        mvi.updateState {
+            it.copy(
+                messages = it.messages.map { m ->
+                    if (m.id == newMessage.id) {
+                        newMessage
+                    } else {
+                        m
+                    }
+                }
+            )
         }
     }
 
