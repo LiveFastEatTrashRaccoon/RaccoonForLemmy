@@ -1,0 +1,9 @@
+- feat: edit chat message #226
+- feat: new fonts and font face for content #306
+- fix: manage subscriptions layout #292
+- fix: opening items from drawer #294
+- fix: FAB color in black theme #293
+- fix: image in comment height #211
+- fix: performance in post detail #300
+- enhancement: disable sheet gesture in editors #299
+- fix: chat loading messages #202
