@@ -51,13 +51,14 @@ kotlin {
                 implementation(projects.coreCommonui.components)
                 implementation(projects.coreCommonui.lemmyui)
                 implementation(projects.coreCommonui.modals)
-                implementation(projects.unitWeb)
                 implementation(projects.coreCommonui.detailopenerApi)
+                implementation(projects.unitWeb)
+                implementation(projects.unitAbout)
                 implementation(projects.coreNotifications)
-                implementation(projects.resources)
                 implementation(projects.domainLemmy.data)
                 implementation(projects.domainLemmy.repository)
                 implementation(projects.domainIdentity)
+                implementation(projects.resources)
             }
         }
         val commonTest by getting {

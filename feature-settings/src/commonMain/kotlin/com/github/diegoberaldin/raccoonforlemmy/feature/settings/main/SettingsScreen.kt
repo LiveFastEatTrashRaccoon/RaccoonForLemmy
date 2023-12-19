@@ -61,6 +61,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomS
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ThemeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.VoteFormatBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.VoteThemeBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -74,7 +75,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLanguageName
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.di.getSettingsViewModel
-import com.github.diegoberaldin.raccoonforlemmy.feature.settings.dialog.AboutDialog
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components.SettingsColorRow
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components.SettingsHeader
@@ -84,6 +84,7 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.components.S
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.staticString
+import com.github.diegoberaldin.raccoonforlemmy.unit.about.AboutDialog
 import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.delay
@@ -126,8 +127,8 @@ class SettingsScreen : Screen {
             }.launchIn(this)
         }
         LaunchedEffect(Unit) {
-            navigationCoordinator.onDoubleTabSelection.onEach { tab ->
-                if (tab == SettingsTab) {
+            navigationCoordinator.onDoubleTabSelection.onEach { section ->
+                if (section == TabNavigationSection.Settings) {
                     scrollState.scrollTo(0)
                     topAppBarState.heightOffset = 0f
                     topAppBarState.contentOffset = 0f
