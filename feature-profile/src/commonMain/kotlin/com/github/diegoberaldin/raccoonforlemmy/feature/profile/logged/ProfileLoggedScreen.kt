@@ -38,22 +38,17 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createcomment.CreateCommentScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.createpost.CreatePostScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.image.ZoomableImageScreen
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.CommentCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.CommentCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.ProfileLoggedSection
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.UserHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.RawContentDialog
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.web.WebViewScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -64,6 +59,10 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.di.getProfileLoggedViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
+import com.github.diegoberaldin.raccoonforlemmy.unit.createcomment.CreateCommentScreen
+import com.github.diegoberaldin.raccoonforlemmy.unit.createpost.CreatePostScreen
+import com.github.diegoberaldin.raccoonforlemmy.unit.web.WebViewScreen
+import com.github.diegoberaldin.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -86,6 +85,7 @@ internal object ProfileLoggedScreen : Tab {
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val lazyListState = rememberLazyListState()
         var rawContent by remember { mutableStateOf<Any?>(null) }
+        val detailOpener = remember { getDetailOpener() }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection.onEach { tab ->
@@ -182,25 +182,16 @@ internal object ProfileLoggedScreen : Tab {
                                     hideAuthor = true,
                                     blurNsfw = false,
                                     onClick = rememberCallback {
-                                        navigationCoordinator.pushScreen(
-                                            PostDetailScreen(post),
-                                        )
+                                        detailOpener.openPostDetail(post)
                                     },
-                                    onOpenCommunity = rememberCallbackArgs { community, _ ->
-                                        navigationCoordinator.pushScreen(
-                                            CommunityDetailScreen(community),
-                                        )
+                                    onOpenCommunity = rememberCallbackArgs { community, instance ->
+                                        detailOpener.openCommunityDetail(community, instance)
                                     },
                                     onOpenCreator = rememberCallbackArgs { user, instance ->
-                                        navigationCoordinator.pushScreen(
-                                            UserDetailScreen(user, instance)
-                                        )
+                                        detailOpener.openUserDetail(user, instance)
                                     },
                                     onOpenPost = rememberCallbackArgs { p, instance ->
-                                        navigationCoordinator.pushScreen(
-                                            PostDetailScreen(p, instance)
-                                        )
-
+                                        detailOpener.openPostDetail(p, instance)
                                     },
                                     onOpenWeb = rememberCallbackArgs { url ->
                                         navigationCoordinator.pushScreen(
@@ -237,9 +228,7 @@ internal object ProfileLoggedScreen : Tab {
                                         )
                                     },
                                     onReply = rememberCallback {
-                                        navigationCoordinator.pushScreen(
-                                            PostDetailScreen(post),
-                                        )
+                                        detailOpener.openPostDetail(post)
                                     },
                                     options = buildList {
                                         add(
@@ -340,11 +329,9 @@ internal object ProfileLoggedScreen : Tab {
                                         navigationCoordinator.pushScreen(ZoomableImageScreen(url))
                                     },
                                     onClick = rememberCallback {
-                                        navigationCoordinator.pushScreen(
-                                            PostDetailScreen(
-                                                post = PostModel(id = comment.postId),
-                                                highlightCommentId = comment.id,
-                                            ),
+                                        detailOpener.openPostDetail(
+                                            post = PostModel(id = comment.postId),
+                                            highlightCommentId = comment.id,
                                         )
                                     },
                                     onUpVote = rememberCallback(model) {
@@ -372,11 +359,9 @@ internal object ProfileLoggedScreen : Tab {
                                         )
                                     },
                                     onReply = rememberCallback {
-                                        navigationCoordinator.pushScreen(
-                                            PostDetailScreen(
-                                                post = PostModel(id = comment.postId),
-                                                highlightCommentId = comment.id,
-                                            ),
+                                        detailOpener.openPostDetail(
+                                            post = PostModel(id = comment.postId),
+                                            highlightCommentId = comment.id,
                                         )
                                     },
                                     options = buildList {

@@ -35,14 +35,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toUiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.communitydetail.CommunityDetailScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.drawer.ModalDrawerContent
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.getCommunityFromUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.getPostFromUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.getUserFromUrl
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.postdetail.PostDetailScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.saveditems.SavedItemsScreen
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.userdetail.UserDetailScreen
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.DrawerEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -56,6 +52,8 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.search.managesubscriptio
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.multicommunity.detail.MultiCommunityScreen
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import com.github.diegoberaldin.raccoonforlemmy.resources.di.getLanguageRepository
+import com.github.diegoberaldin.raccoonforlemmy.unit.drawer.ModalDrawerContent
+import com.github.diegoberaldin.raccoonforlemmy.unit.saveditems.SavedItemsScreen
 import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.StringDesc
 import kotlinx.coroutines.FlowPreview
@@ -93,6 +91,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
     val drawerCoordinator = remember { getDrawerCoordinator() }
     val drawerGesturesEnabled by drawerCoordinator.gesturesEnabled.collectAsState()
     val bottomSheetGesturesEnabled by navigationCoordinator.bottomSheetGesturesEnabled.collectAsState()
+    val detailOpener = remember { getDetailOpener() }
 
     LaunchedEffect(Unit) {
         val accountId = accountRepository.getActive()?.id
@@ -163,33 +162,21 @@ fun App(onLoadingFinished: () -> Unit = {}) {
             val community = getCommunityFromUrl(url)
             val user = getUserFromUrl(url)
             val postAndInstance = getPostFromUrl(url)
-            val newScreen = when {
+            when {
                 community != null -> {
-                    CommunityDetailScreen(
-                        community = community,
-                        otherInstance = community.host,
-                    )
+                    detailOpener.openCommunityDetail(community, community.host)
                 }
 
                 user != null -> {
-                    UserDetailScreen(
-                        user = user,
-                        otherInstance = user.host,
-                    )
+                    detailOpener.openUserDetail(user, user.host)
                 }
 
                 postAndInstance != null -> {
                     val (post, otherInstance) = postAndInstance
-                    PostDetailScreen(
-                        post = post,
-                        otherInstance = otherInstance,
-                    )
+                    detailOpener.openPostDetail(post, otherInstance)
                 }
 
-                else -> null
-            }
-            if (newScreen != null) {
-                navigationCoordinator.pushScreen(newScreen)
+                else -> Unit
             }
         }.launchIn(this)
     }
@@ -210,7 +197,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                 }
 
                 is DrawerEvent.OpenCommunity -> {
-                    navigationCoordinator.pushScreen(CommunityDetailScreen(evt.community))
+                    detailOpener.openCommunityDetail(evt.community)
                 }
 
                 is DrawerEvent.OpenMultiCommunity -> {

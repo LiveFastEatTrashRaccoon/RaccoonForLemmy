@@ -26,11 +26,6 @@ kotlin {
     }
 
     sourceSets {
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.coil)
-            }
-        }
         val commonMain by getting {
             dependencies {
                 implementation(compose.runtime)
@@ -39,29 +34,6 @@ kotlin {
                 implementation(compose.material3)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                implementation(compose.materialIconsExtended)
-
-                implementation(libs.koin.core)
-                implementation(libs.voyager.navigator)
-                implementation(libs.voyager.screenmodel)
-                implementation(libs.voyager.bottomsheet)
-                implementation(libs.voyager.tab)
-
-                implementation(projects.coreUtils)
-                implementation(projects.coreAppearance)
-                implementation(projects.coreArchitecture)
-                implementation(projects.corePreferences)
-                implementation(projects.corePersistence)
-                implementation(projects.coreMd)
-                implementation(projects.coreNotifications)
-                implementation(projects.coreNavigation)
-                implementation(projects.coreCommonui.components)
-                implementation(projects.coreCommonui.lemmyui)
-                implementation(projects.coreCommonui.modals)
-
-                implementation(projects.domainLemmy.data)
-                implementation(projects.domainLemmy.repository)
-                implementation(projects.domainIdentity)
 
                 implementation(projects.resources)
             }
