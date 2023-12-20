@@ -21,7 +21,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "domain-identity"
+            baseName = "identity"
         }
     }
 
@@ -30,6 +30,7 @@ kotlin {
             dependencies {
                 implementation(libs.koin.core)
                 implementation(compose.foundation)
+                implementation(compose.runtime)
                 implementation(projects.core.preferences)
                 implementation(projects.core.api)
                 implementation(projects.core.utils)

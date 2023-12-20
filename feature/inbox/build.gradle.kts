@@ -21,7 +21,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "feature-inbox"
+            baseName = "inbox"
         }
     }
 
@@ -56,11 +56,14 @@ kotlin {
                 implementation(projects.core.persistence)
                 implementation(projects.core.notifications)
                 implementation(projects.unit.zoomableimage)
-                implementation(projects.unit.chat)
+                implementation(projects.unit.replies)
+                implementation(projects.unit.mentions)
+                implementation(projects.unit.messages)
 
                 implementation(projects.domain.lemmy.data)
                 implementation(projects.domain.lemmy.repository)
                 implementation(projects.domain.identity)
+                implementation(projects.domain.inbox)
 
             }
         }
