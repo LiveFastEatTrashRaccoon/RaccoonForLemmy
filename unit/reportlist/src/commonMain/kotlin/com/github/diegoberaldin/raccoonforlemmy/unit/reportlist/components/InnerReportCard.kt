@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.unit.reportlist
+package com.github.diegoberaldin.raccoonforlemmy.unit.reportlist.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -184,6 +184,7 @@ private fun ReportFooter(
     val buttonModifier = Modifier.size(IconSize.m).padding(3.5.dp)
     var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
+    val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f)
 
     Box {
         Row(
@@ -193,10 +194,12 @@ private fun ReportFooter(
                 modifier = buttonModifier,
                 imageVector = Icons.Default.Schedule,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground,
+                tint = ancillaryColor,
             )
             Text(
                 text = date?.prettifyDate() ?: "",
+                style = MaterialTheme.typography.labelLarge,
+                color = ancillaryColor,
             )
             if (options.isNotEmpty()) {
                 Icon(
@@ -213,20 +216,23 @@ private fun ReportFooter(
                         ),
                     imageVector = Icons.Default.MoreHoriz,
                     contentDescription = null,
+                    tint = ancillaryColor,
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            Image(
-                modifier = buttonModifier
-                    .onClick(
-                        onClick = rememberCallback {
-                            onOpenResolve?.invoke()
-                        },
-                    ),
-                imageVector = Icons.Default.OpenInNew,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-            )
+            if (onOpenResolve != null) {
+                Image(
+                    modifier = buttonModifier
+                        .onClick(
+                            onClick = rememberCallback {
+                                onOpenResolve.invoke()
+                            },
+                        ),
+                    imageVector = Icons.Default.OpenInNew,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+                )
+            }
         }
         CustomDropDown(
             expanded = optionsExpanded,
