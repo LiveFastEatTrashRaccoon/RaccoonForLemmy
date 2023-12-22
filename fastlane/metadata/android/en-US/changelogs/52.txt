@@ -1,0 +1,9 @@
+- feat: community moderation log #332
+- feat: favorite communities #333
+- feat: block actions from post list #339
+- feat: show moderators in community info #314
+- enhancement: create post and comment layout #337, #330
+- enhancement: app size optimization #340
+- fix: chat message loading #323
+- fix: text field capitalization #319
+- fix: day in date formatting #312
