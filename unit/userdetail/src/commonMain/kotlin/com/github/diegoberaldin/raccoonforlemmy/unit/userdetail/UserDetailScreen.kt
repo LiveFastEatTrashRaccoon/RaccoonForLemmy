@@ -35,6 +35,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -329,7 +330,13 @@ class UserDetailScreen(
                 }
             },
             snackbarHost = {
-                SnackbarHost(snackbarHostState)
+                SnackbarHost(snackbarHostState) { data ->
+                    Snackbar(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        snackbarData = data,
+                    )
+                }
             }
         ) { padding ->
             val pullRefreshState = rememberPullRefreshState(
