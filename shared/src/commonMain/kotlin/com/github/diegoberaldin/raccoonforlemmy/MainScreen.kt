@@ -94,9 +94,11 @@ internal object MainScreen : Screen {
                     return Offset.Zero
                 }
             }
-            navigationCoordinator.apply {
+            with(navigationCoordinator) {
                 setBottomBarScrollConnection(scrollConnection)
-                setCurrentSection(TabNavigationSection.Home)
+                if (currentSection.value == null) {
+                    setCurrentSection(TabNavigationSection.Home)
+                }
             }
 
             navigationCoordinator.exitMessageVisible.onEach {
