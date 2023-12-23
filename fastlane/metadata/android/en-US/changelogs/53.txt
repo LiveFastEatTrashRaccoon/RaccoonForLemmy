@@ -1,0 +1,7 @@
+- feat: see raw content of chat messages #344
+- enhancement: back to home from other sections #345
+- enhancement: message card layout in chat list #361
+- enhancement: snackbar colors #363
+- fix: drawer navigation #349
+- fix: bottom sheet gestures #347
+- fix: open links #365
