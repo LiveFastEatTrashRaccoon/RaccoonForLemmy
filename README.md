@@ -68,7 +68,7 @@ multiplatform and gradually grew as a fully functional client with many features
 - create and edit new posts (with optional images);
 - reply to post and comments (and edit replies);
 - mark posts as read and hide read contents;
-- custom appearance (color scheme, font, text size, post layout);
+- custom appearance (color scheme, fonts, text sizes, post layout, etc.);
 - custom localization (independent of system settings);
 - block users, communities and instances (the latter requires Lemmy >= 0.19);
 - report post and comments to moderators;
@@ -76,7 +76,7 @@ multiplatform and gradually grew as a fully functional client with many features
 - lazy scrolling (referred to as "zombie mode");
 - explore all the communities on a given instance in guest mode;
 - multi-community (community aggregation);
-- community moderation tools.
+- community moderation tools and moderation log.
 
 Most clients for Lemmy currently offer the first points (with various degrees of completion), so
 there is nothing special about Raccoon for Lemmy, whereas the last ones are less common and are
@@ -94,17 +94,20 @@ clients (and even more so in _open source_ clients). Raccoon For Lemmy is trying
 and offers some extent of moderation tools (feature post, lock post, distinguish comment, remove
 post/comment, ban users and the ability to revert any of these actions).
 
-The application is under active development, so expect new features to be added and the layout is
-going to change and evolve (hopefully for the better) over time.
+The application is under active development, so expect new features to be added over time. Have a
+look on the issues labeled with "feature" in the issue tracker to get an idea of what's going to
+come next.
 
-For this, speak up and use your voice if you have feedback, suggestions, requests and so on.
+If you have ideas, feedback, suggestions or comments remember to speak up and use your
+voice. You can add reports or request features and they will be considered.
 
 ## Why was the project started?
 
 Because raccoons are so adorable, aren't they? 🦝🦝🦝
 
 Joking apart, one of the main goals was to experiment with KMP and learn how to properly deal
-with the challenges of a multiplatform environment.
+with the challenges of a multiplatform environment, and a medium-sized project like this was an
+ideal testing ground for that technology.
 
 Secondly, as a means to dig deeper inside Lemmy's internals and become more humble and patient
 towards other apps whenever I found anything lacking or not implemented in an optimal way (according
@@ -118,12 +121,13 @@ I️ ❤️ Kotlin, I ❤️ Free and Open Source Software and I ❤️ native a
 Moreover, developing a new client was an opportunity to add all the features that I needed and that
 were "scattered" across different apps, e.g. I liked the feature richness
 of [Liftoff](https://github.com/liftoff-app/liftoff) (e.g. the possibility to explore all the
-communities of an external instance), the multi-community feature of
+communities of an external instance in guest mode), the multi-community feature of
 [Summit](https://github.com/idunnololz/summit-for-lemmy) and the polished UI of
 [Thunder](https://github.com/thunder-app/thunder) and I wished I could have them all in the same
-app. If I saw a feature of Lemmy (e.g. sorting by "Controversial") that not all apps offer, I could
-add it myself, etc. This involves a high level of discretionality and personal taste, I know, but
-this project _is_ all about experimenting and learning.
+app.
+
+This involves a high level of discretionality and personal taste, I know, but this project _is_ all
+about experimenting and learning.
 
 ## Technologies used:
 
@@ -133,7 +137,7 @@ this project _is_ all about experimenting and learning.
   networking in conjunction with kotlinx-serialization for JSON marshalling
 - [Moko resources](https://github.com/icerockdev/moko-resources) for resource management
 - [Kamel](https://github.com/Kamel-Media/Kamel) for lazy image loading, but later switched to
-  [Coil](https://github.com/coil-kt/coil) on Android because there was a major bug
+  [Coil](https://github.com/coil-kt/coil) on Android because there was a major bug with large images
 - [Multiplatform settings](https://github.com/russhwolf/multiplatform-settings) for encrypted
   preferences
 - [SQLDelight](https://github.com/cashapp/sqldelight)
@@ -141,12 +145,12 @@ this project _is_ all about experimenting and learning.
 - for Markdown rendering, the initial approach involved using
   [Markdown](https://github.com/JetBrains/markdown) for parsing in conjunction with custom rendering
   but this approach proved difficult to extend and maintain so on Android the
-  [Markwon](https://github.com/noties/Markwon) library was chosen insted.
+  [Markwon](https://github.com/noties/Markwon) library was chosen instead.
 
 ## Credits:
 
-- the `core-md` module in the common flavor is heavily inspired by
-  [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) but
+- the `core-md` module in the iOS flavor is inspired by
+  [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) and
   the Android implementation with Markwon is adapted from
   [Jerboa for Lemmy](https://github.com/dessalines/jerboa)
 - the UI is inspired by the really great [Thunder](https://github.com/thunder-app/thunder) app
@@ -157,34 +161,26 @@ This project would not be what it is were it not for the huge amount of patience
 of early adopters who sent me continous feedback and ideas for improvement after every release.
 
 A special thank to all those who contributed so far:
+
 - [u/rb_c@discuss.tchncs.de](https://discuss.tchncs.de/u/rb_c)
 - [u/heyazorin@lemmy.ml](https://lemmy.ml/u/heyazorin)
-- all who reported feedback and ideas on the Lemmy community, GitHub issues or email.
+- [u/thegiddystitcher@lemm.ee](https://lemm.ee/u/thegiddystitcher)
+- all those who reported feedback and ideas through the Lemmy community, GitHub issues, emails,
+  private messages, homing pidgeons and every other imaginable media.
 
 ## Want to try it out?
+
+Here are some options to install the application on your device.
 
 <a href="https://github.com/ImranR98/Obtainium/releases">
   <img src="https://img.shields.io/badge/Install with:-Obtainium-4d29a0" />
 </a>
 
-You can use Obtainium by simply adding this repo `https://github.com/diegoberaldin/RaccoonForLemmy`.
+<br />
 
-_If you are interested in pre-prod releases, please enable the "Include prereleases" switch in
-order to install versions not marked as stable._
-
-<a href="https://play.google.com/store/apps/details?id=com.github.diegoberaldin.raccoonforlemmy.android">
+<a href="https://play.google.com/apps/testing/com.github.diegoberaldin.raccoonforlemmy.android">
   <img src="https://img.shields.io/badge/Install with:-Google_Play-34a853" />
 </a>
-
-Alternatively, you can use the Play Store. The app is currently only available to a group of
-selected testers
-(because how closed test channels work on Google Play) so if you want to be added
-please [write to me](mailto:diego.beraldin@gmail.com)
-specifying the email adress you are logged in on the Play Store with or, if you are on Lemmy
-[reach out to me](https://feddit.it/u/DieguiTux8623) and send me a message with the email address.
-
-_Once we get to at least 20 testers for >= 14 days I'll be able to publish to an open test channel
-and, later, release a production version._
 
 ## Want to leave your feedback or report a bug?
 
@@ -196,6 +192,10 @@ and, later, release a production version._
   you feel like writing
 - if you are a translator and want to help out with l10n or submit some corrections but you don't
   feel confident with repository forks, pull requests, managing resource files, etc. feel free to
-  drop an email.
+  drop an email or contact me in any way.
 
-Every contribution is welcome, everyone's opinion matters.
+Please remember: every contribution is welcome and everyone's opinion matters here. This is a
+community project, open source, ad-free and free of charge, and it belongs to us all so don't be
+afraid to get involved.
+
+And don't forget every 🦝's motto: «Live Fast, Eat Trash» (for shortness L. F. E. T.).
