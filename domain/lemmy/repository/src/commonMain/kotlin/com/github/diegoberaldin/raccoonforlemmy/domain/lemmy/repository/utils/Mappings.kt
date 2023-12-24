@@ -116,7 +116,9 @@ internal fun Person.toModel() = UserModel(
     admin = admin ?: false,
 )
 
-internal fun PersonView.toModel() = person.toModel()
+internal fun PersonView.toModel() = person.toModel().copy(
+    score = counts.toModel()
+)
 
 internal fun PersonAggregates.toModel() = UserScoreModel(
     postScore = postScore ?: 0,
