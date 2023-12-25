@@ -63,7 +63,9 @@ fun NavigationCoordinator.handleUrl(
         }
 
         openExternal -> {
-            uriHandler.openUri(url)
+            runCatching {
+                uriHandler.openUri(url)
+            }
         }
 
         else -> {

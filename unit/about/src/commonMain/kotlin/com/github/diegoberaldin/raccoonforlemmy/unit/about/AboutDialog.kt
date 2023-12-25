@@ -153,7 +153,9 @@ class AboutDialog : Screen {
                         }
                         Button(
                             onClick = {
-                                uriHandler.openUri("mailto:$REPORT_EMAIL_ADDRESS")
+                                runCatching {
+                                    uriHandler.openUri("mailto:$REPORT_EMAIL_ADDRESS")
+                                }
                             },
                         ) {
                             Text(
@@ -196,8 +198,10 @@ class AboutDialog : Screen {
                             text = stringResource(MR.strings.settings_about_chat_matrix),
                             textDecoration = TextDecoration.Underline,
                             onClick = {
-                                uriHandler.openUri(AboutConstants.MATRIX_URL)
-                                viewModel.reduce(AboutDialogMviModel.Intent.OpenOwnCommunity)
+                                runCatching {
+                                    uriHandler.openUri(AboutConstants.MATRIX_URL)
+                                    viewModel.reduce(AboutDialogMviModel.Intent.OpenOwnCommunity)
+                                }
                             },
                         )
                     }
