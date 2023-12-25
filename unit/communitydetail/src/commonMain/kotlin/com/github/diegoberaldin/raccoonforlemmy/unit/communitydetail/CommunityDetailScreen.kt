@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Reply
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.SyncDisabled
 import androidx.compose.material.icons.outlined.AddCircleOutline
@@ -155,7 +156,9 @@ class CommunityDetailScreen(
         val themeRepository = remember { getThemeRepository() }
         val upvoteColor by themeRepository.upvoteColor.collectAsState()
         val downvoteColor by themeRepository.downvoteColor.collectAsState()
+        val replyColor by themeRepository.replyColor.collectAsState()
         val defaultUpvoteColor = MaterialTheme.colorScheme.primary
+        val defaultReplyColor = MaterialTheme.colorScheme.secondary
         val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
         var rawContent by remember { mutableStateOf<Any?>(null) }
         val settingsRepository = remember { getSettingsRepository() }
@@ -540,6 +543,13 @@ class CommunityDetailScreen(
                                         DismissDirection.EndToStart,
                                     )
                                 },
+                                enableSecondAction = rememberCallbackArgs { value ->
+                                    if (!uiState.isLogged) {
+                                        false
+                                    } else {
+                                        value == DismissValue.DismissedToStart
+                                    }
+                                },
                                 backgroundColor = rememberCallbackArgs { direction ->
                                     when (direction) {
                                         DismissValue.DismissedToStart -> upvoteColor
@@ -547,6 +557,14 @@ class CommunityDetailScreen(
 
                                         DismissValue.DismissedToEnd -> downvoteColor
                                             ?: defaultDownVoteColor
+
+                                        else -> Color.Transparent
+                                    }
+                                },
+                                secondBackgroundColor = rememberCallbackArgs { direction ->
+                                    when (direction) {
+                                        DismissValue.DismissedToStart -> replyColor
+                                            ?: defaultReplyColor
 
                                         else -> Color.Transparent
                                     }
@@ -562,6 +580,17 @@ class CommunityDetailScreen(
                                         tint = Color.White,
                                     )
                                 },
+                                secondSwipeContent = { direction ->
+                                    val icon = when (direction) {
+                                        DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
+                                        DismissDirection.EndToStart -> Icons.Default.Reply
+                                    }
+                                    Icon(
+                                        imageVector = icon,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                    )
+                                },
                                 onGestureBegin = rememberCallback(model) {
                                     model.reduce(CommunityDetailMviModel.Intent.HapticIndication)
                                 },
@@ -569,6 +598,15 @@ class CommunityDetailScreen(
                                     model.reduce(
                                         CommunityDetailMviModel.Intent.UpVotePost(post.id),
                                     )
+                                },
+                                onSecondDismissToStart = rememberCallback(model) {
+                                    with(navigationCoordinator) {
+                                        setBottomSheetGesturesEnabled(false)
+                                        val screen = CreateCommentScreen(
+                                            originalPost = post,
+                                        )
+                                        showBottomSheet(screen)
+                                    }
                                 },
                                 onDismissToEnd = rememberCallback(model) {
                                     model.reduce(
