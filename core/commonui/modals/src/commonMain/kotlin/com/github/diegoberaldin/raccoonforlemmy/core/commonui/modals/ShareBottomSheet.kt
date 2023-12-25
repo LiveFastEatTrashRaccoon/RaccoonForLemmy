@@ -24,24 +24,26 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallb
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
-class ReportListTypeSheet : Screen {
+class ShareBottomSheet(
+    private val urls: List<String>,
+) : Screen {
+
     @Composable
     override fun Content() {
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val notificationCenter = remember { getNotificationCenter() }
 
         Column(
-            modifier = Modifier
-                .padding(
-                    top = Spacing.s,
-                    start = Spacing.s,
-                    end = Spacing.s,
-                    bottom = Spacing.m,
-                ),
+            modifier = Modifier.padding(
+                top = Spacing.s,
+                start = Spacing.s,
+                end = Spacing.s,
+                bottom = Spacing.m,
+            ),
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 BottomSheetHandle()
                 Text(
@@ -50,7 +52,7 @@ class ReportListTypeSheet : Screen {
                         top = Spacing.s,
                         end = Spacing.s,
                     ),
-                    text = stringResource(MR.strings.report_list_type_title),
+                    text = stringResource(MR.strings.post_action_share),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
@@ -58,47 +60,25 @@ class ReportListTypeSheet : Screen {
                     modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
                 ) {
-                    Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.m,
-                        )
-                            .fillMaxWidth()
-                            .onClick(
-                                onClick = rememberCallback {
-                                    notificationCenter.send(
-                                        NotificationCenterEvent.ChangeReportListType(true)
-                                    )
-                                    navigationCoordinator.hideBottomSheet()
-                                },
-                            ),
-                    ) {
-                        Text(
-                            text = stringResource(MR.strings.report_list_type_unresolved),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
+                    for (value in urls) {
+                        Row(
+                            modifier = Modifier.padding(
                                 horizontal = Spacing.s,
                                 vertical = Spacing.m,
-                            ).onClick(
+                            ).fillMaxWidth().onClick(
                                 onClick = rememberCallback {
-                                    notificationCenter.send(
-                                        NotificationCenterEvent.ChangeReportListType(false)
-                                    )
+                                    val event = NotificationCenterEvent.Share(value)
+                                    notificationCenter.send(event)
                                     navigationCoordinator.hideBottomSheet()
                                 },
                             ),
-                    ) {
-                        Text(
-                            text = stringResource(MR.strings.report_list_type_all),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
+                        ) {
+                            Text(
+                                text = value,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
                     }
                 }
             }

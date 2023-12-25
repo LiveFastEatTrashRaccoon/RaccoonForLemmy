@@ -53,6 +53,12 @@ class UserDetailViewModel(
 
     override fun onStarted() {
         mvi.onStarted()
+        mvi.updateState {
+            it.copy(
+                instance = otherInstance.takeIf { n -> n.isNotEmpty() }
+                    ?: apiConfigurationRepository.instance.value,
+            )
+        }
         mvi.scope?.launch {
             themeRepository.postLayout.onEach { layout ->
                 mvi.updateState { it.copy(postLayout = layout) }
@@ -64,6 +70,9 @@ class UserDetailViewModel(
                 .onEach { evt ->
                     applySortType(evt.value)
                 }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.Share::class).onEach { evt ->
+                shareHelper.share(evt.url)
+            }.launchIn(this)
         }
         mvi.updateState {
             it.copy(
@@ -173,10 +182,8 @@ class UserDetailViewModel(
                 }
             }
 
-            is UserDetailMviModel.Intent.SharePost -> {
-                uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    share(post = post)
-                }
+            is UserDetailMviModel.Intent.Share -> {
+                shareHelper.share(intent.url)
             }
 
             UserDetailMviModel.Intent.Block -> blockUser()
@@ -475,20 +482,6 @@ class UserDetailViewModel(
                     }
                 },
             )
-        }
-    }
-
-    private fun share(post: PostModel) {
-        val shareOriginal = settingsRepository.currentSettings.value.sharePostOriginal
-        val url = if (shareOriginal) {
-            post.originalUrl.orEmpty()
-        } else if (otherInstance.isNotEmpty()) {
-            "https://${otherInstance}/post/${post.id}"
-        } else {
-            "https://${apiConfigurationRepository.instance.value}/post/${post.id}"
-        }
-        if (url.isNotEmpty()) {
-            shareHelper.share(url, "text/plain")
         }
     }
 

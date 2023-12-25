@@ -26,7 +26,6 @@ interface CommunityDetailMviModel :
         data object Subscribe : Intent
         data object Unsubscribe : Intent
         data class DeletePost(val id: Int) : Intent
-        data class SharePost(val id: Int) : Intent
         data class MarkAsRead(val id: Int) : Intent
         data class Hide(val id: Int) : Intent
         data object Block : Intent
@@ -38,10 +37,12 @@ interface CommunityDetailMviModel :
         data class ModLockPost(val id: Int) : Intent
         data class ModToggleModUser(val id: Int) : Intent
         data object ToggleFavorite : Intent
+        data class Share(val url: String) : Intent
     }
 
     data class UiState(
         val community: CommunityModel = CommunityModel(),
+        val instance: String = "",
         val isLogged: Boolean = false,
         val refreshing: Boolean = false,
         val asyncInProgress: Boolean = false,

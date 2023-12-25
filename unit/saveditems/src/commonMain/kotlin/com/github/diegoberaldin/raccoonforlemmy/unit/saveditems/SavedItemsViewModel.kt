@@ -45,6 +45,7 @@ class SavedItemsViewModel(
 
     override fun onStarted() {
         mvi.onStarted()
+        mvi.updateState { it.copy(instance = apiConfigurationRepository.instance.value) }
         mvi.scope?.launch {
             themeRepository.postLayout.onEach { layout ->
                 mvi.updateState { it.copy(postLayout = layout) }
@@ -68,6 +69,10 @@ class SavedItemsViewModel(
                 .onEach { evt ->
                     applySortType(evt.value)
                 }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.Share::class).onEach { evt ->
+                shareHelper.share(evt.url)
+            }.launchIn(this)
+
             if (mvi.uiState.value.posts.isEmpty()) {
                 val sortTypes = getSortTypesUseCase.getTypesForSavedItems()
                 mvi.updateState { it.copy(availableSortTypes = sortTypes) }
@@ -117,6 +122,10 @@ class SavedItemsViewModel(
                 )
             }
 
+            is SavedItemsMviModel.Intent.Share -> {
+                shareHelper.share(intent.url)
+            }
+
             is SavedItemsMviModel.Intent.UpVoteComment -> {
                 if (intent.feedback) {
                     hapticFeedback.vibrate()
@@ -136,9 +145,6 @@ class SavedItemsViewModel(
             }
 
             is SavedItemsMviModel.Intent.ChangeSort -> applySortType(intent.value)
-            is SavedItemsMviModel.Intent.SharePost -> share(
-                post = uiState.value.posts.first { it.id == intent.id }
-            )
         }
     }
 
@@ -397,18 +403,6 @@ class SavedItemsViewModel(
                 e.printStackTrace()
                 handleCommentUpdate(comment)
             }
-        }
-    }
-
-    private fun share(post: PostModel) {
-        val shareOriginal = settingsRepository.currentSettings.value.sharePostOriginal
-        val url = if (shareOriginal) {
-            post.originalUrl.orEmpty()
-        } else {
-            "https://${apiConfigurationRepository.instance.value}/post/${post.id}"
-        }
-        if (url.isNotEmpty()) {
-            shareHelper.share(url, "text/plain")
         }
     }
 }

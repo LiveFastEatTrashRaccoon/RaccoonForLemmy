@@ -72,6 +72,9 @@ class MultiCommunityViewModel(
                 .onEach { evt ->
                     applySortType(evt.value)
                 }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.Share::class).onEach { evt ->
+                shareHelper.share(evt.url)
+            }.launchIn(this)
 
             if (uiState.value.currentUserId == null) {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -120,9 +123,9 @@ class MultiCommunityViewModel(
                 )
             }
 
-            is MultiCommunityMviModel.Intent.SharePost -> share(
-                post = uiState.value.posts.first { it.id == intent.id }
-            )
+            is MultiCommunityMviModel.Intent.Share -> {
+                shareHelper.share(intent.url)
+            }
 
             is MultiCommunityMviModel.Intent.UpVotePost -> {
                 if (intent.feedback) {
@@ -311,18 +314,6 @@ class MultiCommunityViewModel(
                     }
                 },
             )
-        }
-    }
-
-    private fun share(post: PostModel) {
-        val shareOriginal = settingsRepository.currentSettings.value.sharePostOriginal
-        val url = if (shareOriginal) {
-            post.originalUrl.orEmpty()
-        } else {
-            "https://${apiConfigurationRepository.instance.value}/post/${post.id}"
-        }
-        if (url.isNotEmpty()) {
-            shareHelper.share(url, "text/plain")
         }
     }
 

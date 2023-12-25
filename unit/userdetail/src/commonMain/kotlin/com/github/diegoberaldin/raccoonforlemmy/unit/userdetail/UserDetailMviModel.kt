@@ -28,13 +28,14 @@ interface UserDetailMviModel :
         data class DownVoteComment(val id: Int, val feedback: Boolean = false) : Intent
         data class SaveComment(val id: Int, val feedback: Boolean = false) : Intent
         data object HapticIndication : Intent
-        data class SharePost(val id: Int) : Intent
+        data class Share(val url: String) : Intent
         data object Block : Intent
         data object BlockInstance : Intent
     }
 
     data class UiState(
         val isLogged: Boolean = false,
+        val instance: String = "",
         val currentUserId: Int? = null,
         val section: UserDetailSection = UserDetailSection.Posts,
         val sortType: SortType = SortType.Active,

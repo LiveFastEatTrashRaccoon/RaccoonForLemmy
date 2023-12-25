@@ -124,6 +124,9 @@ class PostListViewModel(
                         instanceId != null -> blockInstance(instanceId)
                     }
                 }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.Share::class).onEach { evt ->
+                shareHelper.share(evt.url)
+            }.launchIn(this)
 
             zombieModeHelper.index.onEach { index ->
                 if (uiState.value.zombieModeActive) {
@@ -205,10 +208,8 @@ class PostListViewModel(
             PostListMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             is PostListMviModel.Intent.HandlePostUpdate -> handlePostUpdate(intent.post)
             is PostListMviModel.Intent.DeletePost -> handlePostDelete(intent.id)
-            is PostListMviModel.Intent.SharePost -> {
-                uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    share(post = post)
-                }
+            is PostListMviModel.Intent.Share -> {
+                shareHelper.share(intent.url)
             }
 
             is PostListMviModel.Intent.MarkAsRead -> {
@@ -455,18 +456,6 @@ class PostListViewModel(
             val auth = identityRepository.authToken.value.orEmpty()
             postRepository.delete(id = id, auth = auth)
             handlePostDelete(id)
-        }
-    }
-
-    private fun share(post: PostModel) {
-        val shareOriginal = settingsRepository.currentSettings.value.sharePostOriginal
-        val url = if (shareOriginal) {
-            post.originalUrl.orEmpty()
-        } else {
-            "https://${apiConfigurationRepository.instance.value}/post/${post.id}"
-        }
-        if (url.isNotEmpty()) {
-            shareHelper.share(url, "text/plain")
         }
     }
 
