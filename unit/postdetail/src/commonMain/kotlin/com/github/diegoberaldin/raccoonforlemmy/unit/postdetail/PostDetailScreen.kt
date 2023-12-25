@@ -154,7 +154,9 @@ class PostDetailScreen(
         val themeRepository = remember { getThemeRepository() }
         val upvoteColor by themeRepository.upvoteColor.collectAsState()
         val downvoteColor by themeRepository.downvoteColor.collectAsState()
+        val replyColor by themeRepository.replyColor.collectAsState()
         val defaultUpvoteColor = MaterialTheme.colorScheme.primary
+        val defaultReplyColor = MaterialTheme.colorScheme.secondary
         val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
         val lazyListState = rememberLazyListState()
         val scope = rememberCoroutineScope()
@@ -614,6 +616,13 @@ class PostDetailScreen(
                                                     DismissDirection.EndToStart,
                                                 )
                                             },
+                                            enableSecondAction = rememberCallbackArgs { value ->
+                                                if (!uiState.isLogged) {
+                                                    false
+                                                } else {
+                                                    value == DismissValue.DismissedToStart
+                                                }
+                                            },
                                             backgroundColor = rememberCallbackArgs { direction ->
                                                 when (direction) {
                                                     DismissValue.DismissedToStart -> upvoteColor
@@ -623,6 +632,14 @@ class PostDetailScreen(
                                                         ?: defaultDownVoteColor
 
                                                     DismissValue.Default -> Color.Transparent
+                                                }
+                                            },
+                                            secondBackgroundColor = rememberCallbackArgs { direction ->
+                                                when (direction) {
+                                                    DismissValue.DismissedToStart -> replyColor
+                                                        ?: defaultReplyColor
+
+                                                    else -> Color.Transparent
                                                 }
                                             },
                                             onGestureBegin = rememberCallback(model) {
@@ -635,6 +652,15 @@ class PostDetailScreen(
                                                     ),
                                                 )
                                             },
+                                            onSecondDismissToStart = rememberCallback(model) {
+                                                with(navigationCoordinator) {
+                                                    setBottomSheetGesturesEnabled(false)
+                                                    val screen = CreateCommentScreen(
+                                                        originalPost = post,
+                                                    )
+                                                    showBottomSheet(screen)
+                                                }
+                                            },
                                             onDismissToEnd = rememberCallback(model) {
                                                 model.reduce(
                                                     PostDetailMviModel.Intent.DownVoteComment(
@@ -646,6 +672,17 @@ class PostDetailScreen(
                                                 val icon = when (direction) {
                                                     DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
                                                     DismissDirection.EndToStart -> Icons.Default.ArrowCircleUp
+                                                }
+                                                Icon(
+                                                    imageVector = icon,
+                                                    contentDescription = null,
+                                                    tint = Color.White,
+                                                )
+                                            },
+                                            secondSwipeContent = { direction ->
+                                                val icon = when (direction) {
+                                                    DismissDirection.StartToEnd -> Icons.Default.ArrowCircleDown
+                                                    DismissDirection.EndToStart -> Icons.Default.Reply
                                                 }
                                                 Icon(
                                                     imageVector = icon,
