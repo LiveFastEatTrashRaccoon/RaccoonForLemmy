@@ -1,0 +1,9 @@
+- feat: language selection for posts and comments #331
+- feat: user info bottom sheet and user stats #342
+- feat: add link to Matrix space #369
+- fix: open cross posts in guest mode #356
+- feat: share URL from dialog #352
+- fix: navigation from drawer #348
+- feat: support for reply from swipe #268
+- fix: pagination on Lemmy 0.19.x #376
+- enhancement: minor layout and stability improvements
