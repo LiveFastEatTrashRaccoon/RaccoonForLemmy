@@ -1,0 +1,1 @@
+- fix: post detail performance

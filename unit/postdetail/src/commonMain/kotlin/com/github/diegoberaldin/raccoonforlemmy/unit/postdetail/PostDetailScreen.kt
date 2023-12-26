@@ -475,8 +475,8 @@ class PostDetailScreen(
 
                                         OptionId.Share -> {
                                             val urls = listOfNotNull(
-                                                post.originalUrl,
-                                                "https://${uiState.instance}/post/${post.id}"
+                                                uiState.post.originalUrl,
+                                                "https://${uiState.instance}/post/${uiState.post.id}"
                                             ).distinct()
                                             if (urls.size == 1) {
                                                 model.reduce(PostDetailMviModel.Intent.Share(urls.first()))
@@ -657,7 +657,7 @@ class PostDetailScreen(
                                                 with(navigationCoordinator) {
                                                     setBottomSheetGesturesEnabled(false)
                                                     val screen = CreateCommentScreen(
-                                                        originalPost = post,
+                                                        originalPost = uiState.post,
                                                     )
                                                     showBottomSheet(screen)
                                                 }
