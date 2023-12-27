@@ -146,6 +146,7 @@ internal fun Post.toModel() = PostModel(
     text = body.orEmpty(),
     thumbnailUrl = thumbnailUrl.orEmpty(),
     url = url,
+    publishDate = published,
     updateDate = updated,
     nsfw = nsfw,
     embedVideoUrl = embedVideoUrl,
