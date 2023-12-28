@@ -25,6 +25,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepo
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -96,6 +98,7 @@ class UserDetailViewModel(
             }.launchIn(this)
             identityRepository.isLogged.onEach { logged ->
                 mvi.updateState { it.copy(isLogged = logged ?: false) }
+                updateAvailableSortTypes()
             }.launchIn(this)
             if (uiState.value.currentUserId == null) {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -108,7 +111,6 @@ class UserDetailViewModel(
             }
 
             if (uiState.value.posts.isEmpty()) {
-                updateAvailableSortTypes()
                 withContext(Dispatchers.IO) {
                     refresh(initial = true)
                 }
@@ -210,7 +212,6 @@ class UserDetailViewModel(
                 section = section,
             )
         }
-        updateAvailableSortTypes()
     }
 
     private fun updateAvailableSortTypes() {
@@ -258,52 +259,58 @@ class UserDetailViewModel(
         val section = currentState.section
         val userId = currentState.user.id
         if (section == UserDetailSection.Posts) {
-            val itemList = userRepository.getPosts(
-                auth = auth,
-                id = userId,
-                page = currentPage,
-                sort = currentState.sortType,
-                username = user.name,
-                otherInstance = otherInstance,
-            )
-            val comments = if (currentPage == 1 && currentState.comments.isEmpty()) {
-                // this is needed because otherwise on first selector change
-                // the lazy column scrolls back to top (it must have an empty data set)
-                userRepository.getComments(
-                    auth = auth,
-                    id = userId,
-                    page = currentPage,
-                    sort = currentState.sortType,
-                    username = user.name,
-                    otherInstance = otherInstance,
-                ).orEmpty()
-            } else {
-                currentState.comments
-            }
-            mvi.updateState {
-                val newPosts = if (refreshing) {
-                    itemList.orEmpty()
-                } else {
-                    it.posts + itemList.orEmpty()
-                }
-                if (uiState.value.autoLoadImages) {
-                    newPosts.forEach { post ->
-                        post.imageUrl.takeIf { i -> i.isNotEmpty() }?.also { url ->
-                            imagePreloadManager.preload(url)
+            coroutineScope {
+                val itemList = async {
+                    userRepository.getPosts(
+                        auth = auth,
+                        id = userId,
+                        page = currentPage,
+                        sort = currentState.sortType,
+                        username = user.name,
+                        otherInstance = otherInstance,
+                    )
+                }.await()
+                val comments = async {
+                    if (currentPage == 1 && currentState.comments.isEmpty()) {
+                        // this is needed because otherwise on first selector change
+                        // the lazy column scrolls back to top (it must have an empty data set)
+                        userRepository.getComments(
+                            auth = auth,
+                            id = userId,
+                            page = currentPage,
+                            sort = currentState.sortType,
+                            username = user.name,
+                            otherInstance = otherInstance,
+                        ).orEmpty()
+                    } else {
+                        currentState.comments
+                    }
+                }.await()
+                mvi.updateState {
+                    val newPosts = if (refreshing) {
+                        itemList.orEmpty()
+                    } else {
+                        it.posts + itemList.orEmpty()
+                    }
+                    if (uiState.value.autoLoadImages) {
+                        newPosts.forEach { post ->
+                            post.imageUrl.takeIf { i -> i.isNotEmpty() }?.also { url ->
+                                imagePreloadManager.preload(url)
+                            }
                         }
                     }
+                    it.copy(
+                        posts = newPosts,
+                        comments = comments,
+                        loading = false,
+                        canFetchMore = itemList?.isEmpty() != true,
+                        refreshing = false,
+                        initial = false,
+                    )
                 }
-                it.copy(
-                    posts = newPosts,
-                    comments = comments,
-                    loading = false,
-                    canFetchMore = itemList?.isEmpty() != true,
-                    refreshing = false,
-                    initial = false,
-                )
-            }
-            if (!itemList.isNullOrEmpty()) {
-                currentPage++
+                if (!itemList.isNullOrEmpty()) {
+                    currentPage++
+                }
             }
         } else {
             val itemList = userRepository.getComments(

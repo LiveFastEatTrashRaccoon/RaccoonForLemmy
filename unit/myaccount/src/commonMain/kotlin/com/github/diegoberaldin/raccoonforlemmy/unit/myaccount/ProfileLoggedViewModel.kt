@@ -21,12 +21,15 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
 
@@ -89,8 +92,12 @@ class ProfileLoggedViewModel(
             }.launchIn(this)
 
             if (uiState.value.posts.isEmpty()) {
-                refreshUser()
-                refresh(initial = true)
+                withContext(Dispatchers.IO) {
+                    launch {
+                        refreshUser()
+                    }
+                    refresh(initial = true)
+                }
             }
         }
     }
@@ -221,37 +228,43 @@ class ProfileLoggedViewModel(
         val userId = currentState.user.id
         val section = currentState.section
         if (section == ProfileLoggedSection.Posts) {
-            val itemList = userRepository.getPosts(
-                auth = auth,
-                id = userId,
-                page = currentPage,
-                sort = SortType.New,
-            )
-            val comments = if (currentPage == 1 && currentState.comments.isEmpty()) {
-                // this is needed because otherwise on first selector change
-                // the lazy column scrolls back to top (it must have an empty data set)
-                userRepository.getComments(
-                    auth = auth,
-                    id = userId,
-                    page = currentPage,
-                    sort = SortType.New,
-                ).orEmpty()
-            } else {
-                currentState.comments
-            }
-            mvi.updateState {
-                val newPosts = if (refreshing) {
-                    itemList.orEmpty()
-                } else {
-                    it.posts + itemList.orEmpty()
+            coroutineScope {
+                val itemList = async {
+                    userRepository.getPosts(
+                        auth = auth,
+                        id = userId,
+                        page = currentPage,
+                        sort = SortType.New,
+                    )
+                }.await()
+                val comments = async {
+                    if (currentPage == 1 && currentState.comments.isEmpty()) {
+                        // this is needed because otherwise on first selector change
+                        // the lazy column scrolls back to top (it must have an empty data set)
+                        userRepository.getComments(
+                            auth = auth,
+                            id = userId,
+                            page = currentPage,
+                            sort = SortType.New,
+                        ).orEmpty()
+                    } else {
+                        currentState.comments
+                    }
+                }.await()
+                mvi.updateState {
+                    val newPosts = if (refreshing) {
+                        itemList.orEmpty()
+                    } else {
+                        it.posts + itemList.orEmpty()
+                    }
+                    it.copy(
+                        posts = newPosts,
+                        comments = comments,
+                        loading = false,
+                        canFetchMore = itemList?.isEmpty() != true,
+                        refreshing = false,
+                    )
                 }
-                it.copy(
-                    posts = newPosts,
-                    comments = comments,
-                    loading = false,
-                    canFetchMore = itemList?.isEmpty() != true,
-                    refreshing = false,
-                )
             }
         } else {
             val itemList = userRepository.getComments(

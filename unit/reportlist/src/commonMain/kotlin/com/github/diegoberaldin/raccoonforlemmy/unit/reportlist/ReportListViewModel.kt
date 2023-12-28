@@ -14,6 +14,8 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentR
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -124,42 +126,47 @@ class ReportListViewModel(
             val section = currentState.section
             val unresolvedOnly = currentState.unresolvedOnly
             if (section == ReportListSection.Posts) {
-                val itemList = postRepository.getReports(
-                    auth = auth,
-                    communityId = communityId,
-                    page = currentPage,
-                    unresolvedOnly = unresolvedOnly,
-                )
-                val commentReports =
-                    if (currentPage == 1 && currentState.commentReports.isEmpty()) {
-                        // this is needed because otherwise on first selector change
-                        // the lazy column scrolls back to top (it must have an empty data set)
-                        commentRepository.getReports(
+                coroutineScope {
+                    val itemList = async {
+                        postRepository.getReports(
                             auth = auth,
                             communityId = communityId,
                             page = currentPage,
                             unresolvedOnly = unresolvedOnly,
-                        ).orEmpty()
-                    } else {
-                        currentState.commentReports
+                        )
+                    }.await()
+                    val commentReports = async {
+                        if (currentPage == 1 && currentState.commentReports.isEmpty()) {
+                            // this is needed because otherwise on first selector change
+                            // the lazy column scrolls back to top (it must have an empty data set)
+                            commentRepository.getReports(
+                                auth = auth,
+                                communityId = communityId,
+                                page = currentPage,
+                                unresolvedOnly = unresolvedOnly,
+                            ).orEmpty()
+                        } else {
+                            currentState.commentReports
+                        }
+                    }.await()
+                    mvi.updateState {
+                        val postReports = if (refreshing) {
+                            itemList.orEmpty()
+                        } else {
+                            it.postReports + itemList.orEmpty()
+                        }
+                        it.copy(
+                            postReports = postReports,
+                            commentReports = commentReports,
+                            loading = false,
+                            canFetchMore = itemList?.isEmpty() != true,
+                            refreshing = false,
+                            initial = false,
+                        )
                     }
-                mvi.updateState {
-                    val postReports = if (refreshing) {
-                        itemList.orEmpty()
-                    } else {
-                        it.postReports + itemList.orEmpty()
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
                     }
-                    it.copy(
-                        postReports = postReports,
-                        commentReports = commentReports,
-                        loading = false,
-                        canFetchMore = itemList?.isEmpty() != true,
-                        refreshing = false,
-                        initial = false,
-                    )
-                }
-                if (!itemList.isNullOrEmpty()) {
-                    currentPage++
                 }
             } else {
                 val itemList = commentRepository.getReports(
