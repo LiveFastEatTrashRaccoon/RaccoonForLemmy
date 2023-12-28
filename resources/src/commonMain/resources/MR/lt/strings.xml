@@ -304,4 +304,7 @@
     <string name="settings_web_show_nsfw">Rodyti NSFW</string>
     <string name="settings_web_show_read">Rodyti skaitytus įrašus</string>
     <string name="settings_web_email_notifications">Siųsti pranešimus el. paštu</string>
+    <string name="settings_manage_ban">Draudimai ir filtrai</string>
+    <string name="settings_manage_ban_action_unban">Pašalinti draudimą</string>
+    <string name="settings_manage_ban_section_instances">Atvejai</string>
 </resources>

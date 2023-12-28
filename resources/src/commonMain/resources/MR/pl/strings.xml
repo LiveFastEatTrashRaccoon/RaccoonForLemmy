@@ -305,4 +305,7 @@
     <string name="settings_web_show_nsfw">Pokaż NSFW</string>
     <string name="settings_web_show_read">Pokaż przeczytane posty</string>
     <string name="settings_web_email_notifications">Wysyłaj powiadomienia e-mailem</string>
+    <string name="settings_manage_ban">Zakazy i filtry</string>
+    <string name="settings_manage_ban_action_unban">Usuń zakaz</string>
+    <string name="settings_manage_ban_section_instances">Instancje</string>
 </resources>

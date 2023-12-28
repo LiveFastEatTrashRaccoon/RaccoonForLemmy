@@ -305,4 +305,7 @@
     <string name="settings_web_show_nsfw">NSFW\'yi göster</string>
     <string name="settings_web_show_read">Okunmuş gönderileri göster</string>
     <string name="settings_web_email_notifications">E-posta bildirimleri gönder</string>
+    <string name="settings_manage_ban">Yasaklar ve filtreler</string>
+    <string name="settings_manage_ban_action_unban">Yasağı kaldır</string>
+    <string name="settings_manage_ban_section_instances">Örnekler</string>
 </resources>

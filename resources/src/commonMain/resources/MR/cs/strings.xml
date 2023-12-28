@@ -302,4 +302,7 @@
     <string name="settings_web_show_nsfw">Zobrazit NSFW</string>
     <string name="settings_web_show_read">Zobrazit přečtené příspěvky</string>
     <string name="settings_web_email_notifications">Odesílejte e-mailová upozornění</string>
+    <string name="settings_manage_ban">Zákazy a filtry</string>
+    <string name="settings_manage_ban_action_unban">Odstranit zákaz</string>
+    <string name="settings_manage_ban_section_instances">Instance</string>
 </resources>

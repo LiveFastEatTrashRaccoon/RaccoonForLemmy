@@ -301,4 +301,7 @@
     <string name="settings_web_show_nsfw">Montri NSFW</string>
     <string name="settings_web_show_read">Montri legitajn afiŝojn</string>
     <string name="settings_web_email_notifications">Sendi retpoŝtajn sciigojn</string>
+    <string name="settings_manage_ban">Malpermesoj kaj filtriloj</string>
+    <string name="settings_manage_ban_action_unban">Forigi malpermeson</string>
+    <string name="settings_manage_ban_section_instances">Ekzemploj</string>
 </resources>

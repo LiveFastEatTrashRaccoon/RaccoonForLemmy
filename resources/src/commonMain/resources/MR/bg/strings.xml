@@ -310,4 +310,7 @@
     <string name="settings_web_show_nsfw">Показване на NSFW</string>
     <string name="settings_web_show_read">Показване на прочетени публикации</string>
     <string name="settings_web_email_notifications">Изпращайте имейл известия</string>
+    <string name="settings_manage_ban">Забрани и филтри</string>
+    <string name="settings_manage_ban_action_unban">Премахване на забраната</string>
+    <string name="settings_manage_ban_section_instances">Инстанции</string>
 </resources>

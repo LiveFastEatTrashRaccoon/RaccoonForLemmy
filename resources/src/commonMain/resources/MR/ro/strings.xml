@@ -303,4 +303,7 @@
     <string name="settings_web_show_nsfw">Arată NSFW</string>
     <string name="settings_web_show_read">Arată postările citite</string>
     <string name="settings_web_email_notifications">Trimite notificări prin e-mail</string>
+    <string name="settings_manage_ban">Interdicții și filtre</string>
+    <string name="settings_manage_ban_action_unban">Elimină interdicția</string>
+    <string name="settings_manage_ban_section_instances">Instanțe</string>
 </resources>

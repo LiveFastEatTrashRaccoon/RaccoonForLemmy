@@ -310,4 +310,7 @@
     <string name="settings_web_show_nsfw">NSFW anzeigen</string>
     <string name="settings_web_show_read">Gelesene Beiträge anzeigen</string>
     <string name="settings_web_email_notifications">Senden Sie E-Mail-Benachrichtigungen</string>
+    <string name="settings_manage_ban">Verbote und Filter</string>
+    <string name="settings_manage_ban_action_unban">Verbot aufheben</string>
+    <string name="settings_manage_ban_section_instances">Instanzen</string>
 </resources>

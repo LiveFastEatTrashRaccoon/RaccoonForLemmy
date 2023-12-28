@@ -307,4 +307,7 @@
     <string name="settings_web_show_nsfw">Prikaži NSFW</string>
     <string name="settings_web_show_read">Prikaži pročitane postove</string>
     <string name="settings_web_email_notifications">Pošaljite obavijesti e-poštom</string>
+    <string name="settings_manage_ban">Zabrane i filteri</string>
+    <string name="settings_manage_ban_action_unban">Ukloni zabranu</string>
+    <string name="settings_manage_ban_section_instances">Instance</string>
 </resources>

@@ -307,4 +307,7 @@
     <string name="settings_web_show_read">Mostrar publicaciones leídas</string>
     <string name="settings_web_email_notifications">Enviar notificaciones por correo electrónico
     </string>
+    <string name="settings_manage_ban">Prohibiciones y filtros</string>
+    <string name="settings_manage_ban_action_unban">Eliminar prohibición</string>
+    <string name="settings_manage_ban_section_instances">Instancias</string>
 </resources>

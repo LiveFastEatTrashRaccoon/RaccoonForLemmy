@@ -303,4 +303,7 @@
     <string name="settings_web_show_nsfw">Visa NSFW</string>
     <string name="settings_web_show_read">Visa lästa inlägg</string>
     <string name="settings_web_email_notifications">Skicka e-postmeddelanden</string>
+    <string name="settings_manage_ban">Förbud och filter</string>
+    <string name="settings_manage_ban_action_unban">Ta bort förbudet</string>
+    <string name="settings_manage_ban_section_instances">Instanser</string>
 </resources>

@@ -308,4 +308,7 @@
     <string name="settings_web_show_nsfw">Trego NSFW</string>
     <string name="settings_web_show_read">Shfaq postimet e lexuara</string>
     <string name="settings_web_email_notifications">Dërgoni njoftime me email</string>
+    <string name="settings_manage_ban">Ndalimet dhe filtrat</string>
+    <string name="settings_manage_ban_action_unban">Hiq ndalimin</string>
+    <string name="settings_manage_ban_section_instances">Instancat</string>
 </resources>

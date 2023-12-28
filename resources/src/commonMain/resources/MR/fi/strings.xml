@@ -302,4 +302,7 @@
     <string name="settings_web_show_nsfw">Näytä NSFW</string>
     <string name="settings_web_show_read">Näytä luetut viestit</string>
     <string name="settings_web_email_notifications">Lähetä sähköposti-ilmoituksia</string>
+    <string name="settings_manage_ban">Kiellot ja suodattimet</string>
+    <string name="settings_manage_ban_action_unban">Poista kielto</string>
+    <string name="settings_manage_ban_section_instances">Esineet</string>
 </resources>

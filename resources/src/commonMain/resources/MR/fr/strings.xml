@@ -307,4 +307,7 @@
     <string name="settings_web_show_nsfw">Afficher NSFW</string>
     <string name="settings_web_show_read">Afficher les messages lus</string>
     <string name="settings_web_email_notifications">Envoyer des notifications par e-mail</string>
+    <string name="settings_manage_ban">Interdictions et filtres</string>
+    <string name="settings_manage_ban_action_unban">Supprimer interdiction</string>
+    <string name="settings_manage_ban_section_instances">Instances</string>
 </resources>

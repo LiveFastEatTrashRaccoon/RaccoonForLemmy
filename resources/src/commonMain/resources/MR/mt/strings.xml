@@ -307,4 +307,7 @@
     <string name="settings_web_show_nsfw">Uri NSFW</string>
     <string name="settings_web_show_read">Uri postijiet moqrija</string>
     <string name="settings_web_email_notifications">Ibgħat notifiki bl-email</string>
+    <string name="settings_manage_ban">Projbizzjonijiet u filtri</string>
+    <string name="settings_manage_ban_action_unban">Neħħi l-projbizzjoni</string>
+    <string name="settings_manage_ban_section_instances">Każijiet</string>
 </resources>

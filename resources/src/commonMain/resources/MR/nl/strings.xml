@@ -305,4 +305,7 @@
     <string name="settings_web_show_nsfw">NSFW tonen</string>
     <string name="settings_web_show_read">Gelezen berichten weergeven</string>
     <string name="settings_web_email_notifications">E-mailmeldingen verzenden</string>
+    <string name="settings_manage_ban">Verboden en filters</string>
+    <string name="settings_manage_ban_action_unban">Verwijder verbod</string>
+    <string name="settings_manage_ban_section_instances">Instanties</string>
 </resources>

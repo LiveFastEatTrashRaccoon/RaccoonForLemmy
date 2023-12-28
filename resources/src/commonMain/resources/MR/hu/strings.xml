@@ -306,4 +306,7 @@
     <string name="settings_web_show_nsfw">NSFW megjelenítése</string>
     <string name="settings_web_show_read">Olvasott bejegyzések megjelenítése</string>
     <string name="settings_web_email_notifications">E-mail értesítések küldése</string>
+    <string name="settings_manage_ban">Tiltások és szűrők</string>
+    <string name="settings_manage_ban_action_unban">Távolítsa el a tiltást</string>
+    <string name="settings_manage_ban_section_instances">Példányok</string>
 </resources>

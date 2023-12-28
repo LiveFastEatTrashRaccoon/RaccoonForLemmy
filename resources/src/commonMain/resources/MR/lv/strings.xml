@@ -306,4 +306,7 @@
     <string name="settings_web_show_nsfw">Rādīt NSFW</string>
     <string name="settings_web_show_read">Rādīt lasītās ziņas</string>
     <string name="settings_web_email_notifications">Sūtīt e-pasta paziņojumus</string>
+    <string name="settings_manage_ban">Aizliegumi un filtri</string>
+    <string name="settings_manage_ban_action_unban">Noņemt aizliegumu</string>
+    <string name="settings_manage_ban_section_instances">Gadījumi</string>
 </resources>

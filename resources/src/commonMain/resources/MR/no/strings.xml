@@ -304,4 +304,7 @@
     <string name="settings_web_show_nsfw">Vis NSFW</string>
     <string name="settings_web_show_read">Vis leste innlegg</string>
     <string name="settings_web_email_notifications">Send e-postvarsler</string>
+    <string name="settings_manage_ban">Forbud og filtre</string>
+    <string name="settings_manage_ban_action_unban">Fjern forbudet</string>
+    <string name="settings_manage_ban_section_instances">Forekomster</string>
 </resources>

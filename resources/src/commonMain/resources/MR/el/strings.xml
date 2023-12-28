@@ -313,4 +313,7 @@
     <string name="settings_web_email_notifications">Αποστολή ειδοποιήσεων μέσω ηλεκτρονικό
         ταχυδρομείο
     </string>
+    <string name="settings_manage_ban">Απαγορεύσεις και φίλτρα</string>
+    <string name="settings_manage_ban_action_unban">Κατάργηση απαγόρευσης</string>
+    <string name="settings_manage_ban_section_instances">Περιπτώσεις</string>
 </resources>

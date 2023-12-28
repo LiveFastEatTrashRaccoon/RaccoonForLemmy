@@ -304,4 +304,7 @@
     <string name="settings_web_show_nsfw">Показати NSFW</string>
     <string name="settings_web_show_read">Показати прочитані дописи</string>
     <string name="settings_web_email_notifications">Надсилати сповіщення електронною поштою</string>
+    <string name="settings_manage_ban">Заборони та фільтри</string>
+    <string name="settings_manage_ban_action_unban">Зняти бан</string>
+    <string name="settings_manage_ban_section_instances">Примірники</string>
 </resources>

@@ -311,4 +311,7 @@
     <string name="settings_web_show_nsfw">Taispeáin NSFW</string>
     <string name="settings_web_show_read">Taispeáin postálacha léite</string>
     <string name="settings_web_email_notifications">Seol fógraí ríomhphoist</string>
+    <string name="settings_manage_ban">Toirmisc agus scagairí</string>
+    <string name="settings_manage_ban_action_unban">Bain toirmeasc</string>
+    <string name="settings_manage_ban_section_instances">Cásanna</string>
 </resources>

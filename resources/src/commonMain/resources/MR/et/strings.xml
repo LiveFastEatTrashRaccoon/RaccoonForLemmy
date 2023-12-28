@@ -302,4 +302,7 @@
     <string name="settings_web_show_nsfw">Näita NSFW-d</string>
     <string name="settings_web_show_read">Kuva loetud postitused</string>
     <string name="settings_web_email_notifications">Saatke meiliteatisi</string>
+    <string name="settings_manage_ban">Keelud ja filtrid</string>
+    <string name="settings_manage_ban_action_unban">Eemalda keeld</string>
+    <string name="settings_manage_ban_section_instances">Juhtumid</string>
 </resources>

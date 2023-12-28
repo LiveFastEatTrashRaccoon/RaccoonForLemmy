@@ -306,4 +306,7 @@
     <string name="settings_web_show_read">Показать прочитанные сообщения</string>
     <string name="settings_web_email_notifications">Отправлять уведомления по электронной почте
     </string>
+    <string name="settings_manage_ban">Баны и фильтры</string>
+    <string name="settings_manage_ban_action_unban">Снять бан</string>
+    <string name="settings_manage_ban_section_instances">Экземпляры</string>
 </resources>

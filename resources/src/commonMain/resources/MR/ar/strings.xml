@@ -300,4 +300,7 @@
     <string name="settings_web_show_nsfw">عرض إن إس إف دبليو</string>
     <string name="settings_web_show_read">إظهار المشاركات المقروءة</string>
     <string name="settings_web_email_notifications">إرسال إشعارات البريد الإلكتروني</string>
+    <string name="settings_manage_ban">الحظر والمرشحات</string>
+    <string name="settings_manage_ban_action_unban">إزالة الحظر</string>
+    <string name="settings_manage_ban_section_instances">المثيلات</string>
 </resources>

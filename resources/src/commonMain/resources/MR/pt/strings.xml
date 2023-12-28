@@ -304,4 +304,7 @@
     <string name="settings_web_show_nsfw">Mostrar NSFW</string>
     <string name="settings_web_show_read">Mostrar postagens lidas</string>
     <string name="settings_web_email_notifications">Enviar notificações por e-mail</string>
+    <string name="settings_manage_ban">Proibições e filtros</string>
+    <string name="settings_manage_ban_action_unban">Remover proibição</string>
+    <string name="settings_manage_ban_section_instances">Instâncias</string>
 </resources>
