@@ -1,0 +1,6 @@
+- feat: web account preferences #221
+- feat: manage account bans #390
+- fix: reply swipe action #387, #389
+- enhancement: button responsiveness #382
+- enhancement: post loading time #393
+- enhancement: code cleanup and stability improvements
