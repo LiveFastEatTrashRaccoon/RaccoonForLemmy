@@ -85,7 +85,7 @@ actual fun CustomImage(
                 },
             ) {
                 if (loadButtonContent != null) {
-                    loadButtonContent?.invoke()
+                    loadButtonContent.invoke()
                 } else {
                     Text(
                         text = stringResource(MR.strings.button_load),
