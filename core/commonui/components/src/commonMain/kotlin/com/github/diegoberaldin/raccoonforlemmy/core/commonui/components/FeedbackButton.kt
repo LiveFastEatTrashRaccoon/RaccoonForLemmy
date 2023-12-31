@@ -39,8 +39,10 @@ fun FeedbackButton(
                         zoomed = true
                         tryAwaitRelease()
                         zoomed = false
+                    },
+                    onTap = {
                         onClick()
-                    }
+                    },
                 )
             },
         imageVector = imageVector,
