@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.unit.accountsettings.components
+package com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,30 +25,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.toTypography
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.compose.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditTextualInfoDialog(
+fun NumberPickerDialog(
     title: String = "",
-    value: String = "",
-    onClose: ((String?) -> Unit)? = null,
+    initialValue: Int = 0,
+    onClose: (() -> Unit)? = null,
+    onSubmit: ((Int) -> Unit)? = null,
 ) {
-    var textFieldValue by remember {
-        mutableStateOf(TextFieldValue(text = value))
-    }
-    val themeRepository = remember { getThemeRepository() }
-    val contentFontFamily by themeRepository.contentFontFamily.collectAsState()
-    val typography = contentFontFamily.toTypography()
-
+    var currentValue by remember { mutableStateOf(initialValue.toString()) }
     AlertDialog(
         onDismissRequest = {
-            onClose?.invoke(null)
+            onClose?.invoke()
         },
     ) {
         Column(
@@ -61,12 +52,11 @@ fun EditTextualInfoDialog(
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
             Text(
-                text = stringResource(MR.strings.post_action_edit),
+                text = title,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(modifier = Modifier.height(Spacing.s))
-
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
@@ -74,27 +64,21 @@ fun EditTextualInfoDialog(
                     unfocusedContainerColor = Color.Transparent,
                     disabledContainerColor = Color.Transparent,
                 ),
-                label = {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                },
-                textStyle = typography.bodyMedium,
-                value = textFieldValue,
+                textStyle = MaterialTheme.typography.bodyMedium,
+                value = currentValue,
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
+                    keyboardType = KeyboardType.NumberPassword,
                     autoCorrect = true,
                 ),
                 onValueChange = { value ->
-                    textFieldValue = value
+                    currentValue = value
                 },
             )
 
             Spacer(modifier = Modifier.height(Spacing.xs))
             Button(
                 onClick = {
-                    onClose?.invoke(textFieldValue.text)
+                    onSubmit?.invoke(currentValue.toIntOrNull() ?: 0)
                 },
             ) {
                 Text(text = stringResource(MR.strings.button_confirm))
