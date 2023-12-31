@@ -15,12 +15,9 @@ android {
         applicationId = "com.github.diegoberaldin.raccoonforlemmy.android"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 58
+        versionCode = 59
         versionName = "1.3.0"
         archivesName.set("RaccoonForLemmy")
-        ndk {
-            abiFilters += listOf("armeabi", "armeabi-v7a", "x86")
-        }
     }
     buildFeatures {
         compose = true
