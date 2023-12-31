@@ -1,0 +1,10 @@
+- feat: edge to edge contents
+- feat: video support in posts
+- feat: delete private message
+- feat: limit post height when using full layout
+- enhancement: animate progress during remote settings sync
+- enhancement: review Spanish translation
+- fix: reply from swipe action
+- fix: prevent accidental tap on action buttons
+- fix: inbox reloading after navigation
+- enhancement: code cleanup and stability improvements
