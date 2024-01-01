@@ -6,7 +6,7 @@ import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent.inject
 
 val markwonModule = module {
-    single<MarkwonProvider> { params ->
+    single<MarkwonProvider> {
         DefaultMarkwonProvider(
             context = get(),
         )
