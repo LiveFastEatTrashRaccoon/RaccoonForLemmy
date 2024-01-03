@@ -17,5 +17,6 @@
 #}
 
 -dontwarn org.slf4j.impl.StaticLoggerBinder
--keep class net.database.sqlcipher.* { *; }
--keep class net.sqlcipher.** { *; }
+
+-keep class net.zetetic.database.sqlcipher.* { *; }
+-keep class net.zetetic.database.** { *; }
