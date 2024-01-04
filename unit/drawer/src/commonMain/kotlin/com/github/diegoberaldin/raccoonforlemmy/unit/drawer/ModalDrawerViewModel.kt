@@ -21,7 +21,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -53,7 +52,7 @@ class ModalDrawerViewModel(
                     it.copy(instance = instance)
                 }
             }.launchIn(this)
-            identityRepository.isLogged.drop(1).debounce(250).onEach { _ ->
+            identityRepository.isLogged.debounce(250).onEach { _ ->
                 refreshUser()
                 refresh()
             }.launchIn(this)
