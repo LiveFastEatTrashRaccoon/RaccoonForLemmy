@@ -15,8 +15,8 @@ android {
         applicationId = "com.github.diegoberaldin.raccoonforlemmy.android"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 62
-        versionName = "1.4.1"
+        versionCode = 63
+        versionName = "1.4.2"
         archivesName.set("RaccoonForLemmy")
     }
     buildFeatures {

@@ -1,0 +1,6 @@
+- enhancement: add pt-BR l10n
+- enhancement: modal drawer refresh
+- enhancement: improved chat screen
+- enhancement: infinite scrolling option
+- fix: text formatting bar actions
+- fix: comment editing

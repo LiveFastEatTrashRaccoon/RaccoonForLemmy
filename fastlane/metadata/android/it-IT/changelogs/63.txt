@@ -1,0 +1,6 @@
+- enhancement: aggiunta l10n pt-BR
+- enhancement: refresh barra laterale
+- enhancement: migliorata schermata messaggi privati
+- enhancement: opzione scorrimento infinito
+- fix: azioni barra di formattazione testo
+- fix: modifica commenti
