@@ -1,0 +1,6 @@
+- fix: post body height limit
+- fix: bottom bar scroll to reveal
+- fix: sort type after navigation
+- fix: comment toggle collapse and spoilers
+- fix: distinction between replies to post and comments
+- fix: bottom sheet closing
