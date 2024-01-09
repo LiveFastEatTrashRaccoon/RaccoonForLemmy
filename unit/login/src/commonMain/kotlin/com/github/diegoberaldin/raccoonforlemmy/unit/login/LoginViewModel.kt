@@ -14,6 +14,7 @@ import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginViewModel(
     private val mvi: DefaultMviModel<LoginMviModel.Intent, LoginMviModel.UiState, LoginMviModel.Effect>,
@@ -142,7 +143,9 @@ class LoginViewModel(
             if (result.isFailure) {
                 result.exceptionOrNull()?.also {
                     val message = it.message
-                    mvi.emitEffect(LoginMviModel.Effect.LoginError(message))
+                    withContext(Dispatchers.Main) {
+                        mvi.emitEffect(LoginMviModel.Effect.LoginError(message))
+                    }
                 }
             } else {
                 val accountId = accountRepository.getActive()?.id
@@ -155,7 +158,9 @@ class LoginViewModel(
                         jwt = auth
                     )
                 }
-                mvi.emitEffect(LoginMviModel.Effect.LoginSuccess)
+                withContext(Dispatchers.Main) {
+                    mvi.emitEffect(LoginMviModel.Effect.LoginSuccess)
+                }
             }
         }
     }
