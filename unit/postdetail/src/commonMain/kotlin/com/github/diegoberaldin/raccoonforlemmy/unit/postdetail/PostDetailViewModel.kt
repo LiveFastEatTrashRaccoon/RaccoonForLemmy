@@ -381,13 +381,13 @@ class PostDetailViewModel(
             currentPage++
         }
         mvi.updateState {
-            val newcomments = if (refreshing) {
+            val newComments = if (refreshing) {
                 itemList.orEmpty()
             } else {
                 it.comments + itemList.orEmpty()
             }
             it.copy(
-                comments = newcomments,
+                comments = newComments,
                 loading = false,
                 canFetchMore = itemList?.isEmpty() != true,
                 refreshing = false,
@@ -429,8 +429,9 @@ class PostDetailViewModel(
                 sort = sort,
             )?.processCommentsToGetNestedOrder(
                 ancestorId = parentId.toString(),
-            )?.filter {
-                currentState.comments.none { c -> c.id == it.id }
+            )?.filter { c1 ->
+                // prevents accidental duplication
+                currentState.comments.none { c2 -> c2.id == c1.id }
             }
 
             val commentsToInsert = fetchResult.orEmpty()
