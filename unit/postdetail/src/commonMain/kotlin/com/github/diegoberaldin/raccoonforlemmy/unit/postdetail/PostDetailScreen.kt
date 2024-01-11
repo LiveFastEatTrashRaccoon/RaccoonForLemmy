@@ -894,6 +894,8 @@ class PostDetailScreen(
                                         CollapsedCommentCard(
                                             comment = comment,
                                             isOp = comment.creator?.id == uiState.post.creator?.id,
+                                            voteFormat = uiState.voteFormat,
+                                            autoLoadImages = uiState.autoLoadImages,
                                             actionButtonsActive = uiState.isLogged,
                                             onToggleExpanded = rememberCallback(model) {
                                                 model.reduce(
