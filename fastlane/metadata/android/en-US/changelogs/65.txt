@@ -1,0 +1,5 @@
+- feat: new instance selection
+- enhancement: comment loading and vote format
+- enhancement: improved pt-BR l10n
+- fix: post link opening
+- fix: bottom sheet keyboard and close
