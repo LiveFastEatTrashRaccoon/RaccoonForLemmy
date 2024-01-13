@@ -566,7 +566,7 @@ class PostDetailScreen(
                         }
                         items(
                             items = uiState.comments.filter { it.visible },
-                            key = { c -> c.id.toString() + c.updateDate },
+                            key = { c -> c.id.toString() + (c.updateDate ?: c.publishDate) },
                         ) { comment ->
                             Column {
                                 AnimatedContent(
@@ -1100,7 +1100,14 @@ class PostDetailScreen(
                                             },
                                         ) {
                                             Text(
-                                                text = stringResource(MR.strings.post_detail_load_more_comments),
+                                                text = buildString {
+                                                    append(stringResource(MR.strings.post_detail_load_more_comments))
+                                                    comment.comments?.takeIf { it > 0 }?.also { count ->
+                                                        append(" (")
+                                                        append(count)
+                                                        append(")")
+                                                    }
+                                                },
                                                 style = MaterialTheme.typography.labelSmall,
                                             )
                                         }
