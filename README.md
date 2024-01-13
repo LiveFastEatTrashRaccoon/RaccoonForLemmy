@@ -60,7 +60,7 @@ multiplatform and gradually grew as a fully functional client with many features
 ## Main features
 
 - view post feed and comments with different listing and sort types;
-- possibility to upvote and downvote (with optional swipe actions)
+- possibility to upvote and downvote (with optional swipe actions);
 - community and user detail;
 - user profile with one's own posts, comments and saved items;
 - inbox with replies, mentions and direct messages;
@@ -122,11 +122,11 @@ Moreover, developing a new client was an opportunity to add all the features tha
 were "scattered" across different apps, e.g. I liked the feature richness
 of [Liftoff](https://github.com/liftoff-app/liftoff) (e.g. the possibility to explore all the
 communities of an external instance in guest mode), the multi-community feature of
-[Summit](https://github.com/idunnololz/summit-for-lemmy) and the polished UI of
+[Summit](https://github.com/idunnololz/summit-for-lemmy) and the polished UI of the really great
 [Thunder](https://github.com/thunder-app/thunder) and I wished I could have them all in the same
 app.
 
-This involves a high level of discretionality and personal taste, I know, but this project _is_ all
+This involves a high level of discretion and personal taste, I know, but this project _is_ all
 about experimenting and learning.
 
 ## Technologies used:
@@ -134,40 +134,15 @@ about experimenting and learning.
 - [Koin](https://github.com/InsertKoinIO/koin) for dependency injection
 - [Voyager](https://github.com/adrielcafe/voyager) for screen navigation
 - [Ktor](https://github.com/ktorio/ktor) and [Ktorfit](https://github.com/Foso/Ktorfit) for
-  networking in conjunction with kotlinx-serialization for JSON marshalling
+  networking
 - [Moko resources](https://github.com/icerockdev/moko-resources) for resource management
-- [Kamel](https://github.com/Kamel-Media/Kamel) for lazy image loading, but later switched to
-  [Coil](https://github.com/coil-kt/coil) on Android because there was a major bug with large images
 - [Multiplatform settings](https://github.com/russhwolf/multiplatform-settings) for encrypted
   preferences
 - [SQLDelight](https://github.com/cashapp/sqldelight)
   and [SQLCipher](https://github.com/sqlcipher/sqlcipher) for local persistence
-- for Markdown rendering, the initial approach involved using
-  [Markdown](https://github.com/JetBrains/markdown) for parsing in conjunction with custom rendering
-  but this approach proved difficult to extend and maintain so on Android the
-  [Markwon](https://github.com/noties/Markwon) library was chosen instead.
 
-## Credits:
-
-- the `core-md` module in the iOS flavor is inspired by
-  [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) and
-  the Android implementation with Markwon is adapted from
-  [Jerboa for Lemmy](https://github.com/dessalines/jerboa)
-- the UI is inspired by the really great [Thunder](https://github.com/thunder-app/thunder) app
-
-## Acknowledgements:
-
-This project would not be what it is were it not for the huge amount of patience and dedication
-of early adopters who sent me continous feedback and ideas for improvement after every release.
-
-A special thank to all those who contributed so far:
-
-- [u/rb_c@discuss.tchncs.de](https://discuss.tchncs.de/u/rb_c)
-- [u/heyazorin@lemmy.ml](https://lemmy.ml/u/heyazorin)
-- [u/thegiddystitcher@lemm.ee](https://lemm.ee/u/thegiddystitcher)
-- [outerair](https://github.com/outerair)
-- all those who reported feedback and ideas through the Lemmy community, GitHub issues, emails,
-  private messages, homing pidgeons and every other imaginable media.
+More info about the technologies used in the project can be found in
+the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md#51-tech-stack).
 
 ## Want to try it out?
 
