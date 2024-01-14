@@ -1,0 +1,2 @@
+- fix: refresh after instance or account change
+- fix: comment tree structure loading
