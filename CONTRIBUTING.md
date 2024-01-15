@@ -341,8 +341,8 @@ libary which not only works great but also offers support for encryption.
 <dd>
 This project was a chance to experiment with <a href="https://github.com/cashapp/sqldelight">SQLDelight</a>
 (in other multiplatform projects other libraries were tested like Exposed), whereas database encryption
-is obtained through [SQLCipher Android](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/), formerly
-<a href="https://github.com/sqlcipher/android-database-sqlcipher">Android Database SQLCipher</a>.
+is obtained through <a href="https://www.zetetic.net/sqlcipher/sqlcipher-for-android">SQLCipher Android</a>, 
+formerly <a href="https://github.com/sqlcipher/android-database-sqlcipher">Android Database SQLCipher</a>.
 </dd>
 <dt>Markdown rendering</dt>
 <dd>
@@ -548,10 +548,98 @@ On second thoughts:
 
 ### 6.1 Architectural patterns
 
+#### 6.1.1 General principles
+
+The project’s architecture is inspired from the Clean architecture principles. Modules are organized
+in tiers and dependency flows goes from higher modules (top-level and feature modules) towards lower
+order modules (unit modules for UI, domain modules for business logic) which in turn rely on core
+modules for low-level operations; and that is a hierarchical structure on the vertical axis. Apart
+from that, there is a split on the horizontal axis (i.e. different features for different sections
+of the app). The intersection between these two axes determines the modularization strategy.
+
+To summarize, if you are looking for something related to the app UI, have a look at `:feature:xxx`
+or `:unit:xxx` (and possibly you will have to drill down to `:core:commonui:xxx`). If you are
+searching for some piece of interaction with Lemmy APIs, have a look at `:domain:lemmy:xxx` (and
+you’ll probably end up in `:core:api` for more low-level minutia), if you look for data access on
+the local database have a look at `:core:persistence`, and so on. More on this here (Modularization
+strategy).
+
+#### 6.1.2 Model-View-Intent
+
+Every part of the app which has some non trivial user-interaction follows the Model-View-Intent
+architectural pattern. This means that there are two different components interacting with each
+other:
+
+- the View, represented by a `Screen` implementation
+- the ViewModel, represented by a `ScreenModel` implementation
+
+where the interfaces (Screen and ScreenModel) both come from the Voyager navigation library.
+
+The **View** has the responsibility of drawing to screen the UI components that are needed to
+represent a particular **state**, which is provided by the ViewModel they have a reference to (the
+ViewModel being a state holder for this respect). The View has also the ability to collect user
+input (or, rather, intentions as **intents**) and dispatch them to the ViewModel.
+
+On its side, the **ViewModel** holds an observable state and has the ability to react to user
+intents coming from the View, each of which implies some business logic operations which, in turn,
+determine ultimately a state change, observed by the view. In some less frequent case, the ViewModel
+can emit one-time events, that are unrelated to persistent state and can determine volatile *
+*effects** in the View.
+
+These concepts of a ViewModel having to deal with Intent, State and Effect are modelled in Kotlin in
+the `:core:architecture` module which is included as a building block by all UI related features and
+unit modules of the project. The `MviModel` interface defined here is a common supertype of all the
+ScreenModel implementations.
+
+In case some event needs to be propagated across different ViewModels, the event bus defined
+in `:core:notification` is used.
+
 ### 6.2 Modularization strategy
+
+The project has different kinds of modules and, depending on the group a module belongs to, there
+are some rules about which other modules it can depend on.
+
+Here is a description of the dependency flow:
+
+- `:androidApp` which is the KMP equivalent of `:app` module in Android-only projects)
+  include `:shared` and can include `:core` modules (e.g. for navigation);
+- `:shared` is the heart of the KMP application and it virtually includes every other Gradle module
+  as a dependency (it contains in the `DiHelper.kt` files the setup of the DI so it basically needs
+  to see all Koin modules);
+- the `:resources` module is at the bottom of the hierarchy and is included by any other module (but
+  does not depend on any);
+- `:feature` modules are included by :shared and include :domain, :core and :unit modules but they
+  DO not include other each other nor any top level module; some unit modules are used just by one
+  feature (e.g. `:unit:postlist` is used only by `:feature:home`) in some other cases multiple
+  features use the same unit (e.g. `:unit:zoomableimage` is used by
+  both `:feature:home`, `:feature:search`, `:feature:profile` and `:feature:inbox`):
+- `:domain` modules can be used by feature and unit modules and can only include core modules; only
+  exception is `:domain:inbox` which is a thin layer on top of `:domain:lemmy` so it depends on it (
+  for inbox related functions);
+- `:unit` modules are included by feature modules (and `:shared`) and sometimes by other unit
+  modules in case of highly reusable parts of the app; the only notable violation to this rule
+  is `:core:commonui:detailopener-impl` which is a special module because it is only included
+  by `:shared` (which does the binding between `:detailopener-api` and `:detailopener-impl`) and it
+  includes some unit modules but the fact of a unit module included by a core module in general
+  should never happen (instead, the reverse is perfectly ok);
+- `:core` modules can sometimes include each other (but without cycles, e.g. `:core:md`
+  includes `:core:commonui:components` / `:core:utils` because it is a mid-level module and
+  something similar happens with :core:persistence which
+  uses `:core:preferences` / `:core:appearance`)  and nothing else; they are in turn used by all the
+  other types of modules.
 
 ### 6.3 General Kotlin rules
 
+Please refer to [this page](https://kotlinlang.org/docs/coding-conventions.html) for the conventions
+to apply to Kotlin code, most of which are already enforced by Android Studio inspections.
+
 ### 6.4 Compose rules
 
+As far as Compose code is concerned, we take Google’s indications as a baseline:
+
+- [general Compose API](https://android.googlesource.com/platform/frameworks/support/+/androidx-main/compose/docs/compose-api-guidelines.md)
+- [Compose component API](https://android.googlesource.com/platform/frameworks/support/+/androidx-main/compose/docs/compose-component-api-guidelines.md)
+
 ### 6.5 Test structure
+
+TBD depending on experiment result.
