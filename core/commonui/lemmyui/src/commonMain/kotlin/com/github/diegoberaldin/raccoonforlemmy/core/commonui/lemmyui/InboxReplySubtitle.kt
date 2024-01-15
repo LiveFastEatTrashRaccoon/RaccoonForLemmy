@@ -58,8 +58,8 @@ fun InboxReplySubtitle(
     iconSize: Dp = IconSize.s,
     date: String? = null,
     score: Int = 0,
-    upvotes: Int = 0,
-    downvotes: Int = 0,
+    upVotes: Int = 0,
+    downVotes: Int = 0,
     options: List<Option> = emptyList(),
     voteFormat: VoteFormat = VoteFormat.Aggregated,
     upVoted: Boolean = false,
@@ -70,10 +70,10 @@ fun InboxReplySubtitle(
     onDownVote: (() -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
 ) {
-    val buttonModifier = Modifier.size(IconSize.m).padding(3.5.dp)
+    val buttonModifier = Modifier.size(IconSize.m).padding(3.dp)
     val themeRepository = remember { getThemeRepository() }
-    val upvoteColor by themeRepository.upvoteColor.collectAsState()
-    val downvoteColor by themeRepository.downvoteColor.collectAsState()
+    val upVoteColor by themeRepository.upVoteColor.collectAsState()
+    val downVoteColor by themeRepository.downVoteColor.collectAsState()
     val defaultUpvoteColor = MaterialTheme.colorScheme.primary
     val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
     var optionsExpanded by remember { mutableStateOf(false) }
@@ -181,18 +181,23 @@ fun InboxReplySubtitle(
         Box {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
-                Icon(
-                    modifier = buttonModifier,
-                    imageVector = Icons.Default.Schedule,
-                    contentDescription = null,
-                    tint = ancillaryColor,
-                )
-                Text(
-                    text = date?.prettifyDate() ?: "",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = ancillaryColor,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        modifier = buttonModifier,
+                        imageVector = Icons.Default.Schedule,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                    Text(
+                        text = date?.prettifyDate() ?: "",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = ancillaryColor,
+                    )
+                }
                 if (options.isNotEmpty()) {
                     Icon(
                         modifier = Modifier.size(IconSize.m)
@@ -212,13 +217,10 @@ fun InboxReplySubtitle(
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 FeedbackButton(
-                    modifier = buttonModifier
-                        .onClick(
-
-                        ),
+                    modifier = buttonModifier.onClick(),
                     imageVector = Icons.Default.ArrowCircleUp,
                     tintColor = if (upVoted) {
-                        upvoteColor ?: defaultUpvoteColor
+                        upVoteColor ?: defaultUpvoteColor
                     } else {
                         ancillaryColor
                     },
@@ -230,10 +232,10 @@ fun InboxReplySubtitle(
                     text = formatToReadableValue(
                         voteFormat = voteFormat,
                         score = score,
-                        upvotes = upvotes,
-                        downvotes = downvotes,
-                        upvoteColor = upvoteColor ?: defaultUpvoteColor,
-                        downvoteColor = downvoteColor ?: defaultDownVoteColor,
+                        upVotes = upVotes,
+                        downVotes = downVotes,
+                        upVoteColor = upVoteColor ?: defaultUpvoteColor,
+                        downVoteColor = downVoteColor ?: defaultDownVoteColor,
                         upVoted = upVoted,
                         downVoted = downVoted,
                     ),
@@ -241,13 +243,10 @@ fun InboxReplySubtitle(
                     color = ancillaryColor,
                 )
                 FeedbackButton(
-                    modifier = buttonModifier
-                        .onClick(
-
-                        ),
+                    modifier = buttonModifier.onClick(),
                     imageVector = Icons.Default.ArrowCircleDown,
                     tintColor = if (downVoted) {
-                        downvoteColor ?: defaultDownVoteColor
+                        downVoteColor ?: defaultDownVoteColor
                     } else {
                         ancillaryColor
                     },

@@ -38,7 +38,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.Customi
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
-import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.datetime.prettifyDate
@@ -63,7 +62,6 @@ internal fun MessageCard(
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f)
     var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
-    val navigationCoordinator = remember { getNavigationCoordinator() }
 
     Box {
         Canvas(
@@ -117,7 +115,7 @@ internal fun MessageCard(
                     )
                     Box {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.xxxs),
+                            horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             if (options.isNotEmpty()) {
@@ -140,18 +138,22 @@ internal fun MessageCard(
                             Spacer(modifier = Modifier.weight(1f))
 
                             if (date.isNotEmpty()) {
-                                val buttonModifier = Modifier.size(IconSize.m).padding(3.5.dp)
-                                Icon(
-                                    modifier = buttonModifier,
-                                    imageVector = Icons.Default.Schedule,
-                                    contentDescription = null,
-                                    tint = ancillaryColor,
-                                )
-                                Text(
-                                    text = date.prettifyDate(),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = ancillaryColor,
-                                )
+                                val buttonModifier = Modifier.size(IconSize.m).padding(3.dp)
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Icon(
+                                        modifier = buttonModifier,
+                                        imageVector = Icons.Default.Schedule,
+                                        contentDescription = null,
+                                        tint = ancillaryColor,
+                                    )
+                                    Text(
+                                        text = date.prettifyDate(),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = ancillaryColor,
+                                    )
+                                }
                             } else {
                                 Text(
                                     text = "",

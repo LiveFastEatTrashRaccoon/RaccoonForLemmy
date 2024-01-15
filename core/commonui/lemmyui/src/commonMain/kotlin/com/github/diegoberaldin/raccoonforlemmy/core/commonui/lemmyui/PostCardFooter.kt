@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
@@ -52,10 +53,11 @@ fun PostCardFooter(
     modifier: Modifier = Modifier,
     voteFormat: VoteFormat = VoteFormat.Aggregated,
     comments: Int? = null,
-    date: String? = null,
+    publishDate: String? = null,
+    updateDate: String? = null,
     score: Int = 0,
-    upvotes: Int = 0,
-    downvotes: Int = 0,
+    upVotes: Int = 0,
+    downVotes: Int = 0,
     saved: Boolean = false,
     upVoted: Boolean = false,
     downVoted: Boolean = false,
@@ -70,8 +72,8 @@ fun PostCardFooter(
 ) {
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val themeRepository = remember { getThemeRepository() }
-    val upvoteColor by themeRepository.upvoteColor.collectAsState()
-    val downvoteColor by themeRepository.downvoteColor.collectAsState()
+    val upVoteColor by themeRepository.upVoteColor.collectAsState()
+    val downVoteColor by themeRepository.downVoteColor.collectAsState()
     val defaultUpvoteColor = MaterialTheme.colorScheme.primary
     val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f)
@@ -81,38 +83,63 @@ fun PostCardFooter(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
-            val buttonModifier = Modifier.size(IconSize.m).padding(3.5.dp)
+            val buttonModifier = Modifier.size(IconSize.m).padding(3.dp)
             if (comments != null) {
-                Image(
-                    modifier = buttonModifier.padding(1.dp)
-                        .onClick(
-                            onClick = rememberCallback {
-                                onReply?.invoke()
-                            },
-                        ),
-                    imageVector = Icons.Default.Chat,
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(color = ancillaryColor),
-                )
-                Text(
-                    modifier = Modifier.padding(end = Spacing.s),
-                    text = "$comments",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = ancillaryColor,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Image(
+                        modifier = buttonModifier.padding(1.dp)
+                            .onClick(
+                                onClick = rememberCallback {
+                                    onReply?.invoke()
+                                },
+                            ),
+                        imageVector = Icons.Default.Chat,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(color = ancillaryColor),
+                    )
+                    Text(
+                        modifier = Modifier.padding(end = Spacing.s),
+                        text = "$comments",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = ancillaryColor,
+                    )
+                }
             }
-            if (date != null) {
-                Icon(
-                    modifier = buttonModifier.padding(1.dp),
-                    imageVector = Icons.Default.Schedule,
-                    contentDescription = null,
-                    tint = ancillaryColor,
-                )
-                Text(
-                    text = date.prettifyDate(),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = ancillaryColor,
-                )
+            if (publishDate != null) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        modifier = buttonModifier,
+                        imageVector = Icons.Default.Schedule,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                    Text(
+                        text = publishDate.prettifyDate(),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = ancillaryColor,
+                    )
+                }
+            }
+            if (updateDate != null) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        modifier = buttonModifier,
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                    Text(
+                        text = updateDate.prettifyDate(),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = ancillaryColor,
+                    )
+                }
             }
             if (options.isNotEmpty()) {
                 Icon(
@@ -158,7 +185,7 @@ fun PostCardFooter(
                     Icons.Default.ArrowUpward
                 },
                 tintColor = if (upVoted) {
-                    upvoteColor ?: defaultUpvoteColor
+                    upVoteColor ?: defaultUpvoteColor
                 } else {
                     ancillaryColor
                 },
@@ -170,10 +197,10 @@ fun PostCardFooter(
                 text = formatToReadableValue(
                     voteFormat = voteFormat,
                     score = score,
-                    upvotes = upvotes,
-                    downvotes = downvotes,
-                    upvoteColor = upvoteColor ?: defaultUpvoteColor,
-                    downvoteColor = downvoteColor ?: defaultDownVoteColor,
+                    upVotes = upVotes,
+                    downVotes = downVotes,
+                    upVoteColor = upVoteColor ?: defaultUpvoteColor,
+                    downVoteColor = downVoteColor ?: defaultDownVoteColor,
                     upVoted = upVoted,
                     downVoted = downVoted,
                 ),
@@ -188,7 +215,7 @@ fun PostCardFooter(
                     Icons.Default.ArrowDownward
                 },
                 tintColor = if (downVoted) {
-                    downvoteColor ?: defaultDownVoteColor
+                    downVoteColor ?: defaultDownVoteColor
                 } else {
                     ancillaryColor
                 },
