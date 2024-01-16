@@ -38,7 +38,6 @@ include(":core:utils")
 
 include(":domain:identity")
 include(":domain:inbox")
-include(":domain:lemmy")
 include(":domain:lemmy:data")
 include(":domain:lemmy:repository")
 

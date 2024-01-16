@@ -213,6 +213,13 @@ If you want you can change the code in the following spots:
 
 That's it. You can test that everything works by launching the development app.
 
+**A note for translators:** the strings that correspond to theme names (`settings_color_aquamarine`,
+`settings_color_banana`, `settings_color_blue`, `settings_color_gray`, `settings_color_green`,
+`settings_color_orange`, `settings_color_pink`, `settings_color_purple`, `settings_color_red` and
+`settings_color_white`) contain the name of an animal accompanied by an adjective. If would be nice
+if the adjective and the noun would start in every language with the same sound in order to create
+humorous pairs like in English ("hilarious hedgehog", "frolicsome frog", etc.).
+
 However, if you are not a developer and do not feel confident with GitHub's PR mechanism, you can
 just download
 the [base l10n](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/resources/src/commonMain/resources/MR/base/strings.xml)
@@ -455,8 +462,7 @@ These are purely business logic modules that can be reused to provide applicatio
   authorization and API configuration;
 - `:domain:lemmy` contains all the Lemmy API interaction logic and is divided into two submodules:
     - `:data` contains all the domain models for Lemmy entities (posts, comments, communities,
-      users,
-      etc);
+      users, etc);
     - `:repository` contains the repositories that access Lemmy APIs (through the :core:api module)
       and are used to manage the entities contained in the :data module;
 - `:domain:inbox` contains some uses cases needed to interact with the replies, mentions and private
@@ -605,7 +611,7 @@ unit modules of the project. The `MviModel` interface defined here is a common s
 ScreenModel implementations.
 
 In case some event needs to be propagated across different ViewModels, the event bus defined
-in `:core:notification` is used.
+in `:core:notifications` is used.
 
 ### 6.2 Modularization strategy
 
@@ -640,6 +646,9 @@ Here is a description of the dependency flow:
   something similar happens with :core:persistence which
   uses `:core:preferences` / `:core:appearance`)  and nothing else; they are in turn used by all the
   other types of modules.
+
+For more detailed information about dependencies, please refer to the diagrams you can find
+in [this page](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/MODULE_DIAGRAMS.md).
 
 ### 6.3 General Kotlin rules
 
