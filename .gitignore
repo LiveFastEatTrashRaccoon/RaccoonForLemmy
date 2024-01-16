@@ -11,6 +11,6 @@ xcuserdata
 Pods/
 release/
 
-google-services.json
-GoogleService-Info.plist
+androidApp/google-services.json
+iosApp/GoogleService-Info.plist
 
