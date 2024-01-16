@@ -1,0 +1,5 @@
+- feat: show content update date
+- enhancement: open app community in about dialog
+- fix: top bar container height
+- fix: cross-post text
+- fix: links in text formatting bar

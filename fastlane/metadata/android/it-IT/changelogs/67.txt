@@ -1,0 +1,5 @@
+- feat: visualizzatione data aggiornamento contenuti
+- enhancement: apertura comunità dell'app da dialog informazioni
+- fix: altezza contenitore barra superiore
+- fix: testo cross-post
+- fix: link in barra di formattazione
