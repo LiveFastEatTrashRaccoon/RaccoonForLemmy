@@ -241,8 +241,7 @@ request" to submit the request to the upstream repository.
 
 This is a Kotlin Multiplatform (KMP) project that uses the Gradle build tool. The recommended
 development environment is Android Studio with the Kotlin Multiplatform Mobile plugin installed.
-S
-ince the project is using Gradle 8.2.1 with the Android Gradle Plugin (AGP) version 8.2.1 you
+Since the project is using Gradle 8.2.1 with the Android Gradle Plugin (AGP) version 8.2.1 you
 should use Android Studio Hedgehog or later (have a
 look [here](https://developer.android.com/build/releases/gradle-plugin?hl=en#android_gradle_plugin_and_android_studio_compatibility)
 for a compatibility matrix between versions of Gradle, AGP and Android Studio).
@@ -263,6 +262,20 @@ the root folder contains proper memory settings for the JVM and the Kotlin compi
 ```properties
 org.gradle.jvmargs=-Xmx8192M -Dfile.encoding=UTF-8 -Dkotlin.daemon.jvm.options\="-Xmx8192M"
 ```
+
+The first thing that Android Studio does upon first opening the project is a Gradle sync, this may
+take some time since at the beginning it has to download all the dependencies and build the cache.
+A Gradle sync is required every time:
+
+- the Gradle wrapper is updated or some Gradle plugins are updated to a newer version;
+- a new external dependency is added or an existing library is updated to a newer version;
+- a new Gradle module is added to the project or whenever you edit the `settings.gradle.kts` file or
+  any `build.gradle.kts` file in any module of the project hierarchy.
+
+In case it does not suggest it to you automatically, you will fine the "Sync Project with Gradle
+Files" button in the top left corner of the toolbar, right before the "Search Everywhere" button.
+The operation can be, depending on your hardware and connection speed, quite time consuming so be
+patient.
 
 ## 5. Project structure
 
@@ -355,15 +368,15 @@ This approach was promising in the beginning but it has proven to grow more and 
 support custom Markdown features, such as Lemmy spoilers. For this reason, the Android counterpart
 has been completely refactored and migrated to the <a href="https://github.com/noties/Markwon">Markwon</a>
 library which is more flexible/extensible albeit more complicated to use, especially if called from 
-a multiplatform environment with `expect`/`actual` functions (and image opening/URL opening/custom links
-like Lemmy URL references have to be managed). The big star here is `MarkwonProvider` and its implementation
+a multiplatform environment with <code>expect</code>/<code>actual</code> functions (and image opening/URL opening/custom links
+like Lemmy URL references have to be managed). The big star here is <code>MarkwonProvider</code> and its implementation
 <a href="https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/core/md/src/androidMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/markdown/provider/DefaultMarkwonProvider.kt">DefaultMarkwonProvider.kt</a>.
 Parts of the Markwon configuration and usage is inspired by <a href="https://github.com/dessalines/jerboa">Jerboa for Lemmy</a>.
 </dd>
 <dt>Video playback</dt>
 <dd>
-This had to be native, the Android implementation relies on `Exoplayer` whereas the iOS implementation
-on `AVPlayer` as usual.
+This had to be native, the Android implementation relies on <code>Exoplayer</code> whereas the iOS implementation
+on <code>AVPlayer</code> as usual.
 </dd>
 <dt>Theme generation</dt>
 <dd>
