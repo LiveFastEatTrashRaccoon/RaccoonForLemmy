@@ -34,8 +34,8 @@ kotlin {
                 implementation(libs.koin.core)
 
                 implementation(projects.core.appearance)
-                implementation(projects.domain.lemmy.data)
                 implementation(projects.core.persistence)
+                implementation(projects.domain.lemmy.data)
             }
         }
         val commonTest by getting {

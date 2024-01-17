@@ -65,7 +65,6 @@ kotlin {
                 implementation(projects.unit.ban)
                 implementation(projects.unit.communityinfo)
                 implementation(projects.unit.instanceinfo)
-                implementation(projects.unit.createreport)
                 implementation(projects.unit.reportlist)
                 implementation(projects.unit.modlog)
                 implementation(projects.unit.rawcontent)

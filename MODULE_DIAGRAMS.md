@@ -1,3 +1,11 @@
+# Module dependency diagrams
+
+This page contains a series of diagrams to illustrate the dependency relationships between the
+modules this project is made up of.
+
+Modules with only incoming arrows (e.g. `:resources`) and which do not depend on anything internal
+to the project are not listed.
+
 ## Top-level modules
 
 ```mermaid
@@ -267,6 +275,250 @@ flowchart LR
     :unit:ban --> :resources
 ```
 
+```mermaid
+flowchart LR
+    :unit:chat --> :core:appearance
+    :unit:chat --> :core:architecture
+    :unit:chat --> :core:commonui:components
+    :unit:chat --> :core:commonui:lemmyui
+    :unit:chat --> :core:commonui:modals
+    :unit:chat --> :core:navigation
+    :unit:chat --> :core:notifications
+    :unit:chat --> :core:persistence
+    :unit:chat --> :core:utils
+    :unit:chat --> :domain:identity
+    :unit:chat --> :domain:lemmy:data
+    :unit:chat --> :domain:lemmy:repository
+    :unit:chat --> :unit:rawcontent
+    :unit:chat --> :unit:zoomableimage
+    :unit:chat --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:choosecolor --> :core:appearance
+    :unit:choosecolor --> :core:commonui:components
+    :unit:choosecolor --> :core:navigation
+    :unit:choosecolor --> :core:notifications
+    :unit:choosecolor --> :core:persistence
+    :unit:choosecolor --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:communitydetail --> :core:appearance
+    :unit:communitydetail --> :core:architecture
+    :unit:communitydetail --> :core:commonui:components
+    :unit:communitydetail --> :core:commonui:detailopenerApi
+    :unit:communitydetail --> :core:commonui:lemmyui
+    :unit:communitydetail --> :core:commonui:modals
+    :unit:communitydetail --> :core:navigation
+    :unit:communitydetail --> :core:notifications
+    :unit:communitydetail --> :core:persistence
+    :unit:communitydetail --> :core:utils
+    :unit:communitydetail --> :domain:identity
+    :unit:communitydetail --> :domain:lemmy:data
+    :unit:communitydetail --> :domain:lemmy:repository
+    :unit:communitydetail --> :unit:ban
+    :unit:communitydetail --> :unit:communityinfo
+    :unit:communitydetail --> :unit:createcomment
+    :unit:communitydetail --> :unit:createpost
+    :unit:communitydetail --> :unit:createreport
+    :unit:communitydetail --> :unit:instanceinfo
+    :unit:communitydetail --> :unit:modlog
+    :unit:communitydetail --> :unit:rawcontent
+    :unit:communitydetail --> :unit:remove
+    :unit:communitydetail --> :unit:reportlist
+    :unit:communitydetail --> :unit:web
+    :unit:communitydetail --> :unit:zoomableimage
+    :unit:communitydetail --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:communityinfo --> :core:appearance
+    :unit:communityinfo --> :core:architecture
+    :unit:communityinfo --> :core:commonui:components
+    :unit:communityinfo --> :core:commonui:lemmyui
+    :unit:communityinfo --> :core:navigation
+    :unit:communityinfo --> :core:notifications
+    :unit:communityinfo --> :core:persistence
+    :unit:communityinfo --> :core:utils
+    :unit:communityinfo --> :domain:identity
+    :unit:communityinfo --> :domain:lemmy:data
+    :unit:communityinfo --> :domain:lemmy:repository
+    :unit:communityinfo --> :unit:web
+    :unit:communityinfo --> :unit:zoomableimage
+    :unit:communityinfo --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:createcomment --> :core:appearance
+    :unit:createcomment --> :core:architecture
+    :unit:createcomment --> :core:commonui:components
+    :unit:createcomment --> :core:commonui:detailopenerApi
+    :unit:createcomment --> :core:commonui:lemmyui
+    :unit:createcomment --> :core:commonui:modals
+    :unit:createcomment --> :core:navigation
+    :unit:createcomment --> :core:notifications
+    :unit:createcomment --> :core:persistence
+    :unit:createcomment --> :core:utils
+    :unit:createcomment --> :domain:identity
+    :unit:createcomment --> :domain:lemmy:data
+    :unit:createcomment --> :domain:lemmy:repository
+    :unit:createcomment --> :unit:rawcontent
+    :unit:createcomment --> :unit:web
+    :unit:createcomment --> :unit:zoomableimage
+    :unit:createcomment --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:createpost --> :core:appearance
+    :unit:createpost --> :core:architecture
+    :unit:createpost --> :core:commonui:components
+    :unit:createpost --> :core:commonui:detailopenerApi
+    :unit:createpost --> :core:commonui:lemmyui
+    :unit:createpost --> :core:commonui:modals
+    :unit:createpost --> :core:navigation
+    :unit:createpost --> :core:notifications
+    :unit:createpost --> :core:persistence
+    :unit:createpost --> :core:utils
+    :unit:createpost --> :domain:identity
+    :unit:createpost --> :domain:lemmy:data
+    :unit:createpost --> :domain:lemmy:repository
+    :unit:createpost --> :unit:rawcontent
+    :unit:createpost --> :unit:selectcommunity
+    :unit:createpost --> :unit:web
+    :unit:createpost --> :unit:zoomableimage
+    :unit:createpost --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:createreport --> :core:appearance
+    :unit:createreport --> :core:architecture
+    :unit:createreport --> :core:commonui:components
+    :unit:createreport --> :core:commonui:detailopenerApi
+    :unit:createreport --> :core:commonui:lemmyui
+    :unit:createreport --> :core:commonui:modals
+    :unit:createreport --> :core:navigation
+    :unit:createreport --> :core:notifications
+    :unit:createreport --> :core:persistence
+    :unit:createreport --> :core:utils
+    :unit:createreport --> :domain:identity
+    :unit:createreport --> :domain:lemmy:data
+    :unit:createreport --> :domain:lemmy:repository
+    :unit:createreport --> :unit:web
+    :unit:createreport --> :unit:zoomableimage
+    :unit:createreport --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:drawer --> :core:appearance
+    :unit:drawer --> :core:architecture
+    :unit:drawer --> :core:commonui:components
+    :unit:drawer --> :core:commonui:lemmyui
+    :unit:drawer --> :core:navigation
+    :unit:drawer --> :core:notifications
+    :unit:drawer --> :core:persistence
+    :unit:drawer --> :core:utils
+    :unit:drawer --> :domain:identity
+    :unit:drawer --> :domain:lemmy:data
+    :unit:drawer --> :domain:lemmy:repository
+    :unit:drawer --> :unit:selectinstanace
+    :unit:drawer --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:instanceinfo --> :core:appearance
+    :unit:instanceinfo --> :core:architecture
+    :unit:instanceinfo --> :core:commonui:components
+    :unit:instanceinfo --> :core:commonui:detailopenerApi
+    :unit:instanceinfo --> :core:commonui:lemmyui
+    :unit:instanceinfo --> :core:navigation
+    :unit:instanceinfo --> :core:notifications
+    :unit:instanceinfo --> :core:persistence
+    :unit:instanceinfo --> :core:utils
+    :unit:instanceinfo --> :domain:identity
+    :unit:instanceinfo --> :domain:lemmy:data
+    :unit:instanceinfo --> :domain:lemmy:repository
+    :unit:instanceinfo --> :unit:web
+    :unit:instanceinfo --> :unit:zoomableimage
+    :unit:instanceinfo --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:login --> :core:appearance
+    :unit:login --> :core:architecture
+    :unit:login --> :core:commonui:components
+    :unit:login --> :core:commonui:lemmyui
+    :unit:login --> :core:navigation
+    :unit:login --> :core:notifications
+    :unit:login --> :core:persistence
+    :unit:login --> :core:utils
+    :unit:login --> :domain:identity
+    :unit:login --> :domain:lemmy:data
+    :unit:login --> :domain:lemmy:repository
+    :unit:login --> :unit:web
+    :unit:login --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:manageaccounts --> :core:appearance
+    :unit:manageaccounts --> :core:architecture
+    :unit:manageaccounts --> :core:commonui:components
+    :unit:manageaccounts --> :core:commonui:lemmyui
+    :unit:manageaccounts --> :core:navigation
+    :unit:manageaccounts --> :core:notifications
+    :unit:manageaccounts --> :core:persistence
+    :unit:manageaccounts --> :core:utils
+    :unit:manageaccounts --> :domain:identity
+    :unit:manageaccounts --> :domain:lemmy:data
+    :unit:manageaccounts --> :domain:lemmy:repository
+    :unit:manageaccounts --> :unit:login
+    :unit:manageaccounts --> :unit:web
+    :unit:manageaccounts --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:manageban --> :core:appearance
+    :unit:manageban --> :core:architecture
+    :unit:manageban --> :core:commonui:components
+    :unit:manageban --> :core:commonui:lemmyui
+    :unit:manageban --> :core:navigation
+    :unit:manageban --> :core:notifications
+    :unit:manageban --> :core:persistence
+    :unit:manageban --> :core:utils
+    :unit:manageban --> :domain:identity
+    :unit:manageban --> :domain:lemmy:data
+    :unit:manageban --> :domain:lemmy:repository
+    :unit:manageban --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:managesubscriptions --> :core:appearance
+    :unit:managesubscriptions --> :core:architecture
+    :unit:managesubscriptions --> :core:commonui:components
+    :unit:managesubscriptions --> :core:commonui:detailopenerApi
+    :unit:managesubscriptions --> :core:commonui:lemmyui
+    :unit:managesubscriptions --> :core:navigation
+    :unit:managesubscriptions --> :core:notifications
+    :unit:managesubscriptions --> :core:persistence
+    :unit:managesubscriptions --> :core:utils
+    :unit:managesubscriptions --> :domain:identity
+    :unit:managesubscriptions --> :domain:lemmy:data
+    :unit:managesubscriptions --> :domain:lemmy:repository
+    :unit:managesubscriptions --> :resources
+```
+
 TBD
 
 ## Core modules
@@ -278,7 +530,91 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    :core:utils --> :resources
+    :core:appearance --> :resources
 ```
 
-TBD
+```mermaid
+flowchart LR
+    :core:commonui:components --> :core:appearance
+    :core:commonui:components --> :core:utils
+    :core:commonui:components --> :resources
+```
+
+```mermaid
+flowchart LR
+    :core:commonui:detailopenerApi --> :domain:lemmy:data
+    :core:commonui:detailopenerApi --> :resources
+```
+
+```mermaid
+flowchart LR
+    :core:commonui:detailopenerImpl --> :core:commonui:detailopenerApi
+    :core:commonui:detailopenerImpl --> :core:navigation
+    :core:commonui:detailopenerImpl --> :domain:lemmy:data
+    :core:commonui:detailopenerImpl --> :domain:lemmy:repository
+    :core:commonui:detailopenerImpl --> :unit:communitydetail
+    :core:commonui:detailopenerImpl --> :unit:createcommnet
+    :core:commonui:detailopenerImpl --> :unit:createpost
+    :core:commonui:detailopenerImpl --> :unit:postdetail
+    :core:commonui:detailopenerImpl --> :unit:userdetail
+    :core:commonui:detailopenerImpl --> :resources
+```
+
+```mermaid
+flowchart LR
+    :core:commonui:lemmyui --> :core:appearance
+    :core:commonui:lemmyui --> :core:commonui:components
+    :core:commonui:lemmyui --> :core:md
+    :core:commonui:lemmyui --> :core:navigation
+    :core:commonui:lemmyui --> :core:persistence
+    :core:commonui:lemmyui --> :core:utils
+    :core:commonui:lemmyui --> :domain:lemmy:data
+    :core:commonui:lemmyui --> :resources
+```
+
+```mermaid
+flowchart LR
+    :core:commonui:modals --> :core:appearance
+    :core:commonui:modals --> :core:commonui:components
+    :core:commonui:modals --> :core:commonui:lemmyui
+    :core:commonui:modals --> :core:navigation
+    :core:commonui:modals --> :core:notifications
+    :core:commonui:modals --> :core:persistence
+    :core:commonui:modals --> :core:utils
+    :core:commonui:modals --> :domain:lemmy:data
+    :core:commonui:modals --> :resources
+```
+
+```mermaid
+flowchart LR
+    :core:md --> :core:commonui:components
+    :core:md --> :core:utils
+    :core:md --> :resources
+```
+
+```mermaid
+flowchart LR
+    :core:navigation --> :core:persistence
+    :core:navigation --> :domain:lemmy:data
+    :core:navigation --> :resources
+```
+
+```mermaid
+flowchart LR
+    :core:notifications --> :core:appearance
+    :core:notifications --> :core:persistence
+    :core:notifications --> :domain:lemmy:data
+    :core:notifications --> :resources
+```
+
+```mermaid
+flowchart LR
+    :core:persistence --> :core:appearance
+    :core:persistence --> :core:preferences
+    :core:persistence --> :core:utils
+```
+
+```mermaid
+flowchart LR
+    :core:utils --> :resources
+```
