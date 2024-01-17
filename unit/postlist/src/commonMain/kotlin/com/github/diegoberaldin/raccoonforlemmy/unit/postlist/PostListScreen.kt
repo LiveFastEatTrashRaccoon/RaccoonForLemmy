@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -52,13 +54,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Dimensions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
@@ -124,6 +126,9 @@ class PostListScreen : Screen {
         val keepScreenOn = rememberKeepScreenOn()
         val detailOpener = remember { getDetailOpener() }
         val connection = navigationCoordinator.getBottomBarScrollConnection()
+        val bottomNavigationInset = with(LocalDensity.current) {
+            WindowInsets.navigationBars.getBottom(this).toDp()
+        }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection.onEach { section ->
@@ -163,6 +168,11 @@ class PostListScreen : Screen {
         }
 
         Scaffold(
+            contentWindowInsets = if (settings.edgeToEdge) {
+                WindowInsets(0, 0, 0, 0)
+            } else {
+                WindowInsets.navigationBars
+            },
             modifier = Modifier.padding(Spacing.xxs),
             topBar = {
                 PostsTopBar(
@@ -211,7 +221,9 @@ class PostListScreen : Screen {
                     ),
                 ) {
                     FloatingActionButtonMenu(
-                        modifier = Modifier.padding(bottom = Dimensions.topBarHeight),
+                        modifier = Modifier.padding(
+                            bottom = Spacing.xxl + Spacing.s + bottomNavigationInset,
+                        ),
                         items = buildList {
                             if (uiState.zombieModeActive) {
                                 this += FloatingActionButtonMenuItem(

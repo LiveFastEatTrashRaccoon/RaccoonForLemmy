@@ -1,6 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material3.MaterialTheme
@@ -32,7 +34,6 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.DrawerEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.TabNavigationSection
@@ -70,6 +71,9 @@ internal object MainScreen : Screen {
         val exitMessage = stringResource(MR.strings.message_confirm_exit)
         val drawerCoordinator = remember { getDrawerCoordinator() }
         val notificationCenter = remember { getNotificationCenter() }
+        val bottomNavigationInset = with(LocalDensity.current) {
+            WindowInsets.navigationBars.getBottom(this).toDp()
+        }
 
         LaunchedEffect(model) {
             model.effects.onEach {
@@ -199,7 +203,7 @@ internal object MainScreen : Screen {
                                     start = 0.dp,
                                     top = 0.dp,
                                     end = 0.dp,
-                                    bottom = Spacing.m,
+                                    bottom = bottomNavigationInset,
                                 ),
                                 backgroundColor = MaterialTheme.colorScheme.background,
                             ) {
