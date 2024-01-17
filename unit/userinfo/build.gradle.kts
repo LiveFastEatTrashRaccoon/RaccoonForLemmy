@@ -46,11 +46,11 @@ kotlin {
                 implementation(projects.core.architecture)
                 implementation(projects.core.commonui.components)
                 implementation(projects.core.commonui.lemmyui)
-                implementation(projects.unit.zoomableimage)
-                implementation(projects.unit.web)
                 implementation(projects.core.commonui.detailopenerApi)
                 implementation(projects.core.navigation)
                 implementation(projects.core.persistence)
+                implementation(projects.unit.zoomableimage)
+                implementation(projects.unit.web)
 
                 implementation(projects.domain.identity)
                 implementation(projects.domain.lemmy.data)
