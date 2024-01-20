@@ -488,6 +488,7 @@ Here is a list of the main unit modules and their purpose:
 - `:unit:choosefont` contains the bottom sheets used for font selection
 - `:unit:communitydetail` contains the community detail screen
 - `:unit:communityinfo` contains the community info bottom sheet accessible from community detail
+- `:unit:configureswipeactions` contains the screen and bottom sheets to configure swipe actions
 - `:unit:createcomment` contains the create comment form
 - `:unit:createpost` contains the create post form
 - `:unit:drawer` contains the navigation drawer

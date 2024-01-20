@@ -185,6 +185,7 @@ flowchart LR
     :feature:settings --> :unit:accountsettings
     :feature:settings --> :unit:choosecolor
     :feature:settings --> :unit:choosefont
+    :feature:settings --> :unit:configureswipeactions
     :feature:settings --> :unit:manageban
     :feature:settings --> :unit:web
     :feature:settings --> :resources
@@ -361,6 +362,19 @@ flowchart LR
     :unit:communityinfo --> :unit:web
     :unit:communityinfo --> :unit:zoomableimage
     :unit:communityinfo --> :resources
+```
+
+```mermaid
+flowchart LR
+    :unit:configureswipeactions --> :core:appearance
+    :unit:configureswipeactions --> :core:architecture
+    :unit:configureswipeactions --> :core:commonui:components
+    :unit:configureswipeactions --> :core:commonui:lemmyui
+    :unit:configureswipeactions --> :core:navigation
+    :unit:configureswipeactions --> :core:notifications
+    :unit:configureswipeactions --> :core:persistence
+    :unit:configureswipeactions --> :core:utils
+    :unit:configureswipeactions --> :resources
 ```
 
 ```mermaid
@@ -977,6 +991,7 @@ flowchart LR
     :core:persistence --> :core:appearance
     :core:persistence --> :core:preferences
     :core:persistence --> :core:utils
+    :core:persistence --> :resources
 ```
 
 ```mermaid
