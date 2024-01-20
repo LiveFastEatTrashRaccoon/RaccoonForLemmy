@@ -43,6 +43,8 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.materialIconsExtended)
                 implementation(libs.kotlinx.coroutines)
 
                 implementation(libs.koin.core)
@@ -50,6 +52,8 @@ kotlin {
                 implementation(projects.core.appearance)
                 implementation(projects.core.preferences)
                 implementation(projects.core.utils)
+
+                implementation(projects.resources)
             }
         }
         val commonTest by getting {

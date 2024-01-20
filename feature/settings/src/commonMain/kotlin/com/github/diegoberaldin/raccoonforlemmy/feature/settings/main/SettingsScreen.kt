@@ -91,6 +91,7 @@ import com.github.diegoberaldin.raccoonforlemmy.unit.choosecolor.CommentBarTheme
 import com.github.diegoberaldin.raccoonforlemmy.unit.choosecolor.VoteThemeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.unit.choosefont.FontFamilyBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.unit.choosefont.FontScaleBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.manageban.ManageBanScreen
 import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.desc
@@ -253,37 +254,52 @@ class SettingsScreen : Screen {
                             navigationCoordinator.showBottomSheet(sheet)
                         },
                     )
-                    // upvote and downvote colors
-                    SettingsColorRow(
-                        title = stringResource(MR.strings.settings_upvote_color),
-                        value = uiState.upVoteColor ?: MaterialTheme.colorScheme.primary,
-                        onTap = rememberCallback {
-                            val screen = VoteThemeBottomSheet(
-                                actionType = 0,
-                            )
-                            navigationCoordinator.showBottomSheet(screen)
-                        },
-                    )
-                    SettingsColorRow(
-                        title = stringResource(MR.strings.settings_downvote_color),
-                        value = uiState.downVoteColor ?: MaterialTheme.colorScheme.tertiary,
-                        onTap = rememberCallback {
-                            val screen = VoteThemeBottomSheet(
-                                actionType = 1,
-                            )
-                            navigationCoordinator.showBottomSheet(screen)
-                        },
-                    )
-                    SettingsColorRow(
-                        title = stringResource(MR.strings.settings_reply_color),
-                        value = uiState.replyColor ?: MaterialTheme.colorScheme.secondary,
-                        onTap = rememberCallback {
-                            val screen = VoteThemeBottomSheet(
-                                actionType = 2,
-                            )
-                            navigationCoordinator.showBottomSheet(screen)
-                        },
-                    )
+
+                    // action colors
+                    if (uiState.isLogged) {
+                        SettingsColorRow(
+                            title = stringResource(MR.strings.settings_upvote_color),
+                            value = uiState.upVoteColor ?: MaterialTheme.colorScheme.primary,
+                            onTap = rememberCallback {
+                                val screen = VoteThemeBottomSheet(
+                                    actionType = 0,
+                                )
+                                navigationCoordinator.showBottomSheet(screen)
+                            },
+                        )
+                        SettingsColorRow(
+                            title = stringResource(MR.strings.settings_downvote_color),
+                            value = uiState.downVoteColor ?: MaterialTheme.colorScheme.tertiary,
+                            onTap = rememberCallback {
+                                val screen = VoteThemeBottomSheet(
+                                    actionType = 1,
+                                )
+                                navigationCoordinator.showBottomSheet(screen)
+                            },
+                        )
+                        SettingsColorRow(
+                            title = stringResource(MR.strings.settings_reply_color),
+                            value = uiState.replyColor ?: MaterialTheme.colorScheme.secondary,
+                            onTap = rememberCallback {
+                                val screen = VoteThemeBottomSheet(
+                                    actionType = 2,
+                                )
+                                navigationCoordinator.showBottomSheet(screen)
+                            },
+                        )
+                        SettingsColorRow(
+                            title = stringResource(MR.strings.settings_save_color),
+                            value = uiState.saveColor
+                                ?: MaterialTheme.colorScheme.secondaryContainer,
+                            onTap = rememberCallback {
+                                val screen = VoteThemeBottomSheet(
+                                    actionType = 3,
+                                )
+                                navigationCoordinator.showBottomSheet(screen)
+                            },
+                        )
+                    }
+
                     // comment bar theme
                     val commentBarColors =
                         themeRepository.getCommentBarColors(uiState.commentBarTheme)
@@ -353,7 +369,7 @@ class SettingsScreen : Screen {
                         SettingsRow(
                             title = stringResource(MR.strings.settings_post_body_max_lines),
                             value = if (uiState.postBodyMaxLines == null) {
-                               stringResource(MR.strings.settings_post_body_max_lines_unlimited)
+                                stringResource(MR.strings.settings_post_body_max_lines_unlimited)
                             } else {
                                 uiState.postBodyMaxLines.toString()
                             },
@@ -537,6 +553,16 @@ class SettingsScreen : Screen {
                             )
                         },
                     )
+                    if (uiState.isLogged) {
+                        SettingsRow(
+                            title = stringResource(MR.strings.settings_configure_swipe_actions),
+                            disclosureIndicator = true,
+                            onTap = rememberCallback {
+                                val screen = ConfigureSwipeActionsScreen()
+                                navigationCoordinator.pushScreen(screen)
+                            },
+                        )
+                    }
 
                     // double tap
                     SettingsSwitchRow(

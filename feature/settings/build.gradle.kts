@@ -64,6 +64,7 @@ kotlin {
                 implementation(projects.unit.manageban)
                 implementation(projects.unit.choosecolor)
                 implementation(projects.unit.choosefont)
+                implementation(projects.unit.configureswipeactions)
 
                 implementation(projects.resources)
             }

@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Report
@@ -22,10 +21,9 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,7 +51,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeableCard
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeAction
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SwipeActionCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.OptionId
@@ -100,6 +99,7 @@ class ReportListScreen(
             },
         )
         val detailOpener = remember { getDetailOpener() }
+        val defaultResolveColor = MaterialTheme.colorScheme.secondary
 
         LaunchedEffect(model) {
             model.effects.onEach { effect ->
@@ -223,37 +223,36 @@ class ReportListScreen(
                             }
                             items(
                                 items = uiState.postReports,
-                                key = { it.id.toString() + (it.updateDate ?: it.publishDate) + it.resolved + uiState.unresolvedOnly },
+                                key = {
+                                    it.id.toString() + (it.updateDate
+                                        ?: it.publishDate) + it.resolved + uiState.unresolvedOnly
+                                },
                             ) { report ->
-                                val endColor = MaterialTheme.colorScheme.secondary
-                                SwipeableCard(
+                                SwipeActionCard(
                                     modifier = Modifier.fillMaxWidth(),
-                                    directions = setOf(DismissDirection.EndToStart),
                                     enabled = uiState.swipeActionsEnabled,
-                                    backgroundColor = rememberCallbackArgs { direction ->
-                                        when (direction) {
-                                            DismissValue.DismissedToStart -> endColor
-                                            else -> Color.Transparent
-                                        }
-                                    },
                                     onGestureBegin = rememberCallback(model) {
                                         model.reduce(ReportListMviModel.Intent.HapticIndication)
                                     },
-                                    onDismissToStart = rememberCallback(model) {
-                                        model.reduce(
-                                            ReportListMviModel.Intent.ResolvePost(report.id),
-                                        )
-                                    },
-                                    swipeContent = { _ ->
-                                        val icon = when {
-                                            report.resolved -> Icons.Default.Report
-                                            else -> Icons.Default.ReportOff
-                                        }
-                                        Icon(
-                                            modifier = Modifier.padding(Spacing.xs),
-                                            imageVector = icon,
-                                            contentDescription = null,
-                                            tint = Color.White,
+                                    swipeToStartActions = buildList {
+                                        this += SwipeAction(
+                                            swipeContent = {
+                                                val icon = when {
+                                                    report.resolved -> Icons.Default.Report
+                                                    else -> Icons.Default.ReportOff
+                                                }
+                                                Icon(
+                                                    imageVector = icon,
+                                                    contentDescription = null,
+                                                    tint = Color.White,
+                                                )
+                                            },
+                                            backgroundColor = defaultResolveColor,
+                                            onTriggered = rememberCallback {
+                                                model.reduce(
+                                                    ReportListMviModel.Intent.ResolvePost(report.id),
+                                                )
+                                            },
                                         )
                                     },
                                     content = {
@@ -333,35 +332,31 @@ class ReportListScreen(
                                 uiState.commentReports,
                                 { it.id.toString() + (it.updateDate ?: it.publishDate) },
                             ) { report ->
-                                val endColor = MaterialTheme.colorScheme.secondary
-                                SwipeableCard(
+                                SwipeActionCard(
                                     modifier = Modifier.fillMaxWidth(),
-                                    directions = setOf(DismissDirection.EndToStart),
                                     enabled = uiState.swipeActionsEnabled,
-                                    backgroundColor = rememberCallbackArgs { direction ->
-                                        when (direction) {
-                                            DismissValue.DismissedToStart -> endColor
-                                            else -> Color.Transparent
-                                        }
-                                    },
                                     onGestureBegin = rememberCallback(model) {
                                         model.reduce(ReportListMviModel.Intent.HapticIndication)
                                     },
-                                    onDismissToStart = rememberCallback(model) {
-                                        model.reduce(
-                                            ReportListMviModel.Intent.ResolveComment(report.id),
-                                        )
-                                    },
-                                    swipeContent = { _ ->
-                                        val icon = when {
-                                            report.resolved -> Icons.Default.Report
-                                            else -> Icons.Default.ReportOff
-                                        }
-                                        Icon(
-                                            modifier = Modifier.padding(Spacing.xs),
-                                            imageVector = icon,
-                                            contentDescription = null,
-                                            tint = Color.White,
+                                    swipeToStartActions = buildList {
+                                        this += SwipeAction(
+                                            swipeContent = {
+                                                val icon = when {
+                                                    report.resolved -> Icons.Default.Report
+                                                    else -> Icons.Default.ReportOff
+                                                }
+                                                Icon(
+                                                    imageVector = icon,
+                                                    contentDescription = null,
+                                                    tint = Color.White,
+                                                )
+                                            },
+                                            backgroundColor = defaultResolveColor,
+                                            onTriggered = rememberCallback {
+                                                model.reduce(
+                                                    ReportListMviModel.Intent.ResolveComment(report.id),
+                                                )
+                                            },
                                         )
                                     },
                                     content = {
