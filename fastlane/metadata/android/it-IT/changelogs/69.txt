@@ -1,0 +1,6 @@
+- feat: azioni allo swipe personalizzabili su post, commenti e menzioni/risposte
+- fix: statistiche su utenti e comunità
+- fix: modifica post e commenti
+- fix: titolo bottom sheet lunghezza max corpo post
+- enhancement: preferenza nickname su noem@instanza utente
+- enhancement: layout in generale e miglioramenti di minore entità

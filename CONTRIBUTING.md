@@ -345,9 +345,9 @@ the beginning) and makes it really easy to access strings, icons and fonts in a 
 <dd>
 This was something that was expected to be simpler but unfortunately it wasn't. Popular kotlin libraries
 do not support multiplatform yet and the only library that advertised it was <a href="https://github.com/Kamel-Media/Kamel">Kamel</a>
-which had a major bug while rendering large images, and the community proved quite unfriendly/unwelcoming
-when reporting it. The project was already relying on Kamel for many things, from loading images on demand to
-Markdown rendering, so deciding to switch was not easy at all. In the end, the iOS part of the project 
+which had a major bug while rendering large images, which took a long time to be considered (and possibly
+has not been fixed yet). The project was already relying on Kamel for many things, from loading images on demand
+to Markdown rendering, so deciding to switch was not easy at all. In the end, the iOS part of the project 
 continues using it (Raccoon for iOS has by far bigger problems than image rendering, being a virtually
 inexistent platform) while the Android counterpart was migrated to <a href="https://github.com/coil-kt/coil">Coil</a>.
 Things will change when Coil 3.x will be release, because it will go multiplatform as well.

@@ -1,0 +1,6 @@
+- feat: customizable swipe actions on posts, comments and mentions/replies
+- fix: user and community statistics
+- fix: post and comment edit
+- fix: post max body length bottom sheet title
+- enhancement: prefer user display name over name@instance
+- enhancement: overall layout and minor improvements
