@@ -48,6 +48,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.readableName
 
 @Composable
 fun InboxReplySubtitle(
@@ -83,12 +84,10 @@ fun InboxReplySubtitle(
     Column(
         modifier = modifier,
     ) {
-        val communityName = community?.name.orEmpty()
+        val communityName = community?.readableName.orEmpty()
         val communityIcon = community?.icon.orEmpty()
-        val communityHost = community?.host.orEmpty()
-        val creatorName = creator?.name.orEmpty()
+        val creatorName = creator?.readableName.orEmpty()
         val creatorAvatar = creator?.avatar.orEmpty()
-        val creatorHost = creator?.host.orEmpty()
         if (communityName.isNotEmpty() || creatorName.isNotEmpty()) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -121,12 +120,7 @@ fun InboxReplySubtitle(
                         }
                         Text(
                             modifier = Modifier.padding(vertical = Spacing.xs),
-                            text = buildString {
-                                append(creatorName)
-                                if (creatorHost.isNotEmpty() && communityHost != creatorHost) {
-                                    append("@$creatorHost")
-                                }
-                            },
+                            text = creatorName,
                             style = MaterialTheme.typography.bodySmall,
                             color = ancillaryColor,
                             overflow = TextOverflow.Ellipsis,
@@ -162,12 +156,7 @@ fun InboxReplySubtitle(
                         }
                         Text(
                             modifier = Modifier.padding(vertical = Spacing.xs),
-                            text = buildString {
-                                append(communityName)
-                                if (communityHost.isNotEmpty()) {
-                                    append("@$communityHost")
-                                }
-                            },
+                            text = communityName,
                             style = MaterialTheme.typography.bodySmall,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
