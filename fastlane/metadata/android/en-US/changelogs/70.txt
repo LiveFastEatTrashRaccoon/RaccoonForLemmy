@@ -1,0 +1,6 @@
+- feat: opaque and transparent system bars
+- enhancement: new German translation
+- enhancement: user and community readable names
+- fix: Explore and user detail swipe actions
+- fix: open community from Profile comments
+- fix: Profile opening on Lemmy 0.19.2

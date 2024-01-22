@@ -1,0 +1,6 @@
+- feat: barre di sistema opache o trasparenti
+- enhancement: nuova traduzione in tedeesco
+- enhancement: nomi leggibili utenti e comunità
+- fix: azioni di scorrimento in sezione Esplora e dettaglio utente
+- fix: apertura comunità da commenti in sezione Profilo
+- fix: apertura Profilo su Lemmy 0.19.2
