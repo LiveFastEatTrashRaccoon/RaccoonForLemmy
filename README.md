@@ -13,7 +13,7 @@
 
 # Raccoon for Lemmy
 
-A Kotlin Multiplatform Mobile client for Lemmy.
+A Kotlin Multiplatform client for Lemmy (mainly Android).
 
 <div align="center">
 <table>
@@ -60,14 +60,15 @@ multiplatform and gradually grew as a fully functional client with many features
 ## Main features
 
 - view post feed and comments with different listing and sort types;
-- possibility to upvote and downvote (with optional swipe actions);
-- community and user detail;
+- possibility to upvote and downvote (with configurable swipe actions);
+- community and user detail (with info about moderators/moderated communities);
 - user profile with one's own posts, comments and saved items;
 - inbox with replies, mentions and direct messages;
-- global search on Lemmy with different result types (all, posts, comments, user, communities);
+- global search with different result types (all, posts, comments, user, communities);
 - create and edit new posts (with optional images);
+- cross-post contents to other communities;
 - reply to post and comments (and edit replies);
-- mark posts as read and hide read contents;
+- mark posts as read (even while scrolling) and hide read contents;
 - custom appearance (color scheme, fonts, text sizes, post layout, etc.);
 - custom localization (independent of system settings);
 - block users, communities and instances (the latter requires Lemmy >= 0.19);
@@ -76,25 +77,25 @@ multiplatform and gradually grew as a fully functional client with many features
 - lazy scrolling (referred to as "zombie mode");
 - explore all the communities on a given instance in guest mode;
 - multi-community (community aggregation);
-- community moderation tools and moderation log.
+- report post and comments with a reason;
+- view the moderation log;
+- community moderation tool (examine and resolve reports, ban users, feature posts, block
+  further comments from posts, mark comments as distinguished, remove posts/comments).
 
 Most clients for Lemmy currently offer the first points (with various degrees of completion), so
 there is nothing special about Raccoon for Lemmy, whereas the last ones are less common and are
-directed to more picky users (like me) who like to explore the Lemmy ecosystem and want to be able
-to group feed contents arbitrarily.
+directed to more demanding users.
 
-I like to be able to customize the appearance of my apps, so the ability to change font face or
-size and colors was of paramount importance to me. Similarly, I like when I can use an app in my
-native language and change the UI language independently from the system language, so localization
-is a first-class citizen in this project too.
+Concerning customization, the ability to change some aspects like font face or size and app
+colors, vote format, bar transparency and so on was of paramount importance from the very beginning.
+Similarly, users should be able to use the app in their native language and change the UI language
+independently from the system language.
 
-If you are a moderator of a community, it is also good to be able to moderate content from your
-mobile device instead of using the web interface, but in-app moderation is rare in the existing
-clients (and even more so in _open source_ clients). Raccoon For Lemmy is trying to bridge this gap
-and offers some extent of moderation tools (feature post, lock post, distinguish comment, remove
-post/comment, ban users and the ability to revert any of these actions).
+This app is also intended for moderators who want to use their mobile device, offering moderation
+tools (feature post, lock post, distinguish comment, remove post/comment, ban users) and the ability
+to revert any of these actions.
 
-The application is under active development, so expect new features to be added over time. Have a
+The project is under active development, so expect new features to be added over time. Have a
 look on the issues labeled with "feature" in the issue tracker to get an idea of what's going to
 come next.
 
@@ -109,27 +110,27 @@ Joking apart, one of the main goals was to experiment with KMP and learn how to 
 with the challenges of a multiplatform environment, and a medium-sized project like this was an
 ideal testing ground for that technology.
 
-Secondly, as a means to dig deeper inside Lemmy's internals and become more humble and patient
-towards other apps whenever I found anything lacking or not implemented in an optimal way (according
-to my taste).
-
-In the third place, I felt that the Android ecosystem of Lemmy apps was a little "poor" with few
+Secondly, I felt that the Android ecosystem of Lemmy apps was a little "poor" with few
 native apps (fewer open source), while the "market" is dominated by iOS and cross platform clients.
 I️ ❤️ Kotlin, I ❤️ Free and Open Source Software and I ❤️ native app development, so there was a
-"niche" that needed to be filled.
+niche that needed to be filled.
 
-Moreover, developing a new client was an opportunity to add all the features that I needed and that
-were "scattered" across different apps, e.g. I liked the feature richness
-of [Liftoff](https://github.com/liftoff-app/liftoff) (e.g. the possibility to explore all the
-communities of an external instance in guest mode), the multi-community feature of
+Developing a new client was an opportunity to add all the good features that were "scattered" across
+different apps, e.g. the feature richness of [Liftoff](https://github.com/liftoff-app/liftoff), the
+multi-community feature of
 [Summit](https://github.com/idunnololz/summit-for-lemmy) and the polished UI of the really great
-[Thunder](https://github.com/thunder-app/thunder) and I wished I could have them all in the same
-app.
+[Thunder](https://github.com/thunder-app/thunder) and so on. This app tries to be configurable
+enough to make users feel "at home" and choose what they want, while at the same time having a not
+too cluttered interface (except for the Settings screen - I know!)
+
+In the third place, this app has been a means to dig deeper inside Lemmy's internals and become more
+humble and patient towards other apps because there are technical difficulties in having to deal
+with a platform like Lemmy.
 
 This involves a high level of discretion and personal taste, I know, but this project _is_ all
 about experimenting and learning.
 
-## Technologies used:
+## Technologies:
 
 - [Koin](https://github.com/InsertKoinIO/koin) for dependency injection
 - [Voyager](https://github.com/adrielcafe/voyager) for screen navigation
@@ -142,7 +143,9 @@ about experimenting and learning.
   and [SQLCipher](https://github.com/sqlcipher/sqlcipher) for local persistence
 
 More info about the technologies used in the project can be found in
-the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md#51-tech-stack).
+the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md).
+Additionally, you can have a look at the Tech notes section in
+the [project's homepage](https://diegoberaldin.github.io/RaccoonForLemmy/).
 
 ## Want to try it out?
 
@@ -175,4 +178,4 @@ Please remember: every contribution is welcome and everyone's opinion matters he
 community project, open source, ad-free and free of charge, and it belongs to us all so don't be
 afraid to get involved.
 
-And don't forget every 🦝's motto: «Live Fast, Eat Trash» (for shortness L. F. E. T.).
+And don't forget every 🦝's motto: «Live Fast, Eat Trash» (abbreviated L.F.E.T.).

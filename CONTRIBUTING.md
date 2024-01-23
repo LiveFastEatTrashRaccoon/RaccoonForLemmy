@@ -111,8 +111,9 @@ A special thank to all those who contributed so far (in nearly chronological ord
 - [u/SgtAStrawberry](https://lemmy.world/u/SgtAStrawberry)
 - [outerair](https://github.com/outerair)
 - [u/Wild_Mastic](https://lemmy.world/u/Wild_Mastic)
+- [reusityback](https://github.com/reusityback)
 - all those who reported feedback and ideas through the Lemmy community, GitHub issues, emails,
-  private messages, homing pidgeons and every other imaginable media.
+  private messages, homing pigeons and every other imaginable media.
 
 ## 3. HOW-TOs
 

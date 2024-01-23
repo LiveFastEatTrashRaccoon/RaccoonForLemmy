@@ -21,7 +21,7 @@
 title: Raccoon for Lemmy
 email: raccoonforlemmy@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Documentation for Raccoon for Lemmy
+  Raccoon for Lemmy 🦝 documentation
 baseurl: "/RaccoonForLemmy" # the subpath of your site, e.g. /blog
 url: "https://diegoberaldin.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: diegoberaldin

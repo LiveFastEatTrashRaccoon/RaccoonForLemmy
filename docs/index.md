@@ -1,11 +1,10 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
 layout: default
 ---
 
-Welcome to RaccoonForLemmy's homepage!
+Welcome to the homepage of Raccoon for Lemmy!
+
+# Table of contents
 
 - [project overview](#overview)
 - [rationale](#rationale)
@@ -14,7 +13,7 @@ Welcome to RaccoonForLemmy's homepage!
 
 # Overview
 
-Raccoon For Lemmy is a mobile client for Lemmy, a federated aggregation and discussion platform. The
+Raccoon for Lemmy is a mobile client for Lemmy, a federated aggregation and discussion platform. The
 app is implemented as a Kotlin Multiplatform (KMP) project, mainly focusing on the Android platform.
 
 The project was started as an exercise to play around with Kotlin Multiplatform and Compose
@@ -49,13 +48,13 @@ Thunder has a really appealing and polished UI. All these apps have been and con
 of inspiration and motivation for Raccoon, which aims at having all the good sides of them, in a
 Kotlin open source app.
 
-If you are wondering why the app is called like this, aren't raccoons adorable? 🦝 Jokes aside,
+If you are wondering why the app is called like this, aren't raccoons just adorable? 🦝 Jokes aside,
 Lemmy users used to refer to themselves as "lemmings" and the platform logo clearly recalls that
 animal, so there was this tradition in the early days to use animals names for clients (some
 examples being Lemmur, Jerboa and Fennec). The original developers of this app really liked raccoons
-so they choose that. Raccoons are cunning animals that adapt to live in
-harsh conditions, finding a way to survive even with what we consider "trash". They look like masked
-criminals but do not harm anyone, they are lazy and chubby and so cute.
+so they choose that. Raccoons are cunning animals that adapt to live in harsh conditions, finding a
+way to survive even with what we consider "trash". They look like masked criminals but do not harm
+anyone, they are lazy, chubby and cute.
 
 As long as you are on this page, don't forget every raccoon's motto: «Live Fast, Eat Trash»
 (abbreviated L.F.E.T.).
@@ -84,26 +83,41 @@ Here is a list of the most important features of the app:
 - lazy scrolling (referred to as "zombie mode");
 - explore all the communities on a given instance in guest mode (instance info);
 - multi-community (community aggregation);
-- moderation log and the possibility to create reports;
+- report post and comments with a reason;
+- view the moderation log;
 - community moderation tool (examine and resolve reports, ban users, feature posts, block
   further comments from posts, mark comments as distinguished, remove posts/comments).
 
 Most clients for Lemmy currently offer the first points (with various degrees of completion),
-whereas the last ones are trickier and less common, so they are directed to more picky users.
+whereas the last ones are trickier and less common, so they are directed to more demanding users,
+who like to explore the Lemmy ecosystem, play around with settings and fine-tune their client to
+their needs.
 
-I like to be able to customize the appearance of my apps, so the ability to change font face or size
-and colors was of paramount importance to me. Similarly, I like when I can use an app in my native
-language and change the UI language independently from the system language, so localization is a
-first-class citizen in this project too.
+Concerning customization, the ability to change some aspects like font face or size and app
+colors, vote format, bar transparency and so on was of paramount importance from the very beginning.
+Similarly, users should be able to use the app in their native language and change the UI language
+independently from the system language, so localization is a first-class citizen in this project
+too.
+
+For moderators, it is also nice to be able to moderate content from your mobile device instead of
+using the web interface, and in the beginning moderation tools were rare among mobile clients.
+This app tried to bridge this gap and offer moderation tools (feature post, lock post, distinguish
+comment, remove post/comment, ban users and the ability to revert any of these actions).
 
 # Further reading
 
 If what you have read so far sounds interesting and you want to know more, here are some useful
 links:
 
-- view the project on GitHub and have a look at
-  the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md)
-- se the [Matrix space](https://matrix.to/#/#raccoonforlemmy:matrix.org) to chat in real time with
+- view the project on GitHub and have a look at the
+  general [CONTRIBUTING](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md)
+  guide
+- have a look at the more detailed documentation in the [tech notes](tech_manual/main) page.
+
+If, on the other hand, you just want to interact with the community, provide suggestions, report
+bugs or tell your opinion, you can:
+
+- use the [Matrix space](https://matrix.to/#/#raccoonforlemmy:matrix.org) to chat in real time with
   other team members, there are two rooms in the space: "General" is for general information about
   the app development and "Trashcan" is more for smalltalk and random topics.
 - use the [Lemmy community](https://lemmy.world/c/raccoonforlemmy) to receive updates about the new
@@ -115,4 +129,4 @@ links:
   for technical questions about the release roadmap, questions about app internationalization, etc.
 - finally, if none of the above methods fits your needs you
   can [write an email](mailto:raccoonforlemmy@gmail.com) or send a private
-  message to the original developer on Lemmy.
+  message on Lemmy to the [original developer](https://feddit.it/u/DieguiTux8623).
