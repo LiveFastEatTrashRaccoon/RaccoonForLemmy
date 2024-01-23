@@ -128,6 +128,7 @@
     <string name="language_sk" translatable="false">Slovenčina</string>
     <string name="language_sl" translatable="false">Slovenščina</string>
     <string name="language_sq" translatable="false">Shqip</string>
+    <string name="language_tok" translatable="false">toki pona</string>
     <string name="language_tr" translatable="false">Türkçe</string>
     <string name="language_uk" translatable="false">Українська</string>
     <string name="login_field_instance_name">Instance name</string>
@@ -354,5 +355,5 @@
     <string name="button_add">Add new</string>
     <string name="bar_theme_opaque">Opaque</string>
     <string name="bar_theme_transparent">Transparent</string>
-    <string name="settings_bar_theme">Status and navigation bar theme</string>
+    <string name="settings_bar_theme">System notification and navigation bar theme</string>
 </resources>
