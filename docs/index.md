@@ -9,6 +9,7 @@ Welcome to the homepage of Raccoon for Lemmy!
 - [project overview](#overview)
 - [rationale](#rationale)
 - [key app features](#key-app-features)
+- [credits and acknowledgements](#credits-and-acknowledgements)
 - [further reading](#further-reading)
 
 # Overview
@@ -48,7 +49,7 @@ Thunder has a really appealing and polished UI. All these apps have been and con
 of inspiration and motivation for Raccoon, which aims at having all the good sides of them, in a
 Kotlin open source app.
 
-If you are wondering why the app is called like this, aren't raccoons just adorable? 🦝 Jokes aside,
+If you are wondering why the app is called like that, aren't raccoons just adorable? 🦝 Jokes aside,
 Lemmy users used to refer to themselves as "lemmings" and the platform logo clearly recalls that
 animal, so there was this tradition in the early days to use animals names for clients (some
 examples being Lemmur, Jerboa and Fennec). The original developers of this app really liked raccoons
@@ -103,6 +104,48 @@ For moderators, it is also nice to be able to moderate content from your mobile 
 using the web interface, and in the beginning moderation tools were rare among mobile clients.
 This app tried to bridge this gap and offer moderation tools (feature post, lock post, distinguish
 comment, remove post/comment, ban users and the ability to revert any of these actions).
+
+# Credits and acknowledgements
+
+## Credits
+
+A saying from the original developer: «whenever in doubt, anguish or uncertainty, look at the code
+of Jerboa for Lemmy». It is without any doubt that this project has a gratitude debt
+towards [Jerboa](https://github.com/dessalines/jerboa), mainly in two crucial aspects of the app:
+
+- markdown processing and rendering, where `MarkwonProvider` and its implementation are inspired by
+  Jerboa for Lemmy;
+- comment processing to reconstruct the tree with missing nodes, where the memoized algorithm is,
+  too, inspired by Jerboa's.
+
+The UI is inspired (in principle, rather than in actual implementation) on the
+great [Thunder](https://github.com/thunder-app/thunder) app.
+
+The ideas for some of the features come from [Liftoff](https://github.com/liftoff-app/liftoff), e.g.
+the guest mode, while some other come from [Summit](https://github.com/idunnololz/summit-for-lemmy),
+which is again both source of inspiration and admiration.
+
+Towards all the authors and contributors of these projects, a great "thank you" 🙏️🙏️🙏️
+
+## Acknowledgements
+
+A special thanks goes to all those who contributed so far (in nearly chronological order):
+
+- [u/rb_c](https://discuss.tchncs.de/u/rb_c)
+- [u/heyazorin](https://lemmy.ml/u/heyazorin)
+- [u/thegiddystitcher](https://lemm.ee/u/thegiddystitcher)
+- [u/SgtAStrawberry](https://lemmy.world/u/SgtAStrawberry)
+- [outerair](https://github.com/outerair)
+- [u/Wild_Mastic](https://lemmy.world/u/Wild_Mastic)
+- [reusityback](https://github.com/reusityback)
+- all those who reported feedback and ideas through the Lemmy community, GitHub issues, emails,
+  private messages, homing pigeons and every other imaginable media.
+
+This project would not be what it is were it not for the huge amount of patience and dedication of
+these early adopters who sent me continuous feedback and ideas for improvement after every release,
+reported bugs, offered to help, submitted translations to their local language, etc.
+
+You are awesome, thanks 🙏️🙏️🙏️
 
 # Further reading
 
