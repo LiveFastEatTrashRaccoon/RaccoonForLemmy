@@ -144,8 +144,9 @@ about experimenting and learning.
 
 More info about the technologies used in the project can be found in
 the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md).
-Additionally, you can have a look at the Tech notes section in
-the [project's homepage](https://diegoberaldin.github.io/RaccoonForLemmy/).
+Additionally, you can have a look at
+the [Tech notes](https://diegoberaldin.github.io/RaccoonForLemmy/tech_manual/main) section in
+the project's homepage.
 
 ## Want to try it out?
 
@@ -160,6 +161,10 @@ Here are some options to install the application on your device.
 <a href="https://play.google.com/apps/testing/com.github.diegoberaldin.raccoonforlemmy.android">
   <img src="https://img.shields.io/badge/Install with:-Google_Play-34a853" />
 </a>
+
+And please check out
+the [user manual](https://diegoberaldin.github.io/RaccoonForLemmy/user_manual/main) if you need a
+description of the screens.
 
 ## Want to leave your feedback or report a bug?
 

@@ -152,24 +152,25 @@ You are awesome, thanks 🙏️🙏️🙏️
 If what you have read so far sounds interesting and you want to know more, here are some useful
 links:
 
-- view the project on GitHub and have a look at the
-  general [CONTRIBUTING](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md)
-  guide
-- have a look at the more detailed documentation in the [tech notes](tech_manual/main) page.
+- check out the [user manual](user_manual/main);
+- consult
+  the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md)
+  on GitHub;
+- have a look at the more detailed documentation in the [technical manual](tech_manual/main).
 
 If, on the other hand, you just want to interact with the community, provide suggestions, report
 bugs or tell your opinion, you can:
 
 - use the [Matrix space](https://matrix.to/#/#raccoonforlemmy:matrix.org) to chat in real time with
   other team members, there are two rooms in the space: "General" is for general information about
-  the app development and "Trashcan" is more for smalltalk and random topics.
+  the app development and "Trashcan" is more for smalltalk and random topics;
 - use the [Lemmy community](https://lemmy.world/c/raccoonforlemmy) to receive updates about the new
   releases, participate into public discussions in the Lemmy style and provide your feedback or even
-  share your memes about raccoons with any other interested people
+  share your memes about raccoons with any other interested people;
 - use the [GitHub issue tracker](https://github.com/diegoberaldin/RaccoonForLemmy/issues) to report
-  bugs or request features
+  bugs or request features;
 - use the [GitHub discussion section](https://github.com/diegoberaldin/RaccoonForLemmy/discussions)
-  for technical questions about the release roadmap, questions about app internationalization, etc.
+  for technical questions about the release roadmap, questions about app internationalization, etc.;
 - finally, if none of the above methods fits your needs you
   can [write an email](mailto:raccoonforlemmy@gmail.com) or send a private
   message on Lemmy to the [original developer](https://feddit.it/u/DieguiTux8623).
