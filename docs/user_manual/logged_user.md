@@ -48,6 +48,9 @@ The Inbox screen is divided into three sections:
 - Messages: contains the direct messages that other users have sent to you, grouped by users as a
   chat.
 
+You can select (using the top bar) which filter to apply, i.e. whether all items should be included
+or just unread ones.
+
 ![inbox](images/logged_inbox.jpg)
 
 ### 2.6 Settings
@@ -89,3 +92,21 @@ here is a description of the additional functions:
 ![settings 1](images/logged_swipe_actions.jpg)
 ![settings 1](images/logged_web_settings.jpg)
 ![settings 1](images/logged_ban_filter.jpg)
+
+### 2.7 Moderation tools
+
+As a moderator, you can access the list of reports that users have submitted about posts and
+comments in your community. The report list can be accessed by the community detail, using the "⋮"
+button in the top right corner.
+
+The report list screen can be filtered like the inbox (including all items or just unresolved ones)
+and it is divided in two sections:
+
+- Posts: reported posts;
+- Comments: reported comments;
+
+For each report you can see the reason that was specified by the reporting users, you can open the
+content (e.g. to remove it) and you can mark the report as "resolved" once you are done with it.
+
+![report list](images/logged_mod_tools.jpg)
+

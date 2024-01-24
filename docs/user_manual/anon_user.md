@@ -139,3 +139,17 @@ The settings screen allows you to customize the look and behaviour of your app.
 ![settings](images/anon_settings_1.png)
 ![settings](images/anon_settings_2.png)
 ![settings](images/anon_settings_3.png)
+
+### 1.9 Moderation log
+
+The moderation log can be accessed from the community detail using the "⋮" button. It contains a
+list of all the actions that happened for that given community, e.g.:
+
+- users being promoted (or removed) to moderator;
+- posts and comments being removed/restored;
+- posts being locked (prevent further comments) or unlocked;
+- posts being featured;
+- comments being marked as distinguished;
+- community being transferred.
+
+![moderation log](images/logged_modlog.jpg)
