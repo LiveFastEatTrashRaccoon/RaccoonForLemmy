@@ -7,3 +7,5 @@ layout: default
 This page contains a short description of the main features of the app
 
 {% include_relative anon_user.md %}
+
+{% include_relative logged_user.md %}
