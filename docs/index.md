@@ -152,11 +152,11 @@ You are awesome, thanks 🙏️🙏️🙏️
 If what you have read so far sounds interesting and you want to know more, here are some useful
 links:
 
-- check out the [user manual](user_manual/main);
+- check out the [User manual](user_manual/main);
+- have a look at the more detailed documentation in the [Technical manual](tech_manual/main);
 - consult
   the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md)
-  on GitHub;
-- have a look at the more detailed documentation in the [technical manual](tech_manual/main).
+  on GitHub.
 
 If, on the other hand, you just want to interact with the community, provide suggestions, report
 bugs or tell your opinion, you can:

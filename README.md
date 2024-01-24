@@ -57,6 +57,24 @@ Raccoon for Lemmy is a client for the federated aggregation and discussion platf
 The project started as an exercise to play around with Kotlin Multiplatform (KMP) and Compose
 multiplatform and gradually grew as a fully functional client with many features.
 
+## Want to try it out?
+
+Here are some options to install the application on your device.
+
+<a href="https://github.com/ImranR98/Obtainium/releases">
+  <img src="https://img.shields.io/badge/Install with:-Obtainium-4d29a0" />
+</a>
+
+<br />
+
+<a href="https://play.google.com/apps/testing/com.github.diegoberaldin.raccoonforlemmy.android">
+  <img src="https://img.shields.io/badge/Install with:-Google_Play-34a853" />
+</a>
+
+And please check out
+the [User manual](https://diegoberaldin.github.io/RaccoonForLemmy/user_manual/main) if you need a
+description of the screens.
+
 ## Main features
 
 - view post feed and comments with different listing and sort types;
@@ -130,7 +148,9 @@ with a platform like Lemmy.
 This involves a high level of discretion and personal taste, I know, but this project _is_ all
 about experimenting and learning.
 
-## Technologies:
+## Techical notes:
+
+The project uses the following technologies:
 
 - [Koin](https://github.com/InsertKoinIO/koin) for dependency injection
 - [Voyager](https://github.com/adrielcafe/voyager) for screen navigation
@@ -144,27 +164,10 @@ about experimenting and learning.
 
 More info about the technologies used in the project can be found in
 the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md).
+
 Additionally, you can have a look at
-the [Tech notes](https://diegoberaldin.github.io/RaccoonForLemmy/tech_manual/main) section in
+the [Technical manual](https://diegoberaldin.github.io/RaccoonForLemmy/tech_manual/main) section in
 the project's homepage.
-
-## Want to try it out?
-
-Here are some options to install the application on your device.
-
-<a href="https://github.com/ImranR98/Obtainium/releases">
-  <img src="https://img.shields.io/badge/Install with:-Obtainium-4d29a0" />
-</a>
-
-<br />
-
-<a href="https://play.google.com/apps/testing/com.github.diegoberaldin.raccoonforlemmy.android">
-  <img src="https://img.shields.io/badge/Install with:-Google_Play-34a853" />
-</a>
-
-And please check out
-the [user manual](https://diegoberaldin.github.io/RaccoonForLemmy/user_manual/main) if you need a
-description of the screens.
 
 ## Want to leave your feedback or report a bug?
 

@@ -1,6 +1,6 @@
-## Anonymous user
+## 1 Anonymous user
 
-### Home screen
+### 1.1 Home screen
 
 The home screen is made up by three components:
 
@@ -19,7 +19,7 @@ the top or activate the "zombie mode" (i.e. automatic scrolling).
 ![home screen](images/anon_post_list.png)
 ![floating action button menu](images/anon_home_fab.png)
 
-### Post detail
+### 1.2 Post detail
 
 By selecting a post you can open the corresponding detail screen.
 
@@ -35,7 +35,7 @@ Markdown and inspect/copy its contents.
 ![post detail](images/anon_post_detail.png)
 ![see raw post](images/anon_see_raw.png)
 
-### Side menu
+### 1.3 Side menu
 
 In anonymous mode, the side menu gives you the opportunity to change instance (the same menu can be
 accessed by tapping the "via ..." label in the home top bar).
@@ -45,7 +45,7 @@ If your preferred instance is not listed, you can add a new one using the "+" bu
 ![side menu select instance](images/anon_select_instance.png)
 ![add instance](images/anon_add_instance.png)
 
-### Community detail
+### 1.4 Community detail
 
 By tapping on the community info above each post title, you can open the community detail screen,
 which is very similar to the home (you can activate the zombie mode here too).
@@ -56,7 +56,7 @@ information.
 ![community detail](images/anon_community_detail.png)
 ![user info](images/anon_community_info.png)
 
-### User detail
+### 1.5 User detail
 
 Conversely, if you tap on the user name above the title, you will access the user detail screen
 where it is possible to see the posts and comments created by that particular user.
@@ -67,14 +67,14 @@ information.
 ![user detail](images/anon_user_detail.png)
 ![user info](images/anon_user_info.png)
 
-### Explore
+### 1.6 Explore
 
 The explore screens allows you to search Lemmy (among All or local feeds) for contents and filter by
 a query string and result type (post, comment, communities, users or everything).
 
 ![explore](images/anon_explore.png)
 
-### Profile and Inbox
+### 1.7 Profile and Inbox
 
 In anonymous mode the profile and inbox screens are just placeholders that invite you to access with
 an account.
@@ -82,7 +82,7 @@ an account.
 ![explore](images/anon_profile.png)
 ![explore](images/anon_inbox.png)
 
-### Settings
+### 1.8 Settings
 
 The settings screen allows you to customize the look and behaviour of your app.
 
@@ -118,8 +118,6 @@ The settings screen allows you to customize the look and behaviour of your app.
     - Disable infinite scrolling: if this option is enabled, instead of automatically fetching new
       contents while scrolling (in home, community detail, post detail, user detail) an explicit "
       Load more" button is shown, in order to prevent the "doom scrolling" effect;
-    - Mark posts as read when scrolling: instead of marking posts read with an explicit interaction,
-      posts are marked as read on the fly as they become visible while scrolling;
     - Zombie mode interval duration: amount of time between automatic scroll in "lazy mode";
     - Zombie mode scroll amount: translation amount for the automatic scroll in "lazy mode";
     - Hide navigation bar while scrolling: makes the bottom navigation bar invisible while scrolling

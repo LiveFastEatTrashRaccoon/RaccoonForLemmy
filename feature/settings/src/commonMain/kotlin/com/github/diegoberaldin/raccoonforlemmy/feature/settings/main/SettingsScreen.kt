@@ -521,16 +521,18 @@ class SettingsScreen : Screen {
                         },
                     )
 
-                    // mark as read while scrolling
-                    SettingsSwitchRow(
-                        title = stringResource(MR.strings.settings_mark_as_read_while_scrolling),
-                        value = uiState.markAsReadWhileScrolling,
-                        onValueChanged = rememberCallbackArgs(model) { value ->
-                            model.reduce(
-                                SettingsMviModel.Intent.ChangeMarkAsReadWhileScrolling(value)
-                            )
-                        },
-                    )
+                    if (uiState.isLogged) {
+                        // mark as read while scrolling
+                        SettingsSwitchRow(
+                            title = stringResource(MR.strings.settings_mark_as_read_while_scrolling),
+                            value = uiState.markAsReadWhileScrolling,
+                            onValueChanged = rememberCallbackArgs(model) { value ->
+                                model.reduce(
+                                    SettingsMviModel.Intent.ChangeMarkAsReadWhileScrolling(value)
+                                )
+                            },
+                        )
+                    }
 
                     // zombie mode interval
                     SettingsRow(
