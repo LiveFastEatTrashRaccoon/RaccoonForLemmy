@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_back_to_top">o tawa sewi</string>
     <string name="action_chat">o open e toki</string>
     <string name="action_clear_read">lukin la, o weka</string>
-    <string name="action_create_post">o pali e lipu</string>
+    <string name="action_create_post">o sin e lipu</string>
     <string name="action_reply">o toki lili</string>
     <string name="action_activate_zombie_mode">o open e nasin pi jan moli</string>
     <string name="action_deactivate_zombie_mode">o pini e nasin pi jan moli</string>
@@ -89,8 +89,8 @@
     <string name="inbox_listing_type_all">ale</string>
     <string name="inbox_listing_type_title">nasin lukin</string>
     <string name="inbox_listing_type_unread">lukin ala</string>
-    <string name="inbox_not_logged_message">ilo li sona ala e ni: sina seme.\no tawa insa lon lipu
-        "sona jan" tawa ni: sina lukin e toki sina.
+    <string name="inbox_not_logged_message">ilo li sona ala e ni: sina seme.\no tawa insa lon lipu \&quot;sona
+        jan\&quot; tawa ni: sina lukin e toki sina.
     </string>
     <string name="inbox_section_mentions">nimi</string>
     <string name="inbox_section_messages">toki</string>
@@ -116,13 +116,13 @@
     <string name="message_image_loading_error">kama jo e sitelen la, pakala li lon</string>
     <string name="message_invalid_field">sona li ike</string>
     <string name="message_missing_field">sona li lon ala</string>
-    <string name="message_operation_successful">pali li pini pona</string>
+    <string name="message_operation_successful">ona li pini pona</string>
     <string name="multi_community_editor_communities">kulupu</string>
     <string name="multi_community_editor_icon">sitelen lili</string>
     <string name="multi_community_editor_name">nimi</string>
     <string name="multi_community_editor_title">ante e mute-kulupu</string>
     <string name="navigation_drawer_anonymous">nimi ala</string>
-    <string name="navigation_drawer_title_bookmarks">tenpo nanpa tu</string>
+    <string name="navigation_drawer_title_bookmarks">awen sona</string>
     <string name="navigation_drawer_title_subscriptions">o lawa e wile lukin</string>
     <string name="navigation_home">lipu</string>
     <string name="navigation_inbox">poki toki</string>
@@ -240,7 +240,7 @@
     <string name="report_action_unresolve">o weka ala</string>
     <string name="sidebar_not_logged_message">o kama pona lon ilo Rakun tawa ilo Lemi!\n\nsina tawa
         insa ala la, o kepeken e ilo (▼) tawa ante e ilo nanpa.\n\nwile la, tenpo ale la, sina ken
-        tawa insa e ilo nanpa sina lon lipo "sona jan".\n\no musi lon ilo Lemi!
+        tawa insa e ilo nanpa sina lon lipo \&quot;sona jan\&quot;.\n\no musi lon ilo Lemi!
     </string>
     <string name="settings_default_inbox_type">nasin pi poki toki</string>
     <string name="mod_action_add_mod">o sin e jan lawa</string>
@@ -284,7 +284,7 @@
     <string name="user_info_moderates">jan lawa</string>
     <string name="user_info_admin">jan lawa pi ilo nanpa</string>
     <string name="settings_about_chat_matrix">o toki lon ilo Maturi</string>
-    <string name="settings_reply_color">kule pi pali toki</string>
+    <string name="settings_reply_color">kule toki</string>
     <string name="settings_section_account">nasin pi sona jan</string>
     <string name="settings_web_preferences">nasin pi linja sona</string>
     <string name="settings_web_header_personal">sona jan</string>
@@ -311,11 +311,11 @@
     <string name="post_list_load_more_posts">o kama jo e lipu mute</string>
     <string name="settings_infinite_scroll_disabled">o pini e tawa lon tenpo ale</string>
     <string name="dialog_title_add_instance">o sin e ilo nanpa</string>
-    <string name="settings_save_color">kule pi pali awen</string>
-    <string name="settings_configure_swipe_actions">o lawa e pali pi tawa luka</string>
+    <string name="settings_save_color">kule pi awen sona</string>
+    <string name="settings_configure_swipe_actions">o lawa e tawa luka</string>
     <string name="action_upvote">o pana wile pona</string>
     <string name="action_downvote">o pana wile ike</string>
-    <string name="action_save">o awen</string>
+    <string name="action_save">o awen sona</string>
     <string name="action_toggle_read">o sitelen sama lukin/lukin ala</string>
     <string name="configure_actions_side_start">pali pi luka wawa</string>
     <string name="configure_actions_side_end">pali pi luka ike</string>
