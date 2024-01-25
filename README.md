@@ -16,6 +16,23 @@
 A Kotlin Multiplatform client for Lemmy (mainly Android).
 
 <div align="center">
+  <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;">
+    <a href="https://github.com/ImranR98/Obtainium/releases"><img width="200"  src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/c341aeee-f779-41f0-b230-0c3081da3de5" /></a>
+    <a href="https://play.google.com/store/apps/details?id=com.github.diegoberaldin.raccoonforlemmy.android"><img width="200" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" /></a>
+  </div>
+</div>
+
+Raccoon for Lemmy is a client for the federated aggregation and discussion platform Lemmy.
+
+The project started as an exercise to play around with Kotlin Multiplatform (KMP) and Compose
+multiplatform and gradually grew as a fully functional client with many features.
+
+Have a look at the [User manual](https://diegoberaldin.github.io/RaccoonForLemmy/user_manual/main)
+for a more detailed explanation or
+the [Technical manual](https://diegoberaldin.github.io/RaccoonForLemmy/tech_manual/main)
+for some technical notes.
+
+<div align="center">
 <table>
   <tr>
     <td>
@@ -51,29 +68,6 @@ A Kotlin Multiplatform client for Lemmy (mainly Android).
   </tr>
 </table>
 </div>
-
-Raccoon for Lemmy is a client for the federated aggregation and discussion platform Lemmy.
-
-The project started as an exercise to play around with Kotlin Multiplatform (KMP) and Compose
-multiplatform and gradually grew as a fully functional client with many features.
-
-## Want to try it out?
-
-Here are some options to install the application on your device.
-
-<a href="https://github.com/ImranR98/Obtainium/releases">
-  <img src="https://img.shields.io/badge/Install with:-Obtainium-4d29a0" />
-</a>
-
-<br />
-
-<a href="https://play.google.com/apps/testing/com.github.diegoberaldin.raccoonforlemmy.android">
-  <img src="https://img.shields.io/badge/Install with:-Google_Play-34a853" />
-</a>
-
-And please check out
-the [User manual](https://diegoberaldin.github.io/RaccoonForLemmy/user_manual/main) if you need a
-description of the screens.
 
 ## Main features
 
@@ -164,10 +158,6 @@ The project uses the following technologies:
 
 More info about the technologies used in the project can be found in
 the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md).
-
-Additionally, you can have a look at
-the [Technical manual](https://diegoberaldin.github.io/RaccoonForLemmy/tech_manual/main) section in
-the project's homepage.
 
 ## Want to leave your feedback or report a bug?
 
