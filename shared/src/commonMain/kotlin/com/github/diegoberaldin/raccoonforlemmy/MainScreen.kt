@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -164,11 +165,14 @@ internal object MainScreen : Screen {
                     CurrentTab()
                 },
                 snackbarHost = {
-                    SnackbarHost(
-                        modifier = Modifier,
-                        hostState = snackbarHostState,
-                    ) { data ->
+                    SnackbarHost(snackbarHostState) { data ->
                         Snackbar(
+                            modifier = Modifier
+                                .graphicsLayer {
+                                    translationY =
+                                        (-uiState.bottomBarOffsetHeightPx)
+                                            .coerceAtMost(bottomBarHeightPx - bottomNavigationInsetPx)
+                                },
                             containerColor = MaterialTheme.colorScheme.surfaceVariant,
                             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                             snackbarData = data,
