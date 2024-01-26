@@ -164,7 +164,10 @@ internal object MainScreen : Screen {
                     CurrentTab()
                 },
                 snackbarHost = {
-                    SnackbarHost(snackbarHostState) { data ->
+                    SnackbarHost(
+                        modifier = Modifier,
+                        hostState = snackbarHostState,
+                    ) { data ->
                         Snackbar(
                             containerColor = MaterialTheme.colorScheme.surfaceVariant,
                             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
