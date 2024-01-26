@@ -1,0 +1,5 @@
+- fix: window insets for bottom sheets and snackbars
+- fix: avoid unnecessary guest mode when opening communities
+- enhancement: rearrange settings and introduce "Color and fonts" screen
+- enhancement: general layout improvements (margins, font sizes, shadows)
+- enhancement: login field autofill

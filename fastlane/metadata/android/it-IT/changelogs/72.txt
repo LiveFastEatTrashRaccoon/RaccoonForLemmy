@@ -1,0 +1,5 @@
+- fix: insets finestra per bottom sheets e snackbar
+- fix: evita modalità ospite qualora non necessaria all'apertura comunità
+- enhancement: riordino impostazioni, nuova schermata "Colori e font"
+- enhancement: miglioramenti generali di layout (margini, dimensioni font, ombreggiature)
+- enhancement: autocompletamento campi login
