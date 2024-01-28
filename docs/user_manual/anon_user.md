@@ -79,8 +79,8 @@ a query string and result type (post, comment, communities, users or everything)
 In anonymous mode the profile and inbox screens are just placeholders that invite you to access with
 an account.
 
-![explore](images/anon_profile.png)
-![explore](images/anon_inbox.png)
+![anonymous profile](images/anon_profile.png)
+![anonymous inbox](images/anon_inbox.png)
 
 ### 1.8 Settings
 
@@ -94,20 +94,14 @@ The settings screen allows you to customize the look and behaviour of your app.
     - System notification and navigation bar theme: if you enable edge-to-edge display, choosing "
       Transparent" makes the status and nav bar completely transparent, otherwise they have the
       system color with a slight alpha to make them more visible;
-    - Custom theme color: (requires "Use dynamic color" off to be applied) generate a palette by
-      choosing a seed color from a predefined list or custom color;
-    - Comment bar theme: palette of colors used to distinguish nested comments;
-    - UI font family: typeface used for the app UI elements (menus, labels, etc);
-    - Content font family: typeface used for post and comments on Lemmy;
-    - UI text size: scale factor to apply to the app UI elements;
-    - Content text size: scale factor to apply to posts and comments on Lemmy;
+    - Show navigation bar titles: include the section titles in the bottom navigation bar;
+    - Colors and fonts: opens the color and font configuration screen;
+- Post and comments:
     - Post layout: choose a layout (Card, Compact, Full) for posts
     - Vote format: see the score of posts and comments as aggregated (`upvotes - downvotes`), split
       or percentage (`upvotes / (upvotes + downvotes) * 100`);
     - Full height images: show images with scaled width and full height (instead of capping the
       height) in the feed;
-    - Show navigation bar titles: include the section titles in the bottom navigation bar;
-- Post and comments:
     - Default feed type: listing type for the home screen applied by default
     - Default post sort type: sort type for the home, community detail and user detail applied by
       default;
@@ -134,11 +128,25 @@ The settings screen allows you to customize the look and behaviour of your app.
 - Debug:
     - Enable crash reporting: send anonymous reports about crash events;
     - About this app: shows a dialog with the app versions and some useful shortcuts to reach out to
-      the developers or other members of the community.
+      the developers or other members of the community;
+    - User manual: opens the application manual online (this page).
 
-![settings](images/anon_settings_1.png)
-![settings](images/anon_settings_2.png)
-![settings](images/anon_settings_3.png)
+![settings first part](images/anon_settings_1.jpg)
+![settings second part](images/anon_settings_2.jpg)
+
+#### 1.8.1 Colors and fonts
+
+This screen allows to configure colors and fonts of the UI:
+
+- Custom theme color: (requires "Use dynamic color" off to be applied) generate a palette by
+  choosing a seed color from a predefined list or custom color;
+- Comment bar theme: palette of colors used to distinguish nested comments;
+- UI font family: typeface used for the app UI elements (menus, labels, etc);
+- Content font family: typeface used for post and comments on Lemmy;
+- UI text size: scale factor to apply to the app UI elements;
+- Content text size: scale factor to apply to posts and comments on Lemmy;
+
+![colors and fonts](images/anon_color_fonts.jpg)
 
 ### 1.9 Moderation log
 

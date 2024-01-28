@@ -61,13 +61,6 @@ additional items and sub-screens.
 Please refer to [description of the page](#18-settings) for anonymous users for the common parts,
 here is a description of the additional functions:
 
-- Look and feel:
-    - Upvote color: color of the upvote action (both used as a card background when swiping and to
-      highlight the vote indicator when you have upvoted a content);
-    - Downvote color: color of the downvote action (both used as a card background when swiping and
-      to highlight the vote indicator when you have downvoted a content);
-    - Reply action color: card background color for the reply action;
-    - Save action color: card background color for the save action;
 - Posts and comments:
     - Default inbox type: whether the Inbox includes all contents by default of just unread ones;
 - Behaviour:
@@ -75,23 +68,50 @@ here is a description of the additional functions:
       interaction, posts are marked as read on the fly as they become visible while scrolling;
     - Enable double tap action: instead of using swipe actions, this option activated the "
       double tap to like" mode some users may be familiar with from other social apps;
-    - Configure swipe actions: opens the configure swipe actions screen where it is possible to
-      assign an action to the 4 slots (two on the left side and two on the right side) of the
-      cards used to render post, comments and inbox items;
+    - Configure swipe actions: opens the configure swipe actions screen;
     - Enable swipe actions: whether the swipe to left/right actions are enabled in post and comment
       list, inbox and reports;
 - Account settings:
-    - Web preferences: opens a page where you can customize some preferences associated to your
-      Lemmy account (similarly to what you can do on the webapp)
-    - Bans and filters: allows you to see what users, communities and instances you have blocked and
-      remove the block (these settings are tied to your Lemmy account too);
+    - Web preferences: allows you to edit web account preferences;
+    - Bans and filters: configure user/community/instance ban and filtering options.
 
 ![settings 1](images/logged_settings_1.jpg)
-![settings 1](images/logged_settings_3.jpg)
-![settings 1](images/logged_settings_2.jpg)
-![settings 1](images/logged_swipe_actions.jpg)
-![settings 1](images/logged_web_settings.jpg)
-![settings 1](images/logged_ban_filter.jpg)
+![settings 3](images/logged_settings_2.jpg)
+![settings 2](images/logged_settings_3.jpg)
+
+#### 2.6.1 Colors and fonts
+
+This screen for anonymous users allows to configure custom colors for swipe actions:
+
+- Upvote color: color of the upvote action (both used as a card background when swiping and to
+  highlight the vote indicator when you have upvoted a content);
+- Downvote color: color of the downvote action (both used as a card background when swiping and
+  to highlight the vote indicator when you have downvoted a content);
+- Reply action color: card background color for the reply action;
+- Save action color: card background color for the save action;
+
+![colors and fonts](images/logged_color_fonts.jpg)
+
+#### 2.6.2 Configure swipe actions
+
+In this screen it is possible to assign an action to the 4 slots (two on the left side and two on
+the right side) of the cards used to render post, comments and inbox items.
+
+![configure swipe actions](images/logged_swipe_actions.jpg)
+
+#### 2.6.3 Web account settings
+
+This screen lets you configure some preferences associated to your Lemmy account (similarly to what
+you can do on the webapp).
+
+![web settings](images/logged_web_settings.jpg)
+
+#### 2.6.4 Ban and filter options
+
+This screen allows you to see what users, communities and instances you have blocked and
+remove the block (these settings are tied to your Lemmy account too).
+
+![bans and filters](images/logged_ban_filter.jpg)
 
 ### 2.7 Moderation tools
 
