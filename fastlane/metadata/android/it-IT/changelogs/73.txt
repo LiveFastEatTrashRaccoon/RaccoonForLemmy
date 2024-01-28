@@ -1,0 +1,3 @@
+- feat: mostra/nascondi punteggi per post e commenti
+- feat: cambia account da menu laterale
+- enhancement: aggiunti riferimenti a store e manuale utente
