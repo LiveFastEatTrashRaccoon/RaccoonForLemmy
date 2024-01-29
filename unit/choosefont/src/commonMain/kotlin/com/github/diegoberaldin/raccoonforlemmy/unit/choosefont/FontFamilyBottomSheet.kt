@@ -40,7 +40,6 @@ private val defaultChoices: List<Int> = listOf(
 ).map { it.toInt() }
 
 
-
 class FontFamilyBottomSheet(
     private val values: List<Int> = defaultChoices,
     private val content: Boolean = false,
@@ -81,10 +80,11 @@ class FontFamilyBottomSheet(
                     for (value in values) {
                         val family = value.toUiFontFamily()
                         Row(
-                            modifier = Modifier.padding(
-                                horizontal = Spacing.s,
-                                vertical = Spacing.m,
-                            )
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = Spacing.s,
+                                    vertical = Spacing.s,
+                                )
                                 .fillMaxWidth()
                                 .onClick(
                                     onClick = rememberCallback {

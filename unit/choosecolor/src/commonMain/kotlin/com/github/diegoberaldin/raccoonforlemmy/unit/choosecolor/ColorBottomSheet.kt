@@ -95,23 +95,26 @@ class ColorBottomSheet : Screen {
                     val text = value.second
                     val isChooseCustom = text == customText
                     Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.s,
-                        ).fillMaxWidth().onClick(
-                            onClick = rememberCallback {
-                                if (!isChooseCustom) {
-                                    notificationCenter.send(
-                                        NotificationCenterEvent.ChangeColor(
-                                            value.first
+                        modifier = Modifier
+                            .padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            )
+                            .fillMaxWidth()
+                            .onClick(
+                                onClick = rememberCallback {
+                                    if (!isChooseCustom) {
+                                        notificationCenter.send(
+                                            NotificationCenterEvent.ChangeColor(
+                                                value.first
+                                            )
                                         )
-                                    )
-                                    navigationCoordinator.hideBottomSheet()
-                                } else {
-                                    customPickerDialogOpened = true
-                                }
-                            },
-                        ),
+                                        navigationCoordinator.hideBottomSheet()
+                                    } else {
+                                        customPickerDialogOpened = true
+                                    }
+                                },
+                            ),
                     ) {
                         Text(
                             text = text,

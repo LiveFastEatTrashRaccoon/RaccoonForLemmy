@@ -62,16 +62,19 @@ class ShareBottomSheet(
                 ) {
                     for (value in urls) {
                         Row(
-                            modifier = Modifier.padding(
-                                horizontal = Spacing.s,
-                                vertical = Spacing.m,
-                            ).fillMaxWidth().onClick(
-                                onClick = rememberCallback {
-                                    val event = NotificationCenterEvent.Share(value)
-                                    notificationCenter.send(event)
-                                    navigationCoordinator.hideBottomSheet()
-                                },
-                            ),
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = Spacing.s,
+                                    vertical = Spacing.s,
+                                )
+                                .fillMaxWidth()
+                                .onClick(
+                                    onClick = rememberCallback {
+                                        val event = NotificationCenterEvent.Share(value)
+                                        notificationCenter.send(event)
+                                        navigationCoordinator.hideBottomSheet()
+                                    },
+                                ),
                         ) {
                             Text(
                                 text = value,

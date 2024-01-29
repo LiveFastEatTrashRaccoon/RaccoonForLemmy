@@ -74,10 +74,11 @@ class ThemeBottomSheet : Screen {
             ) {
                 for (value in values) {
                     Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.m,
-                        )
+                        modifier = Modifier
+                            .padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            )
                             .fillMaxWidth()
                             .onClick(
                                 onClick = rememberCallback {

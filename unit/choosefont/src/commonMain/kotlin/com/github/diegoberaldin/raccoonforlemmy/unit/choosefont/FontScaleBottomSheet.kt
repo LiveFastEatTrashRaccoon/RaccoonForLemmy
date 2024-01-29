@@ -39,7 +39,6 @@ private val defaultChoices: List<Float> = listOf(
 ).map { it.scaleFactor }
 
 
-
 class FontScaleBottomSheet(
     private val values: List<Float> = defaultChoices,
     private val content: Boolean,
@@ -80,10 +79,11 @@ class FontScaleBottomSheet(
                     for (value in values) {
                         val fontScale = value.toFontScale()
                         Row(
-                            modifier = Modifier.padding(
-                                horizontal = Spacing.s,
-                                vertical = Spacing.m,
-                            )
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = Spacing.s,
+                                    vertical = Spacing.s,
+                                )
                                 .fillMaxWidth()
                                 .onClick(
                                     onClick = rememberCallback {

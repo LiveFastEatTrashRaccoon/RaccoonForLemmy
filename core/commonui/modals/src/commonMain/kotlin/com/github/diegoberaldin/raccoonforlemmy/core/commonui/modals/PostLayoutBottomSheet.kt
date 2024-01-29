@@ -72,17 +72,20 @@ class PostLayoutBottomSheet : Screen {
                 ) {
                     for (value in values) {
                         Row(
-                            modifier = Modifier.padding(
-                                horizontal = Spacing.s,
-                                vertical = Spacing.m,
-                            ).fillMaxWidth().onClick(
-                                onClick = rememberCallback {
-                                    notificationCenter.send(
-                                        NotificationCenterEvent.ChangePostLayout(value)
-                                    )
-                                    navigationCoordinator.hideBottomSheet()
-                                },
-                            ),
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = Spacing.s,
+                                    vertical = Spacing.s,
+                                )
+                                .fillMaxWidth()
+                                .onClick(
+                                    onClick = rememberCallback {
+                                        notificationCenter.send(
+                                            NotificationCenterEvent.ChangePostLayout(value)
+                                        )
+                                        navigationCoordinator.hideBottomSheet()
+                                    },
+                                ),
                         ) {
                             Text(
                                 text = value.toReadableName(),

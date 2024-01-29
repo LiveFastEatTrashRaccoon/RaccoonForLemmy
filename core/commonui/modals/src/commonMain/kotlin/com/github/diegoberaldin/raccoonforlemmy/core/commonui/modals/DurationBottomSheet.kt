@@ -78,17 +78,20 @@ class DurationBottomSheet(
             ) {
                 for (value in values) {
                     Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.s,
-                        ).fillMaxWidth().onClick(
-                            onClick = rememberCallback {
-                                notificationCenter.send(
-                                    NotificationCenterEvent.ChangeZombieInterval(value)
-                                )
-                                navigationCoordinator.hideBottomSheet()
-                            },
-                        ),
+                        modifier = Modifier
+                            .padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            )
+                            .fillMaxWidth()
+                            .onClick(
+                                onClick = rememberCallback {
+                                    notificationCenter.send(
+                                        NotificationCenterEvent.ChangeZombieInterval(value)
+                                    )
+                                    navigationCoordinator.hideBottomSheet()
+                                },
+                            ),
                     ) {
                         Text(
                             text = value.getPrettyDuration(

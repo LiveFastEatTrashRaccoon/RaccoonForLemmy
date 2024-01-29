@@ -76,19 +76,22 @@ class CommentBarThemeBottomSheet : Screen {
                 for (value in values) {
                     val text = value.toReadableName()
                     Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.s,
-                        ).fillMaxWidth().onClick(
-                            onClick = rememberCallback {
-                                notificationCenter.send(
-                                    NotificationCenterEvent.ChangeCommentBarTheme(
-                                        value
+                        modifier = Modifier
+                            .padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            )
+                            .fillMaxWidth()
+                            .onClick(
+                                onClick = rememberCallback {
+                                    notificationCenter.send(
+                                        NotificationCenterEvent.ChangeCommentBarTheme(
+                                            value
+                                        )
                                     )
-                                )
-                                navigationCoordinator.hideBottomSheet()
-                            },
-                        ),
+                                    navigationCoordinator.hideBottomSheet()
+                                },
+                            ),
                     ) {
                         Text(
                             text = text,

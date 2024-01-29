@@ -82,21 +82,24 @@ class PostBodyMaxLinesBottomSheet(
             ) {
                 for (value in values) {
                     Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.s,
-                        ).fillMaxWidth().onClick(
-                            onClick = rememberCallback {
-                                if (value != null && value < 0) {
-                                    customDialogOpened = true
-                                } else {
-                                    notificationCenter.send(
-                                        NotificationCenterEvent.ChangePostBodyMaxLines(value)
-                                    )
-                                    navigationCoordinator.hideBottomSheet()
-                                }
-                            },
-                        ),
+                        modifier = Modifier
+                            .padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            )
+                            .fillMaxWidth()
+                            .onClick(
+                                onClick = rememberCallback {
+                                    if (value != null && value < 0) {
+                                        customDialogOpened = true
+                                    } else {
+                                        notificationCenter.send(
+                                            NotificationCenterEvent.ChangePostBodyMaxLines(value)
+                                        )
+                                        navigationCoordinator.hideBottomSheet()
+                                    }
+                                },
+                            ),
                     ) {
                         val text = when {
                             value == null -> stringResource(MR.strings.settings_post_body_max_lines_unlimited)

@@ -63,10 +63,11 @@ class InboxTypeSheet : Screen {
                     verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
                 ) {
                     Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.m,
-                        )
+                        modifier = Modifier
+                            .padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            )
                             .fillMaxWidth()
                             .onClick(
                                 onClick = rememberCallback {
@@ -88,7 +89,7 @@ class InboxTypeSheet : Screen {
                             .fillMaxWidth()
                             .padding(
                                 horizontal = Spacing.s,
-                                vertical = Spacing.m,
+                                vertical = Spacing.s,
                             ).onClick(
                                 onClick = rememberCallback {
                                     notificationCenter.send(

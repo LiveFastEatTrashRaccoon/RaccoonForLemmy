@@ -103,10 +103,11 @@ internal class SortBottomSheetMain(
                 for (value in values) {
                     val sortValue = value.toSortType()
                     Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.m,
-                        )
+                        modifier = Modifier
+                            .padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            )
                             .fillMaxWidth()
                             .onClick(
                                 onClick = rememberCallback {
@@ -213,10 +214,11 @@ internal class SortBottomSheetTop(
                 for (value in values) {
                     val sortValue = value.toSortType()
                     Row(
-                        modifier = Modifier.padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.m,
-                        )
+                        modifier = Modifier
+                            .padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            )
                             .fillMaxWidth()
                             .onClick(
                                 onClick = rememberCallback {

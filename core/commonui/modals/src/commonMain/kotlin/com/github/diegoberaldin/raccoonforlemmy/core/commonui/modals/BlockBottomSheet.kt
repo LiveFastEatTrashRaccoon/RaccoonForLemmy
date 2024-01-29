@@ -106,29 +106,32 @@ class BlockBottomSheet(
                     }
                     for (value in values) {
                         Row(
-                            modifier = Modifier.padding(
-                                horizontal = Spacing.s,
-                                vertical = Spacing.m,
-                            ).fillMaxWidth().onClick(
-                                onClick = rememberCallback {
-                                    val event = when (value.first) {
-                                        BlockActionType.Community -> NotificationCenterEvent.BlockActionSelected(
-                                            communityId = value.second
-                                        )
-
-                                        BlockActionType.Instance ->
-                                            NotificationCenterEvent.BlockActionSelected(
-                                                instanceId = value.second
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = Spacing.s,
+                                    vertical = Spacing.s,
+                                )
+                                .fillMaxWidth()
+                                .onClick(
+                                    onClick = rememberCallback {
+                                        val event = when (value.first) {
+                                            BlockActionType.Community -> NotificationCenterEvent.BlockActionSelected(
+                                                communityId = value.second
                                             )
 
-                                        BlockActionType.User -> NotificationCenterEvent.BlockActionSelected(
-                                            userId = value.second
-                                        )
-                                    }
-                                    notificationCenter.send(event)
-                                    navigationCoordinator.hideBottomSheet()
-                                },
-                            ),
+                                            BlockActionType.Instance ->
+                                                NotificationCenterEvent.BlockActionSelected(
+                                                    instanceId = value.second
+                                                )
+
+                                            BlockActionType.User -> NotificationCenterEvent.BlockActionSelected(
+                                                userId = value.second
+                                            )
+                                        }
+                                        notificationCenter.send(event)
+                                        navigationCoordinator.hideBottomSheet()
+                                    },
+                                ),
                         ) {
                             val valueText = buildString {
                                 append(value.first.toReadableName())

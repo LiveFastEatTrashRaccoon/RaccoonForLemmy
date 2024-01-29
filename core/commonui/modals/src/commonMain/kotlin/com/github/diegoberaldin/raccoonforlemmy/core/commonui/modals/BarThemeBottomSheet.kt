@@ -74,7 +74,7 @@ class BarThemeBottomSheet : Screen {
                     Row(
                         modifier = Modifier.padding(
                             horizontal = Spacing.s,
-                            vertical = Spacing.m,
+                            vertical = Spacing.s,
                         )
                             .fillMaxWidth()
                             .onClick(
