@@ -1,0 +1,4 @@
+- feat: show posts featured on local instance
+- enhancement: prevent accidental swipes while scrolling
+- fix: manages expiration of authentication tokens
+- chore: update dependencies
