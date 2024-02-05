@@ -1,0 +1,5 @@
+- fix: post edit
+- fix: comment edit after previous edit
+- fix: open community from post body
+- enhancement: post title font weight
+- enhancement: hide scores from "vote format" option
