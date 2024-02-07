@@ -1,0 +1,3 @@
+- fix: load more button for last comment
+- feat: option to prefer display names for users and communities
+- feat: configurable comment bar width

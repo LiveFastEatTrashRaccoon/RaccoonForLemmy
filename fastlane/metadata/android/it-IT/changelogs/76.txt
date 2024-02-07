@@ -1,0 +1,3 @@
+- fix: pulsante "carica altri commenti" in ultimo elemento
+- feat: opzione per prioritizzare nomi visualizzati per utenti e comunità
+- feat: larghezza barra commenti configurabile
