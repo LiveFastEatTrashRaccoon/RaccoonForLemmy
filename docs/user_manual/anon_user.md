@@ -89,15 +89,15 @@ The settings screen allows you to customize the look and behaviour of your app.
 - Look and feel:
     - Language: choose UI language (app specific);
     - UI theme: choose between light, dark, totally dark or system theme;
-    - Use dynamic colors: (on Android 12+) generate a palette based on your background dominant
-      color;
     - System notification and navigation bar theme: if you enable edge-to-edge display, choosing "
       Transparent" makes the status and nav bar completely transparent, otherwise they have the
       system color with a slight alpha to make them more visible;
     - Show navigation bar titles: include the section titles in the bottom navigation bar;
     - Colors and fonts: opens the color and font configuration screen;
 - Post and comments:
-    - Post layout: choose a layout (Card, Compact, Full) for posts
+    - Post layout: choose a layout (Card, Compact, Full) for posts;
+    - Use display names for users and communities: if enabled, uses the user display name and the
+      community title whenever possible, otherwise fallbacks to Lemmy handles;
     - Vote format: see the score of posts and comments as aggregated (`upvotes - downvotes`), split
       or percentage (`upvotes / (upvotes + downvotes) * 100`);
     - Full height images: show images with scaled width and full height (instead of capping the
@@ -138,13 +138,23 @@ The settings screen allows you to customize the look and behaviour of your app.
 
 This screen allows to configure colors and fonts of the UI:
 
-- Custom theme color: (requires "Use dynamic color" off to be applied) generate a palette by
+- Use dynamic colors: (on Android 12+) generate a palette based on your background dominant
+  color;
+- Custom theme color: (requires "Use dynamic color" option to be off) generate a palette by
   choosing a seed color from a predefined list or custom color;
 - Comment bar theme: palette of colors used to distinguish nested comments;
+- Comment bar width: allows to customize a multiplier applied to the width of comment bar indicating
+  the depth on the left of each comment;
 - UI font family: typeface used for the app UI elements (menus, labels, etc);
 - Content font family: typeface used for post and comments on Lemmy;
 - UI text size: scale factor to apply to the app UI elements;
 - Content text size: scale factor to apply to posts and comments on Lemmy;
+
+By the way, if you like Android dynamic colors and you think that on Lemmy there are plenty of
+beautiful images you could set as your home screen background, have a look
+at [this side project](https://github.com/diegoberaldin/CommonGround) of mine. It is a simple app
+that allows you to configure remote image sources from the Lemmy-verse, preview how they look like
+and set them easily as wallpapers for your home and lock screens.
 
 ![colors and fonts](images/anon_color_fonts.jpg)
 
