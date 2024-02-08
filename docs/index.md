@@ -4,6 +4,9 @@ layout: default
 
 Welcome to the homepage of Raccoon for Lemmy!
 
+If you need some guidance about how to use the app, please have a look at
+the [User manual](user_manual/main).
+
 # Table of contents
 
 - [project overview](#overview)
@@ -138,14 +141,16 @@ A special thanks goes to all those who contributed so far (in nearly chronologic
 - [outerair](https://github.com/outerair)
 - [u/Wild_Mastic](https://lemmy.world/u/Wild_Mastic)
 - [reusityback](https://github.com/reusityback)
+- [u/fisco](https://lemmy.ml/u/fisco)
 - all those who reported feedback and ideas through the Lemmy community, GitHub issues, emails,
   private messages, homing pigeons and every other imaginable media.
 
 This project would not be what it is were it not for the huge amount of patience and dedication of
 these early adopters who sent me continuous feedback and ideas for improvement after every release,
-reported bugs, offered to help, submitted translations to their local language, etc.
+reported bugs, offered to help, submitted translations to their local language, offered help to
+other users and made the community a better place, etc.
 
-You are awesome, thanks 🙏️🙏️🙏️
+You are awesome… THANKS 🙏️❤️🦝
 
 # Further reading
 
