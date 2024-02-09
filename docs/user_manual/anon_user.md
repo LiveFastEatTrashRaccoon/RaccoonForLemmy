@@ -16,8 +16,8 @@ percentage) as well as the font size/face can be configured in the Settings scre
 If you open the menu of the floating action button in the bottom right corner, you can go back to
 the top or activate the "zombie mode" (i.e. automatic scrolling).
 
-![home screen](images/anon_post_list.png)
-![floating action button menu](images/anon_home_fab.png)
+<img width="310" alt="home screen" src="images/anon_post_list.png" />
+<img width="310" alt="floating action button menu" src="images/anon_home_fab.png" />
 
 ### 1.2 Post detail
 
@@ -32,8 +32,8 @@ and vote.
 By using the "…" button you can access an additional menu about the post, e.g. you can see the raw
 Markdown and inspect/copy its contents.
 
-![post detail](images/anon_post_detail.png)
-![see raw post](images/anon_see_raw.png)
+<img width="310" alt="post detail" src="images/anon_post_detail.png" />
+<img width="310" alt="see raw post" src="images/anon_see_raw.png" />
 
 ### 1.3 Side menu
 
@@ -42,8 +42,8 @@ accessed by tapping the "via ..." label in the home top bar).
 
 If your preferred instance is not listed, you can add a new one using the "+" button.
 
-![side menu select instance](images/anon_select_instance.png)
-![add instance](images/anon_add_instance.png)
+<img width="310" alt="side menu select instance" src="images/anon_select_instance.png" />
+<img width="310" alt="add instance" src="images/anon_add_instance.png" />
 
 ### 1.4 Community detail
 
@@ -53,8 +53,8 @@ which is very similar to the home (you can activate the zombie mode here too).
 If you tap on the "⋮" button in the top right corner you can also access some additional
 information.
 
-![community detail](images/anon_community_detail.png)
-![user info](images/anon_community_info.png)
+<img width="310" alt="community detail" src="images/anon_community_detail.png" />
+<img width="310" alt="user info" src="images/anon_community_info.png" />
 
 ### 1.5 User detail
 
@@ -64,23 +64,23 @@ where it is possible to see the posts and comments created by that particular us
 If you tap on the "⋮" button in the top right corner you can also access some additional
 information.
 
-![user detail](images/anon_user_detail.png)
-![user info](images/anon_user_info.png)
+<img width="310" alt="user detail" src="images/anon_user_detail.png" />
+<img width="310" alt="user info" src="images/anon_user_info.png" />
 
 ### 1.6 Explore
 
 The explore screens allows you to search Lemmy (among All or local feeds) for contents and filter by
 a query string and result type (post, comment, communities, users or everything).
 
-![explore](images/anon_explore.png)
+<img width="310" alt="explore" src="images/anon_explore.png" />
 
 ### 1.7 Profile and Inbox
 
 In anonymous mode the profile and inbox screens are just placeholders that invite you to access with
 an account.
 
-![anonymous profile](images/anon_profile.png)
-![anonymous inbox](images/anon_inbox.png)
+<img width="310" alt="anonymous profile" src="images/anon_profile.png" />
+<img width="310" alt="anonymous inbox" src="images/anon_inbox.png" />
 
 ### 1.8 Settings
 
@@ -132,8 +132,8 @@ The settings screen allows you to customize the look and behaviour of your app.
       the developers or other members of the community;
     - User manual: opens the application manual online (this page).
 
-![settings first part](images/anon_settings_1.jpg)
-![settings second part](images/anon_settings_2.jpg)
+<img width="310" alt="settings first part" src="images/anon_settings_1.jpg" />
+<img width="310" alt="settings second part" src="images/anon_settings_2.jpg" />
 
 #### 1.8.1 Colors and fonts
 
@@ -157,7 +157,7 @@ at [this side project](https://github.com/diegoberaldin/CommonGround) of mine. I
 that allows you to configure remote image sources from the Lemmy-verse, preview how they look like
 and set them easily as wallpapers for your home and lock screens.
 
-![colors and fonts](images/anon_color_fonts.jpg)
+<img width="310" alt="colors and fonts" src="images/anon_color_fonts.jpg" />
 
 ### 1.9 Moderation log
 
@@ -171,4 +171,4 @@ list of all the actions that happened for that given community, e.g.:
 - comments being marked as distinguished;
 - community being transferred.
 
-![moderation log](images/logged_modlog.jpg)
+<img width="310" alt="moderation log" src="images/logged_modlog.jpg" />

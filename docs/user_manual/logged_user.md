@@ -10,8 +10,8 @@ The floating action button contains an option to hide read posts for logged user
 considered read when you have voted or saved it, opened its detail, opened its image or (if you
 enabled the "Mark read while scrolling" option in the Settings screen) just seen it in the feed.
 
-![post list](images/logged_post_list.jpg)
-![floating action button](images/logged_fab.jpg)
+<img width="310" alt="post list" src="images/logged_post_list.jpg" />
+<img width="310" alt="floating action button" src="images/logged_fab.jpg" />
 
 ### 2.2 Sidebar
 
@@ -19,14 +19,14 @@ For logged users, the side menu allows to see the list of subscriptions, with th
 marked as favorite to the top of the list. By clicking on each item, you will open the corresponding
 community or multi-community detail.
 
-![side bar](images/logged_side_menu.jpg)
+<img width="310" alt="side bar" src="images/logged_side_menu.jpg" />
 
 ### 2.3 Explore
 
 The Explore screen is similar to the one of anonymous users. Like in the home screen, the difference
 if that you can vote, save and reply to contents you are seeing.
 
-![explore](images/logged_explore.jpg)
+<img width="310" alt="explore" src="images/logged_explore.jpg" />
 
 ### 2.4 Profile
 
@@ -36,8 +36,8 @@ about your post and comment count and your Lemmy-birthday.
 In the top right corner of the app bar, you'll find a button to log out and another one to change
 account (or access with a different one).
 
-![profile](images/logged_profile.jpg)
-![manage accounts](images/logged_manage_accounts.jpg)
+<img width="310" alt="profile" src="images/logged_profile.jpg" />
+<img width="310" alt="manage accounts" src="images/logged_manage_accounts.jpg" />
 
 ### 2.5 Inbox
 
@@ -51,7 +51,7 @@ The Inbox screen is divided into three sections:
 You can select (using the top bar) which filter to apply, i.e. whether all items should be included
 or just unread ones.
 
-![inbox](images/logged_inbox.jpg)
+<img width="310" alt="inbox" src="images/logged_inbox.jpg" />
 
 ### 2.6 Settings
 
@@ -75,9 +75,9 @@ here is a description of the additional functions:
     - Web preferences: allows you to edit web account preferences;
     - Bans and filters: configure user/community/instance ban and filtering options.
 
-![settings 1](images/logged_settings_1.jpg)
-![settings 3](images/logged_settings_2.jpg)
-![settings 2](images/logged_settings_3.jpg)
+<img width="310" alt="settings 1" src="images/logged_settings_1.jpg" />
+<img width="310" alt="settings 3" src="images/logged_settings_2.jpg" />
+<img width="310" alt="settings 2" src="images/logged_settings_3.jpg" />
 
 #### 2.6.1 Colors and fonts
 
@@ -90,28 +90,28 @@ This screen for anonymous users allows to configure custom colors for swipe acti
 - Reply action color: card background color for the reply action;
 - Save action color: card background color for the save action;
 
-![colors and fonts](images/logged_color_fonts.jpg)
+<img width="310" alt="colors and fonts" src="images/logged_color_fonts.jpg" />
 
 #### 2.6.2 Configure swipe actions
 
 In this screen it is possible to assign an action to the 4 slots (two on the left side and two on
 the right side) of the cards used to render post, comments and inbox items.
 
-![configure swipe actions](images/logged_swipe_actions.jpg)
+<img width="310" alt="configure swipe actions" src="images/logged_swipe_actions.jpg" />
 
 #### 2.6.3 Web account settings
 
 This screen lets you configure some preferences associated to your Lemmy account (similarly to what
 you can do on the webapp).
 
-![web settings](images/logged_web_settings.jpg)
+<img width="310" alt="web settings" src="images/logged_web_settings.jpg" />
 
 #### 2.6.4 Ban and filter options
 
 This screen allows you to see what users, communities and instances you have blocked and
 remove the block (these settings are tied to your Lemmy account too).
 
-![bans and filters](images/logged_ban_filter.jpg)
+<img width="310" alt="bans and filters" src="images/logged_ban_filter.jpg" />
 
 ### 2.7 Moderation tools
 
@@ -128,5 +128,5 @@ and it is divided in two sections:
 For each report you can see the reason that was specified by the reporting users, you can open the
 content (e.g. to remove it) and you can mark the report as "resolved" once you are done with it.
 
-![report list](images/logged_mod_tools.jpg)
+<img width="310" alt="report list" src="images/logged_mod_tools.jpg" />
 
