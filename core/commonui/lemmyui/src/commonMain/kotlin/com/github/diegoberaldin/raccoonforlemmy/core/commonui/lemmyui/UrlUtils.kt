@@ -97,7 +97,7 @@ private fun normalizeUrl(url: String?): Pair<String, String> {
 private fun extractCommunity(url: String): CommunityModel? = when {
     url.startsWith("/c/") -> {
         val cleanString = url.substring(3)
-        if (url.count { it == '@' } == 1) {
+        if (cleanString.count { it == '@' } == 1) {
             val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
             CommunityModel(
                 name = name,
@@ -112,7 +112,7 @@ private fun extractCommunity(url: String): CommunityModel? = when {
 
     url.startsWith("!") -> {
         val cleanString = url.substring(1)
-        if (url.count { it == '@' } == 1) {
+        if (cleanString.count { it == '@' } == 1) {
             val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
             CommunityModel(
                 name = name,
@@ -131,7 +131,7 @@ private fun extractCommunity(url: String): CommunityModel? = when {
 private fun extractUser(url: String): UserModel? = when {
     url.startsWith("@") -> {
         val cleanString = url.substring(1)
-        if (url.count { it == '@' } == 1) {
+        if (cleanString.count { it == '@' } == 1) {
             val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
             UserModel(
                 name = name,
@@ -146,7 +146,7 @@ private fun extractUser(url: String): UserModel? = when {
 
     url.startsWith("/u/") -> {
         val cleanString = url.substring(3)
-        if (url.count { it == '@' } == 1) {
+        if (cleanString.count { it == '@' } == 1) {
             val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
             UserModel(
                 name = name,
