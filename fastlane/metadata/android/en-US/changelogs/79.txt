@@ -1,0 +1,4 @@
+- feat: drag to reorder in anonymous instance selector bottom sheet
+- fix: post and comment deletion
+- fix: default comment bar width
+- fix: minor bug fixes and stability improvements
