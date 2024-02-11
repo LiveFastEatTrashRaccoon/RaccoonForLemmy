@@ -67,13 +67,13 @@ fun TextFormattingBar(
                             val newText = buildString {
                                 append(it.text.substring(0, selection.start))
                                 append("**")
-                                if (selection.length == 0) {
+                                if (selection.collapsed) {
                                     append(textPlaceholder)
                                 } else {
                                     append(
                                         it.text.substring(
                                             selection.start,
-                                            selection.end
+                                            selection.end,
                                         )
                                     )
                                 }
@@ -85,7 +85,7 @@ fun TextFormattingBar(
                                     )
                                 )
                             }
-                            val newSelection = if (selection.length == 0) {
+                            val newSelection = if (selection.collapsed) {
                                 TextRange(index = selection.start + textPlaceholder.length + 2)
                             } else {
                                 TextRange(
@@ -115,7 +115,7 @@ fun TextFormattingBar(
                             val newText = buildString {
                                 append(it.text.substring(0, selection.start))
                                 append("*")
-                                if (selection.length == 0) {
+                                if (selection.collapsed) {
                                     append(textPlaceholder)
                                 } else {
                                     append(
@@ -133,7 +133,7 @@ fun TextFormattingBar(
                                     )
                                 )
                             }
-                            val newSelection = if (selection.length == 0) {
+                            val newSelection = if (selection.collapsed) {
                                 TextRange(index = selection.start + textPlaceholder.length + 1)
                             } else {
                                 TextRange(
@@ -163,7 +163,7 @@ fun TextFormattingBar(
                             val newText = buildString {
                                 append(it.text.substring(0, selection.start))
                                 append("~~")
-                                if (selection.length == 0) {
+                                if (selection.collapsed) {
                                     append(textPlaceholder)
                                 } else {
                                     append(
@@ -181,7 +181,7 @@ fun TextFormattingBar(
                                     )
                                 )
                             }
-                            val newSelection = if (selection.length == 0) {
+                            val newSelection = if (selection.collapsed) {
                                 TextRange(index = selection.start + textPlaceholder.length + 2)
                             } else {
                                 TextRange(
@@ -227,7 +227,7 @@ fun TextFormattingBar(
                             val newText = buildString {
                                 append(it.text.substring(0, selection.start))
                                 append("[")
-                                if (selection.length == 0) {
+                                if (selection.collapsed) {
                                     append(textPlaceholder)
                                 } else {
                                     append(
@@ -247,7 +247,7 @@ fun TextFormattingBar(
                                     )
                                 )
                             }
-                            val newSelection = if (selection.length == 0) {
+                            val newSelection = if (selection.collapsed) {
                                 TextRange(index = selection.start + textPlaceholder.length + 1)
                             } else {
                                 TextRange(
@@ -277,7 +277,7 @@ fun TextFormattingBar(
                             val newText = buildString {
                                 append(it.text.substring(0, selection.start))
                                 append("`")
-                                if (selection.length == 0) {
+                                if (selection.collapsed) {
                                     append(textPlaceholder)
                                 } else {
                                     append(
@@ -295,7 +295,7 @@ fun TextFormattingBar(
                                     )
                                 )
                             }
-                            val newSelection = if (selection.length == 0) {
+                            val newSelection = if (selection.collapsed) {
                                 TextRange(index = selection.start + textPlaceholder.length + 1)
                             } else {
                                 TextRange(
