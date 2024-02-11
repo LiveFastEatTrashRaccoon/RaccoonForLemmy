@@ -7,9 +7,13 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.Communit
 import com.github.diegoberaldin.raccoonforlemmy.resources.MR
 import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class SelectInstanceViewModel(
@@ -21,11 +25,18 @@ class SelectInstanceViewModel(
         initialState = SelectInstanceMviModel.State(),
     ) {
 
+    private val saveOperationChannel = Channel<List<String>>()
+
+    @OptIn(FlowPreview::class)
     override fun onStarted() {
         super.onStarted()
         scope?.launch {
             apiConfigurationRepository.instance.onEach { instance ->
                 updateState { it.copy(currentInstance = instance) }
+            }.launchIn(this)
+
+            saveOperationChannel.receiveAsFlow().debounce(500).onEach { newInstances ->
+                instanceRepository.updateAll(newInstances)
             }.launchIn(this)
         }
 
@@ -111,7 +122,7 @@ class SelectInstanceViewModel(
             add(to, element)
         }
         scope?.launch {
-            instanceRepository.updateAll(newInstances)
+            saveOperationChannel.send(newInstances)
             updateState {
                 it.copy(instances = newInstances)
             }
