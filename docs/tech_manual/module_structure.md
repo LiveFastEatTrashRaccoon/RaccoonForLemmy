@@ -30,7 +30,7 @@ Here is a description of the dependency flow:
   uses `:core:preferences` / `:core:appearance`)  and nothing else; they are in turn used by all the
   other types of modules.
 
-### Special and top-level modules
+### Top-level modules
 
 The main module (Android-specific) is `:androidApp`, which contains the Application
 subclass (`MainApplication`) and the main activity (`MainActivity`). The latter in

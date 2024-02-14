@@ -271,12 +271,10 @@ The modules can be grouped into five groups:
   `:core:md module` (Markdown rendering) that includes `:core:commonui:components` because Markdown
   requires some custom UI components to be rendered.
 
-For more detailed information:
+For more detailed information about the contents of each group and the purpose of each module,
+please refer
+to [this page](https://diegoberaldin.github.io/RaccoonForLemmy/tech_manual/main#module-structure).
 
-- about the contents of each group and the purpose of each module, please refer
-  to [this page](https://diegoberaldin.github.io/RaccoonForLemmy/tech_manual/main#module-structure)
-- about dependency flow between the modules, have a look to the diagrams you can find
-  in [this page](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/MODULE_DIAGRAMS.md).
 
 ## 6. Conventions
 

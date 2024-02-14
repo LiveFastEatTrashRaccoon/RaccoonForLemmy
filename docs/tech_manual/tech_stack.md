@@ -14,6 +14,7 @@ two different concepts and should not be confused) in a `di` package inside each
 can include each other and all top-level modules are included in the shared module, more on it in
 "Module overview and dependencies".
 </dd>
+
 <dt>Navigation</dt>
 <dd>
 For navigation the <a href="https://github.com/adrielcafe/voyager">Voyager</a> library has been
@@ -28,20 +29,24 @@ Something similar was done for the navigation drawer in <a href="https://github.
 Even the DI integration with Koin was not pain-free, the <code>:core:navigation</code> module contains
 some glue code that is used to work around some of the issues that were encountered.
 </dd>
+
 <dt>Networking</dt>
 <dd>Here, at least for Android developers, no surprises: the choice was <a href="https://github.com/ktorio/ktor">Ktor</a>
 which has great multiplatform support. Instead of using Retrofit, to create network adapters the
 <a href="https://github.com/Foso/Ktorfit">Ktorfit</a> library is used, which uses KSP to parse 
 annotations and generate code.
 </dd>
+
 <dt>Resource management</dt>
 <dd>
 Initially the project used the <a href="https://github.com/icerockdev/moko-resources">Moko resources</a>
 library to load fonts, icons and all the localized messages used in the UI. It worked great, since in those areas
-Compose multiplatform missed the needed functionalities. Since resource management was introduced in Compose multiplatform
-1.6.0, I migrated the project to the built-in system. And, for localization, the project was migrated to the
-<a href="https://github.com/adrielcafe/lyricist">Lyricist</a> library which better handles dynamic language changes.
+Compose multiplatform missed the needed functionalities. But as long as the project grew in size and 
+more complex KSP configurations were needed, having all modules depend on resources became unmaintainable.
+This is why I migrated drawable and font loading to Compose build-in system. And, for localization, the choice was the
+<a href="https://github.com/adrielcafe/lyricist">Lyricist</a> library, which better handles dynamic language changes.
 </dd>
+
 <dt>Image loading</dt>
 <dd>
 This was something that was expected to be simpler but unfortunately it wasn't. Popular kotlin libraries
@@ -53,11 +58,13 @@ continues using it (Raccoon for iOS has by far bigger problems than image render
 inexistent platform) while the Android counterpart was migrated to <a href="https://github.com/coil-kt/coil">Coil</a>.
 Things will change when Coil 3.x will be release, because it will go multiplatform as well.
 </dd>
+
 <dt>Preference storage</dt>
 <dd>
 Here the choice was the <a href="https://github.com/russhwolf/multiplatform-settings">Multiplatform settings</a>
 libary which not only works great but also offers support for encryption.
 </dd>
+
 <dt>Primary persistence</dt>
 <dd>
 This project was a chance to experiment with <a href="https://github.com/cashapp/sqldelight">SQLDelight</a>
@@ -65,6 +72,7 @@ This project was a chance to experiment with <a href="https://github.com/cashapp
 is obtained through <a href="https://www.zetetic.net/sqlcipher/sqlcipher-for-android">SQLCipher Android</a>, 
 formerly <a href="https://github.com/sqlcipher/android-database-sqlcipher">Android Database SQLCipher</a>.
 </dd>
+
 <dt>Markdown rendering</dt>
 <dd>
 This was another part, like image loading, where KMP is still lacking and things are far more
@@ -81,15 +89,24 @@ like Lemmy URL references have to be managed). The big star here is <code>Markwo
 <a href="https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/core/md/src/androidMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/markdown/provider/DefaultMarkwonProvider.kt">DefaultMarkwonProvider.kt</a>.
 Parts of the Markwon configuration and usage is inspired by <a href="https://github.com/dessalines/jerboa">Jerboa for Lemmy</a>.
 </dd>
+
 <dt>Video playback</dt>
 <dd>
 This had to be native, the Android implementation relies on <code>Exoplayer</code> whereas the iOS implementation
 on <code>AVPlayer</code> as usual.
 </dd>
+
 <dt>Theme generation</dt>
 <dd>
 The application allows to select a custom color and generate a Material 3 color scheme as a
 palette originate from that seed color. This is achieved by using the <a href="https://github.com/jordond/MaterialKolor">MaterialKolor</a>
 library which was designed to be multiplatform and works as a charm for the purpose. Thanks!
+</dd>
+
+<dt>Reorderable lists</dt>
+<dd>
+The ability to reorder lists is achieved thanks to the <a href="https://github.com/Calvin-LL/Reorderable">Reorderable</a>
+library which starting from version 1.3.1 has become multiplatform. This functionality is still 
+experimental and is used only in the instance selection bottom sheet for anonymous users.
 </dd>
 </dl>
