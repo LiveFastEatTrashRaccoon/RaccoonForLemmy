@@ -1,0 +1,2 @@
+- refactor: aggiornamento risorse e localizzazione
+- fix: correzioni di minore entità e miglioramenti di stabilità

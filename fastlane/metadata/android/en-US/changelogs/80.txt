@@ -1,0 +1,2 @@
+- refactor: update resource and localization
+- fix: minor bug fixes and stability improvements
