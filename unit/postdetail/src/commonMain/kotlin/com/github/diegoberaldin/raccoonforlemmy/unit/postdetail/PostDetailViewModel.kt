@@ -400,7 +400,8 @@ class PostDetailViewModel(
             it.copy(
                 comments = newComments,
                 loading = false,
-                canFetchMore = itemList?.isEmpty() != true,
+                // deleted commments should not be counted
+                canFetchMore = itemsToAdd.isNotEmpty(),
                 refreshing = false,
                 initial = false,
             )
