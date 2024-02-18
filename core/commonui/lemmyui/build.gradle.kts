@@ -43,7 +43,7 @@ kotlin {
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.commonui.components)
-                implementation(projects.core.md)
+                implementation(projects.core.markdown)
                 implementation(projects.core.l10n)
                 implementation(projects.core.navigation)
                 implementation(projects.core.persistence)

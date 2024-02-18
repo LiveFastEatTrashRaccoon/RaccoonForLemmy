@@ -21,39 +21,23 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "md"
+            baseName = "markdown"
         }
     }
 
     sourceSets {
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.markwon.core)
-                implementation(libs.markwon.strikethrough)
-                implementation(libs.markwon.tables)
-                implementation(libs.markwon.html)
-                implementation(libs.markwon.linkify)
-                implementation(libs.markwon.image.coil)
-                implementation(libs.coil)
-                implementation(libs.coil.gif)
-                implementation(libs.android.gif.drawable)
-            }
-        }
         val commonMain by getting {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
 
-                implementation(libs.koin.core)
+                implementation(libs.markdown)
+                api(libs.multiplatform.markdown.renderer)
 
+                implementation(projects.core.l10n)
                 implementation(projects.core.commonui.components)
                 implementation(projects.core.utils)
-            }
-        }
-        val iosMain by getting {
-            dependencies {
-                implementation(libs.markdown)
             }
         }
         val commonTest by getting {
