@@ -2,23 +2,28 @@ package com.github.diegoberaldin.raccoonforlemmy.unit.drawer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Drafts
 import androidx.compose.material.icons.filled.ManageAccounts
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,14 +34,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.text.input.KeyboardType
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.MultiCommunityItem
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.LocalXmlStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.DrawerEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
@@ -46,8 +51,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotific
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.readableName
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
+import com.github.diegoberaldin.raccoonforlemmy.unit.drawer.components.DrawerCommunityItem
 import com.github.diegoberaldin.raccoonforlemmy.unit.drawer.components.DrawerHeader
 import com.github.diegoberaldin.raccoonforlemmy.unit.drawer.components.DrawerShortcut
 import com.github.diegoberaldin.raccoonforlemmy.unit.manageaccounts.ManageAccountsScreen
@@ -95,9 +102,7 @@ object ModalDrawerContent : Tab {
             }.launchIn(this)
         }
 
-        Column(
-            modifier = Modifier.fillMaxWidth(0.9f)
-        ) {
+        ModalDrawerSheet {
             DrawerHeader(
                 user = uiState.user,
                 instance = uiState.instance,
@@ -111,10 +116,11 @@ object ModalDrawerContent : Tab {
             )
 
             Divider(
-                modifier = Modifier.padding(
-                    top = Spacing.m,
-                    bottom = Spacing.s,
-                )
+                modifier = Modifier
+                    .padding(
+                        top = Spacing.s,
+                        bottom = Spacing.s,
+                    )
             )
 
             if (uiState.user != null) {
@@ -125,110 +131,148 @@ object ModalDrawerContent : Tab {
                     },
                 )
                 Box(
-                    modifier = Modifier.weight(1f).pullRefresh(pullRefreshState),
+                    modifier = Modifier
+                        .weight(1f)
+                        .pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.xxs),
                         verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
-                        for (listingType in listOf(
-                            ListingType.Subscribed,
-                            ListingType.All,
-                            ListingType.Local,
-                        )) {
-                            item {
-                                DrawerShortcut(
-                                    title = listingType.toReadableName(),
-                                    icon = listingType.toIcon(),
-                                    onSelected = rememberCallback(coordinator) {
-                                        scope.launch {
-                                            coordinator.toggleDrawer()
-                                            coordinator.sendEvent(
-                                                DrawerEvent.ChangeListingType(listingType)
-                                            )
-                                        }
-                                    },
-                                )
-                            }
-                        }
                         item {
-                            DrawerShortcut(
-                                title = LocalXmlStrings.current.navigationDrawerTitleBookmarks,
-                                icon = Icons.Default.Bookmarks,
-                                onSelected = rememberCallback(coordinator) {
-                                    scope.launch {
-                                        coordinator.toggleDrawer()
-                                        coordinator.sendEvent(DrawerEvent.OpenBookmarks)
-                                    }
+                            TextField(
+                                modifier = Modifier
+                                    .scale(0.95f)
+                                    .padding(
+                                        horizontal = Spacing.xs,
+                                        vertical = Spacing.xs,
+                                    ).fillMaxWidth(),
+                                label = {
+                                    Text(text = LocalXmlStrings.current.exploreSearchPlaceholder)
                                 },
-                            )
-                        }
-                        item {
-                            DrawerShortcut(
-                                title = LocalXmlStrings.current.navigationDrawerTitleSubscriptions,
-                                icon = Icons.Default.ManageAccounts,
-                                onSelected = rememberCallback(coordinator) {
-                                    scope.launch {
-                                        coordinator.toggleDrawer()
-                                        coordinator.sendEvent(DrawerEvent.ManageSubscriptions)
-                                    }
+                                singleLine = true,
+                                value = uiState.searchText,
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Text,
+                                ),
+                                onValueChange = { value ->
+                                    model.reduce(ModalDrawerMviModel.Intent.SetSearch(value))
+                                },
+                                trailingIcon = {
+                                    Icon(
+                                        modifier = Modifier.onClick(
+                                            onClick = rememberCallback {
+                                                if (uiState.searchText.isNotEmpty()) {
+                                                    model.reduce(
+                                                        ModalDrawerMviModel.Intent.SetSearch(
+                                                            ""
+                                                        )
+                                                    )
+                                                }
+                                            },
+                                        ),
+                                        imageVector = if (uiState.searchText.isEmpty()) Icons.Default.Search else Icons.Default.Clear,
+                                        contentDescription = null,
+                                    )
                                 },
                             )
                         }
 
-                        item {
-                            DrawerShortcut(
-                                title = LocalXmlStrings.current.navigationDrawerTitleDrafts,
-                                icon = Icons.Default.Drafts,
-                                onSelected = rememberCallback(coordinator) {
-                                    scope.launch {
-                                        coordinator.toggleDrawer()
-                                        coordinator.sendEvent(DrawerEvent.OpenDrafts)
-                                    }
-                                },
+                        if (!uiState.isFiltering) {
+                            val listingTypes = listOf(
+                                ListingType.Subscribed,
+                                ListingType.All,
+                                ListingType.Local,
                             )
+                            for (listingType in listingTypes) {
+                                item {
+                                    DrawerShortcut(
+                                        title = listingType.toReadableName(),
+                                        icon = listingType.toIcon(),
+                                        onSelected = rememberCallback(coordinator) {
+                                            scope.launch {
+                                                coordinator.toggleDrawer()
+                                                coordinator.sendEvent(
+                                                    DrawerEvent.ChangeListingType(listingType)
+                                                )
+                                            }
+                                        },
+                                    )
+                                }
+                            }
+                            item {
+                                DrawerShortcut(
+                                    title = LocalXmlStrings.current.navigationDrawerTitleBookmarks,
+                                    icon = Icons.Default.Bookmarks,
+                                    onSelected = rememberCallback(coordinator) {
+                                        scope.launch {
+                                            coordinator.toggleDrawer()
+                                            coordinator.sendEvent(DrawerEvent.OpenBookmarks)
+                                        }
+                                    },
+                                )
+                            }
+                            item {
+                                DrawerShortcut(
+                                    title = LocalXmlStrings.current.navigationDrawerTitleSubscriptions,
+                                    icon = Icons.Default.ManageAccounts,
+                                    onSelected = rememberCallback(coordinator) {
+                                        scope.launch {
+                                            coordinator.toggleDrawer()
+                                            coordinator.sendEvent(DrawerEvent.ManageSubscriptions)
+                                        }
+                                    },
+                                )
+                            }
+                            item {
+                                DrawerShortcut(
+                                    title = LocalXmlStrings.current.navigationDrawerTitleDrafts,
+                                    icon = Icons.Default.Drafts,
+                                    onSelected = rememberCallback(coordinator) {
+                                        scope.launch {
+                                            coordinator.toggleDrawer()
+                                            coordinator.sendEvent(DrawerEvent.OpenDrafts)
+                                        }
+                                    },
+                                )
+                            }
                         }
 
                         items(
                             items = uiState.multiCommunities,
                             key = { it.communityIds.joinToString() },
                         ) { community ->
-                            MultiCommunityItem(
-                                modifier = Modifier.fillMaxWidth().onClick(
-                                    onClick = rememberCallback {
-                                        scope.launch {
-                                            coordinator.toggleDrawer()
-                                            coordinator.sendEvent(
-                                                DrawerEvent.OpenMultiCommunity(community),
-                                            )
-                                        }
-                                    },
-                                ),
-                                community = community,
-                                small = true,
+                            DrawerCommunityItem(
+                                title = community.name,
+                                url = community.icon,
                                 autoLoadImages = uiState.autoLoadImages,
+                                onSelected = {
+                                    scope.launch {
+                                        coordinator.toggleDrawer()
+                                        coordinator.sendEvent(
+                                            DrawerEvent.OpenMultiCommunity(community),
+                                        )
+                                    }
+                                },
                             )
                         }
                         items(
                             items = uiState.communities,
                             key = { it.id.toString() + it.favorite.toString() },
                         ) { community ->
-                            CommunityItem(
-                                modifier = Modifier.fillMaxWidth().onClick(
-                                    onClick = rememberCallback {
-                                        scope.launch {
-                                            coordinator.toggleDrawer()
-                                            coordinator.sendEvent(
-                                                DrawerEvent.OpenCommunity(community),
-                                            )
-                                        }
-                                    },
-                                ),
-                                community = community,
-                                small = true,
-                                showFavorite = true,
+                            DrawerCommunityItem(
+                                title = community.readableName(uiState.preferNicknames),
+                                url = community.icon,
+                                favorite = community.favorite,
                                 autoLoadImages = uiState.autoLoadImages,
-                                preferNicknames = uiState.preferNicknames,
+                                onSelected = {
+                                    scope.launch {
+                                        coordinator.toggleDrawer()
+                                        coordinator.sendEvent(
+                                            DrawerEvent.OpenCommunity(community),
+                                        )
+                                    }
+                                },
                             )
                         }
                     }
