@@ -15,7 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Shop
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -66,7 +66,7 @@ class AboutDialog : Screen {
         val notificationCenter = remember { getNotificationCenter() }
         val detailOpener = remember { getDetailOpener() }
 
-        AlertDialog(
+        BasicAlertDialog(
             onDismissRequest = {
                 notificationCenter.send(NotificationCenterEvent.CloseDialog)
             },
@@ -194,12 +194,12 @@ class AboutDialog : Screen {
                     }
                     item {
                         AboutItem(
-                            painter = CoreResources.matrix,
-                            text = LocalXmlStrings.current.settingsAboutChatMatrix,
+                            painter = CoreResources.discord,
+                            text = LocalXmlStrings.current.settingsAboutChatDiscord,
                             textDecoration = TextDecoration.Underline,
                             onClick = {
                                 runCatching {
-                                    uriHandler.openUri(AboutConstants.MATRIX_URL)
+                                    uriHandler.openUri(AboutConstants.DISCORD_URL)
                                 }
                             },
                         )
