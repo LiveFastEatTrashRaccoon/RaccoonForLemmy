@@ -1,0 +1,11 @@
+- possibility to save drafts for posts and comments
+- content look and feel confiuration with preview
+- reorganization of settings screen
+- custom font scale for content classes
+- new Markdown rendering
+- new navigation transition
+- new material design navigation drawer
+- improved user detail and community detail
+- show vote detail in raw content dialog
+- layout update for report and ban screens and about dialog
+- retain input after configuration change

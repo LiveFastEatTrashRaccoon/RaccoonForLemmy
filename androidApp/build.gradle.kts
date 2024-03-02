@@ -13,8 +13,8 @@ android {
         applicationId = "com.github.diegoberaldin.raccoonforlemmy.android"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 83
-        versionName = "1.8.0-20240229-pre"
+        versionCode = 84
+        versionName = "1.8.0"
         archivesName.set("RaccoonForLemmy")
     }
     buildFeatures {
@@ -51,6 +51,14 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "x86_64")
+            isUniversalApk = true
+        }
     }
 }
 
