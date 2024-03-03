@@ -20,6 +20,7 @@ A Kotlin Multiplatform client for Lemmy (mainly Android).
   <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;">
     <a href="https://github.com/ImranR98/Obtainium/releases"><img width="200"  src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/c341aeee-f779-41f0-b230-0c3081da3de5" /></a>
     <a href="https://play.google.com/store/apps/details?id=com.github.diegoberaldin.raccoonforlemmy.android"><img width="200" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" /></a>
+    <a href="https://apt.izzysoft.de/fdroid/index/apk/com.github.diegoberaldin.raccoonforlemmy.android"><img width="200"  src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/5d8c0e3d-552f-488e-b032-987aeadd4c4a" /></a>
   </div>
 </div>
 
@@ -37,34 +38,26 @@ for some technical notes.
 <table>
   <tr>
     <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/a41fe45c-b1be-44bb-b044-fd6ef38bc205" width="310" alt="home screen" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/8b05b41f-c338-481c-9ee0-6b440651d04b" width="310" alt="home screen" />
     </td>
     <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/a95bfe7b-fdab-4810-a1be-c6baf3270a51" width="310" alt="post detail" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/621ab6ae-a08d-4a2a-a68b-e1c6924325e9" width="310" alt="explore screen" />
-    </td>
-    <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/93df3d76-efd0-47c8-a135-c7fae8caf9ca" width="310" alt="community detail" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/2c5a9ca0-7077-4ca6-9151-5f51588c1343" width="310" alt="post detail" />
     </td>
   </tr>
   <tr>
     <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/103bd28d-f75e-4faa-8805-7ba21dc4a98d" width="310" alt="inbox screen" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/c326fb31-c5b9-4dc6-8cdc-2faf40d50a82" width="310" alt="community detail" />
     </td>
     <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/d1fff835-11a8-47ed-86c7-c04a531f890e" width="310" alt="settings screen" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/30af6355-0312-4d6c-86ac-580229f29979" width="310" alt="explore screen" />
     </td>
   </tr>
   <tr>
     <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/3529a977-3cb8-4465-a828-ee43bf056f77" width="310" alt="community info" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/4028a389-84b7-44b4-bf8e-71004e529d56" width="310" alt="inbox screen" />
     </td>
     <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/b97f7e7f-57ee-4fe5-8f84-386b2c4ac111" width="310" alt="instance info" />
+      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/223a4c67-7554-454e-99db-56bd840591f8" width="310" alt="settings screen" />
     </td>
   </tr>
 </table>
@@ -85,15 +78,15 @@ for some technical notes.
 - custom appearance (color scheme, fonts, text sizes, post layout, etc.);
 - custom localization (independent of system settings);
 - block users, communities and instances (the latter requires Lemmy >= 0.19);
-- report post and comments to moderators;
+- report post and comments to moderators with a reason;
 - support for multiple accounts (and multiple instances) with account-specific settings;
 - lazy scrolling (referred to as "zombie mode");
 - explore all the communities on a given instance in guest mode;
 - multi-community (community aggregation);
-- report post and comments with a reason;
 - view the moderation log;
 - community moderation tool (examine and resolve reports, ban users, feature posts, block
-  further comments from posts, mark comments as distinguished, remove posts/comments).
+  further comments from posts, mark comments as distinguished, remove posts/comments);
+- save posts and comments you are creating as draft to edit them later.
 
 Most clients for Lemmy currently offer the first points (with various degrees of completion), so
 there is nothing special about Raccoon for Lemmy, whereas the last ones are less common and are
