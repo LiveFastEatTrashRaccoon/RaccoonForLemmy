@@ -1,5 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -24,7 +26,7 @@ import androidx.compose.ui.unit.Density
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import cafe.adriel.voyager.transitions.FadeTransition
+import cafe.adriel.voyager.transitions.SlideTransition
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toCommentBarTheme
@@ -257,7 +259,11 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                             },
                         ) {
                             if (hasBeenInitialized) {
-                                FadeTransition(
+                                SlideTransition(
+                                    animationSpec = tween(
+                                        durationMillis = 250,
+                                        easing = FastOutSlowInEasing,
+                                    ),
                                     navigator = navigator,
                                 )
                             }
