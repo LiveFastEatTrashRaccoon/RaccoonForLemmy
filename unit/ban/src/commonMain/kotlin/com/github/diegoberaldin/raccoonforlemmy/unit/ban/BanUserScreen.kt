@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,10 +46,13 @@ import cafe.adriel.voyager.koin.getScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.SettingsIntValueRow
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.LocalXmlStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toReadableMessage
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -131,7 +134,7 @@ class BanUserScreen(
                         IconButton(
                             content = {
                                 Icon(
-                                    imageVector = Icons.Filled.Send,
+                                    imageVector = Icons.AutoMirrored.Filled.Send,
                                     contentDescription = null,
                                 )
                             },
@@ -157,10 +160,10 @@ class BanUserScreen(
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val commentFocusRequester = remember { FocusRequester() }
+                val focusRequester = remember { FocusRequester() }
                 TextField(
                     modifier = Modifier
-                        .focusRequester(commentFocusRequester)
+                        .focusRequester(focusRequester)
                         .heightIn(min = 300.dp, max = 500.dp)
                         .fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
@@ -169,7 +172,7 @@ class BanUserScreen(
                         disabledContainerColor = Color.Transparent,
                     ),
                     label = {
-                        Text(text = LocalXmlStrings.current.createReportPlaceholder)
+                        Text(text = LocalXmlStrings.current.banReasonPlaceholder)
                     },
                     textStyle = MaterialTheme.typography.bodyMedium,
                     value = uiState.text,
@@ -191,6 +194,39 @@ class BanUserScreen(
                         }
                     },
                 )
+
+                if (uiState.targetBanValue) {
+                    // it is a ban (as opposed to unban)
+                    SettingsSwitchRow(
+                        title = LocalXmlStrings.current.banItemPermanent,
+                        value = uiState.permanent,
+                        onValueChanged = rememberCallbackArgs(model) { value ->
+                            model.reduce(BanUserMviModel.Intent.ChangePermanent(value))
+                        },
+                    )
+
+                    if (!uiState.permanent) {
+                        SettingsIntValueRow(
+                            title = LocalXmlStrings.current.banItemDurationDays,
+                            value = uiState.days,
+                            onIncrement = rememberCallback {
+                                model.reduce(BanUserMviModel.Intent.IncrementDays)
+                            },
+                            onDecrement = rememberCallback {
+                                model.reduce(BanUserMviModel.Intent.DecrementDays)
+                            },
+                        )
+                    }
+
+                    SettingsSwitchRow(
+                        title = LocalXmlStrings.current.banItemRemoveData,
+                        value = uiState.removeData,
+                        onValueChanged = rememberCallbackArgs(model) { value ->
+                            model.reduce(BanUserMviModel.Intent.ChangeRemoveData(value))
+                        },
+                    )
+                }
+
                 Spacer(Modifier.height(Spacing.xxl))
             }
 
