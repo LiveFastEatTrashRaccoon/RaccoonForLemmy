@@ -40,6 +40,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.bindToLifecycle
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.CommentCard
@@ -139,6 +140,7 @@ object ProfileLoggedScreen : Tab {
         }
 
         if (uiState.initial) {
+            ProgressHud()
             return
         }
 
