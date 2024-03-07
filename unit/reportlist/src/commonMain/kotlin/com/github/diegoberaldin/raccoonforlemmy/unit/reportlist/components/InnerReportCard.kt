@@ -13,9 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -236,7 +237,7 @@ private fun ReportFooter(
                                 onOpenResolve.invoke()
                             },
                         ),
-                    imageVector = Icons.Filled.OpenInNew,
+                    imageVector = Icons.AutoMirrored.Filled.OpenInNew,
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
                 )
@@ -253,17 +254,14 @@ private fun ReportFooter(
             ),
         ) {
             options.forEach { option ->
-                Text(
-                    modifier = Modifier.padding(
-                        horizontal = Spacing.m,
-                        vertical = Spacing.s,
-                    ).onClick(
-                        onClick = rememberCallback {
-                            optionsExpanded = false
-                            onOptionSelected?.invoke(option.id)
-                        },
-                    ),
-                    text = option.text,
+                DropdownMenuItem(
+                    text = {
+                        Text(option.text)
+                    },
+                    onClick = rememberCallback {
+                        optionsExpanded = false
+                        onOptionSelected?.invoke(option.id)
+                    },
                 )
             }
         }

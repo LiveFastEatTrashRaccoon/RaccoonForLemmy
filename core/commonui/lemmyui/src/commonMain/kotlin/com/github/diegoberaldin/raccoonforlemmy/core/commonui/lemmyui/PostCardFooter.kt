@@ -8,16 +8,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -96,7 +97,7 @@ fun PostCardFooter(
                                     onReply?.invoke()
                                 },
                             ),
-                        imageVector = Icons.Filled.Chat,
+                        imageVector = Icons.AutoMirrored.Filled.Chat,
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(color = ancillaryColor),
                     )
@@ -235,17 +236,14 @@ fun PostCardFooter(
             ),
         ) {
             options.forEach { option ->
-                Text(
-                    modifier = Modifier.padding(
-                        horizontal = Spacing.m,
-                        vertical = Spacing.s,
-                    ).onClick(
-                        onClick = rememberCallback {
-                            optionsMenuOpen.value = false
-                            onOptionSelected?.invoke(option.id)
-                        },
-                    ),
-                    text = option.text,
+                DropdownMenuItem(
+                    text = {
+                        Text(option.text)
+                    },
+                    onClick = rememberCallback {
+                        optionsMenuOpen.value = false
+                        onOptionSelected?.invoke(option.id)
+                    },
                 )
             }
         }
