@@ -23,7 +23,12 @@ class DefaultBarColorProvider : BarColorProvider {
                 }
                 val barColor = when (barTheme) {
                     UiBarTheme.Opaque -> baseColor.copy(alpha = 0.25f)
-                    UiBarTheme.Transparent -> Color.Transparent
+                    UiBarTheme.Transparent -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        Color.Transparent
+                    } else {
+                        baseColor
+                    }
+
                     else -> baseColor
                 }.toArgb()
                 statusBarColor = barColor
@@ -32,6 +37,10 @@ class DefaultBarColorProvider : BarColorProvider {
                 if (barTheme != UiBarTheme.Solid) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         setDecorFitsSystemWindows(false)
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        isStatusBarContrastEnforced = true
+                        isNavigationBarContrastEnforced = true
                     }
                 }
 
