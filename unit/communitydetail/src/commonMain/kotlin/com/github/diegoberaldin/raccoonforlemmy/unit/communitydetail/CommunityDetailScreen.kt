@@ -271,9 +271,7 @@ class CommunityDetailScreen(
                             modifier = Modifier.onClick(
                                 onClick = rememberCallback {
                                     val sheet = SortBottomSheet(
-                                        sheetKey = key,
                                         values = uiState.availableSortTypes.map { it.toInt() },
-                                        comments = false,
                                         expandTop = true,
                                     )
                                     navigationCoordinator.showBottomSheet(sheet)
@@ -289,6 +287,10 @@ class CommunityDetailScreen(
                             val options = buildList {
                                 this += Option(
                                     OptionId.Info, LocalXmlStrings.current.communityDetailInfo
+                                )
+                                this += Option(
+                                    OptionId.SetCustomSort,
+                                    LocalXmlStrings.current.communitySetCustomSort,
                                 )
                                 this += Option(
                                     OptionId.InfoInstance,
@@ -421,6 +423,15 @@ class CommunityDetailScreen(
                                                         val screen = ShareBottomSheet(urls = urls)
                                                         navigationCoordinator.showBottomSheet(screen)
                                                     }
+                                                }
+
+                                                OptionId.SetCustomSort -> {
+                                                    val screen = SortBottomSheet(
+                                                        values = uiState.availableSortTypes.map { it.toInt() },
+                                                        defaultForCommunity = true,
+                                                        expandTop = true,
+                                                    )
+                                                    navigationCoordinator.showBottomSheet(screen)
                                                 }
 
                                                 else -> Unit
