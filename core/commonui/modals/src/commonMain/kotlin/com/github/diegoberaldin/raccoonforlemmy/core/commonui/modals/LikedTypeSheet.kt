@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
@@ -18,17 +19,14 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHandle
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.ModeratorZoneAction
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.toIcon
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.toInt
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.LocalXmlStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 
-class ModeratorZoneBottomSheet : Screen {
+class LikedTypeSheet : Screen {
     @Composable
     override fun Content() {
         val navigationCoordinator = remember { getNavigationCoordinator() }
@@ -55,33 +53,57 @@ class ModeratorZoneBottomSheet : Screen {
                         top = Spacing.s,
                         end = Spacing.s,
                     ),
-                    text = LocalXmlStrings.current.moderatorZoneTitle,
+                    text = LocalXmlStrings.current.filteredContentsType,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground,
-                )
-                val values = listOf(
-                    ModeratorZoneAction.GlobalReports,
-                    ModeratorZoneAction.GlobalModLog,
-                    ModeratorZoneAction.ModeratedContents,
                 )
                 Column(
                     modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xxxs),
                 ) {
-                    for (value in values) {
-                        SettingsRow(
-                            modifier = Modifier.padding(vertical = Spacing.xxs),
-                            icon = value.toIcon(),
-                            title = value.toReadableName(),
-                            disclosureIndicator = true,
-                            onTap = {
-                                navigationCoordinator.hideBottomSheet()
-                                notificationCenter.send(
-                                    NotificationCenterEvent.ModeratorZoneActionSelected(
-                                        value.toInt(),
+                    Row(
+                        modifier = Modifier
+                            .padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            )
+                            .fillMaxWidth()
+                            .onClick(
+                                onClick = rememberCallback {
+                                    notificationCenter.send(
+                                        NotificationCenterEvent.ChangedLikedType(true)
                                     )
-                                )
-                            },
+                                    navigationCoordinator.hideBottomSheet()
+                                },
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = LocalXmlStrings.current.actionUpvote,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            ).onClick(
+                                onClick = rememberCallback {
+                                    notificationCenter.send(
+                                        NotificationCenterEvent.ChangedLikedType(false)
+                                    )
+                                    navigationCoordinator.hideBottomSheet()
+                                },
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = LocalXmlStrings.current.actionDownvote,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }
