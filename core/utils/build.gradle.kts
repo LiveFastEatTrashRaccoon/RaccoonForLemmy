@@ -40,11 +40,6 @@ kotlin {
                 implementation(projects.core.l10n)
             }
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
         val androidMain by getting {
             dependencies {
                 dependsOn(commonMain)
@@ -53,6 +48,14 @@ kotlin {
                 implementation(libs.ktor.android)
                 implementation(libs.coil)
                 implementation(libs.coil.gif)
+            }
+        }
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(kotlin("test-junit"))
+                implementation(libs.mockk)
+                implementation(projects.core.testutils)
             }
         }
     }
