@@ -11,6 +11,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.AddCircleOutline
+import androidx.compose.material.icons.outlined.Pending
+import androidx.compose.material.icons.outlined.RemoveCircleOutline
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -53,11 +56,13 @@ fun CommunityItem(
     preferNicknames: Boolean = true,
     showSubscribers: Boolean = false,
     showFavorite: Boolean = false,
+    showSubscribeButton: Boolean = false,
     options: List<Option> = emptyList(),
     onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSubscribe: (() -> Unit)? = null,
 ) {
     val title = community.readableName(true)
-    val communityName = community.readableHandle
+    val communityHandle = community.readableHandle
     val communityIcon = community.icon.orEmpty()
     val iconSize = if (small) IconSize.m else IconSize.l
     val fullColor = MaterialTheme.colorScheme.onBackground
@@ -105,38 +110,64 @@ fun CommunityItem(
                 },
                 text = buildString {
                     append("!")
-                    append(communityName)
+                    append(communityHandle)
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = ancillaryColor,
             )
         }
-        if (showSubscribers) {
-            Row(
-                modifier = Modifier.padding(start = Spacing.xxs),
-                horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = community.subscribers.toString(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                Icon(
-                    imageVector = Icons.Default.Group,
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onBackground,
-                )
-            }
-        }
+        when {
+            showSubscribers ->
+                Row(
+                    modifier = Modifier.padding(start = Spacing.xxs),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = community.subscribers.toString(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = ancillaryColor,
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Group,
+                        contentDescription = "",
+                        tint = ancillaryColor,
+                    )
+                }
 
-        if (showFavorite) {
-            if (community.favorite) {
+            showFavorite -> {
+                if (community.favorite) {
+                    Icon(
+                        modifier = Modifier.size(IconSize.s),
+                        imageVector = Icons.Default.Star,
+                        contentDescription = "",
+                        tint = ancillaryColor,
+                    )
+                }
+            }
+
+            showSubscribeButton -> {
                 Icon(
-                    modifier = Modifier.size(IconSize.s),
-                    imageVector = Icons.Default.Star,
+                    modifier = Modifier
+                        .size(IconSize.m)
+                        .onClick(
+                            onClick = { onSubscribe?.invoke() }
+                        ),
+                    imageVector = when (community.subscribed) {
+                        true -> {
+                            Icons.Outlined.RemoveCircleOutline
+                        }
+
+                        false -> {
+                            Icons.Outlined.AddCircleOutline
+                        }
+
+                        else -> {
+                            Icons.Outlined.Pending
+                        }
+                    },
                     contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onBackground,
+                    tint = ancillaryColor,
                 )
             }
         }

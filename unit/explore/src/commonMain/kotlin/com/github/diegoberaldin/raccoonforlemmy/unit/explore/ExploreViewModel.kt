@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.search.main
+package com.github.diegoberaldin.raccoonforlemmy.unit.explore
 
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
@@ -112,6 +112,11 @@ class ExploreViewModel(
             notificationCenter.subscribe(NotificationCenterEvent.ResetExplore::class).onEach {
                 onFirstLoad()
             }.launchIn(this)
+            notificationCenter.subscribe(NotificationCenterEvent.ChangeSearchResultType::class).onEach { evt ->
+                if (evt.screenKey == "explore") {
+                    changeResultType(evt.value)
+                }
+            }.launchIn(this)
 
             searchEventChannel.receiveAsFlow().debounce(1000).onEach {
                 emitEffect(ExploreMviModel.Effect.BackToTop)
@@ -159,9 +164,6 @@ class ExploreViewModel(
 
             ExploreMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             is ExploreMviModel.Intent.SetSearch -> setSearch(intent.value)
-            is ExploreMviModel.Intent.SetListingType -> changeListingType(intent.value)
-            is ExploreMviModel.Intent.SetSortType -> changeSortType(intent.value)
-            is ExploreMviModel.Intent.SetResultType -> changeResultType(intent.value)
             is ExploreMviModel.Intent.DownVotePost -> {
                 if (intent.feedback) {
                     hapticFeedback.vibrate()
@@ -239,6 +241,8 @@ class ExploreViewModel(
                     )
                 }
             }
+
+            is ExploreMviModel.Intent.ToggleSubscription -> toggleSubscription(intent.communityId)
         }
     }
 
@@ -685,6 +689,49 @@ class ExploreViewModel(
                         },
                     )
                 }
+            }
+        }
+    }
+
+    private fun toggleSubscription(communityId: Int) {
+        val community = uiState.value.results.firstOrNull {
+            (it as? SearchResult.Community)?.model?.id == communityId
+        }.let { (it as? SearchResult.Community)?.model } ?: return
+        screenModelScope.launch(Dispatchers.IO) {
+            val newValue = when (community.subscribed) {
+                true -> {
+                    hapticFeedback.vibrate()
+                    communityRepository.unsubscribe(
+                        auth = identityRepository.authToken.value,
+                        id = communityId,
+                    )
+                }
+
+                false -> {
+                    hapticFeedback.vibrate()
+                    communityRepository.subscribe(
+                        auth = identityRepository.authToken.value,
+                        id = communityId,
+                    )
+                }
+
+                else -> community
+            }
+            if (newValue == null) {
+                emitEffect(ExploreMviModel.Effect.OperationFailure)
+                return@launch
+            }
+            updateState {
+                it.copy(
+                    results = it.results.map { res ->
+                        if (res !is SearchResult.Community) return@map res
+                        if (res.model.id == community.id) {
+                            res.copy(model = newValue)
+                        } else {
+                            res
+                        }
+                    },
+                )
             }
         }
     }

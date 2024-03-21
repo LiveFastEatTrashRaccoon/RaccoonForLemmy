@@ -1,9 +1,6 @@
-package com.github.diegoberaldin.raccoonforlemmy.feature.search.main
+package com.github.diegoberaldin.raccoonforlemmy.unit.explore
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.DraggableState
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,8 +32,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScrollableTabRow
-import androidx.compose.material3.Tab
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
@@ -45,10 +43,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -74,6 +70,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.UserItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ResultTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.LocalXmlStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.TabNavigationSection
@@ -86,16 +83,18 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallb
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResult
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toInt
+import com.github.diegoberaldin.raccoonforlemmy.unit.explore.components.ExploreTopBar
 import com.github.diegoberaldin.raccoonforlemmy.unit.web.WebViewScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ExploreScreen : Screen {
+class ExploreScreen(
+    private val otherInstance: String = "",
+) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     @Composable
@@ -130,6 +129,10 @@ class ExploreScreen : Screen {
         val detailOpener = remember { getDetailOpener() }
         val connection = navigationCoordinator.getBottomBarScrollConnection()
         val scope = rememberCoroutineScope()
+        val isOnOtherInstance = remember { otherInstance.isNotEmpty() }
+        val otherInstanceName = remember { otherInstance }
+        val snackbarHostState = remember { SnackbarHostState() }
+        val errorMessage = LocalXmlStrings.current.messageGenericError
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection.onEach { section ->
@@ -148,6 +151,10 @@ class ExploreScreen : Screen {
                         topAppBarState.heightOffset = 0f
                         topAppBarState.contentOffset = 0f
                     }
+
+                    ExploreMviModel.Effect.OperationFailure -> {
+                        snackbarHostState.showSnackbar(errorMessage)
+                    }
                 }
             }.launchIn(this)
         }
@@ -164,6 +171,7 @@ class ExploreScreen : Screen {
                     scrollBehavior = scrollBehavior,
                     listingType = uiState.listingType,
                     sortType = uiState.sortType,
+                    resultType = uiState.resultType,
                     onSelectListingType = rememberCallback {
                         focusManager.clearFocus()
                         val sheet = ListingTypeBottomSheet(
@@ -181,12 +189,33 @@ class ExploreScreen : Screen {
                         )
                         navigationCoordinator.showBottomSheet(sheet)
                     },
+                    onSelectResultTypeType = rememberCallback {
+                        val sheet = ResultTypeBottomSheet(
+                            screenKey = buildString {
+                                append("explore")
+                                if (isOnOtherInstance) {
+                                    append("-")
+                                    append(otherInstanceName)
+                                }
+                            }
+                        )
+                        navigationCoordinator.showBottomSheet(sheet)
+                    },
                     onHamburgerTapped = rememberCallback {
                         scope.launch {
                             drawerCoordinator.toggleDrawer()
                         }
                     },
                 )
+            },
+            snackbarHost = {
+                SnackbarHost(snackbarHostState) { data ->
+                    Snackbar(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        snackbarData = data,
+                    )
+                }
             },
         ) { padding ->
             Column(
@@ -195,7 +224,7 @@ class ExploreScreen : Screen {
             ) {
                 TextField(
                     modifier = Modifier.padding(
-                        horizontal = Spacing.m,
+                        horizontal = Spacing.s,
                         vertical = Spacing.s,
                     ).fillMaxWidth(),
                     label = {
@@ -221,67 +250,6 @@ class ExploreScreen : Screen {
                             imageVector = if (uiState.searchText.isEmpty()) Icons.Default.Search else Icons.Default.Clear,
                             contentDescription = null,
                         )
-                    },
-                )
-                val currentSection = when (uiState.resultType) {
-                    SearchResultType.Posts -> 1
-                    SearchResultType.Comments -> 2
-                    SearchResultType.Communities -> 3
-                    SearchResultType.Users -> 4
-                    else -> 0
-                }
-                var isTowardsStart by remember { mutableStateOf(false) }
-                val draggableState = remember {
-                    DraggableState { delta ->
-                        isTowardsStart = delta > 0
-                    }
-                }
-                val onSectionSelected = { idx: Int ->
-                    val section = when (idx) {
-                        1 -> SearchResultType.Posts
-                        2 -> SearchResultType.Comments
-                        3 -> SearchResultType.Communities
-                        4 -> SearchResultType.Users
-                        else -> SearchResultType.All
-                    }
-                    model.reduce(ExploreMviModel.Intent.SetResultType(section))
-                }
-                ScrollableTabRow(
-                    selectedTabIndex = currentSection,
-                    edgePadding = 0.dp,
-                    tabs = {
-                        listOf(
-                            LocalXmlStrings.current.exploreResultTypeAll,
-                            LocalXmlStrings.current.exploreResultTypePosts,
-                            LocalXmlStrings.current.exploreResultTypeComments,
-                            LocalXmlStrings.current.exploreResultTypeCommunities,
-                            LocalXmlStrings.current.exploreResultTypeUsers,
-                        ).forEachIndexed { i, title ->
-                            Tab(
-                                modifier = Modifier.draggable(state = draggableState,
-                                    orientation = Orientation.Horizontal,
-                                    onDragStopped = {
-                                        if (isTowardsStart) {
-                                            onSectionSelected((currentSection - 1).coerceAtLeast(0))
-                                        } else {
-                                            onSectionSelected(
-                                                (currentSection + 1).coerceAtMost(4)
-                                            )
-                                        }
-                                    }),
-                                selected = i == currentSection,
-                                text = {
-                                    Text(
-                                        text = title,
-                                        style = MaterialTheme.typography.titleSmall,
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                },
-                                onClick = rememberCallback {
-                                    onSectionSelected(i)
-                                },
-                            )
-                        }
                     },
                 )
 
@@ -334,6 +302,10 @@ class ExploreScreen : Screen {
                                         community = result.model,
                                         autoLoadImages = uiState.autoLoadImages,
                                         preferNicknames = uiState.preferNicknames,
+                                        showSubscribeButton = !isOnOtherInstance,
+                                        onSubscribe = rememberCallback(model) {
+                                            model.reduce(ExploreMviModel.Intent.ToggleSubscription(result.model.id))
+                                        }
                                     )
                                 }
 

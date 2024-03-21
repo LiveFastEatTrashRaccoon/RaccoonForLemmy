@@ -140,6 +140,7 @@ internal fun SearchResultType.toDto(): SearchType = when (this) {
     SearchResultType.Communities -> SearchType.Communities
     SearchResultType.Posts -> SearchType.Posts
     SearchResultType.Users -> SearchType.Users
+    SearchResultType.Urls -> SearchType.Url
 }
 
 internal fun Person.toModel() = UserModel(
@@ -241,7 +242,11 @@ internal fun CommunityView.toModel() = community.toModel().copy(
     monthlyActiveUsers = counts.usersActiveMonth,
     weeklyActiveUsers = counts.usersActiveWeek,
     dailyActiveUsers = counts.usersActiveDay,
-    subscribed = subscribed == SubscribedType.Subscribed,
+    subscribed = when(subscribed){
+        SubscribedType.Subscribed -> true
+        SubscribedType.NotSubscribed -> false
+        SubscribedType.Pending -> null
+    },
     subscribers = counts.subscribers,
     posts = counts.posts,
     comments = counts.comments,
