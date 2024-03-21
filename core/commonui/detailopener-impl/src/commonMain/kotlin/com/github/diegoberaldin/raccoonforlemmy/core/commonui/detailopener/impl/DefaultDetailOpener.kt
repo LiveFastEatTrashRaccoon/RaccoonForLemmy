@@ -40,11 +40,12 @@ class DefaultDetailOpener(
             val (actualCommunity, actualInstance) = withContext(Dispatchers.IO) {
                 val defaultResult = community to otherInstance
                 if (otherInstance.isEmpty()) {
-                    return@withContext defaultResult
-                }
-                val found = searchCommunity(name = community.name, host = otherInstance)
-                if (found != null) {
-                    found to ""
+                    val found = searchCommunity(name = community.name, host = otherInstance)
+                    if (found != null) {
+                        found to ""
+                    } else {
+                        defaultResult
+                    }
                 } else {
                     defaultResult
                 }
@@ -165,7 +166,7 @@ class DefaultDetailOpener(
         val auth = identityRepository.authToken.value
 
         tailrec suspend fun searchRec(page: Int = 0): CommunityModel? {
-            val results = communityRepository.getAll(
+            val results = communityRepository.search(
                 auth = auth,
                 query = name,
                 resultType = SearchResultType.Communities,
