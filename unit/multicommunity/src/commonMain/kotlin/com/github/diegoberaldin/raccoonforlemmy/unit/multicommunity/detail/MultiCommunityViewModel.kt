@@ -89,6 +89,9 @@ class MultiCommunityViewModel(
             notificationCenter.subscribe(NotificationCenterEvent.CopyText::class).onEach {
                 emitEffect(MultiCommunityMviModel.Effect.TriggerCopy(it.value))
             }.launchIn(this)
+            identityRepository.isLogged.onEach { logged ->
+                updateState { it.copy(isLogged = logged ?: false) }
+            }.launchIn(this)
 
             if (uiState.value.currentUserId == null) {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -106,7 +109,7 @@ class MultiCommunityViewModel(
                         )
                     }
                     paginator.setCommunities(uiState.value.community.communityIds)
-                    refresh()
+                    refresh(initial = true)
                 }
             }
         }
@@ -143,9 +146,7 @@ class MultiCommunityViewModel(
                 if (intent.feedback) {
                     hapticFeedback.vibrate()
                 }
-                toggleUpVote(
-                    post = uiState.value.posts.first { it.id == intent.id },
-                )
+                toggleUpVote(post = uiState.value.posts.first { it.id == intent.id })
             }
 
             MultiCommunityMviModel.Intent.ClearRead -> clearRead()
@@ -163,10 +164,10 @@ class MultiCommunityViewModel(
         }
     }
 
-    private fun refresh() {
+    private fun refresh(initial: Boolean = false) {
         hideReadPosts = false
         paginator.reset()
-        updateState { it.copy(canFetchMore = true, refreshing = true) }
+        updateState { it.copy(canFetchMore = true, refreshing = true, initial = initial) }
         loadNextPage()
     }
 
@@ -221,6 +222,7 @@ class MultiCommunityViewModel(
                     loading = false,
                     canFetchMore = canFetchMore,
                     refreshing = false,
+                    initial = newPosts.isEmpty(),
                 )
             }
         }
