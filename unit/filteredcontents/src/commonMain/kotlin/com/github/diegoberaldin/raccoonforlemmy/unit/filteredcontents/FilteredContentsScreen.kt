@@ -201,9 +201,6 @@ class FilteredContentsScreen(
                     ),
                 ) {
                     FloatingActionButtonMenu(
-                        modifier = Modifier.padding(
-                            bottom = Spacing.xxl + Spacing.s + bottomNavigationInset,
-                        ),
                         items = buildList {
                             this += FloatingActionButtonMenuItem(
                                 icon = Icons.Default.ExpandLess,
