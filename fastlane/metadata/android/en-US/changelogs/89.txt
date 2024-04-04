@@ -1,0 +1,12 @@
+- feat: moderation tools in profile
+- feat: liked and disliked contents in profile
+- feat: ban duration
+- feat: community specific download directory and sort type
+- feat: explore other instances
+- feat: search posts in community + comments in post detail
+- feat: default language for posts / comments
+- feat: copy post title / body text
+- feat: share image files
+- enhancement: UI improvements
+- fix: multi-community loading
+- other fixes: login, account switch, profile loading, etc.
