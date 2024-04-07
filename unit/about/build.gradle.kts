@@ -52,11 +52,12 @@ kotlin {
                 implementation(projects.core.resources)
                 implementation(projects.core.utils)
 
-                implementation(projects.unit.web)
-
                 implementation(projects.domain.identity)
                 implementation(projects.domain.lemmy.data)
                 implementation(projects.domain.lemmy.repository)
+
+                implementation(projects.unit.licences)
+                implementation(projects.unit.web)
             }
         }
         val commonTest by getting {
