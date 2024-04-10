@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,6 +26,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallb
 @Composable
 fun SettingsRow(
     icon: ImageVector? = null,
+    painter: Painter? = null,
     title: String,
     value: String = "",
     disclosureIndicator: Boolean = false,
@@ -45,12 +48,19 @@ fun SettingsRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
     ) {
+        val imageModifier = Modifier.size(IconSize.m)
         if (icon != null) {
             Icon(
-                modifier = Modifier.size(IconSize.m),
+                modifier = imageModifier,
                 imageVector = icon,
                 contentDescription = null,
                 tint = fullColor,
+            )
+        }
+        if (painter != null) {
+            Image(
+                painter = painter,
+                contentDescription = null,
             )
         }
         Column(
