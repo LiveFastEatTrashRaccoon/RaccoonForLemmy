@@ -24,6 +24,7 @@ interface AdvancedSettingsMviModel :
         data class ChangeImageSourcePath(val value: Boolean) : Intent
         data class ChangeDefaultLanguage(val value: Long?) : Intent
         data class ChangeFadeReadPosts(val value: Boolean) : Intent
+        data class ChangeShowUnreadComments(val value: Boolean) : Intent
     }
 
     data class UiState(
@@ -49,6 +50,7 @@ interface AdvancedSettingsMviModel :
         val inboxBackgroundCheckPeriod: Duration? = null,
         val appIconChangeSupported: Boolean = false,
         val fadeReadPosts: Boolean = false,
+        val showUnreadComments: Boolean = false,
     )
 
     sealed interface Effect

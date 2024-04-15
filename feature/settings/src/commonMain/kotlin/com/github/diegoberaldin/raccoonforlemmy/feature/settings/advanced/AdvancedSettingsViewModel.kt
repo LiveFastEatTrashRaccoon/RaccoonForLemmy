@@ -106,6 +106,7 @@ class AdvancedSettingsViewModel(
                 defaultLanguageId = settings.defaultLanguageId,
                 appIconChangeSupported = appIconManager.supportsMultipleIcons,
                 fadeReadPosts = settings.fadeReadPosts,
+                showUnreadComments = settings.showUnreadComments,
             )
         }
     }
@@ -139,6 +140,7 @@ class AdvancedSettingsViewModel(
             )
 
             is AdvancedSettingsMviModel.Intent.ChangeFadeReadPosts -> changeFadeReadPosts(intent.value)
+            is AdvancedSettingsMviModel.Intent.ChangeShowUnreadComments -> changeShowUnreadPosts(intent.value)
         }
     }
 
@@ -296,6 +298,14 @@ class AdvancedSettingsViewModel(
         updateState { it.copy(fadeReadPosts = value) }
         screenModelScope.launch(Dispatchers.IO) {
             val settings = settingsRepository.currentSettings.value.copy(fadeReadPosts = value)
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeShowUnreadPosts(value: Boolean) {
+        updateState { it.copy(showUnreadComments = value) }
+        screenModelScope.launch(Dispatchers.IO) {
+            val settings = settingsRepository.currentSettings.value.copy(showUnreadComments = value)
             saveSettings(settings)
         }
     }
