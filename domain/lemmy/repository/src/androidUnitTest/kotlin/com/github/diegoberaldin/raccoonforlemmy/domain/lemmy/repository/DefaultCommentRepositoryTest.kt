@@ -36,7 +36,7 @@ class DefaultCommentRepositoryTest {
     private val serviceProvider = mockk<ServiceProvider> {
         every { comment } returns commentService
     }
-    private val customServiceProvider = mockk<ServiceProvider> {
+    private val customServiceProvider = mockk<ServiceProvider>(relaxUnitFun = true) {
         every { comment } returns commentService
     }
     private val sut = DefaultCommentRepository(

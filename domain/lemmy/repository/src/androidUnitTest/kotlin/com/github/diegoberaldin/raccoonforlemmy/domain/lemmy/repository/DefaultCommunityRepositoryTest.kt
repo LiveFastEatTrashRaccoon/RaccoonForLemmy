@@ -1,0 +1,296 @@
+package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository
+
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SearchResponse
+import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SearchType
+import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
+import com.github.diegoberaldin.raccoonforlemmy.core.api.service.CommunityService
+import com.github.diegoberaldin.raccoonforlemmy.core.api.service.SearchService
+import com.github.diegoberaldin.raccoonforlemmy.core.api.service.SiteService
+import com.github.diegoberaldin.raccoonforlemmy.core.testutils.DispatcherTestRule
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResult
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toDto
+import io.mockk.Called
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.Rule
+import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertNotNull
+
+class DefaultCommunityRepositoryTest {
+
+    @get:Rule
+    val dispatcherTestRule = DispatcherTestRule()
+
+    private val communityService = mockk<CommunityService>()
+    private val searchService = mockk<SearchService>()
+    private val siteService = mockk<SiteService>()
+    private val serviceProvider = mockk<ServiceProvider> {
+        every { community } returns communityService
+        every { search } returns searchService
+        every { site } returns siteService
+    }
+    private val customServiceProvider = mockk<ServiceProvider>(relaxUnitFun = true) {
+        every { community } returns communityService
+        every { search } returns searchService
+        every { site } returns siteService
+    }
+    private val sut = DefaultCommunityRepository(
+        services = serviceProvider,
+        customServices = customServiceProvider,
+    )
+
+    @Test
+    fun givenSuccess_whenSearch_thenResultIsAsExpected() = runTest {
+        coEvery {
+            searchService.search(
+                authHeader = any(),
+                auth = any(),
+                q = any(),
+                communityId = any(),
+                communityName = any(),
+                creatorId = any(),
+                type = any(),
+                sort = any(),
+                listingType = any(),
+                page = any(),
+                limit = any(),
+            )
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns SearchResponse(
+                type = SearchType.Communities,
+                comments = emptyList(),
+                posts = emptyList(),
+                communities = listOf(
+                    mockk(relaxed = true)
+                ),
+                users = emptyList(),
+            )
+        }
+
+        val token = "fake-token"
+        val query = "q"
+        val res = sut.search(
+            query = query,
+            auth = token,
+            page = 1,
+            limit = 20,
+            listingType = ListingType.All,
+            sortType = SortType.Active,
+            resultType = SearchResultType.Communities,
+        )
+
+        assertEquals(1, res.size)
+        assertIs<SearchResult.Community>(res.first())
+        coVerify {
+            customServiceProvider wasNot Called
+            searchService.search(
+                authHeader = token.toAuthHeader(),
+                auth = token,
+                q = query,
+                communityId = null,
+                communityName = null,
+                creatorId = null,
+                type = SearchType.Communities,
+                sort = SortType.Active.toDto(),
+                listingType = ListingType.All.toDto(),
+                page = 1,
+                limit = 20,
+            )
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenGetList_thenResultIsAsExpected() = runTest {
+        coEvery {
+            communityService.getAll(
+                authHeader = any(),
+                auth = any(),
+                sort = any(),
+                page = any(),
+                limit = any(),
+            )
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk {
+                every { communities } returns listOf(
+                    mockk(relaxed = true)
+                )
+            }
+        }
+
+        val otherInstance = "other-instance"
+        val res = sut.getList(
+            page = 1,
+            instance = otherInstance,
+            limit = 20,
+            sortType = SortType.Active
+        )
+
+        assertEquals(1, res.size)
+        coVerify {
+            serviceProvider wasNot Called
+            customServiceProvider.changeInstance(otherInstance)
+            customServiceProvider.community
+            communityService.getAll(
+                authHeader = null,
+                auth = null,
+                page = 1,
+                showNsfw = any(),
+                limit = 20,
+                sort = SortType.Active.toDto(),
+            )
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenGetResolved_thenResultIsAsExpected() = runTest {
+        coEvery {
+            searchService.resolveObject(
+                authHeader = any(),
+                q = any(),
+            )
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk {
+                every { community } returns mockk(relaxed = true)
+            }
+        }
+
+        val token = "fake-token"
+        val query = "q"
+        val res = sut.getResolved(
+            query = query,
+            auth = token
+        )
+
+        assertNotNull(res)
+        coVerify {
+            searchService.resolveObject(
+                authHeader = token.toAuthHeader(),
+                q = query,
+            )
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenGetSubscribed_thenResultIsAsExpected() = runTest {
+        coEvery {
+            siteService.get(
+                authHeader = any(),
+                auth = any(),
+            )
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk {
+                every { myUser } returns mockk {
+                    every { follows } returns listOf(
+                        mockk {
+                            every { community } returns mockk(relaxed = true)
+                        }
+                    )
+                }
+            }
+        }
+
+        val token = "fake-token"
+        val res = sut.getSubscribed(
+            auth = token,
+        )
+
+        assertEquals(1, res.size)
+        coVerify {
+            siteService.get(
+                auth = token,
+                authHeader = token.toAuthHeader(),
+            )
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenGet_thenResultIsAsExpected() = runTest {
+        val communityId = 1L
+        coEvery {
+            communityService.get(
+                authHeader = any(),
+                auth = any(),
+                id = any(),
+                name = any(),
+            )
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk {
+                every { communityView } returns mockk(relaxed = true) {
+                    every { community } returns mockk(relaxed = true) {
+                        every { id } returns communityId
+                    }
+                }
+            }
+        }
+
+        val token = "fake-token"
+        val res = sut.get(
+            auth = token,
+            id = communityId
+        )
+
+        assertNotNull(res)
+        assertEquals(communityId, res.id)
+        coVerify {
+            communityService.get(
+                id = communityId,
+                name = null,
+                auth = token,
+                authHeader = token.toAuthHeader(),
+            )
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenGetModerators_thenResultIsAsExpected() = runTest {
+        val communityId = 1L
+        coEvery {
+            communityService.get(
+                authHeader = any(),
+                auth = any(),
+                id = any(),
+                name = any(),
+            )
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk {
+                every { communityView } returns mockk(relaxed = true) {
+                    every { community } returns mockk(relaxed = true) {
+                        every { id } returns communityId
+                        every { moderators } returns listOf(mockk(relaxed = true))
+                    }
+                }
+            }
+        }
+
+        val token = "fake-token"
+        val res = sut.getModerators(
+            auth = token,
+            id = communityId,
+        )
+
+        assertEquals(1, res.size)
+        coVerify {
+            communityService.get(
+                id = communityId,
+                name = null,
+                auth = token,
+                authHeader = token.toAuthHeader(),
+            )
+        }
+    }
+}
