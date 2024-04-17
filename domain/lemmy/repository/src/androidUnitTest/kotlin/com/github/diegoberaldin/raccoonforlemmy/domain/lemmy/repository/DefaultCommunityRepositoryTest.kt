@@ -7,6 +7,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.service.CommunityServic
 import com.github.diegoberaldin.raccoonforlemmy.core.api.service.SearchService
 import com.github.diegoberaldin.raccoonforlemmy.core.api.service.SiteService
 import com.github.diegoberaldin.raccoonforlemmy.core.testutils.DispatcherTestRule
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResult
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultType
@@ -19,9 +20,11 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 
@@ -290,6 +293,195 @@ class DefaultCommunityRepositoryTest {
                 name = null,
                 auth = token,
                 authHeader = token.toAuthHeader(),
+            )
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenSubscribe_thenResultIsAsExpected() = runTest {
+        val communityId = 1L
+        coEvery {
+            communityService.follow(any(), any())
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk {
+                every { communityView } returns mockk(relaxed = true) {
+                    every { community } returns mockk(relaxed = true) {
+                        every { id } returns communityId
+                    }
+                }
+            }
+        }
+
+        val token = "fake-token"
+        val res = sut.subscribe(
+            auth = token,
+            id = communityId,
+        )
+
+        assertNotNull(res)
+        assertEquals(communityId, res.id)
+        coVerify {
+            communityService.follow(
+                authHeader = token.toAuthHeader(),
+                withArg { data ->
+                    assertEquals(communityId, data.communityId)
+                    assertTrue(data.follow)
+                }
+            )
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenUnsubscribe_thenResultIsAsExpected() = runTest {
+        val communityId = 1L
+        coEvery {
+            communityService.follow(any(), any())
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk {
+                every { communityView } returns mockk(relaxed = true) {
+                    every { community } returns mockk(relaxed = true) {
+                        every { id } returns communityId
+                    }
+                }
+            }
+        }
+
+        val token = "fake-token"
+        val res = sut.unsubscribe(
+            auth = token,
+            id = communityId,
+        )
+
+        assertNotNull(res)
+        assertEquals(communityId, res.id)
+        coVerify {
+            communityService.follow(
+                authHeader = token.toAuthHeader(),
+                withArg { data ->
+                    assertEquals(communityId, data.communityId)
+                    assertFalse(data.follow)
+                }
+            )
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenBlock_thenResultIsAsExpected() = runTest {
+        val communityId = 1L
+        coEvery {
+            communityService.block(any(), any())
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk()
+
+            val token = "fake-token"
+            sut.block(
+                auth = token,
+                id = communityId,
+                blocked = true,
+            )
+
+            coVerify {
+                communityService.block(
+                    authHeader = token.toAuthHeader(),
+                    withArg { data ->
+                        assertEquals(communityId, data.communityId)
+                        assertTrue(data.block)
+                    }
+                )
+            }
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenBanUser_thenInteractionsAreAsExpected() = runTest {
+        val communityId = 1L
+        val userId = 2L
+        coEvery {
+            communityService.ban(any(), any())
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk()
+        }
+
+        val token = "fake-token"
+        sut.banUser(
+            auth = token,
+            communityId = communityId,
+            userId = userId,
+            ban = true,
+        )
+
+        coVerify {
+            communityService.ban(
+                authHeader = token.toAuthHeader(),
+                withArg { data ->
+                    assertEquals(communityId, data.communityId)
+                    assertEquals(userId, data.personId)
+                    assertTrue(data.ban)
+                }
+            )
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenAddModerator_thenInteractionsAreAsExpected() = runTest {
+        val communityId = 1L
+        val userId = 2L
+        coEvery {
+            communityService.addMod(any(), any())
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk()
+        }
+
+        val token = "fake-token"
+        sut.addModerator(
+            auth = token,
+            communityId = communityId,
+            userId = userId,
+            added = true,
+        )
+
+        coVerify {
+            communityService.addMod(
+                authHeader = token.toAuthHeader(),
+                withArg { data ->
+                    assertEquals(communityId, data.communityId)
+                    assertEquals(userId, data.personId)
+                    assertTrue(data.added)
+                }
+            )
+        }
+    }
+
+    @Test
+    fun givenSuccess_whenUpdate_thenInteractionsAreAsExpected() = runTest {
+        val communityId = 1L
+        coEvery {
+            communityService.edit(any(), any())
+        } returns mockk {
+            every { isSuccessful } returns true
+            every { body() } returns mockk()
+        }
+
+        val token = "fake-token"
+        val newName = "fake-community-name"
+        val data = CommunityModel(id = communityId, name = newName)
+        sut.update(
+            auth = token,
+            community = data
+        )
+
+        coVerify {
+            communityService.edit(
+                authHeader = token.toAuthHeader(),
+                withArg { data ->
+                    assertEquals(communityId, data.communityId)
+                    assertEquals(newName, data.title)
+                }
             )
         }
     }
