@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -36,13 +35,13 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.Conte
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.IconSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.readContentAlpha
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomImage
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.readableName
@@ -75,7 +74,7 @@ fun CommunityAndCreatorInfo(
     val creatorName = creator?.readableName(preferNicknames).orEmpty()
     val creatorAvatar = creator?.avatar.orEmpty()
     val fullColor = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor)
-    val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f * additionalAlphaFactor)
+    val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha * additionalAlphaFactor)
 
     Row(
         modifier = modifier,
@@ -170,15 +169,9 @@ fun CommunityAndCreatorInfo(
                 }
             }
             if (creator != null) {
-                val translationAmount = 3.dp.toLocalPixel()
                 CustomizedContent(ContentFontClass.AncillaryText) {
                     Text(
                         modifier = Modifier
-                            .graphicsLayer {
-                                if (communityName.isNotEmpty()) {
-                                    translationY = -translationAmount
-                                }
-                            }
                             .onClick(
                                 onClick = rememberCallback {
                                     onOpenCreator?.invoke(creator)
