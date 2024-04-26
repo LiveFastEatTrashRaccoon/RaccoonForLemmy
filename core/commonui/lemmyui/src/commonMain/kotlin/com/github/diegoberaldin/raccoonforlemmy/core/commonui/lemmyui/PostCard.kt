@@ -43,6 +43,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsR
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.looksLikeAVideo
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.looksLikeAnImage
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -500,8 +502,8 @@ private fun ExtendedPost(
                 }
             }
         }
-        val postLinkUrl = post.url.orEmpty()
-        if (postLinkUrl != post.imageUrl && postLinkUrl != post.videoUrl) {
+        val postLinkUrl = post.url.orEmpty().takeIf { !it.looksLikeAnImage && !it.looksLikeAVideo }.orEmpty()
+        if (postLinkUrl.isNotEmpty() && postLinkUrl != post.imageUrl && postLinkUrl != post.videoUrl) {
             PostLinkBanner(
                 modifier = Modifier
                     .padding(
