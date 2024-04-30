@@ -22,8 +22,8 @@ import platform.UIKit.UIView
 @OptIn(ExperimentalForeignApi::class)
 @Composable
 actual fun VideoPlayer(
-    modifier: Modifier,
     url: String,
+    modifier: Modifier,
     onPlaybackStarted: (() -> Unit)?,
 ) {
     val player = remember { AVPlayer(uRL = NSURL.URLWithString(url)!!) }

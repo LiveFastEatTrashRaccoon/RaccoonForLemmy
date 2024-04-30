@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
  */
 @Composable
 expect fun VideoPlayer(
-    modifier: Modifier,
     url: String,
+    modifier: Modifier = Modifier,
     onPlaybackStarted: (() -> Unit)? = null,
 )

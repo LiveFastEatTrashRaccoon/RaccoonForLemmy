@@ -24,8 +24,8 @@ import androidx.media3.ui.PlayerView
 @OptIn(UnstableApi::class)
 @Composable
 actual fun VideoPlayer(
-    modifier: Modifier,
     url: String,
+    modifier: Modifier,
     onPlaybackStarted: (() -> Unit)?,
 ) {
     val context = LocalContext.current
