@@ -183,6 +183,8 @@ class UserDetailScreen(
                     UserDetailMviModel.Effect.BackToTop -> {
                         scope.launch {
                             lazyListState.scrollToItem(0)
+                            topAppBarState.heightOffset = 0f
+                            topAppBarState.contentOffset = 0f
                         }
                     }
 
@@ -597,10 +599,7 @@ class UserDetailScreen(
                                         actionButtonsActive = uiState.isLogged,
                                         onClick = rememberCallback {
                                             model.reduce(UserDetailMviModel.Intent.WillOpenDetail)
-                                            detailOpener.openPostDetail(
-                                                post = post,
-                                                supportNavigation = true,
-                                            )
+                                            detailOpener.openPostDetail(post)
                                         },
                                         onDoubleClick = if (!uiState.doubleTapActionEnabled) {
                                             null
@@ -664,10 +663,7 @@ class UserDetailScreen(
                                         } else {
                                             model.reduce(UserDetailMviModel.Intent.WillOpenDetail)
                                             rememberCallback {
-                                                detailOpener.openPostDetail(
-                                                    post = post,
-                                                    supportNavigation = true,
-                                                )
+                                                detailOpener.openPostDetail(post)
                                             }
                                         },
                                         onOpenImage = rememberCallbackArgs { url ->

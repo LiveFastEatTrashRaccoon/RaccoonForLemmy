@@ -243,6 +243,8 @@ class MultiCommunityScreen(
                                     model.reduce(MultiCommunityMviModel.Intent.ClearRead)
                                     scope.launch {
                                         lazyListState.scrollToItem(0)
+                                        topAppBarState.heightOffset = 0f
+                                        topAppBarState.contentOffset = 0f
                                     }
                                 },
                             )
@@ -403,10 +405,7 @@ class MultiCommunityScreen(
                                     onClick = rememberCallback {
                                         model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))
                                         model.reduce(MultiCommunityMviModel.Intent.WillOpenDetail)
-                                        detailOpener.openPostDetail(
-                                            post = post,
-                                            supportNavigation = true,
-                                        )
+                                        detailOpener.openPostDetail(post)
                                     },
                                     onDoubleClick = if (uiState.swipeActionsEnabled) {
                                         null
@@ -460,10 +459,7 @@ class MultiCommunityScreen(
                                     },
                                     onReply = rememberCallback(model) {
                                         model.reduce(MultiCommunityMviModel.Intent.WillOpenDetail)
-                                        detailOpener.openPostDetail(
-                                            post = post,
-                                            supportNavigation = true,
-                                        )
+                                        detailOpener.openPostDetail(post)
                                     },
                                     onOpenImage = rememberCallbackArgs { url ->
                                         model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))
