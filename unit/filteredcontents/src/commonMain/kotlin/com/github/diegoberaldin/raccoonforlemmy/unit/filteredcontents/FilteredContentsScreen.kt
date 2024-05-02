@@ -139,8 +139,7 @@ class FilteredContentsScreen(
         }
 
         Scaffold(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background)
-                .padding(Spacing.xxs),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
             topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
@@ -213,13 +212,15 @@ class FilteredContentsScreen(
             },
         ) { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues).then(
-                    if (settings.hideNavigationBarWhileScrolling) {
-                        Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                    } else {
-                        Modifier
-                    }
-                ),
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        }
+                    ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
                 SectionSelector(
@@ -254,7 +255,6 @@ class FilteredContentsScreen(
                         .pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
-                        modifier = Modifier.padding(horizontal = Spacing.xs),
                         state = lazyListState,
                         verticalArrangement = Arrangement.spacedBy(Spacing.interItem)
                     ) {
@@ -304,7 +304,9 @@ class FilteredContentsScreen(
                                                 backgroundColor = upVoteColor ?: defaultUpvoteColor,
                                                 onTriggered = rememberCallback {
                                                     model.reduce(
-                                                        FilteredContentsMviModel.Intent.UpVotePost(post.id)
+                                                        FilteredContentsMviModel.Intent.UpVotePost(
+                                                            post.id
+                                                        )
                                                     )
                                                 },
                                             )
@@ -317,10 +319,13 @@ class FilteredContentsScreen(
                                                         tint = Color.White,
                                                     )
                                                 },
-                                                backgroundColor = downVoteColor ?: defaultDownVoteColor,
+                                                backgroundColor = downVoteColor
+                                                    ?: defaultDownVoteColor,
                                                 onTriggered = rememberCallback {
                                                     model.reduce(
-                                                        FilteredContentsMviModel.Intent.DownVotePost(post.id)
+                                                        FilteredContentsMviModel.Intent.DownVotePost(
+                                                            post.id
+                                                        )
                                                     )
                                                 },
                                             )
@@ -350,7 +355,9 @@ class FilteredContentsScreen(
                                                 backgroundColor = saveColor ?: defaultSaveColor,
                                                 onTriggered = rememberCallback {
                                                     model.reduce(
-                                                        FilteredContentsMviModel.Intent.SavePost(post.id)
+                                                        FilteredContentsMviModel.Intent.SavePost(
+                                                            post.id
+                                                        )
                                                     )
                                                 },
                                             )
@@ -373,6 +380,7 @@ class FilteredContentsScreen(
                                             postLayout = uiState.postLayout,
                                             limitBodyHeight = true,
                                             fullHeightImage = uiState.fullHeightImages,
+                                            fullWidthImage = uiState.fullWidthImages,
                                             voteFormat = uiState.voteFormat,
                                             autoLoadImages = uiState.autoLoadImages,
                                             preferNicknames = uiState.preferNicknames,
@@ -406,7 +414,9 @@ class FilteredContentsScreen(
                                             },
                                             onDownVote = rememberCallback(model) {
                                                 model.reduce(
-                                                    FilteredContentsMviModel.Intent.DownVotePost(post.id),
+                                                    FilteredContentsMviModel.Intent.DownVotePost(
+                                                        post.id
+                                                    ),
                                                 )
                                             },
                                             onSave = rememberCallback(model) {
@@ -471,11 +481,15 @@ class FilteredContentsScreen(
                                                     }
 
                                                     OptionId.FeaturePost -> model.reduce(
-                                                        FilteredContentsMviModel.Intent.ModFeaturePost(post.id)
+                                                        FilteredContentsMviModel.Intent.ModFeaturePost(
+                                                            post.id
+                                                        )
                                                     )
 
                                                     OptionId.LockPost -> model.reduce(
-                                                        FilteredContentsMviModel.Intent.ModLockPost(post.id)
+                                                        FilteredContentsMviModel.Intent.ModLockPost(
+                                                            post.id
+                                                        )
                                                     )
 
                                                     OptionId.Remove -> {
@@ -492,7 +506,9 @@ class FilteredContentsScreen(
                                                                     newValue = post.creator?.banned != true,
                                                                     postId = post.id,
                                                                 )
-                                                                navigationCoordinator.pushScreen(screen)
+                                                                navigationCoordinator.pushScreen(
+                                                                    screen
+                                                                )
                                                             }
                                                         }
                                                     }
@@ -546,7 +562,9 @@ class FilteredContentsScreen(
                                                 backgroundColor = upVoteColor ?: defaultUpvoteColor,
                                                 onTriggered = rememberCallback {
                                                     model.reduce(
-                                                        FilteredContentsMviModel.Intent.UpVoteComment(comment.id)
+                                                        FilteredContentsMviModel.Intent.UpVoteComment(
+                                                            comment.id
+                                                        )
                                                     )
                                                 },
                                             )
@@ -559,10 +577,13 @@ class FilteredContentsScreen(
                                                         tint = Color.White,
                                                     )
                                                 },
-                                                backgroundColor = downVoteColor ?: defaultDownVoteColor,
+                                                backgroundColor = downVoteColor
+                                                    ?: defaultDownVoteColor,
                                                 onTriggered = rememberCallback {
                                                     model.reduce(
-                                                        FilteredContentsMviModel.Intent.DownVoteComment(comment.id),
+                                                        FilteredContentsMviModel.Intent.DownVoteComment(
+                                                            comment.id
+                                                        ),
                                                     )
                                                 },
                                             )
@@ -592,7 +613,9 @@ class FilteredContentsScreen(
                                                 backgroundColor = saveColor ?: defaultSaveColor,
                                                 onTriggered = rememberCallback {
                                                     model.reduce(
-                                                        FilteredContentsMviModel.Intent.SaveComment(comment.id),
+                                                        FilteredContentsMviModel.Intent.SaveComment(
+                                                            comment.id
+                                                        ),
                                                     )
                                                 },
                                             )
@@ -629,17 +652,23 @@ class FilteredContentsScreen(
                                             },
                                             onUpVote = rememberCallback(model) {
                                                 model.reduce(
-                                                    FilteredContentsMviModel.Intent.UpVoteComment(comment.id)
+                                                    FilteredContentsMviModel.Intent.UpVoteComment(
+                                                        comment.id
+                                                    )
                                                 )
                                             },
                                             onDownVote = rememberCallback(model) {
                                                 model.reduce(
-                                                    FilteredContentsMviModel.Intent.DownVoteComment(comment.id)
+                                                    FilteredContentsMviModel.Intent.DownVoteComment(
+                                                        comment.id
+                                                    )
                                                 )
                                             },
                                             onSave = rememberCallback(model) {
                                                 model.reduce(
-                                                    FilteredContentsMviModel.Intent.SaveComment(comment.id)
+                                                    FilteredContentsMviModel.Intent.SaveComment(
+                                                        comment.id
+                                                    )
                                                 )
                                             },
                                             onReply = rememberCallback {
@@ -688,7 +717,9 @@ class FilteredContentsScreen(
                                                     }
 
                                                     OptionId.DistinguishComment -> model.reduce(
-                                                        FilteredContentsMviModel.Intent.ModDistinguishComment(comment.id)
+                                                        FilteredContentsMviModel.Intent.ModDistinguishComment(
+                                                            comment.id
+                                                        )
                                                     )
 
                                                     OptionId.BanUser -> {
@@ -700,7 +731,9 @@ class FilteredContentsScreen(
                                                                     newValue = comment.creator?.banned != true,
                                                                     commentId = comment.id,
                                                                 )
-                                                                navigationCoordinator.pushScreen(screen)
+                                                                navigationCoordinator.pushScreen(
+                                                                    screen
+                                                                )
                                                             }
                                                         }
                                                     }

@@ -250,9 +250,7 @@ class CommunityDetailScreen(
         }
 
         Scaffold(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                .padding(Spacing.xxs),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
             topBar = {
                 val maxTopInset = Dimensions.maxTopBarInset.toLocalPixel()
                 var topInset by remember { mutableStateOf(maxTopInset) }
@@ -838,6 +836,7 @@ class CommunityDetailScreen(
                                             postLayout = uiState.postLayout,
                                             limitBodyHeight = true,
                                             fullHeightImage = uiState.fullHeightImages,
+                                            fullWidthImage = uiState.fullWidthImages,
                                             voteFormat = uiState.voteFormat,
                                             autoLoadImages = uiState.autoLoadImages,
                                             preferNicknames = uiState.preferNicknames,

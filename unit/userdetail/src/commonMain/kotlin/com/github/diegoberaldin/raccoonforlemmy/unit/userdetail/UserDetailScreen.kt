@@ -196,9 +196,7 @@ class UserDetailScreen(
         }
 
         Scaffold(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                .padding(Spacing.xxs),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
             topBar = {
                 val userName = uiState.user.readableName(uiState.preferNicknames)
                 val maxTopInset = Dimensions.maxTopBarInset.toLocalPixel()
@@ -591,6 +589,7 @@ class UserDetailScreen(
                                         postLayout = uiState.postLayout,
                                         limitBodyHeight = true,
                                         fullHeightImage = uiState.fullHeightImages,
+                                        fullWidthImage = uiState.fullWidthImages,
                                         blurNsfw = uiState.blurNsfw,
                                         voteFormat = uiState.voteFormat,
                                         autoLoadImages = uiState.autoLoadImages,

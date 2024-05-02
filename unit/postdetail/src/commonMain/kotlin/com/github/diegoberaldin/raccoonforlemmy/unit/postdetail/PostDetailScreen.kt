@@ -271,9 +271,7 @@ class PostDetailScreen(
         }
 
         Scaffold(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                .padding(Spacing.xs),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
             topBar = {
                 val maxTopInset = Dimensions.maxTopBarInset.toLocalPixel()
                 var topInset by remember { mutableStateOf(maxTopInset) }
@@ -538,6 +536,7 @@ class PostDetailScreen(
                                         PostLayout.Full
                                     },
                                     fullHeightImage = uiState.fullHeightImages,
+                                    fullWidthImage = uiState.fullWidthImages,
                                     includeFullBody = true,
                                     voteFormat = uiState.voteFormat,
                                     autoLoadImages = uiState.autoLoadImages,
