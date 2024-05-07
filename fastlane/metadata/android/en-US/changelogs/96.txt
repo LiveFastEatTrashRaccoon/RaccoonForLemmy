@@ -1,0 +1,18 @@
+- improved image viewer
+- new splash screen, alternate icon
+- full width images
+- license screen
+- background check for unread items
+- fade read posts
+- login/title autocompletion
+- show unread comments count
+- community/user info in side panel
+- add app to system "Share" menu
+- settings import/export
+- embedded web frame in posts
+- navigation between comments
+- navigation to previous/next post
+- open URLs in custom tabs
+- improved spoiler support
+- distinguish comments by bots
+- UI improvements
