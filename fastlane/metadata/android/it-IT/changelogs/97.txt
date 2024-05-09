@@ -1,0 +1,3 @@
+- selezione modalità ridimensionamento immagine
+- fix schermata creazione commento
+- fix cambio account
