@@ -196,6 +196,13 @@ class UserDetailScreen(
                 }
             }.launchIn(this)
         }
+        LaunchedEffect(navigationCoordinator) {
+            navigationCoordinator.globalMessage.onEach { message ->
+                snackbarHostState.showSnackbar(
+                    message = message,
+                )
+            }.launchIn(this)
+        }
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -769,8 +776,7 @@ class UserDetailScreen(
                         if (uiState.posts.isEmpty() && !uiState.loading) {
                             item {
                                 Text(
-                                    modifier = Modifier.fillMaxWidth()
-                                        .padding(top = Spacing.xs),
+                                    modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
                                     textAlign = TextAlign.Center,
                                     text = LocalXmlStrings.current.messageEmptyList,
                                     style = MaterialTheme.typography.bodyLarge,
@@ -1024,8 +1030,7 @@ class UserDetailScreen(
                         if (uiState.comments.isEmpty() && !uiState.loading) {
                             item {
                                 Text(
-                                    modifier = Modifier.fillMaxWidth()
-                                        .padding(top = Spacing.xs),
+                                    modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
                                     textAlign = TextAlign.Center,
                                     text = LocalXmlStrings.current.messageEmptyList,
                                     style = MaterialTheme.typography.bodyLarge,

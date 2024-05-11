@@ -106,18 +106,23 @@ internal object MainScreen : Screen {
         LaunchedEffect(navigationCoordinator) {
             with(navigationCoordinator) {
                 if (currentSection.value == null) {
-                    navigationCoordinator.setCurrentSection(TabNavigationSection.Home)
+                    setCurrentSection(TabNavigationSection.Home)
                 }
             }
 
-            navigationCoordinator.exitMessageVisible.onEach {
-                if (it) {
+            navigationCoordinator.exitMessageVisible.onEach { visible ->
+                if (visible) {
                     snackbarHostState.showSnackbar(
                         message = exitMessage,
                         duration = SnackbarDuration.Short,
                     )
                     navigationCoordinator.setExitMessageVisible(false)
                 }
+            }.launchIn(this)
+            navigationCoordinator.globalMessage.onEach { message ->
+                snackbarHostState.showSnackbar(
+                    message = message,
+                )
             }.launchIn(this)
         }
 
