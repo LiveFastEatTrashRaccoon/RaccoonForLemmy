@@ -271,6 +271,7 @@ class PostListViewModel(
         hideReadPosts = false
         val listingType = uiState.value.listingType ?: return
         val sortType = uiState.value.sortType ?: return
+        zombieModeHelper.pause()
         postPaginationManager.reset(
             PostPaginationSpecification.Listing(
                 listingType = listingType,
@@ -284,6 +285,7 @@ class PostListViewModel(
                 canFetchMore = true,
                 refreshing = true,
                 loading = false,
+                zombieModeActive = false,
             )
         }
         loadNextPage()
@@ -331,6 +333,7 @@ class PostListViewModel(
         updateState { it.copy(sortType = value) }
         screenModelScope.launch {
             emitEffect(PostListMviModel.Effect.BackToTop)
+            delay(50)
             refresh()
         }
     }
@@ -342,6 +345,7 @@ class PostListViewModel(
         updateState { it.copy(listingType = value) }
         screenModelScope.launch(Dispatchers.IO) {
             emitEffect(PostListMviModel.Effect.BackToTop)
+            delay(50)
             refresh()
         }
     }
