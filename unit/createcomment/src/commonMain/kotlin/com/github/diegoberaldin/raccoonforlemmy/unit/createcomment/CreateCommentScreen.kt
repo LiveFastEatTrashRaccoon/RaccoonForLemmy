@@ -188,6 +188,7 @@ class CreateCommentScreen(
                                 }
                             },
                             color = MaterialTheme.colorScheme.onBackground,
+                            style = MaterialTheme.typography.titleMedium,
                         )
                     },
                     actions = {
@@ -326,8 +327,8 @@ class CreateCommentScreen(
                         TextFormattingBar(
                             modifier = Modifier.padding(
                                 top = Spacing.s,
-                                start = Spacing.m,
-                                end = Spacing.m,
+                                start = Spacing.s,
+                                end = Spacing.s,
                             ),
                             textFieldValue = uiState.textValue,
                             onTextFieldValueChanged = { value ->

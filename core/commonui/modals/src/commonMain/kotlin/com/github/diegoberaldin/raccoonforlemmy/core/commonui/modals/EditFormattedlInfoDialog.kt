@@ -73,7 +73,7 @@ fun EditFormattedInfoDialog(
         ) {
             Text(
                 text = LocalXmlStrings.current.postActionEdit,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(modifier = Modifier.height(Spacing.s))
@@ -103,8 +103,8 @@ fun EditFormattedInfoDialog(
                     TextFormattingBar(
                         modifier = Modifier.padding(
                             top = Spacing.s,
-                            start = Spacing.m,
-                            end = Spacing.m,
+                            start = Spacing.s,
+                            end = Spacing.s,
                         ),
                         textFieldValue = textFieldValue,
                         onTextFieldValueChanged = {

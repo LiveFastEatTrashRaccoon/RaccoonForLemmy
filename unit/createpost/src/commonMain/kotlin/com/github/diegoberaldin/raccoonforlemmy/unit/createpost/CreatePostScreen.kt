@@ -252,6 +252,7 @@ class CreatePostScreen(
                                 else -> LocalXmlStrings.current.createPostTitle
                             },
                             color = MaterialTheme.colorScheme.onBackground,
+                            style = MaterialTheme.typography.titleMedium,
                         )
                     },
                     actions = {
@@ -510,8 +511,8 @@ class CreatePostScreen(
                         TextFormattingBar(
                             modifier = Modifier.padding(
                                 top = Spacing.s,
-                                start = Spacing.m,
-                                end = Spacing.m,
+                                start = Spacing.s,
+                                end = Spacing.s,
                             ),
                             textFieldValue = uiState.bodyValue,
                             onTextFieldValueChanged = { value ->
