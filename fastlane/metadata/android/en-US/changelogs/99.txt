@@ -1,0 +1,7 @@
+- fix post body max height
+- fix bug when changing feed/sort type
+- fix system share
+- fix status bar styling
+- enhanced inbox messages and chat
+- feedback after report, ban and removal
+- general layout improvements

@@ -1,0 +1,7 @@
+- fix altezza massima post
+- fix bug al cambio tipo di feed/ordinamento
+- fix condivisione di sistema
+- fix stile barra di stato
+- miglioramento chat e messaggi inbox
+- feedback per segnalazione, ban e rimozione
+- miglioramenti di layout generali
