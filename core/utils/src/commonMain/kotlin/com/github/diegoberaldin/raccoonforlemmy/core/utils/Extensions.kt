@@ -1,5 +1,3 @@
-@file:Suppress("ktlint:standard:no-wildcard-imports")
-
 package com.github.diegoberaldin.raccoonforlemmy.core.utils
 
 import androidx.compose.runtime.Composable
@@ -10,7 +8,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.Locales
-import io.ktor.utils.io.core.toByteArray
+import io.ktor.utils.io.core.*
 import org.kotlincrypto.hash.md.MD5
 import kotlin.math.round
 
@@ -177,7 +175,7 @@ val String.looksLikeAVideo: Boolean
     }
 
 val String.isRedGifs: Boolean
-    get() = this.contains("redgifs.com")
+    get() = contains("redgifs.com")
 
 fun String?.ellipsize(
     length: Int = 100,
