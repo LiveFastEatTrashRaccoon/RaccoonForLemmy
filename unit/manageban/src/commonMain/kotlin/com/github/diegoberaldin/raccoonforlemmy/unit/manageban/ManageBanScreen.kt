@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,9 +28,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -50,6 +53,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.github.diegoberaldin.raccoonforlemmy.unit.manageban.components.InstanceItem
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class ManageBanScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -64,6 +69,22 @@ class ManageBanScreen : Screen {
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
         val lazyListState = rememberLazyListState()
+        val successMessage = LocalXmlStrings.current.messageOperationSuccessful
+        val errorMessage = LocalXmlStrings.current.messageGenericError
+
+        LaunchedEffect(model) {
+            model.effects.onEach { evt ->
+                when (evt) {
+                    is ManageBanMviModel.Effect.Failure -> {
+                        snackbarHostState.showSnackbar(evt.message ?: errorMessage)
+                    }
+
+                    ManageBanMviModel.Effect.Success -> {
+                        snackbarHostState.showSnackbar(successMessage)
+                    }
+                }
+            }.launchIn(this)
+        }
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -200,13 +221,11 @@ class ManageBanScreen : Screen {
                                                         )
                                                 },
                                             onOptionSelected =
-                                                rememberCallbackArgs(model) { optionId ->
+                                                rememberCallbackArgs(user) { optionId ->
                                                     when (optionId) {
                                                         OptionId.Unban -> {
                                                             model.reduce(
-                                                                ManageBanMviModel.Intent.UnblockUser(
-                                                                    user.id,
-                                                                ),
+                                                                ManageBanMviModel.Intent.UnblockUser(user.id),
                                                             )
                                                         }
 
@@ -250,13 +269,11 @@ class ManageBanScreen : Screen {
                                                         )
                                                 },
                                             onOptionSelected =
-                                                rememberCallbackArgs(model) { optionId ->
+                                                rememberCallbackArgs(community) { optionId ->
                                                     when (optionId) {
                                                         OptionId.Unban -> {
                                                             model.reduce(
-                                                                ManageBanMviModel.Intent.UnblockCommunity(
-                                                                    community.id,
-                                                                ),
+                                                                ManageBanMviModel.Intent.UnblockCommunity(community.id),
                                                             )
                                                         }
 
@@ -298,13 +315,11 @@ class ManageBanScreen : Screen {
                                                         )
                                                 },
                                             onOptionSelected =
-                                                rememberCallbackArgs(model) { optionId ->
+                                                rememberCallbackArgs(instance) { optionId ->
                                                     when (optionId) {
                                                         OptionId.Unban -> {
                                                             model.reduce(
-                                                                ManageBanMviModel.Intent.UnblockInstance(
-                                                                    instance.id,
-                                                                ),
+                                                                ManageBanMviModel.Intent.UnblockInstance(instance.id),
                                                             )
                                                         }
 
@@ -317,6 +332,14 @@ class ManageBanScreen : Screen {
                             }
                         }
                     }
+
+                    PullRefreshIndicator(
+                        refreshing = uiState.refreshing,
+                        state = pullRefreshState,
+                        modifier = Modifier.align(Alignment.TopCenter),
+                        backgroundColor = MaterialTheme.colorScheme.background,
+                        contentColor = MaterialTheme.colorScheme.onBackground,
+                    )
                 }
             }
         }
