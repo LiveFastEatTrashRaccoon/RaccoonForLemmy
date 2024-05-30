@@ -11,13 +11,13 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class DefaultCommunitySortRepositoryTest {
+class DefaultCommunityPreferredLanguageRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
     private val keyStore = mockk<TemporaryKeyStore>(relaxUnitFun = true)
 
-    private val sut = DefaultCommunitySortRepository(keyStore = keyStore)
+    private val sut = DefaultCommunityPreferredLanguageRepository(keyStore = keyStore)
 
     @Test
     fun givenEmptyInitialState_whenSave_thenValueIsStored() = runTest {
@@ -42,6 +42,17 @@ class DefaultCommunitySortRepositoryTest {
     }
 
     @Test
+    fun givenCommunityAlreadyExisting_whenSaveNull_thenValueIsRemoved() = runTest {
+        every { keyStore.get(KEY, listOf()) } returns listOf("!raccoonforlemmy@lemmy.world:0")
+
+        sut.save("!raccoonforlemmy@lemmy.world", null)
+
+        verify {
+            keyStore.save(KEY, emptyList())
+        }
+    }
+
+    @Test
     fun givenOtherCommunityAlreadyExisting_whenSave_thenBothValuesAreStored() = runTest {
         every { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
 
@@ -51,6 +62,18 @@ class DefaultCommunitySortRepositoryTest {
             keyStore.save(KEY, listOf("!test@lemmy.world:1", "!raccoonforlemmy@lemmy.world:1"))
         }
     }
+
+    @Test
+    fun givenOtherCommunityAlreadyExisting_whenSaveNull_thenValueIsRemovedButTheOtherIsNot() =
+        runTest {
+            every { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
+
+            sut.save("!raccoonforlemmy@lemmy.world", null)
+
+            verify {
+                keyStore.save(KEY, listOf("!test@lemmy.world:1"))
+            }
+        }
 
     @Test
     fun givenEmptyInitialState_whenGet_thenResultIsAsExpected() = runTest {
@@ -80,6 +103,6 @@ class DefaultCommunitySortRepositoryTest {
     }
 
     companion object {
-        private const val KEY = "communitySort"
+        private const val KEY = "communityPreferredLanguage"
     }
 }

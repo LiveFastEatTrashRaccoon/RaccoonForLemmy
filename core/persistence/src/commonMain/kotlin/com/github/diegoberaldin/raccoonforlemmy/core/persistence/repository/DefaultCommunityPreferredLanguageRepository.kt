@@ -5,38 +5,43 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
-private const val SETTINGS_KEY = "communitySort"
+private const val SETTINGS_KEY = "communityPreferredLanguage"
 
-internal class DefaultCommunitySortRepository(
+internal class DefaultCommunityPreferredLanguageRepository(
     private val keyStore: TemporaryKeyStore,
-) : CommunitySortRepository {
-    override suspend fun get(handle: String): Int? = withContext(Dispatchers.IO) {
+) : CommunityPreferredLanguageRepository {
+
+    override suspend fun get(handle: String): Long? = withContext(Dispatchers.IO) {
         val map = deserializeMap()
         map[handle]
     }
 
     override suspend fun save(
         handle: String,
-        value: Int,
+        value: Long?,
     ) = withContext(Dispatchers.IO) {
         val map = deserializeMap()
-        map[handle] = value
+        if (value != null) {
+            map[handle] = value
+        } else {
+            map.remove(handle)
+        }
         val newValue = serializeMap(map)
         keyStore.save(SETTINGS_KEY, newValue)
     }
 
-    private fun deserializeMap(): MutableMap<String, Int> =
+    private fun deserializeMap(): MutableMap<String, Long> =
         keyStore.get(SETTINGS_KEY, listOf()).mapNotNull {
             it.split(":").takeIf { e -> e.size == 2 }?.let { e -> e[0] to e[1] }
         }.let { pairs ->
-            val res = mutableMapOf<String, Int>()
+            val res = mutableMapOf<String, Long>()
             for (pair in pairs) {
-                res[pair.first] = pair.second.toInt()
+                res[pair.first] = pair.second.toLong()
             }
             res
         }
 
-    private fun serializeMap(map: Map<String, Int>): List<String> =
+    private fun serializeMap(map: Map<String, Long>): List<String> =
         map.map { e ->
             e.key + ":" + e.value
         }

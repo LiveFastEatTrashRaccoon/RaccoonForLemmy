@@ -1,11 +1,11 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository
 
-interface CommunitySortRepository {
-    suspend fun get(handle: String): Int?
+interface CommunityPreferredLanguageRepository {
+    suspend fun get(handle: String): Long?
 
     suspend fun save(
         handle: String,
-        value: Int,
+        value: Long?,
     )
 
     suspend fun clear()
