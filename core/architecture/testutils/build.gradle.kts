@@ -20,22 +20,25 @@ kotlin {
         iosSimulatorArm64(),
     ).forEach {
         it.binaries.framework {
-            baseName = "core.architecture"
+            baseName = "core.architecture.testutils"
             isStatic = true
         }
     }
 
     sourceSets {
-        val commonMain by getting {
+        val commonMain by getting
+        val androidMain by getting {
             dependencies {
                 implementation(libs.kotlinx.coroutines)
+                implementation(projects.core.architecture)
+                implementation(kotlin("test-junit"))
             }
         }
     }
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.architecture"
+    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.architecture.testutils"
     compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
