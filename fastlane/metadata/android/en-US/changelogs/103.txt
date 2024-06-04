@@ -1,0 +1,10 @@
+- feat: add instance admin tools
+- feat: default editor language on a per-instance basis
+- fix: remove blank space above keyboard on some Android versions
+- fix: instance unban
+- fix: stability issues when navigating through contents
+- enhancement: hide downvote action if not allowed
+- enhancement: pagination in subscription list
+- enhancement: post opening/refreshing performance
+- enhancement: mentions/replies marked as read when voted
+- enhancement: minor UI improvements

@@ -1,0 +1,10 @@
+- feat: strumenti per amministratori
+- feat: lingua predefinita in editor per istanza
+- fix: rimosso padding tastiera su alcune versioni di Android
+- fix: annullamento ban instanza
+- fix: problemi di stabilità in navigazione contenuti
+- enhancement: voto negativo nascosto se non disponibile
+- enhancement: paginazione in elenco iscrizioni
+- enhancement: performance apertura/refresh post
+- enhancement: menzioni/risposte contrassegnate come lette al voto
+- enhancement: miglioramenti di UI
