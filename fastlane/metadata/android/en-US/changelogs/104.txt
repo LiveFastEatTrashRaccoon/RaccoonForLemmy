@@ -1,0 +1,2 @@
+- fix: edit reply to comments
+- fix: crash when opening sort bottom sheet
