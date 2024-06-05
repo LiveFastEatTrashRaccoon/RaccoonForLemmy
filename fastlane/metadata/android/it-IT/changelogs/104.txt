@@ -1,0 +1,2 @@
+- fix: modifica risposte a commenti
+- fix: crash all'apertura del bottom sheet di ordinamento
