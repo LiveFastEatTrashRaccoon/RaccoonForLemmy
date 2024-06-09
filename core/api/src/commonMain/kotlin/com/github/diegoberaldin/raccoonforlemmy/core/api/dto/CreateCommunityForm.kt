@@ -4,8 +4,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class EditCommunityForm(
-    @SerialName("community_id") val communityId: CommunityId? = null,
+data class CreateCommunityForm(
+    @SerialName("name") val name: String,
     @SerialName("icon") val icon: String? = null,
     @SerialName("banner") val banner: String? = null,
     @SerialName("title") val title: String? = null,
