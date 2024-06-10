@@ -5,14 +5,18 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentR
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultCommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultCommunityRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultGetSiteSupportsHiddenPostsUseCase
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultGetSortTypesUseCase
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultIsSiteVersionAtLeastUseCase
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultLemmyItemCache
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultModlogRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultPostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultPrivateMessageRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultSiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.DefaultUserRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.GetSiteSupportsHiddenPostsUseCase
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.IsSiteVersionAtLeastUseCase
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.LemmyItemCache
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.ModlogRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
@@ -26,9 +30,14 @@ private const val CACHE_SIZE = 5
 
 val repositoryModule =
     module {
+        single<IsSiteVersionAtLeastUseCase> {
+            DefaultIsSiteVersionAtLeastUseCase(
+                siteRepository = get(),
+            )
+        }
         single<GetSortTypesUseCase> {
             DefaultGetSortTypesUseCase(
-                siteRepository = get(),
+                isSiteVersionAtLeastUseCase = get(),
             )
         }
         single<PostRepository> {
@@ -77,6 +86,11 @@ val repositoryModule =
                 commentCache = LruCache.factory(CACHE_SIZE),
                 communityCache = LruCache.factory(CACHE_SIZE),
                 userCache = LruCache.factory(CACHE_SIZE),
+            )
+        }
+        single<GetSiteSupportsHiddenPostsUseCase> {
+            DefaultGetSiteSupportsHiddenPostsUseCase(
+                isSiteVersionAtLeastUseCase = get(),
             )
         }
     }
