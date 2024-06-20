@@ -8,13 +8,22 @@ plugins {
 
 android {
     namespace = "com.github.diegoberaldin.raccoonforlemmy.android"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
         applicationId = "com.github.diegoberaldin.raccoonforlemmy.android"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 108
-        versionName = "1.12.0-20240615-pre"
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.android.targetSdk
+                .get()
+                .toInt()
+        versionCode = 109
+        versionName = "1.12.0-20240620-pre"
     }
     base.archivesName = "RaccoonForLemmy"
     buildFeatures {
