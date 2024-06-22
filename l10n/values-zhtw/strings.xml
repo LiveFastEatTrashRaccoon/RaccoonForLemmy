@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="communityDetailBlock">封鎖</string>
     <string name="communityDetailBlockInstance">封鎖網站</string>
@@ -410,5 +410,5 @@
     <string name="settingsEnableToggleFavoriteInNavDrawer">加入/移除導航抽屜中的收藏</string>
     <string name="messageContentDeleted">您已刪除此內容</string>
     <string name="actionRestore">恢復</string>
-    <string name="settingsInboxPreviewMaxLines">Inbox card preview max lines</string>
+    <string name="settingsInboxPreviewMaxLines"></string>
 </resources>
