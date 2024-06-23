@@ -410,5 +410,4 @@
     <string name="settingsEnableToggleFavoriteInNavDrawer">加入/攞走導航櫃桶嘅最愛</string>
     <string name="messageContentDeleted">您刪除咗呢個內容</string>
     <string name="actionRestore">恢復</string>
-    <string name="settingsInboxPreviewMaxLines"></string>
 </resources>
