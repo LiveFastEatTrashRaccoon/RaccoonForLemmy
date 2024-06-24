@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Cerca nei commenti</string>
     <string name="advancedSettingsDefaultLanguage">Lingua di default nell\'editor</string>
     <string name="undetermined">Non definito</string>
-    <string name="exploreResultTypeTitle">Tipo di risultato</string>
+    <string name="exploreResultTypeTitle">Tipo risultato di ricerca</string>
     <string name="communityActionEdit">Modifica comunità</string>
     <string name="editCommunityHeaderTextual">Informazioni testuali</string>
     <string name="editCommunityItemSidebar">Sidebar</string>
