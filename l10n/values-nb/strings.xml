@@ -283,7 +283,7 @@
     <string name="settingsWebBot">Bot</string>
     <string name="settingsWebDisplayName">Display name</string>
     <string name="settingsWebMatrix">Matrix user ID</string>
-    <string name="settingsWebEmail">Email</string>
+    <string name="settingsWebEmail">E-post</string>
     <string name="settingsWebShowBot">Show bot accounts</string>
     <string name="settingsWebShowNsfw">Show NSFW</string>
     <string name="settingsWebShowRead">Show read posts</string>
