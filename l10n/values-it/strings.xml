@@ -119,7 +119,7 @@
     <string name="navigationDrawerTitleBookmarks">Segnalibri</string>
     <string name="navigationDrawerTitleSubscriptions">Gestione iscrizioni</string>
     <string name="navigationHome">Post</string>
-    <string name="navigationInbox">Inbox</string>
+    <string name="navigationInbox">In arrivo</string>
     <string name="navigationProfile">Profilo</string>
     <string name="navigationSearch">Esplora</string>
     <string name="navigationSettings">Impostazioni</string>
@@ -145,9 +145,9 @@
     <string name="profileYearShort">a</string>
     <string name="settingsAbout">Informazioni app</string>
     <string name="settingsAboutAppVersion">Versione app</string>
-    <string name="settingsAboutChangelog">Visualizza changelog</string>
+    <string name="settingsAboutChangelog">Visualizza il registro modifiche</string>
     <string name="settingsAboutReportGithub">Segnala un bug (GitHub)</string>
-    <string name="settingsAboutReportEmail">Segnala un bug (email)</string>
+    <string name="settingsAboutReportEmail">Segnala un bug (e-mail)</string>
     <string name="settingsAboutViewGithub">Vedi su GitHub</string>
     <string name="settingsAboutViewLemmy">Comunità Lemmy</string>
     <string name="settingsAutoExpandComments">Espandi commenti automaticamente</string>
@@ -283,7 +283,7 @@
     <string name="settingsWebBot">Bot</string>
     <string name="settingsWebDisplayName">Nome visualizzato</string>
     <string name="settingsWebMatrix">ID utente Matrix</string>
-    <string name="settingsWebEmail">Email</string>
+    <string name="settingsWebEmail">E-mail</string>
     <string name="settingsWebShowBot">Mostra account bot</string>
     <string name="settingsWebShowNsfw">Mostra NSFW</string>
     <string name="settingsWebShowRead">Mostra post letti</string>
@@ -338,7 +338,7 @@
     <string name="buttonYesQuit">Sì, esci</string>
     <string name="settingsItemImageSourcePath">Salva le immagini in sottodirectory specifiche</string>
     <string name="settingsSubtitleImageSourcePath">utilizza handle comunità o utente nei percorsi</string>
-    <string name="settingsTitleDisplay">Display</string>
+    <string name="settingsTitleDisplay">Visualizzazione</string>
     <string name="settingsTitleReading">Lettura e contenuti</string>
     <string name="settingsTitlePictures">Immagini</string>
     <string name="settingsTitleExperimental">Esperimenti</string>
@@ -359,9 +359,9 @@
     <string name="exploreResultTypeTitle">Tipo risultato di ricerca</string>
     <string name="communityActionEdit">Modifica comunità</string>
     <string name="editCommunityHeaderTextual">Informazioni testuali</string>
-    <string name="editCommunityItemSidebar">Sidebar</string>
+    <string name="editCommunityItemSidebar">Barra laterale</string>
     <string name="editCommunityItemPostingRestrictedToMods">Pubblicazione riservata ai moderatori</string>
-    <string name="messageAreYouSure">Sei sicuro di voler continuare?</string>
+    <string name="messageAreYouSure">Sei sicuro/sicura di voler continuare?</string>
     <string name="buttonCancel">Annulla</string>
     <string name="shareModeUrl">Condividi come URL</string>
     <string name="shareModeFile">Condividi come file</string>
