@@ -283,7 +283,7 @@
     <string name="settingsWebBot">Bot</string>
     <string name="settingsWebDisplayName">Kuvatav nimi</string>
     <string name="settingsWebMatrix">Matrix kasutajatunnus</string>
-    <string name="settingsWebEmail">Meil</string>
+    <string name="settingsWebEmail">E-post</string>
     <string name="settingsWebShowBot">Kuva roboti kontod</string>
     <string name="settingsWebShowNsfw">Näita NSFW-d</string>
     <string name="settingsWebShowRead">Kuva loetud postitused</string>
