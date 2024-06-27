@@ -412,4 +412,5 @@
     <string name="actionRestore">Ripristina</string>
     <string name="settingsInboxPreviewMaxLines">Numero massimo righe anteprima in inbox</string>
     <string name="settingsDefaultExploreResultType">Tipo di risultato di ricerca predefinito per Esplora</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Usa avatar come icona profilo nella barra di navigazione inferiore</string>
 </resources>
