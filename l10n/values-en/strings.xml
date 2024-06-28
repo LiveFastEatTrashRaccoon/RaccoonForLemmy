@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="actionBackToTop">Back to top</string>
     <string name="actionChat">Send message</string>
@@ -412,4 +412,5 @@
     <string name="actionRestore">Restore</string>
     <string name="settingsInboxPreviewMaxLines">Inbox card preview max lines</string>
     <string name="settingsDefaultExploreResultType">Default search result type for explore</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Use avatar as profile icon in bottom navigation bar</string>
 </resources>

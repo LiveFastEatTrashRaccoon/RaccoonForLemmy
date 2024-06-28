@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="actionBackToTop">Vissza az oldal tetejére</string>
     <string name="actionChat">Üzenet küldése</string>
@@ -283,7 +283,7 @@
     <string name="settingsWebBot">Bot</string>
     <string name="settingsWebDisplayName">Megjelenítendő név</string>
     <string name="settingsWebMatrix">Matrix felhasználói azonosító</string>
-    <string name="settingsWebEmail">Email</string>
+    <string name="settingsWebEmail">E-mail</string>
     <string name="settingsWebShowBot">Bot-fiókok megjelenítése</string>
     <string name="settingsWebShowNsfw">NSFW megjelenítése</string>
     <string name="settingsWebShowRead">Olvasott bejegyzések megjelenítése</string>

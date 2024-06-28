@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="actionBackToTop">Retour au début</string>
     <string name="actionChat">Envoyer un message</string>
@@ -17,7 +17,7 @@
     <string name="communityDetailBlockInstance">Bloquer l\'instance</string>
     <string name="communityDetailInfo">Informations sur la communauté</string>
     <string name="communityDetailInstanceInfo">Détails sur l\'instance</string>
-    <string name="communityInfoComments">Commentaires</string>
+    <string name="communityInfoComments">commentaires</string>
     <string name="communityInfoDailyActiveUsers">utilisateurs actifs (jour)</string>
     <string name="communityInfoMonthlyActiveUsers">utilisateurs actifs (mois)</string>
     <string name="communityInfoPosts">publications</string>
@@ -27,7 +27,7 @@
     <string name="createCommentTitle">Nouveau commentaire</string>
     <string name="createPostBody">Texte de la publication</string>
     <string name="createPostCommunity">Communauté</string>
-    <string name="createPostCrossPostText">Publication croisée à partir de:</string>
+    <string name="createPostCrossPostText">Publication croisée à partir de :</string>
     <string name="createPostName">Titre de la publication</string>
     <string name="createPostNsfw">NSFW</string>
     <string name="createPostTabEditor">Éditeur</string>
@@ -92,13 +92,13 @@
     <string name="inboxSectionMessages">Messages</string>
     <string name="inboxSectionReplies">Réponses</string>
     <string name="instanceDetailCommunities">Communautés</string>
-    <string name="instanceDetailTitle">Instance:</string>
+    <string name="instanceDetailTitle">Instance :</string>
     <string name="lang">fr</string>
     <string name="loginFieldInstanceName">Nom de l\'instance</string>
     <string name="loginFieldLabelOptional">(optionnel)</string>
     <string name="loginFieldPassword">Mot de passe</string>
-    <string name="loginFieldToken">TOTP 2FA token</string>
-    <string name="loginFieldUserName">Nom d\'utilisateurs (ou email)</string>
+    <string name="loginFieldToken">Jeton A2F TOTP</string>
+    <string name="loginFieldUserName">Nom d\'utilisateur (ou courriel)</string>
     <string name="manageAccountsButtonAdd">Ajouter une compte</string>
     <string name="manageAccountsTitle">Gérer les comptes</string>
     <string name="manageSubscriptionsHeaderMulticommunities">Multi-communautés</string>
@@ -129,16 +129,17 @@
     <string name="postActionReport">Signaler</string>
     <string name="postActionSeeRaw">Voir brut</string>
     <string name="postActionShare">Partager</string>
-    <string name="postDetailCrossPosts">également publié dans:</string>
+    <string name="postDetailCrossPosts">également publié dans :</string>
     <string name="postDetailLoadMoreComments">Charger plus de commentaires</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">S\'inscrire</string>
     <string name="profileDayShort">j</string>
-    <string name="profileMillionShort">m</string>
+    <string name="profileMillionShort">M</string>
     <string name="profileMonthShort">m</string>
-    <string name="profileNotLoggedMessage">Vous n\'êtes pas connecté.\nVeuillez ajouter un compte pour continuer.</string>
+    <string name="profileNotLoggedMessage">Vous n\'êtes pas connecté·e.
+\nVeuillez ajouter un compte pour continuer.</string>
     <string name="profileSectionComments">Commentaires</string>
     <string name="profileSectionPosts">Publications</string>
     <string name="profileThousandShort">k</string>
@@ -146,13 +147,13 @@
     <string name="settingsAbout">À propos de cette application</string>
     <string name="settingsAboutAppVersion">Version de l\'application</string>
     <string name="settingsAboutChangelog">Voir le journal des modifications</string>
-    <string name="settingsAboutReportGithub">Signaler un bug (GitHub)</string>
-    <string name="settingsAboutReportEmail">Signaler un bug (e-mail)</string>
+    <string name="settingsAboutReportGithub">Signaler une erreur (GitHub)</string>
+    <string name="settingsAboutReportEmail">Signaler une erreur (courriel)</string>
     <string name="settingsAboutViewGithub">Voir sur GitHub</string>
     <string name="settingsAboutViewLemmy">Communauté Lemmy</string>
     <string name="settingsAutoExpandComments">Élargir les commentaires automatiquement</string>
     <string name="settingsAutoLoadImages">Charger les images automatiquement</string>
-    <string name="settingsBlurNsfw">Flouer les images NSFW</string>
+    <string name="settingsBlurNsfw">Flouter les images NSFW</string>
     <string name="settingsColorAquamarine">🐬 Dauphin distrait</string>
     <string name="settingsColorBanana">🦔 Hérisson hilarante</string>
     <string name="settingsColorBlue">🐳 Baleine balourde</string>
@@ -170,8 +171,8 @@
     <string name="settingsColorRed">🦀 Crabe calme</string>
     <string name="settingsColorWhite">🐼 Ours obèse</string>
     <string name="settingsContentFontLarge">Grand</string>
-    <string name="settingsContentFontLarger">Extra large</string>
-    <string name="settingsContentFontLargest">Double extra large</string>
+    <string name="settingsContentFontLarger">Très grand</string>
+    <string name="settingsContentFontLargest">Énorme</string>
     <string name="settingsContentFontNormal">Normal</string>
     <string name="settingsContentFontScale">Tailler du texte des publications</string>
     <string name="settingsContentFontSmall">Petit</string>
@@ -210,7 +211,7 @@
     <string name="settingsUpvoteColor">Couleur votes positifs</string>
     <string name="settingsHideNavigationBar">Masquer la barre de navigation lors du défilement</string>
     <string name="settingsZombieModeInterval">Durée de l\'intervalle du mode zombie</string>
-    <string name="settingsZombieModeScrollAmount">Zombie mode scroll amount</string>
+    <string name="settingsZombieModeScrollAmount">Quantité de défilement en mode zombie</string>
     <string name="settingsMarkAsReadWhileScrolling">Marquer les messages comme lus lors du défilement</string>
     <string name="actionQuote">Citer</string>
     <string name="modActionAllow">Réautoriser l\'utilisateur</string>
@@ -238,7 +239,7 @@
     <string name="settingsVoteFormatSeparated">Séparé</string>
     <string name="settingsVoteFormatPercentage">Pourcentage</string>
     <string name="settingsFontFamilyDefault">Système</string>
-    <string name="postReplySourceAccount">par:</string>
+    <string name="postReplySourceAccount">par :</string>
     <string name="settingsCommentBarTheme">Thème de la barre de commentaires</string>
     <string name="settingsCommentBarThemeBlue">🌊 Océan</string>
     <string name="settingsCommentBarThemeGreen">🥑 Avocat</string>
@@ -283,11 +284,11 @@
     <string name="settingsWebBot">Bot</string>
     <string name="settingsWebDisplayName">Nom</string>
     <string name="settingsWebMatrix">ID utilisateur Matrix</string>
-    <string name="settingsWebEmail">E-mail</string>
+    <string name="settingsWebEmail">Courriel</string>
     <string name="settingsWebShowBot">Afficher les comptes de robots</string>
     <string name="settingsWebShowNsfw">Afficher NSFW</string>
     <string name="settingsWebShowRead">Afficher les messages lus</string>
-    <string name="settingsWebEmailNotifications">Envoyer des notifications par e-mail</string>
+    <string name="settingsWebEmailNotifications">Envoyer des notifications par courriel</string>
     <string name="settingsManageBan">Interdictions et filtres</string>
     <string name="settingsManageBanActionUnban">Supprimer interdiction</string>
     <string name="settingsManageBanSectionInstances">Instances</string>
@@ -338,7 +339,7 @@
     <string name="buttonYesQuit">Oui, quitter</string>
     <string name="settingsItemImageSourcePath">Enregistrez les images dans des sous-répertoires spécifiques</string>
     <string name="settingsSubtitleImageSourcePath">utiliser la communauté ou le handle d\'utilisateur dans les chemins</string>
-    <string name="settingsTitleDisplay">Écran</string>
+    <string name="settingsTitleDisplay">Affichage</string>
     <string name="settingsTitleReading">Lecture et contenu</string>
     <string name="settingsTitlePictures">Des photos</string>
     <string name="settingsTitleExperimental">Expériences</string>
@@ -356,12 +357,12 @@
     <string name="actionSearchInComments">Rechercher dans les commentaires</string>
     <string name="advancedSettingsDefaultLanguage">Langue par défaut dans l\'éditeur</string>
     <string name="undetermined">Indéfini</string>
-    <string name="exploreResultTypeTitle">Type de résultat</string>
+    <string name="exploreResultTypeTitle">Type de résultat de recherche</string>
     <string name="communityActionEdit">Modifier la communauté</string>
     <string name="editCommunityHeaderTextual">Informations textuelles</string>
     <string name="editCommunityItemSidebar">Barre latérale</string>
     <string name="editCommunityItemPostingRestrictedToMods">Publication réservée aux modérateurs</string>
-    <string name="messageAreYouSure">Êtes-vous sur de vouloir continuer?</string>
+    <string name="messageAreYouSure">Êtes-vous sûr·e de vouloir continuer ?</string>
     <string name="buttonCancel">Annuler</string>
     <string name="shareModeUrl">Partager sous forme de URL</string>
     <string name="shareModeFile">Partager sous forme de fichier</string>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="homeInstanceVia">via</string>
     <string name="homeListingTitle">Feeds</string>
@@ -51,7 +51,7 @@
     <string name="createCommentBody">Kommentartext</string>
     <string name="createCommentTitle">Neuer Kommentar</string>
     <string name="createPostBody">Beitragstext</string>
-    <string name="createPostCommunity">Community</string>
+    <string name="createPostCommunity">Gemeinschaft</string>
     <string name="createPostCrossPostText">Cross-gepostet von:</string>
     <string name="createPostName">Beitragstitel</string>
     <string name="createPostNsfw">NSFW</string>
@@ -164,11 +164,11 @@
     <string name="profileYearShort">j</string>
     <string name="settingsAbout">Über diese App</string>
     <string name="settingsAboutAppVersion">App-Version</string>
-    <string name="settingsAboutChangelog">Vollständiges Changelog anzeigen</string>
-    <string name="settingsAboutReportGithub">Melde einen Bug (GitHub)</string>
-    <string name="settingsAboutReportEmail">Melde einen Bug (E-Mail)</string>
+    <string name="settingsAboutChangelog">Vollständiges Protokoll anzeigen</string>
+    <string name="settingsAboutReportGithub">Einen Fehler melden (GitHub)</string>
+    <string name="settingsAboutReportEmail">Einen Fehler melden (E-Mail)</string>
     <string name="settingsAboutViewGithub">Auf GitHub ansehen</string>
-    <string name="settingsAboutViewLemmy">Lemmy Community</string>
+    <string name="settingsAboutViewLemmy">Lemmy-Gemeinschaft</string>
     <string name="settingsAutoExpandComments">Kommentare automatisch aufklappen</string>
     <string name="settingsAutoLoadImages">Bilder automatisch laden</string>
     <string name="settingsBlurNsfw">NSFW-Bilder unkenntlich machen</string>
@@ -325,7 +325,7 @@
     <string name="selectActionTitle">Wähle eine Aktion aus</string>
     <string name="buttonAdd">Neu hinzufügen</string>
     <string name="barThemeOpaque">Undurchsichtig</string>
-    <string name="barThemeTransparent">Transparent</string>
+    <string name="barThemeTransparent">Durchsichtig</string>
     <string name="settingsBarTheme">Theme der Status- und Navigationsleiste</string>
     <string name="settingsColorsAndFonts">Erscheinungsbild der Anwendung</string>
     <string name="settingsAboutViewGooglePlay">Auf Google Play ansehen</string>
@@ -372,7 +372,7 @@
     <string name="actionSearchInComments">Suche in Kommentaren</string>
     <string name="advancedSettingsDefaultLanguage">Standardsprache im Editor</string>
     <string name="undetermined">Nicht definiert</string>
-    <string name="exploreResultTypeTitle">Ergebnistyp</string>
+    <string name="exploreResultTypeTitle">Suchergebnistyp</string>
     <string name="communityActionEdit">Community bearbeiten</string>
     <string name="editCommunityHeaderTextual">Textinformationen</string>
     <string name="editCommunityItemSidebar">Seitenleiste</string>

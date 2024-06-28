@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="actionBackToTop">Takaisin ylös</string>
     <string name="actionChat">Lähetä viesti</string>
@@ -106,9 +106,9 @@
     <string name="messageEmptyComments">Siellä on liian hiljaista.\nHaluaisitko olla se, joka kirjoittaa ensimmäisen kommentin?</string>
     <string name="messageEmptyList">Ei enää näytettäviä kohteita</string>
     <string name="messageErrorLoadingComments">Kommenttien lataamisessa tapahtui virhe.</string>
-    <string name="messageGenericError">Yleinen virhe.</string>
+    <string name="messageGenericError">Yleinen virhe</string>
     <string name="messageImageLoadingError">Kuvan latausvirhe</string>
-    <string name="messageInvalidField">Kenttä ei kelpaa.</string>
+    <string name="messageInvalidField">Kenttä ei kelpaa</string>
     <string name="messageMissingField">Puuttuva kenttä</string>
     <string name="messageOperationSuccessful">Toiminto suoritettu onnistuneesti</string>
     <string name="multiCommunityEditorCommunities">Yhteisöt</string>
@@ -280,7 +280,7 @@
     <string name="settingsWebAvatar">hahmo</string>
     <string name="settingsWebBanner">Banneri</string>
     <string name="settingsWebBio">Bio</string>
-    <string name="settingsWebBot">Bot</string>
+    <string name="settingsWebBot">Botti</string>
     <string name="settingsWebDisplayName">Näyttönimi</string>
     <string name="settingsWebMatrix">Matrix käyttäjätunnus</string>
     <string name="settingsWebEmail">Sähköposti</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Hae kommenteista</string>
     <string name="advancedSettingsDefaultLanguage">Editorin oletuskieli</string>
     <string name="undetermined">Määrittämätön</string>
-    <string name="exploreResultTypeTitle">Tuloksen tyyppi</string>
+    <string name="exploreResultTypeTitle">Hakutuloksen tyyppi</string>
     <string name="communityActionEdit">Muokkaa yhteisöä</string>
     <string name="editCommunityHeaderTextual">Tekstimuotoinen tieto</string>
     <string name="editCommunityItemSidebar">Sivupalkki</string>
