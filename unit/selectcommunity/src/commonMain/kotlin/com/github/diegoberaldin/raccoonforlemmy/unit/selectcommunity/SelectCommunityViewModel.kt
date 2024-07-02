@@ -36,9 +36,11 @@ class SelectCommunityViewModel(
             uiState
                 .map { it.searchText }
                 .distinctUntilChanged()
-                .debounce(1000)
+                .debounce(1_000)
                 .onEach {
-                    refresh()
+                    if (!uiState.value.initial) {
+                        refresh()
+                    }
                 }.launchIn(this)
 
             if (uiState.value.initial) {

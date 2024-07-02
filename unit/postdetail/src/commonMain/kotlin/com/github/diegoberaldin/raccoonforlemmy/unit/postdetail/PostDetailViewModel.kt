@@ -182,9 +182,11 @@ class PostDetailViewModel(
                 .distinctUntilChanged()
                 .debounce(1_000)
                 .onEach {
-                    updateState { it.copy(loading = false) }
-                    emitEffect(PostDetailMviModel.Effect.BackToTop)
-                    refresh()
+                    if (!uiState.value.initial) {
+                        updateState { it.copy(loading = false) }
+                        emitEffect(PostDetailMviModel.Effect.BackToTop)
+                        refresh()
+                    }
                 }.launchIn(this)
 
             identityRepository.isLogged

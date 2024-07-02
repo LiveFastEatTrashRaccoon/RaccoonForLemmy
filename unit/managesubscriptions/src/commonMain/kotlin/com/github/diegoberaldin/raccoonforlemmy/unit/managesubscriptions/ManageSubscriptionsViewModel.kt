@@ -77,10 +77,12 @@ class ManageSubscriptionsViewModel(
             uiState
                 .map { it.searchText }
                 .distinctUntilChanged()
-                .debounce(1000)
+                .debounce(1_000)
                 .onEach {
-                    emitEffect(ManageSubscriptionsMviModel.Effect.BackToTop)
-                    refresh()
+                    if (!uiState.value.initial) {
+                        emitEffect(ManageSubscriptionsMviModel.Effect.BackToTop)
+                        refresh()
+                    }
                 }.launchIn(this)
             if (uiState.value.communities.isEmpty()) {
                 refresh(initial = true)

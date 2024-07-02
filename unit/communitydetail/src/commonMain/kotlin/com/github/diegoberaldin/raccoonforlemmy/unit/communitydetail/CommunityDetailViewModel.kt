@@ -185,10 +185,12 @@ class CommunityDetailViewModel(
                 .distinctUntilChanged()
                 .debounce(1_000)
                 .onEach {
-                    updateState { it.copy(loading = false) }
-                    emitEffect(CommunityDetailMviModel.Effect.BackToTop)
-                    delay(50)
-                    refresh()
+                    if (!uiState.value.initial) {
+                        updateState { it.copy(loading = false) }
+                        emitEffect(CommunityDetailMviModel.Effect.BackToTop)
+                        delay(50)
+                        refresh()
+                    }
                 }.launchIn(this)
 
             lemmyValueCache.isCurrentUserAdmin

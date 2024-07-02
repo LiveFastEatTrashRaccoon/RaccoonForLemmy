@@ -46,7 +46,7 @@ class MultiCommunityEditorViewModel(
             uiState
                 .map { it.searchText }
                 .distinctUntilChanged()
-                .debounce(1000)
+                .debounce(1_000)
                 .onEach {
                     refresh()
                 }.launchIn(this)

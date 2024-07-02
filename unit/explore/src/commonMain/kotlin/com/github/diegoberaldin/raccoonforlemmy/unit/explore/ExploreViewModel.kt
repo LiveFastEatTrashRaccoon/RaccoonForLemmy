@@ -169,7 +169,7 @@ class ExploreViewModel(
                 .map {
                     it.searchText
                 }.distinctUntilChanged()
-                .debounce(1000)
+                .debounce(1_000)
                 .onEach {
                     if (!uiState.value.initial) {
                         emitEffect(ExploreMviModel.Effect.BackToTop)
