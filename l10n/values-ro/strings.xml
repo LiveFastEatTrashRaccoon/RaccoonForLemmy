@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">postată și în:</string>
     <string name="postDetailLoadMoreComments">Încărcă mai multe comentării</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Login</string>
     <string name="profileDayShort">d</string>
@@ -412,4 +412,8 @@
     <string name="actionRestore">Restaurați-l</string>
     <string name="settingsInboxPreviewMaxLines">Numărul maxim de linii în cardurile de inbox</string>
     <string name="settingsDefaultExploreResultType">Tip de rezultat de căutare prestabilit pentru Explorarea</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Utilizează avatarul ca pictogramă de profil în bara de navigare de jos</string>
+    <string name="messageReadAllInboxSuccess">Toate elementele au fost marcate ca citite</string>
+    <string name="settingsItemRandomThemeColor">Utilizează culoare aleatoare</string>
+    <string name="settingsSubtitleRandomThemeColor">Schimbă culoarea temei la fiecare pornire a aplicației</string>
 </resources>
