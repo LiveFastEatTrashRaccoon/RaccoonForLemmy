@@ -361,7 +361,7 @@
     <string name="editCommunityHeaderTextual">Informazioni testuali</string>
     <string name="editCommunityItemSidebar">Barra laterale</string>
     <string name="editCommunityItemPostingRestrictedToMods">Pubblicazione riservata ai moderatori</string>
-    <string name="messageAreYouSure">Sei sicuro/sicura di voler continuare?</string>
+    <string name="messageAreYouSure">Sei sicuro di voler continuare?</string>
     <string name="buttonCancel">Annulla</string>
     <string name="shareModeUrl">Condividi come URL</string>
     <string name="shareModeFile">Condividi come file</string>
@@ -414,4 +414,6 @@
     <string name="settingsDefaultExploreResultType">Tipo di risultato di ricerca predefinito per Esplora</string>
     <string name="settingsUseAvatarAsProfileNavigationIcon">Usa avatar come icona profilo nella barra di navigazione inferiore</string>
     <string name="messageReadAllInboxSuccess">Tutti gli elementi sono stati contrassegnati come letti</string>
+    <string name="settingsItemRandomThemeColor">Usa colore casuale</string>
+    <string name="settingsSubtitleRandomThemeColor">Cambia il colore del tema ad ogni avvio dell\'app</string>
 </resources>
