@@ -204,9 +204,7 @@ class PostListViewModel(
         val auth = identityRepository.authToken.value.orEmpty()
         val user = siteRepository.getCurrentUser(auth)
         updateState {
-            it.copy(
-                currentUserId = user?.id ?: 0,
-            )
+            it.copy(currentUserId = user?.id ?: 0)
         }
     }
 

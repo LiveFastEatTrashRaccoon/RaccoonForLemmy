@@ -224,7 +224,7 @@ class CommunityDetailViewModel(
                         sortType = customPostSortType ?: defaultPostSortType,
                         currentPreferredLanguageId = preferredLanguageId,
                         availableLanguages = languages,
-                        currentUserId = identityRepository.cachedUser?.id,
+                        currentUserId = identityRepository.cachedUser?.id ?: 0,
                     )
                 }
                 refresh(initial = true)
