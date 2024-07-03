@@ -2,7 +2,6 @@ package com.github.diegoberaldin.raccoonforlemmy
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -24,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -34,15 +34,14 @@ import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiBarTheme
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toCommentBarTheme
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toPostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toUiFontFamily
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toUiTheme
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getAppColorRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.toColor
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.DraggableSideMenu
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.getCommunityFromUrl
@@ -75,16 +74,11 @@ import kotlinx.coroutines.launch
 fun App(onLoadingFinished: () -> Unit = {}) {
     val accountRepository = remember { getAccountRepository() }
     val settingsRepository = remember { getSettingsRepository() }
+    val appColorRepository = remember { getAppColorRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     var hasBeenInitialized by remember { mutableStateOf(false) }
     val apiConfigurationRepository = remember { getApiConfigurationRepository() }
     val themeRepository = remember { getThemeRepository() }
-    val defaultTheme =
-        if (isSystemInDarkTheme()) {
-            UiTheme.Dark
-        } else {
-            UiTheme.Light
-        }.toInt()
     val locale by derivedStateOf { settings.locale }
     val useDynamicColors by themeRepository.dynamicColors.collectAsState()
     val uiFontScale by themeRepository.uiFontScale.collectAsState()
@@ -110,31 +104,20 @@ fun App(onLoadingFinished: () -> Unit = {}) {
     LaunchedEffect(Unit) {
         val accountId = accountRepository.getActive()?.id
         val currentSettings = settingsRepository.getSettings(accountId)
-        settingsRepository.changeCurrentSettings(currentSettings)
+        val seedColor =
+            if (currentSettings.randomThemeColor) {
+                appColorRepository
+                    .getRandomColor()
+                    .toColor()
+                    .toArgb()
+            } else {
+                currentSettings.customSeedColor
+            }
+        settingsRepository.changeCurrentSettings(currentSettings.copy(customSeedColor = seedColor))
         val lastActiveAccount = accountRepository.getActive()
         val lastInstance = lastActiveAccount?.instance?.takeIf { it.isNotEmpty() }
         if (lastInstance != null) {
             apiConfigurationRepository.changeInstance(lastInstance)
-        }
-
-        with(themeRepository) {
-            changeUiTheme((currentSettings.theme ?: defaultTheme).toUiTheme())
-            changeNavItemTitles(currentSettings.navigationTitlesVisible)
-            changeDynamicColors(currentSettings.dynamicColors)
-            changeCustomSeedColor(currentSettings.customSeedColor?.let { Color(it) })
-            changePostLayout(currentSettings.postLayout.toPostLayout())
-            changeContentFontScale(currentSettings.contentFontScale)
-            changeUiFontScale(currentSettings.uiFontScale)
-            changeUiFontFamily(currentSettings.uiFontFamily.toUiFontFamily())
-            changeContentFontFamily(currentSettings.contentFontFamily.toUiFontFamily())
-            changeCommentBarTheme(currentSettings.commentBarTheme.toCommentBarTheme())
-
-            with(themeRepository) {
-                changeUpVoteColor(currentSettings.upVoteColor?.let { Color(it) })
-                changeDownVoteColor(currentSettings.downVoteColor?.let { Color(it) })
-                changeReplyColor(currentSettings.replyColor?.let { Color(it) })
-                changeSaveColor(currentSettings.saveColor?.let { Color(it) })
-            }
         }
 
         subscriptionsCache.initialize()
@@ -161,13 +144,10 @@ fun App(onLoadingFinished: () -> Unit = {}) {
             changeUiFontScale(settings.uiFontScale)
             changeUiFontFamily(settings.uiFontFamily.toUiFontFamily())
             changeContentFontFamily(settings.contentFontFamily.toUiFontFamily())
-
-            with(themeRepository) {
-                changeUpVoteColor(settings.upVoteColor?.let { Color(it) })
-                changeDownVoteColor(settings.downVoteColor?.let { Color(it) })
-                changeReplyColor(settings.replyColor?.let { Color(it) })
-                changeSaveColor(settings.saveColor?.let { Color(it) })
-            }
+            changeUpVoteColor(settings.upVoteColor?.let { Color(it) })
+            changeDownVoteColor(settings.downVoteColor?.let { Color(it) })
+            changeReplyColor(settings.replyColor?.let { Color(it) })
+            changeSaveColor(settings.saveColor?.let { Color(it) })
         }
     }
 

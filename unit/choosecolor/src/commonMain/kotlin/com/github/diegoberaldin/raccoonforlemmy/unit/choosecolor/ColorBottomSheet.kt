@@ -28,7 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getAppColorRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.toColor
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.BottomSheetHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -44,6 +47,19 @@ class ColorBottomSheet : Screen {
         val notificationCenter = remember { getNotificationCenter() }
         var customPickerDialogOpened by remember { mutableStateOf(false) }
         val settingsRepository = remember { getSettingsRepository() }
+        val appColorRepository = remember { getAppColorRepository() }
+        val customText = LocalStrings.current.settingsColorCustom
+
+        val values: List<Pair<Color?, String>> =
+            buildList {
+                this +=
+                    appColorRepository.getColors().map {
+                        it.toColor() to it.toReadableName()
+                    }
+                this += null to customText
+                this += null to LocalStrings.current.buttonReset
+            }
+
         Column(
             modifier =
                 Modifier.padding(
@@ -55,22 +71,7 @@ class ColorBottomSheet : Screen {
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
         ) {
             BottomSheetHeader(LocalStrings.current.settingsCustomSeedColor)
-            val customText = LocalStrings.current.settingsColorCustom
-            val values: List<Pair<Color?, String>> =
-                listOf(
-                    Color(0xFF001F7D) to LocalStrings.current.settingsColorBlue,
-                    Color(0xFF36B3B3) to LocalStrings.current.settingsColorAquamarine,
-                    Color(0xFF884DFF) to LocalStrings.current.settingsColorPurple,
-                    Color(0xFF00B300) to LocalStrings.current.settingsColorGreen,
-                    Color(0xFFFF0000) to LocalStrings.current.settingsColorRed,
-                    Color(0xFFFF66600) to LocalStrings.current.settingsColorOrange,
-                    Color(0x94786818) to LocalStrings.current.settingsColorBanana,
-                    Color(0xFFFC0FC0) to LocalStrings.current.settingsColorPink,
-                    Color(0xFF303B47) to LocalStrings.current.settingsColorGray,
-                    Color(0xFFd7d7d7) to LocalStrings.current.settingsColorWhite,
-                    null to customText,
-                    null to LocalStrings.current.buttonReset,
-                )
+
             Column(
                 modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
@@ -84,8 +85,7 @@ class ColorBottomSheet : Screen {
                                 .padding(
                                     horizontal = Spacing.s,
                                     vertical = Spacing.s,
-                                )
-                                .fillMaxWidth()
+                                ).fillMaxWidth()
                                 .onClick(
                                     onClick = {
                                         if (!isChooseCustom) {
@@ -133,7 +133,8 @@ class ColorBottomSheet : Screen {
 
         if (customPickerDialogOpened) {
             val current =
-                settingsRepository.currentSettings.value.customSeedColor?.let { Color(it) }
+                settingsRepository.currentSettings.value.customSeedColor
+                    ?.let { Color(it) }
             ColorPickerDialog(
                 initialValue = current ?: MaterialTheme.colorScheme.primary,
                 onClose = {

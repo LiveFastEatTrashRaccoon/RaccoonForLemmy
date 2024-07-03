@@ -11,7 +11,13 @@ interface SettingsColorAndFontMviModel :
     MviModel<SettingsColorAndFontMviModel.Intent, SettingsColorAndFontMviModel.UiState, SettingsColorAndFontMviModel.Effect>,
     ScreenModel {
     sealed interface Intent {
-        data class ChangeDynamicColors(val value: Boolean) : Intent
+        data class ChangeDynamicColors(
+            val value: Boolean,
+        ) : Intent
+
+        data class ChangeRandomColor(
+            val value: Boolean,
+        ) : Intent
     }
 
     data class UiState(
@@ -27,6 +33,7 @@ interface SettingsColorAndFontMviModel :
         val commentBarTheme: CommentBarTheme = CommentBarTheme.Blue,
         val uiFontScale: Float = 1f,
         val uiFontFamily: UiFontFamily = UiFontFamily.Poppins,
+        val randomColor: Boolean = false,
     )
 
     sealed interface Effect

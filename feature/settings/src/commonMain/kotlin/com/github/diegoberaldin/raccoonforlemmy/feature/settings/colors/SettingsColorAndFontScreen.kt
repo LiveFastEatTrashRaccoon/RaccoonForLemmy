@@ -77,11 +77,13 @@ class SettingsColorAndFontScreen : Screen {
         var uiFontSizeWorkaround by remember { mutableStateOf(true) }
 
         LaunchedEffect(themeRepository) {
-            themeRepository.uiFontScale.drop(1).onEach {
-                uiFontSizeWorkaround = false
-                delay(50)
-                uiFontSizeWorkaround = true
-            }.launchIn(this)
+            themeRepository.uiFontScale
+                .drop(1)
+                .onEach {
+                    uiFontSizeWorkaround = false
+                    delay(50)
+                    uiFontSizeWorkaround = true
+                }.launchIn(this)
         }
 
         if (!uiFontSizeWorkaround) {
@@ -123,8 +125,7 @@ class SettingsColorAndFontScreen : Screen {
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        )
-                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                        ).nestedScroll(scrollBehavior.nestedScrollConnection),
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
@@ -143,15 +144,28 @@ class SettingsColorAndFontScreen : Screen {
                                 },
                         )
                     }
+                    // random color
+                    SettingsSwitchRow(
+                        title = LocalStrings.current.settingsItemRandomThemeColor,
+                        subtitle = LocalStrings.current.settingsSubtitleRandomThemeColor,
+                        value = uiState.randomColor,
+                        onValueChanged =
+                            rememberCallbackArgs(model) { value ->
+                                model.reduce(
+                                    SettingsColorAndFontMviModel.Intent.ChangeRandomColor(value),
+                                )
+                            },
+                    )
 
                     // custom scheme seed color
                     SettingsColorRow(
                         title = LocalStrings.current.settingsCustomSeedColor,
                         value =
-                            uiState.customSeedColor ?: colorSchemeProvider.getColorScheme(
-                                theme = uiState.uiTheme ?: defaultTheme,
-                                dynamic = uiState.dynamicColors,
-                            ).primary,
+                            uiState.customSeedColor ?: colorSchemeProvider
+                                .getColorScheme(
+                                    theme = uiState.uiTheme ?: defaultTheme,
+                                    dynamic = uiState.dynamicColors,
+                                ).primary,
                         onTap =
                             rememberCallback {
                                 val sheet = ColorBottomSheet()

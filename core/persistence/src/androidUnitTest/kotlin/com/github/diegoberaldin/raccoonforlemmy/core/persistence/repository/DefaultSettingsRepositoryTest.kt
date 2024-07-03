@@ -160,6 +160,7 @@ class DefaultSettingsRepositoryTest {
                     inboxPreviewMaxLines = model.inboxPreviewMaxLines?.toLong(),
                     defaultExploreResultType = model.defaultExploreResultType.toLong(),
                     useAvatarAsProfileNavigationIcon = if (model.useAvatarAsProfileNavigationIcon) 1 else 0,
+                    randomThemeColor = if (model.randomThemeColor) 1 else 0,
                 )
             }
         }
@@ -235,6 +236,7 @@ class DefaultSettingsRepositoryTest {
                     inboxPreviewMaxLines = model.inboxPreviewMaxLines?.toLong(),
                     defaultExploreResultType = model.defaultExploreResultType.toLong(),
                     useAvatarAsProfileNavigationIcon = if (model.useAvatarAsProfileNavigationIcon) 1 else 0,
+                    randomThemeColor = if (model.randomThemeColor) 1 else 0,
                 )
             }
         }
@@ -305,6 +307,7 @@ class DefaultSettingsRepositoryTest {
         inboxPreviewMaxLines: Int? = null,
         defaultExploreResultType: Int = 2,
         useAvatarAsProfileNavigationIcon: Boolean = false,
+        randomThemeColor: Boolean = false,
     ) = GetBy(
         id = id,
         theme = theme,
@@ -369,5 +372,6 @@ class DefaultSettingsRepositoryTest {
         inboxPreviewMaxLines = inboxPreviewMaxLines?.toLong(),
         defaultExploreResultType = defaultExploreResultType.toLong(),
         useAvatarAsProfileNavigationIcon = if (useAvatarAsProfileNavigationIcon) 1 else 0,
+        randomThemeColor = if (randomThemeColor) 1 else 0,
     )
 }

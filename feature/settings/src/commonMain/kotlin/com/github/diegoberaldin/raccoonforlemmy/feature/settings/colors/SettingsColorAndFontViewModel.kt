@@ -26,63 +26,84 @@ class SettingsColorAndFontViewModel(
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
-) : SettingsColorAndFontMviModel,
-    DefaultMviModel<SettingsColorAndFontMviModel.Intent, SettingsColorAndFontMviModel.UiState, SettingsColorAndFontMviModel.Effect>(
+) : DefaultMviModel<SettingsColorAndFontMviModel.Intent, SettingsColorAndFontMviModel.UiState, SettingsColorAndFontMviModel.Effect>(
         initialState = SettingsColorAndFontMviModel.UiState(),
-    ) {
+    ),
+    SettingsColorAndFontMviModel {
     init {
         screenModelScope.launch {
-            themeRepository.uiTheme.onEach { value ->
-                updateState { it.copy(uiTheme = value) }
-            }.launchIn(this)
-            themeRepository.uiFontFamily.onEach { value ->
-                updateState { it.copy(uiFontFamily = value) }
-            }.launchIn(this)
-            themeRepository.uiFontScale.onEach { value ->
-                updateState { it.copy(uiFontScale = value) }
-            }.launchIn(this)
-            themeRepository.dynamicColors.onEach { value ->
-                updateState { it.copy(dynamicColors = value) }
-            }.launchIn(this)
-            themeRepository.customSeedColor.onEach { value ->
-                updateState { it.copy(customSeedColor = value) }
-            }.launchIn(this)
-            themeRepository.upVoteColor.onEach { value ->
-                updateState { it.copy(upVoteColor = value) }
-            }.launchIn(this)
-            themeRepository.downVoteColor.onEach { value ->
-                updateState { it.copy(downVoteColor = value) }
-            }.launchIn(this)
-            themeRepository.replyColor.onEach { value ->
-                updateState { it.copy(replyColor = value) }
-            }.launchIn(this)
-            themeRepository.saveColor.onEach { value ->
-                updateState { it.copy(saveColor = value) }
-            }.launchIn(this)
-            themeRepository.commentBarTheme.onEach { value ->
-                updateState { it.copy(commentBarTheme = value) }
-            }.launchIn(this)
+            themeRepository.uiTheme
+                .onEach { value ->
+                    updateState { it.copy(uiTheme = value) }
+                }.launchIn(this)
+            themeRepository.uiFontFamily
+                .onEach { value ->
+                    updateState { it.copy(uiFontFamily = value) }
+                }.launchIn(this)
+            themeRepository.uiFontScale
+                .onEach { value ->
+                    updateState { it.copy(uiFontScale = value) }
+                }.launchIn(this)
+            themeRepository.dynamicColors
+                .onEach { value ->
+                    updateState { it.copy(dynamicColors = value) }
+                }.launchIn(this)
+            themeRepository.customSeedColor
+                .onEach { value ->
+                    updateState { it.copy(customSeedColor = value) }
+                }.launchIn(this)
+            themeRepository.upVoteColor
+                .onEach { value ->
+                    updateState { it.copy(upVoteColor = value) }
+                }.launchIn(this)
+            themeRepository.downVoteColor
+                .onEach { value ->
+                    updateState { it.copy(downVoteColor = value) }
+                }.launchIn(this)
+            themeRepository.replyColor
+                .onEach { value ->
+                    updateState { it.copy(replyColor = value) }
+                }.launchIn(this)
+            themeRepository.saveColor
+                .onEach { value ->
+                    updateState { it.copy(saveColor = value) }
+                }.launchIn(this)
+            themeRepository.commentBarTheme
+                .onEach { value ->
+                    updateState { it.copy(commentBarTheme = value) }
+                }.launchIn(this)
+            settingsRepository.currentSettings
+                .onEach { settings ->
+                    updateState { it.copy(randomColor = settings.randomThemeColor) }
+                }.launchIn(this)
 
-            identityRepository.isLogged.onEach { logged ->
-                updateState { it.copy(isLogged = logged ?: false) }
-            }.launchIn(this)
+            identityRepository.isLogged
+                .onEach { logged ->
+                    updateState { it.copy(isLogged = logged ?: false) }
+                }.launchIn(this)
 
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeFontFamily::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeFontFamily::class)
                 .onEach { evt ->
                     changeFontFamily(evt.value)
                 }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeUiFontSize::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeUiFontSize::class)
                 .onEach { evt ->
                     changeUiFontScale(evt.value)
                 }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeColor::class).onEach { evt ->
-                changeCustomSeedColor(evt.color)
-            }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeCommentBarTheme::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeColor::class)
+                .onEach { evt ->
+                    changeCustomSeedColor(evt.color)
+                }.launchIn(this)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeCommentBarTheme::class)
                 .onEach { evt ->
                     changeCommentBarTheme(evt.value)
                 }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeActionColor::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeActionColor::class)
                 .onEach { evt ->
                     when (evt.actionType) {
                         3 -> changeSaveColor(evt.color)
@@ -101,9 +122,8 @@ class SettingsColorAndFontViewModel(
 
     override fun reduce(intent: SettingsColorAndFontMviModel.Intent) {
         when (intent) {
-            is SettingsColorAndFontMviModel.Intent.ChangeDynamicColors -> {
-                changeDynamicColors(intent.value)
-            }
+            is SettingsColorAndFontMviModel.Intent.ChangeDynamicColors -> changeDynamicColors(intent.value)
+            is SettingsColorAndFontMviModel.Intent.ChangeRandomColor -> changeRandomColor(intent.value)
         }
     }
 
@@ -132,9 +152,26 @@ class SettingsColorAndFontViewModel(
     private fun changeDynamicColors(value: Boolean) {
         themeRepository.changeDynamicColors(value)
         screenModelScope.launch {
+            val oldSettings = settingsRepository.currentSettings.value
+            val newRandomThemeColor = if (value) false else oldSettings.randomThemeColor
             val settings =
-                settingsRepository.currentSettings.value.copy(
+                oldSettings.copy(
                     dynamicColors = value,
+                    randomThemeColor = newRandomThemeColor,
+                )
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeRandomColor(value: Boolean) {
+        screenModelScope.launch {
+            val oldSettings = settingsRepository.currentSettings.value
+            val newDynamicColors = if (value) false else oldSettings.dynamicColors
+            themeRepository.changeDynamicColors(newDynamicColors)
+            val settings =
+                oldSettings.copy(
+                    randomThemeColor = value,
+                    dynamicColors = newDynamicColors,
                 )
             saveSettings(settings)
         }

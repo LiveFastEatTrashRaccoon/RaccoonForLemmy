@@ -63,6 +63,7 @@ CREATE TABLE SettingsEntity (
     inboxPreviewMaxLines INTEGER DEFAULT NULL,
     defaultExploreResultType INTEGER NOT NULL DEFAULT 2,
     useAvatarAsProfileNavigationIcon INTEGER NOT NULL DEFAULT 0,
+    randomThemeColor INTEGER NOT NULL DEFAULT 1,
     FOREIGN KEY (account_id) REFERENCES AccountEntity(id) ON DELETE CASCADE,
     UNIQUE(account_id)
 );
@@ -131,8 +132,10 @@ INSERT OR IGNORE INTO SettingsEntity (
     inboxPreviewMaxLines,
     defaultExploreResultType,
     useAvatarAsProfileNavigationIcon,
+    randomThemeColor,
     account_id
 ) VALUES (
+    ?,
     ?,
     ?,
     ?,
@@ -261,7 +264,8 @@ SET theme = ?,
     enableToggleFavoriteInNavDrawer = ?,
     inboxPreviewMaxLines = ?,
     defaultExploreResultType = ?,
-    useAvatarAsProfileNavigationIcon = ?
+    useAvatarAsProfileNavigationIcon = ?,
+    randomThemeColor = ?
 WHERE account_id = ?;
 
 getBy:
@@ -328,6 +332,7 @@ SELECT
     enableToggleFavoriteInNavDrawer,
     inboxPreviewMaxLines,
     defaultExploreResultType,
-    useAvatarAsProfileNavigationIcon
+    useAvatarAsProfileNavigationIcon,
+    randomThemeColor
 FROM SettingsEntity
 WHERE account_id = ?;

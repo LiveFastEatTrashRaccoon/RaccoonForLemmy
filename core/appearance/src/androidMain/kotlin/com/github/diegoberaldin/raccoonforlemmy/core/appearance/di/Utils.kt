@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.appearance.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.AppColorRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.BarColorProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.DefaultBarColorProvider
@@ -30,5 +31,10 @@ actual fun getColorSchemeProvider(): ColorSchemeProvider {
 
 actual fun getBarColorProvider(): BarColorProvider {
     val res by inject<BarColorProvider>(BarColorProvider::class.java)
+    return res
+}
+
+actual fun getAppColorRepository(): AppColorRepository {
+    val res by inject<AppColorRepository>(AppColorRepository::class.java)
     return res
 }

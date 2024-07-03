@@ -65,6 +65,7 @@ private object KeyStoreKeys {
     const val FULL_WIDTH_IMAGES = "fullWidthImages"
     const val COMMENT_INDENT_AMOUNT = "commentIndentAmount"
     const val DEFAULT_EXPLORE_RESULT_TYPE = "defaultExploreResultType"
+    const val RANDOM_THEME_COLOR = "randomThemeColor"
 }
 
 internal class DefaultSettingsRepository(
@@ -161,6 +162,7 @@ internal class DefaultSettingsRepository(
             inboxPreviewMaxLines = settings.inboxPreviewMaxLines?.toLong(),
             defaultExploreResultType = settings.defaultExploreResultType.toLong(),
             useAvatarAsProfileNavigationIcon = if (settings.useAvatarAsProfileNavigationIcon) 1L else 0L,
+            randomThemeColor = if (settings.randomThemeColor) 1L else 0L,
         )
     }
 
@@ -240,6 +242,7 @@ internal class DefaultSettingsRepository(
                     enableButtonsToScrollBetweenComments = keyStore[KeyStoreKeys.ENABLE_BUTTONS_TO_SCROLL_BETWEEN_COMMENTS, false],
                     fullWidthImages = keyStore[KeyStoreKeys.FULL_WIDTH_IMAGES, false],
                     defaultExploreResultType = keyStore[KeyStoreKeys.DEFAULT_EXPLORE_RESULT_TYPE, 2],
+                    randomThemeColor = keyStore[KeyStoreKeys.RANDOM_THEME_COLOR, true],
                 )
             } else {
                 val entity = db.settingsQueries.getBy(accountId).executeAsOneOrNull()
@@ -360,6 +363,7 @@ internal class DefaultSettingsRepository(
                 KeyStoreKeys.DEFAULT_EXPLORE_RESULT_TYPE,
                 settings.defaultExploreResultType,
             )
+            keyStore.save(KeyStoreKeys.RANDOM_THEME_COLOR, settings.randomThemeColor)
         } else {
             db.settingsQueries.update(
                 theme = settings.theme?.toLong(),
@@ -443,6 +447,7 @@ internal class DefaultSettingsRepository(
                 inboxPreviewMaxLines = settings.inboxPreviewMaxLines?.toLong(),
                 defaultExploreResultType = settings.defaultExploreResultType.toLong(),
                 useAvatarAsProfileNavigationIcon = if (settings.useAvatarAsProfileNavigationIcon) 1L else 0L,
+                randomThemeColor = if (settings.randomThemeColor) 1L else 0L,
             )
         }
     }
@@ -544,4 +549,5 @@ private fun GetBy.toModel() =
         inboxPreviewMaxLines = inboxPreviewMaxLines?.toInt(),
         defaultExploreResultType = defaultExploreResultType.toInt(),
         useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon == 1L,
+        randomThemeColor = randomThemeColor == 1L,
     )

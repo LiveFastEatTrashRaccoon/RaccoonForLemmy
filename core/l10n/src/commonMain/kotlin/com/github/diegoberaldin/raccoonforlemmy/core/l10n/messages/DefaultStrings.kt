@@ -423,4 +423,6 @@ internal open class DefaultStrings : Strings {
     override val settingsUseAvatarAsProfileNavigationIcon =
         "Use avatar as profile icon in bottom navigation bar"
     override val messageReadAllInboxSuccess = "All items have been marked as read"
+    override val settingsItemRandomThemeColor = "Use random color"
+    override val settingsSubtitleRandomThemeColor = "Change theme color at each app startup"
 }

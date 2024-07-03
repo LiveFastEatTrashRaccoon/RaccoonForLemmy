@@ -422,6 +422,8 @@ interface Strings {
     val settingsDefaultExploreResultType: String
     val settingsUseAvatarAsProfileNavigationIcon: String
     val messageReadAllInboxSuccess: String
+    val settingsItemRandomThemeColor: String
+    val settingsSubtitleRandomThemeColor: String
 }
 
 object Locales {

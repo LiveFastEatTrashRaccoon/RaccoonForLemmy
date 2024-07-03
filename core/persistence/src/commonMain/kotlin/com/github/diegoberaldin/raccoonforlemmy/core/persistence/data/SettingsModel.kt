@@ -66,4 +66,5 @@ data class SettingsModel(
     val inboxPreviewMaxLines: Int? = null,
     val defaultExploreResultType: Int = 2,
     val useAvatarAsProfileNavigationIcon: Boolean = false,
+    val randomThemeColor: Boolean = true,
 )

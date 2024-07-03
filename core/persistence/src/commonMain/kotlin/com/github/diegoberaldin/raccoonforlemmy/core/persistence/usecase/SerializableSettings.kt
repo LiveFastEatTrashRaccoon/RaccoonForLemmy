@@ -78,6 +78,7 @@ internal data class SerializableSettings(
     val inboxPreviewMaxLines: Int? = null,
     val defaultExploreResultType: Int = 2,
     val useAvatarAsProfileNavigationIcon: Boolean = false,
+    val randomThemeColor: Boolean = false,
 )
 
 internal fun SerializableSettings.toModel() =
@@ -146,6 +147,7 @@ internal fun SerializableSettings.toModel() =
         enableToggleFavoriteInNavDrawer = enableToggleFavoriteInNavDrawer,
         inboxPreviewMaxLines = inboxPreviewMaxLines,
         useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon,
+        randomThemeColor = randomThemeColor,
     )
 
 internal fun SettingsModel.toData() =
@@ -216,4 +218,5 @@ internal fun SettingsModel.toData() =
         enableToggleFavoriteInNavDrawer = enableToggleFavoriteInNavDrawer,
         inboxPreviewMaxLines = inboxPreviewMaxLines,
         useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon,
+        randomThemeColor = randomThemeColor,
     )
