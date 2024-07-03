@@ -414,4 +414,6 @@
     <string name="settingsDefaultExploreResultType">Tipo de resultado de búsqueda predeterminado para Descubre</string>
     <string name="settingsUseAvatarAsProfileNavigationIcon">Utilizar avatar como icono de perfil en la barra de navegación inferior</string>
     <string name="messageReadAllInboxSuccess">Todos los elementos han sido marcados como leídos</string>
+    <string name="settingsItemRandomThemeColor">Usar color aleatorio</string>
+    <string name="settingsSubtitleRandomThemeColor">Cambiar de tema por cada reinicialización de la aplicación</string>
 </resources>
