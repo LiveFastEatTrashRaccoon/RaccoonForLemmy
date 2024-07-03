@@ -413,4 +413,8 @@
     <string name="actionRestore">Restaurer</string>
     <string name="settingsInboxPreviewMaxLines">Nombre maximum de lignes dans les cartes de boîte de réception</string>
     <string name="settingsDefaultExploreResultType">Type de résultat de recherche par défaut pour Explorer</string>
+    <string name="messageReadAllInboxSuccess">Tous les articles ont été marqués comme lus</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Utiliser l\'avatar comme icône de profil dans la barre de navigation inférieure</string>
+    <string name="settingsItemRandomThemeColor">Utiliser couleur aléatoire</string>
+    <string name="settingsSubtitleRandomThemeColor">Changer la couleur du thème à chaque démarrage de l\'application</string>
 </resources>
