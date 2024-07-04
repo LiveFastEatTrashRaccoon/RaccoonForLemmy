@@ -434,6 +434,10 @@ internal val FrStrings =
             "Nombre maximum de lignes dans les cartes de boîte de réception"
         override val settingsDefaultExploreResultType =
             "Type de résultat de recherche par défaut pour Explorer"
+        override val messageReadAllInboxSuccess = "Tous les articles ont été marqués comme lus"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Utiliser l\'avatar comme icône de profil dans la barre de navigation inférieure"
+        override val settingsItemRandomThemeColor = "Utiliser couleur aléatoire"
+        override val settingsSubtitleRandomThemeColor =
+            "Changer la couleur du thème à chaque démarrage de l\'application"
     }

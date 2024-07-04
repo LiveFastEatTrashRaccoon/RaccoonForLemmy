@@ -433,4 +433,7 @@ internal val EsStrings =
             "Utilizar avatar como icono de perfil en la barra de navegación inferior"
         override val messageReadAllInboxSuccess =
             "Todos los elementos han sido marcados como leídos"
+        override val settingsItemRandomThemeColor = "Usar color aleatorio"
+        override val settingsSubtitleRandomThemeColor =
+            "Cambiar de tema por cada reinicialización de la aplicación"
     }

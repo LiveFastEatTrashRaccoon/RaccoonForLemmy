@@ -136,7 +136,7 @@ internal val RoStrings =
         override val postDetailCrossPosts = "postată și în:"
         override val postDetailLoadMoreComments = "Încărcă mai multe comentării"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Login"
         override val profileDayShort = "d"
@@ -429,4 +429,8 @@ internal val RoStrings =
             "Tip de rezultat de căutare prestabilit pentru Explorarea"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Utilizează avatarul ca pictogramă de profil în bara de navigare de jos"
+        override val messageReadAllInboxSuccess = "Toate elementele au fost marcate ca citite"
+        override val settingsItemRandomThemeColor = "Utilizează culoare aleatoare"
+        override val settingsSubtitleRandomThemeColor =
+            "Schimbă culoarea temei la fiecare pornire a aplicației"
     }
