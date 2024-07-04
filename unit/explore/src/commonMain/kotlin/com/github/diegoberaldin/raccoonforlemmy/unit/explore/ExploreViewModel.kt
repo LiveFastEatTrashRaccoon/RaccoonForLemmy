@@ -194,9 +194,9 @@ class ExploreViewModel(
                     listingType = listingType,
                     sortType = sortType,
                     resultType = settings.defaultExploreResultType.toSearchResultType(),
+                    initial = true,
                 )
             }
-            refresh(initial = true)
             emitEffect(ExploreMviModel.Effect.BackToTop)
         }
     }
@@ -312,7 +312,12 @@ class ExploreViewModel(
 
     private fun setSearch(value: String) {
         screenModelScope.launch {
-            updateState { it.copy(searchText = value) }
+            updateState {
+                it.copy(
+                    searchText = value,
+                    initial = false,
+                )
+            }
         }
     }
 
