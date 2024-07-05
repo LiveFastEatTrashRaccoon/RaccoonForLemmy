@@ -45,10 +45,10 @@ class DefaultNavigationCoordinatorTest {
             val initial = sut.currentSection.value
             assertNull(initial)
 
-            sut.setCurrentSection(TabNavigationSection.Settings)
+            sut.setCurrentSection(TabNavigationSection.Profile)
 
             val value = sut.currentSection.value
-            assertEquals(TabNavigationSection.Settings, value)
+            assertEquals(TabNavigationSection.Profile, value)
         }
 
     @Test

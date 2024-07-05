@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Explicit
@@ -39,7 +40,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.buildAnnotatedString
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toReadableName
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
@@ -48,10 +48,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.handleUrl
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.LanguageBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.SortBottomSheet
-import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ThemeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.UrlOpeningModeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
-import com.github.diegoberaldin.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -99,18 +97,6 @@ class SettingsScreen : Screen {
         val uriHandler = LocalUriHandler.current
         val customTabsHelper = remember { getCustomTabsHelper() }
 
-        LaunchedEffect(Unit) {
-            navigationCoordinator.onDoubleTabSelection
-                .onEach { section ->
-                    runCatching {
-                        if (section == TabNavigationSection.Settings) {
-                            scrollState.scrollTo(0)
-                            topAppBarState.heightOffset = 0f
-                            topAppBarState.contentOffset = 0f
-                        }
-                    }
-                }.launchIn(this)
-        }
         LaunchedEffect(notificationCenter) {
             notificationCenter
                 .subscribe(NotificationCenterEvent.CloseDialog::class)
@@ -120,24 +106,38 @@ class SettingsScreen : Screen {
         }
 
         Scaffold(
-            modifier = Modifier.padding(Spacing.xs),
             topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        scope.launch {
-                                            drawerCoordinator.toggleDrawer()
-                                        }
-                                    },
-                                ),
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        if (navigationCoordinator.canPop.value) {
+                            Image(
+                                modifier =
+                                    Modifier
+                                        .onClick(
+                                            onClick = {
+                                                navigationCoordinator.popScreen()
+                                            },
+                                        ),
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                            )
+                        } else {
+                            Image(
+                                modifier =
+                                    Modifier.onClick(
+                                        onClick = {
+                                            scope.launch {
+                                                drawerCoordinator.toggleDrawer()
+                                            }
+                                        },
+                                    ),
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                            )
+                        }
                     },
                     title = {
                         Text(
@@ -180,17 +180,6 @@ class SettingsScreen : Screen {
                         onTap =
                             rememberCallback {
                                 val sheet = LanguageBottomSheet()
-                                navigationCoordinator.showBottomSheet(sheet)
-                            },
-                    )
-
-                    // theme
-                    SettingsRow(
-                        title = LocalStrings.current.settingsUiTheme,
-                        value = uiState.uiTheme.toReadableName(),
-                        onTap =
-                            rememberCallback {
-                                val sheet = ThemeBottomSheet()
                                 navigationCoordinator.showBottomSheet(sheet)
                             },
                     )

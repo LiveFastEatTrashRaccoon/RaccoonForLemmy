@@ -47,7 +47,7 @@ import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.ExploreTab
-import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.main.SettingsScreen
 import com.github.diegoberaldin.raccoonforlemmy.ui.navigation.TabNavigationItem
 import com.github.diegoberaldin.raccoonforlemmy.unit.manageaccounts.ManageAccountsScreen
 import kotlinx.coroutines.delay
@@ -179,6 +179,11 @@ internal object MainScreen : Screen {
                                 }
                             }
 
+                            DrawerEvent.OpenSettings -> {
+                                val screen = SettingsScreen()
+                                navigationCoordinator.pushScreen(screen)
+                            }
+
                             else -> Unit
                         }
                     }.launchIn(this)
@@ -261,18 +266,6 @@ internal object MainScreen : Screen {
                                         },
                                 )
                                 TabNavigationItem(
-                                    tab = ProfileTab,
-                                    withText = titleVisible,
-                                    customIconUrl = uiState.customProfileUrl,
-                                    onLongPress =
-                                        rememberCallback {
-                                            if (uiState.isLogged) {
-                                                val screen = ManageAccountsScreen()
-                                                navigationCoordinator.showBottomSheet(screen)
-                                            }
-                                        },
-                                )
-                                TabNavigationItem(
                                     tab = InboxTab,
                                     withText = titleVisible,
                                     onLongPress =
@@ -283,8 +276,16 @@ internal object MainScreen : Screen {
                                         },
                                 )
                                 TabNavigationItem(
-                                    tab = SettingsTab,
+                                    tab = ProfileTab,
                                     withText = titleVisible,
+                                    customIconUrl = uiState.customProfileUrl,
+                                    onLongPress =
+                                        rememberCallback {
+                                            if (uiState.isLogged) {
+                                                val screen = ManageAccountsScreen()
+                                                navigationCoordinator.showBottomSheet(screen)
+                                            }
+                                        },
                                 )
                             }
                         }

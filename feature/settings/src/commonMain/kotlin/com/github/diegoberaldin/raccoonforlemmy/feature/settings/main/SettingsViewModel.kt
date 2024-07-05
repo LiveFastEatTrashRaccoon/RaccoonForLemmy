@@ -1,8 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.feature.settings.main
 
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.L10nManager
@@ -41,53 +39,60 @@ class SettingsViewModel(
     private val customTabsHelper: CustomTabsHelper,
     private val siteSupportsHiddenPosts: GetSiteSupportsHiddenPostsUseCase,
     private val siteSupportsMediaListUseCase: GetSiteSupportsMediaListUseCase,
-) : SettingsMviModel,
-    DefaultMviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect>(
+) : DefaultMviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect>(
         initialState = SettingsMviModel.UiState(),
-    ) {
+    ),
+    SettingsMviModel {
     init {
         screenModelScope.launch {
-            themeRepository.uiTheme.onEach { value ->
-                updateState { it.copy(uiTheme = value) }
-            }.launchIn(this)
+            themeRepository.uiTheme
+                .onEach { value ->
+                    updateState { it.copy(uiTheme = value) }
+                }.launchIn(this)
 
-            l10nManager.lyricist.state.onEach { lang ->
-                updateState { it.copy(lang = lang.languageTag) }
-            }.launchIn(this)
+            l10nManager.lyricist.state
+                .onEach { lang ->
+                    updateState { it.copy(lang = lang.languageTag) }
+                }.launchIn(this)
 
-            identityRepository.isLogged.onEach { logged ->
-                updateState { it.copy(isLogged = logged ?: false) }
-            }.launchIn(this)
+            identityRepository.isLogged
+                .onEach { logged ->
+                    updateState { it.copy(isLogged = logged ?: false) }
+                }.launchIn(this)
 
-            notificationCenter.subscribe(NotificationCenterEvent.Logout::class).onEach {
-                handleLogout()
-            }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeLanguage::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.Logout::class)
+                .onEach {
+                    handleLogout()
+                }.launchIn(this)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeLanguage::class)
                 .onEach { evt ->
                     changeLanguage(evt.value)
                 }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeTheme::class).onEach { evt ->
-                changeTheme(evt.value)
-            }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeFeedType::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeFeedType::class)
                 .onEach { evt ->
                     if (evt.screenKey == "settings") {
                         changeDefaultListingType(evt.value)
                     }
                 }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeSortType::class)
                 .onEach { evt ->
                     if (evt.screenKey == "settings") {
                         changeDefaultPostSortType(evt.value)
                     }
                 }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeCommentSortType::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeCommentSortType::class)
                 .onEach { evt ->
                     if (evt.screenKey == "settings") {
                         changeDefaultCommentSortType(evt.value)
                     }
                 }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeUrlOpeningMode::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeUrlOpeningMode::class)
                 .onEach { evt ->
                     changeUrlOpeningMode(evt.value.toUrlOpeningMode())
                 }.launchIn(this)
@@ -124,23 +129,10 @@ class SettingsViewModel(
 
     override fun reduce(intent: SettingsMviModel.Intent) {
         when (intent) {
-            is SettingsMviModel.Intent.ChangeUiTheme -> changeTheme(intent.value)
-            is SettingsMviModel.Intent.ChangeLanguage -> changeLanguage(intent.value)
             is SettingsMviModel.Intent.ChangeBlurNsfw -> changeBlurNsfw(intent.value)
             is SettingsMviModel.Intent.ChangeIncludeNsfw -> changeIncludeNsfw(intent.value)
             is SettingsMviModel.Intent.ChangeEnableSwipeActions -> changeEnableSwipeActions(intent.value)
             is SettingsMviModel.Intent.ChangeCrashReportEnabled -> changeCrashReportEnabled(intent.value)
-        }
-    }
-
-    private fun changeTheme(value: UiTheme?) {
-        themeRepository.changeUiTheme(value)
-        screenModelScope.launch {
-            val settings =
-                settingsRepository.currentSettings.value.copy(
-                    theme = value?.toInt(),
-                )
-            saveSettings(settings)
         }
     }
 

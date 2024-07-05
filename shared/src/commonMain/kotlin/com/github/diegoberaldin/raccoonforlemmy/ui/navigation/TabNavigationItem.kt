@@ -35,7 +35,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigation
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.ExploreTab
-import com.github.diegoberaldin.raccoonforlemmy.feature.settings.ui.SettingsTab
 
 @Composable
 internal fun RowScope.TabNavigationItem(
@@ -63,7 +62,6 @@ internal fun RowScope.TabNavigationItem(
                 ExploreTab -> TabNavigationSection.Explore
                 ProfileTab -> TabNavigationSection.Profile
                 InboxTab -> TabNavigationSection.Inbox
-                SettingsTab -> TabNavigationSection.Settings
                 else -> TabNavigationSection.Home
             }
         navigationCoordinator.setCurrentSection(section)

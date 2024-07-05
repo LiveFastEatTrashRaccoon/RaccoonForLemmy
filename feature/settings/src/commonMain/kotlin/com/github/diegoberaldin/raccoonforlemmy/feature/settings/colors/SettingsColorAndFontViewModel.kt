@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.toArgb
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.CommentBarTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiFontFamily
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ColorSchemeProvider
@@ -83,6 +84,11 @@ class SettingsColorAndFontViewModel(
                 }.launchIn(this)
 
             notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeTheme::class)
+                .onEach { evt ->
+                    changeTheme(evt.value)
+                }.launchIn(this)
+            notificationCenter
                 .subscribe(NotificationCenterEvent.ChangeFontFamily::class)
                 .onEach { evt ->
                     changeFontFamily(evt.value)
@@ -124,6 +130,17 @@ class SettingsColorAndFontViewModel(
         when (intent) {
             is SettingsColorAndFontMviModel.Intent.ChangeDynamicColors -> changeDynamicColors(intent.value)
             is SettingsColorAndFontMviModel.Intent.ChangeRandomColor -> changeRandomColor(intent.value)
+        }
+    }
+
+    private fun changeTheme(value: UiTheme?) {
+        themeRepository.changeUiTheme(value)
+        screenModelScope.launch {
+            val settings =
+                settingsRepository.currentSettings.value.copy(
+                    theme = value?.toInt(),
+                )
+            saveSettings(settings)
         }
     }
 

@@ -39,6 +39,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepos
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.modals.ThemeBottomSheet
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
@@ -131,6 +132,17 @@ class SettingsColorAndFontScreen : Screen {
                     modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
+                    // theme
+                    SettingsRow(
+                        title = LocalStrings.current.settingsUiTheme,
+                        value = uiState.uiTheme.toReadableName(),
+                        onTap =
+                            rememberCallback {
+                                val sheet = ThemeBottomSheet()
+                                navigationCoordinator.showBottomSheet(sheet)
+                            },
+                    )
+
                     // dynamic colors
                     if (uiState.supportsDynamicColors) {
                         SettingsSwitchRow(

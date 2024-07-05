@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -202,6 +204,23 @@ object ModalDrawerContent : Tab {
                                             },
                                     )
                                 }
+                            }
+                            item {
+                                DrawerShortcut(
+                                    title = LocalStrings.current.navigationSettings,
+                                    icon = Icons.Default.Settings,
+                                    onSelected =
+                                        rememberCallback(coordinator) {
+                                            scope.launch {
+                                                focusManager.clearFocus()
+                                                navigationCoordinator.popUntilRoot()
+                                                coordinator.toggleDrawer()
+                                                delay(50)
+
+                                                coordinator.sendEvent(DrawerEvent.OpenSettings)
+                                            }
+                                        },
+                                )
                             }
                         }
 

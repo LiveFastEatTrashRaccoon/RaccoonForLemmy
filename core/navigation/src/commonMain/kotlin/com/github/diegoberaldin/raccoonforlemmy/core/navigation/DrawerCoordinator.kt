@@ -12,11 +12,19 @@ sealed interface DrawerEvent {
 
     data object Close : DrawerEvent
 
-    data class OpenCommunity(val community: CommunityModel) : DrawerEvent
+    data class OpenCommunity(
+        val community: CommunityModel,
+    ) : DrawerEvent
 
-    data class OpenMultiCommunity(val community: MultiCommunityModel) : DrawerEvent
+    data object OpenSettings : DrawerEvent
 
-    data class ChangeListingType(val value: ListingType) : DrawerEvent
+    data class OpenMultiCommunity(
+        val community: MultiCommunityModel,
+    ) : DrawerEvent
+
+    data class ChangeListingType(
+        val value: ListingType,
+    ) : DrawerEvent
 }
 
 @Stable

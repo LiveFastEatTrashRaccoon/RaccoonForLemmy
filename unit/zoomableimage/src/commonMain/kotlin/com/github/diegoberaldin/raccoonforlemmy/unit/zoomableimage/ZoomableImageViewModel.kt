@@ -112,7 +112,7 @@ class ZoomableImageViewModel(
                         )
                     }
                 // if done too early no image is found
-                delay(250)
+                delay(750)
                 updateState { it.copy(loading = false) }
 
                 if (path != null) {
