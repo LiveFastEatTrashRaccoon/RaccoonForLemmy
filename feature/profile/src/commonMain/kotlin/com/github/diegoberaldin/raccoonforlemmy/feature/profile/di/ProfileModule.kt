@@ -2,6 +2,8 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.profile.di
 
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.main.ProfileMainMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.main.ProfileMainViewModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.menu.ProfileSideMenuMviModel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.menu.ProfileSideMenuViewModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.notlogged.ProfileNotLoggedMviModel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.notlogged.ProfileNotLoggedViewModel
 import com.github.diegoberaldin.raccoonforlemmy.unit.login.di.loginModule
@@ -25,6 +27,11 @@ val profileTabModule =
         factory<ProfileNotLoggedMviModel> {
             ProfileNotLoggedViewModel(
                 identityRepository = get(),
+            )
+        }
+        factory<ProfileSideMenuMviModel> {
+            ProfileSideMenuViewModel(
+                lemmyValueCache = get(),
             )
         }
     }

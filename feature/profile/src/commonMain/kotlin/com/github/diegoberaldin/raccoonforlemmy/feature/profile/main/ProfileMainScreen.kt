@@ -5,8 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.ManageAccounts
+import androidx.compose.material.icons.automirrored.filled.MenuOpen
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -51,6 +50,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotific
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalPixel
+import com.github.diegoberaldin.raccoonforlemmy.feature.profile.menu.ProfileSideMenuScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.notlogged.ProfileNotLoggedScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.drafts.DraftsScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.filteredcontents.FilteredContentsScreen
@@ -91,7 +91,8 @@ internal object ProfileMainScreen : Tab {
         var logoutConfirmDialogOpen by remember { mutableStateOf(false) }
 
         LaunchedEffect(notificationCenter) {
-            notificationCenter.subscribe(NotificationCenterEvent.ModeratorZoneActionSelected::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ModeratorZoneActionSelected::class)
                 .onEach {
                     val action = it.value.toModeratorZoneAction()
                     when (action) {
@@ -110,41 +111,45 @@ internal object ProfileMainScreen : Tab {
                     }
                 }.launchIn(this)
 
-            notificationCenter.subscribe(NotificationCenterEvent.ProfileSideMenuAction::class).onEach { evt ->
-                navigationCoordinator.closeSideMenu()
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ProfileSideMenuAction::class)
+                .onEach { evt ->
+                    navigationCoordinator.closeSideMenu()
 
-                when (evt) {
-                    NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts -> {
-                        navigationCoordinator.showBottomSheet(ManageAccountsScreen())
-                    }
+                    when (evt) {
+                        NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts -> {
+                            navigationCoordinator.showBottomSheet(ManageAccountsScreen())
+                        }
 
-                    NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions -> {
-                        navigationCoordinator.pushScreen(ManageSubscriptionsScreen())
-                    }
+                        NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions -> {
+                            navigationCoordinator.pushScreen(ManageSubscriptionsScreen())
+                        }
 
-                    NotificationCenterEvent.ProfileSideMenuAction.Bookmarks -> {
-                        val screen = FilteredContentsScreen(type = FilteredContentsType.Bookmarks.toInt())
-                        navigationCoordinator.pushScreen(screen)
-                    }
+                        NotificationCenterEvent.ProfileSideMenuAction.Bookmarks -> {
+                            val screen =
+                                FilteredContentsScreen(type = FilteredContentsType.Bookmarks.toInt())
+                            navigationCoordinator.pushScreen(screen)
+                        }
 
-                    NotificationCenterEvent.ProfileSideMenuAction.Drafts -> {
-                        navigationCoordinator.pushScreen(DraftsScreen())
-                    }
+                        NotificationCenterEvent.ProfileSideMenuAction.Drafts -> {
+                            navigationCoordinator.pushScreen(DraftsScreen())
+                        }
 
-                    NotificationCenterEvent.ProfileSideMenuAction.Votes -> {
-                        val screen = FilteredContentsScreen(type = FilteredContentsType.Votes.toInt())
-                        navigationCoordinator.pushScreen(screen)
-                    }
+                        NotificationCenterEvent.ProfileSideMenuAction.Votes -> {
+                            val screen =
+                                FilteredContentsScreen(type = FilteredContentsType.Votes.toInt())
+                            navigationCoordinator.pushScreen(screen)
+                        }
 
-                    NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone -> {
-                        navigationCoordinator.showBottomSheet(ModeratorZoneBottomSheet())
-                    }
+                        NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone -> {
+                            navigationCoordinator.showBottomSheet(ModeratorZoneBottomSheet())
+                        }
 
-                    NotificationCenterEvent.ProfileSideMenuAction.Logout -> {
-                        logoutConfirmDialogOpen = true
+                        NotificationCenterEvent.ProfileSideMenuAction.Logout -> {
+                            logoutConfirmDialogOpen = true
+                        }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
 
         Scaffold(
@@ -152,9 +157,10 @@ internal object ProfileMainScreen : Tab {
             topBar = {
                 val maxTopInset = Dimensions.maxTopBarInset.toLocalPixel()
                 var topInset by remember { mutableStateOf(maxTopInset) }
-                snapshotFlow { topAppBarState.collapsedFraction }.onEach {
-                    topInset = maxTopInset * (1 - it)
-                }.launchIn(scope)
+                snapshotFlow { topAppBarState.collapsedFraction }
+                    .onEach {
+                        topInset = maxTopInset * (1 - it)
+                    }.launchIn(scope)
 
                 TopAppBar(
                     windowInsets =
@@ -194,25 +200,14 @@ internal object ProfileMainScreen : Tab {
                                         .padding(horizontal = Spacing.xs)
                                         .onClick(
                                             onClick = {
-                                                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts)
+                                                navigationCoordinator.openSideMenu(
+                                                    ProfileSideMenuScreen(),
+                                                )
                                             },
                                         ),
-                                imageVector = Icons.Default.ManageAccounts,
+                                imageVector = Icons.AutoMirrored.Default.MenuOpen,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onBackground,
-                            )
-                            Icon(
-                                modifier =
-                                    Modifier
-                                        .padding(horizontal = Spacing.xs)
-                                        .onClick(
-                                            onClick = {
-                                                logoutConfirmDialogOpen = true
-                                            },
-                                        ),
-                                imageVector = Icons.AutoMirrored.Default.Logout,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
                             )
                         }
                     },
@@ -224,8 +219,7 @@ internal object ProfileMainScreen : Tab {
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        )
-                        .nestedScroll(fabNestedScrollConnection)
+                        ).nestedScroll(fabNestedScrollConnection)
                         .then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -250,7 +244,9 @@ internal object ProfileMainScreen : Tab {
                         CurrentScreen()
                         val navigator = LocalTabNavigator.current
                         LaunchedEffect(model) {
-                            model.uiState.map { s -> s.logged }.distinctUntilChanged()
+                            model.uiState
+                                .map { s -> s.logged }
+                                .distinctUntilChanged()
                                 .onEach { logged ->
                                     val index =
                                         when (logged) {

@@ -168,18 +168,6 @@ object ProfileLoggedScreen : Tab {
                             }
                         }
                         item {
-                            ProfileActionMenu(
-                                modifier =
-                                    Modifier
-                                        .padding(
-                                            top = Spacing.xs,
-                                            bottom = Spacing.s,
-                                        ).fillMaxWidth(),
-                                isModerator = uiState.isModerator,
-                            )
-                            HorizontalDivider()
-                        }
-                        item {
                             SectionSelector(
                                 modifier = Modifier.padding(bottom = Spacing.s),
                                 titles =

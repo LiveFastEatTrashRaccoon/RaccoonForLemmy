@@ -73,11 +73,12 @@ fun DraggableSideMenu(
     }
 
     LaunchedEffect(draggableState) {
-        snapshotFlow { draggableState.currentValue }.onEach { value: SlideAnchorPosition ->
-            if (value == SlideAnchorPosition.Closed) {
-                onDismiss?.invoke()
-            }
-        }.launchIn(this)
+        snapshotFlow { draggableState.currentValue }
+            .onEach { value: SlideAnchorPosition ->
+                if (value == SlideAnchorPosition.Closed) {
+                    onDismiss?.invoke()
+                }
+            }.launchIn(this)
     }
 
     Box(
@@ -90,17 +91,12 @@ fun DraggableSideMenu(
                         x = draggableState.requireOffset().roundToInt(),
                         y = 0,
                     )
-                }
-                .anchoredDraggable(
+                }.anchoredDraggable(
                     state = draggableState,
                     orientation = Orientation.Horizontal,
-                )
-                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
+                ).background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
                 .padding(
-                    top = Spacing.xxl,
                     bottom = Spacing.m,
-                    end = Spacing.s,
-                    start = Spacing.s,
                 ),
     ) {
         content()

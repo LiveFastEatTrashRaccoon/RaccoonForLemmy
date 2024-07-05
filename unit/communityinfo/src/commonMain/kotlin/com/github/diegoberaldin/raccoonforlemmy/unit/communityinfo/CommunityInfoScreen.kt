@@ -81,7 +81,6 @@ class CommunityInfoScreen(
             topBar = {
                 val title = uiState.community.readableName(uiState.preferNicknames)
                 TopAppBar(
-                    modifier = Modifier.padding(top = Spacing.s),
                     colors =
                         TopAppBarDefaults.topAppBarColors().copy(
                             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
@@ -112,12 +111,9 @@ class CommunityInfoScreen(
             LazyColumn(
                 modifier =
                     Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        )
                         .fillMaxSize()
                         .padding(
-                            top = Spacing.s,
+                            top = padding.calculateTopPadding(),
                             start = Spacing.m,
                             end = Spacing.m,
                         ),
@@ -138,7 +134,10 @@ class CommunityInfoScreen(
                         DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),
                             icon = Icons.Default.Cake,
-                            title = uiState.community.creationDate?.prettifyDate().orEmpty(),
+                            title =
+                                uiState.community.creationDate
+                                    ?.prettifyDate()
+                                    .orEmpty(),
                         )
                         DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),

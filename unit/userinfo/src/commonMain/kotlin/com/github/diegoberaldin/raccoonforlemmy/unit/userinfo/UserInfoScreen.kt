@@ -85,7 +85,6 @@ class UserInfoScreen(
             topBar = {
                 val title = uiState.user.readableName(uiState.preferNicknames)
                 TopAppBar(
-                    modifier = Modifier.padding(top = Spacing.s),
                     colors =
                         TopAppBarDefaults.topAppBarColors().copy(
                             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
@@ -119,8 +118,6 @@ class UserInfoScreen(
                         .fillMaxSize()
                         .padding(
                             top = padding.calculateTopPadding(),
-                        ).padding(
-                            top = Spacing.s,
                             start = Spacing.m,
                             end = Spacing.m,
                         ),
