@@ -26,8 +26,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.VideoPlayer
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
 
-private const val DEFAULT_ASPECT_RATIO = 1f
-
 @Composable
 fun PostCardVideo(
     modifier: Modifier = Modifier,
@@ -72,7 +70,7 @@ fun PostCardVideo(
             var loading by remember { mutableStateOf(true) }
             if (shouldBeRendered) {
                 VideoPlayer(
-                    modifier = Modifier.aspectRatio(DEFAULT_ASPECT_RATIO),
+                    modifier = Modifier.fillMaxWidth(),
                     url = url,
                     onPlaybackStarted = {
                         loading = false
@@ -83,7 +81,7 @@ fun PostCardVideo(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .aspectRatio(DEFAULT_ASPECT_RATIO)
+                                .aspectRatio(16 / 9.0f)
                                 .background(backgroundColor),
                         contentAlignment = Alignment.Center,
                     ) {

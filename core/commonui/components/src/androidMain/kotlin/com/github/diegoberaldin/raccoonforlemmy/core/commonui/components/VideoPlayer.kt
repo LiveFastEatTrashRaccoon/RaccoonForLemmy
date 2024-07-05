@@ -31,7 +31,8 @@ actual fun VideoPlayer(
     val context = LocalContext.current
     val exoPlayer =
         remember {
-            ExoPlayer.Builder(context)
+            ExoPlayer
+                .Builder(context)
                 .build()
                 .apply {
                     val defaultDataSourceFactory = DefaultDataSource.Factory(context)
@@ -41,7 +42,8 @@ actual fun VideoPlayer(
                             defaultDataSourceFactory,
                         )
                     val source =
-                        ProgressiveMediaSource.Factory(dataSourceFactory)
+                        ProgressiveMediaSource
+                            .Factory(dataSourceFactory)
                             .createMediaSource(MediaItem.fromUri(url))
                     setMediaSource(source)
 
@@ -70,7 +72,7 @@ actual fun VideoPlayer(
             PlayerView(context).apply {
                 controllerAutoShow = true
                 controllerHideOnTouch = true
-                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
 
                 player = exoPlayer
                 layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
