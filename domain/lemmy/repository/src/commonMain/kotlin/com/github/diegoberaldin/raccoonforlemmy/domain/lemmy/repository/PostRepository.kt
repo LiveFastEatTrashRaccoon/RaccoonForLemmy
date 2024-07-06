@@ -104,11 +104,6 @@ interface PostRepository {
         auth: String,
     ): PostModel?
 
-    suspend fun uploadImage(
-        auth: String,
-        bytes: ByteArray,
-    ): String?
-
     suspend fun report(
         postId: Long,
         reason: String,

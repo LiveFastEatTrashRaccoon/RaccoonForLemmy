@@ -7,6 +7,11 @@ interface MediaRepository {
         const val DEFAULT_PAGE_SIZE = 20
     }
 
+    suspend fun uploadImage(
+        auth: String,
+        bytes: ByteArray,
+    ): String?
+
     suspend fun getAll(
         auth: String? = null,
         page: Int,

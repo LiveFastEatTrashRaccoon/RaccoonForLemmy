@@ -13,7 +13,7 @@ val chatModule =
                 siteRepository = get(),
                 userRepository = get(),
                 messageRepository = get(),
-                postRepository = get(),
+                mediaRepository = get(),
                 notificationCenter = get(),
                 settingsRepository = get(),
             )

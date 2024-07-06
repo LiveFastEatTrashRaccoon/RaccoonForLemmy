@@ -5,3 +5,11 @@ data class MediaModel(
     val deleteToken: String,
     val date: String? = null,
 )
+
+fun MediaModel.getUrl(instance: String): String =
+    buildString {
+        append("https://")
+        append(instance)
+        append("/pictrs/image/")
+        append(alias)
+    }

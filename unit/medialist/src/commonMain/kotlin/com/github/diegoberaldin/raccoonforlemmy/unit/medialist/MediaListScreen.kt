@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -33,6 +32,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +57,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallb
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.MediaModel
 import com.github.diegoberaldin.raccoonforlemmy.unit.medialist.components.MediaItem
 import com.github.diegoberaldin.raccoonforlemmy.unit.medialist.components.MediaItemPlaceholder
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class MediaListScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -67,10 +69,25 @@ class MediaListScreen : Screen {
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val navigationCoordinator = remember { getNavigationCoordinator() }
-        val lazyListState = rememberLazyListState()
         val snackbarHostState = remember { SnackbarHostState() }
         val successMessage = LocalStrings.current.messageOperationSuccessful
+        val failureMessage = LocalStrings.current.messageGenericError
         var itemToDelete by remember { mutableStateOf<MediaModel?>(null) }
+
+        LaunchedEffect(model) {
+            model.effects
+                .onEach { event ->
+                    when (event) {
+                        MediaListMviModel.Effect.Success -> {
+                            snackbarHostState.showSnackbar(successMessage)
+                        }
+
+                        is MediaListMviModel.Effect.Failure -> {
+                            snackbarHostState.showSnackbar(event.message ?: failureMessage)
+                        }
+                    }
+                }.launchIn(this)
+        }
 
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -122,8 +139,7 @@ class MediaListScreen : Screen {
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        )
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        ).nestedScroll(scrollBehavior.nestedScrollConnection)
                         .fillMaxSize()
                         .pullRefresh(pullRefreshState),
             ) {
@@ -141,6 +157,7 @@ class MediaListScreen : Screen {
                         MediaItem(
                             modifier = Modifier.fillMaxWidth(),
                             media = media,
+                            instance = uiState.currentInstance,
                             postLayout = uiState.postLayout,
                             fullWidthImage = uiState.fullWidthImages,
                             fullHeightImage = uiState.fullHeightImages,

@@ -647,37 +647,6 @@ class DefaultPostRepositoryTest {
         }
 
     @Test
-    fun whenUploadImage_thenInteractionsAreAsExpected() =
-        runTest {
-            val instance = "fake-instance"
-            every {
-                serviceProvider.currentInstance
-            } returns instance
-            coEvery {
-                postService.uploadImage(
-                    authHeader = any(),
-                    url = any(),
-                    token = any(),
-                    content = any(),
-                )
-            } returns mockk(relaxed = true)
-
-            sut.uploadImage(
-                auth = AUTH_TOKEN,
-                bytes = byteArrayOf(),
-            )
-
-            coVerify {
-                postService.uploadImage(
-                    authHeader = AUTH_TOKEN.toAuthHeader(),
-                    url = "https://$instance/pictrs/image",
-                    token = "jwt=$AUTH_TOKEN",
-                    content = any(),
-                )
-            }
-        }
-
-    @Test
     fun whenReport_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {

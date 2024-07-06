@@ -13,6 +13,7 @@ val createPostModule =
                 draftId = params[2],
                 identityRepository = get(),
                 postRepository = get(),
+                mediaRepository = get(),
                 siteRepository = get(),
                 themeRepository = get(),
                 settingsRepository = get(),

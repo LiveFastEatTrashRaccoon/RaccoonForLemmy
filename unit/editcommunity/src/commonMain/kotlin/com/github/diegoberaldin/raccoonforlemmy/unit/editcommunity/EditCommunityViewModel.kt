@@ -8,7 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.Ident
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityVisibilityType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.MediaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.launchIn
@@ -19,17 +19,18 @@ class EditCommunityViewModel(
     private val communityId: Long?,
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
-    private val postRepository: PostRepository,
+    private val mediaRepository: MediaRepository,
     private val notificationCenter: NotificationCenter,
-) : EditCommunityMviModel,
-    DefaultMviModel<EditCommunityMviModel.Intent, EditCommunityMviModel.UiState, EditCommunityMviModel.Effect>(
+) : DefaultMviModel<EditCommunityMviModel.Intent, EditCommunityMviModel.UiState, EditCommunityMviModel.Effect>(
         initialState = EditCommunityMviModel.UiState(),
-    ) {
+    ),
+    EditCommunityMviModel {
     private var originalCommunity: CommunityModel? = null
 
     init {
         screenModelScope.launch {
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeCommunityVisibility::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeCommunityVisibility::class)
                 .onEach { event ->
                     updateVisibility(event.value)
                 }.launchIn(this)
@@ -141,7 +142,7 @@ class EditCommunityViewModel(
         screenModelScope.launch(Dispatchers.IO) {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
-            val url = postRepository.uploadImage(auth, bytes)
+            val url = mediaRepository.uploadImage(auth, bytes)
             if (url != null) {
                 updateState {
                     it.copy(
@@ -161,7 +162,7 @@ class EditCommunityViewModel(
         screenModelScope.launch(Dispatchers.IO) {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
-            val url = postRepository.uploadImage(auth, bytes)
+            val url = mediaRepository.uploadImage(auth, bytes)
             if (url != null) {
                 updateState {
                     it.copy(

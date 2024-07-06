@@ -102,7 +102,8 @@ internal class DefaultServiceProvider(
                 }
             }
         val ktorfit =
-            Ktorfit.Builder()
+            Ktorfit
+                .Builder()
                 .baseUrl(baseUrl)
                 .httpClient(client)
                 .build()

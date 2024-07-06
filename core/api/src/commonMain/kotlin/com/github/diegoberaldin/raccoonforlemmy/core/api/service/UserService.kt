@@ -4,7 +4,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.BlockPersonForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.BlockPersonResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommentSortType
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.CommunityId
-import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.DeleteImageForm
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetPersonDetailsResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetPersonMentionsResponse
 import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.GetRepliesResponse
@@ -100,11 +99,4 @@ interface UserService {
         @Query("page") page: Int? = null,
         @Query("limit") limit: Int? = null,
     ): ListMediaResponse
-
-    @POST("image/delete")
-    @Headers("Content-Type: application/json")
-    suspend fun deleteImage(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: DeleteImageForm,
-    ): Boolean
 }

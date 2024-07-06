@@ -7,7 +7,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.MediaRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
@@ -22,7 +22,7 @@ class InboxChatViewModel(
     private val messageRepository: PrivateMessageRepository,
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository,
-    private val postRepository: PostRepository,
+    private val mediaRepository: MediaRepository,
     private val notificationCenter: NotificationCenter,
 ) : InboxChatMviModel,
     DefaultMviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.Effect>(
@@ -204,7 +204,7 @@ class InboxChatViewModel(
         screenModelScope.launch {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
-            val url = postRepository.uploadImage(auth, bytes)
+            val url = mediaRepository.uploadImage(auth, bytes)
             if (url != null) {
                 emitEffect(InboxChatMviModel.Effect.AddImageToText(url))
             }

@@ -22,10 +22,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.toModel
-import io.ktor.client.request.forms.MultiPartFormDataContent
-import io.ktor.client.request.forms.formData
-import io.ktor.http.Headers
-import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
@@ -334,42 +330,6 @@ internal class DefaultPostRepository(
                         form = data,
                     )
                 res.postView.toModel()
-            }.getOrNull()
-        }
-
-    override suspend fun uploadImage(
-        auth: String,
-        bytes: ByteArray,
-    ): String? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val url = "https://${services.currentInstance}/pictrs/image"
-                val multipart =
-                    MultiPartFormDataContent(
-                        formData {
-                            append(
-                                key = "images[]",
-                                value = bytes,
-                                headers =
-                                    Headers.build {
-                                        append(HttpHeaders.ContentType, "image/*")
-                                        append(HttpHeaders.ContentDisposition, "filename=image.jpeg")
-                                    },
-                            )
-                        },
-                    )
-                val images =
-                    services.post.uploadImage(
-                        url = url,
-                        token = "jwt=$auth",
-                        authHeader = auth.toAuthHeader(),
-                        content = multipart,
-                    )
-                "$url/${images.files?.firstOrNull()?.file}"
-            }.apply {
-                exceptionOrNull()?.also {
-                    it.printStackTrace()
-                }
             }.getOrNull()
         }
 

@@ -10,7 +10,7 @@ val accountSettingsModule =
             AccountSettingsViewModel(
                 siteRepository = get(),
                 identityRepository = get(),
-                postRepository = get(),
+                mediaRepository = get(),
                 getSortTypesUseCase = get(),
                 notificationCenter = get(),
             )

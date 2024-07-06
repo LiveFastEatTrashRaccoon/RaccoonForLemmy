@@ -8,6 +8,7 @@ val mediaListModule =
     module {
         factory<MediaListMviModel> {
             MediaListViewModel(
+                apiConfigurationRepository = get(),
                 identityRepository = get(),
                 mediaRepository = get(),
                 settingsRepository = get(),

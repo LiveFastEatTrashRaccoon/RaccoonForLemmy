@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -51,11 +52,12 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.looksLikeAVideo
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.MediaModel
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.imageUrl
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.getUrl
 
 @Composable
 internal fun MediaItem(
     media: MediaModel,
+    instance: String,
     modifier: Modifier = Modifier,
     postLayout: PostLayout = PostLayout.Card,
     fullHeightImage: Boolean = true,
@@ -63,62 +65,88 @@ internal fun MediaItem(
     options: List<Option> = emptyList(),
     onOptionSelected: ((OptionId) -> Unit)? = null,
 ) {
-    val mediaUrl = media.alias
+    val url = media.getUrl(instance)
     val backgroundColor =
         when (postLayout) {
             PostLayout.Card -> MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
             else -> MaterialTheme.colorScheme.background
         }
-
-    Column(
+    Box(
         modifier =
-            modifier.background(backgroundColor),
-        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+            modifier
+                .then(
+                    if (postLayout == PostLayout.Card) {
+                        Modifier
+                            .padding(horizontal = Spacing.xs)
+                            .shadow(
+                                elevation = 5.dp,
+                                shape = RoundedCornerShape(CornerSize.l),
+                            ).clip(RoundedCornerShape(CornerSize.l))
+                            .background(backgroundColor)
+                            .padding(vertical = Spacing.s)
+                    } else {
+                        Modifier
+                    },
+                ),
     ) {
-        if (mediaUrl.looksLikeAVideo) {
-            PostCardVideo(
+        Column(
+            modifier =
+                modifier
+                    .background(backgroundColor)
+                    .padding(top = Spacing.s),
+            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+        ) {
+            if (media.alias.looksLikeAVideo) {
+                PostCardVideo(
+                    modifier =
+                        Modifier
+                            .padding(
+                                vertical = Spacing.xxs,
+                                horizontal = if (fullWidthImage) 0.dp else Spacing.s,
+                            ),
+                    url = url,
+                    backgroundColor = backgroundColor,
+                )
+            } else {
+                PostCardImage(
+                    modifier =
+                        Modifier
+                            .padding(
+                                vertical = Spacing.xs,
+                                horizontal = if (fullWidthImage) 0.dp else Spacing.s,
+                            ).then(
+                                if (postLayout == PostLayout.Card && !fullWidthImage) {
+                                    Modifier.clip(RoundedCornerShape(CornerSize.xl))
+                                } else {
+                                    Modifier
+                                },
+                            ).then(
+                                if (fullHeightImage) {
+                                    Modifier
+                                } else {
+                                    Modifier.heightIn(max = 200.dp)
+                                },
+                            ),
+                    minHeight = Dp.Unspecified,
+                    maxHeight = Dp.Unspecified,
+                    imageUrl = url,
+                    loadButtonContent = @Composable {
+                        Icon(imageVector = Icons.Default.Download, contentDescription = null)
+                    },
+                )
+            }
+
+            MediaFooter(
                 modifier =
-                    Modifier
-                        .padding(
-                            vertical = Spacing.xxs,
-                            horizontal = if (fullWidthImage) 0.dp else Spacing.s,
-                        ),
-                url = mediaUrl,
-                backgroundColor = backgroundColor,
-            )
-        } else {
-            PostCardImage(
-                modifier =
-                    Modifier
-                        .weight(0.25f)
-                        .then(
-                            if (fullHeightImage) {
-                                Modifier
-                            } else {
-                                Modifier.aspectRatio(1f)
-                            },
-                        )
-                        .padding(vertical = Spacing.xs)
-                        .clip(RoundedCornerShape(CornerSize.s)),
-                minHeight = Dp.Unspecified,
-                maxHeight = Dp.Unspecified,
-                imageUrl = mediaUrl,
-                loadButtonContent = @Composable {
-                    Icon(imageVector = Icons.Default.Download, contentDescription = null)
-                },
+                    Modifier.padding(
+                        vertical = Spacing.xs,
+                        horizontal = Spacing.s,
+                ),
+                date = media.date,
+                options = options,
+                onOptionSelected = onOptionSelected,
             )
         }
-
-        MediaFooter(
-            modifier =
-                Modifier.padding(
-                    vertical = Spacing.xs,
-                    horizontal = Spacing.s,
-                ),
-            date = media.date,
-            options = options,
-            onOptionSelected = onOptionSelected,
-        )
     }
 }
 
@@ -161,13 +189,13 @@ private fun MediaFooter(
             if (options.isNotEmpty()) {
                 Icon(
                     modifier =
-                        Modifier.size(IconSize.m)
+                    Modifier
+                        .size(IconSize.m)
                             .padding(Spacing.xs)
                             .padding(top = Spacing.xxs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            }
-                            .onClick(
+                            }.onClick(
                                 onClick = {
                                     optionsExpanded = true
                                 },

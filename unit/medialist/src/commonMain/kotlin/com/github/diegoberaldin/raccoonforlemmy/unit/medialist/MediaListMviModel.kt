@@ -22,12 +22,15 @@ interface MediaListMviModel :
         val refreshing: Boolean = false,
         val loading: Boolean = false,
         val media: List<MediaModel> = emptyList(),
+        val currentInstance: String = "",
         val postLayout: PostLayout = PostLayout.Card,
         val fullHeightImages: Boolean = true,
         val fullWidthImages: Boolean = false,
     )
 
     sealed interface Effect {
+        data object Success : Effect
+
         data class Failure(val message: String?) : Effect
     }
 }

@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
+import com.github.diegoberaldin.raccoonforlemmy.core.api.service.PostService
 import com.github.diegoberaldin.raccoonforlemmy.core.api.service.UserService
 import com.github.diegoberaldin.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.MediaModel
@@ -20,14 +21,44 @@ class DefaultMediaRepositoryTest {
     val dispatcherTestRule = DispatcherTestRule()
 
     private val userService = mockk<UserService>()
+    private val postService = mockk<PostService>(relaxUnitFun = true)
     private val serviceProvider =
         mockk<ServiceProvider> {
             every { user } returns userService
+            every { post } returns postService
+            every { currentInstance } returns INSTANCE
         }
     private val sut =
         DefaultMediaRepository(
             services = serviceProvider,
         )
+
+    @Test
+    fun whenUploadImage_thenInteractionsAreAsExpected() =
+        runTest {
+            coEvery {
+                postService.uploadImage(
+                    authHeader = any(),
+                    url = any(),
+                    token = any(),
+                    content = any(),
+                )
+            } returns mockk(relaxed = true)
+
+            sut.uploadImage(
+                auth = AUTH_TOKEN,
+                bytes = byteArrayOf(),
+            )
+
+            coVerify {
+                postService.uploadImage(
+                    authHeader = AUTH_TOKEN.toAuthHeader(),
+                    url = "https://$INSTANCE/pictrs/image",
+                    token = "jwt=${AUTH_TOKEN}",
+                    content = any(),
+                )
+            }
+        }
 
     @Test
     fun givenNoResults_whenGetAll_thenResultAndInteractionsAreAsExpected() =
@@ -99,12 +130,7 @@ class DefaultMediaRepositoryTest {
     @Test
     fun whenDelete_thenInteractionsAreAsExpected() =
         runTest {
-            coEvery {
-                userService.deleteImage(
-                    authHeader = any(),
-                    form = any(),
-                )
-            } returns true
+            val instance = "fake-instance"
 
             val media = MediaModel(alias = "fake-alias", deleteToken = "fake-delete-token")
             sut.delete(
@@ -113,18 +139,16 @@ class DefaultMediaRepositoryTest {
             )
 
             coVerify {
-                userService.deleteImage(
+                postService.deleteImage(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
-                    form =
-                        withArg {
-                            assertEquals("fake-delete-token", it.token)
-                            assertEquals("fake-alias", it.filename)
-                        },
+                    url = "https://$instance/pictrs/image/delete/fake-delete-token/fake-alias",
+                    token = "jwt=${AUTH_TOKEN}",
                 )
             }
         }
 
     companion object {
         private const val AUTH_TOKEN = "fake-auth-token"
+        private const val INSTANCE = "fake-instance"
     }
 }

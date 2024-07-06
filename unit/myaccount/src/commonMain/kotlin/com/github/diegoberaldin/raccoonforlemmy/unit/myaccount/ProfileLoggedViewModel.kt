@@ -54,7 +54,12 @@ class ProfileLoggedViewModel(
     ProfileLoggedMviModel {
     init {
         screenModelScope.launch {
-            updateState { it.copy(instance = apiConfigurationRepository.instance.value) }
+            apiConfigurationRepository.instance
+                .onEach { instance ->
+                    updateState {
+                        it.copy(instance = instance)
+                    }
+                }.launchIn(this)
 
             themeRepository.postLayout
                 .onEach { layout ->

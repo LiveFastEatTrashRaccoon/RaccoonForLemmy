@@ -18,6 +18,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.LemmyItemCache
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.MediaRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.flow.launchIn
@@ -32,6 +33,7 @@ class CreateCommentViewModel(
     private val identityRepository: IdentityRepository,
     private val commentRepository: CommentRepository,
     private val postRepository: PostRepository,
+    private val mediaRepository: MediaRepository,
     private val siteRepository: SiteRepository,
     private val themeRepository: ThemeRepository,
     private val settingsRepository: SettingsRepository,
@@ -233,7 +235,7 @@ class CreateCommentViewModel(
         screenModelScope.launch {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
-            val url = postRepository.uploadImage(auth, bytes)
+            val url = mediaRepository.uploadImage(auth, bytes)
             if (url != null) {
                 val newValue =
                     uiState.value.textValue.let {

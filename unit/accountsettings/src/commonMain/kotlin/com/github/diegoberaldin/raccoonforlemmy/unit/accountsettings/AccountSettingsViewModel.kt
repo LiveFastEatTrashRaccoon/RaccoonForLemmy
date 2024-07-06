@@ -9,7 +9,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.AccountSetting
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.MediaRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -20,24 +20,26 @@ import kotlinx.coroutines.launch
 class AccountSettingsViewModel(
     private val siteRepository: SiteRepository,
     private val identityRepository: IdentityRepository,
-    private val postRepository: PostRepository,
+    private val mediaRepository: MediaRepository,
     private val getSortTypesUseCase: GetSortTypesUseCase,
     private val notificationCenter: NotificationCenter,
-) : AccountSettingsMviModel,
-    DefaultMviModel<AccountSettingsMviModel.Intent, AccountSettingsMviModel.UiState, AccountSettingsMviModel.Effect>(
+) : DefaultMviModel<AccountSettingsMviModel.Intent, AccountSettingsMviModel.UiState, AccountSettingsMviModel.Effect>(
         initialState = AccountSettingsMviModel.UiState(),
-    ) {
+    ),
+    AccountSettingsMviModel {
     private var accountSettings: AccountSettingsModel? = null
 
     init {
         screenModelScope.launch {
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeSortType::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeSortType::class)
                 .onEach { evt ->
                     if (evt.screenKey == "accountSettings") {
                         updateState { it.copy(defaultSortType = evt.value) }
                     }
                 }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeFeedType::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeFeedType::class)
                 .onEach { evt ->
                     if (evt.screenKey == "accountSettings") {
                         updateState { it.copy(defaultListingType = evt.value) }
@@ -241,7 +243,7 @@ class AccountSettingsViewModel(
         screenModelScope.launch(Dispatchers.IO) {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
-            val url = postRepository.uploadImage(auth, bytes)
+            val url = mediaRepository.uploadImage(auth, bytes)
             if (url != null) {
                 updateState {
                     it.copy(
@@ -261,7 +263,7 @@ class AccountSettingsViewModel(
         screenModelScope.launch(Dispatchers.IO) {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
-            val url = postRepository.uploadImage(auth, bytes)
+            val url = mediaRepository.uploadImage(auth, bytes)
             if (url != null) {
                 updateState {
                     it.copy(

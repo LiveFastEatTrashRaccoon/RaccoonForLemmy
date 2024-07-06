@@ -11,7 +11,7 @@ val editCommunityModule =
                 communityId = params[0],
                 identityRepository = get(),
                 communityRepository = get(),
-                postRepository = get(),
+                mediaRepository = get(),
                 notificationCenter = get(),
             )
         }

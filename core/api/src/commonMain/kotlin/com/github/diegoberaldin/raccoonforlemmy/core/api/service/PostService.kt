@@ -126,6 +126,13 @@ interface PostService {
         @Body content: MultiPartFormDataContent,
     ): PictrsImages
 
+    @GET
+    suspend fun deleteImage(
+        @Url url: String,
+        @Header("Cookie") token: String,
+        @Header("Authorization") authHeader: String? = null,
+    )
+
     @POST("post/report")
     @Headers("Content-Type: application/json")
     suspend fun createReport(

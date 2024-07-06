@@ -15,6 +15,7 @@ val createCommentModule =
                 identityRepository = get(),
                 commentRepository = get(),
                 postRepository = get(),
+                mediaRepository = get(),
                 siteRepository = get(),
                 themeRepository = get(),
                 settingsRepository = get(),

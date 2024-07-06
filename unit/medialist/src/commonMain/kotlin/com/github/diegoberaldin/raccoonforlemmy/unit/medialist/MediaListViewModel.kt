@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.MediaModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.MediaRepository
@@ -12,29 +13,38 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class MediaListViewModel(
+    private val apiConfigurationRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
     private val mediaRepository: MediaRepository,
     private val settingsRepository: SettingsRepository,
     private val themeRepository: ThemeRepository,
-) : MediaListMviModel,
-    DefaultMviModel<MediaListMviModel.Intent, MediaListMviModel.State, MediaListMviModel.Effect>(
+) : DefaultMviModel<MediaListMviModel.Intent, MediaListMviModel.State, MediaListMviModel.Effect>(
         initialState = MediaListMviModel.State(),
-    ) {
+    ),
+    MediaListMviModel {
     private var currentPage = 1
 
     init {
         screenModelScope.launch {
-            themeRepository.postLayout.onEach { layout ->
-                updateState { it.copy(postLayout = layout) }
-            }.launchIn(this)
-            settingsRepository.currentSettings.onEach { settings ->
-                updateState {
-                    it.copy(
-                        fullHeightImages = settings.fullHeightImages,
-                        fullWidthImages = settings.fullWidthImages,
-                    )
-                }
-            }.launchIn(this)
+            themeRepository.postLayout
+                .onEach { layout ->
+                    updateState { it.copy(postLayout = layout) }
+                }.launchIn(this)
+
+            settingsRepository.currentSettings
+                .onEach { settings ->
+                    updateState {
+                        it.copy(
+                            fullHeightImages = settings.fullHeightImages,
+                            fullWidthImages = settings.fullWidthImages,
+                        )
+                    }
+                }.launchIn(this)
+
+            apiConfigurationRepository.instance
+                .onEach { instance ->
+                    updateState { it.copy(currentInstance = instance) }
+                }.launchIn(this)
 
             if (uiState.value.initial) {
                 refresh(initial = true)
@@ -73,6 +83,7 @@ class MediaListViewModel(
 
     private suspend fun loadNextPage() {
         val currentState = uiState.value
+        val refreshing = currentState.refreshing
         if (!currentState.canFetchMore || currentState.loading) {
             updateState { it.copy(refreshing = false) }
             return
@@ -80,17 +91,25 @@ class MediaListViewModel(
         updateState { it.copy(loading = true) }
 
         val auth = identityRepository.authToken.value
-        val media =
+        val itemsToAdd =
             mediaRepository.getAll(
                 auth = auth,
                 page = currentPage,
             )
-        val canFetchMore = media.isNotEmpty()
+        if (itemsToAdd.isNotEmpty()) {
+            currentPage++
+        }
         updateState {
+            val newItems =
+                if (refreshing) {
+                    itemsToAdd
+                } else {
+                    it.media + itemsToAdd
+                }
             it.copy(
-                media = media,
+                media = newItems,
                 loading = false,
-                canFetchMore = canFetchMore,
+                canFetchMore = itemsToAdd.isNotEmpty(),
                 refreshing = false,
                 initial = false,
             )
@@ -106,6 +125,7 @@ class MediaListViewModel(
                     media = media,
                 )
                 updateState { it.copy(media = it.media.filter { m -> m.alias != media.alias }) }
+                emitEffect(MediaListMviModel.Effect.Success)
             } catch (e: Exception) {
                 emitEffect(MediaListMviModel.Effect.Failure(e.message))
             }
