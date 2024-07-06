@@ -53,14 +53,12 @@ kotlin {
                 implementation(projects.core.persistence)
                 implementation(projects.core.utils)
 
-                implementation(projects.unit.multicommunity)
-
                 implementation(projects.domain.identity)
                 implementation(projects.domain.lemmy.data)
                 implementation(projects.domain.lemmy.pagination)
                 implementation(projects.domain.lemmy.repository)
 
-                implementation(projects.unit.editcommunity)
+                implementation(projects.unit.multicommunity)
             }
         }
         val commonTest by getting {

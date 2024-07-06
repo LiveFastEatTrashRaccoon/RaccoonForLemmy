@@ -1,10 +1,14 @@
 package com.github.diegoberaldin.raccoonforlemmy
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Surface
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -56,6 +60,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getDrawerCoor
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getAccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLanguageDirection
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
@@ -336,6 +341,26 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                             }
                         }
 
+                        // scrim for draggable side menu
+                        AnimatedVisibility(
+                            modifier = Modifier.fillMaxSize(),
+                            visible = sideMenuOpened,
+                        ) {
+                            Surface(
+                                modifier =
+                                    Modifier
+                                        .onClick(
+                                            onClick = {
+                                                navigationCoordinator.closeSideMenu()
+                                            },
+                                        ),
+                                color = DrawerDefaults.scrimColor,
+                            ) {
+                                Box(modifier = Modifier.fillMaxSize())
+                            }
+                        }
+
+                        // draggable side menu
                         DraggableSideMenu(
                             availableWidth = screenWidth.toLocalDp(),
                             opened = sideMenuOpened,

@@ -229,6 +229,8 @@ sealed interface NotificationCenterEvent {
 
         data object ModeratorZone : ProfileSideMenuAction
 
+        data object CreateCommunity : ProfileSideMenuAction
+
         data object Logout : ProfileSideMenuAction
     }
 

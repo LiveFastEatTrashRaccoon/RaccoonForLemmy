@@ -7,6 +7,7 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Drafts
+import androidx.compose.material.icons.filled.GroupAdd
 import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.ThumbsUpDown
@@ -25,6 +26,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallb
 internal fun ProfileMenuContent(
     modifier: Modifier = Modifier,
     isModerator: Boolean = false,
+    canCreateCommunity: Boolean = false,
 ) {
     val notificationCenter = remember { getNotificationCenter() }
 
@@ -72,6 +74,16 @@ internal fun ProfileMenuContent(
                 onTap =
                     rememberCallback {
                         notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone)
+                    },
+            )
+        }
+        if (canCreateCommunity) {
+            SettingsRow(
+                title = LocalStrings.current.actionCreateCommunity,
+                icon = Icons.Default.GroupAdd,
+                onTap =
+                    rememberCallback {
+                        notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity)
                     },
             )
         }

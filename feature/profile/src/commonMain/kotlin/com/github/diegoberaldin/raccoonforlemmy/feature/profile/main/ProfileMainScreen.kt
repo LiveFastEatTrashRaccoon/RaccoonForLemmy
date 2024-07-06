@@ -53,6 +53,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalPixel
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.menu.ProfileSideMenuScreen
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.notlogged.ProfileNotLoggedScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.drafts.DraftsScreen
+import com.github.diegoberaldin.raccoonforlemmy.unit.editcommunity.EditCommunityScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.filteredcontents.FilteredContentsScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.filteredcontents.FilteredContentsType
 import com.github.diegoberaldin.raccoonforlemmy.unit.filteredcontents.toInt
@@ -147,6 +148,12 @@ internal object ProfileMainScreen : Tab {
 
                         NotificationCenterEvent.ProfileSideMenuAction.Logout -> {
                             logoutConfirmDialogOpen = true
+                        }
+
+                        NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity -> {
+                            navigationCoordinator.pushScreen(
+                                EditCommunityScreen(),
+                            )
                         }
                     }
                 }.launchIn(this)

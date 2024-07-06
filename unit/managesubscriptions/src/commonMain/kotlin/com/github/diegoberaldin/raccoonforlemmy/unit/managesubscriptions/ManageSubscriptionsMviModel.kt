@@ -15,13 +15,21 @@ interface ManageSubscriptionsMviModel :
 
         data object HapticIndication : Intent
 
-        data class Unsubscribe(val id: Long) : Intent
+        data class Unsubscribe(
+            val id: Long,
+        ) : Intent
 
-        data class DeleteMultiCommunity(val id: Long) : Intent
+        data class DeleteMultiCommunity(
+            val id: Long,
+        ) : Intent
 
-        data class ToggleFavorite(val id: Long) : Intent
+        data class ToggleFavorite(
+            val id: Long,
+        ) : Intent
 
-        data class SetSearch(val value: String) : Intent
+        data class SetSearch(
+            val value: String,
+        ) : Intent
 
         data object LoadNextPage : Intent
     }
@@ -36,7 +44,6 @@ interface ManageSubscriptionsMviModel :
         val searchText: String = "",
         val canFetchMore: Boolean = true,
         val loading: Boolean = false,
-        val canCreateCommunity: Boolean = false,
     )
 
     sealed interface Effect {

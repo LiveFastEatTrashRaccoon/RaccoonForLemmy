@@ -75,7 +75,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigation
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
-import com.github.diegoberaldin.raccoonforlemmy.unit.editcommunity.EditCommunityScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.multicommunity.detail.MultiCommunityScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorScreen
 import kotlinx.coroutines.flow.launchIn
@@ -247,39 +246,6 @@ class ManageSubscriptionsScreen : Screen {
                         state = lazyListState,
                         verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
-                        if (uiState.canCreateCommunity) {
-                            // create community header
-                            item {
-                                Row(
-                                    modifier =
-                                        Modifier.fillMaxWidth().padding(horizontal = Spacing.s),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Text(
-                                        modifier = Modifier.padding(vertical = Spacing.xs),
-                                        text = LocalStrings.current.actionCreateCommunity,
-                                        style = MaterialTheme.typography.titleMedium,
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    Icon(
-                                        modifier =
-                                            Modifier
-                                                .padding(horizontal = Spacing.xs)
-                                                .onClick(
-                                                    onClick = {
-                                                        navigatorCoordinator.pushScreen(
-                                                            EditCommunityScreen(),
-                                                        )
-                                                    },
-                                                ),
-                                        imageVector = Icons.Default.AddCircle,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                }
-                            }
-                        }
                         item {
                             Row(
                                 modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s),

@@ -69,6 +69,7 @@ class ProfileSideMenuScreen : Screen {
                             end = Spacing.m,
                         ),
                 isModerator = uiState.isModerator,
+                canCreateCommunity = uiState.canCreateCommunity,
             )
         }
     }

@@ -20,7 +20,6 @@ val manageSubscriptionsModule =
                 settingsRepository = get(),
                 favoriteCommunityRepository = get(),
                 communityPaginationManager = get(),
-                lemmyValueCache = get(),
             )
         }
     }

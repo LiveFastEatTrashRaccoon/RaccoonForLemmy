@@ -64,6 +64,7 @@ kotlin {
                 implementation(projects.unit.createcomment)
                 implementation(projects.unit.createpost)
                 implementation(projects.unit.drafts)
+                implementation(projects.unit.editcommunity)
                 implementation(projects.unit.filteredcontents)
                 implementation(projects.unit.login)
                 implementation(projects.unit.manageaccounts)
@@ -90,8 +91,14 @@ kotlin {
 
 android {
     namespace = "com.github.diegoberaldin.raccoonforlemmy.feature.profile"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }
