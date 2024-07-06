@@ -344,6 +344,9 @@ object ModalDrawerContent : Tab {
                                 onSelected = {
                                     scope.launch {
                                         coordinator.toggleDrawer()
+                                        navigationCoordinator.popUntilRoot()
+                                        coordinator.toggleDrawer()
+                                        delay(50)
                                         coordinator.sendEvent(
                                             DrawerEvent.ChangeListingType(listingType),
                                         )
@@ -351,6 +354,24 @@ object ModalDrawerContent : Tab {
                                 },
                             )
                         }
+                    }
+
+                    item {
+                        DrawerShortcut(
+                            title = LocalStrings.current.navigationSettings,
+                            icon = Icons.Default.Settings,
+                            onSelected =
+                                rememberCallback(coordinator) {
+                                    scope.launch {
+                                        focusManager.clearFocus()
+                                        navigationCoordinator.popUntilRoot()
+                                        coordinator.toggleDrawer()
+                                        delay(50)
+
+                                        coordinator.sendEvent(DrawerEvent.OpenSettings)
+                                    }
+                                },
+                        )
                     }
                 }
             }
