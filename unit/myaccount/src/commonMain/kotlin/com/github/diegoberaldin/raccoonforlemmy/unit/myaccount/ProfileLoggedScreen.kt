@@ -578,7 +578,7 @@ object ProfileLoggedScreen : Tab {
                             }
                         }
                         item {
-                            if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                            if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
                                 if (settings.infiniteScrollEnabled) {
                                     model.reduce(ProfileLoggedMviModel.Intent.LoadNextPage)
                                 } else {

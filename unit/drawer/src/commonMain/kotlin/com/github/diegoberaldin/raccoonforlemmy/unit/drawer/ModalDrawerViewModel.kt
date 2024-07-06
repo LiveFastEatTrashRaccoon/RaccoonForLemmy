@@ -25,6 +25,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -101,6 +102,7 @@ class ModalDrawerViewModel(
             uiState
                 .map { it.searchText }
                 .distinctUntilChanged()
+                .drop(1)
                 .debounce(1_000)
                 .onEach {
                     refresh()

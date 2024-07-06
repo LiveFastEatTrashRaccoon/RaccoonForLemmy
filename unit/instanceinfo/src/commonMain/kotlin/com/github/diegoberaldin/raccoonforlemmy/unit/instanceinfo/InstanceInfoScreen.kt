@@ -78,15 +78,16 @@ class InstanceInfoScreen(
         val detailOpener = remember { getDetailOpener() }
 
         LaunchedEffect(model) {
-            model.effects.onEach { effect ->
-                when (effect) {
-                    InstanceInfoMviModel.Effect.BackToTop -> {
-                        runCatching {
-                            listState.scrollToItem(0)
+            model.effects
+                .onEach { effect ->
+                    when (effect) {
+                        InstanceInfoMviModel.Effect.BackToTop -> {
+                            runCatching {
+                                listState.scrollToItem(0)
+                            }
                         }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
 
         Scaffold(
@@ -175,11 +176,9 @@ class InstanceInfoScreen(
                             } else {
                                 Modifier
                             },
-                        )
-                        .padding(
+                        ).padding(
                             top = padding.calculateTopPadding(),
-                        )
-                        .pullRefresh(pullRefreshState),
+                        ).pullRefresh(pullRefreshState),
             ) {
                 LazyColumn(
                     modifier = Modifier.padding(top = Spacing.xs, start = Spacing.s, end = Spacing.s),
@@ -242,7 +241,7 @@ class InstanceInfoScreen(
                     }
 
                     item {
-                        if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                        if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
                             model.reduce(InstanceInfoMviModel.Intent.LoadNextPage)
                         }
                     }

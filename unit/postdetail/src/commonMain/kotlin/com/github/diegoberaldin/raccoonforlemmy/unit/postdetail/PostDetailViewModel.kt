@@ -32,6 +32,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -91,6 +92,7 @@ class PostDetailViewModel(
                         post = post,
                         isModerator = isModerator,
                         currentUserId = identityRepository.cachedUser?.id,
+                        canFetchMore = it.comments.size < post.comments,
                     )
                 }
             }
@@ -180,6 +182,7 @@ class PostDetailViewModel(
             uiState
                 .map { it.searchText }
                 .distinctUntilChanged()
+                .drop(1)
                 .debounce(1_000)
                 .onEach {
                     if (!uiState.value.initial) {
@@ -273,7 +276,11 @@ class PostDetailViewModel(
                         admins = admins,
                     )
                 }
-                refresh(initial = true)
+                if (uiState.value.post.comments == 0) {
+                    updateState { it.copy(loading = false, initial = false) }
+                } else {
+                    refresh(initial = true)
+                }
             }
         }
     }

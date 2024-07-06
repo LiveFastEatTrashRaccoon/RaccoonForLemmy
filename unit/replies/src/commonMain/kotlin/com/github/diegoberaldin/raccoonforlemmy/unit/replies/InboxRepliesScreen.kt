@@ -308,7 +308,7 @@ class InboxRepliesScreen : Tab {
                     }
                 }
                 item {
-                    if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                    if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
                         model.reduce(InboxRepliesMviModel.Intent.LoadNextPage)
                     }
                     if (uiState.loading && !uiState.refreshing) {

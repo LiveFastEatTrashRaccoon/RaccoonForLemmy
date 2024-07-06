@@ -14,6 +14,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.ValidationError
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -46,6 +47,7 @@ class MultiCommunityEditorViewModel(
             uiState
                 .map { it.searchText }
                 .distinctUntilChanged()
+                .drop(1)
                 .debounce(1_000)
                 .onEach {
                     refresh()

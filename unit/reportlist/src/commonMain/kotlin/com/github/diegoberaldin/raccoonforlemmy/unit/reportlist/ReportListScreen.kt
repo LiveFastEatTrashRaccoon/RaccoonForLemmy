@@ -102,16 +102,17 @@ class ReportListScreen(
         val defaultResolveColor = MaterialTheme.colorScheme.secondary
 
         LaunchedEffect(model) {
-            model.effects.onEach { effect ->
-                when (effect) {
-                    ReportListMviModel.Effect.BackToTop ->
-                        kotlin.runCatching {
-                            lazyListState.scrollToItem(0)
-                            topAppBarState.heightOffset = 0f
-                            topAppBarState.contentOffset = 0f
-                        }
-                }
-            }.launchIn(this)
+            model.effects
+                .onEach { effect ->
+                    when (effect) {
+                        ReportListMviModel.Effect.BackToTop ->
+                            kotlin.runCatching {
+                                lazyListState.scrollToItem(0)
+                                topAppBarState.heightOffset = 0f
+                                topAppBarState.contentOffset = 0f
+                            }
+                    }
+                }.launchIn(this)
         }
 
         Scaffold(
@@ -206,8 +207,7 @@ class ReportListScreen(
                                 } else {
                                     Modifier
                                 },
-                            )
-                            .pullRefresh(pullRefreshState),
+                            ).pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -452,7 +452,7 @@ class ReportListScreen(
                         }
 
                         item {
-                            if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                            if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
                                 model.reduce(ReportListMviModel.Intent.LoadNextPage)
                             }
                             if (uiState.loading && !uiState.refreshing) {

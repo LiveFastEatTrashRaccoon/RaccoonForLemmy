@@ -132,21 +132,22 @@ class MultiCommunityScreen(
         val clipboardManager = LocalClipboardManager.current
 
         LaunchedEffect(model) {
-            model.effects.onEach { effect ->
-                when (effect) {
-                    is MultiCommunityMviModel.Effect.TriggerCopy -> {
-                        clipboardManager.setText(AnnotatedString(text = effect.text))
-                    }
+            model.effects
+                .onEach { effect ->
+                    when (effect) {
+                        is MultiCommunityMviModel.Effect.TriggerCopy -> {
+                            clipboardManager.setText(AnnotatedString(text = effect.text))
+                        }
 
-                    MultiCommunityMviModel.Effect.BackToTop -> {
-                        runCatching {
-                            lazyListState.scrollToItem(0)
-                            topAppBarState.heightOffset = 0f
-                            topAppBarState.contentOffset = 0f
+                        MultiCommunityMviModel.Effect.BackToTop -> {
+                            runCatching {
+                                lazyListState.scrollToItem(0)
+                                topAppBarState.heightOffset = 0f
+                                topAppBarState.contentOffset = 0f
+                            }
                         }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
 
         Scaffold(
@@ -154,9 +155,10 @@ class MultiCommunityScreen(
                 val sortType = uiState.sortType
                 val maxTopInset = Dimensions.maxTopBarInset.toLocalPixel()
                 var topInset by remember { mutableStateOf(maxTopInset) }
-                snapshotFlow { topAppBarState.collapsedFraction }.onEach {
-                    topInset = maxTopInset * (1 - it)
-                }.launchIn(scope)
+                snapshotFlow { topAppBarState.collapsedFraction }
+                    .onEach {
+                        topInset = maxTopInset * (1 - it)
+                    }.launchIn(scope)
                 TopAppBar(
                     windowInsets =
                         if (settings.edgeToEdge) {
@@ -287,16 +289,14 @@ class MultiCommunityScreen(
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        )
-                        .fillMaxWidth()
+                        ).fillMaxWidth()
                         .then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                             } else {
                                 Modifier
                             },
-                        )
-                        .nestedScroll(fabNestedScrollConnection)
+                        ).nestedScroll(fabNestedScrollConnection)
                         .pullRefresh(pullRefreshState),
             ) {
                 LazyColumn(
@@ -613,7 +613,7 @@ class MultiCommunityScreen(
                         }
                     }
                     item {
-                        if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                        if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
                             if (settings.infiniteScrollEnabled) {
                                 model.reduce(MultiCommunityMviModel.Intent.LoadNextPage)
                             } else {

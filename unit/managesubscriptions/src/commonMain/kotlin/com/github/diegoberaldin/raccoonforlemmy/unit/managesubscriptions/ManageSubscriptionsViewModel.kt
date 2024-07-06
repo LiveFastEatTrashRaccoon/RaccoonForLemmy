@@ -19,6 +19,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.Communit
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -64,6 +65,7 @@ class ManageSubscriptionsViewModel(
             uiState
                 .map { it.searchText }
                 .distinctUntilChanged()
+                .drop(1)
                 .debounce(1_000)
                 .onEach {
                     if (!uiState.value.initial) {

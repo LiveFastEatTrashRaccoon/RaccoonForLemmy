@@ -1449,7 +1449,7 @@ class CommunityDetailScreen(
                                 }
                             }
                             item {
-                                if (!uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                                if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
                                     if (settings.infiniteScrollEnabled) {
                                         model.reduce(CommunityDetailMviModel.Intent.LoadNextPage)
                                     } else {
