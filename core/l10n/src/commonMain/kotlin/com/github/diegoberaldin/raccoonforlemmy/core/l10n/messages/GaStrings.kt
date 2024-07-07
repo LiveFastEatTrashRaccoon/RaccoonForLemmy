@@ -136,7 +136,7 @@ internal val GaStrings =
         override val postDetailCrossPosts = "sa phost freisin chuig:"
         override val postDetailLoadMoreComments = "Lódáil tuilleadh tuairimí"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "nóim"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Logáil Isteach"
         override val profileDayShort = "d"
@@ -368,7 +368,7 @@ internal val GaStrings =
         override val actionSearchInComments = "Cuardaigh i dtuairimí"
         override val advancedSettingsDefaultLanguage = "Teanga réamhshocraithe san eagarthóir"
         override val undetermined = "Neamhshainithe"
-        override val exploreResultTypeTitle = "Cineál toraidh"
+        override val exploreResultTypeTitle = "Cineál toraidh cuardaigh"
         override val communityActionEdit = "Cuir pobal in eagar"
         override val editCommunityHeaderTextual = "Eolas téacsach"
         override val editCommunityItemSidebar = "Barra Taoibh"
@@ -428,6 +428,10 @@ internal val GaStrings =
         override val settingsInboxPreviewMaxLines = "An líon uasta línte i gcártaí bosca isteach"
         override val settingsDefaultExploreResultType =
             "Cineál toradh cuardaigh réamhshocraithe le haghaidh Explore"
+        override val messageReadAllInboxSuccess = "Marcáladh gach mír mar léite"
+        override val settingsItemRandomThemeColor = "Bain úsáid as dath randamach"
+        override val settingsSubtitleRandomThemeColor =
+            "Athraigh dath an téama ag gach tosaithe app"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Úsáid avatar mar dheilbhín próifíle sa bharra nascleanúna ag bun"
     }

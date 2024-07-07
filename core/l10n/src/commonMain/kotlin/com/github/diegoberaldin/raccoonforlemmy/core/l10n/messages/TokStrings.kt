@@ -425,4 +425,6 @@ internal val TokStrings =
         override val messageReadAllInboxSuccess = "sina lukin e ijo ale pi poki toki"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "o kepeken e sitelen jan tawa sitelen lili pi linja anpa"
+        override val settingsItemRandomThemeColor = "o ante e kule lon tempo ale"
+        override val settingsSubtitleRandomThemeColor = "open e ilo nanpa ni la, o ante e kule"
     }
