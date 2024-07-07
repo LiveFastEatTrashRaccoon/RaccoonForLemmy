@@ -23,6 +23,7 @@ internal fun String.sanitize(): String =
         .spoilerFixUp()
         .quoteFixUp()
         .expandLemmyHandles()
+        .expandLemmyMentions()
         .dollarSignFixUp()
         .unescapeMarkdown()
         .imageBeforeFixup()
@@ -83,7 +84,9 @@ private fun String.quoteFixUp(): String =
         finalLines.joinToString("\n")
     }
 
-private fun String.expandLemmyHandles(): String = LemmyLinkRegex.lemmyHandle.replace(this, "[$1@$2](!$1@$2)")
+private fun String.expandLemmyHandles(): String = LemmyLinkRegex.handle.replace(this, "[$1@$2](!$1@$2)")
+
+private fun String.expandLemmyMentions(): String = LemmyMentionRegex.mention.replace(this, "[$1](@$1@$2)")
 
 private fun String.dollarSignFixUp(): String =
     // due to a bug in how the renderer builds annotated strings, replace with full width dollar sign

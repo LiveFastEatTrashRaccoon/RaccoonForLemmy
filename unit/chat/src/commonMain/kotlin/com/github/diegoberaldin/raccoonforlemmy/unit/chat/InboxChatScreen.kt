@@ -110,22 +110,23 @@ class InboxChatScreen(
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(model) {
-            model.effects.onEach { effect ->
-                when (effect) {
-                    is InboxChatMviModel.Effect.AddImageToText -> {
-                        textFieldValue =
-                            textFieldValue.let {
-                                it.copy(text = it.text + "\n![](${effect.url})")
-                            }
-                    }
+            model.effects
+                .onEach { effect ->
+                    when (effect) {
+                        is InboxChatMviModel.Effect.AddImageToText -> {
+                            textFieldValue =
+                                textFieldValue.let {
+                                    it.copy(text = it.text + "\n![](${effect.url})")
+                                }
+                        }
 
-                    InboxChatMviModel.Effect.ScrollToBottom -> {
-                        runCatching {
-                            lazyListState.scrollToItem(0)
+                        InboxChatMviModel.Effect.ScrollToBottom -> {
+                            runCatching {
+                                lazyListState.scrollToItem(0)
+                            }
                         }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
 
         Scaffold(
@@ -145,7 +146,9 @@ class InboxChatScreen(
                             if (avatar.isNotEmpty()) {
                                 CustomImage(
                                     modifier =
-                                        Modifier.padding(Spacing.xxxs).size(IconSize.s)
+                                        Modifier
+                                            .padding(Spacing.xxxs)
+                                            .size(IconSize.s)
                                             .clip(RoundedCornerShape(IconSize.s / 2)),
                                     url = avatar,
                                     autoload = uiState.autoLoadImages,
@@ -261,8 +264,7 @@ class InboxChatScreen(
                             .padding(
                                 top = padding.calculateTopPadding(),
                                 bottom = padding.calculateBottomPadding(),
-                            )
-                            .consumeWindowInsets(padding),
+                            ).consumeWindowInsets(padding),
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -300,13 +302,16 @@ class InboxChatScreen(
                                 onOpenCommunity =
                                     rememberCallbackArgs { community, instance ->
                                         detailOpener.openCommunityDetail(
-                                            community,
-                                            instance,
+                                            community = community,
+                                            otherInstance = instance,
                                         )
                                     },
                                 onOpenUser =
                                     rememberCallbackArgs { user, instance ->
-                                        detailOpener.openUserDetail(user, instance)
+                                        detailOpener.openUserDetail(
+                                            user = user,
+                                            otherInstance = instance,
+                                        )
                                     },
                                 onOpenPost =
                                     rememberCallbackArgs { post, instance ->

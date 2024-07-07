@@ -6,13 +6,23 @@ internal object SpoilerRegex {
 }
 
 internal object LemmyLinkRegex {
-    private const val DETAIL_FRAGMENT: String = """[a-zA-Z0-9_]{3,}"""
+    private const val DETAIL_FRAGMENT: String = "[a-zA-Z0-9_]{3,}"
 
     private const val INSTANCE_FRAGMENT: String =
-        """([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.)+[a-zA-Z]{2,}"""
+        "([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\\.)+[a-zA-Z]{2,}"
 
-    val lemmyHandle: Regex =
-        Regex("(?<!\\S)!(?<detail>$DETAIL_FRAGMENT)(?:@(?<instance>$INSTANCE_FRAGMENT))?\\b")
+    val handle: Regex =
+        Regex("(?<=\\s)!(?<detail>$DETAIL_FRAGMENT)(?:@(?<instance>$INSTANCE_FRAGMENT))?\\s")
+}
+
+internal object LemmyMentionRegex {
+    private const val DETAIL_FRAGMENT: String = "[a-zA-Z0-9_]{3,}"
+
+    private const val INSTANCE_FRAGMENT: String =
+        "([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\\.)+[a-zA-Z]{2,}"
+
+    val mention: Regex =
+        Regex("(?<=\\s)@(?<detail>$DETAIL_FRAGMENT)@(?<instance>$INSTANCE_FRAGMENT)\\b")
 }
 
 internal object ImageRegex {

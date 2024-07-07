@@ -188,7 +188,9 @@ class InboxMentionsScreen : Tab {
                                             onTriggered =
                                                 rememberCallback {
                                                     model.reduce(
-                                                        InboxMentionsMviModel.Intent.DownVoteComment(mention.id),
+                                                        InboxMentionsMviModel.Intent.DownVoteComment(
+                                                            mention.id,
+                                                        ),
                                                     )
                                                 },
                                         )
@@ -244,7 +246,7 @@ class InboxMentionsScreen : Tab {
                                 voteFormat = uiState.voteFormat,
                                 downVoteEnabled = uiState.downVoteEnabled,
                                 previewMaxLines = uiState.previewMaxLines,
-                                onOpenPost =
+                                onClick =
                                     rememberCallbackArgs { post ->
                                         if (!mention.read) {
                                             model.reduce(
@@ -261,8 +263,11 @@ class InboxMentionsScreen : Tab {
                                         )
                                     },
                                 onOpenCreator =
-                                    rememberCallbackArgs { user ->
-                                        detailOpener.openUserDetail(user)
+                                    rememberCallbackArgs { user, instance ->
+                                        detailOpener.openUserDetail(
+                                            user = user,
+                                            otherInstance = instance,
+                                        )
                                     },
                                 onOpenCommunity =
                                     rememberCallbackArgs { community ->

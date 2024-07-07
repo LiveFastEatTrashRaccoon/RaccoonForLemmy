@@ -248,7 +248,7 @@ class InboxRepliesScreen : Tab {
                                 voteFormat = uiState.voteFormat,
                                 downVoteEnabled = uiState.downVoteEnabled,
                                 previewMaxLines = uiState.previewMaxLines,
-                                onOpenPost =
+                                onClick =
                                     rememberCallbackArgs { post ->
                                         if (!reply.read) {
                                             model.reduce(
@@ -264,8 +264,11 @@ class InboxRepliesScreen : Tab {
                                         )
                                     },
                                 onOpenCreator =
-                                    rememberCallbackArgs { user ->
-                                        detailOpener.openUserDetail(user)
+                                    rememberCallbackArgs { user, instance ->
+                                        detailOpener.openUserDetail(
+                                            user = user,
+                                            otherInstance = instance,
+                                        )
                                     },
                                 onOpenCommunity =
                                     rememberCallbackArgs { community ->

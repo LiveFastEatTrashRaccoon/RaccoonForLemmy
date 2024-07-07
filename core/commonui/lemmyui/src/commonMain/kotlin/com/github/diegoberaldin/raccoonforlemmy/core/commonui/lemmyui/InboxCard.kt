@@ -23,6 +23,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ancillaryT
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
@@ -48,14 +49,18 @@ fun InboxCard(
     postLayout: PostLayout = PostLayout.Card,
     options: List<Option> = emptyList(),
     onImageClick: (String) -> Unit,
-    onOpenPost: (PostModel) -> Unit,
-    onOpenCreator: (UserModel) -> Unit,
+    onClick: (PostModel) -> Unit,
+    onOpenCreator: (UserModel, String) -> Unit,
     onOpenCommunity: (CommunityModel) -> Unit,
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
     onReply: (() -> Unit)? = null,
 ) {
+    val onClickPost =
+        rememberCallback {
+            onClick.invoke(mention.post)
+        }
     Box(
         modifier =
             Modifier
@@ -73,17 +78,16 @@ fun InboxCard(
                     } else {
                         Modifier.background(MaterialTheme.colorScheme.background)
                     },
-                ).onClick(
-                    onClick = {
-                        onOpenPost(mention.post)
-                    },
-                ),
+                ).onClick(onClick = onClickPost),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
             InboxCardHeader(
-                modifier = Modifier.padding(horizontal = Spacing.s),
+                modifier =
+                    Modifier
+                        .onClick(onClick = onClickPost)
+                        .padding(horizontal = Spacing.s),
                 mention = mention,
                 type = type,
             )
@@ -114,19 +118,23 @@ fun InboxCard(
                         text = previewText,
                         autoLoadImages = autoLoadImages,
                         onOpenImage = onImageClick,
-                        onClick = {
-                            onOpenPost(mention.post)
-                        },
+                        onClick = onClickPost,
+                        onOpenUser =
+                            rememberCallbackArgs { user, instance ->
+                                onOpenCreator(user, instance)
+                            },
                     )
                 }
             }
             InboxReplySubtitle(
                 modifier =
-                    Modifier.padding(
-                        start = Spacing.s,
-                        end = Spacing.s,
-                        top = Spacing.s,
-                    ),
+                    Modifier
+                        .onClick(onClick = onClickPost)
+                        .padding(
+                            start = Spacing.s,
+                            end = Spacing.s,
+                            top = Spacing.s,
+                        ),
                 creator = mention.creator,
                 community = mention.community,
                 autoLoadImages = autoLoadImages,
@@ -144,7 +152,7 @@ fun InboxCard(
                 onOpenCommunity = onOpenCommunity,
                 onOpenCreator =
                     rememberCallbackArgs { user ->
-                        onOpenCreator(user)
+                        onOpenCreator(user, "")
                     },
                 onUpVote = onUpVote,
                 onDownVote = onDownVote,
