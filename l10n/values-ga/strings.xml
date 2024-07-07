@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">sa phost freisin chuig:</string>
     <string name="postDetailLoadMoreComments">Lódáil tuilleadh tuairimí</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">nóim</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Logáil Isteach</string>
     <string name="profileDayShort">d</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Cuardaigh i dtuairimí</string>
     <string name="advancedSettingsDefaultLanguage">Teanga réamhshocraithe san eagarthóir</string>
     <string name="undetermined">Neamhshainithe</string>
-    <string name="exploreResultTypeTitle">Cineál toraidh</string>
+    <string name="exploreResultTypeTitle">Cineál toraidh cuardaigh</string>
     <string name="communityActionEdit">Cuir pobal in eagar</string>
     <string name="editCommunityHeaderTextual">Eolas téacsach</string>
     <string name="editCommunityItemSidebar">Barra Taoibh</string>
@@ -412,4 +412,8 @@
     <string name="actionRestore">Athchóirigh</string>
     <string name="settingsInboxPreviewMaxLines">An líon uasta línte i gcártaí bosca isteach</string>
     <string name="settingsDefaultExploreResultType">Cineál toradh cuardaigh réamhshocraithe le haghaidh Explore</string>
+    <string name="messageReadAllInboxSuccess">Marcáladh gach mír mar léite</string>
+    <string name="settingsItemRandomThemeColor">Bain úsáid as dath randamach</string>
+    <string name="settingsSubtitleRandomThemeColor">Athraigh dath an téama ag gach tosaithe app</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Úsáid avatar mar dheilbhín próifíle sa bharra nascleanúna ag bun</string>
 </resources>
