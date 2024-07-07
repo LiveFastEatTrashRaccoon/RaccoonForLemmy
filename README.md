@@ -6,6 +6,7 @@
   <img src="https://img.shields.io/github/license/diegoberaldin/RaccoonForLemmy" />
   <img src="https://github.com/diegoberaldin/RaccoonForLemmy/actions/workflows/android.yml/badge.svg" />
   <a href="https://hosted.weblate.org/engage/raccoonforlemmy/"><img src="https://hosted.weblate.org/widget/raccoonforlemmy/status-badge.png" /></a>
+  <img alt="Matrix" src="https://img.shields.io/matrix/raccoon4lemmy:matrix.org" />
 </div>
 
 <br />
