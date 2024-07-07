@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -32,10 +31,8 @@ import com.mikepenz.markdown.model.MarkdownColors
 import com.mikepenz.markdown.model.MarkdownPadding
 import com.mikepenz.markdown.model.MarkdownTypography
 import com.mikepenz.markdown.model.markdownPadding
-import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.intellij.markdown.ast.ASTNode
 import kotlin.math.floor
 
 private val String.containsSpoiler: Boolean
@@ -97,11 +94,10 @@ fun CustomMarkdownWrapper(
     val components =
         markdownComponents(
             paragraph = { model ->
-                val substring =
-                    model.content.substring(
-                        startIndex = model.node.startOffset,
-                        endIndex = model.node.endOffset,
-                    )
+                val substring = model.content.substring(
+                    startIndex = model.node.startOffset,
+                    endIndex = model.node.endOffset,
+                )
                 when {
                     substring.containsSpoiler -> {
                         CustomMarkdownSpoiler(content = substring)
@@ -118,10 +114,22 @@ fun CustomMarkdownWrapper(
                     }
 
                     else -> {
-                        markdownParagraphWithHighlights(
-                            content = model.content,
-                            node = model.node,
+                        val style = LocalMarkdownTypography.current.paragraph
+                        var styledText = buildAnnotatedString {
+                            pushStyle(style.toSpanStyle())
+                            buildCustomMarkdownAnnotatedString(model.content, model.node.children)
+                            pop()
+                        }
+
+                        styledText = applyAnnotatedStringHighlight(
+                            annotatedString = styledText,
                             highlightText = highlightText,
+                        )
+
+                        MarkdownText(
+                            styledText,
+                            modifier = modifier,
+                            style = style,
                         )
                     }
                 }
@@ -134,6 +142,13 @@ fun CustomMarkdownWrapper(
                     autoLoadImages = autoLoadImages,
                 )
             },
+            blockQuote = { model ->
+                //CustomBlockQuote(model.content, model.node)
+                CustomBlockQuote(
+                    model.content,
+                    model.node,
+                )
+            }
         )
 
     CompositionLocalProvider(
@@ -172,37 +187,24 @@ fun CustomMarkdownWrapper(
 }
 
 @Composable
-internal fun markdownParagraphWithHighlights(
-    content: String,
-    node: ASTNode,
-    modifier: Modifier = Modifier,
-    style: TextStyle = LocalMarkdownTypography.current.paragraph,
-    highlightText: String? = null,
-) {
+internal fun applyAnnotatedStringHighlight(
+    annotatedString: AnnotatedString,
+    highlightText: String?
+): AnnotatedString {
+    if (highlightText == null) {
+        return annotatedString
+    }
+
     val highlightColor = Color(255,194,10,150)
-    var styledText = buildAnnotatedString {
-        pushStyle(style.toSpanStyle())
-        buildMarkdownAnnotatedString(content, node)
-        pop()
+    val startIndex = annotatedString.indexOf(highlightText, 0, true)
+    val builder = AnnotatedString.Builder(annotatedString)
+    if (startIndex > -1) {
+        builder.addStyle(
+            style = SpanStyle(background = highlightColor),
+            startIndex,
+            startIndex + highlightText.length
+        )
     }
 
-    if (highlightText != null) {
-        val startIndex = styledText.indexOf(highlightText, 0, true)
-        val builder = AnnotatedString.Builder(styledText)
-        if (startIndex > -1) {
-            builder.addStyle(
-                style = SpanStyle(background = highlightColor),
-                startIndex,
-                startIndex + highlightText.length
-            )
-
-            styledText = builder.toAnnotatedString()
-        }
-    }
-
-    MarkdownText(
-        styledText,
-        modifier = modifier,
-        style = style,
-    )
+    return builder.toAnnotatedString()
 }
