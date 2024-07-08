@@ -416,4 +416,6 @@
     <string name="messageReadAllInboxSuccess">Toate elementele au fost marcate ca citite</string>
     <string name="settingsItemRandomThemeColor">Utilizează culoare aleatoare</string>
     <string name="settingsSubtitleRandomThemeColor">Schimbă culoarea temei la fiecare pornire a aplicației</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Deschide pagina web cu clic pe imaginea postării</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Dacă o postare are o adresă URL, deschide pagina web cu clic pe imagine</string>
 </resources>
