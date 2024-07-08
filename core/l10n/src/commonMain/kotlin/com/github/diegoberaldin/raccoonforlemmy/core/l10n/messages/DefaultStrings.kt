@@ -425,4 +425,7 @@ internal open class DefaultStrings : Strings {
     override val messageReadAllInboxSuccess = "All items have been marked as read"
     override val settingsItemRandomThemeColor = "Use random color"
     override val settingsSubtitleRandomThemeColor = "Change theme color at each app startup"
+    override val settingsItemOpenPostWebPageOnImageClick = "Open web page on post image click"
+    override val settingsSubtitleOpenPostWebPageOnImageClick =
+        "If a post has an URL, open web page on image click"
 }

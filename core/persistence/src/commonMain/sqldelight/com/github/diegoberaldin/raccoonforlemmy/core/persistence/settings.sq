@@ -64,6 +64,7 @@ CREATE TABLE SettingsEntity (
     defaultExploreResultType INTEGER NOT NULL DEFAULT 2,
     useAvatarAsProfileNavigationIcon INTEGER NOT NULL DEFAULT 0,
     randomThemeColor INTEGER NOT NULL DEFAULT 1,
+    openPostWebPageOnImageClick INTEGER NOT NULL DEFAULT 1,
     FOREIGN KEY (account_id) REFERENCES AccountEntity(id) ON DELETE CASCADE,
     UNIQUE(account_id)
 );
@@ -133,8 +134,10 @@ INSERT OR IGNORE INTO SettingsEntity (
     defaultExploreResultType,
     useAvatarAsProfileNavigationIcon,
     randomThemeColor,
+    openPostWebPageOnImageClick,
     account_id
 ) VALUES (
+    ?,
     ?,
     ?,
     ?,
@@ -265,7 +268,8 @@ SET theme = ?,
     inboxPreviewMaxLines = ?,
     defaultExploreResultType = ?,
     useAvatarAsProfileNavigationIcon = ?,
-    randomThemeColor = ?
+    randomThemeColor = ?,
+    openPostWebPageOnImageClick = ?
 WHERE account_id = ?;
 
 getBy:
@@ -333,6 +337,7 @@ SELECT
     inboxPreviewMaxLines,
     defaultExploreResultType,
     useAvatarAsProfileNavigationIcon,
-    randomThemeColor
+    randomThemeColor,
+    openPostWebPageOnImageClick
 FROM SettingsEntity
 WHERE account_id = ?;

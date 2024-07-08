@@ -67,4 +67,5 @@ data class SettingsModel(
     val defaultExploreResultType: Int = 2,
     val useAvatarAsProfileNavigationIcon: Boolean = false,
     val randomThemeColor: Boolean = true,
+    val openPostWebPageOnImageClick: Boolean = true,
 )

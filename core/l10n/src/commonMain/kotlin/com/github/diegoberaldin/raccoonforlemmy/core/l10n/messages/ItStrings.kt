@@ -436,4 +436,8 @@ internal val ItStrings =
         override val settingsItemRandomThemeColor = "Usa colore casuale"
         override val settingsSubtitleRandomThemeColor =
             "Cambia il colore del tema ad ogni avvio dell\'app"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Apri pagina web al clic su immagine post"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Se un post ha un URL, apri pagina web al click sull\'immagine"
     }

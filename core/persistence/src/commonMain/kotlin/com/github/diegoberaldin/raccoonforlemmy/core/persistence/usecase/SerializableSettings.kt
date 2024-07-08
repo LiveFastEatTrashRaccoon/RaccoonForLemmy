@@ -79,6 +79,7 @@ internal data class SerializableSettings(
     val defaultExploreResultType: Int = 2,
     val useAvatarAsProfileNavigationIcon: Boolean = false,
     val randomThemeColor: Boolean = false,
+    val openPostWebPageOnImageClick: Boolean = true,
 )
 
 internal fun SerializableSettings.toModel() =
@@ -148,6 +149,7 @@ internal fun SerializableSettings.toModel() =
         inboxPreviewMaxLines = inboxPreviewMaxLines,
         useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon,
         randomThemeColor = randomThemeColor,
+        openPostWebPageOnImageClick = openPostWebPageOnImageClick,
     )
 
 internal fun SettingsModel.toData() =
@@ -219,4 +221,5 @@ internal fun SettingsModel.toData() =
         inboxPreviewMaxLines = inboxPreviewMaxLines,
         useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon,
         randomThemeColor = randomThemeColor,
+        openPostWebPageOnImageClick = openPostWebPageOnImageClick,
     )

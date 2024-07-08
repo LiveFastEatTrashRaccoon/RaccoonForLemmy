@@ -1,0 +1,2 @@
+ALTER TABLE SettingsEntity
+ADD COLUMN openPostWebPageOnImageClick INTEGER NOT NULL DEFAULT 1;

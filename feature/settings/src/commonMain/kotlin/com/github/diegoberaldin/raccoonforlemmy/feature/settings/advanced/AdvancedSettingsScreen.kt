@@ -347,6 +347,21 @@ class AdvancedSettingsScreen : Screen {
                             },
                     )
 
+                    // open post web page on image click
+                    SettingsSwitchRow(
+                        title = LocalStrings.current.settingsItemOpenPostWebPageOnImageClick,
+                        subtitle = LocalStrings.current.settingsSubtitleOpenPostWebPageOnImageClick,
+                        value = uiState.openPostWebPageOnImageClick,
+                        onValueChanged =
+                            rememberCallbackArgs(model) { value ->
+                                model.reduce(
+                                    AdvancedSettingsMviModel.Intent.ChangeOpenPostWebPageOnImageClick(
+                                        value,
+                                    ),
+                                )
+                            },
+                    )
+
                     // infinite scrolling
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsInfiniteScrollDisabled,

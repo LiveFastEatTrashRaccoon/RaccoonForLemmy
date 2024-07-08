@@ -66,6 +66,7 @@ private object KeyStoreKeys {
     const val COMMENT_INDENT_AMOUNT = "commentIndentAmount"
     const val DEFAULT_EXPLORE_RESULT_TYPE = "defaultExploreResultType"
     const val RANDOM_THEME_COLOR = "randomThemeColor"
+    const val OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK = "openPostWebPageOnImageClick"
 }
 
 internal class DefaultSettingsRepository(
@@ -163,6 +164,7 @@ internal class DefaultSettingsRepository(
             defaultExploreResultType = settings.defaultExploreResultType.toLong(),
             useAvatarAsProfileNavigationIcon = if (settings.useAvatarAsProfileNavigationIcon) 1L else 0L,
             randomThemeColor = if (settings.randomThemeColor) 1L else 0L,
+            openPostWebPageOnImageClick = if (settings.openPostWebPageOnImageClick) 1L else 0L,
         )
     }
 
@@ -243,6 +245,7 @@ internal class DefaultSettingsRepository(
                     fullWidthImages = keyStore[KeyStoreKeys.FULL_WIDTH_IMAGES, false],
                     defaultExploreResultType = keyStore[KeyStoreKeys.DEFAULT_EXPLORE_RESULT_TYPE, 2],
                     randomThemeColor = keyStore[KeyStoreKeys.RANDOM_THEME_COLOR, true],
+                    openPostWebPageOnImageClick = keyStore[KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK, true],
                 )
             } else {
                 val entity = db.settingsQueries.getBy(accountId).executeAsOneOrNull()
@@ -364,6 +367,7 @@ internal class DefaultSettingsRepository(
                 settings.defaultExploreResultType,
             )
             keyStore.save(KeyStoreKeys.RANDOM_THEME_COLOR, settings.randomThemeColor)
+            keyStore.save(KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK, settings.openPostWebPageOnImageClick)
         } else {
             db.settingsQueries.update(
                 theme = settings.theme?.toLong(),
@@ -448,6 +452,7 @@ internal class DefaultSettingsRepository(
                 defaultExploreResultType = settings.defaultExploreResultType.toLong(),
                 useAvatarAsProfileNavigationIcon = if (settings.useAvatarAsProfileNavigationIcon) 1L else 0L,
                 randomThemeColor = if (settings.randomThemeColor) 1L else 0L,
+                openPostWebPageOnImageClick = if (settings.openPostWebPageOnImageClick) 1L else 0L,
             )
         }
     }
@@ -550,4 +555,5 @@ private fun GetBy.toModel() =
         defaultExploreResultType = defaultExploreResultType.toInt(),
         useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon == 1L,
         randomThemeColor = randomThemeColor == 1L,
+        openPostWebPageOnImageClick = openPostWebPageOnImageClick == 1L,
     )

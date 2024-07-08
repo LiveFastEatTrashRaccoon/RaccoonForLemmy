@@ -316,7 +316,7 @@ private fun CompactPost(
                         autoLoadImages = autoLoadImages,
                         onOpen =
                             rememberCallback {
-                                if (postLinkUrl.isNotEmpty()) {
+                                if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
                                     navigationCoordinator.handleUrl(
                                         url = postLinkUrl,
                                         openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
@@ -355,7 +355,7 @@ private fun CompactPost(
                         blurred = blurNsfw && post.nsfw,
                         onImageClick =
                             rememberCallbackArgs { url ->
-                                if (postLinkUrl.isNotEmpty()) {
+                                if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
                                     navigationCoordinator.handleUrl(
                                         url = postLinkUrl,
                                         openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
@@ -559,7 +559,7 @@ private fun ExtendedPost(
                     autoLoadImages = autoLoadImages,
                     backgroundColor = backgroundColor,
                     onOpen = {
-                        if (postLinkUrl.isNotEmpty()) {
+                        if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
                             navigationCoordinator.handleUrl(
                                 url = postLinkUrl,
                                 openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
@@ -599,7 +599,7 @@ private fun ExtendedPost(
                     blurred = blurNsfw && post.nsfw,
                     onImageClick =
                         rememberCallbackArgs { url ->
-                            if (postLinkUrl.isNotEmpty()) {
+                            if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
                                 navigationCoordinator.handleUrl(
                                     url = postLinkUrl,
                                     openingMode = settings.urlOpeningMode.toUrlOpeningMode(),

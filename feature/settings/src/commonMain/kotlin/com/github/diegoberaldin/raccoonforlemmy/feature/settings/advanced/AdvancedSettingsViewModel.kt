@@ -143,6 +143,7 @@ class AdvancedSettingsViewModel(
                     inboxPreviewMaxLines = settings.inboxPreviewMaxLines,
                     defaultExploreResultType = settings.defaultExploreResultType.toSearchResultType(),
                     useAvatarAsProfileNavigationIcon = settings.useAvatarAsProfileNavigationIcon,
+                    openPostWebPageOnImageClick = settings.openPostWebPageOnImageClick,
                 )
             }
         }
@@ -167,9 +168,7 @@ class AdvancedSettingsViewModel(
                 changeMarkAsReadWhileScrolling(intent.value)
 
             is AdvancedSettingsMviModel.Intent.ChangeSearchPostTitleOnly ->
-                changeSearchPostTitleOnly(
-                    intent.value,
-                )
+                changeSearchPostTitleOnly(intent.value)
 
             is AdvancedSettingsMviModel.Intent.ChangeEdgeToEdge -> changeEdgeToEdge(intent.value)
             is AdvancedSettingsMviModel.Intent.ChangeInfiniteScrollDisabled ->
@@ -177,15 +176,11 @@ class AdvancedSettingsViewModel(
 
             is AdvancedSettingsMviModel.Intent.ChangeImageSourcePath -> changeImageSourcePath(intent.value)
             is AdvancedSettingsMviModel.Intent.ChangeDefaultLanguage ->
-                changeDefaultLanguageId(
-                    intent.value,
-                )
+                changeDefaultLanguageId(intent.value)
 
             is AdvancedSettingsMviModel.Intent.ChangeFadeReadPosts -> changeFadeReadPosts(intent.value)
             is AdvancedSettingsMviModel.Intent.ChangeShowUnreadComments ->
-                changeShowUnreadPosts(
-                    intent.value,
-                )
+                changeShowUnreadPosts(intent.value)
 
             is AdvancedSettingsMviModel.Intent.ExportSettings -> handleExportSettings()
             is AdvancedSettingsMviModel.Intent.ImportSettings -> handleImportSettings(intent.content)
@@ -193,14 +188,13 @@ class AdvancedSettingsViewModel(
                 changeEnableButtonsToScrollBetweenComments(intent.value)
 
             is AdvancedSettingsMviModel.Intent.ChangeEnableToggleFavoriteInNavDrawer ->
-                changeEnableToggleFavoriteInNavDrawer(
-                    intent.value,
-                )
+                changeEnableToggleFavoriteInNavDrawer(intent.value)
 
             is AdvancedSettingsMviModel.Intent.ChangeUseAvatarAsProfileNavigationIcon ->
-                changeUseAvatarAsProfileNavigationIcon(
-                    intent.value,
-                )
+                changeUseAvatarAsProfileNavigationIcon(intent.value)
+
+            is AdvancedSettingsMviModel.Intent.ChangeOpenPostWebPageOnImageClick ->
+                changeOpenPostWebPageOnImageClick(intent.value)
         }
     }
 
@@ -423,6 +417,15 @@ class AdvancedSettingsViewModel(
             updateState { it.copy(useAvatarAsProfileNavigationIcon = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(useAvatarAsProfileNavigationIcon = value)
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeOpenPostWebPageOnImageClick(value: Boolean) {
+        screenModelScope.launch {
+            updateState { it.copy(openPostWebPageOnImageClick = value) }
+            val settings =
+                settingsRepository.currentSettings.value.copy(openPostWebPageOnImageClick = value)
             saveSettings(settings)
         }
     }

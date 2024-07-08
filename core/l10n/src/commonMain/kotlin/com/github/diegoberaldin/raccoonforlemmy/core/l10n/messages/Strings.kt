@@ -424,6 +424,8 @@ interface Strings {
     val messageReadAllInboxSuccess: String
     val settingsItemRandomThemeColor: String
     val settingsSubtitleRandomThemeColor: String
+    val settingsItemOpenPostWebPageOnImageClick: String
+    val settingsSubtitleOpenPostWebPageOnImageClick: String
 }
 
 object Locales {
