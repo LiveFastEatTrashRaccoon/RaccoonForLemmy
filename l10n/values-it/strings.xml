@@ -416,4 +416,6 @@
     <string name="messageReadAllInboxSuccess">Tutti gli elementi sono stati contrassegnati come letti</string>
     <string name="settingsItemRandomThemeColor">Usa colore casuale</string>
     <string name="settingsSubtitleRandomThemeColor">Cambia il colore del tema ad ogni avvio dell\'app</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Apri pagina web al clic su immagine post</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Se un post ha un URL, apri pagina web al click sull\'immagine</string>
 </resources>
