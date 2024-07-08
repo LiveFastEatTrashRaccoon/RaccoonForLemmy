@@ -417,4 +417,6 @@
     <string name="settingsUseAvatarAsProfileNavigationIcon">Utiliser l\'avatar comme icône de profil dans la barre de navigation inférieure</string>
     <string name="settingsItemRandomThemeColor">Utiliser couleur aléatoire</string>
     <string name="settingsSubtitleRandomThemeColor">Changer la couleur du thème à chaque démarrage de l\'application</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Ouvrir la page web en cliquant sur l\'image de la publication</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Si une publication est associée à une URL, ouvrir la page web en cliquant sur l\'image</string>
 </resources>
