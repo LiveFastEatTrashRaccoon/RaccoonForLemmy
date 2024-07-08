@@ -416,4 +416,6 @@
     <string name="messageReadAllInboxSuccess">All items have been marked as read</string>
     <string name="settingsItemRandomThemeColor">Use random color</string>
     <string name="settingsSubtitleRandomThemeColor">Change theme color at each app startup</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Open web page on post image click</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">If a post has an URL, open web page on image click</string>
 </resources>
