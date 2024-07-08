@@ -56,7 +56,7 @@
     <string name="homeListingTypeAll">Gach</string>
     <string name="homeListingTypeLocal">Áitiúil</string>
     <string name="homeListingTypeSubscribed">Liostáilte</string>
-    <string name="homeSortTitle">Sórtáil de réir:</string>
+    <string name="homeSortTitle">Sórtáil de réir</string>
     <string name="homeSortTypeActive">Gníomhach</string>
     <string name="homeSortTypeControversial">Conspóideach</string>
     <string name="homeSortTypeHot">weather forecast</string>
@@ -94,7 +94,7 @@
     <string name="instanceDetailCommunities">An Coimisiún Eorpach</string>
     <string name="instanceDetailTitle">Ásc:</string>
     <string name="lang">ga</string>
-    <string name="loginFieldInstanceName">Ainm áisc:</string>
+    <string name="loginFieldInstanceName">Ainm cás</string>
     <string name="loginFieldLabelOptional">(roghnach)</string>
     <string name="loginFieldPassword">Pasfhocal</string>
     <string name="loginFieldToken">Comhartha TOTP 2FA</string>
@@ -416,4 +416,6 @@
     <string name="settingsItemRandomThemeColor">Bain úsáid as dath randamach</string>
     <string name="settingsSubtitleRandomThemeColor">Athraigh dath an téama ag gach tosaithe app</string>
     <string name="settingsUseAvatarAsProfileNavigationIcon">Úsáid avatar mar dheilbhín próifíle sa bharra nascleanúna ag bun</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Oscail leathanach gréasáin ar cliceáil íomhá postála</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Má tá URL ag postáil, oscail leathanach gréasáin ar chliceáil íomhá</string>
 </resources>
