@@ -440,4 +440,8 @@ internal val FrStrings =
         override val settingsItemRandomThemeColor = "Utiliser couleur aléatoire"
         override val settingsSubtitleRandomThemeColor =
             "Changer la couleur du thème à chaque démarrage de l\'application"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Ouvrir la page web en cliquant sur l\'image de la publication"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Si une publication est associée à une URL, ouvrir la page web en cliquant sur l\'image"
     }

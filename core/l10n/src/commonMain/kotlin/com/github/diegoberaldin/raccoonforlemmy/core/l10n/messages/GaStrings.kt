@@ -58,7 +58,7 @@ internal val GaStrings =
         override val homeListingTypeAll = "Gach"
         override val homeListingTypeLocal = "Áitiúil"
         override val homeListingTypeSubscribed = "Liostáilte"
-        override val homeSortTitle = "Sórtáil de réir:"
+        override val homeSortTitle = "Sórtáil de réir"
         override val homeSortTypeActive = "Gníomhach"
         override val homeSortTypeControversial = "Conspóideach"
         override val homeSortTypeHot = "weather forecast"
@@ -97,7 +97,7 @@ internal val GaStrings =
         override val instanceDetailCommunities = "An Coimisiún Eorpach"
         override val instanceDetailTitle = "Ásc:"
         override val lang = "ga"
-        override val loginFieldInstanceName = "Ainm áisc:"
+        override val loginFieldInstanceName = "Ainm cás"
         override val loginFieldLabelOptional = "(roghnach)"
         override val loginFieldPassword = "Pasfhocal"
         override val loginFieldToken = "Comhartha TOTP 2FA"
@@ -434,4 +434,8 @@ internal val GaStrings =
             "Athraigh dath an téama ag gach tosaithe app"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Úsáid avatar mar dheilbhín próifíle sa bharra nascleanúna ag bun"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Oscail leathanach gréasáin ar cliceáil íomhá postála"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Má tá URL ag postáil, oscail leathanach gréasáin ar chliceáil íomhá"
     }

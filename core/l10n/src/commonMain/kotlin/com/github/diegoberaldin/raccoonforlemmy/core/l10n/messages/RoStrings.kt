@@ -433,4 +433,8 @@ internal val RoStrings =
         override val settingsItemRandomThemeColor = "Utilizează culoare aleatoare"
         override val settingsSubtitleRandomThemeColor =
             "Schimbă culoarea temei la fiecare pornire a aplicației"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Deschide pagina web cu clic pe imaginea postării"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Dacă o postare are o adresă URL, deschide pagina web cu clic pe imagine"
     }
