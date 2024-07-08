@@ -416,4 +416,6 @@
     <string name="messageReadAllInboxSuccess">Todos los elementos han sido marcados como leídos</string>
     <string name="settingsItemRandomThemeColor">Usar color aleatorio</string>
     <string name="settingsSubtitleRandomThemeColor">Cambiar de tema por cada reinicialización de la aplicación</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Abrir página web con el clic sobre la imagen de la publicación</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Si una publicación lleva un URL asociado, abrir la página web con el clic sobre la imagen</string>
 </resources>
