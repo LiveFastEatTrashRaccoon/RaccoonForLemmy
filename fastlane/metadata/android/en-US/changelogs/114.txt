@@ -1,0 +1,16 @@
+- search highlighting
+- improved M3 components (bottom nav, search)
+- cleanup profile screen
+- add admin/mod badge in comments
+- fix comment expanded/visible at refresh
+- improved login messages
+- restore deleted posts/comments
+- improved Markdown support
+- add edit swipe action
+- add/remove favorites from navigation drawer
+- improve support for user/community references
+- fix comment navigation
+- fix post opening
+- random theme color
+- list of uploaded media (and deletion)
+- update l10n

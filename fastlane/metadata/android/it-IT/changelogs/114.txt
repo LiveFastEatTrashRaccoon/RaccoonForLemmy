@@ -1,0 +1,16 @@
+- evidenziazione ricerca
+- componenti M3 (navbar, ricerca)
+- riordino schermata profilo
+- indicatori admin/mod commenti
+- fix espansione commenti al refresh
+- miglioramento messaggi login
+- ripristino post/commenti cancellati
+- supporto Markdown migliorato
+- azione swipe Modifica
+- aggiungi/rimuovi preferiti in barra laterale
+- supporto riferimenti utenti/comunità
+- fix navigazione commenti
+- fix apertura post
+- colore tema casuale
+- lista media caricati (e cancellazione)
+- aggiornamento l10n
