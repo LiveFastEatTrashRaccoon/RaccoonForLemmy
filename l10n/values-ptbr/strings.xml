@@ -123,7 +123,7 @@
     <string name="navigationInbox">Mensagens</string>
     <string name="navigationProfile">Perfil</string>
     <string name="navigationSearch">Descobrir</string>
-    <string name="navigationSettings">Configurar</string>
+    <string name="navigationSettings">Configuração</string>
     <string name="postActionCrossPost">Postar cruzado</string>
     <string name="postActionEdit">Editar</string>
     <string name="postActionHide">Esconder</string>
@@ -133,7 +133,7 @@
     <string name="postDetailCrossPosts">postado também em:</string>
     <string name="postDetailLoadMoreComments">Carregar mais comentários</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Fazer login</string>
     <string name="profileDayShort">d</string>
@@ -198,7 +198,7 @@
     <string name="settingsPostLayoutCompact">Compacto</string>
     <string name="settingsPostLayoutFull">Inteiro</string>
     <string name="settingsSectionAppearance">Aparência</string>
-    <string name="settingsAdvanced">Configurações avançadas</string>
+    <string name="settingsAdvanced">Avançado</string>
     <string name="settingsSectionDebug">Depuração</string>
     <string name="settingsSectionGeneral">Básico</string>
     <string name="settingsSectionNsfw">NSFW (conteúdo explícito)</string>
@@ -316,8 +316,8 @@
     <string name="settingsAboutViewGooglePlay">Ver no Google Play</string>
     <string name="settingsUserManual">Manual do usuário</string>
     <string name="settingsShowScores">Mostrar pontoações</string>
-    <string name="settingsVoteFormatHidden">Escondido</string>
-    <string name="settingsCommentBarThickness">Espessura da barra de comentários</string>
+    <string name="settingsVoteFormatHidden">Não mostrar</string>
+    <string name="settingsCommentBarThickness">Espessura da barra em comentários</string>
     <string name="settingsPreferUserNicknames">Usar nomes próprios de usuários e comunidades</string>
     <string name="messageVideoNsfw">Este vídeo foi marcado como NSFW</string>
     <string name="settingsTitleFontScale">Tamanho de texto para títulos</string>
@@ -341,8 +341,8 @@
     <string name="settingsSubtitleImageSourcePath">usar comunidade ou ID de usuário em caminhos</string>
     <string name="settingsTitleDisplay">Tela</string>
     <string name="settingsTitleReading">Leitura e conteúdo</string>
-    <string name="settingsTitlePictures">Fotos</string>
-    <string name="settingsTitleExperimental">Experimentais</string>
+    <string name="settingsTitlePictures">Imagens</string>
+    <string name="settingsTitleExperimental">Experimental</string>
     <string name="communitySetCustomSort">Tipo de ordem personalizado</string>
     <string name="settingsDefaultExploreType">Tipo padrão de feed em Descobrir</string>
     <string name="actionSearchInCommunity">Buscar na comunidade</string>
@@ -392,7 +392,7 @@
     <string name="contentScaleFit">Ajustar o tamanho</string>
     <string name="contentScaleFillWidth">Preencher a largura</string>
     <string name="contentScaleFillHeight">Preencher a altura</string>
-    <string name="settingsCommentIndentAmount">Largura de recuo dos comentários</string>
+    <string name="settingsCommentIndentAmount">Grau de indentação em comentários</string>
     <string name="postActionUnhide">Reverter ocultação</string>
     <string name="adminActionPurge">Purgar</string>
     <string name="adminActionMarkAsFeatured">Marcar como destaque (instância)</string>
@@ -409,9 +409,14 @@
     <string name="settingsHiddenPosts">Posts escondidos</string>
     <string name="settingsMediaList">Uploads de mídia</string>
     <string name="settingsEnableToggleFavoriteInNavDrawer">Adicionar/remover favoritos na barra de navegação</string>
-    <string name="messageContentDeleted">Você apagou este conteúdo</string>
+    <string name="messageContentDeleted">Este conteúdo foi apagado</string>
     <string name="actionRestore">Restaurar</string>
     <string name="settingsInboxPreviewMaxLines">Número máximo de linhas em cartões de mensagens</string>
     <string name="settingsDefaultExploreResultType">Tipo padrão para busca em Descobrir</string>
     <string name="settingsUseAvatarAsProfileNavigationIcon">Usar o avatar como ícone de perfil na barra de navegação</string>
+    <string name="messageReadAllInboxSuccess">Todo foi marcado como lido</string>
+    <string name="settingsItemRandomThemeColor">Usar tema aleatório</string>
+    <string name="settingsSubtitleRandomThemeColor">Alterar a cor do tema em cada inicialização do app</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Abrir site ao clicar na imagem de post</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Se um post tiver URL, ao clicar na imagem você será redirecionado ao site</string>
 </resources>
