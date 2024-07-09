@@ -444,4 +444,9 @@ internal val FrStrings =
             "Ouvrir la page web en cliquant sur l\'image de la publication"
         override val settingsSubtitleOpenPostWebPageOnImageClick =
             "Si une publication est associée à une URL, ouvrir la page web en cliquant sur l\'image"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Configurer la barre de navigation inférieure"
+        override val settingsItemAlternateMarkdownRendering =
+            "Activer le rendu de Markdown alternatif"
+        override val selectTabNavigationTitle = "Sélectionnez une section"
     }

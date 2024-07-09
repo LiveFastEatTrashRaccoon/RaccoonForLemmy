@@ -440,4 +440,9 @@ internal val EsStrings =
             "Abrir página web con el clic sobre la imagen de la publicación"
         override val settingsSubtitleOpenPostWebPageOnImageClick =
             "Si una publicación lleva un URL asociado, abrir la página web con el clic sobre la imagen"
+        override val settingsItemAlternateMarkdownRendering =
+            "Activar renderización Markdown alternativa"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Configurar la barra de navegación inferior"
+        override val selectTabNavigationTitle = "Seleccionar una sección"
     }

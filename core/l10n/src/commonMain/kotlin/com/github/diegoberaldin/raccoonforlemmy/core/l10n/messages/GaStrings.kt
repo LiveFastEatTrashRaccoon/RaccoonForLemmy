@@ -248,7 +248,7 @@ internal val GaStrings =
         override val postReplySourceAccount = "le:"
         override val settingsCommentBarTheme = "Téama barra tráchta"
         override val settingsCommentBarThemeBlue = "🌊 Aigéan"
-        override val settingsCommentBarThemeGreen = "🥑 Avocado"
+        override val settingsCommentBarThemeGreen = "🥑 Abhacáid"
         override val settingsCommentBarThemeRed = "🍓 Sú talún"
         override val settingsCommentBarThemeMulti = "🌈 Bogha ceatha"
         override val messageConfirmExit = "Tapáil 🔙 arís chun imeacht"
@@ -287,7 +287,7 @@ internal val GaStrings =
         override val settingsWebAvatar = "Avatar"
         override val settingsWebBanner = "Meirge"
         override val settingsWebBio = "Bith"
-        override val settingsWebBot = "Bot"
+        override val settingsWebBot = "Róbat"
         override val settingsWebDisplayName = "Ainm taispeána"
         override val settingsWebMatrix = "Aitheantas úsáideora Matrix"
         override val settingsWebEmail = "Ríomhphost"
@@ -438,4 +438,8 @@ internal val GaStrings =
             "Oscail leathanach gréasáin ar cliceáil íomhá postála"
         override val settingsSubtitleOpenPostWebPageOnImageClick =
             "Má tá URL ag postáil, oscail leathanach gréasáin ar chliceáil íomhá"
+        override val settingsItemAlternateMarkdownRendering =
+            "Cumasaigh rindreáil Markdown malartach"
+        override val settingsItemConfigureBottomNavigationBar = "Cumraigh barra nascleanúna ag bun"
+        override val selectTabNavigationTitle = "Roghnaigh alt"
     }
