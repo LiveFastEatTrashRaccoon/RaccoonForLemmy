@@ -426,6 +426,7 @@ interface Strings {
     val settingsSubtitleRandomThemeColor: String
     val settingsItemOpenPostWebPageOnImageClick: String
     val settingsSubtitleOpenPostWebPageOnImageClick: String
+    val settingsItemAlternateMarkdownRendering: String
 }
 
 object Locales {

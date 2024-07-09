@@ -428,4 +428,5 @@ internal open class DefaultStrings : Strings {
     override val settingsItemOpenPostWebPageOnImageClick = "Open web page on post image click"
     override val settingsSubtitleOpenPostWebPageOnImageClick =
         "If a post has an URL, open web page on image click"
+    override val settingsItemAlternateMarkdownRendering = "Enable alternate Markdown rendering"
 }

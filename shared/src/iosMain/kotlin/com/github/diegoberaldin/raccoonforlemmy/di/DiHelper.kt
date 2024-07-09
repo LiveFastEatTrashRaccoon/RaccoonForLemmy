@@ -8,6 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.l10n.di.coreL10nModule
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.navigationModule
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.coreNotificationModule
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.corePersistenceModule
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.coreAppConfigModule
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.corePreferencesModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.AppInfo
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.appIconModule
@@ -65,6 +66,7 @@ fun initKoin() {
             internalSharedModule,
             coreAppearanceModule,
             corePreferencesModule,
+            coreAppConfigModule,
             coreApiModule,
             coreIdentityModule,
             coreL10nModule,

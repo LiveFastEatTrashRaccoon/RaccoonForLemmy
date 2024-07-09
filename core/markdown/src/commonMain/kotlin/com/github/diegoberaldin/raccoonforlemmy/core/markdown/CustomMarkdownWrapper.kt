@@ -58,6 +58,7 @@ fun CustomMarkdownWrapper(
     autoLoadImages: Boolean,
     maxLines: Int? = null,
     highlightText: String?,
+    enableAlternateRendering: Boolean = false,
     onOpenUrl: ((String) -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
     onClick: (() -> Unit)?,
@@ -109,7 +110,12 @@ fun CustomMarkdownWrapper(
 
                     substring.isImage -> {
                         val res = ImageRegex.image.find(substring)
-                        val link = res?.groups?.get("url")?.value.orEmpty()
+                        val link =
+                            res
+                                ?.groups
+                                ?.get("url")
+                                ?.value
+                                .orEmpty()
                         CustomMarkdownImage(
                             url = link,
                             autoLoadImages = autoLoadImages,
@@ -179,12 +185,13 @@ internal fun markdownParagraphWithHighlights(
     style: TextStyle = LocalMarkdownTypography.current.paragraph,
     highlightText: String? = null,
 ) {
-    val highlightColor = Color(255,194,10,150)
-    var styledText = buildAnnotatedString {
-        pushStyle(style.toSpanStyle())
-        buildMarkdownAnnotatedString(content, node)
-        pop()
-    }
+    val highlightColor = Color(255, 194, 10, 150)
+    var styledText =
+        buildAnnotatedString {
+            pushStyle(style.toSpanStyle())
+            buildMarkdownAnnotatedString(content, node)
+            pop()
+        }
 
     if (highlightText != null) {
         val startIndex = styledText.indexOf(highlightText, 0, true)
@@ -193,7 +200,7 @@ internal fun markdownParagraphWithHighlights(
             builder.addStyle(
                 style = SpanStyle(background = highlightColor),
                 startIndex,
-                startIndex + highlightText.length
+                startIndex + highlightText.length,
             )
 
             styledText = builder.toAnnotatedString()

@@ -85,6 +85,10 @@ interface AdvancedSettingsMviModel :
         data class ChangeOpenPostWebPageOnImageClick(
             val value: Boolean,
         ) : Intent
+
+        data class ChangeEnableAlternateMarkdownRendering(
+            val value: Boolean,
+        ) : Intent
     }
 
     data class UiState(
@@ -119,6 +123,8 @@ interface AdvancedSettingsMviModel :
         val defaultExploreResultType: SearchResultType = SearchResultType.Communities,
         val useAvatarAsProfileNavigationIcon: Boolean = false,
         val openPostWebPageOnImageClick: Boolean = true,
+        val alternateMarkdownRenderingItemVisible: Boolean = false,
+        val enableAlternateMarkdownRendering: Boolean = false,
     )
 
     sealed interface Effect {

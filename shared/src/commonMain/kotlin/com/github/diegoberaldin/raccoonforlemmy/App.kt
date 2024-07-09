@@ -60,6 +60,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getDrawerCoor
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getAccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.getAppConfigStore
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLanguageDirection
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
@@ -105,6 +106,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
     val sideMenuOpened by navigationCoordinator.sideMenuOpened.collectAsState()
     val scope = rememberCoroutineScope()
     val subscriptionsCache = remember { getSubscriptionsCache() }
+    val appConfigStore = remember { getAppConfigStore() }
 
     LaunchedEffect(Unit) {
         val accountId = accountRepository.getActive()?.id
@@ -126,6 +128,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
         }
 
         subscriptionsCache.initialize()
+        appConfigStore.initialize()
 
         hasBeenInitialized = true
         launch {

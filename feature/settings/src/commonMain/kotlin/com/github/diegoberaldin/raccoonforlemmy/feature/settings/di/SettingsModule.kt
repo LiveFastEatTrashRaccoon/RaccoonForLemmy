@@ -50,6 +50,7 @@ val settingsTabModule =
                 fileSystemManager = get(),
                 importSettings = get(),
                 exportSettings = get(),
+                appConfigStore = get(),
             )
         }
     }
