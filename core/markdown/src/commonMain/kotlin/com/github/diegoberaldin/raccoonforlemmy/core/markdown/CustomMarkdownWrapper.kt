@@ -193,33 +193,23 @@ fun CustomMarkdownWrapper(
 }
 
 @Composable
-internal fun markdownParagraphWithHighlights(
-    content: String,
-    node: ASTNode,
-    modifier: Modifier = Modifier,
-    style: TextStyle = LocalMarkdownTypography.current.paragraph,
-    highlightText: String? = null,
-) {
+internal fun applyAnnotatedStringHighlight(
+    annotatedString: AnnotatedString,
+    highlightText: String?
+): AnnotatedString {
+    if (highlightText == null) {
+        return annotatedString
+    }
+
     val highlightColor = Color(255, 194, 10, 150)
-    var styledText =
-        buildAnnotatedString {
-            pushStyle(style.toSpanStyle())
-            buildMarkdownAnnotatedString(content, node)
-            pop()
-        }
-
-    if (highlightText != null) {
-        val startIndex = styledText.indexOf(highlightText, 0, true)
-        val builder = AnnotatedString.Builder(styledText)
-        if (startIndex > -1) {
-            builder.addStyle(
-                style = SpanStyle(background = highlightColor),
-                startIndex,
-                startIndex + highlightText.length,
-            )
-
-            styledText = builder.toAnnotatedString()
-        }
+    val startIndex = annotatedString.indexOf(highlightText, 0, true)
+    val builder = AnnotatedString.Builder(annotatedString)
+    if (startIndex > -1) {
+        builder.addStyle(
+            style = SpanStyle(background = highlightColor),
+            startIndex,
+            startIndex + highlightText.length
+        )
     }
 
     return builder.toAnnotatedString()
