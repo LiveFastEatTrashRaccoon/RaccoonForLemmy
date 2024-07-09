@@ -24,6 +24,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.compose.components.markdownComponents
+import com.mikepenz.markdown.compose.elements.MarkdownBlockQuote
 import com.mikepenz.markdown.compose.elements.MarkdownText
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
@@ -31,6 +32,7 @@ import com.mikepenz.markdown.model.MarkdownColors
 import com.mikepenz.markdown.model.MarkdownPadding
 import com.mikepenz.markdown.model.MarkdownTypography
 import com.mikepenz.markdown.model.markdownPadding
+import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.floor
@@ -123,7 +125,11 @@ fun CustomMarkdownWrapper(
                         val style = LocalMarkdownTypography.current.paragraph
                         var styledText = buildAnnotatedString {
                             pushStyle(style.toSpanStyle())
-                            buildCustomMarkdownAnnotatedString(model.content, model.node.children)
+                            if (enableAlternateRendering) {
+                                buildCustomMarkdownAnnotatedString(model.content, model.node.children)
+                            } else {
+                                buildMarkdownAnnotatedString(model.content, model.node)
+                            }
                             pop()
                         }
 
@@ -149,11 +155,17 @@ fun CustomMarkdownWrapper(
                 )
             },
             blockQuote = { model ->
-                //CustomBlockQuote(model.content, model.node)
-                CustomBlockQuote(
-                    model.content,
-                    model.node,
-                )
+                if (enableAlternateRendering) {
+                    CustomBlockQuote(
+                        content = model.content,
+                        node = model.node,
+                    )
+                } else {
+                    MarkdownBlockQuote(
+                        content = model.content,
+                        node = model.node,
+                    )
+                }
             }
         )
 
