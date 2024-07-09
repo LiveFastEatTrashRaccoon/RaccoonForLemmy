@@ -67,6 +67,7 @@ private object KeyStoreKeys {
     const val DEFAULT_EXPLORE_RESULT_TYPE = "defaultExploreResultType"
     const val RANDOM_THEME_COLOR = "randomThemeColor"
     const val OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK = "openPostWebPageOnImageClick"
+    const val ENABLE_ALTERNATE_MARKDOWN_RENDERING = "enableAlternateMarkdownRendering"
 }
 
 internal class DefaultSettingsRepository(
@@ -246,11 +247,14 @@ internal class DefaultSettingsRepository(
                     defaultExploreResultType = keyStore[KeyStoreKeys.DEFAULT_EXPLORE_RESULT_TYPE, 2],
                     randomThemeColor = keyStore[KeyStoreKeys.RANDOM_THEME_COLOR, true],
                     openPostWebPageOnImageClick = keyStore[KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK, true],
+                    enableAlternateMarkdownRendering = keyStore[KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING, false],
                 )
             } else {
                 val entity = db.settingsQueries.getBy(accountId).executeAsOneOrNull()
-                val result = entity?.toModel()
-                result ?: SettingsModel()
+                val result = entity?.toModel() ?: SettingsModel()
+                result.copy(
+                    enableAlternateMarkdownRendering = keyStore[KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING, false],
+                )
             }
         }
 
@@ -258,6 +262,10 @@ internal class DefaultSettingsRepository(
         settings: SettingsModel,
         accountId: Long?,
     ) = withContext(Dispatchers.IO) {
+        keyStore.save(
+            KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING,
+            settings.enableAlternateMarkdownRendering,
+        )
         if (accountId == null) {
             // anonymous user, storing into keystore
             if (settings.theme != null) {

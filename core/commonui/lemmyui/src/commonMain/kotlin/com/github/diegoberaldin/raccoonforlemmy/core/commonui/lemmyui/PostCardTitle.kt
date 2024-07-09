@@ -26,6 +26,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun PostCardTitle(
@@ -64,6 +65,9 @@ fun PostCardTitle(
             FontWeight.Normal
         }
     val additionalAlphaFactor = if (markRead) readContentAlpha else 1f
+    val enableAlternateMarkdownRendering by settingsRepository.currentSettings
+        .map { it.enableAlternateMarkdownRendering }
+        .collectAsState(false)
 
     CustomMarkdownWrapper(
         modifier = modifier.padding(horizontal = Spacing.xxs),
@@ -93,6 +97,7 @@ fun PostCardTitle(
                 dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
             ),
         highlightText = highlightText,
+        enableAlternateRendering = enableAlternateMarkdownRendering,
         onOpenUrl =
             rememberCallbackArgs { url ->
                 navigationCoordinator.handleUrl(

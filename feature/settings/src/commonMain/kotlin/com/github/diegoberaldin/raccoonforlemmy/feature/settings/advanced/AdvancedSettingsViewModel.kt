@@ -13,6 +13,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.Acco
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.usecase.ExportSettingsUseCase
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.usecase.ImportSettingsUseCase
+import com.github.diegoberaldin.raccoonforlemmy.core.preferences.appconfig.AppConfigStore
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.AppIconManager
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.AppIconVariant
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.toAppIconVariant
@@ -27,7 +28,9 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toInt
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSearchResultType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
@@ -44,6 +47,7 @@ class AdvancedSettingsViewModel(
     private val fileSystemManager: FileSystemManager,
     private val importSettings: ImportSettingsUseCase,
     private val exportSettings: ExportSettingsUseCase,
+    private val appConfigStore: AppConfigStore,
 ) : DefaultMviModel<AdvancedSettingsMviModel.Intent, AdvancedSettingsMviModel.UiState, AdvancedSettingsMviModel.Effect>(
         initialState = AdvancedSettingsMviModel.UiState(),
     ),
@@ -112,6 +116,15 @@ class AdvancedSettingsViewModel(
                     }
                 }.launchIn(this)
 
+            appConfigStore.appConfig
+                .map { it.alternateMarkdownRenderingSettingsItemEnabled }
+                .distinctUntilChanged()
+                .onEach { alternateMarkdownRenderingSettingsItemEnabled ->
+                    updateState {
+                        it.copy(alternateMarkdownRenderingItemVisible = alternateMarkdownRenderingSettingsItemEnabled)
+                    }
+                }.launchIn(this)
+
             updateAvailableLanguages()
 
             val settings = settingsRepository.currentSettings.value
@@ -144,6 +157,7 @@ class AdvancedSettingsViewModel(
                     defaultExploreResultType = settings.defaultExploreResultType.toSearchResultType(),
                     useAvatarAsProfileNavigationIcon = settings.useAvatarAsProfileNavigationIcon,
                     openPostWebPageOnImageClick = settings.openPostWebPageOnImageClick,
+                    enableAlternateMarkdownRendering = settings.enableAlternateMarkdownRendering,
                 )
             }
         }
@@ -195,6 +209,9 @@ class AdvancedSettingsViewModel(
 
             is AdvancedSettingsMviModel.Intent.ChangeOpenPostWebPageOnImageClick ->
                 changeOpenPostWebPageOnImageClick(intent.value)
+
+            is AdvancedSettingsMviModel.Intent.ChangeEnableAlternateMarkdownRendering ->
+                changeEnableAlternateMarkdownRendering(intent.value)
         }
     }
 
@@ -426,6 +443,15 @@ class AdvancedSettingsViewModel(
             updateState { it.copy(openPostWebPageOnImageClick = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(openPostWebPageOnImageClick = value)
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeEnableAlternateMarkdownRendering(value: Boolean) {
+        screenModelScope.launch {
+            updateState { it.copy(enableAlternateMarkdownRendering = value) }
+            val settings =
+                settingsRepository.currentSettings.value.copy(enableAlternateMarkdownRendering = value)
             saveSettings(settings)
         }
     }

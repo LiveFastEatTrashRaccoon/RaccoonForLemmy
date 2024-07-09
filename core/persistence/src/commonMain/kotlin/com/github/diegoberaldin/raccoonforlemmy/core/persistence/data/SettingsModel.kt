@@ -68,4 +68,5 @@ data class SettingsModel(
     val useAvatarAsProfileNavigationIcon: Boolean = false,
     val randomThemeColor: Boolean = true,
     val openPostWebPageOnImageClick: Boolean = true,
+    val enableAlternateMarkdownRendering: Boolean = false,
 )

@@ -495,6 +495,21 @@ class AdvancedSettingsScreen : Screen {
                         title = LocalStrings.current.settingsTitleExperimental,
                         icon = Icons.Default.Science,
                     )
+                    if (uiState.alternateMarkdownRenderingItemVisible) {
+                        // alternate Markdown rendering
+                        SettingsSwitchRow(
+                            title = LocalStrings.current.settingsItemAlternateMarkdownRendering,
+                            value = uiState.enableAlternateMarkdownRendering,
+                            onValueChanged =
+                                rememberCallbackArgs(model) { value ->
+                                    model.reduce(
+                                        AdvancedSettingsMviModel.Intent.ChangeEnableAlternateMarkdownRendering(
+                                            value,
+                                        ),
+                                    )
+                                },
+                        )
+                    }
                     if (uiState.isLogged) {
                         // edit favorites in navigation drawer
                         SettingsSwitchRow(

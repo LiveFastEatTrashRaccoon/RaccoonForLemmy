@@ -55,6 +55,7 @@ fun CustomMarkdownWrapper(
     autoLoadImages: Boolean,
     maxLines: Int? = null,
     highlightText: String?,
+    enableAlternateRendering: Boolean = false,
     onOpenUrl: ((String) -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
     onClick: (() -> Unit)?,
@@ -105,7 +106,12 @@ fun CustomMarkdownWrapper(
 
                     substring.isImage -> {
                         val res = ImageRegex.image.find(substring)
-                        val link = res?.groups?.get("url")?.value.orEmpty()
+                        val link =
+                            res
+                                ?.groups
+                                ?.get("url")
+                                ?.value
+                                .orEmpty()
                         CustomMarkdownImage(
                             url = link,
                             autoLoadImages = autoLoadImages,
@@ -187,23 +193,33 @@ fun CustomMarkdownWrapper(
 }
 
 @Composable
-internal fun applyAnnotatedStringHighlight(
-    annotatedString: AnnotatedString,
-    highlightText: String?
-): AnnotatedString {
-    if (highlightText == null) {
-        return annotatedString
-    }
+internal fun markdownParagraphWithHighlights(
+    content: String,
+    node: ASTNode,
+    modifier: Modifier = Modifier,
+    style: TextStyle = LocalMarkdownTypography.current.paragraph,
+    highlightText: String? = null,
+) {
+    val highlightColor = Color(255, 194, 10, 150)
+    var styledText =
+        buildAnnotatedString {
+            pushStyle(style.toSpanStyle())
+            buildMarkdownAnnotatedString(content, node)
+            pop()
+        }
 
-    val highlightColor = Color(255,194,10,150)
-    val startIndex = annotatedString.indexOf(highlightText, 0, true)
-    val builder = AnnotatedString.Builder(annotatedString)
-    if (startIndex > -1) {
-        builder.addStyle(
-            style = SpanStyle(background = highlightColor),
-            startIndex,
-            startIndex + highlightText.length
-        )
+    if (highlightText != null) {
+        val startIndex = styledText.indexOf(highlightText, 0, true)
+        val builder = AnnotatedString.Builder(styledText)
+        if (startIndex > -1) {
+            builder.addStyle(
+                style = SpanStyle(background = highlightColor),
+                startIndex,
+                startIndex + highlightText.length,
+            )
+
+            styledText = builder.toAnnotatedString()
+        }
     }
 
     return builder.toAnnotatedString()

@@ -51,6 +51,7 @@ class DefaultSettingsRepositoryTest {
     fun givenAccount_whenGetSettings_thenResultIsAsExpected() =
         runTest {
             every { query.executeAsOneOrNull() } returns createFake(id = 2)
+            every { keyStore[any(), any<Boolean>()] } returns false
 
             val res = sut.getSettings(1)
 
