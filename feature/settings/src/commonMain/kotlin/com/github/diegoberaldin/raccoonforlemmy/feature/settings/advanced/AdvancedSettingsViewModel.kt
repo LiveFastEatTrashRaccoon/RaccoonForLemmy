@@ -17,6 +17,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.preferences.appconfig.AppCo
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.AppIconManager
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.AppIconVariant
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.toAppIconVariant
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.AppInfo
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.fs.FileSystemManager
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.gallery.GalleryHelper
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toInboxDefaultType
@@ -120,8 +121,10 @@ class AdvancedSettingsViewModel(
                 .map { it.alternateMarkdownRenderingSettingsItemEnabled }
                 .distinctUntilChanged()
                 .onEach { alternateMarkdownRenderingSettingsItemEnabled ->
+                    val itemVisible =
+                        alternateMarkdownRenderingSettingsItemEnabled || AppInfo.isDebug
                     updateState {
-                        it.copy(alternateMarkdownRenderingItemVisible = alternateMarkdownRenderingSettingsItemEnabled)
+                        it.copy(alternateMarkdownRenderingItemVisible = itemVisible)
                     }
                 }.launchIn(this)
 
