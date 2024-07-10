@@ -30,14 +30,15 @@ internal fun AboutItem(
 ) {
     Row(
         modifier =
-            Modifier.padding(
-                horizontal = Spacing.xs,
-                vertical = Spacing.s,
-            ).onClick(
-                onClick = {
-                    onClick?.invoke()
-                },
-            ),
+            Modifier
+                .padding(
+                    horizontal = Spacing.xs,
+                    vertical = Spacing.s,
+                ).onClick(
+                    onClick = {
+                        onClick?.invoke()
+                    },
+                ),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -61,12 +62,16 @@ internal fun AboutItem(
             text = text,
             style = MaterialTheme.typography.bodyLarge,
             textDecoration = textDecoration,
+            color = MaterialTheme.colorScheme.onBackground,
         )
+
         Spacer(modifier = Modifier.weight(1f))
+
         if (value.isNotEmpty()) {
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground,
             )
         }
     }
