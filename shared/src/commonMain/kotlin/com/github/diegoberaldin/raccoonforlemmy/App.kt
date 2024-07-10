@@ -38,6 +38,7 @@ import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiBarTheme
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toCommentBarTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toPostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toUiFontFamily
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toUiTheme
@@ -153,6 +154,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
             changeDownVoteColor(settings.downVoteColor?.let { Color(it) })
             changeReplyColor(settings.replyColor?.let { Color(it) })
             changeSaveColor(settings.saveColor?.let { Color(it) })
+            changeCommentBarTheme(settings.commentBarTheme.toCommentBarTheme())
         }
     }
 
