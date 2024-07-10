@@ -1001,21 +1001,13 @@ class CommunityDetailScreen(
                                             model.reduce(CommunityDetailMviModel.Intent.HapticIndication)
                                         },
                                     swipeToStartActions =
-                                        if (uiState.isLogged && !isOnOtherInstance) {
-                                            uiState.actionsOnSwipeToStartPosts.toSwipeActions(
-                                                canEdit = post.creator?.id == uiState.currentUserId,
-                                            )
-                                        } else {
-                                            emptyList()
-                                        },
+                                        uiState.actionsOnSwipeToStartPosts.toSwipeActions(
+                                            canEdit = post.creator?.id == uiState.currentUserId,
+                                        ),
                                     swipeToEndActions =
-                                        if (uiState.isLogged && !isOnOtherInstance) {
-                                            uiState.actionsOnSwipeToEndPosts.toSwipeActions(
-                                                canEdit = post.creator?.id == uiState.currentUserId,
-                                            )
-                                        } else {
-                                            emptyList()
-                                        },
+                                        uiState.actionsOnSwipeToEndPosts.toSwipeActions(
+                                            canEdit = post.creator?.id == uiState.currentUserId,
+                                        ),
                                     content = {
                                         PostCard(
                                             modifier = Modifier.padding(horizontal = Spacing.xs),

@@ -37,6 +37,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepo
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
@@ -99,13 +100,20 @@ class CommunityDetailViewModel(
                     updateState { it.copy(isLogged = logged ?: false) }
                     updateAvailableSortTypes()
                 }.launchIn(this)
+            combine(
+                identityRepository.isLogged.map { it == true },
+                settingsRepository.currentSettings.map { it.enableSwipeActions },
+            ) { logged, swipeActionsEnabled ->
+                logged && swipeActionsEnabled && otherInstance.isEmpty()
+            }.onEach { value ->
+                updateState { it.copy(swipeActionsEnabled = value) }
+            }.launchIn(this)
 
             settingsRepository.currentSettings
                 .onEach { settings ->
                     updateState {
                         it.copy(
                             blurNsfw = settings.blurNsfw,
-                            swipeActionsEnabled = settings.enableSwipeActions,
                             doubleTapActionEnabled = settings.enableDoubleTapAction,
                             fullHeightImages = settings.fullHeightImages,
                             fullWidthImages = settings.fullWidthImages,
