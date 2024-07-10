@@ -12,14 +12,7 @@ internal object LemmyLinkRegex {
         "([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\\.)+[a-zA-Z]{2,}"
 
     val handle: Regex =
-        Regex("(?<=\\s)!(?<detail>$DETAIL_FRAGMENT)(?:@(?<instance>$INSTANCE_FRAGMENT))?\\s")
-}
-
-internal object LemmyMentionRegex {
-    private const val DETAIL_FRAGMENT: String = "[a-zA-Z0-9_]{3,}"
-
-    private const val INSTANCE_FRAGMENT: String =
-        "([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\\.)+[a-zA-Z]{2,}"
+        Regex("(?<=\\s)!(?<detail>$DETAIL_FRAGMENT)(?:@(?<instance>$INSTANCE_FRAGMENT))?\\b")
 
     val mention: Regex =
         Regex("(?<=\\s)@(?<detail>$DETAIL_FRAGMENT)@(?<instance>$INSTANCE_FRAGMENT)\\b")
