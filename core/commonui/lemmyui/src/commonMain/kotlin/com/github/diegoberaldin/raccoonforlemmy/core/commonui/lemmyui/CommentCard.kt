@@ -164,7 +164,7 @@ fun CommentCard(
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
                     )
                 } else {
-                    CustomizedContent(ContentFontClass.Body) {
+                    CustomizedContent(ContentFontClass.Comment) {
                         CompositionLocalProvider(
                             LocalDensity provides
                                 Density(

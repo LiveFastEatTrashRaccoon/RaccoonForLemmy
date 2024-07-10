@@ -104,7 +104,7 @@ Ut enim ad minim veniam, quis *nostrud* exercitation ullamco laboris nisi ut ali
 
 velit esse cillum dolore eu fugiat nulla pariatur.
                 """.trimIndent(),
-            thumbnailUrl = "https://feddit.it/pictrs/image/4c6be082-0bf1-4095-b1cd-5fba8b602832.webp?format=webp&thumbnail=256",
+            thumbnailUrl = "https://feddit.it/pictrs/image/f677007a-166a-43b0-aea8-4c41ae1a35e8.webp?format=webp",
             url = "https://github.com/diegoberaldin/RaccoonForLemmy",
             publishDate = "2024-01-01T12:00:00Z",
             upvotes = 2,
