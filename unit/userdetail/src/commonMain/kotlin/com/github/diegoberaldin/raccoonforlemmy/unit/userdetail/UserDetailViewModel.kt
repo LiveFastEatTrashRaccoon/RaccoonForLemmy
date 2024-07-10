@@ -35,7 +35,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -131,7 +133,6 @@ class UserDetailViewModel(
                     updateState {
                         it.copy(
                             blurNsfw = settings.blurNsfw,
-                            swipeActionsEnabled = settings.enableSwipeActions,
                             doubleTapActionEnabled = settings.enableDoubleTapAction,
                             voteFormat = settings.voteFormat,
                             autoLoadImages = settings.autoLoadImages,
@@ -152,6 +153,14 @@ class UserDetailViewModel(
                     updateState { it.copy(isLogged = logged ?: false) }
                     updateAvailableSortTypes()
                 }.launchIn(this)
+            combine(
+                identityRepository.isLogged.map { it == true },
+                settingsRepository.currentSettings.map { it.enableSwipeActions },
+            ) { logged, swipeActionsEnabled ->
+                logged && swipeActionsEnabled && otherInstance.isEmpty()
+            }.onEach { value ->
+                updateState { it.copy(swipeActionsEnabled = value) }
+            }.launchIn(this)
 
             if (uiState.value.currentUserId == null) {
                 val auth = identityRepository.authToken.value.orEmpty()

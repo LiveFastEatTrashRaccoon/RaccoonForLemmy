@@ -441,12 +441,7 @@ class ExploreScreen(
                                             rememberCallback(model) {
                                                 model.reduce(ExploreMviModel.Intent.HapticIndication)
                                             },
-                                        swipeToStartActions =
-                                            if (uiState.isLogged) {
-                                                uiState.actionsOnSwipeToStartPosts.toSwipeActions()
-                                            } else {
-                                                emptyList()
-                                            },
+                                        swipeToStartActions = uiState.actionsOnSwipeToStartPosts.toSwipeActions(),
                                         swipeToEndActions =
                                             if (uiState.isLogged) {
                                                 uiState.actionsOnSwipeToEndPosts.toSwipeActions()
@@ -681,12 +676,7 @@ class ExploreScreen(
                                             rememberCallback(model) {
                                                 model.reduce(ExploreMviModel.Intent.HapticIndication)
                                             },
-                                        swipeToStartActions =
-                                            if (uiState.isLogged) {
-                                                uiState.actionsOnSwipeToStartComments.toSwipeActions()
-                                            } else {
-                                                emptyList()
-                                            },
+                                        swipeToStartActions = uiState.actionsOnSwipeToStartComments.toSwipeActions(),
                                         swipeToEndActions =
                                             if (uiState.isLogged) {
                                                 uiState.actionsOnSwipeToEndComments.toSwipeActions()

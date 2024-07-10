@@ -24,7 +24,9 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.LemmyVal
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -61,13 +63,19 @@ class MultiCommunityViewModel(
                 .onEach { layout ->
                     updateState { it.copy(postLayout = layout) }
                 }.launchIn(this)
-
+            combine(
+                identityRepository.isLogged.map { it == true },
+                settingsRepository.currentSettings.map { it.enableSwipeActions },
+            ) { logged, swipeActionsEnabled ->
+                logged && swipeActionsEnabled
+            }.onEach { value ->
+                updateState { it.copy(swipeActionsEnabled = value) }
+            }.launchIn(this)
             settingsRepository.currentSettings
                 .onEach { settings ->
                     updateState {
                         it.copy(
                             blurNsfw = settings.blurNsfw,
-                            swipeActionsEnabled = settings.enableSwipeActions,
                             voteFormat = settings.voteFormat,
                             autoLoadImages = settings.autoLoadImages,
                             preferNicknames = settings.preferUserNicknames,

@@ -510,22 +510,14 @@ class PostListScreen : Screen {
                                         model.reduce(PostListMviModel.Intent.HapticIndication)
                                     },
                                 swipeToStartActions =
-                                    if (uiState.isLogged) {
-                                        uiState.actionsOnSwipeToStartPosts.toSwipeActions(
-                                            canEdit = post.creator?.id == uiState.currentUserId,
-                                        )
-                                    } else {
-                                        emptyList()
-                                    },
+                                    uiState.actionsOnSwipeToStartPosts.toSwipeActions(
+                                        canEdit = post.creator?.id == uiState.currentUserId,
+                                    ),
                                 swipeToEndActions =
-                                    if (uiState.isLogged) {
-                                        uiState.actionsOnSwipeToEndPosts.toSwipeActions(
-                                            canEdit = post.creator?.id == uiState.currentUserId,
-                                        )
-                                    } else {
-                                        emptyList()
-                                    },
-                                content = {
+                                    uiState.actionsOnSwipeToEndPosts.toSwipeActions(
+                                        canEdit = post.creator?.id == uiState.currentUserId,
+                                    ),
+                                    content = {
                                     PostCard(
                                         post = post,
                                         postLayout = uiState.postLayout,

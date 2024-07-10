@@ -418,12 +418,7 @@ class MultiCommunityScreen(
                                 rememberCallback(model) {
                                     model.reduce(MultiCommunityMviModel.Intent.HapticIndication)
                                 },
-                            swipeToStartActions =
-                                if (uiState.isLogged) {
-                                    uiState.actionsOnSwipeToStartPosts.toSwipeActions()
-                                } else {
-                                    emptyList()
-                                },
+                            swipeToStartActions = uiState.actionsOnSwipeToStartPosts.toSwipeActions(),
                             swipeToEndActions =
                                 if (uiState.isLogged) {
                                     uiState.actionsOnSwipeToEndPosts.toSwipeActions()
