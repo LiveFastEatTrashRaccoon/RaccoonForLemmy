@@ -241,7 +241,7 @@
     <string name="postReplySourceAccount">le:</string>
     <string name="settingsCommentBarTheme">Téama barra tráchta</string>
     <string name="settingsCommentBarThemeBlue">🌊 Aigéan</string>
-    <string name="settingsCommentBarThemeGreen">🥑 Avocado</string>
+    <string name="settingsCommentBarThemeGreen">🥑 Abhacáid</string>
     <string name="settingsCommentBarThemeRed">🍓 Sú talún</string>
     <string name="settingsCommentBarThemeMulti">🌈 Bogha ceatha</string>
     <string name="messageConfirmExit">Tapáil 🔙 arís chun imeacht</string>
@@ -280,7 +280,7 @@
     <string name="settingsWebAvatar">Avatar</string>
     <string name="settingsWebBanner">Meirge</string>
     <string name="settingsWebBio">Bith</string>
-    <string name="settingsWebBot">Bot</string>
+    <string name="settingsWebBot">Róbat</string>
     <string name="settingsWebDisplayName">Ainm taispeána</string>
     <string name="settingsWebMatrix">Aitheantas úsáideora Matrix</string>
     <string name="settingsWebEmail">Ríomhphost</string>
@@ -418,4 +418,5 @@
     <string name="settingsUseAvatarAsProfileNavigationIcon">Úsáid avatar mar dheilbhín próifíle sa bharra nascleanúna ag bun</string>
     <string name="settingsItemOpenPostWebPageOnImageClick">Oscail leathanach gréasáin ar cliceáil íomhá postála</string>
     <string name="settingsSubtitleOpenPostWebPageOnImageClick">Má tá URL ag postáil, oscail leathanach gréasáin ar chliceáil íomhá</string>
+    <string name="settingsItemAlternateMarkdownRendering">Cumasaigh rindreáil Markdown malartach</string>
 </resources>
