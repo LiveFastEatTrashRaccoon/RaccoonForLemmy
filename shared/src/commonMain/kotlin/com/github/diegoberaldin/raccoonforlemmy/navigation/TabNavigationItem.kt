@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.ui.navigation
+package com.github.diegoberaldin.raccoonforlemmy.navigation
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -24,7 +24,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
-import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.IconSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
@@ -32,39 +31,28 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomI
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.ExploreTab
+import com.github.diegoberaldin.raccoonforlemmy.feature.settings.SettingsTab
 
 @Composable
 internal fun RowScope.TabNavigationItem(
-    tab: Tab,
+    section: TabNavigationSection,
     withText: Boolean = true,
     customIconUrl: String? = null,
-    onLongPress: (() -> Unit)? = null,
+    onClick: ((Tab) -> Unit)? = null,
+    onLongPress: ((Tab) -> Unit)? = null,
 ) {
-    val tabNavigator = LocalTabNavigator.current
     val navigationCoordinator = remember { getNavigationCoordinator() }
     val unread by navigationCoordinator.inboxUnread.collectAsState()
-    val color =
-        if (tabNavigator.current == tab) {
-            MaterialTheme.colorScheme.primary
-        } else {
-            MaterialTheme.colorScheme.outline
-        }
-
+    val currentSection by navigationCoordinator.currentSection.collectAsState()
     val interactionSource = remember { MutableInteractionSource() }
+    val tab = section.toTab()
 
     fun handleClick() {
-        tabNavigator.current = tab
-        val section =
-            when (tab) {
-                ExploreTab -> TabNavigationSection.Explore
-                ProfileTab -> TabNavigationSection.Profile
-                InboxTab -> TabNavigationSection.Inbox
-                else -> TabNavigationSection.Home
-            }
-        navigationCoordinator.setCurrentSection(section)
+        onClick?.invoke(tab)
     }
 
     val pointerInputModifier =
@@ -80,14 +68,14 @@ internal fun RowScope.TabNavigationItem(
                     handleClick()
                 },
                 onLongPress = {
-                    onLongPress?.invoke()
+                    onLongPress?.invoke(tab)
                 },
             )
         }
 
     NavigationBarItem(
         onClick = ::handleClick,
-        selected = tabNavigator.current == tab,
+        selected = section == currentSection,
         interactionSource = interactionSource,
         icon = {
             val content = @Composable {
@@ -107,7 +95,6 @@ internal fun RowScope.TabNavigationItem(
                         modifier = pointerInputModifier,
                         painter = tab.options.icon ?: rememberVectorPainter(Icons.Default.Home),
                         contentDescription = null,
-                        tint = color,
                     )
                 }
             }
@@ -141,7 +128,6 @@ internal fun RowScope.TabNavigationItem(
                 Text(
                     modifier = Modifier,
                     text = tab.options.title,
-                    color = color,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -149,3 +135,13 @@ internal fun RowScope.TabNavigationItem(
         },
     )
 }
+
+private fun TabNavigationSection.toTab(): Tab =
+    when (this) {
+        TabNavigationSection.Explore -> ExploreTab
+        TabNavigationSection.Profile -> ProfileTab
+        TabNavigationSection.Inbox -> InboxTab
+        TabNavigationSection.Settings -> SettingsTab
+        TabNavigationSection.Bookmarks -> BookmarksTab
+        else -> HomeTab
+    }

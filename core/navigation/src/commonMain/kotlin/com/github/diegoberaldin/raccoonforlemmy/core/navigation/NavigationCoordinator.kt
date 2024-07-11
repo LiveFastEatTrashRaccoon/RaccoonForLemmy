@@ -19,6 +19,10 @@ sealed interface TabNavigationSection {
     data object Profile : TabNavigationSection
 
     data object Inbox : TabNavigationSection
+
+    data object Settings : TabNavigationSection
+
+    data object Bookmarks : TabNavigationSection
 }
 
 sealed interface ComposeEvent {
