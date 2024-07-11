@@ -43,6 +43,7 @@ kotlin {
             implementation(libs.voyager.koin)
 
             implementation(projects.core.persistence)
+            implementation(projects.core.preferences)
             implementation(projects.domain.lemmy.data)
         }
         val androidUnitTest by getting {
@@ -59,8 +60,14 @@ kotlin {
 
 android {
     namespace = "com.github.diegoberaldin.raccoonforlemmy.core.navigation"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }

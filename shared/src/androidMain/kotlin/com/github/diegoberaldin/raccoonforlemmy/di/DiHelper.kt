@@ -5,7 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.di.coreApiModule
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.coreAppearanceModule
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.di.lemmyUiModule
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.di.coreL10nModule
-import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.navigationModule
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.coreNavigationModule
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.coreNotificationModule
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.corePersistenceModule
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.coreAppConfigModule
@@ -79,7 +79,7 @@ val sharedHelperModule =
             domainInboxModule,
             imagePreloadModule,
             networkModule,
-            navigationModule,
+            coreNavigationModule,
             lemmyUiModule,
             homeTabModule,
             inboxTabModule,

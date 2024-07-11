@@ -2,6 +2,8 @@ package com.github.diegoberaldin.raccoonforlemmy
 
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.BottomNavItemsRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.inbox.InboxCoordinator
@@ -19,6 +21,8 @@ class MainViewModel(
     private val identityRepository: IdentityRepository,
     private val settingRepository: SettingsRepository,
     private val userRepository: UserRepository,
+    private val accountRepository: AccountRepository,
+    private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val notificationChecker: InboxNotificationChecker,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect>(
@@ -59,6 +63,7 @@ class MainViewModel(
                 .onEach { isLogged ->
                     updateState { it.copy(isLogged = isLogged ?: false) }
                     updateCustomProfileIcon()
+                    refreshBottomNavigationItems()
                 }.launchIn(this)
         }
     }
@@ -99,6 +104,14 @@ class MainViewModel(
             userRepository.readAll(auth)
             inboxCoordinator.sendEvent(InboxCoordinator.Event.Refresh)
             emitEffect(MainMviModel.Effect.ReadAllInboxSuccess)
+        }
+    }
+
+    private suspend fun refreshBottomNavigationItems() {
+        val accountId = accountRepository.getActive()?.id
+        val sections = bottomNavItemsRepository.get(accountId)
+        updateState {
+            it.copy(bottomBarSections = sections)
         }
     }
 }
