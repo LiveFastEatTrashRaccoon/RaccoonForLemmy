@@ -418,4 +418,5 @@
     <string name="settingsSubtitleRandomThemeColor">Cambia il colore del tema ad ogni avvio dell\'app</string>
     <string name="settingsItemOpenPostWebPageOnImageClick">Apri pagina web al clic su immagine post</string>
     <string name="settingsSubtitleOpenPostWebPageOnImageClick">Se un post ha un URL, apri pagina web al click sull\'immagine</string>
+    <string name="settingsItemAlternateMarkdownRendering">Abilita rendering Markdown alternativo</string>
 </resources>
