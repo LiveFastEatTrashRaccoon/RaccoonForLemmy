@@ -418,4 +418,7 @@
     <string name="settingsSubtitleRandomThemeColor">Schimbă culoarea temei la fiecare pornire a aplicației</string>
     <string name="settingsItemOpenPostWebPageOnImageClick">Deschide pagina web cu clic pe imaginea postării</string>
     <string name="settingsSubtitleOpenPostWebPageOnImageClick">Dacă o postare are o adresă URL, deschide pagina web cu clic pe imagine</string>
+    <string name="settingsItemAlternateMarkdownRendering">Activează redarea alternativă Markdown</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Configurează bara de navigare de jos</string>
+    <string name="selectTabNavigationTitle">Selectează o secțiune</string>
 </resources>
