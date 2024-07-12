@@ -91,6 +91,15 @@ class DefaultSettingsRepositoryTest {
         }
 
     @Test
+    fun whenChangeCurrentBottomBarSections_thenValueIsUpdated() =
+        runTest {
+            val sectionIds = listOf(0, 1, 2)
+            sut.changeCurrentBottomBarSections(sectionIds)
+            val value = sut.currentBottomBarSections.value
+            assertEquals(sectionIds, value)
+        }
+
+    @Test
     fun whenCreateSettings_thenResultIsAsExpected() =
         runTest {
             val model = SettingsModel()

@@ -42,18 +42,14 @@ internal fun RowScope.TabNavigationItem(
     section: TabNavigationSection,
     withText: Boolean = true,
     customIconUrl: String? = null,
-    onClick: ((Tab) -> Unit)? = null,
-    onLongPress: ((Tab) -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+    onLongPress: (() -> Unit)? = null,
 ) {
     val navigationCoordinator = remember { getNavigationCoordinator() }
     val unread by navigationCoordinator.inboxUnread.collectAsState()
     val currentSection by navigationCoordinator.currentSection.collectAsState()
     val interactionSource = remember { MutableInteractionSource() }
     val tab = section.toTab()
-
-    fun handleClick() {
-        onClick?.invoke(tab)
-    }
 
     val pointerInputModifier =
         Modifier.pointerInput(Unit) {
@@ -65,16 +61,18 @@ internal fun RowScope.TabNavigationItem(
                     interactionSource.emit(PressInteraction.Release(press))
                 },
                 onTap = {
-                    handleClick()
+                    onClick?.invoke()
                 },
                 onLongPress = {
-                    onLongPress?.invoke(tab)
+                    onLongPress?.invoke()
                 },
             )
         }
 
     NavigationBarItem(
-        onClick = ::handleClick,
+        onClick = {
+            onClick?.invoke()
+        },
         selected = section == currentSection,
         interactionSource = interactionSource,
         icon = {
@@ -136,7 +134,7 @@ internal fun RowScope.TabNavigationItem(
     )
 }
 
-private fun TabNavigationSection.toTab(): Tab =
+internal fun TabNavigationSection.toTab(): Tab =
     when (this) {
         TabNavigationSection.Explore -> ExploreTab
         TabNavigationSection.Profile -> ProfileTab

@@ -11,20 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Duration
 
-sealed interface TabNavigationSection {
-    data object Home : TabNavigationSection
-
-    data object Explore : TabNavigationSection
-
-    data object Profile : TabNavigationSection
-
-    data object Inbox : TabNavigationSection
-
-    data object Settings : TabNavigationSection
-
-    data object Bookmarks : TabNavigationSection
-}
-
 sealed interface ComposeEvent {
     data class WithUrl(
         val url: String,

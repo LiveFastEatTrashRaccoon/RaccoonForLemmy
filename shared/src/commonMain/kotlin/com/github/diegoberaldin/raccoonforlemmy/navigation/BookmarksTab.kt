@@ -8,6 +8,8 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.TabNavigationSection
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.toInt
 import com.github.diegoberaldin.raccoonforlemmy.unit.filteredcontents.FilteredContentsScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.filteredcontents.FilteredContentsType
 import com.github.diegoberaldin.raccoonforlemmy.unit.filteredcontents.toInt
@@ -20,7 +22,7 @@ object BookmarksTab : Tab {
             val title = LocalStrings.current.navigationDrawerTitleBookmarks
 
             return TabOptions(
-                index = 5u,
+                index = TabNavigationSection.Bookmarks.toInt().toUShort(),
                 title = title,
                 icon = icon,
             )

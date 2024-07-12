@@ -67,6 +67,7 @@ kotlin {
                 implementation(projects.unit.choosecolor)
                 implementation(projects.unit.choosefont)
                 implementation(projects.unit.configureswipeactions)
+                implementation(projects.unit.configurenavbar)
                 implementation(projects.unit.configurecontentview)
                 implementation(projects.unit.filteredcontents)
                 implementation(projects.unit.medialist)
@@ -82,8 +83,14 @@ kotlin {
 
 android {
     namespace = "com.github.diegoberaldin.raccoonforlemmy.feature.settings"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }

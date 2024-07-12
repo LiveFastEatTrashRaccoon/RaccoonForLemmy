@@ -36,6 +36,7 @@ import com.github.diegoberaldin.raccoonforlemmy.unit.chat.di.chatModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.communitydetail.di.communityDetailModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.communityinfo.di.communityInfoModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.configurecontentview.di.configureContentViewModule
+import com.github.diegoberaldin.raccoonforlemmy.unit.configurenavbar.di.configureNavBarModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.configureswipeactions.di.configureSwipeActionsModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.createcomment.di.createCommentModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.createpost.di.createPostModule
@@ -122,6 +123,7 @@ fun initKoin() {
             moderateWithReasonModule,
             acknowledgementsModule,
             mediaListModule,
+            configureNavBarModule,
         )
     }
 

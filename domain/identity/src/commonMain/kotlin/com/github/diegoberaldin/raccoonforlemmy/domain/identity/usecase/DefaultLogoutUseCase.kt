@@ -1,5 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase
 
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.BottomNavItemsRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.toInts
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
@@ -14,6 +16,7 @@ internal class DefaultLogoutUseCase(
     private val notificationCenter: NotificationCenter,
     private val settingsRepository: SettingsRepository,
     private val communitySortRepository: CommunitySortRepository,
+    private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val lemmyValueCache: LemmyValueCache,
 ) : LogoutUseCase {
     override suspend operator fun invoke() {
@@ -31,5 +34,8 @@ internal class DefaultLogoutUseCase(
         }
         val anonSettings = settingsRepository.getSettings(null)
         settingsRepository.changeCurrentSettings(anonSettings)
+
+        val bottomBarSections = bottomNavItemsRepository.get(null)
+        settingsRepository.changeCurrentBottomBarSections(bottomBarSections.toInts())
     }
 }

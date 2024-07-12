@@ -36,6 +36,7 @@ interface ModalDrawerMviModel :
         val searchText: String = "",
         val isFiltering: Boolean = false,
         val enableToggleFavorite: Boolean = false,
+        val isSettingsVisible: Boolean = true,
     )
 
     sealed interface Effect

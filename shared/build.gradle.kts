@@ -76,6 +76,7 @@ kotlin {
                 implementation(projects.unit.communitydetail)
                 implementation(projects.unit.communityinfo)
                 implementation(projects.unit.configurecontentview)
+                implementation(projects.unit.configurenavbar)
                 implementation(projects.unit.configureswipeactions)
                 implementation(projects.unit.createcomment)
                 implementation(projects.unit.createpost)

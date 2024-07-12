@@ -11,7 +11,7 @@ internal class DefaultBottomNavItemsRepository(
     override suspend fun get(accountId: Long?): List<TabNavigationSection> =
         withContext(Dispatchers.IO) {
             val key = getKey(accountId)
-            val itemIds = keyStore.get(key, emptyList())
+            val itemIds = keyStore.get(key, emptyList()).mapNotNull { it.toIntOrNull() }
             val res = itemIds.mapNotNull { it.toTabNavigationSection() }.takeUnless { it.isEmpty() }
             res ?: BottomNavItemsRepository.DEFAULT_ITEMS
         }
@@ -21,7 +21,7 @@ internal class DefaultBottomNavItemsRepository(
         items: List<TabNavigationSection>,
     ) = withContext(Dispatchers.IO) {
         val key = getKey(accountId)
-        val itemIds = items.map { it.toTabNavigationId() }
+        val itemIds = items.map { it.toInt().toString() }
         keyStore.save(key, itemIds)
     }
 
@@ -35,24 +35,3 @@ internal class DefaultBottomNavItemsRepository(
             append(".items")
         }
 }
-
-private fun String.toTabNavigationSection(): TabNavigationSection? =
-    when (this) {
-        "0" -> TabNavigationSection.Home
-        "1" -> TabNavigationSection.Explore
-        "2" -> TabNavigationSection.Inbox
-        "3" -> TabNavigationSection.Profile
-        "4" -> TabNavigationSection.Settings
-        "5" -> TabNavigationSection.Bookmarks
-        else -> null
-    }
-
-private fun TabNavigationSection.toTabNavigationId(): String =
-    when (this) {
-        TabNavigationSection.Home -> "0"
-        TabNavigationSection.Explore -> "1"
-        TabNavigationSection.Inbox -> "2"
-        TabNavigationSection.Profile -> "3"
-        TabNavigationSection.Settings -> "4"
-        TabNavigationSection.Bookmarks -> "5"
-    }

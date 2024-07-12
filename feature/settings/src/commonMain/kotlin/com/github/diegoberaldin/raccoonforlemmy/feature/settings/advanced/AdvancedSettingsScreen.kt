@@ -69,6 +69,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.datetime.getPrettyDur
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.fs.getFileSystemManager
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toReadableName
+import com.github.diegoberaldin.raccoonforlemmy.unit.configurenavbar.ConfigureNavBarScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -159,6 +160,7 @@ class AdvancedSettingsScreen : Screen {
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
+                            bottom = padding.calculateBottomPadding(),
                         ).nestedScroll(scrollBehavior.nestedScrollConnection),
             ) {
                 Column(
@@ -494,6 +496,14 @@ class AdvancedSettingsScreen : Screen {
                     SettingsHeader(
                         title = LocalStrings.current.settingsTitleExperimental,
                         icon = Icons.Default.Science,
+                    )
+                    SettingsRow(
+                        title = LocalStrings.current.settingsItemConfigureBottomNavigationBar,
+                        disclosureIndicator = true,
+                        onTap =
+                            rememberCallback {
+                                navigationCoordinator.pushScreen(ConfigureNavBarScreen())
+                            },
                     )
                     if (uiState.alternateMarkdownRenderingItemVisible) {
                         // alternate Markdown rendering

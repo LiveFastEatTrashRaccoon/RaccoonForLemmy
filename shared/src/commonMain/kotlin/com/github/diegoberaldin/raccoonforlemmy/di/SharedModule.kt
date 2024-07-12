@@ -14,8 +14,6 @@ internal val internalSharedModule =
                 identityRepository = get(),
                 settingRepository = get(),
                 userRepository = get(),
-                accountRepository = get(),
-                bottomNavItemsRepository = get(),
                 notificationChecker = get(),
                 lemmyValueCache = get(),
             )

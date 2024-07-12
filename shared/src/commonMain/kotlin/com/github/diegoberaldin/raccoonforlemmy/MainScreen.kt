@@ -43,10 +43,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getDrawerCoor
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.main.SettingsScreen
 import com.github.diegoberaldin.raccoonforlemmy.navigation.TabNavigationItem
+import com.github.diegoberaldin.raccoonforlemmy.navigation.toTab
 import com.github.diegoberaldin.raccoonforlemmy.unit.manageaccounts.ManageAccountsScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
@@ -277,7 +277,8 @@ internal object MainScreen : Screen {
                                     ),
                                 tonalElevation = 0.dp,
                             ) {
-                                for (section in uiState.bottomBarSections) {
+                                // it must be done so (indexed), otherwise section gets remembered in tap callbacks
+                                uiState.bottomBarSections.forEachIndexed { idx, section ->
                                     TabNavigationItem(
                                         section = section,
                                         withText = titleVisible,
@@ -287,15 +288,17 @@ internal object MainScreen : Screen {
                                             } else {
                                                 null
                                             },
-                                        onClick =
-                                            rememberCallbackArgs { tab ->
-                                                tabNavigator.current = tab
-                                                navigationCoordinator.setCurrentSection(section)
-                                            },
-                                        onLongPress =
-                                            rememberCallbackArgs { tab ->
-                                                handleOnLongPress(tab, section)
-                                            },
+                                        onClick = {
+                                            val section = uiState.bottomBarSections[idx]
+                                            val tab = section.toTab()
+                                            tabNavigator.current = tab
+                                            navigationCoordinator.setCurrentSection(section)
+                                        },
+                                        onLongPress = {
+                                            val section = uiState.bottomBarSections[idx]
+                                            val tab = section.toTab()
+                                            handleOnLongPress(tab, section)
+                                        },
                                     )
                                 }
                             }

@@ -4,6 +4,8 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.TabNavigationSection
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.toTabNavigationSections
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.FavoriteCommunityModel
@@ -96,6 +98,14 @@ class ModalDrawerViewModel(
                             preferNicknames = settings.preferUserNicknames,
                             enableToggleFavorite = settings.enableToggleFavoriteInNavDrawer,
                         )
+                    }
+                }.launchIn(this)
+            settingsRepository.currentBottomBarSections
+                .onEach { sectionIds ->
+                    val isSettingsInBottomBar =
+                        sectionIds.toTabNavigationSections().contains(TabNavigationSection.Settings)
+                    updateState {
+                        it.copy(isSettingsVisible = !isSettingsInBottomBar)
                     }
                 }.launchIn(this)
 

@@ -40,6 +40,7 @@ kotlin {
                 implementation(projects.core.utils)
                 implementation(projects.core.appearance)
                 implementation(projects.core.persistence)
+                implementation(projects.core.navigation)
                 implementation(projects.core.notifications)
                 implementation(projects.domain.lemmy.repository)
                 implementation(projects.domain.lemmy.data)
@@ -58,8 +59,14 @@ kotlin {
 
 android {
     namespace = "com.github.diegoberaldin.raccoonforlemmy.domain.identity"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }

@@ -27,6 +27,7 @@ internal fun ProfileMenuContent(
     modifier: Modifier = Modifier,
     isModerator: Boolean = false,
     canCreateCommunity: Boolean = false,
+    isBookmarksVisible: Boolean = true,
 ) {
     val notificationCenter = remember { getNotificationCenter() }
 
@@ -42,14 +43,16 @@ internal fun ProfileMenuContent(
                     notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions)
                 },
         )
-        SettingsRow(
-            title = LocalStrings.current.navigationDrawerTitleBookmarks,
-            icon = Icons.Default.Bookmark,
-            onTap =
-                rememberCallback {
-                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Bookmarks)
-                },
-        )
+        if (isBookmarksVisible) {
+            SettingsRow(
+                title = LocalStrings.current.navigationDrawerTitleBookmarks,
+                icon = Icons.Default.Bookmark,
+                onTap =
+                    rememberCallback {
+                        notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Bookmarks)
+                    },
+            )
+        }
         SettingsRow(
             title = LocalStrings.current.navigationDrawerTitleDrafts,
             icon = Icons.Default.Drafts,

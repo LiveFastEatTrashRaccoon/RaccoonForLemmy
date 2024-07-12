@@ -79,8 +79,18 @@ class DefaultBottomNavItemsRepositoryTest {
         runTest {
             val otherAccountId = 1L
             val accountId = 2L
-            every { keyStore.get("BottomNavItemsRepository.$otherAccountId.items", any<List<String>>()) } returns ITEMS_IDS
-            every { keyStore.get("BottomNavItemsRepository.$accountId.items", any<List<String>>()) } returns emptyList()
+            every {
+                keyStore.get(
+                    "BottomNavItemsRepository.$otherAccountId.items",
+                    any<List<String>>(),
+                )
+            } returns ITEMS_IDS
+            every {
+                keyStore.get(
+                    "BottomNavItemsRepository.$accountId.items",
+                    any<List<String>>(),
+                )
+            } returns emptyList()
 
             val res = sut.get(accountId)
 
@@ -94,14 +104,46 @@ class DefaultBottomNavItemsRepositoryTest {
     fun givenDataForOtherUser_whenGetForAnonymousAccount_thenResultAndInteractionsIsAsExpected() =
         runTest {
             val otherAccountId = 1
-            every { keyStore.get("BottomNavItemsRepository.$otherAccountId.items", any<List<String>>()) } returns ITEMS_IDS
-            every { keyStore.get("BottomNavItemsRepository.items", any<List<String>>()) } returns emptyList()
+            every {
+                keyStore.get(
+                    "BottomNavItemsRepository.$otherAccountId.items",
+                    any<List<String>>(),
+                )
+            } returns ITEMS_IDS
+            every {
+                keyStore.get(
+                    "BottomNavItemsRepository.items",
+                    any<List<String>>(),
+                )
+            } returns emptyList()
 
             val res = sut.get(null)
 
             assertEquals(BottomNavItemsRepository.DEFAULT_ITEMS, res)
             coVerify {
                 keyStore.get("BottomNavItemsRepository.items", emptyList())
+            }
+        }
+
+    @Test
+    fun whenUpdateAnonymousUser_thenInteractionsAreAsExpected() =
+        runTest {
+            sut.update(accountId = null, items = ITEMS)
+
+            coVerify {
+                keyStore.save("BottomNavItemsRepository.items", ITEMS_IDS)
+            }
+        }
+
+    @Test
+    fun whenUpdateLoggedUser_thenInteractionsAreAsExpected() =
+        runTest {
+            val accountId = 1L
+
+            sut.update(accountId = accountId, items = ITEMS)
+
+            coVerify {
+                keyStore.save("BottomNavItemsRepository.1.items", ITEMS_IDS)
             }
         }
 

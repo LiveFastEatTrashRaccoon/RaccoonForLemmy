@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase
 
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.BottomNavItemsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.AccountModel
@@ -32,6 +33,10 @@ class DefaultSwitchAccountUseCaseTest {
     private val communityPreferredLanguageRepository =
         mockk<CommunityPreferredLanguageRepository>(relaxUnitFun = true)
     private val lemmyValueCache = mockk<LemmyValueCache>(relaxUnitFun = true)
+    private val bottomNavItemsRepository =
+        mockk<BottomNavItemsRepository>(relaxUnitFun = true) {
+            coEvery { get(accountId = any()) } returns BottomNavItemsRepository.DEFAULT_ITEMS
+        }
     private val sut =
         DefaultSwitchAccountUseCase(
             identityRepository = identityRepository,
@@ -41,6 +46,7 @@ class DefaultSwitchAccountUseCaseTest {
             notificationCenter = notificationCenter,
             communitySortRepository = communitySortRepository,
             communityPreferredLanguageRepository = communityPreferredLanguageRepository,
+            bottomNavItemsRepository = bottomNavItemsRepository,
             lemmyValueCache = lemmyValueCache,
         )
 

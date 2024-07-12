@@ -42,6 +42,7 @@ kotlin {
             implementation(libs.voyager.screenmodel)
             implementation(libs.voyager.koin)
 
+            implementation(projects.core.l10n)
             implementation(projects.core.persistence)
             implementation(projects.core.preferences)
             implementation(projects.domain.lemmy.data)

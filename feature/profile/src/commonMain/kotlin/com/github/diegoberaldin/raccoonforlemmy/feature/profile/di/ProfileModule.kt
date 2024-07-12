@@ -31,6 +31,7 @@ val profileTabModule =
         }
         factory<ProfileSideMenuMviModel> {
             ProfileSideMenuViewModel(
+                settingsRepository = get(),
                 lemmyValueCache = get(),
             )
         }

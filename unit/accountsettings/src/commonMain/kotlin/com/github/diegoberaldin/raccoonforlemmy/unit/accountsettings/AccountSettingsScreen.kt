@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -110,17 +111,18 @@ class AccountSettingsScreen : Screen {
         var confirmBackWithUnsavedChangesDialog by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
-            model.effects.onEach { evt ->
-                when (evt) {
-                    AccountSettingsMviModel.Effect.Failure -> {
-                        snackbarHostState.showSnackbar(errorMessage)
-                    }
+            model.effects
+                .onEach { evt ->
+                    when (evt) {
+                        AccountSettingsMviModel.Effect.Failure -> {
+                            snackbarHostState.showSnackbar(errorMessage)
+                        }
 
-                    AccountSettingsMviModel.Effect.Success -> {
-                        snackbarHostState.showSnackbar(successMessage)
+                        AccountSettingsMviModel.Effect.Success -> {
+                            snackbarHostState.showSnackbar(successMessage)
+                        }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
 
         DisposableEffect(key) {
@@ -214,8 +216,7 @@ class AccountSettingsScreen : Screen {
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                            bottom = Spacing.m,
-                        )
+                        ).navigationBarsPadding()
                         .then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)

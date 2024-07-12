@@ -70,6 +70,7 @@ class ProfileSideMenuScreen : Screen {
                         ),
                 isModerator = uiState.isModerator,
                 canCreateCommunity = uiState.canCreateCommunity,
+                isBookmarksVisible = uiState.isBookmarksVisible,
             )
         }
     }

@@ -427,6 +427,8 @@ interface Strings {
     val settingsItemOpenPostWebPageOnImageClick: String
     val settingsSubtitleOpenPostWebPageOnImageClick: String
     val settingsItemAlternateMarkdownRendering: String
+    val settingsItemConfigureBottomNavigationBar: String
+    val selectTabNavigationTitle: String
 }
 
 object Locales {
