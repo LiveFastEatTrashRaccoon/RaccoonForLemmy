@@ -419,4 +419,6 @@
     <string name="settingsItemOpenPostWebPageOnImageClick">Oscail leathanach gréasáin ar cliceáil íomhá postála</string>
     <string name="settingsSubtitleOpenPostWebPageOnImageClick">Má tá URL ag postáil, oscail leathanach gréasáin ar chliceáil íomhá</string>
     <string name="settingsItemAlternateMarkdownRendering">Cumasaigh rindreáil Markdown malartach</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Cumraigh barra nascleanúna ag bun</string>
+    <string name="selectTabNavigationTitle">Roghnaigh alt</string>
 </resources>
