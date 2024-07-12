@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.markdown
 
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -11,7 +10,6 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextDecoration
 import com.mikepenz.markdown.compose.LocalMarkdownColors
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
-import com.mikepenz.markdown.utils.MARKDOWN_TAG_IMAGE_URL
 import com.mikepenz.markdown.utils.MARKDOWN_TAG_URL
 import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
 import org.intellij.markdown.MarkdownElementTypes
@@ -82,31 +80,36 @@ fun AnnotatedString.Builder.buildCustomMarkdownAnnotatedString(content: String, 
             MarkdownElementTypes.IMAGE -> child.findChildOfTypeRecursive(
                 MarkdownElementTypes.LINK_DESTINATION
             )?.let {
-                appendInlineContent(MARKDOWN_TAG_IMAGE_URL, it.getTextInNode(content).toString())
+                //appendInlineContent(MARKDOWN_TAG_IMAGE_URL, it.getTextInNode(content).toString())
+                CustomMarkdownImage(
+                    url = it.getTextInNode(content).toString(),
+                    null,
+                    true,
+                )
             }
 
             MarkdownElementTypes.UNORDERED_LIST -> buildCustomMarkdownAnnotatedString(content, child.children)
             MarkdownElementTypes.LIST_ITEM -> {
                 append("\u2022")
                 append("\t\t")
-                buildMarkdownAnnotatedString(content, child.children)
+                buildCustomMarkdownAnnotatedString(content, child.children)
             }
 
             MarkdownElementTypes.EMPH -> {
                 pushStyle(SpanStyle(fontStyle = FontStyle.Italic))
-                buildMarkdownAnnotatedString(content, child)
+                buildCustomMarkdownAnnotatedString(content, child.children)
                 pop()
             }
 
             MarkdownElementTypes.STRONG -> {
                 pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-                buildMarkdownAnnotatedString(content, child)
+                buildCustomMarkdownAnnotatedString(content, child.children)
                 pop()
             }
 
             GFMElementTypes.STRIKETHROUGH -> {
                 pushStyle(SpanStyle(textDecoration = TextDecoration.LineThrough))
-                buildMarkdownAnnotatedString(content, child)
+                buildCustomMarkdownAnnotatedString(content, child.children)
                 pop()
             }
 
@@ -119,7 +122,7 @@ fun AnnotatedString.Builder.buildCustomMarkdownAnnotatedString(content: String, 
                     )
                 )
                 append(' ')
-                buildMarkdownAnnotatedString(content, child.children.innerList())
+                buildCustomMarkdownAnnotatedString(content, child.children.innerList())
                 append(' ')
                 pop()
             }

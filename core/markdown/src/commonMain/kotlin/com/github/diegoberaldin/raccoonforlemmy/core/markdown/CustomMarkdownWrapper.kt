@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.markdown
 
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -35,6 +36,8 @@ import com.mikepenz.markdown.model.markdownPadding
 import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
+import org.intellij.markdown.parser.MarkdownParser
 import kotlin.math.floor
 
 private val String.containsSpoiler: Boolean
@@ -64,6 +67,24 @@ fun CustomMarkdownWrapper(
     onDoubleClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
 ) {
+    if (enableAlternateRendering) {
+        val parsedMarkdown = MarkdownParser(GFMFlavourDescriptor()).buildMarkdownTreeFromString(content)
+        parsedMarkdown.children.forEachIndexed { index, child ->
+            when (child.type.name) {
+                else -> {
+                    Text (
+                        buildAnnotatedString {
+                            if (child.children.isNotEmpty()) {
+                                buildCustomMarkdownAnnotatedString(content = content, children = child.children)
+                            }
+                        }
+                    )
+                }
+            }
+        }
+        return
+    }
+
     val maxHeightDp =
         with(LocalDensity.current) {
             if (maxLines == null) {
