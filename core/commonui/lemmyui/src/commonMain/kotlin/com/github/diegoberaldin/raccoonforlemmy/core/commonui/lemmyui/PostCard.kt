@@ -20,6 +20,7 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -223,6 +225,8 @@ private fun CompactPost(
     val uriHandler = LocalUriHandler.current
     val customTabsHelper = remember { getCustomTabsHelper() }
     val navigationCoordinator = remember { getNavigationCoordinator() }
+    var textSelection by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     val postLinkUrl =
         post.url
             .orEmpty()
@@ -292,7 +296,14 @@ private fun CompactPost(
                         autoLoadImages = autoLoadImages,
                         markRead = markRead,
                         highlightText = highlightText,
-                        onClick = onClick,
+                        onClick = {
+                            if (textSelection) {
+                                focusManager.clearFocus(true)
+                                textSelection = false
+                            } else {
+                                onClick?.invoke()
+                            }
+                        },
                         onOpenCommunity = onOpenCommunity,
                         onOpenUser = onOpenCreator,
                         onOpenPost = onOpenPost,
@@ -300,7 +311,7 @@ private fun CompactPost(
                         onDoubleClick = onDoubleClick,
                         onOpenWeb = onOpenWeb,
                         onLongClick = {
-                            optionsMenuOpen.value = true
+                            textSelection = true
                         },
                     )
                 }
@@ -457,6 +468,8 @@ private fun ExtendedPost(
     val customTabsHelper = remember { getCustomTabsHelper() }
     val navigationCoordinator = remember { getNavigationCoordinator() }
     val optionsMenuOpen = remember { mutableStateOf(false) }
+    var textSelection by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     val postLinkUrl =
         post.url
             .orEmpty()
@@ -536,13 +549,19 @@ private fun ExtendedPost(
                     onOpenUser = onOpenCreator,
                     onOpenPost = onOpenPost,
                     onOpenWeb = onOpenWeb,
-                    onClick = onClick,
+                    onClick = {
+                        if (textSelection) {
+                            focusManager.clearFocus(true)
+                            textSelection = false
+                        } else {
+                            onClick?.invoke()
+                        }
+                    },
                     onOpenImage = onOpenImage,
                     onDoubleClick = onDoubleClick,
-                    onLongClick =
-                        rememberCallback {
-                            optionsMenuOpen.value = true
-                        },
+                    onLongClick = {
+                        textSelection = true
+                    },
                 )
             }
 
@@ -649,7 +668,14 @@ private fun ExtendedPost(
                             autoLoadImages = autoLoadImages,
                             markRead = markRead,
                             highlightText = highlightText,
-                            onClick = onClick,
+                            onClick = {
+                                if (textSelection) {
+                                    focusManager.clearFocus(true)
+                                    textSelection = false
+                                } else {
+                                    onClick?.invoke()
+                                }
+                            },
                             onOpenCommunity = onOpenCommunity,
                             onOpenUser = onOpenCreator,
                             onOpenPost = onOpenPost,
@@ -657,7 +683,7 @@ private fun ExtendedPost(
                             onOpenWeb = onOpenWeb,
                             onDoubleClick = onDoubleClick,
                             onLongClick = {
-                                optionsMenuOpen.value = true
+                                textSelection = true
                             },
                         )
                     }

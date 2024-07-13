@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.markdown
 
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -207,9 +208,11 @@ internal fun markdownParagraphWithHighlights(
         }
     }
 
-    MarkdownText(
-        styledText,
-        modifier = modifier,
-        style = style,
-    )
+    SelectionContainer {
+        MarkdownText(
+            styledText,
+            modifier = modifier,
+            style = style,
+        )
+    }
 }
