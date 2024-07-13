@@ -440,4 +440,6 @@ internal val GaStrings =
             "Má tá URL ag postáil, oscail leathanach gréasáin ar chliceáil íomhá"
         override val settingsItemAlternateMarkdownRendering =
             "Cumasaigh rindreáil Markdown malartach"
+        override val settingsItemConfigureBottomNavigationBar = "Cumraigh barra nascleanúna ag bun"
+        override val selectTabNavigationTitle = "Roghnaigh alt"
     }

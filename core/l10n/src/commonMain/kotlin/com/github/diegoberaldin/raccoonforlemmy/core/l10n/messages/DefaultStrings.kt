@@ -429,6 +429,6 @@ internal open class DefaultStrings : Strings {
     override val settingsSubtitleOpenPostWebPageOnImageClick =
         "If a post has an URL, open web page on image click"
     override val settingsItemAlternateMarkdownRendering = "Enable alternate Markdown rendering"
-    override val settingsItemConfigureBottomNavigationBar = "Configure navigation bar"
+    override val settingsItemConfigureBottomNavigationBar = "Configure bottom navigation bar"
     override val selectTabNavigationTitle = "Select a section"
 }
