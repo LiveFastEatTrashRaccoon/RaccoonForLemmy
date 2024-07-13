@@ -418,4 +418,7 @@
     <string name="settingsSubtitleRandomThemeColor">Cambiar de tema por cada reinicialización de la aplicación</string>
     <string name="settingsItemOpenPostWebPageOnImageClick">Abrir página web con el clic sobre la imagen de la publicación</string>
     <string name="settingsSubtitleOpenPostWebPageOnImageClick">Si una publicación lleva un URL asociado, abrir la página web con el clic sobre la imagen</string>
+    <string name="settingsItemAlternateMarkdownRendering">Activar renderización Markdown alternativa</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Configurar la barra de navegación inferior</string>
+    <string name="selectTabNavigationTitle">Seleccionar una sección</string>
 </resources>

@@ -419,4 +419,6 @@
     <string name="settingsItemOpenPostWebPageOnImageClick">Apri pagina web al clic su immagine post</string>
     <string name="settingsSubtitleOpenPostWebPageOnImageClick">Se un post ha un URL, apri pagina web al click sull\'immagine</string>
     <string name="settingsItemAlternateMarkdownRendering">Abilita rendering Markdown alternativo</string>
+    <string name="selectTabNavigationTitle">Seleziona una sezione</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Configura barra di navigazione inferiore</string>
 </resources>
