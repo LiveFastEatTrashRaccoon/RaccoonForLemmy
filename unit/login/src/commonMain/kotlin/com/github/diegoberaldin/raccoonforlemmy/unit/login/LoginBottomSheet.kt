@@ -97,19 +97,20 @@ class LoginBottomSheet : Screen {
         val focusManager = LocalFocusManager.current
 
         LaunchedEffect(model) {
-            model.effects.onEach {
-                when (it) {
-                    is LoginMviModel.Effect.LoginError -> {
-                        snackbarHostState.showSnackbar(
-                            message = it.message ?: genericError,
-                        )
-                    }
+            model.effects
+                .onEach {
+                    when (it) {
+                        is LoginMviModel.Effect.LoginError -> {
+                            snackbarHostState.showSnackbar(
+                                message = it.message ?: genericError,
+                            )
+                        }
 
-                    LoginMviModel.Effect.LoginSuccess -> {
-                        navigationCoordinator.popScreen()
+                        LoginMviModel.Effect.LoginSuccess -> {
+                            navigationCoordinator.popScreen()
+                        }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
 
         Scaffold(
@@ -141,7 +142,9 @@ class LoginBottomSheet : Screen {
                             onClick = {
                                 navigationCoordinator.handleUrl(
                                     url = HELP_URL,
-                                    openingMode = settingsRepository.currentSettings.value.urlOpeningMode.toUrlOpeningMode(),
+                                    openingMode =
+                                        settingsRepository.currentSettings.value.urlOpeningMode
+                                            .toUrlOpeningMode(),
                                     uriHandler = uriHandler,
                                     customTabsHelper = customTabsHelper,
                                     onOpenWeb = { url ->
@@ -176,8 +179,9 @@ class LoginBottomSheet : Screen {
                         Modifier
                             .padding(
                                 top = padding.calculateTopPadding(),
-                            )
-                            .consumeWindowInsets(padding)
+                                start = Spacing.l,
+                                end = Spacing.l,
+                            ).consumeWindowInsets(padding)
                             .safeImePadding()
                             .fillMaxWidth()
                             .verticalScroll(rememberScrollState()),
@@ -187,7 +191,10 @@ class LoginBottomSheet : Screen {
 
                     // instance name
                     TextField(
-                        modifier = Modifier.focusRequester(instanceFocusRequester),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .focusRequester(instanceFocusRequester),
                         label = {
                             Text(text = LocalStrings.current.loginFieldInstanceName)
                         },
@@ -242,6 +249,7 @@ class LoginBottomSheet : Screen {
                     TextField(
                         modifier =
                             Modifier
+                                .fillMaxWidth()
                                 .autofill(
                                     autofillTypes =
                                         listOf(
@@ -251,8 +259,7 @@ class LoginBottomSheet : Screen {
                                     onFill = { value ->
                                         model.reduce(LoginMviModel.Intent.SetUsername(value))
                                     },
-                                )
-                                .focusRequester(usernameFocusRequester),
+                                ).focusRequester(usernameFocusRequester),
                         label = {
                             Text(text = LocalStrings.current.loginFieldUserName)
                         },
@@ -293,13 +300,13 @@ class LoginBottomSheet : Screen {
                     TextField(
                         modifier =
                             Modifier
+                                .fillMaxWidth()
                                 .autofill(
                                     autofillTypes = listOf(AutofillType.Password),
                                     onFill = { value ->
                                         model.reduce(LoginMviModel.Intent.SetPassword(value))
                                     },
-                                )
-                                .focusRequester(passwordFocusRequester),
+                                ).focusRequester(passwordFocusRequester),
                         label = {
                             Text(text = LocalStrings.current.loginFieldPassword)
                         },
@@ -358,7 +365,10 @@ class LoginBottomSheet : Screen {
 
                     // TOTP 2FA token
                     TextField(
-                        modifier = Modifier.focusRequester(tokenFocusRequester),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .focusRequester(tokenFocusRequester),
                         label = {
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(Spacing.s),
