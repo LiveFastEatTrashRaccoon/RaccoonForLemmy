@@ -1,6 +1,5 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,12 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.TextFieldLineLimits
-import androidx.compose.foundation.text2.input.clearText
-import androidx.compose.foundation.text2.input.rememberTextFieldState
-import androidx.compose.foundation.text2.input.textAsFlow
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -34,6 +29,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.IconSize
@@ -41,11 +37,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchField(
     hint: String? = null,
@@ -61,27 +53,29 @@ fun SearchField(
             imeAction = ImeAction.Search,
         ),
 ) {
-    val textFieldState = rememberTextFieldState(value)
-    LaunchedEffect(Unit) {
-        textFieldState
-            .textAsFlow()
-            .distinctUntilChanged()
-            .onEach {
-                onValueChange(it.toString())
-            }.launchIn(this)
+    var textFieldValue by remember {
+        mutableStateOf(
+            TextFieldValue(text = value),
+        )
+    }
+    LaunchedEffect(textFieldValue) {
+        onValueChange(textFieldValue.text)
     }
     var height by remember { mutableStateOf(0f) }
-    BasicTextField2(
+    BasicTextField(
         modifier =
             modifier.onGloballyPositioned {
                 height = it.size.toSize().height
             },
-        state = textFieldState,
+        value = textFieldValue,
+        onValueChange = { newValue ->
+            textFieldValue = newValue
+        },
         keyboardOptions = keyboardOptions,
-        lineLimits = TextFieldLineLimits.SingleLine,
+        maxLines = 1,
         cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
         textStyle = textStyle.copy(color = MaterialTheme.colorScheme.onBackground),
-        decorator =
+        decorationBox =
             { innerTextField ->
                 Row(
                     modifier =
@@ -126,7 +120,7 @@ fun SearchField(
                             modifier =
                                 iconModifier.onClick(
                                     onClick = {
-                                        textFieldState.clearText()
+                                        textFieldValue = TextFieldValue()
                                     },
                                 ),
                             imageVector = Icons.Default.Clear,
