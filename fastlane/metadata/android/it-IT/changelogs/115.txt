@@ -1,0 +1,6 @@
+- fix: stabilità all'avvio in assenza di connessione
+- fix: apertura pannello laterale in modalità anonima
+- fix: aspetto commenti (tema colori barra, dimensione del testo)
+- fix: colore testo finestra di dialogo "Informazioni app" in modalità scura
+- fix: gestione riferimenti Lemmy (menzioni utente e indirizzi comunità)
+- aggiornamenti localizzazione (Irlandese, Spagnolo, Portoghese)
