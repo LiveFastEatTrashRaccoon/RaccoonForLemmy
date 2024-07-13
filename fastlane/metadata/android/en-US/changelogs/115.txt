@@ -1,0 +1,6 @@
+- fix: stability issue when app started with no connection
+- fix: drawer gesture for anonymous users
+- fix: comment appearance (bar theme, font size)
+- fix: about dialog text color in dark mode
+- fix: Lemmy reference handling (user mentions and community handles)
+- various l10n updates (Irish, Spanish, Portuguese)
