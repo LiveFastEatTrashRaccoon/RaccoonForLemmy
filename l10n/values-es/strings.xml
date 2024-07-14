@@ -103,7 +103,7 @@
     <string name="manageAccountsTitle">Gestionar cuentas</string>
     <string name="manageSubscriptionsHeaderMulticommunities">Multi-comunidades</string>
     <string name="manageSubscriptionsHeaderSubscriptions">Suscripciones</string>
-    <string name="messageEmptyComments">Está demasiado tranquilo aquí.
+    <string name="messageEmptyComments">Aquí hay demasiado silencio.
 \n¿Te gustaría ser el primero en comentar?</string>
     <string name="messageEmptyList">Ningún elemento para mostrar</string>
     <string name="messageErrorLoadingComments">Error al cargar los comentarios.</string>
