@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Bozze</string>
     <string name="moderatorZoneTitle">Strumenti per moderatori</string>
     <string name="moderatorZoneActionContents">Contenuti da moderare</string>
-    <string name="messageAuthIssue">Si è verificato un errore nel recupero dei dati utente, fare refresh della schermata</string>
+    <string name="messageAuthIssue">Si è verificato un errore nel recupero dei dati, è possibile che il token attuale sia scaduto.</string>
     <string name="banReasonPlaceholder">Motivazione (opzionale)</string>
     <string name="banItemPermanent">Ban permanente</string>
     <string name="banItemRemoveData">Rimuovi dati</string>
@@ -421,4 +421,9 @@
     <string name="settingsItemAlternateMarkdownRendering">Abilita rendering Markdown alternativo</string>
     <string name="selectTabNavigationTitle">Seleziona una sezione</string>
     <string name="settingsItemConfigureBottomNavigationBar">Configura barra di navigazione inferiore</string>
+    <string name="messageAuthIssueSegueHighlight1">forzare un nuovo caricamento</string>
+    <string name="messageAuthIssueSegue">Si consiglia di intraprendere una delle seguenti azioni:
+\n• forzare un nuovo caricamento
+\n• effettuare nuovamente l\'accesso
+\n• cancellare i dati dell\'applicazione</string>
 </resources>
