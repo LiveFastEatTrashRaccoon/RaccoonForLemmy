@@ -334,7 +334,7 @@ internal open class DefaultStrings : Strings {
     override val moderatorZoneTitle = "Moderation tools"
     override val moderatorZoneActionContents = "Moderated contents"
     override val messageAuthIssue =
-        "An error occurred while fetching user data, try refreshing the screen"
+        "An error occurred while fetching data, possibly your token has expired."
     override val banReasonPlaceholder = "Reason (optional)"
     override val banItemPermanent = "Permanent ban"
     override val banItemRemoveData = "Remove data"
@@ -431,4 +431,8 @@ internal open class DefaultStrings : Strings {
     override val settingsItemAlternateMarkdownRendering = "Enable alternate Markdown rendering"
     override val settingsItemConfigureBottomNavigationBar = "Configure bottom navigation bar"
     override val selectTabNavigationTitle = "Select a section"
+    override val messageAuthIssueSegue =
+        "You could try one of the following actions:\n• force refresh\n• log in again\n• clear the application data"
+    override val messageAuthIssueSegueHighlight1 = "force refresh"
+    override val messageAuthIssueSegueHighlight2 = "log in again"
 }

@@ -429,6 +429,9 @@ interface Strings {
     val settingsItemAlternateMarkdownRendering: String
     val settingsItemConfigureBottomNavigationBar: String
     val selectTabNavigationTitle: String
+    val messageAuthIssueSegue: String
+    val messageAuthIssueSegueHighlight1: String
+    val messageAuthIssueSegueHighlight2: String
 }
 
 object Locales {
