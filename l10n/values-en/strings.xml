@@ -422,8 +422,5 @@
     <string name="settingsItemConfigureBottomNavigationBar">Configure bottom navigation bar</string>
     <string name="selectTabNavigationTitle">Select a section</string>
     <string name="messageAuthIssueSegueHighlight1">force refresh</string>
-    <string name="messageAuthIssueSegue">You could try one of the following actions:
-\n• force refresh
-\n• log in again
-\n• clear the application data</string>
+    <string name="messageAuthIssueSegue">You could try one of the following actions:</string>
 </resources>
