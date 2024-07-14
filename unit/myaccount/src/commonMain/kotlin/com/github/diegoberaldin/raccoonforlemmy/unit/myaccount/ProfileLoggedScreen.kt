@@ -156,11 +156,11 @@ object ProfileLoggedScreen : Tab {
                                     user = user,
                                     autoLoadImages = uiState.autoLoadImages,
                                     onOpenImage =
-                                        rememberCallbackArgs { url ->
+                                        rememberCallbackArgs(user) { url ->
                                             navigationCoordinator.pushScreen(
                                                 ZoomableImageScreen(
                                                     url = url,
-                                                    source = uiState.user?.readableHandle.orEmpty(),
+                                                    source = user.readableHandle,
                                                 ),
                                             )
                                         },

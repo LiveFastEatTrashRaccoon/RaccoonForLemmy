@@ -22,7 +22,9 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -31,6 +33,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
 
@@ -152,6 +155,7 @@ class ProfileLoggedViewModel(
 
             ProfileLoggedMviModel.Intent.Refresh ->
                 screenModelScope.launch {
+                    refreshUser()
                     refresh()
                 }
 
@@ -234,22 +238,23 @@ class ProfileLoggedViewModel(
             updateState { it.copy(user = null) }
         } else {
             var user = identityRepository.cachedUser
-
-            runCatching {
-                withTimeout(2000) {
-                    while (user == null) {
-                        // retry getting user if non-empty auth
-                        delay(500)
-                        identityRepository.refreshLoggedState()
-                        user = identityRepository.cachedUser
-                        yield()
-                    }
-
-                    lemmyValueCache.refresh(auth)
-                    updateState {
-                        it.copy(user = user)
+            withContext(Dispatchers.IO) {
+                runCatching {
+                    withTimeout(2000) {
+                        while (user == null) {
+                            // retry getting user if non-empty auth
+                            delay(500)
+                            identityRepository.refreshLoggedState()
+                            user = identityRepository.cachedUser
+                            yield()
+                        }
                     }
                 }
+
+                lemmyValueCache.refresh(auth)
+            }
+            updateState {
+                it.copy(user = user)
             }
         }
     }

@@ -146,15 +146,17 @@ class ModalDrawerViewModel(
             updateState { it.copy(user = null) }
         } else {
             var user = siteRepository.getCurrentUser(auth)
-            runCatching {
-                withTimeout(2000) {
-                    while (user == null) {
-                        // retry getting user if non-empty auth
-                        delay(500)
-                        user = siteRepository.getCurrentUser(auth)
-                        yield()
+            withContext(Dispatchers.IO) {
+                runCatching {
+                    withTimeout(2000) {
+                        while (user == null) {
+                            // retry getting user if non-empty auth
+                            delay(500)
+                            user = siteRepository.getCurrentUser(auth)
+                            yield()
+                        }
+                        updateState { it.copy(user = user) }
                     }
-                    updateState { it.copy(user = user) }
                 }
             }
         }
