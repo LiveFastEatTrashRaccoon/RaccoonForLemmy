@@ -421,8 +421,4 @@
     <string name="settingsItemAlternateMarkdownRendering">o kepeken e nanpa ante pi ilo Makadon</string>
     <string name="settingsItemConfigureBottomNavigationBar">o ante e lukin pi linja anpa</string>
     <string name="selectTabNavigationTitle">o anu e ijo wan</string>
-    <string name="messageAuthIssueSegue">sina ken lukin e ni:
-\n• o kama sona lon tenpo nanpa tu
-\n• o tawa insa lon tenpo nanpa tu
-\n• o weka e sona pi ilo nanpa ni</string>
 </resources>
