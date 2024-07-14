@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Drafts</string>
     <string name="moderatorZoneTitle">Moderation tools</string>
     <string name="moderatorZoneActionContents">Moderated contents</string>
-    <string name="messageAuthIssue">An error occurred while fetching user data, try refreshing the screen</string>
+    <string name="messageAuthIssue">An error occurred while fetching data, possibly your token has expired.</string>
     <string name="banReasonPlaceholder">Reason (optional)</string>
     <string name="banItemPermanent">Permanent ban</string>
     <string name="banItemRemoveData">Remove data</string>
@@ -421,4 +421,10 @@
     <string name="settingsItemAlternateMarkdownRendering">Enable alternate Markdown rendering</string>
     <string name="settingsItemConfigureBottomNavigationBar">Configure bottom navigation bar</string>
     <string name="selectTabNavigationTitle">Select a section</string>
+    <string name="messageAuthIssueSegueHighlight1">force refresh</string>
+    <string name="messageAuthIssueSegue">You could try one of the following actions:
+\n• force refresh
+\n• log in again
+\n• clear the application data</string>
+    <string name="messageAuthIssueSegueHighlight2">log in again</string>
 </resources>
