@@ -422,7 +422,6 @@
     <string name="settingsItemAlternateMarkdownRendering">Activar renderización Markdown alternativa</string>
     <string name="settingsItemConfigureBottomNavigationBar">Configurar la barra de navegación inferior</string>
     <string name="selectTabNavigationTitle">Seleccionar una sección</string>
-    <string name="messageAuthIssueSegueHighlight1">forzar refresco</string>
     <string name="messageAuthIssueSegue">Puedes intentar una de las siguientes acciones:
 \n• forzar actualización
 \n• volver a iniciar sesión
