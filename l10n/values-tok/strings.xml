@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">lukin sitelen</string>
     <string name="moderatorZoneTitle">ilo tawa jan lawa</string>
     <string name="moderatorZoneActionContents">ijo pi kulupu lawa</string>
-    <string name="messageAuthIssue">kama sona ijo la, pakala wan li lon. o lukin open e lipu ni lon tenpo nanpa tu</string>
+    <string name="messageAuthIssue">kama sona ijo la, pakala li lon. ken la, toki lawa sina li weka.</string>
     <string name="banReasonPlaceholder">Tan (sina wile la)</string>
     <string name="banItemPermanent">lon tenpo ale</string>
     <string name="banItemRemoveData">o weka e sona</string>
@@ -421,4 +421,10 @@
     <string name="settingsItemAlternateMarkdownRendering">o kepeken e nanpa ante pi ilo Makadon</string>
     <string name="settingsItemConfigureBottomNavigationBar">o ante e lukin pi linja anpa</string>
     <string name="selectTabNavigationTitle">o anu e ijo wan</string>
+    <string name="messageAuthIssueSegue">sina ken lukin e ni:
+\n• o kama sona lon tenpo nanpa tu
+\n• o tawa insa lon tenpo nanpa tu
+\n• o weka e sona pi ilo nanpa ni</string>
+    <string name="messageAuthIssueSegueHighlight1">o kama sona lon tenpo nanpa tu</string>
+    <string name="messageAuthIssueSegueHighlight2">o tawa insa lon tenpo nanpa tu</string>
 </resources>
