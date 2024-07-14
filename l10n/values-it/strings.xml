@@ -421,8 +421,4 @@
     <string name="settingsItemAlternateMarkdownRendering">Abilita rendering Markdown alternativo</string>
     <string name="selectTabNavigationTitle">Seleziona una sezione</string>
     <string name="settingsItemConfigureBottomNavigationBar">Configura barra di navigazione inferiore</string>
-    <string name="messageAuthIssueSegue">Si consiglia di intraprendere una delle seguenti azioni:
-\n• forzare un nuovo caricamento
-\n• effettuare nuovamente l\'accesso
-\n• cancellare i dati dell\'applicazione</string>
 </resources>
