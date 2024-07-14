@@ -335,7 +335,7 @@ internal val TokStrings =
         override val moderatorZoneTitle = "ilo tawa jan lawa"
         override val moderatorZoneActionContents = "ijo pi kulupu lawa"
         override val messageAuthIssue =
-            "kama sona ijo la, pakala wan li lon. o lukin open e lipu ni lon tenpo nanpa tu"
+            "kama sona ijo la, pakala li lon. ken la, toki lawa sina li weka."
         override val banReasonPlaceholder = "Tan (sina wile la)"
         override val banItemPermanent = "lon tenpo ale"
         override val banItemRemoveData = "o weka e sona"
@@ -427,4 +427,16 @@ internal val TokStrings =
             "o kepeken e sitelen jan tawa sitelen lili pi linja anpa"
         override val settingsItemRandomThemeColor = "o ante e kule lon tempo ale"
         override val settingsSubtitleRandomThemeColor = "open e ilo nanpa ni la, o ante e kule"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "sina luka e sitelen lipu la, o open e linluwi"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "lipu li jo e sitelen wan la, luka e sitelen la, o open e linluwi"
+        override val settingsItemAlternateMarkdownRendering =
+            "o kepeken e nanpa ante pi ilo Makadon"
+        override val settingsItemConfigureBottomNavigationBar = "o ante e lukin pi linja anpa"
+        override val selectTabNavigationTitle = "o anu e ijo wan"
+        override val messageAuthIssueSegue0 = "sina ken lukin e ni:"
+        override val messageAuthIssueSegue1 = "o kama sona lon tenpo nanpa tu"
+        override val messageAuthIssueSegue2 = "o tawa insa lon tenpo nanpa tu"
+        override val messageAuthIssueSegue3 = "o weka e sona pi ilo nanpa ni"
     }

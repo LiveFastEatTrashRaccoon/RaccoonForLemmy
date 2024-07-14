@@ -165,45 +165,33 @@ object ProfileLoggedScreen : Tab {
 
                             val annotatedString =
                                 buildAnnotatedString {
-                                    val text = LocalStrings.current.messageAuthIssueSegue
-                                    val span1 =
-                                        LocalStrings.current.messageAuthIssueSegueHighlight1
-                                    val span2 =
-                                        LocalStrings.current.messageAuthIssueSegueHighlight2
+                                    val linkStyle =
+                                        SpanStyle(
+                                            color = MaterialTheme.colorScheme.primary,
+                                            textDecoration = TextDecoration.Underline,
+                                        )
                                     withStyle(SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
-                                        append(text)
-                                        val span1Start = text.indexOf(span1)
-                                        val span1End = span1Start + span1.length
-                                        addStringAnnotation(
-                                            tag = AuthIssueAnnotations.ANNOTATION_ACTION,
-                                            annotation = AuthIssueAnnotations.ACTION_REFRESH,
-                                            start = span1Start,
-                                            end = span1End,
+                                        append(LocalStrings.current.messageAuthIssueSegue0)
+                                        append("\n• ")
+                                        pushStringAnnotation(
+                                            AuthIssueAnnotations.ANNOTATION_ACTION,
+                                            AuthIssueAnnotations.ACTION_REFRESH,
                                         )
-                                        addStyle(
-                                            SpanStyle(
-                                                color = MaterialTheme.colorScheme.primary,
-                                                textDecoration = TextDecoration.Underline,
-                                            ),
-                                            span1Start,
-                                            span1End,
+                                        withStyle(linkStyle) {
+                                            append(LocalStrings.current.messageAuthIssueSegue1)
+                                        }
+                                        pop()
+                                        append("\n• ")
+                                        pushStringAnnotation(
+                                            AuthIssueAnnotations.ANNOTATION_ACTION,
+                                            AuthIssueAnnotations.ACTION_LOGIN,
                                         )
-                                        val span2Start = text.indexOf(span2)
-                                        val span2End = span2Start + span2.length
-                                        addStringAnnotation(
-                                            tag = AuthIssueAnnotations.ANNOTATION_ACTION,
-                                            annotation = AuthIssueAnnotations.ACTION_LOGIN,
-                                            start = span2Start,
-                                            end = span2End,
-                                        )
-                                        addStyle(
-                                            SpanStyle(
-                                                color = MaterialTheme.colorScheme.primary,
-                                                textDecoration = TextDecoration.Underline,
-                                            ),
-                                            span2Start,
-                                            span2End,
-                                        )
+                                        withStyle(linkStyle) {
+                                            append(LocalStrings.current.messageAuthIssueSegue2)
+                                        }
+                                        pop()
+                                        append("\n• ")
+                                        append(LocalStrings.current.messageAuthIssueSegue3)
                                     }
                                 }
                             Box(
