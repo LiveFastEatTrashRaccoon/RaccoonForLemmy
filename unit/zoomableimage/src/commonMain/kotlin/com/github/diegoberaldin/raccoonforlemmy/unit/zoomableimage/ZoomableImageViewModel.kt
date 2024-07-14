@@ -11,9 +11,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core.utils.gallery.GalleryHelper
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.gallery.download
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.imagepreload.ImagePreloadManager
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.share.ShareHelper
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ class ZoomableImageViewModel(
                         is NotificationCenterEvent.ShareImageModeSelected.ModeFile -> shareFile(event.url, event.source)
                         is NotificationCenterEvent.ShareImageModeSelected.ModeUrl -> shareUrl(event.url)
                     }
-                }.launchIn(this)
+                }.launchIn(CoroutineScope(Dispatchers.IO))
         }
     }
 
@@ -103,22 +103,22 @@ class ZoomableImageViewModel(
                         val idx = s.lastIndexOf(".").takeIf { it >= 0 } ?: s.length
                         s.substring(idx).takeIf { it.isNotEmpty() } ?: ".jpeg"
                     }
-                val path =
-                    withContext(Dispatchers.IO) {
-                        galleryHelper.saveToGallery(
-                            bytes = bytes,
-                            name = "${epochMillis()}$extension",
-                            additionalPathSegment = folder.takeIf { imageSourcePath },
-                        )
-                    }
-                // if done too early no image is found
-                delay(750)
-                updateState { it.copy(loading = false) }
+                withContext(Dispatchers.IO) {
+                    val path = galleryHelper.saveToGallery(
+                        bytes = bytes,
+                        name = "${epochMillis()}$extension",
+                        additionalPathSegment = folder.takeIf { imageSourcePath },
+                    )
 
-                if (path != null) {
-                    shareHelper.shareImage(path)
-                } else {
-                    emitEffect(ZoomableImageMviModel.Effect.ShareFailure)
+                    withContext(Dispatchers.Main) {
+                        updateState { it.copy(loading = false) }
+
+                        if (path != null) {
+                            shareHelper.shareImage(path)
+                        } else {
+                            emitEffect(ZoomableImageMviModel.Effect.ShareFailure)
+                        }
+                    }
                 }
             } catch (e: Throwable) {
                 e.printStackTrace()
