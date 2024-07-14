@@ -23,7 +23,10 @@ class MainViewModel(
     private val notificationChecker: InboxNotificationChecker,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect>(
-        initialState = MainMviModel.UiState(),
+        initialState =
+            MainMviModel.UiState(
+                bottomBarSections = settingRepository.currentBottomBarSections.value.toTabNavigationSections(),
+            ),
     ),
     MainMviModel {
     init {
