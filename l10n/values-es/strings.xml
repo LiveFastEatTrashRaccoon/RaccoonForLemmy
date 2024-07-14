@@ -103,7 +103,8 @@
     <string name="manageAccountsTitle">Gestionar cuentas</string>
     <string name="manageSubscriptionsHeaderMulticommunities">Multi-comunidades</string>
     <string name="manageSubscriptionsHeaderSubscriptions">Suscripciones</string>
-    <string name="messageEmptyComments">Nada que ver por aquí.\n¡Sé el primero en comentar!</string>
+    <string name="messageEmptyComments">Aquí hay demasiado silencio.
+\n¿Te gustaría ser el primero en comentar?</string>
     <string name="messageEmptyList">Ningún elemento para mostrar</string>
     <string name="messageErrorLoadingComments">Error al cargar los comentarios.</string>
     <string name="messageGenericError">Error</string>
@@ -328,7 +329,7 @@
     <string name="navigationDrawerTitleDrafts">Borradores</string>
     <string name="moderatorZoneTitle">Herramientas para moderadores</string>
     <string name="moderatorZoneActionContents">Contenidos por moderar</string>
-    <string name="messageAuthIssue">Se produjo un error al obtener los datos del usuario, intente actualizar la pantalla</string>
+    <string name="messageAuthIssue">Se ha producido un error al obtener los datos, posiblemente tu token ha caducado.</string>
     <string name="banReasonPlaceholder">Razón (opcional)</string>
     <string name="banItemPermanent">Prohibición permanente</string>
     <string name="banItemRemoveData">Eliminar datos</string>
@@ -418,4 +419,13 @@
     <string name="settingsSubtitleRandomThemeColor">Cambiar de tema por cada reinicialización de la aplicación</string>
     <string name="settingsItemOpenPostWebPageOnImageClick">Abrir página web con el clic sobre la imagen de la publicación</string>
     <string name="settingsSubtitleOpenPostWebPageOnImageClick">Si una publicación lleva un URL asociado, abrir la página web con el clic sobre la imagen</string>
+    <string name="settingsItemAlternateMarkdownRendering">Activar renderización Markdown alternativa</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Configurar la barra de navegación inferior</string>
+    <string name="selectTabNavigationTitle">Seleccionar una sección</string>
+    <string name="messageAuthIssueSegueHighlight1">forzar refresco</string>
+    <string name="messageAuthIssueSegueHighlight2">iniciar sesión de nuevo</string>
+    <string name="messageAuthIssueSegue">Puedes intentar una de las siguientes acciones:
+\n• forzar actualización
+\n• volver a iniciar sesión
+\n• borrar los datos de la aplicación</string>
 </resources>

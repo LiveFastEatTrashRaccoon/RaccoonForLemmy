@@ -8,6 +8,8 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.TabNavigationSection
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.toInt
 import com.github.diegoberaldin.raccoonforlemmy.unit.explore.ExploreScreen
 
 object ExploreTab : Tab {
@@ -16,7 +18,7 @@ object ExploreTab : Tab {
             val icon = rememberVectorPainter(Icons.Default.Explore)
             val title = LocalStrings.current.navigationSearch
             return TabOptions(
-                index = 1u,
+                index = TabNavigationSection.Explore.toInt().toUShort(),
                 title = title,
                 icon = icon,
             )

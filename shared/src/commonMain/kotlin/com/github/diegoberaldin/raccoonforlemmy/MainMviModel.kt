@@ -2,6 +2,8 @@ package com.github.diegoberaldin.raccoonforlemmy
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.MviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.BottomNavItemsRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.TabNavigationSection
 
 interface MainMviModel :
     MviModel<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect>,
@@ -18,6 +20,7 @@ interface MainMviModel :
         val bottomBarOffsetHeightPx: Float = 0f,
         val customProfileUrl: String? = null,
         val isLogged: Boolean = false,
+        val bottomBarSections: List<TabNavigationSection> = BottomNavItemsRepository.DEFAULT_ITEMS,
     )
 
     sealed interface Effect {

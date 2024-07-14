@@ -2,6 +2,7 @@ package com.github.diegoberaldin.raccoonforlemmy
 
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.toTabNavigationSections
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.inbox.InboxCoordinator
@@ -22,7 +23,10 @@ class MainViewModel(
     private val notificationChecker: InboxNotificationChecker,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect>(
-        initialState = MainMviModel.UiState(),
+        initialState =
+            MainMviModel.UiState(
+                bottomBarSections = settingRepository.currentBottomBarSections.value.toTabNavigationSections(),
+            ),
     ),
     MainMviModel {
     init {
@@ -49,10 +53,14 @@ class MainViewModel(
                         notificationChecker.stop()
                     }
                 }.launchIn(this)
-
             settingRepository.currentSettings
                 .onEach {
                     updateCustomProfileIcon()
+                }.launchIn(this)
+            settingRepository.currentBottomBarSections
+                .onEach { sectionIds ->
+                    val sections = sectionIds.toTabNavigationSections()
+                    updateState { it.copy(bottomBarSections = sections) }
                 }.launchIn(this)
 
             identityRepository.isLogged

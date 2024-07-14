@@ -1,6 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase
 
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.VoteFormat
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.BottomNavItemsRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.toInts
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.AccountModel
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.CommunityPreferredLanguageRepository
@@ -21,6 +23,7 @@ internal class DefaultLoginUseCase(
     private val siteRepository: SiteRepository,
     private val communitySortRepository: CommunitySortRepository,
     private val communityPreferredLanguageRepository: CommunityPreferredLanguageRepository,
+    private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val lemmyValueCache: LemmyValueCache,
 ) : LoginUseCase {
     override suspend operator fun invoke(
@@ -106,6 +109,9 @@ internal class DefaultLoginUseCase(
 
             val newSettings = settingsRepository.getSettings(accountId)
             settingsRepository.changeCurrentSettings(newSettings)
+
+            val bottomBarSections = bottomNavItemsRepository.get(accountId)
+            settingsRepository.changeCurrentBottomBarSections(bottomBarSections.toInts())
         }
     }
 }

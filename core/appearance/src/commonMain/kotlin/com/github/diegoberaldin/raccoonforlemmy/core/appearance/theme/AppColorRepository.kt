@@ -51,15 +51,15 @@ fun AppColor.toColor(): Color =
 fun AppColor.toReadableName(): String =
     when (this) {
         AppColor.Blue -> LocalStrings.current.settingsColorBlue
-        AppColor.Green -> LocalStrings.current.settingsColorAquamarine
-        AppColor.Gray -> LocalStrings.current.settingsColorPurple
-        AppColor.LightBlue -> LocalStrings.current.settingsColorGreen
-        AppColor.Orange -> LocalStrings.current.settingsColorRed
-        AppColor.Pink -> LocalStrings.current.settingsColorOrange
-        AppColor.Purple -> LocalStrings.current.settingsColorBanana
-        AppColor.Red -> LocalStrings.current.settingsColorPink
-        AppColor.White -> LocalStrings.current.settingsColorGray
-        AppColor.Yellow -> LocalStrings.current.settingsColorWhite
+        AppColor.LightBlue -> LocalStrings.current.settingsColorAquamarine
+        AppColor.Purple -> LocalStrings.current.settingsColorPurple
+        AppColor.Green -> LocalStrings.current.settingsColorGreen
+        AppColor.Red -> LocalStrings.current.settingsColorRed
+        AppColor.Orange -> LocalStrings.current.settingsColorOrange
+        AppColor.Yellow -> LocalStrings.current.settingsColorBanana
+        AppColor.Gray -> LocalStrings.current.settingsColorGray
+        AppColor.Pink -> LocalStrings.current.settingsColorPink
+        AppColor.White -> LocalStrings.current.settingsColorWhite
     }
 
 internal class DefaultAppColorRepository : AppColorRepository {

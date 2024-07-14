@@ -47,6 +47,7 @@ val coreIdentityModule =
                 siteRepository = get(),
                 communitySortRepository = get(),
                 communityPreferredLanguageRepository = get(),
+                bottomNavItemsRepository = get(),
                 lemmyValueCache = get(),
             )
         }
@@ -57,6 +58,7 @@ val coreIdentityModule =
                 notificationCenter = get(),
                 settingsRepository = get(),
                 communitySortRepository = get(),
+                bottomNavItemsRepository = get(),
                 lemmyValueCache = get(),
             )
         }
@@ -69,6 +71,7 @@ val coreIdentityModule =
                 notificationCenter = get(),
                 communitySortRepository = get(),
                 communityPreferredLanguageRepository = get(),
+                bottomNavItemsRepository = get(),
                 lemmyValueCache = get(),
             )
         }

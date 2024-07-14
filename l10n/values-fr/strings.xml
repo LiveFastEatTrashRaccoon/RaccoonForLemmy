@@ -419,4 +419,7 @@
     <string name="settingsSubtitleRandomThemeColor">Changer la couleur du thème à chaque démarrage de l\'application</string>
     <string name="settingsItemOpenPostWebPageOnImageClick">Ouvrir la page web en cliquant sur l\'image de la publication</string>
     <string name="settingsSubtitleOpenPostWebPageOnImageClick">Si une publication est associée à une URL, ouvrir la page web en cliquant sur l\'image</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Configurer la barre de navigation inférieure</string>
+    <string name="settingsItemAlternateMarkdownRendering">Activer le rendu de Markdown alternatif</string>
+    <string name="selectTabNavigationTitle">Sélectionnez une section</string>
 </resources>

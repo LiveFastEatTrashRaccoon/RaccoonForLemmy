@@ -1,6 +1,8 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase
 
 import com.github.diegoberaldin.raccoonforlemmy.core.api.provider.ServiceProvider
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.BottomNavItemsRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.toInts
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.AccountModel
@@ -19,6 +21,7 @@ internal class DefaultSwitchAccountUseCase(
     private val settingsRepository: SettingsRepository,
     private val communitySortRepository: CommunitySortRepository,
     private val communityPreferredLanguageRepository: CommunityPreferredLanguageRepository,
+    private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val lemmyValueCache: LemmyValueCache,
 ) : SwitchAccountUseCase {
     override suspend fun invoke(account: AccountModel) {
@@ -44,5 +47,8 @@ internal class DefaultSwitchAccountUseCase(
 
         val newSettings = settingsRepository.getSettings(accountId)
         settingsRepository.changeCurrentSettings(newSettings)
+
+        val bottomBarSections = bottomNavItemsRepository.get(accountId)
+        settingsRepository.changeCurrentBottomBarSections(bottomBarSections.toInts())
     }
 }

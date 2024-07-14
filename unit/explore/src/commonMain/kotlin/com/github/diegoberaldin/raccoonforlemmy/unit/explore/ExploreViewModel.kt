@@ -27,6 +27,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepo
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
@@ -74,12 +75,18 @@ class ExploreViewModel(
                 )
             }
             identityRepository.isLogged
-                .onEach { isLogged ->
-                    updateState {
-                        it.copy(isLogged = isLogged ?: false)
-                    }
+                .onEach { logged ->
+                    updateState { it.copy(isLogged = logged ?: false) }
                     updateAvailableSortTypes()
                 }.launchIn(this)
+            combine(
+                identityRepository.isLogged.map { it == true },
+                settingsRepository.currentSettings.map { it.enableSwipeActions },
+            ) { logged, swipeActionsEnabled ->
+                logged && swipeActionsEnabled && otherInstance.isEmpty()
+            }.onEach { value ->
+                updateState { it.copy(swipeActionsEnabled = value) }
+            }.launchIn(this)
             themeRepository.postLayout
                 .onEach { layout ->
                     updateState { it.copy(postLayout = layout) }
@@ -94,7 +101,6 @@ class ExploreViewModel(
                             preferNicknames = settings.preferUserNicknames,
                             fullHeightImages = settings.fullHeightImages,
                             fullWidthImages = settings.fullWidthImages,
-                            swipeActionsEnabled = settings.enableSwipeActions,
                             doubleTapActionEnabled = settings.enableDoubleTapAction,
                             actionsOnSwipeToStartPosts = settings.actionsOnSwipeToStartPosts,
                             actionsOnSwipeToEndPosts = settings.actionsOnSwipeToEndPosts,

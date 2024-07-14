@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.unit.myaccount
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -33,12 +36,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
@@ -68,6 +76,12 @@ import com.github.diegoberaldin.raccoonforlemmy.unit.web.WebViewScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+
+private object AuthIssueAnnotations {
+    const val ANNOTATION_ACTION = "action"
+    const val ACTION_REFRESH = "refresh"
+    const val ACTION_LOGIN = "login"
+}
 
 object ProfileLoggedScreen : Tab {
     override val options: TabOptions
@@ -142,12 +156,98 @@ object ProfileLoggedScreen : Tab {
                     if (uiState.user == null) {
                         item {
                             Text(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s),
                                 textAlign = TextAlign.Center,
                                 text = LocalStrings.current.messageAuthIssue,
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onBackground,
                             )
+
+                            val annotatedString =
+                                buildAnnotatedString {
+                                    val text = LocalStrings.current.messageAuthIssueSegue
+                                    val span1 =
+                                        LocalStrings.current.messageAuthIssueSegueHighlight1
+                                    val span2 =
+                                        LocalStrings.current.messageAuthIssueSegueHighlight2
+                                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+                                        append(text)
+                                        val span1Start = text.indexOf(span1)
+                                        val span1End = span1Start + span1.length
+                                        addStringAnnotation(
+                                            tag = AuthIssueAnnotations.ANNOTATION_ACTION,
+                                            annotation = AuthIssueAnnotations.ACTION_REFRESH,
+                                            start = span1Start,
+                                            end = span1End,
+                                        )
+                                        addStyle(
+                                            SpanStyle(
+                                                color = MaterialTheme.colorScheme.primary,
+                                                textDecoration = TextDecoration.Underline,
+                                            ),
+                                            span1Start,
+                                            span1End,
+                                        )
+                                        val span2Start = text.indexOf(span2)
+                                        val span2End = span2Start + span2.length
+                                        addStringAnnotation(
+                                            tag = AuthIssueAnnotations.ANNOTATION_ACTION,
+                                            annotation = AuthIssueAnnotations.ACTION_LOGIN,
+                                            start = span2Start,
+                                            end = span2End,
+                                        )
+                                        addStyle(
+                                            SpanStyle(
+                                                color = MaterialTheme.colorScheme.primary,
+                                                textDecoration = TextDecoration.Underline,
+                                            ),
+                                            span2Start,
+                                            span2End,
+                                        )
+                                    }
+                                }
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .padding(
+                                            vertical = Spacing.m,
+                                            horizontal = Spacing.s,
+                                        ).border(
+                                            width = 1.dp,
+                                            color = MaterialTheme.colorScheme.onBackground,
+                                            shape = RoundedCornerShape(CornerSize.l),
+                                        ).padding(
+                                            vertical = Spacing.s,
+                                            horizontal = Spacing.m,
+                                        ),
+                            ) {
+                                ClickableText(
+                                    modifier =
+                                        Modifier.fillMaxWidth(),
+                                    text = annotatedString,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    onClick = { offset ->
+                                        val annotation =
+                                            annotatedString
+                                                .getStringAnnotations(
+                                                    tag = AuthIssueAnnotations.ANNOTATION_ACTION,
+                                                    start = offset,
+                                                    end = offset,
+                                                ).firstOrNull()
+                                        if (annotation != null) {
+                                            when (annotation.item) {
+                                                AuthIssueAnnotations.ACTION_REFRESH ->
+                                                    model.reduce(ProfileLoggedMviModel.Intent.Refresh)
+
+                                                AuthIssueAnnotations.ACTION_LOGIN ->
+                                                    notificationCenter.send(
+                                                        NotificationCenterEvent.ProfileSideMenuAction.Logout,
+                                                    )
+                                            }
+                                        }
+                                    },
+                                )
+                            }
                         }
                     } else {
                         item {
@@ -156,11 +256,11 @@ object ProfileLoggedScreen : Tab {
                                     user = user,
                                     autoLoadImages = uiState.autoLoadImages,
                                     onOpenImage =
-                                        rememberCallbackArgs { url ->
+                                        rememberCallbackArgs(user) { url ->
                                             navigationCoordinator.pushScreen(
                                                 ZoomableImageScreen(
                                                     url = url,
-                                                    source = uiState.user?.readableHandle.orEmpty(),
+                                                    source = user.readableHandle,
                                                 ),
                                             )
                                         },

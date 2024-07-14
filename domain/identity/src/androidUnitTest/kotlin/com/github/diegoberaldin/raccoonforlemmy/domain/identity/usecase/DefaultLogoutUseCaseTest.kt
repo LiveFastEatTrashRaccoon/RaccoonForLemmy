@@ -1,5 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.domain.identity.usecase
 
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.BottomNavItemsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.data.AccountModel
@@ -27,6 +28,10 @@ class DefaultLogoutUseCaseTest {
     private val notificationCenter = mockk<NotificationCenter>(relaxUnitFun = true)
     private val communitySortRepository = mockk<CommunitySortRepository>(relaxUnitFun = true)
     private val lemmyValueCache = mockk<LemmyValueCache>(relaxUnitFun = true)
+    private val bottomNavItemsRepository =
+        mockk<BottomNavItemsRepository>(relaxUnitFun = true) {
+            coEvery { get(accountId = any()) } returns BottomNavItemsRepository.DEFAULT_ITEMS
+        }
     private val sut =
         DefaultLogoutUseCase(
             identityRepository = identityRepository,
@@ -34,6 +39,7 @@ class DefaultLogoutUseCaseTest {
             settingsRepository = settingsRepository,
             notificationCenter = notificationCenter,
             communitySortRepository = communitySortRepository,
+            bottomNavItemsRepository = bottomNavItemsRepository,
             lemmyValueCache = lemmyValueCache,
         )
 

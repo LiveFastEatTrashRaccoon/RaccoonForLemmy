@@ -38,6 +38,7 @@ import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiBarTheme
+import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toCommentBarTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toPostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toUiFontFamily
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.toUiTheme
@@ -56,8 +57,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.ProvideString
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.ComposeEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.DrawerEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.SideMenuEvents
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getBottomNavItemsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.toInts
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getAccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.getAppConfigStore
@@ -107,9 +110,12 @@ fun App(onLoadingFinished: () -> Unit = {}) {
     val scope = rememberCoroutineScope()
     val subscriptionsCache = remember { getSubscriptionsCache() }
     val appConfigStore = remember { getAppConfigStore() }
+    val bottomNavItemsRepository = remember { getBottomNavItemsRepository() }
 
     LaunchedEffect(Unit) {
-        val accountId = accountRepository.getActive()?.id
+        val lastActiveAccount = accountRepository.getActive()
+        val lastInstance = lastActiveAccount?.instance?.takeIf { it.isNotEmpty() }
+        val accountId = lastActiveAccount?.id
         val currentSettings = settingsRepository.getSettings(accountId)
         val seedColor =
             if (currentSettings.randomThemeColor) {
@@ -121,8 +127,8 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                 currentSettings.customSeedColor
             }
         settingsRepository.changeCurrentSettings(currentSettings.copy(customSeedColor = seedColor))
-        val lastActiveAccount = accountRepository.getActive()
-        val lastInstance = lastActiveAccount?.instance?.takeIf { it.isNotEmpty() }
+        val bottomBarSections = bottomNavItemsRepository.get(accountId)
+        settingsRepository.changeCurrentBottomBarSections(bottomBarSections.toInts())
         if (lastInstance != null) {
             apiConfigurationRepository.changeInstance(lastInstance)
         }
@@ -131,6 +137,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
         appConfigStore.initialize()
 
         hasBeenInitialized = true
+
         launch {
             delay(50)
             onLoadingFinished()
@@ -156,6 +163,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
             changeDownVoteColor(settings.downVoteColor?.let { Color(it) })
             changeReplyColor(settings.replyColor?.let { Color(it) })
             changeSaveColor(settings.saveColor?.let { Color(it) })
+            changeCommentBarTheme(settings.commentBarTheme.toCommentBarTheme())
         }
     }
 

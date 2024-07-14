@@ -1122,13 +1122,9 @@ class PostDetailScreen(
                                                         model.reduce(PostDetailMviModel.Intent.HapticIndication)
                                                     },
                                                 swipeToStartActions =
-                                                    if (uiState.isLogged && !isOnOtherInstance) {
-                                                        uiState.actionsOnSwipeToStartComments.toSwipeActions(
-                                                            canEdit = comment.creator?.id == uiState.currentUserId,
-                                                        )
-                                                    } else {
-                                                        emptyList()
-                                                    },
+                                                    uiState.actionsOnSwipeToStartComments.toSwipeActions(
+                                                        canEdit = comment.creator?.id == uiState.currentUserId,
+                                                    ),
                                                 swipeToEndActions =
                                                     if (uiState.isLogged && !isOnOtherInstance) {
                                                         uiState.actionsOnSwipeToEndComments.toSwipeActions(

@@ -33,8 +33,9 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
-                implementation(compose.material3)
                 implementation(compose.material)
+                implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
@@ -75,6 +76,7 @@ kotlin {
                 implementation(projects.unit.communitydetail)
                 implementation(projects.unit.communityinfo)
                 implementation(projects.unit.configurecontentview)
+                implementation(projects.unit.configurenavbar)
                 implementation(projects.unit.configureswipeactions)
                 implementation(projects.unit.createcomment)
                 implementation(projects.unit.createpost)

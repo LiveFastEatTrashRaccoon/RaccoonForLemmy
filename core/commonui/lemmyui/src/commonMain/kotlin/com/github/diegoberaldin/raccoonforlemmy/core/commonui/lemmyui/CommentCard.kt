@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -82,6 +83,8 @@ fun CommentCard(
     val themeRepository = remember { getThemeRepository() }
     var commentHeight by remember { mutableStateOf(0f) }
     val commentBarTheme by themeRepository.commentBarTheme.collectAsState()
+    var textSelection by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     val barColor =
         themeRepository.getCommentBarColor(
             depth = comment.depth,
@@ -164,7 +167,7 @@ fun CommentCard(
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
                     )
                 } else {
-                    CustomizedContent(ContentFontClass.Body) {
+                    CustomizedContent(ContentFontClass.Comment) {
                         CompositionLocalProvider(
                             LocalDensity provides
                                 Density(
@@ -176,7 +179,14 @@ fun CommentCard(
                             PostCardBody(
                                 text = comment.text.orEmpty(),
                                 autoLoadImages = autoLoadImages,
-                                onClick = onClick,
+                                onClick = {
+                                    if (textSelection) {
+                                        focusManager.clearFocus(true)
+                                        textSelection = false
+                                    } else {
+                                        onClick?.invoke()
+                                    }
+                                },
                                 highlightText = highlightText,
                                 onOpenImage = onImageClick,
                                 onDoubleClick = onDoubleClick,
@@ -184,6 +194,9 @@ fun CommentCard(
                                 onOpenUser = onOpenCreator,
                                 onOpenPost = onOpenPost,
                                 onOpenWeb = onOpenWeb,
+                                onLongClick = {
+                                    textSelection = true
+                                },
                             )
                         }
                     }

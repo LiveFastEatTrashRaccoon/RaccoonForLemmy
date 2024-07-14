@@ -10,9 +10,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.VoteFormat
@@ -57,6 +62,8 @@ fun InboxCard(
     onOptionSelected: ((OptionId) -> Unit)? = null,
     onReply: (() -> Unit)? = null,
 ) {
+    var textSelection by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     val onClickPost =
         rememberCallback {
             onClick.invoke(mention.post)
@@ -118,11 +125,21 @@ fun InboxCard(
                         text = previewText,
                         autoLoadImages = autoLoadImages,
                         onOpenImage = onImageClick,
-                        onClick = onClickPost,
+                        onClick = {
+                            if (textSelection) {
+                                focusManager.clearFocus(true)
+                                textSelection = false
+                            } else {
+                                onClickPost.invoke()
+                            }
+                        },
                         onOpenUser =
                             rememberCallbackArgs { user, instance ->
                                 onOpenCreator(user, instance)
                             },
+                        onLongClick = {
+                            textSelection = true
+                        },
                     )
                 }
             }

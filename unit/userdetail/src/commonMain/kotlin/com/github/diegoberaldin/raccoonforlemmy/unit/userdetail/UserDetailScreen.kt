@@ -652,12 +652,7 @@ class UserDetailScreen(
                                     rememberCallback(model) {
                                         model.reduce(UserDetailMviModel.Intent.HapticIndication)
                                     },
-                                swipeToStartActions =
-                                    if (uiState.isLogged && !isOnOtherInstance) {
-                                        uiState.actionsOnSwipeToStartPosts.toSwipeActions()
-                                    } else {
-                                        emptyList()
-                                    },
+                                swipeToStartActions = uiState.actionsOnSwipeToStartPosts.toSwipeActions(),
                                 swipeToEndActions =
                                     if (uiState.isLogged && !isOnOtherInstance) {
                                         uiState.actionsOnSwipeToEndPosts.toSwipeActions()
@@ -1001,12 +996,7 @@ class UserDetailScreen(
                                     rememberCallback(model) {
                                         model.reduce(UserDetailMviModel.Intent.HapticIndication)
                                     },
-                                swipeToStartActions =
-                                    if (uiState.isLogged && !isOnOtherInstance) {
-                                        uiState.actionsOnSwipeToStartComments.toSwipeActions()
-                                    } else {
-                                        emptyList()
-                                    },
+                                swipeToStartActions = uiState.actionsOnSwipeToStartComments.toSwipeActions(),
                                 swipeToEndActions =
                                     if (uiState.isLogged && !isOnOtherInstance) {
                                         uiState.actionsOnSwipeToEndComments.toSwipeActions()

@@ -437,4 +437,9 @@ internal val RoStrings =
             "Deschide pagina web cu clic pe imaginea postării"
         override val settingsSubtitleOpenPostWebPageOnImageClick =
             "Dacă o postare are o adresă URL, deschide pagina web cu clic pe imagine"
+        override val settingsItemAlternateMarkdownRendering =
+            "Activează redarea alternativă Markdown"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Configurează bara de navigare de jos"
+        override val selectTabNavigationTitle = "Selectează o secțiune"
     }

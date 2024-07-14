@@ -245,4 +245,8 @@ sealed interface NotificationCenterEvent {
     data object FavoritesUpdated : NotificationCenterEvent
 
     data object OpenSearchInExplore : NotificationCenterEvent
+
+    data class TabNavigationSectionSelected(
+        val sectionId: Int,
+    ) : NotificationCenterEvent
 }

@@ -5,7 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.api.di.coreApiModule
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.coreAppearanceModule
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.di.lemmyUiModule
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.di.coreL10nModule
-import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.navigationModule
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.coreNavigationModule
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.coreNotificationModule
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.corePersistenceModule
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.coreAppConfigModule
@@ -36,6 +36,7 @@ import com.github.diegoberaldin.raccoonforlemmy.unit.chat.di.chatModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.communitydetail.di.communityDetailModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.communityinfo.di.communityInfoModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.configurecontentview.di.configureContentViewModule
+import com.github.diegoberaldin.raccoonforlemmy.unit.configurenavbar.di.configureNavBarModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.configureswipeactions.di.configureSwipeActionsModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.createcomment.di.createCommentModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.createpost.di.createPostModule
@@ -59,6 +60,7 @@ import com.github.diegoberaldin.raccoonforlemmy.unit.userinfo.di.userInfoModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.zoomableimage.di.zoomableImageModule
 import org.koin.core.context.startKoin
 import platform.Foundation.NSBundle
+import kotlin.experimental.ExperimentalNativeApi
 
 fun initKoin() {
     startKoin {
@@ -81,7 +83,7 @@ fun initKoin() {
             utilsModule,
             imagePreloadModule,
             networkModule,
-            navigationModule,
+            coreNavigationModule,
             lemmyUiModule,
             homeTabModule,
             inboxTabModule,
@@ -121,21 +123,26 @@ fun initKoin() {
             moderateWithReasonModule,
             acknowledgementsModule,
             mediaListModule,
+            configureNavBarModule,
         )
     }
 
-    AppInfo.versionCode =
-        buildString {
-            val dict = NSBundle.mainBundle.infoDictionary
-            val buildNumber = dict?.get("CFBundleVersion") as? String ?: ""
-            val versionName = dict?.get("CFBundleShortVersionString") as? String ?: ""
-            if (versionName.isNotEmpty()) {
-                append(versionName)
+    @OptIn(ExperimentalNativeApi::class)
+    with(AppInfo) {
+        versionCode =
+            buildString {
+                val dict = NSBundle.mainBundle.infoDictionary
+                val buildNumber = dict?.get("CFBundleVersion") as? String ?: ""
+                val versionName = dict?.get("CFBundleShortVersionString") as? String ?: ""
+                if (versionName.isNotEmpty()) {
+                    append(versionName)
+                }
+                if (buildNumber.isNotEmpty()) {
+                    append(" (")
+                    append(buildNumber)
+                    append(")")
+                }
             }
-            if (buildNumber.isNotEmpty()) {
-                append(" (")
-                append(buildNumber)
-                append(")")
-            }
-        }
+        isDebug = Platform.isDebugBinary
+    }
 }

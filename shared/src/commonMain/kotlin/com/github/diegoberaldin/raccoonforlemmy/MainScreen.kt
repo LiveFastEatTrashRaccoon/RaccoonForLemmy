@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.tab.CurrentTab
+import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
@@ -42,13 +43,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getDrawerCoor
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.feature.home.ui.HomeTab
-import com.github.diegoberaldin.raccoonforlemmy.feature.inbox.ui.InboxTab
-import com.github.diegoberaldin.raccoonforlemmy.feature.profile.ui.ProfileTab
-import com.github.diegoberaldin.raccoonforlemmy.feature.search.ui.ExploreTab
 import com.github.diegoberaldin.raccoonforlemmy.feature.settings.main.SettingsScreen
-import com.github.diegoberaldin.raccoonforlemmy.ui.navigation.TabNavigationItem
+import com.github.diegoberaldin.raccoonforlemmy.navigation.TabNavigationItem
+import com.github.diegoberaldin.raccoonforlemmy.navigation.toTab
 import com.github.diegoberaldin.raccoonforlemmy.unit.manageaccounts.ManageAccountsScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
@@ -225,6 +223,37 @@ internal object MainScreen : Screen {
                                     uiFontSizeWorkaround = true
                                 }.launchIn(this)
                         }
+
+                        fun handleOnLongPress(
+                            tab: Tab,
+                            section: TabNavigationSection,
+                        ) {
+                            when (section) {
+                                TabNavigationSection.Explore -> {
+                                    tabNavigator.current = tab
+                                    navigationCoordinator.setCurrentSection(TabNavigationSection.Explore)
+                                    scope.launch {
+                                        notificationCenter.send(NotificationCenterEvent.OpenSearchInExplore)
+                                    }
+                                }
+
+                                TabNavigationSection.Inbox -> {
+                                    if (uiState.isLogged) {
+                                        model.reduce(MainMviModel.Intent.ReadAllInbox)
+                                    }
+                                }
+
+                                TabNavigationSection.Profile -> {
+                                    if (uiState.isLogged) {
+                                        val screen = ManageAccountsScreen()
+                                        navigationCoordinator.showBottomSheet(screen)
+                                    }
+                                }
+
+                                else -> Unit
+                            }
+                        }
+
                         if (uiFontSizeWorkaround) {
                             NavigationBar(
                                 modifier =
@@ -248,45 +277,30 @@ internal object MainScreen : Screen {
                                     ),
                                 tonalElevation = 0.dp,
                             ) {
-                                TabNavigationItem(
-                                    tab = HomeTab,
-                                    withText = titleVisible,
-                                )
-                                TabNavigationItem(
-                                    tab = ExploreTab,
-                                    withText = titleVisible,
-                                    onLongPress =
-                                        rememberCallback {
-                                            tabNavigator.current = ExploreTab
-                                            navigationCoordinator.setCurrentSection(TabNavigationSection.Explore)
-
-                                            scope.launch {
-                                                notificationCenter.send(NotificationCenterEvent.OpenSearchInExplore)
-                                            }
+                                // it must be done so (indexed), otherwise section gets remembered in tap callbacks
+                                uiState.bottomBarSections.forEachIndexed { idx, section ->
+                                    TabNavigationItem(
+                                        section = section,
+                                        withText = titleVisible,
+                                        customIconUrl =
+                                            if (section == TabNavigationSection.Profile) {
+                                                uiState.customProfileUrl
+                                            } else {
+                                                null
+                                            },
+                                        onClick = {
+                                            val section = uiState.bottomBarSections[idx]
+                                            val tab = section.toTab()
+                                            tabNavigator.current = tab
+                                            navigationCoordinator.setCurrentSection(section)
                                         },
-                                )
-                                TabNavigationItem(
-                                    tab = InboxTab,
-                                    withText = titleVisible,
-                                    onLongPress =
-                                        rememberCallback(model) {
-                                            if (uiState.isLogged) {
-                                                model.reduce(MainMviModel.Intent.ReadAllInbox)
-                                            }
+                                        onLongPress = {
+                                            val section = uiState.bottomBarSections[idx]
+                                            val tab = section.toTab()
+                                            handleOnLongPress(tab, section)
                                         },
-                                )
-                                TabNavigationItem(
-                                    tab = ProfileTab,
-                                    withText = titleVisible,
-                                    customIconUrl = uiState.customProfileUrl,
-                                    onLongPress =
-                                        rememberCallback {
-                                            if (uiState.isLogged) {
-                                                val screen = ManageAccountsScreen()
-                                                navigationCoordinator.showBottomSheet(screen)
-                                            }
-                                        },
-                                )
+                                    )
+                                }
                             }
                         }
                     }

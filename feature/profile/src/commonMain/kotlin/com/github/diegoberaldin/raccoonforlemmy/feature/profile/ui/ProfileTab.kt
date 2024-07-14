@@ -8,6 +8,8 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.TabNavigationSection
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.toInt
 import com.github.diegoberaldin.raccoonforlemmy.feature.profile.main.ProfileMainScreen
 
 object ProfileTab : Tab {
@@ -16,7 +18,7 @@ object ProfileTab : Tab {
             val icon = rememberVectorPainter(Icons.Default.AccountCircle)
             val title = LocalStrings.current.navigationProfile
             return TabOptions(
-                index = 2u,
+                index = TabNavigationSection.Profile.toInt().toUShort(),
                 title = title,
                 icon = icon,
             )

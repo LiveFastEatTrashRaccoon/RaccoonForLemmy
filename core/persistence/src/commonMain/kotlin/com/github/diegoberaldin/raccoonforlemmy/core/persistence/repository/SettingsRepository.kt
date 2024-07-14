@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 interface SettingsRepository {
     val currentSettings: StateFlow<SettingsModel>
+    val currentBottomBarSections: StateFlow<List<Int>>
 
     suspend fun createSettings(
         settings: SettingsModel,
@@ -21,4 +22,6 @@ interface SettingsRepository {
     )
 
     fun changeCurrentSettings(settings: SettingsModel)
+
+    fun changeCurrentBottomBarSections(sectionIds: List<Int>)
 }

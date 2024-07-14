@@ -30,6 +30,7 @@ import com.github.diegoberaldin.raccoonforlemmy.unit.postdetail.utils.sortToNest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
@@ -106,7 +107,6 @@ class PostDetailViewModel(
                 .onEach { settings ->
                     updateState {
                         it.copy(
-                            swipeActionsEnabled = settings.enableSwipeActions,
                             doubleTapActionEnabled = settings.enableDoubleTapAction,
                             voteFormat = settings.voteFormat,
                             autoLoadImages = settings.autoLoadImages,
@@ -133,7 +133,6 @@ class PostDetailViewModel(
                 .onEach { evt ->
                     applySortType(evt.value)
                 }.launchIn(this)
-
             notificationCenter
                 .subscribe(NotificationCenterEvent.CommentCreated::class)
                 .onEach {
@@ -196,6 +195,14 @@ class PostDetailViewModel(
                 .onEach { logged ->
                     updateState { it.copy(isLogged = logged ?: false) }
                 }.launchIn(this)
+            combine(
+                identityRepository.isLogged.map { it == true },
+                settingsRepository.currentSettings.map { it.enableSwipeActions },
+            ) { logged, swipeActionsEnabled ->
+                logged && swipeActionsEnabled && otherInstance.isEmpty()
+            }.onEach { value ->
+                updateState { it.copy(swipeActionsEnabled = value) }
+            }.launchIn(this)
 
             postNavigationManager.canNavigate
                 .onEach { canNavigate ->

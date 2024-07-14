@@ -11,6 +11,7 @@ interface ProfileSideMenuMviModel :
     data class State(
         val isModerator: Boolean = false,
         val canCreateCommunity: Boolean = false,
+        val isBookmarksVisible: Boolean = true,
     )
 
     sealed interface Effect

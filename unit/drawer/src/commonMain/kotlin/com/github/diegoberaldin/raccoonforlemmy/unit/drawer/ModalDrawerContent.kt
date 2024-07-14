@@ -205,22 +205,24 @@ object ModalDrawerContent : Tab {
                                     )
                                 }
                             }
-                            item {
-                                DrawerShortcut(
-                                    title = LocalStrings.current.navigationSettings,
-                                    icon = Icons.Default.Settings,
-                                    onSelected =
-                                        rememberCallback(coordinator) {
-                                            scope.launch {
-                                                focusManager.clearFocus()
-                                                navigationCoordinator.popUntilRoot()
-                                                coordinator.toggleDrawer()
-                                                delay(50)
+                            if (uiState.isSettingsVisible) {
+                                item {
+                                    DrawerShortcut(
+                                        title = LocalStrings.current.navigationSettings,
+                                        icon = Icons.Default.Settings,
+                                        onSelected =
+                                            rememberCallback(coordinator) {
+                                                scope.launch {
+                                                    focusManager.clearFocus()
+                                                    navigationCoordinator.popUntilRoot()
+                                                    coordinator.toggleDrawer()
+                                                    delay(50)
 
-                                                coordinator.sendEvent(DrawerEvent.OpenSettings)
-                                            }
-                                        },
-                                )
+                                                    coordinator.sendEvent(DrawerEvent.OpenSettings)
+                                                }
+                                            },
+                                    )
+                                }
                             }
                         }
 

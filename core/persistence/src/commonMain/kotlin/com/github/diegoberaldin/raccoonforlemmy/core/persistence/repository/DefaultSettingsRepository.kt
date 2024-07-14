@@ -13,6 +13,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeySto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -77,6 +78,7 @@ internal class DefaultSettingsRepository(
     private val db = provider.getDatabase()
 
     override val currentSettings = MutableStateFlow(SettingsModel())
+    override val currentBottomBarSections = MutableStateFlow<List<Int>>(emptyList())
 
     override suspend fun createSettings(
         settings: SettingsModel,
@@ -375,7 +377,10 @@ internal class DefaultSettingsRepository(
                 settings.defaultExploreResultType,
             )
             keyStore.save(KeyStoreKeys.RANDOM_THEME_COLOR, settings.randomThemeColor)
-            keyStore.save(KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK, settings.openPostWebPageOnImageClick)
+            keyStore.save(
+                KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK,
+                settings.openPostWebPageOnImageClick,
+            )
         } else {
             db.settingsQueries.update(
                 theme = settings.theme?.toLong(),
@@ -466,7 +471,11 @@ internal class DefaultSettingsRepository(
     }
 
     override fun changeCurrentSettings(settings: SettingsModel) {
-        currentSettings.value = settings
+        currentSettings.update { settings }
+    }
+
+    override fun changeCurrentBottomBarSections(sectionIds: List<Int>) {
+        currentBottomBarSections.update { sectionIds }
     }
 }
 

@@ -28,7 +28,9 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepo
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -68,12 +70,17 @@ class PostListViewModel(
             identityRepository.isLogged
                 .onEach { logged ->
                     refreshUser()
-                    updateState {
-                        it.copy(isLogged = logged ?: false)
-                    }
+                    updateState { it.copy(isLogged = logged ?: false) }
                     updateAvailableSortTypes()
                 }.launchIn(this)
-
+            combine(
+                identityRepository.isLogged.map { it == true },
+                settingsRepository.currentSettings.map { it.enableSwipeActions },
+            ) { logged, swipeActionsEnabled ->
+                logged && swipeActionsEnabled
+            }.onEach { value ->
+                updateState { it.copy(swipeActionsEnabled = value) }
+            }.launchIn(this)
             themeRepository.postLayout
                 .onEach { layout ->
                     updateState { it.copy(postLayout = layout) }
@@ -84,7 +91,6 @@ class PostListViewModel(
                     updateState {
                         it.copy(
                             blurNsfw = settings.blurNsfw,
-                            swipeActionsEnabled = settings.enableSwipeActions,
                             doubleTapActionEnabled = settings.enableDoubleTapAction,
                             voteFormat = settings.voteFormat,
                             autoLoadImages = settings.autoLoadImages,

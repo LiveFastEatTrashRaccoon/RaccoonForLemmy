@@ -1,6 +1,7 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -57,57 +58,59 @@ fun PostCardBody(
         .collectAsState(false)
 
     if (text.isNotEmpty()) {
-        CustomMarkdownWrapper(
-            modifier = modifier.padding(horizontal = Spacing.xxs),
-            content = text,
-            maxLines = maxLines,
-            autoLoadImages = autoLoadImages,
-            typography =
-                markdownTypography(
-                    h1 = typography.titleLarge,
-                    h2 = typography.titleLarge,
-                    h3 = typography.titleMedium,
-                    h4 = typography.titleMedium,
-                    h5 = typography.titleSmall,
-                    h6 = typography.titleSmall,
-                    text = typography.bodyMedium,
-                    paragraph = typography.bodyMedium,
-                    quote = typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
-                    bullet = typography.bodyMedium,
-                    list = typography.bodyMedium,
-                    ordered = typography.bodyMedium,
-                    code = typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
-                ),
-            colors =
-                markdownColor(
-                    text = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
-                    linkText = MaterialTheme.colorScheme.primary.copy(alpha = additionalAlphaFactor),
-                    codeText = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
-                    codeBackground = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                    dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                ),
-            highlightText = highlightText,
-            enableAlternateRendering = enableAlternateMarkdownRendering,
-            onOpenUrl =
-                rememberCallbackArgs { url ->
-                    navigationCoordinator.handleUrl(
-                        url = url,
-                        openingMode = settingsRepository.currentSettings.value.urlOpeningMode.toUrlOpeningMode(),
-                        uriHandler = uriHandler,
-                        customTabsHelper = customTabsHelper,
-                        onOpenCommunity = onOpenCommunity,
-                        onOpenUser = onOpenUser,
-                        onOpenPost = onOpenPost,
-                        onOpenWeb = onOpenWeb,
-                    )
-                },
-            onOpenImage =
-                rememberCallbackArgs { url ->
-                    onOpenImage?.invoke(url)
-                },
-            onClick = onClick,
-            onDoubleClick = onDoubleClick,
-            onLongClick = onLongClick,
-        )
+        SelectionContainer {
+            CustomMarkdownWrapper(
+                modifier = modifier.padding(horizontal = Spacing.xxs),
+                content = text,
+                maxLines = maxLines,
+                autoLoadImages = autoLoadImages,
+                typography =
+                    markdownTypography(
+                        h1 = typography.titleLarge,
+                        h2 = typography.titleLarge,
+                        h3 = typography.titleMedium,
+                        h4 = typography.titleMedium,
+                        h5 = typography.titleSmall,
+                        h6 = typography.titleSmall,
+                        text = typography.bodyMedium,
+                        paragraph = typography.bodyMedium,
+                        quote = typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
+                        bullet = typography.bodyMedium,
+                        list = typography.bodyMedium,
+                        ordered = typography.bodyMedium,
+                        code = typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
+                    ),
+                colors =
+                    markdownColor(
+                        text = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
+                        linkText = MaterialTheme.colorScheme.primary.copy(alpha = additionalAlphaFactor),
+                        codeText = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
+                        codeBackground = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
+                        dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                    ),
+                highlightText = highlightText,
+                enableAlternateRendering = enableAlternateMarkdownRendering,
+                onOpenUrl =
+                    rememberCallbackArgs { url ->
+                        navigationCoordinator.handleUrl(
+                            url = url,
+                            openingMode = settingsRepository.currentSettings.value.urlOpeningMode.toUrlOpeningMode(),
+                            uriHandler = uriHandler,
+                            customTabsHelper = customTabsHelper,
+                            onOpenCommunity = onOpenCommunity,
+                            onOpenUser = onOpenUser,
+                            onOpenPost = onOpenPost,
+                            onOpenWeb = onOpenWeb,
+                        )
+                    },
+                onOpenImage =
+                    rememberCallbackArgs { url ->
+                        onOpenImage?.invoke(url)
+                    },
+                onClick = onClick,
+                onDoubleClick = onDoubleClick,
+                onLongClick = onLongClick,
+            )
+        }
     }
 }

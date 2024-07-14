@@ -440,4 +440,6 @@ internal val ItStrings =
             "Apri pagina web al clic su immagine post"
         override val settingsSubtitleOpenPostWebPageOnImageClick =
             "Se un post ha un URL, apri pagina web al click sull\'immagine"
+        override val settingsItemAlternateMarkdownRendering =
+            "Abilita rendering Markdown alternativo"
     }

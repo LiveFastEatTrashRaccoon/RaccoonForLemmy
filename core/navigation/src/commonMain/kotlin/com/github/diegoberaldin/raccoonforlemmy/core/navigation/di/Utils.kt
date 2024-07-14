@@ -1,8 +1,11 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.navigation.di
 
+import com.github.diegoberaldin.raccoonforlemmy.core.navigation.BottomNavItemsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.DrawerCoordinator
 import com.github.diegoberaldin.raccoonforlemmy.core.navigation.NavigationCoordinator
 
 expect fun getNavigationCoordinator(): NavigationCoordinator
 
 expect fun getDrawerCoordinator(): DrawerCoordinator
+
+expect fun getBottomNavItemsRepository(): BottomNavItemsRepository

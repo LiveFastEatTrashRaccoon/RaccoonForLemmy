@@ -13,7 +13,9 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class MainApplication : Application(), ImageLoaderFactory {
+class MainApplication :
+    Application(),
+    ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
 
@@ -24,16 +26,19 @@ class MainApplication : Application(), ImageLoaderFactory {
                 sharedHelperModule,
             )
 
-            AppInfo.versionCode =
-                buildString {
-                    append(BuildConfig.VERSION_NAME)
-                    append(" (")
-                    append(BuildConfig.VERSION_CODE)
-                    append(")")
-                    if (BuildConfig.DEBUG) {
-                        append(" - dev")
+            with(AppInfo) {
+                versionCode =
+                    buildString {
+                        append(BuildConfig.VERSION_NAME)
+                        append(" (")
+                        append(BuildConfig.VERSION_CODE)
+                        append(")")
+                        if (BuildConfig.DEBUG) {
+                            append(" - dev")
+                        }
                     }
-                }
+                isDebug = BuildConfig.DEBUG
+            }
         }.apply {
             val crashReportWriter: CrashReportWriter by inject()
             val crashReportConfig: CrashReportConfiguration by inject()
