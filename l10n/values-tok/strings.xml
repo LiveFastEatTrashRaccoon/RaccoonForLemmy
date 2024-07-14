@@ -416,4 +416,9 @@
     <string name="settingsUseAvatarAsProfileNavigationIcon">o kepeken e sitelen jan tawa sitelen lili pi linja anpa</string>
     <string name="settingsItemRandomThemeColor">o ante e kule lon tempo ale</string>
     <string name="settingsSubtitleRandomThemeColor">open e ilo nanpa ni la, o ante e kule</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">sina luka e sitelen lipu la, o open e linluwi</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">lipu li jo e sitelen wan la, luka e sitelen la, o open e linluwi</string>
+    <string name="settingsItemAlternateMarkdownRendering">o kepeken e nanpa ante pi ilo Makadon</string>
+    <string name="settingsItemConfigureBottomNavigationBar">o ante e lukin pi linja anpa</string>
+    <string name="selectTabNavigationTitle">o anu e ijo wan</string>
 </resources>
