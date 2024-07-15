@@ -329,7 +329,7 @@
     <string name="navigationDrawerTitleDrafts">Brouillons</string>
     <string name="moderatorZoneTitle">Outils pour les modérateurs</string>
     <string name="moderatorZoneActionContents">Contenus à modérer</string>
-    <string name="messageAuthIssue">Une erreur s\'est produite lors de la récupération des données utilisateur, essayez d\'actualiser l\'écran</string>
+    <string name="messageAuthIssue">Une erreur s\'est produite lors de la récupération des données, peut-être que votre jeton a expiré.</string>
     <string name="banReasonPlaceholder">Raison (facultatif)</string>
     <string name="banItemPermanent">Interdiction permanente</string>
     <string name="banItemRemoveData">Supprimer données</string>
@@ -422,4 +422,8 @@
     <string name="settingsItemConfigureBottomNavigationBar">Configurer la barre de navigation inférieure</string>
     <string name="settingsItemAlternateMarkdownRendering">Activer le rendu de Markdown alternatif</string>
     <string name="selectTabNavigationTitle">Sélectionnez une section</string>
+    <string name="messageAuthIssueSegue0">Vous pourriez essayer l\'une des actions suivantes :</string>
+    <string name="messageAuthIssueSegue2">s\'enregistrer à nouveau</string>
+    <string name="messageAuthIssueSegue1">actualiser l\'ecran</string>
+    <string name="messageAuthIssueSegue3">effacer les données de l\'application</string>
 </resources>
