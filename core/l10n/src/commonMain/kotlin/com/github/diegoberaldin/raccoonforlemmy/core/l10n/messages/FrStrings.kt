@@ -340,7 +340,7 @@ internal val FrStrings =
         override val moderatorZoneTitle = "Outils pour les modérateurs"
         override val moderatorZoneActionContents = "Contenus à modérer"
         override val messageAuthIssue =
-            "Une erreur s\'est produite lors de la récupération des données utilisateur, essayez d\'actualiser l\'écran"
+            "Une erreur s\'est produite lors de la récupération des données, peut-être que votre jeton a expiré."
         override val banReasonPlaceholder = "Raison (facultatif)"
         override val banItemPermanent = "Interdiction permanente"
         override val banItemRemoveData = "Supprimer données"
@@ -449,4 +449,8 @@ internal val FrStrings =
         override val settingsItemAlternateMarkdownRendering =
             "Activer le rendu de Markdown alternatif"
         override val selectTabNavigationTitle = "Sélectionnez une section"
+        override val messageAuthIssueSegue0 = "Vous pourriez essayer l\'une des actions suivantes :"
+        override val messageAuthIssueSegue2 = "s\'enregistrer à nouveau"
+        override val messageAuthIssueSegue1 = "actualiser l\'ecran"
+        override val messageAuthIssueSegue3 = "effacer les données de l\'application"
     }
