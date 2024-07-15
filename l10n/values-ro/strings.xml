@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Ciorne</string>
     <string name="moderatorZoneTitle">Instrumente pentru moderatori</string>
     <string name="moderatorZoneActionContents">Conținute la moderat</string>
-    <string name="messageAuthIssue">A apărut o eroare la preluarea datelor utilizatorului, încercearcă să reîmprospătezi ecranul</string>
+    <string name="messageAuthIssue">A apărut o eroare la preluarea datelor, este posibil ca indicativul tău să fi expirat.</string>
     <string name="banReasonPlaceholder">Motiv (opțional)</string>
     <string name="banItemPermanent">Interdicție permanentă</string>
     <string name="banItemRemoveData">Elimină datele</string>
@@ -421,4 +421,8 @@
     <string name="settingsItemAlternateMarkdownRendering">Activează redarea alternativă Markdown</string>
     <string name="settingsItemConfigureBottomNavigationBar">Configurează bara de navigare de jos</string>
     <string name="selectTabNavigationTitle">Selectează o secțiune</string>
+    <string name="messageAuthIssueSegue0">Poți să încerci una dintre următoarele acțiuni:</string>
+    <string name="messageAuthIssueSegue3">ștergere datele aplicației</string>
+    <string name="messageAuthIssueSegue1">reîmprospătare forțată</string>
+    <string name="messageAuthIssueSegue2">a se conecta din nou</string>
 </resources>
