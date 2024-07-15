@@ -19,3 +19,5 @@ expect val shareHelperModule: Module
 expect val customTabsModule: Module
 
 expect val hapticFeedbackModule: Module
+
+expect val appInfoModule: Module

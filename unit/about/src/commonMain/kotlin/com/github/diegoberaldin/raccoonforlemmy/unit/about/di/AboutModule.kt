@@ -7,6 +7,8 @@ import org.koin.dsl.module
 val aboutModule =
     module {
         factory<AboutDialogMviModel> {
-            AboutDialogViewModel()
+            AboutDialogViewModel(
+                appInfoRepository = get(),
+            )
         }
     }

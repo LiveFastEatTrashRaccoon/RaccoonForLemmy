@@ -51,6 +51,7 @@ val settingsTabModule =
                 importSettings = get(),
                 exportSettings = get(),
                 appConfigStore = get(),
+                appInfoRepository = get(),
             )
         }
     }
