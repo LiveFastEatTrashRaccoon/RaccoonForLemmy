@@ -109,6 +109,7 @@ fun CollapsedCommentCard(
                     upVoted = comment.myVote > 0,
                     downVoted = comment.myVote < 0,
                     comments = comment.comments,
+                    onClick = onClick,
                     onUpVote = onUpVote,
                     onDownVote = onDownVote,
                     onSave = onSave,

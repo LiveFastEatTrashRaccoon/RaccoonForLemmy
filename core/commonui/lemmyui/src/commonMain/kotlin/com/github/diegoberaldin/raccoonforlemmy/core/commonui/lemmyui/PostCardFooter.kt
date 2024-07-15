@@ -24,7 +24,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -71,8 +70,8 @@ fun PostCardFooter(
     actionButtonsActive: Boolean = true,
     markRead: Boolean = false,
     downVoteEnabled: Boolean = true,
-    optionsMenuOpen: MutableState<Boolean> = remember { mutableStateOf(false) },
     options: List<Option> = emptyList(),
+    onClick: (() -> Unit)? = null,
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
@@ -88,9 +87,22 @@ fun PostCardFooter(
     val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
     val ancillaryColor =
         MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha * additionalAlphaFactor)
+    var optionsMenuOpen by remember { mutableStateOf(false) }
 
     CustomizedContent(ContentFontClass.AncillaryText) {
-        Box(modifier = modifier) {
+        Box(
+            modifier =
+                modifier.onClick(
+                    onClick = {
+                        onClick?.invoke()
+                    },
+                    onLongClick = {
+                        if (!optionsMenuOpen) {
+                            optionsMenuOpen = true
+                        }
+                    },
+                ),
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
@@ -102,12 +114,12 @@ fun PostCardFooter(
                     ) {
                         Icon(
                             modifier =
-                                buttonModifier.padding(
-                                    top = 3.5.dp,
-                                    end = 3.5.dp,
-                                    bottom = 3.5.dp,
-                                )
-                                    .onClick(
+                                buttonModifier
+                                    .padding(
+                                        top = 3.5.dp,
+                                        end = 3.5.dp,
+                                        bottom = 3.5.dp,
+                                    ).onClick(
                                         onClick = {
                                             onReply?.invoke()
                                         },
@@ -131,8 +143,7 @@ fun PostCardFooter(
                                 .background(
                                     color = MaterialTheme.colorScheme.secondary,
                                     shape = RoundedCornerShape(CornerSize.s),
-                                )
-                                .padding(horizontal = Spacing.xxs),
+                                ).padding(horizontal = Spacing.xxs),
                         text = "+$unreadComments",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSecondary,
@@ -178,14 +189,14 @@ fun PostCardFooter(
                 if (options.isNotEmpty()) {
                     Icon(
                         modifier =
-                            Modifier.size(IconSize.m)
+                            Modifier
+                                .size(IconSize.m)
                                 .padding(Spacing.xs)
                                 .onGloballyPositioned {
                                     optionsOffset = it.positionInParent()
-                                }
-                                .onClick(
+                                }.onClick(
                                     onClick = {
-                                        optionsMenuOpen.value = true
+                                        optionsMenuOpen = true
                                     },
                                 ),
                         imageVector = Icons.Default.MoreHoriz,
@@ -282,9 +293,9 @@ fun PostCardFooter(
             }
 
             CustomDropDown(
-                expanded = optionsMenuOpen.value,
+                expanded = optionsMenuOpen,
                 onDismiss = {
-                    optionsMenuOpen.value = false
+                    optionsMenuOpen = false
                 },
                 offset =
                     DpOffset(
@@ -298,7 +309,7 @@ fun PostCardFooter(
                             Text(option.text)
                         },
                         onClick = {
-                            optionsMenuOpen.value = false
+                            optionsMenuOpen = false
                             onOptionSelected?.invoke(option.id)
                         },
                     )
