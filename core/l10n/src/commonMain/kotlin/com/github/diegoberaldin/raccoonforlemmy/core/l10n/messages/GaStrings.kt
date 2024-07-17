@@ -337,7 +337,7 @@ internal val GaStrings =
         override val moderatorZoneTitle = "Uirlisí le haghaidh modhnóirí"
         override val moderatorZoneActionContents = "Ábhar go measartha"
         override val messageAuthIssue =
-            "Tharla earráid agus sonraí úsáideora á bhfáil agat, bain triail as an scáileán a athnuachan"
+            "Tharla earráid agus sonraí á bhfáil, seans go bhfuil do chomhartha imithe in éag."
         override val banReasonPlaceholder = "Fáth (roghnach)"
         override val banItemPermanent = "Cosc buan"
         override val banItemRemoveData = "Bain sonraí"
@@ -442,4 +442,9 @@ internal val GaStrings =
             "Cumasaigh rindreáil Markdown malartach"
         override val settingsItemConfigureBottomNavigationBar = "Cumraigh barra nascleanúna ag bun"
         override val selectTabNavigationTitle = "Roghnaigh alt"
+        override val messageAuthIssueSegue0 =
+            "D’fhéadfá triail a bhaint as ceann amháin de na gníomhartha seo a leanas:"
+        override val messageAuthIssueSegue3 = "sonraí an fheidhmchláir a ghlanadh"
+        override val messageAuthIssueSegue1 = "fórsa athnuachan"
+        override val messageAuthIssueSegue2 = "logáil isteach arís"
     }
