@@ -2,10 +2,12 @@ package com.github.diegoberaldin.raccoonforlemmy.unit.createpost
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -197,38 +199,42 @@ class CreatePostScreen(
             }
         }
         LaunchedEffect(model) {
-            model.effects.onEach { effect ->
-                when (effect) {
-                    is CreatePostMviModel.Effect.Failure -> {
-                        snackbarHostState.showSnackbar(effect.message ?: genericError)
-                    }
+            model.effects
+                .onEach { effect ->
+                    when (effect) {
+                        is CreatePostMviModel.Effect.Failure -> {
+                            snackbarHostState.showSnackbar(effect.message ?: genericError)
+                        }
 
-                    CreatePostMviModel.Effect.Success -> {
-                        notificationCenter.send(
-                            event = NotificationCenterEvent.PostCreated,
-                        )
-                        navigationCoordinator.popScreen()
-                    }
+                        CreatePostMviModel.Effect.Success -> {
+                            notificationCenter.send(
+                                event = NotificationCenterEvent.PostCreated,
+                            )
+                            navigationCoordinator.popScreen()
+                        }
 
-                    CreatePostMviModel.Effect.DraftSaved -> navigationCoordinator.popScreen()
+                        CreatePostMviModel.Effect.DraftSaved -> navigationCoordinator.popScreen()
 
-                    CreatePostMviModel.Effect.AutoFillFailed -> {
-                        snackbarHostState.showSnackbar(genericError)
+                        CreatePostMviModel.Effect.AutoFillFailed -> {
+                            snackbarHostState.showSnackbar(genericError)
+                        }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
         LaunchedEffect(notificationCenter) {
-            notificationCenter.subscribe(NotificationCenterEvent.SelectCommunity::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.SelectCommunity::class)
                 .onEach { evt ->
                     model.reduce(CreatePostMviModel.Intent.SetCommunity(evt.model))
                     focusManager.clearFocus()
                 }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.CloseDialog::class).onEach {
-                if (openSelectCommunity) {
-                    openSelectCommunity = false
-                }
-            }.launchIn(this)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.CloseDialog::class)
+                .onEach {
+                    if (openSelectCommunity) {
+                        openSelectCommunity = false
+                    }
+                }.launchIn(this)
         }
 
         Scaffold(
@@ -302,27 +308,70 @@ class CreatePostScreen(
                 }
             },
         ) { padding ->
-            Column(
+            Box(
                 modifier =
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        )
+                        ).consumeWindowInsets(padding)
                         .safeImePadding()
-                        .verticalScroll(rememberScrollState()),
+                        .fillMaxSize(),
             ) {
-                // community
-                if (forceCommunitySelection) {
-                    TextField(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth().onFocusChanged(
-                                    rememberCallbackArgs { state ->
-                                        if (state.hasFocus) {
-                                            openSelectCommunity = true
-                                        }
-                                    },
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                ) {
+                    // community
+                    if (forceCommunitySelection) {
+                        TextField(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .onFocusChanged(
+                                        rememberCallbackArgs { state ->
+                                            if (state.hasFocus) {
+                                                openSelectCommunity = true
+                                            }
+                                        },
+                                    ),
+                            colors =
+                                TextFieldDefaults.colors(
+                                    focusedContainerColor = Color.Transparent,
+                                    unfocusedContainerColor = Color.Transparent,
+                                    disabledContainerColor = Color.Transparent,
                                 ),
+                            label = {
+                                Text(
+                                    text = LocalStrings.current.createPostCommunity,
+                                    style = MaterialTheme.typography.titleMedium,
+                                )
+                            },
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Groups,
+                                    contentDescription = null,
+                                )
+                            },
+                            textStyle = typography.bodyMedium,
+                            value = uiState.communityInfo,
+                            readOnly = true,
+                            singleLine = true,
+                            onValueChange = {},
+                            isError = uiState.communityError != null,
+                            supportingText = {
+                                val error = uiState.communityError
+                                if (error != null) {
+                                    Text(
+                                        text = error.toReadableMessage(),
+                                        color = MaterialTheme.colorScheme.error,
+                                    )
+                                }
+                            },
+                        )
+                    }
+
+                    // title
+                    TextField(
+                        modifier = Modifier.fillMaxWidth(),
                         colors =
                             TextFieldDefaults.colors(
                                 focusedContainerColor = Color.Transparent,
@@ -331,24 +380,54 @@ class CreatePostScreen(
                             ),
                         label = {
                             Text(
-                                text = LocalStrings.current.createPostCommunity,
+                                text = LocalStrings.current.createPostName,
                                 style = MaterialTheme.typography.titleMedium,
                             )
                         },
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Groups,
-                                contentDescription = null,
-                            )
-                        },
-                        textStyle = typography.bodyMedium,
-                        value = uiState.communityInfo,
-                        readOnly = true,
+                        textStyle = typography.titleMedium,
+                        value = uiState.title,
                         singleLine = true,
-                        onValueChange = {},
-                        isError = uiState.communityError != null,
+                        trailingIcon = {
+                            if (uiState.url.isNotBlank()) {
+                                Text(
+                                    modifier =
+                                        Modifier
+                                            .padding(horizontal = Spacing.s)
+                                            .background(
+                                                color = MaterialTheme.colorScheme.primary,
+                                                shape = RoundedCornerShape(CornerSize.m),
+                                            ).padding(Spacing.xs)
+                                            .onClick(
+                                                onClick = {
+                                                    model.reduce(CreatePostMviModel.Intent.AutoFillTitle)
+                                                },
+                                            ),
+                                    text = "auto".uppercase(),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontFamily = FontFamily.Default,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                )
+                            }
+                        },
+                        keyboardOptions =
+                            KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                autoCorrect = true,
+                                imeAction = ImeAction.Next,
+                                capitalization = KeyboardCapitalization.Sentences,
+                            ),
+                        keyboardActions =
+                            KeyboardActions(onNext = {
+                                urlFocusRequester.requestFocus()
+                            }),
+                        onValueChange =
+                            rememberCallbackArgs(model) { value ->
+                                model.reduce(CreatePostMviModel.Intent.SetTitle(value))
+                            },
+                        isError = uiState.titleError != null,
                         supportingText = {
-                            val error = uiState.communityError
+                            val error = uiState.titleError
                             if (error != null) {
                                 Text(
                                     text = error.toReadableMessage(),
@@ -357,163 +436,90 @@ class CreatePostScreen(
                             }
                         },
                     )
-                }
 
-                // title
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors =
-                        TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                        ),
-                    label = {
-                        Text(
-                            text = LocalStrings.current.createPostName,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    },
-                    textStyle = typography.titleMedium,
-                    value = uiState.title,
-                    singleLine = true,
-                    trailingIcon = {
-                        if (uiState.url.isNotBlank()) {
+                    // image
+                    TextField(
+                        modifier = Modifier.fillMaxWidth().focusRequester(urlFocusRequester),
+                        colors =
+                            TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                disabledContainerColor = Color.Transparent,
+                            ),
+                        label = {
                             Text(
+                                text = LocalStrings.current.createPostUrl,
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        },
+                        trailingIcon = {
+                            Icon(
                                 modifier =
-                                    Modifier
-                                        .padding(horizontal = Spacing.s)
-                                        .background(
-                                            color = MaterialTheme.colorScheme.primary,
-                                            shape = RoundedCornerShape(CornerSize.m),
-                                        )
-                                        .padding(Spacing.xs)
-                                        .onClick(
-                                            onClick = {
-                                                model.reduce(CreatePostMviModel.Intent.AutoFillTitle)
-                                            },
-                                        ),
-                                text = "auto".uppercase(),
-                                style = MaterialTheme.typography.labelSmall,
-                                fontFamily = FontFamily.Default,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                    Modifier.onClick(
+                                        onClick = {
+                                            openImagePicker = true
+                                        },
+                                    ),
+                                imageVector = Icons.Default.Image,
+                                contentDescription = null,
                             )
-                        }
-                    },
-                    keyboardOptions =
-                        KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            autoCorrect = true,
-                            imeAction = ImeAction.Next,
-                            capitalization = KeyboardCapitalization.Sentences,
-                        ),
-                    keyboardActions =
-                        KeyboardActions(onNext = {
-                            urlFocusRequester.requestFocus()
-                        }),
-                    onValueChange =
-                        rememberCallbackArgs(model) { value ->
-                            model.reduce(CreatePostMviModel.Intent.SetTitle(value))
                         },
-                    isError = uiState.titleError != null,
-                    supportingText = {
-                        val error = uiState.titleError
-                        if (error != null) {
-                            Text(
-                                text = error.toReadableMessage(),
-                                color = MaterialTheme.colorScheme.error,
-                            )
-                        }
-                    },
-                )
-
-                // image
-                TextField(
-                    modifier = Modifier.fillMaxWidth().focusRequester(urlFocusRequester),
-                    colors =
-                        TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                        ),
-                    label = {
-                        Text(
-                            text = LocalStrings.current.createPostUrl,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    },
-                    trailingIcon = {
-                        Icon(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        openImagePicker = true
-                                    },
-                                ),
-                            imageVector = Icons.Default.Image,
-                            contentDescription = null,
-                        )
-                    },
-                    textStyle =
-                        typography.bodyMedium.copy(
-                            fontFamily = FontFamily.Monospace,
-                        ),
-                    value = uiState.url,
-                    singleLine = true,
-                    keyboardOptions =
-                        KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            autoCorrect = false,
-                            imeAction = ImeAction.Next,
-                        ),
-                    keyboardActions =
-                        KeyboardActions(onNext = {
-                            bodyFocusRequester.requestFocus()
-                        }),
-                    onValueChange =
-                        rememberCallbackArgs(model) { value ->
-                            model.reduce(CreatePostMviModel.Intent.SetUrl(value))
-                        },
-                    isError = uiState.urlError != null,
-                    supportingText = {
-                        val error = uiState.urlError
-                        if (error != null) {
-                            Text(
-                                text = error.toReadableMessage(),
-                                color = MaterialTheme.colorScheme.error,
-                            )
-                        }
-                    },
-                )
-
-                // NSFW
-                Row(
-                    modifier =
-                        Modifier.fillMaxWidth().padding(
-                            vertical = Spacing.s,
-                            horizontal = Spacing.m,
-                        ),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = LocalStrings.current.createPostNsfw,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Switch(
-                        checked = uiState.nsfw,
-                        onCheckedChange =
+                        textStyle =
+                            typography.bodyMedium.copy(
+                                fontFamily = FontFamily.Monospace,
+                            ),
+                        value = uiState.url,
+                        singleLine = true,
+                        keyboardOptions =
+                            KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                autoCorrect = false,
+                                imeAction = ImeAction.Next,
+                            ),
+                        keyboardActions =
+                            KeyboardActions(onNext = {
+                                bodyFocusRequester.requestFocus()
+                            }),
+                        onValueChange =
                             rememberCallbackArgs(model) { value ->
-                                model.reduce(CreatePostMviModel.Intent.ChangeNsfw(value))
+                                model.reduce(CreatePostMviModel.Intent.SetUrl(value))
                             },
+                        isError = uiState.urlError != null,
+                        supportingText = {
+                            val error = uiState.urlError
+                            if (error != null) {
+                                Text(
+                                    text = error.toReadableMessage(),
+                                    color = MaterialTheme.colorScheme.error,
+                                )
+                            }
+                        },
                     )
-                }
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-                ) {
+                    // NSFW
+                    Row(
+                        modifier =
+                            Modifier.fillMaxWidth().padding(
+                                vertical = Spacing.s,
+                                horizontal = Spacing.m,
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = LocalStrings.current.createPostNsfw,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Switch(
+                            checked = uiState.nsfw,
+                            onCheckedChange =
+                                rememberCallbackArgs(model) { value ->
+                                    model.reduce(CreatePostMviModel.Intent.ChangeNsfw(value))
+                                },
+                        )
+                    }
+
                     SectionSelector(
                         titles =
                             listOf(
@@ -537,26 +543,6 @@ class CreatePostScreen(
                     )
 
                     if (uiState.section == CreatePostSection.Edit) {
-                        TextFormattingBar(
-                            modifier =
-                                Modifier.padding(
-                                    top = Spacing.s,
-                                    start = Spacing.s,
-                                    end = Spacing.s,
-                                ),
-                            textFieldValue = uiState.bodyValue,
-                            onTextFieldValueChanged = { value ->
-                                model.reduce(CreatePostMviModel.Intent.ChangeBodyValue(value))
-                            },
-                            onSelectImage = {
-                                openImagePickerInBody = true
-                            },
-                            currentLanguageId = uiState.currentLanguageId,
-                            availableLanguages = uiState.availableLanguages,
-                            onSelectLanguage = {
-                                selectLanguageDialogOpen = true
-                            },
-                        )
                         TextField(
                             modifier =
                                 Modifier
@@ -619,7 +605,17 @@ class CreatePostScreen(
                             downVoteEnabled = uiState.downVoteEnabled,
                         )
                     }
+                }
 
+                // bottom part with user name and toolbar
+                Column(
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.background)
+                            .padding(bottom = Spacing.xs),
+                ) {
                     if (uiState.currentUser.isNotEmpty()) {
                         Text(
                             modifier =
@@ -642,32 +638,56 @@ class CreatePostScreen(
                             textAlign = TextAlign.End,
                         )
                     }
+
+                    if (uiState.section == CreatePostSection.Edit) {
+                        TextFormattingBar(
+                            modifier =
+                                Modifier.padding(
+                                    top = Spacing.s,
+                                    start = Spacing.s,
+                                    end = Spacing.s,
+                                    bottom = Spacing.xs,
+                                ),
+                            textFieldValue = uiState.bodyValue,
+                            onTextFieldValueChanged = { value ->
+                                model.reduce(CreatePostMviModel.Intent.ChangeBodyValue(value))
+                            },
+                            onSelectImage = {
+                                openImagePickerInBody = true
+                            },
+                            currentLanguageId = uiState.currentLanguageId,
+                            availableLanguages = uiState.availableLanguages,
+                            onSelectLanguage = {
+                                selectLanguageDialogOpen = true
+                            },
+                        )
+                    }
                 }
             }
-        }
 
-        if (selectLanguageDialogOpen) {
-            SelectLanguageDialog(
-                languages = uiState.availableLanguages,
-                currentLanguageId = uiState.currentLanguageId,
-                onSelect =
-                    rememberCallbackArgs { langId ->
-                        model.reduce(CreatePostMviModel.Intent.ChangeLanguage(langId))
-                        selectLanguageDialogOpen = false
-                    },
-                onDismiss =
-                    rememberCallback {
-                        selectLanguageDialogOpen = false
-                    },
-            )
-        }
+            if (selectLanguageDialogOpen) {
+                SelectLanguageDialog(
+                    languages = uiState.availableLanguages,
+                    currentLanguageId = uiState.currentLanguageId,
+                    onSelect =
+                        rememberCallbackArgs { langId ->
+                            model.reduce(CreatePostMviModel.Intent.ChangeLanguage(langId))
+                            selectLanguageDialogOpen = false
+                        },
+                    onDismiss =
+                        rememberCallback {
+                            selectLanguageDialogOpen = false
+                        },
+                )
+            }
 
-        if (uiState.loading) {
-            ProgressHud()
-        }
+            if (uiState.loading) {
+                ProgressHud()
+            }
 
-        if (openSelectCommunity) {
-            SelectCommunityDialog().Content()
+            if (openSelectCommunity) {
+                SelectCommunityDialog().Content()
+            }
         }
     }
 }

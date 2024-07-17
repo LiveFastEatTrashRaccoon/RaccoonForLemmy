@@ -127,35 +127,36 @@ class CreateCommentScreen(
             }
         }
         LaunchedEffect(model) {
-            model.effects.onEach { effect ->
-                when (effect) {
-                    is CreateCommentMviModel.Effect.Failure -> {
-                        snackbarHostState.showSnackbar(effect.message ?: genericError)
-                    }
-
-                    is CreateCommentMviModel.Effect.Success -> {
-                        notificationCenter.send(event = NotificationCenterEvent.CommentCreated)
-                        uiState.originalPost?.also { originalPost ->
-                            notificationCenter.send(
-                                event =
-                                    NotificationCenterEvent.PostUpdated(
-                                        originalPost.copy(
-                                            comments =
-                                                if (effect.new) {
-                                                    originalPost.comments + 1
-                                                } else {
-                                                    originalPost.comments
-                                                },
-                                        ),
-                                    ),
-                            )
+            model.effects
+                .onEach { effect ->
+                    when (effect) {
+                        is CreateCommentMviModel.Effect.Failure -> {
+                            snackbarHostState.showSnackbar(effect.message ?: genericError)
                         }
-                        navigationCoordinator.popScreen()
-                    }
 
-                    CreateCommentMviModel.Effect.DraftSaved -> navigationCoordinator.popScreen()
-                }
-            }.launchIn(this)
+                        is CreateCommentMviModel.Effect.Success -> {
+                            notificationCenter.send(event = NotificationCenterEvent.CommentCreated)
+                            uiState.originalPost?.also { originalPost ->
+                                notificationCenter.send(
+                                    event =
+                                        NotificationCenterEvent.PostUpdated(
+                                            originalPost.copy(
+                                                comments =
+                                                    if (effect.new) {
+                                                        originalPost.comments + 1
+                                                    } else {
+                                                        originalPost.comments
+                                                    },
+                                            ),
+                                        ),
+                                )
+                            }
+                            navigationCoordinator.popScreen()
+                        }
+
+                        CreateCommentMviModel.Effect.DraftSaved -> navigationCoordinator.popScreen()
+                    }
+                }.launchIn(this)
         }
         LaunchedEffect(initialText) {
             if (uiState.textValue.text.isEmpty() && !initialText.isNullOrEmpty()) {
@@ -235,8 +236,7 @@ class CreateCommentScreen(
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        )
-                        .consumeWindowInsets(padding)
+                        ).consumeWindowInsets(padding)
                         .safeImePadding()
                         .fillMaxSize(),
             ) {
@@ -354,26 +354,6 @@ class CreateCommentScreen(
                     )
 
                     if (uiState.section == CreatePostSection.Edit) {
-                        TextFormattingBar(
-                            modifier =
-                                Modifier.padding(
-                                    top = Spacing.s,
-                                    start = Spacing.s,
-                                    end = Spacing.s,
-                                ),
-                            textFieldValue = uiState.textValue,
-                            onTextFieldValueChanged = { value ->
-                                model.reduce(CreateCommentMviModel.Intent.ChangeTextValue(value))
-                            },
-                            onSelectImage = {
-                                openImagePicker = true
-                            },
-                            currentLanguageId = uiState.currentLanguageId,
-                            availableLanguages = uiState.availableLanguages,
-                            onSelectLanguage = {
-                                selectLanguageDialogOpen = true
-                            },
-                        )
                         TextField(
                             modifier =
                                 Modifier
@@ -431,7 +411,17 @@ class CreateCommentScreen(
                             )
                         }
                     }
+                }
 
+                // bottom part with user name and toolbar
+                Column(
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.background)
+                            .padding(bottom = Spacing.xs),
+                ) {
                     if (uiState.currentUser.isNotEmpty()) {
                         Text(
                             modifier =
@@ -458,6 +448,28 @@ class CreateCommentScreen(
                             textAlign = TextAlign.End,
                         )
                     }
+
+                    TextFormattingBar(
+                        modifier =
+                            Modifier
+                                .padding(
+                                    top = Spacing.s,
+                                    start = Spacing.s,
+                                    end = Spacing.s,
+                                ),
+                        textFieldValue = uiState.textValue,
+                        onTextFieldValueChanged = { value ->
+                            model.reduce(CreateCommentMviModel.Intent.ChangeTextValue(value))
+                        },
+                        onSelectImage = {
+                            openImagePicker = true
+                        },
+                        currentLanguageId = uiState.currentLanguageId,
+                        availableLanguages = uiState.availableLanguages,
+                        onSelectLanguage = {
+                            selectLanguageDialogOpen = true
+                        },
+                    )
                 }
             }
 
