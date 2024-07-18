@@ -2,8 +2,10 @@ package com.github.diegoberaldin.raccoonforlemmy.core.utils.di
 
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.AppIconManager
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.DefaultAppIconManager
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.AppInfoRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.CrashReportConfiguration
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.CrashReportWriter
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.DefaultAppInfoRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.DefaultCrashReportConfiguration
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.DefaultCrashReportWriter
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.fs.DefaultFileSystemManager
@@ -101,6 +103,15 @@ actual val customTabsModule =
     module {
         single<CustomTabsHelper> {
             DefaultCustomTabsHelper(
+                context = get(),
+            )
+        }
+    }
+
+actual val appInfoModule =
+    module {
+        single<AppInfoRepository> {
+            DefaultAppInfoRepository(
                 context = get(),
             )
         }

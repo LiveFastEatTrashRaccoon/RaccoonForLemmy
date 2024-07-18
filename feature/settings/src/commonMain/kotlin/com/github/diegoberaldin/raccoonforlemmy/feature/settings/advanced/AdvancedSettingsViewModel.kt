@@ -17,7 +17,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.preferences.appconfig.AppCo
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.AppIconManager
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.AppIconVariant
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.appicon.toAppIconVariant
-import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.AppInfo
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.AppInfoRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.fs.FileSystemManager
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.gallery.GalleryHelper
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toInboxDefaultType
@@ -49,6 +49,7 @@ class AdvancedSettingsViewModel(
     private val importSettings: ImportSettingsUseCase,
     private val exportSettings: ExportSettingsUseCase,
     private val appConfigStore: AppConfigStore,
+    private val appInfoRepository: AppInfoRepository,
 ) : DefaultMviModel<AdvancedSettingsMviModel.Intent, AdvancedSettingsMviModel.UiState, AdvancedSettingsMviModel.Effect>(
         initialState = AdvancedSettingsMviModel.UiState(),
     ),
@@ -117,12 +118,12 @@ class AdvancedSettingsViewModel(
                     }
                 }.launchIn(this)
 
+            val isDebug = appInfoRepository.geInfo().isDebug
             appConfigStore.appConfig
-                .map { it.alternateMarkdownRenderingSettingsItemEnabled }
+                .map { conf -> conf.alternateMarkdownRenderingSettingsItemEnabled }
                 .distinctUntilChanged()
-                .onEach { alternateMarkdownRenderingSettingsItemEnabled ->
-                    val itemVisible =
-                        alternateMarkdownRenderingSettingsItemEnabled || AppInfo.isDebug
+                .onEach { itemEnabled ->
+                    val itemVisible = itemEnabled || isDebug
                     updateState {
                         it.copy(alternateMarkdownRenderingItemVisible = itemVisible)
                     }

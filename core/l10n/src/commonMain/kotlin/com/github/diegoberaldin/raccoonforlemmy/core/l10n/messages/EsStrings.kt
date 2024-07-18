@@ -106,7 +106,8 @@ internal val EsStrings =
         override val manageAccountsTitle = "Gestionar cuentas"
         override val manageSubscriptionsHeaderMulticommunities = "Multi-comunidades"
         override val manageSubscriptionsHeaderSubscriptions = "Suscripciones"
-        override val messageEmptyComments = "Nada que ver por aquí.\n¡Sé el primero en comentar!"
+        override val messageEmptyComments =
+            "Aquí hay demasiado silencio.\n¿Te gustaría ser el primero en comentar?"
         override val messageEmptyList = "Ningún elemento para mostrar"
         override val messageErrorLoadingComments = "Error al cargar los comentarios."
         override val messageGenericError = "Error"
@@ -336,7 +337,7 @@ internal val EsStrings =
         override val moderatorZoneTitle = "Herramientas para moderadores"
         override val moderatorZoneActionContents = "Contenidos por moderar"
         override val messageAuthIssue =
-            "Se produjo un error al obtener los datos del usuario, intente actualizar la pantalla"
+            "Se ha producido un error al obtener los datos, posiblemente tu token ha caducado."
         override val banReasonPlaceholder = "Razón (opcional)"
         override val banItemPermanent = "Prohibición permanente"
         override val banItemRemoveData = "Eliminar datos"
@@ -445,4 +446,9 @@ internal val EsStrings =
         override val settingsItemConfigureBottomNavigationBar =
             "Configurar la barra de navegación inferior"
         override val selectTabNavigationTitle = "Seleccionar una sección"
+        override val messageAuthIssueSegue0 =
+            "Puedes intentar una de las siguientes acciones:"
+        override val messageAuthIssueSegue1 = "forzar actualización"
+        override val messageAuthIssueSegue2 = "volver a iniciar sesión"
+        override val messageAuthIssueSegue3 = "borrar los datos de la aplicación"
     }

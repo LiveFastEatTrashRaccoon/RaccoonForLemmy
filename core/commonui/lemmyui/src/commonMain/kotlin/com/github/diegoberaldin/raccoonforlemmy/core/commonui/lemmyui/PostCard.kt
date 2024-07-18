@@ -20,9 +20,9 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -111,7 +111,6 @@ fun PostCard(
                         Modifier
                     },
                 ).onClick(
-                    onClick = onClick ?: {},
                     onDoubleClick = onDoubleClick ?: {},
                 ),
     ) {
@@ -219,7 +218,6 @@ private fun CompactPost(
     onClick: (() -> Unit)?,
     onDoubleClick: (() -> Unit)?,
 ) {
-    val optionsMenuOpen = remember { mutableStateOf(false) }
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     val uriHandler = LocalUriHandler.current
@@ -240,11 +238,13 @@ private fun CompactPost(
                 .padding(horizontal = Spacing.xs)
                 .pointerInput(Unit) {
                     detectTapGestures(
-                        onLongPress = {
-                            optionsMenuOpen.value = true
-                        },
                         onTap = {
-                            onClick?.invoke()
+                            if (textSelection) {
+                                focusManager.clearFocus()
+                                textSelection = false
+                            } else {
+                                onClick?.invoke()
+                            }
                         },
                     )
                 },
@@ -270,10 +270,6 @@ private fun CompactPost(
             autoLoadImages = autoLoadImages,
             preferNicknames = preferNicknames,
             onDoubleClick = onDoubleClick,
-            onLongClick =
-                rememberCallback {
-                    optionsMenuOpen.value = true
-                },
         )
         Row(
             modifier = Modifier.padding(horizontal = Spacing.xs),
@@ -382,10 +378,6 @@ private fun CompactPost(
                                 }
                             },
                         onDoubleClick = onDoubleClick,
-                        onLongClick =
-                            rememberCallback {
-                                optionsMenuOpen.value = true
-                            },
                     )
                 }
             }
@@ -412,13 +404,13 @@ private fun CompactPost(
             downVoted = post.myVote < 0,
             saved = post.saved,
             downVoteEnabled = downVoteEnabled,
+            onClick = onClick,
             onUpVote = onUpVote,
             onDownVote = onDownVote,
             onSave = onSave,
             onReply = onReply,
             publishDate = post.publishDate,
             updateDate = post.updateDate,
-            optionsMenuOpen = optionsMenuOpen,
             options = options,
             onOptionSelected = onOptionSelected,
             actionButtonsActive = actionButtonsActive,
@@ -467,7 +459,6 @@ private fun ExtendedPost(
     val uriHandler = LocalUriHandler.current
     val customTabsHelper = remember { getCustomTabsHelper() }
     val navigationCoordinator = remember { getNavigationCoordinator() }
-    val optionsMenuOpen = remember { mutableStateOf(false) }
     var textSelection by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val postLinkUrl =
@@ -486,11 +477,12 @@ private fun ExtendedPost(
                 .background(backgroundColor)
                 .pointerInput(Unit) {
                     detectTapGestures(
-                        onLongPress = {
-                            optionsMenuOpen.value = true
-                        },
                         onTap = {
-                            onClick?.invoke()
+                            if (textSelection) {
+                                textSelection = false
+                            } else {
+                                onClick?.invoke()
+                            }
                         },
                     )
                 },
@@ -516,10 +508,6 @@ private fun ExtendedPost(
             autoLoadImages = autoLoadImages,
             preferNicknames = preferNicknames,
             onDoubleClick = onDoubleClick,
-            onLongClick =
-                rememberCallback {
-                    optionsMenuOpen.value = true
-                },
         )
         if (post.deleted) {
             Text(
@@ -536,10 +524,12 @@ private fun ExtendedPost(
             CustomizedContent(ContentFontClass.Title) {
                 PostCardTitle(
                     modifier =
-                        Modifier.padding(
-                            vertical = Spacing.xs,
-                            horizontal = Spacing.s,
-                        ),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = Spacing.xs,
+                                horizontal = Spacing.s,
+                            ),
                     text = post.title,
                     markRead = markRead,
                     highlightText = highlightText,
@@ -635,9 +625,6 @@ private fun ExtendedPost(
                         },
                     onDoubleClick = onDoubleClick,
                     autoLoadImages = autoLoadImages,
-                    onLongClick = {
-                        optionsMenuOpen.value = true
-                    },
                 )
             }
 
@@ -653,11 +640,13 @@ private fun ExtendedPost(
                     CustomizedContent(ContentFontClass.Body) {
                         PostCardBody(
                             modifier =
-                                Modifier.padding(
-                                    top = Spacing.xxs,
-                                    start = Spacing.s,
-                                    end = Spacing.s,
-                                ),
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        top = Spacing.xxs,
+                                        start = Spacing.s,
+                                        end = Spacing.s,
+                                    ),
                             text = post.text,
                             maxLines =
                                 if (limitBodyHeight) {
@@ -739,6 +728,7 @@ private fun ExtendedPost(
             downVoted = post.myVote < 0,
             saved = post.saved,
             downVoteEnabled = downVoteEnabled,
+            onClick = onClick,
             onUpVote = onUpVote,
             onDownVote = onDownVote,
             onSave = onSave,
@@ -746,7 +736,6 @@ private fun ExtendedPost(
             publishDate = post.publishDate,
             updateDate = post.updateDate,
             options = options,
-            optionsMenuOpen = optionsMenuOpen,
             onOptionSelected = onOptionSelected,
             actionButtonsActive = actionButtonsActive,
         )

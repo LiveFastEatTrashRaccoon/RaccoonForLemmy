@@ -11,6 +11,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.corePersiste
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.coreAppConfigModule
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.corePreferencesModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.appIconModule
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.appInfoModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.crashReportModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.customTabsModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.fileSystemModule
@@ -121,5 +122,6 @@ val sharedHelperModule =
             acknowledgementsModule,
             mediaListModule,
             configureNavBarModule,
+            appInfoModule,
         )
     }

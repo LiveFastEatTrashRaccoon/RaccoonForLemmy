@@ -431,8 +431,9 @@ internal open class DefaultStrings : Strings {
     override val settingsItemAlternateMarkdownRendering = "Enable alternate Markdown rendering"
     override val settingsItemConfigureBottomNavigationBar = "Configure bottom navigation bar"
     override val selectTabNavigationTitle = "Select a section"
-    override val messageAuthIssueSegue =
-        "You could try one of the following actions:\n• force refresh\n• log in again\n• clear the application data"
-    override val messageAuthIssueSegueHighlight1 = "force refresh"
-    override val messageAuthIssueSegueHighlight2 = "log in again"
+    override val messageAuthIssueSegue0 =
+        "You could try one of the following actions:"
+    override val messageAuthIssueSegue1 = "force refresh"
+    override val messageAuthIssueSegue2 = "log in again"
+    override val messageAuthIssueSegue3 = "clear the application data"
 }

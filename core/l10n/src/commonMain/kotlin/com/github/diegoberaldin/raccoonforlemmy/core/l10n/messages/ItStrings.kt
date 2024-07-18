@@ -337,7 +337,7 @@ internal val ItStrings =
         override val moderatorZoneTitle = "Strumenti per moderatori"
         override val moderatorZoneActionContents = "Contenuti da moderare"
         override val messageAuthIssue =
-            "Si è verificato un errore nel recupero dei dati utente, fare refresh della schermata"
+            "Si è verificato un errore nel recupero dei dati, è possibile che il token attuale sia scaduto."
         override val banReasonPlaceholder = "Motivazione (opzionale)"
         override val banItemPermanent = "Ban permanente"
         override val banItemRemoveData = "Rimuovi dati"
@@ -442,4 +442,12 @@ internal val ItStrings =
             "Se un post ha un URL, apri pagina web al click sull\'immagine"
         override val settingsItemAlternateMarkdownRendering =
             "Abilita rendering Markdown alternativo"
+        override val selectTabNavigationTitle = "Seleziona una sezione"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Configura barra di navigazione inferiore"
+        override val messageAuthIssueSegue0 =
+            "Si consiglia di intraprendere una delle seguenti azioni:"
+        override val messageAuthIssueSegue1 = "forzare l\'aggiornamento"
+        override val messageAuthIssueSegue2 = "effettuare nuovamente l\'accesso"
+        override val messageAuthIssueSegue3 = " cancellare i dati dell\'applicazione"
     }

@@ -102,18 +102,6 @@ fun EditFormattedInfoDialog(
                 )
 
                 if (currentSection == CreatePostSection.Edit) {
-                    TextFormattingBar(
-                        modifier =
-                            Modifier.padding(
-                                top = Spacing.s,
-                                start = Spacing.s,
-                                end = Spacing.s,
-                            ),
-                        textFieldValue = textFieldValue,
-                        onTextFieldValueChanged = {
-                            textFieldValue = it
-                        },
-                    )
                     TextField(
                         modifier =
                             Modifier
@@ -141,6 +129,18 @@ fun EditFormattedInfoDialog(
                             ),
                         onValueChange = { value ->
                             textFieldValue = value
+                        },
+                    )
+                    TextFormattingBar(
+                        modifier =
+                            Modifier.padding(
+                                top = Spacing.s,
+                                start = Spacing.s,
+                                end = Spacing.s,
+                            ),
+                        textFieldValue = textFieldValue,
+                        onTextFieldValueChanged = {
+                            textFieldValue = it
                         },
                     )
                 } else {

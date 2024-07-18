@@ -104,7 +104,14 @@ fun CommentCard(
             modifier =
                 Modifier
                     .onClick(
-                        onClick = onClick ?: {},
+                        onClick = {
+                            if (textSelection) {
+                                focusManager.clearFocus()
+                                textSelection = false
+                            } else {
+                                onClick?.invoke()
+                            }
+                        },
                         onDoubleClick = onDoubleClick ?: {},
                     ).padding(
                         start =
@@ -214,6 +221,7 @@ fun CommentCard(
                     comments = comment.comments,
                     actionButtonsActive = actionButtonsActive,
                     downVoteEnabled = downVoteEnabled,
+                    onClick = onClick,
                     onUpVote = onUpVote,
                     onDownVote = onDownVote,
                     onSave = onSave,

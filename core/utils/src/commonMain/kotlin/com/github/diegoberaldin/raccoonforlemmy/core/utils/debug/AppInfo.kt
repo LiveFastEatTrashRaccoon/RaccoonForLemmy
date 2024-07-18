@@ -1,6 +1,10 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.utils.debug
 
-object AppInfo {
-    var versionCode = ""
-    var isDebug = false
+data class AppInfo(
+    val versionCode: String,
+    val isDebug: Boolean,
+)
+
+interface AppInfoRepository {
+    fun geInfo(): AppInfo
 }

@@ -4,15 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -85,7 +86,17 @@ fun InboxCard(
                     } else {
                         Modifier.background(MaterialTheme.colorScheme.background)
                     },
-                ).onClick(onClick = onClickPost),
+                ).onClick(
+                    onClick =
+                        rememberCallback {
+                            if (textSelection) {
+                                focusManager.clearFocus()
+                                textSelection = false
+                            } else {
+                                onClickPost()
+                            }
+                        },
+                ),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
@@ -93,8 +104,10 @@ fun InboxCard(
             InboxCardHeader(
                 modifier =
                     Modifier
-                        .onClick(onClick = onClickPost)
-                        .padding(horizontal = Spacing.s),
+                        .fillMaxWidth()
+                        .onClick(
+                            onClick = onClickPost,
+                        ).padding(horizontal = Spacing.s),
                 mention = mention,
                 type = type,
             )
@@ -119,9 +132,11 @@ fun InboxCard(
                 CustomizedContent(ContentFontClass.Body) {
                     PostCardBody(
                         modifier =
-                            Modifier.padding(
-                                horizontal = Spacing.s,
-                            ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = Spacing.s,
+                                ),
                         text = previewText,
                         autoLoadImages = autoLoadImages,
                         onOpenImage = onImageClick,

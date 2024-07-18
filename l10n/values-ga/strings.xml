@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Dréachtaí</string>
     <string name="moderatorZoneTitle">Uirlisí le haghaidh modhnóirí</string>
     <string name="moderatorZoneActionContents">Ábhar go measartha</string>
-    <string name="messageAuthIssue">Tharla earráid agus sonraí úsáideora á bhfáil agat, bain triail as an scáileán a athnuachan</string>
+    <string name="messageAuthIssue">Tharla earráid agus sonraí á bhfáil, seans go bhfuil do chomhartha imithe in éag.</string>
     <string name="banReasonPlaceholder">Fáth (roghnach)</string>
     <string name="banItemPermanent">Cosc buan</string>
     <string name="banItemRemoveData">Bain sonraí</string>
@@ -421,4 +421,8 @@
     <string name="settingsItemAlternateMarkdownRendering">Cumasaigh rindreáil Markdown malartach</string>
     <string name="settingsItemConfigureBottomNavigationBar">Cumraigh barra nascleanúna ag bun</string>
     <string name="selectTabNavigationTitle">Roghnaigh alt</string>
+    <string name="messageAuthIssueSegue0">D’fhéadfá triail a bhaint as ceann amháin de na gníomhartha seo a leanas:</string>
+    <string name="messageAuthIssueSegue3">sonraí an fheidhmchláir a ghlanadh</string>
+    <string name="messageAuthIssueSegue1">fórsa athnuachan</string>
+    <string name="messageAuthIssueSegue2">logáil isteach arís</string>
 </resources>

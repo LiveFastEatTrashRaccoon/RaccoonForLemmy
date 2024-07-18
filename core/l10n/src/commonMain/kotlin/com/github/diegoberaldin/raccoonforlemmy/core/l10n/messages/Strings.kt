@@ -429,9 +429,10 @@ interface Strings {
     val settingsItemAlternateMarkdownRendering: String
     val settingsItemConfigureBottomNavigationBar: String
     val selectTabNavigationTitle: String
-    val messageAuthIssueSegue: String
-    val messageAuthIssueSegueHighlight1: String
-    val messageAuthIssueSegueHighlight2: String
+    val messageAuthIssueSegue0: String
+    val messageAuthIssueSegue1: String
+    val messageAuthIssueSegue2: String
+    val messageAuthIssueSegue3: String
 }
 
 object Locales {
@@ -470,6 +471,7 @@ object Locales {
     const val NB = "nb"
     const val NN = "nn"
     const val MT = "mt"
+    const val ZH_CN = "zh_CN"
     const val ZH_TW = "zh_TW"
     const val ZH_HK = "zh_HK"
 }
@@ -511,6 +513,7 @@ internal val localizableStrings: Map<LanguageTag, Strings> =
         Locales.TOK to TokStrings,
         Locales.TR to TrStrings,
         Locales.UK to UkStrings,
+        Locales.ZH_CN to ZhCnStrings,
         Locales.ZH_HK to ZhHkStrings,
         Locales.ZH_TW to ZhTwStrings,
     )

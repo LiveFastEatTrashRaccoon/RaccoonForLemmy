@@ -10,8 +10,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.di.coreNotifi
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.di.corePersistenceModule
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.coreAppConfigModule
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.di.corePreferencesModule
-import com.github.diegoberaldin.raccoonforlemmy.core.utils.debug.AppInfo
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.appIconModule
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.appInfoModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.crashReportModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.customTabsModule
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.di.fileSystemModule
@@ -59,8 +59,6 @@ import com.github.diegoberaldin.raccoonforlemmy.unit.userdetail.di.userDetailMod
 import com.github.diegoberaldin.raccoonforlemmy.unit.userinfo.di.userInfoModule
 import com.github.diegoberaldin.raccoonforlemmy.unit.zoomableimage.di.zoomableImageModule
 import org.koin.core.context.startKoin
-import platform.Foundation.NSBundle
-import kotlin.experimental.ExperimentalNativeApi
 
 fun initKoin() {
     startKoin {
@@ -124,25 +122,7 @@ fun initKoin() {
             acknowledgementsModule,
             mediaListModule,
             configureNavBarModule,
+            appInfoModule,
         )
-    }
-
-    @OptIn(ExperimentalNativeApi::class)
-    with(AppInfo) {
-        versionCode =
-            buildString {
-                val dict = NSBundle.mainBundle.infoDictionary
-                val buildNumber = dict?.get("CFBundleVersion") as? String ?: ""
-                val versionName = dict?.get("CFBundleShortVersionString") as? String ?: ""
-                if (versionName.isNotEmpty()) {
-                    append(versionName)
-                }
-                if (buildNumber.isNotEmpty()) {
-                    append(" (")
-                    append(buildNumber)
-                    append(")")
-                }
-            }
-        isDebug = Platform.isDebugBinary
     }
 }

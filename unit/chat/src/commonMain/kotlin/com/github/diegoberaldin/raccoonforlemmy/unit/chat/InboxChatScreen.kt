@@ -29,9 +29,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -185,33 +185,13 @@ class InboxChatScreen(
                     modifier =
                         Modifier
                             .safeImePadding()
-                            .padding(
-                                top = Spacing.xs,
-                                bottom = Spacing.l,
-                            ),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                            .fillMaxWidth()
+                            .navigationBarsPadding()
+                            .padding(bottom = Spacing.s)
+                            .background(MaterialTheme.colorScheme.background),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
-                    TextFormattingBar(
-                        modifier = Modifier.padding(horizontal = Spacing.s),
-                        textFieldValue = textFieldValue,
-                        onTextFieldValueChanged = {
-                            textFieldValue = it
-                        },
-                        onSelectImage = {
-                            openImagePicker = true
-                        },
-                        lastActionIcon = Icons.AutoMirrored.Default.Send,
-                        onLastAction =
-                            rememberCallback {
-                                model.reduce(
-                                    InboxChatMviModel.Intent.SubmitNewMessage(
-                                        textFieldValue.text,
-                                    ),
-                                )
-                                textFieldValue = TextFieldValue(text = "")
-                            },
-                    )
-                    TextField(
+                    OutlinedTextField(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
@@ -253,6 +233,32 @@ class InboxChatScreen(
                         onValueChange = { value ->
                             textFieldValue = value
                         },
+                    )
+
+                    TextFormattingBar(
+                        modifier =
+                            Modifier.padding(
+                                top = Spacing.xs,
+                                start = Spacing.s,
+                                end = Spacing.s,
+                            ),
+                        textFieldValue = textFieldValue,
+                        onTextFieldValueChanged = {
+                            textFieldValue = it
+                        },
+                        onSelectImage = {
+                            openImagePicker = true
+                        },
+                        lastActionIcon = Icons.AutoMirrored.Default.Send,
+                        onLastAction =
+                            rememberCallback {
+                                model.reduce(
+                                    InboxChatMviModel.Intent.SubmitNewMessage(
+                                        textFieldValue.text,
+                                    ),
+                                )
+                                textFieldValue = TextFieldValue(text = "")
+                            },
                     )
                 }
             },

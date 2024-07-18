@@ -71,6 +71,9 @@ def main():
     if lang_code == "en" and len(country_code) == 0:
         dest_file = "../core/l10n/src/commonMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/l10n/messages/DefaultStrings.kt"
     else:
+        # add support for formats like zh-rCN
+        if country_code.startswith("-r"):
+            country_code = country_code[2:]
         dest_file = "../core/l10n/src/commonMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/l10n/messages/{0}{1}Strings.kt".format(lang_code.capitalize(), country_code.capitalize())
     convert(lang_code, country_code, source_file, dest_file)
 

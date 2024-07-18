@@ -336,7 +336,7 @@ internal val RoStrings =
         override val moderatorZoneTitle = "Instrumente pentru moderatori"
         override val moderatorZoneActionContents = "Conținute la moderat"
         override val messageAuthIssue =
-            "A apărut o eroare la preluarea datelor utilizatorului, încercearcă să reîmprospătezi ecranul"
+            "A apărut o eroare la preluarea datelor, este posibil ca indicativul tău să fi expirat."
         override val banReasonPlaceholder = "Motiv (opțional)"
         override val banItemPermanent = "Interdicție permanentă"
         override val banItemRemoveData = "Elimină datele"
@@ -442,4 +442,8 @@ internal val RoStrings =
         override val settingsItemConfigureBottomNavigationBar =
             "Configurează bara de navigare de jos"
         override val selectTabNavigationTitle = "Selectează o secțiune"
+        override val messageAuthIssueSegue0 = "Poți să încerci una dintre următoarele acțiuni:"
+        override val messageAuthIssueSegue3 = "ștergere datele aplicației"
+        override val messageAuthIssueSegue1 = "reîmprospătare forțată"
+        override val messageAuthIssueSegue2 = "a se conecta din nou"
     }
