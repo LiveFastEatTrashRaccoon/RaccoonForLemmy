@@ -167,29 +167,28 @@ interface inside the `:core:l10n` module, namely under the `messages` package in
 source set.
 
 First of all, determine the locale code, suppose it is `xx_YY`, based on the IANA conventions: it
-can
-consist a set of letters for the language `xx`, optionally followed by an underscore and another
-letter
-set for the region `YY` (e.g. `pt_BR` for Brazilian Portuguese or `pt` for Portuguese). If you only
-have to use the `xx` part, please ignore the `yy` indication in the rest of the explanation
-contained in this paragraph.
+can consist a set of letters for the language `xx`, optionally followed by an underscore and
+another letter set for the region `YY` (e.g. `pt_BR` for Brazilian Portuguese or `pt` for 
+Portuguese). If you only have to use the `xx` part, please ignore the `yy` indication in the rest
+of the explanation contained in this paragraph.
 
 Inside the `messages` package, create a file named `XxYyStrings.kt` which will contain an
-anonymous implementation of `Strings` stored in a variable called `XxYyStrings` like this
+anonymous subclass of `DefaultStrings` stored in a variable called `XxYyStrings` like this
 
 ```kotlin
 
 internal val XxYyStrings =
-    object : Strings {
+    object : DefaultStrings() {
         override val actionBackToTop = "..."
         // ... continue overriding all the remaining properties
     }
 ```
 
-It is recommended to copy the contents of the existing `EnStrings.kt` (i.e. the base localization)
-in order to already have all the overridden properties and just rewrite the values in quotes.
+Since you are extending `DefaultStrings` you are automatically using the base localization
+for all the properties for which you do not provide an override. Just re-declare the property
+using the key as its name and insert the translation inside double quotes.
 
-While editing messages, please escape all apostrophes (`'`) with a backslash (`\'`); while not
+While editing messages, please escape all apostrophes (`'`) with a backslash (`\'`): while not
 strictly needed any more, it's for compatibility with the old XML format used for localization.
 
 Afterwards, edit the `Strings.kt` file in the same directory with the following modifications:
@@ -224,12 +223,6 @@ That's it! You can test that everything works by launching the development app.
 `settingsColorWhite`) contain the name of an animal accompanied by an adjective. It would be nice
 if the adjective and the noun would start in every language with the same sound in order to create
 humorous pairs like in English ("hilarious hedgehog", "frolicsome frog", etc.).
-
-However, if you are not a developer and do not feel confident with GitHub's PR mechanism, you can
-just download
-the [base l10n](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/core/l10n/src/commonMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/l10n/messages/EnStrings.kt)
-to your local machine, edit the file and send an email to the maintainers with the attachment, we
-will take care of the rest.
 
 If you have proposals, want to submit l10n fixes/improvements to existing ones, you can
 use [this discussion](https://github.com/diegoberaldin/RaccoonForLemmy/discussions/378) and post an
