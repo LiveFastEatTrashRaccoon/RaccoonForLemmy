@@ -18,15 +18,27 @@ interface ManageBanMviModel :
     MviModel<ManageBanMviModel.Intent, ManageBanMviModel.UiState, ManageBanMviModel.Effect>,
     ScreenModel {
     sealed interface Intent {
-        data class ChangeSection(val section: ManageBanSection) : Intent
+        data class ChangeSection(
+            val section: ManageBanSection,
+        ) : Intent
 
         data object Refresh : Intent
 
-        data class UnblockUser(val id: Long) : Intent
+        data class UnblockUser(
+            val id: Long,
+        ) : Intent
 
-        data class UnblockCommunity(val id: Long) : Intent
+        data class UnblockCommunity(
+            val id: Long,
+        ) : Intent
 
-        data class UnblockInstance(val id: Long) : Intent
+        data class UnblockInstance(
+            val id: Long,
+        ) : Intent
+
+        data class SetSearch(
+            val value: String,
+        ) : Intent
     }
 
     data class UiState(
@@ -38,11 +50,16 @@ interface ManageBanMviModel :
         val bannedUsers: List<UserModel> = emptyList(),
         val bannedCommunities: List<CommunityModel> = emptyList(),
         val bannedInstances: List<InstanceModel> = emptyList(),
+        val searchText: String = "",
     )
 
     sealed interface Effect {
+        data object BackToTop : Effect
+
         data object Success : Effect
 
-        data class Failure(val message: String?) : Effect
+        data class Failure(
+            val message: String?,
+        ) : Effect
     }
 }

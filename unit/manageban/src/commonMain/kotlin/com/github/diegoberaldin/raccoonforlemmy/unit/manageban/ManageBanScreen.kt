@@ -34,12 +34,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
+import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SearchField
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.CommunityItemPlaceholder
@@ -69,21 +74,43 @@ class ManageBanScreen : Screen {
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
         val lazyListState = rememberLazyListState()
+        val focusManager = LocalFocusManager.current
+        val keyboardScrollConnection =
+            remember {
+                object : NestedScrollConnection {
+                    override fun onPreScroll(
+                        available: Offset,
+                        source: NestedScrollSource,
+                    ): Offset {
+                        focusManager.clearFocus()
+                        return Offset.Zero
+                    }
+                }
+            }
         val successMessage = LocalStrings.current.messageOperationSuccessful
         val errorMessage = LocalStrings.current.messageGenericError
 
         LaunchedEffect(model) {
-            model.effects.onEach { evt ->
-                when (evt) {
-                    is ManageBanMviModel.Effect.Failure -> {
-                        snackbarHostState.showSnackbar(evt.message ?: errorMessage)
-                    }
+            model.effects
+                .onEach { evt ->
+                    when (evt) {
+                        is ManageBanMviModel.Effect.Failure -> {
+                            snackbarHostState.showSnackbar(evt.message ?: errorMessage)
+                        }
 
-                    ManageBanMviModel.Effect.Success -> {
-                        snackbarHostState.showSnackbar(successMessage)
+                        ManageBanMviModel.Effect.Success -> {
+                            snackbarHostState.showSnackbar(successMessage)
+                        }
+
+                        ManageBanMviModel.Effect.BackToTop -> {
+                            runCatching {
+                                lazyListState.scrollToItem(0)
+                                topAppBarState.heightOffset = 0f
+                                topAppBarState.contentOffset = 0f
+                            }
+                        }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
 
         Scaffold(
@@ -138,8 +165,7 @@ class ManageBanScreen : Screen {
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        )
-                        .then(
+                        ).then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                             } else {
@@ -148,6 +174,23 @@ class ManageBanScreen : Screen {
                         ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
+                SearchField(
+                    modifier =
+                        Modifier
+                            .padding(
+                                horizontal = Spacing.xs,
+                                vertical = Spacing.s,
+                            ).fillMaxWidth(),
+                    hint = LocalStrings.current.exploreSearchPlaceholder,
+                    value = uiState.searchText,
+                    onValueChange = { value ->
+                        model.reduce(ManageBanMviModel.Intent.SetSearch(value))
+                    },
+                    onClear = {
+                        model.reduce(ManageBanMviModel.Intent.SetSearch(""))
+                    },
+                )
+
                 SectionSelector(
                     modifier = Modifier.padding(vertical = Spacing.xs),
                     titles =
@@ -182,7 +225,7 @@ class ManageBanScreen : Screen {
                                 } else {
                                     Modifier
                                 },
-                            )
+                            ).nestedScroll(keyboardScrollConnection)
                             .pullRefresh(pullRefreshState),
                 ) {
                     LazyColumn(
@@ -201,7 +244,8 @@ class ManageBanScreen : Screen {
                                         item {
                                             Text(
                                                 modifier =
-                                                    Modifier.fillMaxWidth()
+                                                    Modifier
+                                                        .fillMaxWidth()
                                                         .padding(top = Spacing.xs),
                                                 textAlign = TextAlign.Center,
                                                 text = LocalStrings.current.messageEmptyList,
@@ -253,7 +297,8 @@ class ManageBanScreen : Screen {
                                         item {
                                             Text(
                                                 modifier =
-                                                    Modifier.fillMaxWidth()
+                                                    Modifier
+                                                        .fillMaxWidth()
                                                         .padding(top = Spacing.xs),
                                                 textAlign = TextAlign.Center,
                                                 text = LocalStrings.current.messageEmptyList,
@@ -305,7 +350,8 @@ class ManageBanScreen : Screen {
                                         item {
                                             Text(
                                                 modifier =
-                                                    Modifier.fillMaxWidth()
+                                                    Modifier
+                                                        .fillMaxWidth()
                                                         .padding(top = Spacing.xs),
                                                 textAlign = TextAlign.Center,
                                                 text = LocalStrings.current.messageEmptyList,
