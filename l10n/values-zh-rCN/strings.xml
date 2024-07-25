@@ -255,4 +255,21 @@
     <string name="settingsFontFamilyDefault">系统</string>
     <string name="postReplySourceAccount">由：</string>
     <string name="settingsCommentBarTheme">评论栏主题</string>
+    <string name="modlogItemPostLocked">被锁定</string>
+    <string name="modlogItemPostFeatured">被标记为精选帖子</string>
+    <string name="modlogItemPostUnfeatured">被标记为非精选帖子</string>
+    <string name="modlogItemPostUnlocked">被解锁</string>
+    <string name="modlogItemPostRemoved">被移除</string>
+    <string name="settingsSearchPostsTitleOnly">仅按照标题搜索帖子</string>
+    <string name="settingsContentFontFamily">内容字体</string>
+    <string name="communityInfoModerators">版主</string>
+    <string name="communityActionAddFavorite">添加到收藏夹</string>
+    <string name="communityActionRemoveFavorite">从收藏夹移除</string>
+    <string name="communityActionViewModlog">查看审核日志</string>
+    <string name="modlogTitle">审核日志</string>
+    <string name="modlogItemModAdded">被添加为版主</string>
+    <string name="modlogItemModRemoved">被移除版主身份</string>
+    <string name="modlogItemUserBanned">被禁止</string>
+    <string name="modlogItemUserUnbanned">被解禁</string>
+    <string name="modlogItemPostRestored">被恢复</string>
 </resources>
