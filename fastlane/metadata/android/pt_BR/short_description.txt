@@ -1,1 +1,1 @@
-Cliente para Lemmy, uma plataforma federada de agregação e discussão.
+Cliente Lemmy para plataforma de agregação e discussão no fediverso.
