@@ -11,6 +11,7 @@ val exploreModule =
                 otherInstance = params[0],
                 apiConfigRepository = get(),
                 identityRepository = get(),
+                accountRepository = get(),
                 communityRepository = get(),
                 userRepository = get(),
                 postRepository = get(),
@@ -21,6 +22,7 @@ val exploreModule =
                 hapticFeedback = get(),
                 getSortTypesUseCase = get(),
                 lemmyValueCache = get(),
+                domainBlocklistRepository = get(),
             )
         }
     }

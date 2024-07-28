@@ -22,11 +22,13 @@ val paginationModule =
         factory<PostPaginationManager> {
             DefaultPostPaginationManager(
                 identityRepository = get(),
+                accountRepository = get(),
                 postRepository = get(),
                 communityRepository = get(),
                 userRepository = get(),
                 multiCommunityPaginator = get(),
                 notificationCenter = get(),
+                domainBlocklistRepository = get(),
             )
         }
         factory<CommentPaginationManager> {

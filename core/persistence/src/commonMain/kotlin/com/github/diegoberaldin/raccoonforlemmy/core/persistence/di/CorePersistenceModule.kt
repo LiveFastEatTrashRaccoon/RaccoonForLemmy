@@ -8,11 +8,13 @@ import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.Comm
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DefaultAccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DefaultCommunityPreferredLanguageRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DefaultCommunitySortRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DefaultDomainBlocklistRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DefaultDraftRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DefaultFavoriteCommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DefaultInstanceSelectionRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DefaultMultiCommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DefaultSettingsRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DraftRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.FavoriteCommunityRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.InstanceSelectionRepository
@@ -82,6 +84,11 @@ val corePersistenceModule =
         single<ExportSettingsUseCase> {
             DefaultExportSettingsUseCase(
                 settingsRepository = get(),
+            )
+        }
+        single<DomainBlocklistRepository> {
+            DefaultDomainBlocklistRepository(
+                keyStore = get(),
             )
         }
     }

@@ -5,6 +5,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.Theme
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
@@ -51,6 +53,8 @@ class ExploreViewModel(
     private val hapticFeedback: HapticFeedback,
     private val getSortTypesUseCase: GetSortTypesUseCase,
     private val lemmyValueCache: LemmyValueCache,
+    private val accountRepository: AccountRepository,
+    private val domainBlocklistRepository: DomainBlocklistRepository,
 ) : DefaultMviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect>(
         initialState = ExploreMviModel.UiState(),
     ),
@@ -66,6 +70,7 @@ class ExploreViewModel(
                     append(otherInstance)
                 }
             }
+    private var blockedDomains: List<String>? = null
 
     init {
         screenModelScope.launch {
@@ -355,6 +360,8 @@ class ExploreViewModel(
 
     private suspend fun refresh(initial: Boolean = false) {
         currentPage = 1
+        val accountId = accountRepository.getActive()?.id
+        blockedDomains = domainBlocklistRepository.get(accountId)
         updateState {
             it.copy(
                 canFetchMore = true,
@@ -427,7 +434,18 @@ class ExploreViewModel(
                     } else {
                         isSafeForWork(item)
                     }
-                }.let {
+                }.filter {
+                    when (it) {
+                        is SearchResult.Post -> {
+                            blockedDomains?.takeIf { l -> l.isNotEmpty() }?.let { blockList ->
+                                blockList.none { domain -> it.model.url?.contains(domain) ?: true }
+                            } ?: true
+                        }
+
+                        else -> true
+                    }
+                }
+                .let {
                     when (resultType) {
                         SearchResultType.Communities -> {
                             if (additionalResolvedCommunity != null &&

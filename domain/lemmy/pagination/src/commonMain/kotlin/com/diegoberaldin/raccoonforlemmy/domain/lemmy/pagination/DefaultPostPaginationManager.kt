@@ -2,6 +2,8 @@ package com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination
 
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResult
@@ -21,10 +23,12 @@ import kotlinx.coroutines.withContext
 
 internal class DefaultPostPaginationManager(
     private val identityRepository: IdentityRepository,
+    private val accountRepository: AccountRepository,
     private val postRepository: PostRepository,
     private val communityRepository: CommunityRepository,
     private val userRepository: UserRepository,
     private val multiCommunityPaginator: MultiCommunityPaginator,
+    private val domainBlocklistRepository: DomainBlocklistRepository,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     notificationCenter: NotificationCenter,
 ) : PostPaginationManager {
@@ -36,6 +40,7 @@ internal class DefaultPostPaginationManager(
     private var currentPage: Int = 1
     private var pageCursor: String? = null
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
+    private var blockedDomains: List<String>? = null
 
     init {
         notificationCenter
@@ -52,6 +57,7 @@ internal class DefaultPostPaginationManager(
         currentPage = 1
         pageCursor = null
         multiCommunityPaginator.reset()
+        blockedDomains = null
         (specification as? PostPaginationSpecification.MultiCommunity)?.also {
             multiCommunityPaginator.setCommunities(it.communityIds)
         }
@@ -61,6 +67,10 @@ internal class DefaultPostPaginationManager(
         withContext(Dispatchers.IO) {
             val specification = specification ?: return@withContext emptyList()
             val auth = identityRepository.authToken.value.orEmpty()
+            if (blockedDomains == null) {
+                val accountId = accountRepository.getActive()?.id
+                blockedDomains = domainBlocklistRepository.get(accountId)
+            }
 
             val result =
                 when (specification) {
@@ -85,6 +95,7 @@ internal class DefaultPostPaginationManager(
                             .deduplicate()
                             .filterNsfw(specification.includeNsfw)
                             .filterDeleted()
+                            .filterByUrlDomain()
                     }
 
                     is PostPaginationSpecification.Community -> {
@@ -125,6 +136,7 @@ internal class DefaultPostPaginationManager(
                             .deduplicate()
                             .filterNsfw(specification.includeNsfw)
                             .filterDeleted(includeCurrentCreator = true)
+                            .filterByUrlDomain()
                     }
 
                     is PostPaginationSpecification.MultiCommunity -> {
@@ -138,6 +150,7 @@ internal class DefaultPostPaginationManager(
                             .deduplicate()
                             .filterNsfw(specification.includeNsfw)
                             .filterDeleted(includeCurrentCreator = true)
+                            .filterByUrlDomain()
                     }
 
                     is PostPaginationSpecification.User -> {
@@ -159,6 +172,7 @@ internal class DefaultPostPaginationManager(
                             .deduplicate()
                             .filterNsfw(specification.includeNsfw)
                             .filterDeleted(includeCurrentCreator = specification.includeDeleted)
+                            .filterByUrlDomain()
                     }
 
                     is PostPaginationSpecification.Votes -> {
@@ -181,6 +195,7 @@ internal class DefaultPostPaginationManager(
                             .orEmpty()
                             .deduplicate()
                             .filterDeleted(includeCurrentCreator = true)
+                            .filterByUrlDomain()
                     }
 
                     is PostPaginationSpecification.Saved -> {
@@ -199,6 +214,7 @@ internal class DefaultPostPaginationManager(
                             .orEmpty()
                             .deduplicate()
                             .filterDeleted()
+                            .filterByUrlDomain()
                     }
 
                     is PostPaginationSpecification.Hidden -> {
@@ -220,6 +236,7 @@ internal class DefaultPostPaginationManager(
                             .orEmpty()
                             .deduplicate()
                             .filterDeleted()
+                            .filterByUrlDomain()
                     }
                 }
 
@@ -233,6 +250,7 @@ internal class DefaultPostPaginationManager(
             specification = specification,
             currentPage = currentPage,
             pageCursor = pageCursor,
+            blockedDomains = blockedDomains,
             history = history,
         )
 
@@ -242,6 +260,7 @@ internal class DefaultPostPaginationManager(
             specification = it.specification
             pageCursor = it.pageCursor
             history.clear()
+            blockedDomains = it.blockedDomains
             history.addAll(it.history)
         }
     }
@@ -263,6 +282,14 @@ internal class DefaultPostPaginationManager(
         val currentUserId = identityRepository.cachedUser?.id
         return filter { post ->
             !post.deleted || (includeCurrentCreator && post.creator?.id == currentUserId)
+        }
+    }
+
+    private fun List<PostModel>.filterByUrlDomain(): List<PostModel> {
+        return filter { post ->
+            blockedDomains?.takeIf { it.isNotEmpty() }?.let { blockList ->
+                blockList.none { domain -> post.url?.contains(domain) ?: true }
+            } ?: true
         }
     }
 

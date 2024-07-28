@@ -2,6 +2,8 @@ package com.github.diegoberaldin.raccoonforlemmy.unit.manageban
 
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.AccountBansModel
@@ -25,15 +27,18 @@ import kotlinx.coroutines.launch
 @OptIn(FlowPreview::class)
 class ManageBanViewModel(
     private val identityRepository: IdentityRepository,
+    private val accountRepository: AccountRepository,
     private val siteRepository: SiteRepository,
     private val settingsRepository: SettingsRepository,
     private val userRepository: UserRepository,
     private val communityRepository: CommunityRepository,
+    private val blocklistRepository: DomainBlocklistRepository,
 ) : DefaultMviModel<ManageBanMviModel.Intent, ManageBanMviModel.UiState, ManageBanMviModel.Effect>(
         initialState = ManageBanMviModel.UiState(),
     ),
     ManageBanMviModel {
     private var originalBans: AccountBansModel? = null
+    private var originalBlockedDomains: List<String> = emptyList()
 
     init {
         screenModelScope.launch {
@@ -83,6 +88,8 @@ class ManageBanViewModel(
             is ManageBanMviModel.Intent.UnblockCommunity -> unbanCommunity(intent.id)
             is ManageBanMviModel.Intent.UnblockInstance -> unbanInstance(intent.id)
             is ManageBanMviModel.Intent.UnblockUser -> unbanUser(intent.id)
+            is ManageBanMviModel.Intent.BlockDomain -> blockDomain(intent.value)
+            is ManageBanMviModel.Intent.UnblockDomain -> unblockDomain(intent.value)
             is ManageBanMviModel.Intent.SetSearch -> updateSearchText(intent.value)
         }
     }
@@ -90,6 +97,8 @@ class ManageBanViewModel(
     private suspend fun refresh() {
         val auth = identityRepository.authToken.value.orEmpty()
         originalBans = siteRepository.getBans(auth)
+        val accountId = accountRepository.getActive()?.id
+        originalBlockedDomains = blocklistRepository.get(accountId)
         val query = uiState.value.searchText
         filterResults(query)
     }
@@ -164,8 +173,36 @@ class ManageBanViewModel(
                 bannedUsers = bans.users.filterUsersBy(query),
                 bannedCommunities = bans.communities.filterCommunitiesBy(query),
                 bannedInstances = bans.instances.filterInstancesBy(query),
+                blockedDomains = originalBlockedDomains.filterBy(query),
                 initial = false,
             )
+        }
+    }
+
+    private fun blockDomain(domain: String) {
+        val newValues =
+            if (originalBlockedDomains.contains(domain)) {
+                originalBlockedDomains
+            } else {
+                originalBlockedDomains + domain
+            }
+        screenModelScope.launch {
+            val accountId = accountRepository.getActive()?.id
+            originalBlockedDomains = newValues
+            blocklistRepository.update(accountId, newValues)
+            val query = uiState.value.searchText
+            filterResults(query)
+        }
+    }
+
+    private fun unblockDomain(domain: String) {
+        val newValues = originalBlockedDomains - domain
+        screenModelScope.launch {
+            val accountId = accountRepository.getActive()?.id
+            originalBlockedDomains = newValues
+            blocklistRepository.update(accountId, newValues)
+            val query = uiState.value.searchText
+            filterResults(query)
         }
     }
 }
@@ -188,5 +225,12 @@ private fun List<InstanceModel>.filterInstancesBy(query: String): List<InstanceM
     if (query.isEmpty()) {
         this
     } else {
-        filter { it.domain.contains(query) }
+        filter { it.domain.contains(query, ignoreCase = true) }
+    }
+
+private fun List<String>.filterBy(query: String): List<String> =
+    if (query.isEmpty()) {
+        this
+    } else {
+        filter { it.contains(query, ignoreCase = true) }
     }

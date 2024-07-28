@@ -2,6 +2,8 @@ package com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination
 
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -45,16 +47,26 @@ class DefaultPostPaginationManagerTest {
             val slot = slot<KClass<NotificationCenterEvent>>()
             every { subscribe(capture(slot)) } answers { MutableSharedFlow() }
         }
+    private val accountRepository =
+        mockk<AccountRepository>(relaxUnitFun = true) {
+            coEvery { getActive() } returns null
+        }
+    private val domainBlocklistRepository =
+        mockk<DomainBlocklistRepository>(relaxUnitFun = true) {
+            coEvery { get(accountId = any()) } returns emptyList<String>()
+        }
 
     private val sut =
         DefaultPostPaginationManager(
             identityRepository = identityRepository,
+            accountRepository = accountRepository,
             postRepository = postRepository,
             communityRepository = communityRepository,
             userRepository = userRepository,
             multiCommunityPaginator = multiCommunityPaginator,
             notificationCenter = notificationCenter,
             dispatcher = dispatcherTestRule.dispatcher,
+            domainBlocklistRepository = domainBlocklistRepository,
         )
 
     @Test

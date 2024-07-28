@@ -433,6 +433,8 @@ interface Strings {
     val messageAuthIssueSegue1: String
     val messageAuthIssueSegue2: String
     val messageAuthIssueSegue3: String
+    val settingsManageBanSectionDomains: String
+    val settingsManageBanDomainPlaceholder: String
 }
 
 object Locales {

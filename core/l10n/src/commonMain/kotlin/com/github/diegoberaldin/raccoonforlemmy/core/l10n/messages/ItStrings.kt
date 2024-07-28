@@ -450,4 +450,6 @@ internal val ItStrings =
         override val messageAuthIssueSegue1 = "forzare l\'aggiornamento"
         override val messageAuthIssueSegue2 = "effettuare nuovamente l\'accesso"
         override val messageAuthIssueSegue3 = " cancellare i dati dell\'applicazione"
+        override val settingsManageBanSectionDomains = "Domini"
+        override val settingsManageBanDomainPlaceholder = "Sottostringa URL da escludere"
     }

@@ -7,12 +7,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.InstanceModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.UserModel
 
-enum class ManageBanSection {
-    Users,
-    Communities,
-    Instances,
-}
-
 @Stable
 interface ManageBanMviModel :
     MviModel<ManageBanMviModel.Intent, ManageBanMviModel.UiState, ManageBanMviModel.Effect>,
@@ -39,6 +33,14 @@ interface ManageBanMviModel :
         data class SetSearch(
             val value: String,
         ) : Intent
+
+        data class BlockDomain(
+            val value: String,
+        ) : Intent
+
+        data class UnblockDomain(
+            val value: String,
+        ) : Intent
     }
 
     data class UiState(
@@ -50,6 +52,7 @@ interface ManageBanMviModel :
         val bannedUsers: List<UserModel> = emptyList(),
         val bannedCommunities: List<CommunityModel> = emptyList(),
         val bannedInstances: List<InstanceModel> = emptyList(),
+        val blockedDomains: List<String> = emptyList(),
         val searchText: String = "",
     )
 

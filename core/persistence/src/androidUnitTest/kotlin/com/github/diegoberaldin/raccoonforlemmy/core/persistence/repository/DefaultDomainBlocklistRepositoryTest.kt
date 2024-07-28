@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.core.navigation
+package com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository
 
 import com.github.diegoberaldin.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.github.diegoberaldin.raccoonforlemmy.core.testutils.DispatcherTestRule
@@ -10,13 +10,13 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class DefaultBottomNavItemsRepositoryTest {
+class DefaultDomainBlocklistRepositoryTest {
     @get:Rule
     val dispatcherRule = DispatcherTestRule()
 
     private val keyStore = mockk<TemporaryKeyStore>(relaxUnitFun = true)
     private val sut =
-        DefaultBottomNavItemsRepository(
+        DefaultDomainBlocklistRepository(
             keyStore = keyStore,
         )
 
@@ -27,7 +27,7 @@ class DefaultBottomNavItemsRepositoryTest {
 
             val res = sut.get(null)
 
-            assertEquals(BottomNavItemsRepository.DEFAULT_ITEMS, res)
+            assertEquals(emptyList(), res)
             coVerify {
                 keyStore.get("$KEY_PREFIX.items", emptyList())
             }
@@ -36,11 +36,12 @@ class DefaultBottomNavItemsRepositoryTest {
     @Test
     fun givenData_whenGetForAnonymousUser_thenResultAndInteractionsIsAsExpected() =
         runTest {
-            every { keyStore.get(any(), any<List<String>>()) } returns ITEMS_IDS
+            val fakeList = listOf("example.org")
+            every { keyStore.get(any(), any<List<String>>()) } returns fakeList
 
             val res = sut.get(null)
 
-            assertEquals(ITEMS, res)
+            assertEquals(fakeList, res)
             coVerify {
                 keyStore.get("$KEY_PREFIX.items", emptyList())
             }
@@ -54,7 +55,7 @@ class DefaultBottomNavItemsRepositoryTest {
 
             val res = sut.get(accountId)
 
-            assertEquals(BottomNavItemsRepository.DEFAULT_ITEMS, res)
+            assertEquals(emptyList(), res)
             coVerify {
                 keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
             }
@@ -64,11 +65,12 @@ class DefaultBottomNavItemsRepositoryTest {
     fun givenData_whenGetForLoggedUser_thenResultAndInteractionsIsAsExpected() =
         runTest {
             val accountId = 1L
-            every { keyStore.get(any(), any<List<String>>()) } returns ITEMS_IDS
+            val fakeList = listOf("example.org")
+            every { keyStore.get(any(), any<List<String>>()) } returns fakeList
 
             val res = sut.get(accountId)
 
-            assertEquals(ITEMS, res)
+            assertEquals(fakeList, res)
             coVerify {
                 keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
             }
@@ -79,12 +81,13 @@ class DefaultBottomNavItemsRepositoryTest {
         runTest {
             val otherAccountId = 1L
             val accountId = 2L
+            val fakeList = listOf("example.org")
             every {
                 keyStore.get(
                     "$KEY_PREFIX.$otherAccountId.items",
                     any<List<String>>(),
                 )
-            } returns ITEMS_IDS
+            } returns fakeList
             every {
                 keyStore.get(
                     "$KEY_PREFIX.$accountId.items",
@@ -94,7 +97,7 @@ class DefaultBottomNavItemsRepositoryTest {
 
             val res = sut.get(accountId)
 
-            assertEquals(BottomNavItemsRepository.DEFAULT_ITEMS, res)
+            assertEquals(emptyList(), res)
             coVerify {
                 keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
             }
@@ -104,12 +107,13 @@ class DefaultBottomNavItemsRepositoryTest {
     fun givenDataForOtherUser_whenGetForAnonymousAccount_thenResultAndInteractionsIsAsExpected() =
         runTest {
             val otherAccountId = 1
+            val fakeList = listOf("example.org")
             every {
                 keyStore.get(
                     "$KEY_PREFIX.$otherAccountId.items",
                     any<List<String>>(),
                 )
-            } returns ITEMS_IDS
+            } returns fakeList
             every {
                 keyStore.get(
                     "$KEY_PREFIX.items",
@@ -119,7 +123,7 @@ class DefaultBottomNavItemsRepositoryTest {
 
             val res = sut.get(null)
 
-            assertEquals(BottomNavItemsRepository.DEFAULT_ITEMS, res)
+            assertEquals(emptyList(), res)
             coVerify {
                 keyStore.get("$KEY_PREFIX.items", emptyList())
             }
@@ -128,10 +132,11 @@ class DefaultBottomNavItemsRepositoryTest {
     @Test
     fun whenUpdateAnonymousUser_thenInteractionsAreAsExpected() =
         runTest {
-            sut.update(accountId = null, items = ITEMS)
+            val fakeList = listOf("example.org")
+            sut.update(accountId = null, items = fakeList)
 
             coVerify {
-                keyStore.save("$KEY_PREFIX.items", ITEMS_IDS)
+                keyStore.save("$KEY_PREFIX.items", fakeList)
             }
         }
 
@@ -139,24 +144,16 @@ class DefaultBottomNavItemsRepositoryTest {
     fun whenUpdateLoggedUser_thenInteractionsAreAsExpected() =
         runTest {
             val accountId = 1L
+            val fakeList = listOf("example.org")
 
-            sut.update(accountId = accountId, items = ITEMS)
+            sut.update(accountId = accountId, items = fakeList)
 
             coVerify {
-                keyStore.save("$KEY_PREFIX.$accountId.items", ITEMS_IDS)
+                keyStore.save("$KEY_PREFIX.$accountId.items", fakeList)
             }
         }
 
     companion object {
-        private val ITEMS_IDS = listOf("0", "1", "3", "2", "4")
-        private val ITEMS =
-            listOf(
-                TabNavigationSection.Home,
-                TabNavigationSection.Explore,
-                TabNavigationSection.Profile,
-                TabNavigationSection.Inbox,
-                TabNavigationSection.Settings,
-            )
-        private const val KEY_PREFIX = "BottomNavItemsRepository"
+        private const val KEY_PREFIX = "DomainBlocklistRepository"
     }
 }

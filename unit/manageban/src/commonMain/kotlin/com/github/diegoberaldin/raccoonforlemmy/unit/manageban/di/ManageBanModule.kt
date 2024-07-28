@@ -9,10 +9,12 @@ val manageBanModule =
         factory<ManageBanMviModel> {
             ManageBanViewModel(
                 identityRepository = get(),
+                accountRepository = get(),
                 siteRepository = get(),
                 settingsRepository = get(),
                 userRepository = get(),
                 communityRepository = get(),
+                blocklistRepository = get(),
             )
         }
     }
