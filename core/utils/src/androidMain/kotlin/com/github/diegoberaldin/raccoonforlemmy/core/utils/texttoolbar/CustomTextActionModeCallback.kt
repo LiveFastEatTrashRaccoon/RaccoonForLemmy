@@ -1,89 +1,30 @@
-package com.github.diegoberaldin.raccoonforlemmy.unit.rawcontent
+package com.github.diegoberaldin.raccoonforlemmy.core.utils.texttoolbar
 
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.platform.TextToolbar
-import androidx.compose.ui.platform.TextToolbarStatus
 
 private const val ACTION_ID_COPY = 0
 private const val ACTION_ID_SEARCH = 1
 private const val ACTION_ID_QUOTE = 2
 private const val GROUP_ID = 0
 
-class CustomTextToolbar(
-    private val view: View,
-    private val isLogged: Boolean,
-    private val quoteActionLabel: String,
-    private val shareActionLabel: String,
-    private val onShare: () -> Unit,
-    private val onQuote: () -> Unit,
-) : TextToolbar {
-    private var actionMode: ActionMode? = null
-
-    override var status: TextToolbarStatus = TextToolbarStatus.Hidden
-        private set
-
-    override fun hide() {
-        status = TextToolbarStatus.Hidden
-        actionMode?.finish()
-        actionMode = null
-    }
-
-    override fun showMenu(
-        rect: Rect,
-        onCopyRequested: (() -> Unit)?,
-        onPasteRequested: (() -> Unit)?,
-        onCutRequested: (() -> Unit)?,
-        onSelectAllRequested: (() -> Unit)?,
-    ) {
-        if (actionMode == null) {
-            status = TextToolbarStatus.Shown
-            actionMode =
-                view.startActionMode(
-                    CustomTextActionModeCallback(
-                        rect = rect,
-                        isLogged = isLogged,
-                        quoteActionLabel = quoteActionLabel,
-                        shareActionLabel = shareActionLabel,
-                        onCopy = {
-                            onCopyRequested?.invoke()
-                        },
-                        onShare = {
-                            onCopyRequested?.invoke()
-                            onShare()
-                        },
-                        onQuote = {
-                            onCopyRequested?.invoke()
-                            onQuote()
-                        },
-                    ),
-                    ActionMode.TYPE_FLOATING,
-                )
-        } else {
-            actionMode?.invalidate()
-            actionMode = null
-        }
-    }
-}
-
-private class CustomTextActionModeCallback(
+internal class CustomTextActionModeCallback(
     private val rect: Rect,
-    private val quoteActionLabel: String,
+    private val quoteActionLabel: String?,
     private val shareActionLabel: String,
-    private val isLogged: Boolean,
     private val onCopy: () -> Unit,
     private val onShare: () -> Unit,
-    private val onQuote: () -> Unit,
+    private val onQuote: (() -> Unit)?,
 ) : ActionMode.Callback2() {
     override fun onCreateActionMode(
         mode: ActionMode?,
         menu: Menu?,
     ): Boolean {
         menu?.apply {
-            if (isLogged) {
+            if (quoteActionLabel != null) {
                 add(
                     GROUP_ID,
                     ACTION_ID_QUOTE,
@@ -129,7 +70,7 @@ private class CustomTextActionModeCallback(
                 }
 
                 ACTION_ID_QUOTE -> {
-                    onQuote()
+                    onQuote?.invoke()
                     true
                 }
 

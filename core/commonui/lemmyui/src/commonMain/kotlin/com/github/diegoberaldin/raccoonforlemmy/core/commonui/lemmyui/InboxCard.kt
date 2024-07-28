@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,7 +19,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.unit.dp
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.PostLayout
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.VoteFormat
@@ -31,6 +34,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.share.getShareHelper
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -69,6 +74,15 @@ fun InboxCard(
         rememberCallback {
             onClick.invoke(mention.post)
         }
+    val shareHelper = remember { getShareHelper() }
+    val clipboardManager = LocalClipboardManager.current
+    val onShareLambda =
+        rememberCallback {
+            val query = clipboardManager.getText()?.text.orEmpty()
+            shareHelper.share(query)
+        }
+    val shareActionLabel = LocalStrings.current.postActionShare
+
     Box(
         modifier =
             Modifier
@@ -98,99 +112,107 @@ fun InboxCard(
                         },
                 ),
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+        CompositionLocalProvider(
+            LocalTextToolbar provides
+                getCustomTextToolbar(
+                    shareActionLabel = shareActionLabel,
+                    onShare = onShareLambda,
+                ),
         ) {
-            InboxCardHeader(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
+            Column(
+                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+            ) {
+                InboxCardHeader(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
                         .onClick(
                             onClick = onClickPost,
                         ).padding(horizontal = Spacing.s),
-                mention = mention,
-                type = type,
-            )
-            if (mention.comment.removed) {
-                Text(
-                    modifier = Modifier.padding(horizontal = Spacing.s),
-                    text = LocalStrings.current.messageContentRemoved,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
+                    mention = mention,
+                    type = type,
                 )
-            } else {
-                val previewText =
-                    if (previewMaxLines == null || previewMaxLines < 0) {
-                        mention.comment.text.orEmpty()
-                    } else {
-                        mention.comment.text
-                            .orEmpty()
-                            .split("\n")
-                            .take(previewMaxLines)
-                            .joinToString("\n")
-                    }
-                CustomizedContent(ContentFontClass.Body) {
-                    PostCardBody(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
+                if (mention.comment.removed) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = LocalStrings.current.messageContentRemoved,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
+                    )
+                } else {
+                    val previewText =
+                        if (previewMaxLines == null || previewMaxLines < 0) {
+                            mention.comment.text.orEmpty()
+                        } else {
+                            mention.comment.text
+                                .orEmpty()
+                                .split("\n")
+                                .take(previewMaxLines)
+                                .joinToString("\n")
+                        }
+                    CustomizedContent(ContentFontClass.Body) {
+                        PostCardBody(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
                                 .padding(
                                     horizontal = Spacing.s,
                                 ),
-                        text = previewText,
-                        autoLoadImages = autoLoadImages,
-                        onOpenImage = onImageClick,
-                        onClick = {
-                            if (textSelection) {
-                                focusManager.clearFocus(true)
-                                textSelection = false
-                            } else {
-                                onClickPost.invoke()
-                            }
-                        },
-                        onOpenUser =
-                            rememberCallbackArgs { user, instance ->
+                            text = previewText,
+                            autoLoadImages = autoLoadImages,
+                            onOpenImage = onImageClick,
+                            onClick = {
+                                if (textSelection) {
+                                    focusManager.clearFocus(true)
+                                    textSelection = false
+                                } else {
+                                    onClickPost.invoke()
+                                }
+                            },
+                            onOpenUser =
+                                rememberCallbackArgs { user, instance ->
                                 onOpenCreator(user, instance)
                             },
-                        onLongClick = {
-                            textSelection = true
-                        },
-                    )
+                            onLongClick = {
+                                textSelection = true
+                            },
+                        )
+                    }
                 }
-            }
-            InboxReplySubtitle(
-                modifier =
-                    Modifier
+                InboxReplySubtitle(
+                    modifier =
+                        Modifier
                         .onClick(onClick = onClickPost)
                         .padding(
                             start = Spacing.s,
                             end = Spacing.s,
                             top = Spacing.s,
                         ),
-                creator = mention.creator,
-                community = mention.community,
-                autoLoadImages = autoLoadImages,
-                preferNicknames = preferNicknames,
-                date = mention.publishDate,
-                score = mention.score,
-                showScores = showScores,
-                upVotes = mention.upvotes,
-                downVotes = mention.downvotes,
-                voteFormat = voteFormat,
-                upVoted = mention.myVote > 0,
-                downVoted = mention.myVote < 0,
-                downVoteEnabled = downVoteEnabled,
-                options = options,
-                onOpenCommunity = onOpenCommunity,
-                onOpenCreator =
-                    rememberCallbackArgs { user ->
+                    creator = mention.creator,
+                    community = mention.community,
+                    autoLoadImages = autoLoadImages,
+                    preferNicknames = preferNicknames,
+                    date = mention.publishDate,
+                    score = mention.score,
+                    showScores = showScores,
+                    upVotes = mention.upvotes,
+                    downVotes = mention.downvotes,
+                    voteFormat = voteFormat,
+                    upVoted = mention.myVote > 0,
+                    downVoted = mention.myVote < 0,
+                    downVoteEnabled = downVoteEnabled,
+                    options = options,
+                    onOpenCommunity = onOpenCommunity,
+                    onOpenCreator =
+                        rememberCallbackArgs { user ->
                         onOpenCreator(user, "")
                     },
-                onUpVote = onUpVote,
-                onDownVote = onDownVote,
-                onOptionSelected = onOptionSelected,
-                onReply = onReply,
-            )
+                    onUpVote = onUpVote,
+                    onDownVote = onDownVote,
+                    onOptionSelected = onOptionSelected,
+                    onReply = onReply,
+                )
+            }
         }
     }
 }

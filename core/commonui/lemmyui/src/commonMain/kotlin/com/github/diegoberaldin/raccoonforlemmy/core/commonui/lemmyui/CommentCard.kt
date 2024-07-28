@@ -20,8 +20,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -35,7 +37,10 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ancillaryT
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.share.getShareHelper
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -96,151 +101,167 @@ fun CommentCard(
         } else {
             0.dp
         }
+    val shareHelper = remember { getShareHelper() }
+    val clipboardManager = LocalClipboardManager.current
+    val onShareLambda =
+        rememberCallback {
+            val query = clipboardManager.getText()?.text.orEmpty()
+            shareHelper.share(query)
+        }
+    val shareActionLabel = LocalStrings.current.postActionShare
 
-    Column(
-        modifier = modifier,
+    CompositionLocalProvider(
+        LocalTextToolbar provides
+            getCustomTextToolbar(
+                shareActionLabel = shareActionLabel,
+                onShare = onShareLambda,
+            ),
     ) {
-        Box(
-            modifier =
-                Modifier
-                    .onClick(
-                        onClick = {
-                            if (textSelection) {
-                                focusManager.clearFocus()
-                                textSelection = false
-                            } else {
-                                onClick?.invoke()
-                            }
-                        },
-                        onDoubleClick = onDoubleClick ?: {},
-                    ).padding(
-                        start =
-                            indentAmount
-                                .takeIf {
-                                    it > 0 && comment.depth > 0
-                                }?.let {
-                                    (it * comment.depth).dp + Spacing.xxxs
-                                } ?: 0.dp,
-                    ),
+        Column(
+            modifier = modifier,
         ) {
-            Column(
+            Box(
                 modifier =
                     Modifier
-                        .padding(start = barWidth)
-                        .fillMaxWidth()
-                        .padding(
-                            vertical = Spacing.xxs,
-                            horizontal = Spacing.s,
-                        ).onGloballyPositioned {
-                            commentHeight = it.size.toSize().height
-                        },
-                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                        .onClick(
+                            onClick = {
+                                if (textSelection) {
+                                    focusManager.clearFocus()
+                                    textSelection = false
+                                } else {
+                                    onClick?.invoke()
+                                }
+                            },
+                            onDoubleClick = onDoubleClick ?: {},
+                        ).padding(
+                            start =
+                                indentAmount
+                                    .takeIf {
+                                        it > 0 && comment.depth > 0
+                                    }?.let {
+                                        (it * comment.depth).dp + Spacing.xxxs
+                                    } ?: 0.dp,
+                        ),
             ) {
-                CommunityAndCreatorInfo(
-                    modifier = Modifier.padding(top = Spacing.xxs),
-                    iconSize = IconSize.s,
-                    autoLoadImages = autoLoadImages,
-                    preferNicknames = preferNicknames,
-                    creator = comment.creator.takeIf { !hideAuthor },
-                    community = comment.community.takeIf { !hideCommunity },
-                    indicatorExpanded = comment.expanded.takeIf { showExpandedIndicator },
-                    distinguished = comment.distinguished,
-                    isOp = isOp,
-                    isMod = isMod,
-                    isAdmin = isAdmin,
-                    isBot = comment.creator?.bot.takeIf { showBot } ?: false,
-                    onOpenCreator =
-                        rememberCallbackArgs { user ->
-                            onOpenCreator?.invoke(user, "")
-                        },
-                    onOpenCommunity =
-                        rememberCallbackArgs { community ->
-                            onOpenCommunity?.invoke(community, "")
-                        },
-                    onToggleExpanded = onToggleExpanded,
-                )
-                if (comment.removed) {
-                    Text(
-                        text = LocalStrings.current.messageContentRemoved,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
-                    )
-                } else if (comment.deleted) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = LocalStrings.current.messageContentDeleted,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
-                    )
-                } else {
-                    CustomizedContent(ContentFontClass.Comment) {
-                        CompositionLocalProvider(
-                            LocalDensity provides
-                                Density(
-                                    density = LocalDensity.current.density,
-                                    // additional downscale for font in comments
-                                    fontScale = LocalDensity.current.fontScale * COMMENT_TEXT_SCALE_FACTOR,
-                                ),
-                        ) {
-                            PostCardBody(
-                                text = comment.text.orEmpty(),
-                                autoLoadImages = autoLoadImages,
-                                onClick = {
-                                    if (textSelection) {
-                                        focusManager.clearFocus(true)
-                                        textSelection = false
-                                    } else {
-                                        onClick?.invoke()
-                                    }
-                                },
-                                highlightText = highlightText,
-                                onOpenImage = onImageClick,
-                                onDoubleClick = onDoubleClick,
-                                onOpenCommunity = onOpenCommunity,
-                                onOpenUser = onOpenCreator,
-                                onOpenPost = onOpenPost,
-                                onOpenWeb = onOpenWeb,
-                                onLongClick = {
-                                    textSelection = true
-                                },
-                            )
-                        }
-                    }
-                }
-                PostCardFooter(
-                    modifier = Modifier.padding(vertical = Spacing.xs),
-                    score = comment.score,
-                    showScores = showScores,
-                    voteFormat = voteFormat,
-                    upVotes = comment.upvotes,
-                    downVotes = comment.downvotes,
-                    saved = comment.saved,
-                    upVoted = comment.myVote > 0,
-                    downVoted = comment.myVote < 0,
-                    comments = comment.comments,
-                    actionButtonsActive = actionButtonsActive,
-                    downVoteEnabled = downVoteEnabled,
-                    onClick = onClick,
-                    onUpVote = onUpVote,
-                    onDownVote = onDownVote,
-                    onSave = onSave,
-                    onReply = onReply,
-                    publishDate = comment.publishDate,
-                    updateDate = comment.updateDate,
-                    options = options,
-                    onOptionSelected = onOptionSelected,
-                )
-            }
-            if (indentAmount > 0 && comment.depth > 0) {
-                Box(
+                Column(
                     modifier =
                         Modifier
-                            .padding(top = Spacing.xxs)
-                            .width(barWidth)
-                            .height(commentHeight.toLocalDp())
-                            .background(color = barColor, shape = RoundedCornerShape(barWidth / 2)),
-                )
+                            .padding(start = barWidth)
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = Spacing.xxs,
+                                horizontal = Spacing.s,
+                            ).onGloballyPositioned {
+                                commentHeight = it.size.toSize().height
+                            },
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                ) {
+                    CommunityAndCreatorInfo(
+                        modifier = Modifier.padding(top = Spacing.xxs),
+                        iconSize = IconSize.s,
+                        autoLoadImages = autoLoadImages,
+                        preferNicknames = preferNicknames,
+                        creator = comment.creator.takeIf { !hideAuthor },
+                        community = comment.community.takeIf { !hideCommunity },
+                        indicatorExpanded = comment.expanded.takeIf { showExpandedIndicator },
+                        distinguished = comment.distinguished,
+                        isOp = isOp,
+                        isMod = isMod,
+                        isAdmin = isAdmin,
+                        isBot = comment.creator?.bot.takeIf { showBot } ?: false,
+                        onOpenCreator =
+                            rememberCallbackArgs { user ->
+                                onOpenCreator?.invoke(user, "")
+                            },
+                        onOpenCommunity =
+                            rememberCallbackArgs { community ->
+                                onOpenCommunity?.invoke(community, "")
+                            },
+                        onToggleExpanded = onToggleExpanded,
+                    )
+                    if (comment.removed) {
+                        Text(
+                            text = LocalStrings.current.messageContentRemoved,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
+                        )
+                    } else if (comment.deleted) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = LocalStrings.current.messageContentDeleted,
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
+                        )
+                    } else {
+                        CustomizedContent(ContentFontClass.Comment) {
+                            CompositionLocalProvider(
+                                LocalDensity provides
+                                    Density(
+                                        density = LocalDensity.current.density,
+                                        // additional downscale for font in comments
+                                        fontScale = LocalDensity.current.fontScale * COMMENT_TEXT_SCALE_FACTOR,
+                                    ),
+                            ) {
+                                PostCardBody(
+                                    text = comment.text.orEmpty(),
+                                    autoLoadImages = autoLoadImages,
+                                    onClick = {
+                                        if (textSelection) {
+                                            focusManager.clearFocus(true)
+                                            textSelection = false
+                                        } else {
+                                            onClick?.invoke()
+                                        }
+                                    },
+                                    highlightText = highlightText,
+                                    onOpenImage = onImageClick,
+                                    onDoubleClick = onDoubleClick,
+                                    onOpenCommunity = onOpenCommunity,
+                                    onOpenUser = onOpenCreator,
+                                    onOpenPost = onOpenPost,
+                                    onOpenWeb = onOpenWeb,
+                                    onLongClick = {
+                                        textSelection = true
+                                    },
+                                )
+                            }
+                        }
+                    }
+                    PostCardFooter(
+                        modifier = Modifier.padding(vertical = Spacing.xs),
+                        score = comment.score,
+                        showScores = showScores,
+                        voteFormat = voteFormat,
+                        upVotes = comment.upvotes,
+                        downVotes = comment.downvotes,
+                        saved = comment.saved,
+                        upVoted = comment.myVote > 0,
+                        downVoted = comment.myVote < 0,
+                        comments = comment.comments,
+                        actionButtonsActive = actionButtonsActive,
+                        downVoteEnabled = downVoteEnabled,
+                        onClick = onClick,
+                        onUpVote = onUpVote,
+                        onDownVote = onDownVote,
+                        onSave = onSave,
+                        onReply = onReply,
+                        publishDate = comment.publishDate,
+                        updateDate = comment.updateDate,
+                        options = options,
+                        onOptionSelected = onOptionSelected,
+                    )
+                }
+                if (indentAmount > 0 && comment.depth > 0) {
+                    Box(
+                        modifier =
+                            Modifier
+                                .padding(top = Spacing.xxs)
+                                .width(barWidth)
+                                .height(commentHeight.toLocalDp())
+                                .background(color = barColor, shape = RoundedCornerShape(barWidth / 2)),
+                    )
+                }
             }
         }
     }
