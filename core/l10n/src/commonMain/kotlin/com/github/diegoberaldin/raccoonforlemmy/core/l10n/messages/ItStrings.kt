@@ -452,4 +452,6 @@ internal val ItStrings =
         override val messageAuthIssueSegue3 = " cancellare i dati dell\'applicazione"
         override val settingsManageBanSectionDomains = "Domini"
         override val settingsManageBanDomainPlaceholder = "Sottostringa URL da escludere"
+        override val settingsManageBanSectionStopWords = "Parole"
+        override val settingsManageBanStopWordPlaceholder = "Espressione vietata"
     }

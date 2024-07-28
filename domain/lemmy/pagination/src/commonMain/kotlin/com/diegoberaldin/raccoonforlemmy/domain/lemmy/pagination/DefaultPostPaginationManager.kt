@@ -4,6 +4,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.StopWordRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResult
@@ -29,6 +30,7 @@ internal class DefaultPostPaginationManager(
     private val userRepository: UserRepository,
     private val multiCommunityPaginator: MultiCommunityPaginator,
     private val domainBlocklistRepository: DomainBlocklistRepository,
+    private val stopWordRepository: StopWordRepository,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     notificationCenter: NotificationCenter,
 ) : PostPaginationManager {
@@ -41,6 +43,7 @@ internal class DefaultPostPaginationManager(
     private var pageCursor: String? = null
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
     private var blockedDomains: List<String>? = null
+    private var stopWords: List<String>? = null
 
     init {
         notificationCenter
@@ -58,6 +61,7 @@ internal class DefaultPostPaginationManager(
         pageCursor = null
         multiCommunityPaginator.reset()
         blockedDomains = null
+        stopWords = null
         (specification as? PostPaginationSpecification.MultiCommunity)?.also {
             multiCommunityPaginator.setCommunities(it.communityIds)
         }
@@ -67,9 +71,12 @@ internal class DefaultPostPaginationManager(
         withContext(Dispatchers.IO) {
             val specification = specification ?: return@withContext emptyList()
             val auth = identityRepository.authToken.value.orEmpty()
+            val accountId = accountRepository.getActive()?.id
             if (blockedDomains == null) {
-                val accountId = accountRepository.getActive()?.id
                 blockedDomains = domainBlocklistRepository.get(accountId)
+            }
+            if (stopWords == null) {
+                stopWords = stopWordRepository.get(accountId)
             }
 
             val result =
@@ -96,6 +103,7 @@ internal class DefaultPostPaginationManager(
                             .filterNsfw(specification.includeNsfw)
                             .filterDeleted()
                             .filterByUrlDomain()
+                            .filterByStopWords()
                     }
 
                     is PostPaginationSpecification.Community -> {
@@ -137,6 +145,7 @@ internal class DefaultPostPaginationManager(
                             .filterNsfw(specification.includeNsfw)
                             .filterDeleted(includeCurrentCreator = true)
                             .filterByUrlDomain()
+                            .filterByStopWords()
                     }
 
                     is PostPaginationSpecification.MultiCommunity -> {
@@ -151,6 +160,7 @@ internal class DefaultPostPaginationManager(
                             .filterNsfw(specification.includeNsfw)
                             .filterDeleted(includeCurrentCreator = true)
                             .filterByUrlDomain()
+                            .filterByStopWords()
                     }
 
                     is PostPaginationSpecification.User -> {
@@ -173,6 +183,7 @@ internal class DefaultPostPaginationManager(
                             .filterNsfw(specification.includeNsfw)
                             .filterDeleted(includeCurrentCreator = specification.includeDeleted)
                             .filterByUrlDomain()
+                            .filterByStopWords()
                     }
 
                     is PostPaginationSpecification.Votes -> {
@@ -196,6 +207,7 @@ internal class DefaultPostPaginationManager(
                             .deduplicate()
                             .filterDeleted(includeCurrentCreator = true)
                             .filterByUrlDomain()
+                            .filterByStopWords()
                     }
 
                     is PostPaginationSpecification.Saved -> {
@@ -215,6 +227,7 @@ internal class DefaultPostPaginationManager(
                             .deduplicate()
                             .filterDeleted()
                             .filterByUrlDomain()
+                            .filterByStopWords()
                     }
 
                     is PostPaginationSpecification.Hidden -> {
@@ -237,6 +250,7 @@ internal class DefaultPostPaginationManager(
                             .deduplicate()
                             .filterDeleted()
                             .filterByUrlDomain()
+                            .filterByStopWords()
                     }
                 }
 
@@ -251,6 +265,7 @@ internal class DefaultPostPaginationManager(
             currentPage = currentPage,
             pageCursor = pageCursor,
             blockedDomains = blockedDomains,
+            stopWords = stopWords,
             history = history,
         )
 
@@ -261,6 +276,7 @@ internal class DefaultPostPaginationManager(
             pageCursor = it.pageCursor
             history.clear()
             blockedDomains = it.blockedDomains
+            stopWords = it.stopWords
             history.addAll(it.history)
         }
     }
@@ -289,6 +305,19 @@ internal class DefaultPostPaginationManager(
         return filter { post ->
             blockedDomains?.takeIf { it.isNotEmpty() }?.let { blockList ->
                 blockList.none { domain -> post.url?.contains(domain) ?: true }
+            } ?: true
+        }
+    }
+
+    private fun List<PostModel>.filterByStopWords(): List<PostModel> {
+        return filter { post ->
+            stopWords?.takeIf { it.isNotEmpty() }?.let { stopWordList ->
+                stopWordList.none { domain ->
+                    post.title.contains(
+                        other = domain,
+                        ignoreCase = true,
+                    )
+                }
             } ?: true
         }
     }

@@ -15,6 +15,7 @@ val manageBanModule =
                 userRepository = get(),
                 communityRepository = get(),
                 blocklistRepository = get(),
+                stopWordRepository = get(),
             )
         }
     }

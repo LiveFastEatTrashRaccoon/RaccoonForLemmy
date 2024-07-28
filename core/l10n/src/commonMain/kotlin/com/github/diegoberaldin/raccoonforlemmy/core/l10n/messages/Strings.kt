@@ -435,6 +435,8 @@ interface Strings {
     val messageAuthIssueSegue3: String
     val settingsManageBanSectionDomains: String
     val settingsManageBanDomainPlaceholder: String
+    val settingsManageBanSectionStopWords: String
+    val settingsManageBanStopWordPlaceholder: String
 }
 
 object Locales {

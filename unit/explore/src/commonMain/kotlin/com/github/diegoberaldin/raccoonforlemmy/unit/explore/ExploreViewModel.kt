@@ -8,6 +8,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.StopWordRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -55,6 +56,7 @@ class ExploreViewModel(
     private val lemmyValueCache: LemmyValueCache,
     private val accountRepository: AccountRepository,
     private val domainBlocklistRepository: DomainBlocklistRepository,
+    private val stopWordRepository: StopWordRepository,
 ) : DefaultMviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect>(
         initialState = ExploreMviModel.UiState(),
     ),
@@ -71,6 +73,7 @@ class ExploreViewModel(
                 }
             }
     private var blockedDomains: List<String>? = null
+    private var stopWords: List<String>? = null
 
     init {
         screenModelScope.launch {
@@ -362,6 +365,7 @@ class ExploreViewModel(
         currentPage = 1
         val accountId = accountRepository.getActive()?.id
         blockedDomains = domainBlocklistRepository.get(accountId)
+        stopWords = stopWordRepository.get(accountId)
         updateState {
             it.copy(
                 canFetchMore = true,
@@ -437,9 +441,19 @@ class ExploreViewModel(
                 }.filter {
                     when (it) {
                         is SearchResult.Post -> {
-                            blockedDomains?.takeIf { l -> l.isNotEmpty() }?.let { blockList ->
-                                blockList.none { domain -> it.model.url?.contains(domain) ?: true }
-                            } ?: true
+                            val filteredByDomain =
+                                blockedDomains?.takeIf { l -> l.isNotEmpty() }?.let { blockList ->
+                                    blockList.none { domain ->
+                                        it.model.url?.contains(domain) ?: true
+                                    }
+                                } ?: true
+                            val filteredByStopWord =
+                                stopWords?.takeIf { l -> l.isNotEmpty() }?.let { stopWordList ->
+                                    stopWordList.none { domain ->
+                                        it.model.title.contains(other = domain, ignoreCase = true)
+                                    }
+                                } ?: true
+                            filteredByDomain && filteredByStopWord
                         }
 
                         else -> true

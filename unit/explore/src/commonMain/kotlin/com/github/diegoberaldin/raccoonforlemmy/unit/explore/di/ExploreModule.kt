@@ -23,6 +23,7 @@ val exploreModule =
                 getSortTypesUseCase = get(),
                 lemmyValueCache = get(),
                 domainBlocklistRepository = get(),
+                stopWordRepository = get(),
             )
         }
     }

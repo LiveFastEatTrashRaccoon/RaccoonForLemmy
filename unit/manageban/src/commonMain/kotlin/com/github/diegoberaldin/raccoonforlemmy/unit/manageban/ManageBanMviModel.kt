@@ -41,6 +41,14 @@ interface ManageBanMviModel :
         data class UnblockDomain(
             val value: String,
         ) : Intent
+
+        data class AddStopWord(
+            val value: String,
+        ) : Intent
+
+        data class RemoveStopWord(
+            val value: String,
+        ) : Intent
     }
 
     data class UiState(
@@ -53,6 +61,7 @@ interface ManageBanMviModel :
         val bannedCommunities: List<CommunityModel> = emptyList(),
         val bannedInstances: List<InstanceModel> = emptyList(),
         val blockedDomains: List<String> = emptyList(),
+        val stopWords: List<String> = emptyList(),
         val searchText: String = "",
     )
 

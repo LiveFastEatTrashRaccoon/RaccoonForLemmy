@@ -108,6 +108,7 @@ class ManageBanScreen : Screen {
         val errorMessage = LocalStrings.current.messageGenericError
         val scope = rememberCoroutineScope()
         var addDomainDialogOpen by remember { mutableStateOf(false) }
+        var addStopWordDialogOpen by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -211,6 +212,17 @@ class ManageBanScreen : Screen {
                                                 },
                                         )
                                 }
+                                if (uiState.section == ManageBanSection.StopWords) {
+                                    this +=
+                                        FloatingActionButtonMenuItem(
+                                            icon = Icons.Default.AddCircle,
+                                            text = LocalStrings.current.buttonAdd,
+                                            onSelected =
+                                                rememberCallback {
+                                                    addStopWordDialogOpen = true
+                                                },
+                                        )
+                                }
                             },
                     )
                 }
@@ -264,6 +276,7 @@ class ManageBanScreen : Screen {
                             LocalStrings.current.exploreResultTypeCommunities,
                             LocalStrings.current.settingsManageBanSectionInstances,
                             LocalStrings.current.settingsManageBanSectionDomains,
+                            LocalStrings.current.settingsManageBanSectionStopWords,
                         ),
                     scrollable = true,
                     currentSection = uiState.section.toInt(),
@@ -510,6 +523,60 @@ class ManageBanScreen : Screen {
                                     }
                                 }
                             }
+
+                            ManageBanSection.StopWords -> {
+                                if (uiState.stopWords.isEmpty()) {
+                                    if (uiState.initial) {
+                                        items(5) {
+                                            ManageBanItemPlaceholder()
+                                        }
+                                    } else {
+                                        item {
+                                            Text(
+                                                modifier =
+                                                    Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(top = Spacing.xs),
+                                                textAlign = TextAlign.Center,
+                                                text = LocalStrings.current.messageEmptyList,
+                                                style = MaterialTheme.typography.bodyLarge,
+                                                color = MaterialTheme.colorScheme.onBackground,
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    items(
+                                        items = uiState.stopWords,
+                                        key = { it },
+                                    ) { domain ->
+                                        ManageBanItem(
+                                            title = domain,
+                                            options =
+                                                buildList {
+                                                    this +=
+                                                        Option(
+                                                            OptionId.Unban,
+                                                            LocalStrings.current.settingsManageBanActionUnban,
+                                                        )
+                                                },
+                                            onOptionSelected =
+                                                rememberCallbackArgs(domain) { optionId ->
+                                                    when (optionId) {
+                                                        OptionId.Unban -> {
+                                                            model.reduce(
+                                                                ManageBanMviModel.Intent.RemoveStopWord(
+                                                                    domain,
+                                                                ),
+                                                            )
+                                                        }
+
+                                                        else -> Unit
+                                                    }
+                                                },
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -526,13 +593,28 @@ class ManageBanScreen : Screen {
 
         if (addDomainDialogOpen) {
             EditTextualInfoDialog(
-                title = LocalStrings.current.settingsManageBanDomainPlaceholder,
+                title = LocalStrings.current.buttonAdd,
+                label = LocalStrings.current.settingsManageBanDomainPlaceholder,
                 value = "",
                 onClose =
                     rememberCallbackArgs(model) { newValue ->
                         addDomainDialogOpen = false
                         newValue?.also {
                             model.reduce(ManageBanMviModel.Intent.BlockDomain(it))
+                        }
+                    },
+            )
+        }
+        if (addStopWordDialogOpen) {
+            EditTextualInfoDialog(
+                title = LocalStrings.current.buttonAdd,
+                label = LocalStrings.current.settingsManageBanStopWordPlaceholder,
+                value = "",
+                onClose =
+                    rememberCallbackArgs(model) { newValue ->
+                        addStopWordDialogOpen = false
+                        newValue?.also {
+                            model.reduce(ManageBanMviModel.Intent.AddStopWord(it))
                         }
                     },
             )

@@ -8,4 +8,5 @@ internal data class DefaultPostPaginationManagerState(
     val pageCursor: String? = null,
     val history: List<PostModel> = emptyList(),
     val blockedDomains: List<String>? = null,
+    val stopWords: List<String>? = null,
 ) : PostPaginationManagerState

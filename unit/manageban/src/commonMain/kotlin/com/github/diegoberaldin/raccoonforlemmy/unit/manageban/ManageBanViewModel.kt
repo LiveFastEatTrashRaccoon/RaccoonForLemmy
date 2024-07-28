@@ -5,6 +5,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviMode
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.StopWordRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.AccountBansModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -33,12 +34,14 @@ class ManageBanViewModel(
     private val userRepository: UserRepository,
     private val communityRepository: CommunityRepository,
     private val blocklistRepository: DomainBlocklistRepository,
+    private val stopWordRepository: StopWordRepository,
 ) : DefaultMviModel<ManageBanMviModel.Intent, ManageBanMviModel.UiState, ManageBanMviModel.Effect>(
         initialState = ManageBanMviModel.UiState(),
     ),
     ManageBanMviModel {
     private var originalBans: AccountBansModel? = null
     private var originalBlockedDomains: List<String> = emptyList()
+    private var originalStopWords: List<String> = emptyList()
 
     init {
         screenModelScope.launch {
@@ -91,6 +94,8 @@ class ManageBanViewModel(
             is ManageBanMviModel.Intent.BlockDomain -> blockDomain(intent.value)
             is ManageBanMviModel.Intent.UnblockDomain -> unblockDomain(intent.value)
             is ManageBanMviModel.Intent.SetSearch -> updateSearchText(intent.value)
+            is ManageBanMviModel.Intent.AddStopWord -> addStopWord(intent.value)
+            is ManageBanMviModel.Intent.RemoveStopWord -> removeStopWord(intent.value)
         }
     }
 
@@ -99,6 +104,7 @@ class ManageBanViewModel(
         originalBans = siteRepository.getBans(auth)
         val accountId = accountRepository.getActive()?.id
         originalBlockedDomains = blocklistRepository.get(accountId)
+        originalStopWords = stopWordRepository.get(accountId)
         val query = uiState.value.searchText
         filterResults(query)
     }
@@ -174,6 +180,7 @@ class ManageBanViewModel(
                 bannedCommunities = bans.communities.filterCommunitiesBy(query),
                 bannedInstances = bans.instances.filterInstancesBy(query),
                 blockedDomains = originalBlockedDomains.filterBy(query),
+                stopWords = originalStopWords.filterBy(query),
                 initial = false,
             )
         }
@@ -201,6 +208,33 @@ class ManageBanViewModel(
             val accountId = accountRepository.getActive()?.id
             originalBlockedDomains = newValues
             blocklistRepository.update(accountId, newValues)
+            val query = uiState.value.searchText
+            filterResults(query)
+        }
+    }
+
+    private fun addStopWord(word: String) {
+        val newValues =
+            if (originalStopWords.contains(word)) {
+                originalStopWords
+            } else {
+                originalStopWords + word
+            }
+        screenModelScope.launch {
+            val accountId = accountRepository.getActive()?.id
+            originalStopWords = newValues
+            stopWordRepository.update(accountId, newValues)
+            val query = uiState.value.searchText
+            filterResults(query)
+        }
+    }
+
+    private fun removeStopWord(word: String) {
+        val newValues = originalStopWords - word
+        screenModelScope.launch {
+            val accountId = accountRepository.getActive()?.id
+            originalStopWords = newValues
+            stopWordRepository.update(accountId, newValues)
             val query = uiState.value.searchText
             filterResults(query)
         }

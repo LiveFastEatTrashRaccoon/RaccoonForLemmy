@@ -438,4 +438,6 @@ internal open class DefaultStrings : Strings {
     override val messageAuthIssueSegue3 = "clear the application data"
     override val settingsManageBanSectionDomains = "Domains"
     override val settingsManageBanDomainPlaceholder = "Substring of URL to exclude"
+    override val settingsManageBanSectionStopWords = "Words"
+    override val settingsManageBanStopWordPlaceholder = "Forbidden expression"
 }

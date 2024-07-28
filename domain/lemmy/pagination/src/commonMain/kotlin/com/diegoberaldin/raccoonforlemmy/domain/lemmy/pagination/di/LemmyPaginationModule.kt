@@ -29,6 +29,7 @@ val paginationModule =
                 multiCommunityPaginator = get(),
                 notificationCenter = get(),
                 domainBlocklistRepository = get(),
+                stopWordRepository = get(),
             )
         }
         factory<CommentPaginationManager> {

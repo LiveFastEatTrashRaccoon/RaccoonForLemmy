@@ -112,17 +112,18 @@ class EditCommunityScreen(
         LaunchedEffect(model) {
             model.reduce(EditCommunityMviModel.Intent.Refresh)
 
-            model.effects.onEach { evt ->
-                when (evt) {
-                    EditCommunityMviModel.Effect.Failure -> {
-                        snackbarHostState.showSnackbar(errorMessage)
-                    }
+            model.effects
+                .onEach { evt ->
+                    when (evt) {
+                        EditCommunityMviModel.Effect.Failure -> {
+                            snackbarHostState.showSnackbar(errorMessage)
+                        }
 
-                    EditCommunityMviModel.Effect.Success -> {
-                        snackbarHostState.showSnackbar(successMessage)
+                        EditCommunityMviModel.Effect.Success -> {
+                            snackbarHostState.showSnackbar(successMessage)
+                        }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
 
         DisposableEffect(key) {
@@ -226,8 +227,7 @@ class EditCommunityScreen(
                         .padding(
                             top = padding.calculateTopPadding(),
                             bottom = Spacing.m,
-                        )
-                        .then(
+                        ).then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                             } else {
@@ -374,7 +374,8 @@ class EditCommunityScreen(
 
         if (openNameEditDialog) {
             EditTextualInfoDialog(
-                title = LocalStrings.current.multiCommunityEditorName,
+                title = LocalStrings.current.postActionEdit,
+                label = LocalStrings.current.multiCommunityEditorName,
                 value = uiState.title,
                 onClose =
                     rememberCallbackArgs(model) { newValue ->
@@ -388,7 +389,8 @@ class EditCommunityScreen(
 
         if (openTitleEditDialog) {
             EditTextualInfoDialog(
-                title = LocalStrings.current.settingsWebDisplayName,
+                title = LocalStrings.current.postActionEdit,
+                label = LocalStrings.current.settingsWebDisplayName,
                 value = uiState.title,
                 onClose =
                     rememberCallbackArgs(model) { newValue ->

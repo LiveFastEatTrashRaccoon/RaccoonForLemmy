@@ -4,6 +4,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationC
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.StopWordRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -53,7 +54,11 @@ class DefaultPostPaginationManagerTest {
         }
     private val domainBlocklistRepository =
         mockk<DomainBlocklistRepository>(relaxUnitFun = true) {
-            coEvery { get(accountId = any()) } returns emptyList<String>()
+            coEvery { get(accountId = any()) } returns emptyList()
+        }
+    private val stopWordRepository =
+        mockk<StopWordRepository>(relaxUnitFun = true) {
+            coEvery { get(accountId = any()) } returns emptyList()
         }
 
     private val sut =
@@ -67,6 +72,7 @@ class DefaultPostPaginationManagerTest {
             notificationCenter = notificationCenter,
             dispatcher = dispatcherTestRule.dispatcher,
             domainBlocklistRepository = domainBlocklistRepository,
+            stopWordRepository = stopWordRepository,
         )
 
     @Test

@@ -34,7 +34,8 @@ import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditTextualInfoDialog(
-    title: String = "",
+    title: String,
+    label: String = "",
     value: String = "",
     onClose: ((String?) -> Unit)? = null,
 ) {
@@ -59,7 +60,7 @@ fun EditTextualInfoDialog(
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
             Text(
-                text = LocalStrings.current.postActionEdit,
+                text = title,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
             )
@@ -75,7 +76,7 @@ fun EditTextualInfoDialog(
                     ),
                 label = {
                     Text(
-                        text = title,
+                        text = label,
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 },
