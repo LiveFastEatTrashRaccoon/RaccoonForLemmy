@@ -335,7 +335,7 @@ internal val PtBrStrings =
         override val moderatorZoneTitle = "Ferramentas de moderadores"
         override val moderatorZoneActionContents = "Conteúdos para moderar"
         override val messageAuthIssue =
-            "Ocorreu um erro ao buscar dados do usuário. Tente atualizar a tela"
+            "Ocorreu um erro durante processamento dos dados, pode ser que seu token expirou."
         override val banReasonPlaceholder = "Motivo (opcional)"
         override val banItemPermanent = "Bloqueio permanente"
         override val banItemRemoveData = "Remover dados"
@@ -435,4 +435,12 @@ internal val PtBrStrings =
             "Abrir site ao clicar na imagem de post"
         override val settingsSubtitleOpenPostWebPageOnImageClick =
             "Se um post tiver URL, ao clicar na imagem você será redirecionado ao site"
+        override val settingsItemAlternateMarkdownRendering =
+            "Usar a renderização alternativa de marcação"
+        override val settingsItemConfigureBottomNavigationBar = "Configurar a barra de navegação"
+        override val selectTabNavigationTitle = "Selecione uma opção"
+        override val messageAuthIssueSegue0 = "Você pode tentar uma das opções:"
+        override val messageAuthIssueSegue3 = "limpar os dados do app"
+        override val messageAuthIssueSegue1 = "forçar a atualização"
+        override val messageAuthIssueSegue2 = "fazer login de novo"
     }
