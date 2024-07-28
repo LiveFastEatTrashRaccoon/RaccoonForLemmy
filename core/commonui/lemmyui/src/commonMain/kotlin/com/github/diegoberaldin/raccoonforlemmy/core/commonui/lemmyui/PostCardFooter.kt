@@ -119,9 +119,15 @@ fun PostCardFooter(
                                         top = 3.5.dp,
                                         end = 3.5.dp,
                                         bottom = 3.5.dp,
-                                    ).onClick(
-                                        onClick = {
-                                            onReply?.invoke()
+                                    ).then(
+                                        if (actionButtonsActive) {
+                                            Modifier.onClick(
+                                                onClick = {
+                                                    onReply?.invoke()
+                                                },
+                                            )
+                                        } else {
+                                            Modifier
                                         },
                                     ),
                             imageVector = Icons.AutoMirrored.Default.Chat,
@@ -225,6 +231,7 @@ fun PostCardFooter(
                             } else {
                                 ancillaryColor
                             },
+                        enabled = actionButtonsActive,
                         onClick = {
                             onSave?.invoke()
                         },
@@ -244,6 +251,7 @@ fun PostCardFooter(
                         } else {
                             ancillaryColor
                         },
+                    enabled = actionButtonsActive,
                     onClick = {
                         onUpVote?.invoke()
                     },
@@ -285,6 +293,7 @@ fun PostCardFooter(
                             } else {
                                 ancillaryColor
                             },
+                        enabled = actionButtonsActive,
                         onClick = {
                             onDownVote?.invoke()
                         },

@@ -21,8 +21,9 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.ancillaryT
 
 @Composable
 fun FeedbackButton(
-    modifier: Modifier = Modifier,
     imageVector: ImageVector,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     tintColor: Color = MaterialTheme.colorScheme.background.copy(alpha = ancillaryTextAlpha),
     onClick: () -> Unit,
 ) {
@@ -35,18 +36,24 @@ fun FeedbackButton(
         modifier =
             modifier
                 .scale(scale)
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onPress = {
-                            zoomed = true
-                            tryAwaitRelease()
-                            zoomed = false
-                        },
-                        onTap = {
-                            onClick()
-                        },
-                    )
-                },
+                .then(
+                    if (enabled) {
+                        Modifier.pointerInput(Unit) {
+                            detectTapGestures(
+                                onPress = {
+                                    zoomed = true
+                                    tryAwaitRelease()
+                                    zoomed = false
+                                },
+                                onTap = {
+                                    onClick()
+                                },
+                            )
+                        }
+                    } else {
+                        Modifier
+                    },
+                ),
         imageVector = imageVector,
         contentDescription = null,
         colorFilter =
