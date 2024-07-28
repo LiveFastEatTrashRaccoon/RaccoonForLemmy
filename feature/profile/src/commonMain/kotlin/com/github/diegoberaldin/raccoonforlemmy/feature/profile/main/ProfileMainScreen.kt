@@ -3,6 +3,7 @@ package com.github.diegoberaldin.raccoonforlemmy.feature.profile.main
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuOpen
@@ -226,7 +227,8 @@ internal object ProfileMainScreen : Tab {
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        ).nestedScroll(fabNestedScrollConnection)
+                        ).navigationBarsPadding()
+                        .nestedScroll(fabNestedScrollConnection)
                         .then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)

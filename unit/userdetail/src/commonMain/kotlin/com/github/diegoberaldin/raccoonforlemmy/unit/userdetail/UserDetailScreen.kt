@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -467,13 +468,15 @@ class UserDetailScreen(
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        ).then(
+                        ).navigationBarsPadding()
+                        .then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                             } else {
                                 Modifier
                             },
-                        ).nestedScroll(fabNestedScrollConnection)
+                        ).navigationBarsPadding()
+                        .nestedScroll(fabNestedScrollConnection)
                         .pullRefresh(pullRefreshState),
             ) {
                 LazyColumn(
