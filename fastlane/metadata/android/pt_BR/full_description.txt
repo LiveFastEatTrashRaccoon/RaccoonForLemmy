@@ -1,0 +1,34 @@
+<p>
+    <i>Raccoon for Lemmy</i> é de código livre e pretende oferecer uma experiência bacana sem anúncios e de melhor maneira possível no Lemmy.
+</p>
+<p>
+    Usando este app você deveria se sentir em casa, por isso tentamos dar grande importância à localização e à personalização da interface do usuário.
+</p>
+<p>
+    <b>Características principais:</b>
+</p>
+<ul>
+    <li>visualização de posts e comentários com diferentes tipos de classificação;</li>
+    <li>possibilidade de votar (com gestos de deslize configurável);</li>
+    <li>Detalhes de comunidades e usuários (com informações sobre moderadores/comunidades moderadas);</li>
+    <li>perfil de usuário com posts, comentários e itens salvos;</li>
+    <li>Mensagens diretas, com respostas e menções;</li>
+    <li>busca global com diferentes tipos de resultados (todo, posts, comentários, usuários, comunidades);</li>
+    <li>criação e edição de novos posts (tb com imagens);</li>
+    <li>criação de posts cruzados em outras comunidades;</li>
+    <li>comentar em posts e comentários (tb editar respostas);</li>
+    <li>Marcar posts como lidos (ao deslizar) e ocultar conteúdos lidos;</li>
+    <li>aparência personalizada (temas de cores, fontes, tamanho de texto, leiaute de posts, etc.);</li>
+    <li>idioma personalizado (independente de como é definido no sistema);</li>
+    <li>bloquear usuários, comunidades e instâncias;</li>
+    <li>Denunciar posts e comentários aos moderadores;</li>
+    <li>suporte de várias contas com configurações específicas delas;</li>
+    <li>rolagem preguiçosa (conhecida como "modo zumbi");</li>
+    <li>descobrir as comunidades numa determinada instância via modo anônimo;</li>
+    <li>multicomunidade (agregação de comunidades);</li>
+    <li>acesso a registro de moderação;</li>
+    <li>Ferramenta da moderação de comunidade (verificar e resolver denúncias, banir usuários, destacar posts em comunidade, proibir comentários adicionais em posts, marcar comentários como distintos, remover posts/comentários, revisar todos posts/comentários criados, editar/criar comunidade)</li>
+    <li>salvar rascunhos de posts e comentários</li>
+    <li>modo anônimo com alteração rápida de instâncias</li>
+    <li>Ferramentas de administração (purgar usuários/posts/comentários/comunidades, destacar posts locais, ocultar/desativar comunidades)</li>
+</ul>
