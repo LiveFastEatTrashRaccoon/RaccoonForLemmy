@@ -136,7 +136,7 @@ internal val LtStrings =
         override val postDetailCrossPosts = "taip pat paskelbta:"
         override val postDetailLoadMoreComments = "rodyti daugiau komentarų"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Prisijungti"
         override val profileDayShort = "d"
@@ -336,7 +336,7 @@ internal val LtStrings =
         override val moderatorZoneTitle = "Priemonės moderatoriams"
         override val moderatorZoneActionContents = "Turinys vidutinis"
         override val messageAuthIssue =
-            "Gaunant vartotojo duomenis įvyko klaida. Pabandykite atnaujinti ekraną"
+            "Gaunant duomenis įvyko klaida, galbūt baigėsi jūsų prieigos rakto galiojimo laikas."
         override val banReasonPlaceholder = "Priežastis (neprivaloma)"
         override val banItemPermanent = "Nuolatinis draudimas"
         override val banItemRemoveData = "Pašalinti duomenis"
@@ -366,7 +366,7 @@ internal val LtStrings =
         override val actionSearchInComments = "Ieškokite komentaruose"
         override val advancedSettingsDefaultLanguage = "Numatytoji kalba redaktoriuje"
         override val undetermined = "Neapibrėžtas"
-        override val exploreResultTypeTitle = "Rezultato tipas"
+        override val exploreResultTypeTitle = "Paieškos rezultato tipas"
         override val communityActionEdit = "Redaguoti bendruomenę"
         override val editCommunityHeaderTextual = "Tekstinė informacija"
         override val editCommunityItemSidebar = "Šoninė juosta"
@@ -427,6 +427,27 @@ internal val LtStrings =
         override val settingsInboxPreviewMaxLines = "Maksimalus eilučių skaičius gautųjų kortelėse"
         override val settingsDefaultExploreResultType =
             "Numatytasis Naršymo paieškos rezultatų tipas"
+        override val messageReadAllInboxSuccess = "Visi elementai pažymėti kaip perskaityti"
+        override val settingsItemRandomThemeColor = "Naudokite atsitiktinę spalvą"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Atidarykite tinklalapį ant vaizdo įrašo"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Jei įrašas turi URL, atidarykite tinklalapį spustelėję vaizdą"
+        override val settingsManageBanSectionDomains = "Domenai"
+        override val settingsManageBanSectionStopWords = "Žodžiai"
+        override val settingsManageBanStopWordPlaceholder = "Draudžiama išraiška"
+        override val settingsManageBanDomainPlaceholder = "URL poeilutė, kurią norite išskirti"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Naudokite avatarą kaip profilio piktogramą apatinėje naršymo juostoje"
+        override val settingsSubtitleRandomThemeColor =
+            "Keiskite temos spalvą kiekvieną kartą paleidžiant programą"
+        override val settingsItemAlternateMarkdownRendering =
+            "Įgalinti alternatyvų žymėjimo atvaizdavimą"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Konfigūruoti apatinę naršymo juostą"
+        override val selectTabNavigationTitle = "Pasirinkite skyrių"
+        override val messageAuthIssueSegue0 = "Galite išbandyti vieną iš šių veiksmų:"
+        override val messageAuthIssueSegue3 = "išvalyti programos duomenis"
+        override val messageAuthIssueSegue1 = "priverstinai atnaujinti"
+        override val messageAuthIssueSegue2 = "prisijunkite dar kartą"
     }

@@ -447,4 +447,8 @@ internal val GaStrings =
         override val messageAuthIssueSegue3 = "sonraí an fheidhmchláir a ghlanadh"
         override val messageAuthIssueSegue1 = "fórsa athnuachan"
         override val messageAuthIssueSegue2 = "logáil isteach arís"
+        override val settingsManageBanDomainPlaceholder = "Fotheaghrán an URL le eisiamh"
+        override val settingsManageBanSectionDomains = "Fearainn"
+        override val settingsManageBanSectionStopWords = "Focail"
+        override val settingsManageBanStopWordPlaceholder = "Léiriú toirmiscthe"
     }

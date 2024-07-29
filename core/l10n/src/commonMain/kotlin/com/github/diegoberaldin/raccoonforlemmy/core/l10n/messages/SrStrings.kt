@@ -136,7 +136,7 @@ internal val SrStrings =
         override val postDetailCrossPosts = "такође објављено на:"
         override val postDetailLoadMoreComments = "Учитајте још коментара"
         override val postHourShort = "х"
-        override val postMinuteShort = "м"
+        override val postMinuteShort = "мин"
         override val postSecondShort = "с"
         override val profileButtonLogin = "Пријавите се"
         override val profileDayShort = "д"
@@ -337,7 +337,7 @@ internal val SrStrings =
         override val moderatorZoneTitle = "Алати за модерирање"
         override val moderatorZoneActionContents = "Садржај за модерирање"
         override val messageAuthIssue =
-            "Дошло је до грешке при преузимању корисничких података, покушајте да освежите екран"
+            "Дошло је до грешке при преузимању података, можда је ваш токен истекао."
         override val banReasonPlaceholder = "Разлог (опционо)"
         override val banItemPermanent = "Трајна забрана"
         override val banItemRemoveData = "Уклоните податке"
@@ -367,7 +367,7 @@ internal val SrStrings =
         override val actionSearchInComments = "Тражи у коментарима"
         override val advancedSettingsDefaultLanguage = "Подразумевани језик у уређивачу"
         override val undetermined = "Недефинисан"
-        override val exploreResultTypeTitle = "Тип резултата"
+        override val exploreResultTypeTitle = "Тип резултата претраге"
         override val communityActionEdit = "Уредите заједницу"
         override val editCommunityHeaderTextual = "Текстуалне информације"
         override val editCommunityItemSidebar = "Бочна трака"
@@ -430,6 +430,27 @@ internal val SrStrings =
             "Максималан број линија у картицама пријемног сандучет"
         override val settingsDefaultExploreResultType =
             "Подразумевани тип резултата претраге за Истраживање"
+        override val messageReadAllInboxSuccess = "Све ставке су означене као прочитане"
+        override val settingsItemRandomThemeColor = "Користите насумичне боје"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Отворите веб страницу кликом на слику поста"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Ако пост има УРЛ, отворите веб страницу кликом на слику"
+        override val settingsManageBanSectionDomains = "Домаинс"
+        override val settingsManageBanDomainPlaceholder = "Подниз УРЛ-а за изузимање"
+        override val settingsManageBanSectionStopWords = "Речи"
+        override val settingsManageBanStopWordPlaceholder = "Забрањено изражавање"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Користите аватар као икону профила на доњој траци за навигацију"
+        override val settingsSubtitleRandomThemeColor =
+            "Промените боју теме при сваком покретању апликације"
+        override val settingsItemAlternateMarkdownRendering =
+            "Омогући алтернативно Маркдовн рендеровање"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Конфигуришите доњу траку за навигацију"
+        override val selectTabNavigationTitle = "Изаберите одељак"
+        override val messageAuthIssueSegue0 = "Можете покушати једну од следећих радњи:"
+        override val messageAuthIssueSegue1 = "принудно освежавање"
+        override val messageAuthIssueSegue2 = "пријавите се поново"
+        override val messageAuthIssueSegue3 = "обришите податке апликације"
     }

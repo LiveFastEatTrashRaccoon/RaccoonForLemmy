@@ -136,7 +136,7 @@ internal val SlStrings =
         override val postDetailCrossPosts = "objavljeno tudi na:"
         override val postDetailLoadMoreComments = "Naloži več komentarjev"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Prijava"
         override val profileDayShort = "d"
@@ -336,7 +336,7 @@ internal val SlStrings =
         override val moderatorZoneTitle = "Orodja za moderatorje"
         override val moderatorZoneActionContents = "Vsebina za moderiranje"
         override val messageAuthIssue =
-            "Pri pridobivanju uporabniških podatkov je prišlo do napake, poskusite osvežiti zaslon"
+            "Pri pridobivanju podatkov je prišlo do napake, vaš žeton je morda potekel."
         override val banReasonPlaceholder = "Razlog (neobvezno)"
         override val banItemPermanent = "Trajna prepoved"
         override val banItemRemoveData = "Odstrani podatke"
@@ -366,7 +366,7 @@ internal val SlStrings =
         override val actionSearchInComments = "Išči v komentarjih"
         override val advancedSettingsDefaultLanguage = "Privzeti jezik v urejevalniku"
         override val undetermined = "Nedoločeno"
-        override val exploreResultTypeTitle = "Vrsta rezultata"
+        override val exploreResultTypeTitle = "Vrsta rezultata iskanja"
         override val communityActionEdit = "Uredi skupnost"
         override val editCommunityHeaderTextual = "Besedilne informacije"
         override val editCommunityItemSidebar = "Stranska vrstica"
@@ -428,6 +428,27 @@ internal val SlStrings =
             "Največje število vrstic v karticah prejete pošte"
         override val settingsDefaultExploreResultType =
             "Privzeta vrsta rezultatov iskanja za Raziskovanje"
+        override val messageReadAllInboxSuccess = "Vsi elementi so bili označeni kot prebrani"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Uporabite avatar kot ikono profila v spodnji vrstici za krmarjenje"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Odpri spletno stran s klikom na objavo slike"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Če ima objava URL, odprite spletno stran s klikom na sliko"
+        override val settingsManageBanSectionDomains = "Domene"
+        override val settingsManageBanDomainPlaceholder = "Podniz URL-ja za izključitev"
+        override val settingsManageBanSectionStopWords = "Besede"
+        override val settingsManageBanStopWordPlaceholder = "Prepovedano izražanje"
+        override val settingsItemRandomThemeColor = "Uporabite naključno barvo"
+        override val settingsSubtitleRandomThemeColor =
+            "Spremenite barvo teme ob vsakem zagonu aplikacije"
+        override val settingsItemAlternateMarkdownRendering =
+            "Omogoči nadomestno upodabljanje Markdown"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Konfigurirajte spodnjo navigacijsko vrstico"
+        override val selectTabNavigationTitle = "Izberite razdelek"
+        override val messageAuthIssueSegue0 = "Poskusite lahko z enim od naslednjih dejanj:"
+        override val messageAuthIssueSegue1 = "prisilno osveži"
+        override val messageAuthIssueSegue2 = "znova se prijavite"
+        override val messageAuthIssueSegue3 = "počistite podatke aplikacije"
     }

@@ -136,7 +136,7 @@ internal val BgStrings =
         override val postDetailCrossPosts = "също така публикуван на:"
         override val postDetailLoadMoreComments = "Зареждане на още коментари"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "мин"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Вход"
         override val profileDayShort = "d"
@@ -338,7 +338,7 @@ internal val BgStrings =
         override val moderatorZoneTitle = "Инструменти за модератори"
         override val moderatorZoneActionContents = "Съдържание за модериране"
         override val messageAuthIssue =
-            "Възникна грешка при извличането на потребителски данни, опитайте да обновите екрана"
+            "Възникна грешка при извличането на данни, вероятно вашият токен е изтекъл."
         override val banReasonPlaceholder = "Причина (по избор)"
         override val banItemPermanent = "Постоянна забрана"
         override val banItemRemoveData = "Премахване на данни"
@@ -369,7 +369,7 @@ internal val BgStrings =
         override val actionSearchInComments = "Търсете в коментарите"
         override val advancedSettingsDefaultLanguage = "Език по подразбиране в редактора"
         override val undetermined = "Недефиниран"
-        override val exploreResultTypeTitle = "Тип резултат"
+        override val exploreResultTypeTitle = "Тип резултат от търсенето"
         override val communityActionEdit = "Редактиране на общността"
         override val editCommunityHeaderTextual = "Текстова информация"
         override val editCommunityItemSidebar = "Странична лента"
@@ -431,6 +431,27 @@ internal val BgStrings =
         override val settingsInboxPreviewMaxLines = "Максимален брой редове във входящите карти"
         override val settingsDefaultExploreResultType =
             "ип резултати от търсенето по подразбиране за Explore"
+        override val messageReadAllInboxSuccess = "Всички елементи са маркирани като прочетени"
+        override val settingsItemRandomThemeColor = "Използвайте произволен цвят"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Използвайте аватара като икона на профил в долната лента за навигация"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Отворете уеб страницата при щракване върху изображението за публикуване"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Ако дадена публикация има URL, отворете уеб страницата при щракване върху изображение"
+        override val settingsManageBanDomainPlaceholder = "Подниз на URL за изключване"
+        override val settingsManageBanSectionDomains = "Домейни"
+        override val settingsManageBanSectionStopWords = "Думи"
+        override val settingsManageBanStopWordPlaceholder = "Забранено изразяване"
+        override val settingsSubtitleRandomThemeColor =
+            "Променете цвета на темата при всяко стартиране на приложението"
+        override val settingsItemAlternateMarkdownRendering =
+            "Активиране на алтернативно изобразяване на Markdown"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Конфигурирайте долната лента за навигация"
+        override val selectTabNavigationTitle = "Изберете раздел"
+        override val messageAuthIssueSegue0 = "Можете да опитате едно от следните действия:"
+        override val messageAuthIssueSegue3 = "изчистете данните на приложението"
+        override val messageAuthIssueSegue1 = "принудително опресняване"
+        override val messageAuthIssueSegue2 = "влезте отново"
     }

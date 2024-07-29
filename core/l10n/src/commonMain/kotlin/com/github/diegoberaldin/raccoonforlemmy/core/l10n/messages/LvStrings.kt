@@ -136,7 +136,7 @@ internal val LvStrings =
         override val postDetailCrossPosts = "arī izlikts:"
         override val postDetailLoadMoreComments = "Ielādēt vairāk komentāru"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Pieslēgties"
         override val profileDayShort = "d."
@@ -337,7 +337,7 @@ internal val LvStrings =
         override val moderatorZoneTitle = "Rīki moderatoriem"
         override val moderatorZoneActionContents = "Saturs līdz mērenam"
         override val messageAuthIssue =
-            "Ienesot lietotāja datus, radās kļūda. Mēģiniet atsvaidzināt ekrānu"
+            "Ienesot datus, radās kļūda, iespējams, jūsu pilnvaras derīguma termiņš ir beidzies."
         override val banReasonPlaceholder = "Iemesls (pēc izvēles)"
         override val banItemPermanent = "Pastāvīgs aizliegums"
         override val banItemRemoveData = "Noņemiet datus"
@@ -366,7 +366,7 @@ internal val LvStrings =
         override val actionSearchInComments = "Meklējiet komentāros"
         override val advancedSettingsDefaultLanguage = "Redaktora noklusējuma valoda"
         override val undetermined = "nenoteikts"
-        override val exploreResultTypeTitle = "Rezultāta veids"
+        override val exploreResultTypeTitle = "Meklēšanas rezultāta veids"
         override val communityActionEdit = "Rediģēt kopienu"
         override val editCommunityHeaderTextual = "Teksta informācija"
         override val editCommunityItemSidebar = "Sānjosla"
@@ -426,6 +426,27 @@ internal val LvStrings =
         override val settingsInboxPreviewMaxLines = "Maksimālais rindu skaits iesūtnes kartītēs"
         override val settingsDefaultExploreResultType =
             "Noklusējuma meklēšanas rezultāta veids funkcijai Izpētīt"
+        override val messageReadAllInboxSuccess = "Visi vienumi ir atzīmēti kā izlasīti"
+        override val settingsItemRandomThemeColor = "Izmantojiet nejaušas krāsas"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Atveriet tīmekļa lapu, noklikšķinot uz attēla ievietošanas"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Ja ziņai ir URL, atveriet tīmekļa lapu, noklikšķinot uz attēla"
+        override val settingsManageBanDomainPlaceholder = "Izslēdzamā URL apakšvirkne"
+        override val settingsManageBanSectionDomains = "Domēni"
+        override val settingsManageBanSectionStopWords = "Vārdi"
+        override val settingsManageBanStopWordPlaceholder = "Aizliegta izpausme"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Izmantojiet iemiesojumu kā profila ikonu apakšējā navigācijas joslā"
+        override val settingsSubtitleRandomThemeColor =
+            "Mainiet motīva krāsu katrā lietotnes palaišanas reizē"
+        override val settingsItemAlternateMarkdownRendering =
+            "Iespējot alternatīvu Markdown renderēšanu"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Konfigurējiet apakšējo navigācijas joslu"
+        override val selectTabNavigationTitle = "Izvēlieties sadaļu"
+        override val messageAuthIssueSegue0 = "Varat izmēģināt kādu no šīm darbībām:"
+        override val messageAuthIssueSegue3 = "notīriet lietojumprogrammas datus"
+        override val messageAuthIssueSegue1 = "piespiest atsvaidzināt"
+        override val messageAuthIssueSegue2 = "piesakieties vēlreiz"
     }

@@ -136,7 +136,7 @@ internal val MtStrings =
         override val postDetailCrossPosts = "imtella\' wkoll fuq:"
         override val postDetailLoadMoreComments = "Tella\' iktar kummenti"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Idħol"
         override val profileDayShort = "d"
@@ -338,7 +338,7 @@ internal val MtStrings =
         override val moderatorZoneTitle = "Għodda għall-moderaturi"
         override val moderatorZoneActionContents = "Kontenut għall-moderat"
         override val messageAuthIssue =
-            "Żball seħħ waqt li ġġib id-dejta tal-utent, ipprova aġġorna l-iskrin"
+            "Sar żball waqt li kienet qed iġġib id-dejta, possibbilment it-token tiegħek skada."
         override val banReasonPlaceholder = "Raġuni (mhux obbligatorju)"
         override val banItemPermanent = "Projbizzjoni permanenti"
         override val banItemRemoveData = "Neħħi d-data"
@@ -367,7 +367,7 @@ internal val MtStrings =
         override val actionSearchInComments = "Fittex fil-kummenti"
         override val advancedSettingsDefaultLanguage = "Lingwa default fl-editur"
         override val undetermined = "Mhux definit"
-        override val exploreResultTypeTitle = "Tip ta\' riżultat"
+        override val exploreResultTypeTitle = "Tip ta\' riżultat tat-tfittxija"
         override val communityActionEdit = "Editja komunità"
         override val editCommunityHeaderTextual = "Informazzjoni testwali"
         override val editCommunityItemSidebar = "Istrixxa tal-ġenb"
@@ -428,6 +428,27 @@ internal val MtStrings =
         override val settingsInboxPreviewMaxLines = "Numru massimu ta' linji fil-karti tal-inbox"
         override val settingsDefaultExploreResultType =
             "Tip ta' riżultat tat-tfittxija default għal Esplora"
+        override val messageReadAllInboxSuccess = "L-oġġetti kollha ġew immarkati bħala moqrija"
+        override val settingsItemRandomThemeColor = "Uża kulur każwali"
+        override val settingsSubtitleRandomThemeColor =
+            "Ibdel il-kulur tat-tema f\'kull istartjar tal-app"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Uża l-avatar bħala ikona tal-profil fil-bar tan-navigazzjoni t\'isfel"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Iftaħ il-paġna tal-web fuq ikklikkja l-immaġni tal-post"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Jekk post ikollu URL, iftaħ il-paġna tal-web fuq ikklikkja immaġni"
+        override val settingsManageBanDomainPlaceholder = "Substring tal-URL biex teskludi"
+        override val settingsManageBanSectionStopWords = "Kliem"
+        override val settingsManageBanStopWordPlaceholder = "Espressjoni pprojbita"
+        override val settingsManageBanSectionDomains = "Dominji"
+        override val settingsItemAlternateMarkdownRendering =
+            "Ippermetti r-rendiment alternattiv ta\' Markdown"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Ikkonfigura l-bar tan-navigazzjoni tal-qiegħ"
+        override val selectTabNavigationTitle = "Agħżel taqsima"
+        override val messageAuthIssueSegue0 = "Tista\' tipprova waħda mill-azzjonijiet li ġejjin:"
+        override val messageAuthIssueSegue3 = "ċara d-dejta tal-applikazzjoni"
+        override val messageAuthIssueSegue1 = "iġiegħel l-aġġornament"
+        override val messageAuthIssueSegue2 = "erġa\' illoggja"
     }

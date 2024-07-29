@@ -136,7 +136,7 @@ internal val PlStrings =
         override val postDetailCrossPosts = "opublikowane również na:"
         override val postDetailLoadMoreComments = "Załaduj więcej komentarzy"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Login"
         override val profileDayShort = "d"
@@ -337,7 +337,7 @@ internal val PlStrings =
         override val moderatorZoneTitle = "Narzędzia dla moderatorów"
         override val moderatorZoneActionContents = "Treść do moderacji"
         override val messageAuthIssue =
-            "Wystąpił błąd podczas pobierania danych użytkownika. Spróbuj odświeżyć ekran"
+            "Wystąpił błąd podczas pobierania danych. Prawdopodobnie Twój token wygasł."
         override val banReasonPlaceholder = "Powód (opcjonalnie)"
         override val banItemPermanent = "Stały zakaz"
         override val banItemRemoveData = "Usuń dane"
@@ -367,7 +367,7 @@ internal val PlStrings =
         override val actionSearchInComments = "Szukaj w komentarzach"
         override val advancedSettingsDefaultLanguage = "Domyślny język w edytorze"
         override val undetermined = "Nieokreślony"
-        override val exploreResultTypeTitle = "Typ wyniku"
+        override val exploreResultTypeTitle = "Typ wyniku wyszukiwania"
         override val communityActionEdit = "Edytuj społeczność"
         override val editCommunityHeaderTextual = "Informacje tekstowe"
         override val editCommunityItemSidebar = "Pasek boczny"
@@ -429,6 +429,28 @@ internal val PlStrings =
             "Maksymalna liczba linii w kartach skrzynki odbiorczej"
         override val settingsDefaultExploreResultType =
             "Domyślny typ wyniku wyszukiwania dla Eksploruj"
+        override val messageReadAllInboxSuccess =
+            "Wszystkie pozycje zostały oznaczone jako przeczytane"
+        override val settingsItemRandomThemeColor = "Użyj losowego koloru"
+        override val settingsSubtitleRandomThemeColor =
+            "Zmień kolor motywu przy każdym uruchomieniu aplikacji"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Użyj awatara jako ikony profilu na dolnym pasku nawigacyjnym"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Otwórz stronę internetową po kliknięciu obrazu wpisu"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Jeśli post ma adres URL, otwórz stronę internetową po kliknięciu obrazu"
+        override val settingsManageBanDomainPlaceholder = "Podciąg adresu URL do wykluczenia"
+        override val settingsManageBanSectionDomains = "Domeny"
+        override val settingsManageBanSectionStopWords = "Słowa"
+        override val settingsManageBanStopWordPlaceholder = "Zakazane wyrażenie"
+        override val settingsItemAlternateMarkdownRendering =
+            "Włącz alternatywne renderowanie Markdown"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Skonfiguruj dolny pasek nawigacyjny"
+        override val selectTabNavigationTitle = "Wybierz sekcję"
+        override val messageAuthIssueSegue0 = "Możesz wypróbować jedno z następujących działań:"
+        override val messageAuthIssueSegue3 = "wyczyść dane aplikacji"
+        override val messageAuthIssueSegue1 = "wymuś odświeżenie"
+        override val messageAuthIssueSegue2 = "Zaloguj się jeszcze raz"
     }

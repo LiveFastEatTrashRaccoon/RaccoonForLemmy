@@ -137,7 +137,7 @@ internal val NnStrings =
         override val postDetailCrossPosts = "også postet på:"
         override val postDetailLoadMoreComments = "last inn flere kommentarer"
         override val postHourShort = "T"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Pålogging"
         override val profileDayShort = "d"
@@ -336,7 +336,7 @@ internal val NnStrings =
         override val moderatorZoneTitle = "Verktøy for moderatorer"
         override val moderatorZoneActionContents = "Innhold å moderere"
         override val messageAuthIssue =
-            "Det oppstod en feil under henting av brukerdata. Prøv å oppdatere skjermen"
+            "Det oppsto en feil under henting av data, muligens tokenet ditt har utløpt."
         override val banReasonPlaceholder = "Årsak (valgfritt)"
         override val banItemPermanent = "Permanent forbud"
         override val banItemRemoveData = "Fjern data"
@@ -365,7 +365,7 @@ internal val NnStrings =
         override val actionSearchInComments = "Søk i kommentarfeltet"
         override val advancedSettingsDefaultLanguage = "Standardspråk i editoren"
         override val undetermined = "Udefinert"
-        override val exploreResultTypeTitle = "Resultattype"
+        override val exploreResultTypeTitle = "Søkeresultattype"
         override val communityActionEdit = "Rediger fellesskap"
         override val editCommunityHeaderTextual = "Tekstinformasjon"
         override val editCommunityItemSidebar = "Sidefelt"
@@ -425,6 +425,26 @@ internal val NnStrings =
         override val actionRestore = "Restaurere"
         override val settingsInboxPreviewMaxLines = "Maks antall linjer i innbokskort"
         override val settingsDefaultExploreResultType = "Standard søkeresultattype for Utforsk"
+        override val messageReadAllInboxSuccess = "Alle elementer er merket som lest"
+        override val settingsItemRandomThemeColor = "Bruk tilfeldig farge"
+        override val settingsSubtitleRandomThemeColor = "Endre temafarge ved hver appoppstart"
         override val settingsUseAvatarAsProfileNavigationIcon =
-            "Bruk avatar som profilikon i navigasjonslinjen nederst"
+            "Bruk avatar som profilikon i nederste navigasjonslinje"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Åpne nettsiden ved å legge inn bildeklikk"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Hvis et innlegg har en URL, åpne nettsiden ved bildeklikk"
+        override val settingsManageBanSectionDomains = "Domener"
+        override val settingsManageBanDomainPlaceholder = "Understreng av URL som skal ekskluderes"
+        override val settingsManageBanSectionStopWords = "Ord"
+        override val settingsManageBanStopWordPlaceholder = "Forbudt uttrykk"
+        override val messageAuthIssueSegue1 = "tvinge oppdatering"
+        override val settingsItemAlternateMarkdownRendering =
+            "Aktiver alternativ Markdown-gjengivelse"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Konfigurer den nederste navigasjonslinjen"
+        override val selectTabNavigationTitle = "Velg en seksjon"
+        override val messageAuthIssueSegue0 = "Du kan prøve en av følgende handlinger:"
+        override val messageAuthIssueSegue2 = "logge på igjen"
+        override val messageAuthIssueSegue3 = "slett applikasjonsdataene"
     }

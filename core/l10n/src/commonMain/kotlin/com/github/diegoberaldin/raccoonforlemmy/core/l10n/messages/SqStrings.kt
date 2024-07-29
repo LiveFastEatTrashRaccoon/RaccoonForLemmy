@@ -337,7 +337,7 @@ internal val SqStrings =
         override val moderatorZoneTitle = "Mjete për moderatorët"
         override val moderatorZoneActionContents = "Përmbajtja për të moderuar"
         override val messageAuthIssue =
-            "Ndodhi një gabim gjatë marrjes së të dhënave të përdoruesit, provoni të rifreskoni ekranin"
+            "Ndodhi një gabim gjatë marrjes së të dhënave, ndoshta kodi juaj ka skaduar."
         override val banReasonPlaceholder = "Arsyeja (opsionale)"
         override val banItemPermanent = "Ndalim i përhershëm"
         override val banItemRemoveData = "Hiq të dhënat"
@@ -367,7 +367,7 @@ internal val SqStrings =
         override val actionSearchInComments = "Kërkoni në komente"
         override val advancedSettingsDefaultLanguage = "Gjuha e parazgjedhur në redaktues"
         override val undetermined = "E papërcaktuar"
-        override val exploreResultTypeTitle = "Lloji i rezultatit"
+        override val exploreResultTypeTitle = "Lloji i rezultatit të kërkimit"
         override val communityActionEdit = "Redakto komunitetin"
         override val editCommunityHeaderTextual = "Informacioni tekstual"
         override val editCommunityItemSidebar = "Shiriti anësor"
@@ -430,6 +430,27 @@ internal val SqStrings =
             "Numri maksimal i rreshtave në kartat e kutisë hyrëse"
         override val settingsDefaultExploreResultType =
             "Lloji i parazgjedhur i rezultatit të kërkimit për Eksploro"
+        override val messageReadAllInboxSuccess = "Të gjithë artikujt janë shënuar si të lexuar"
+        override val settingsItemRandomThemeColor = "Përdorni një ngjyrë të rastësishme"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Përdorni avatarin si ikonë të profilit në shiritin e poshtëm të navigimit"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Hapni faqen e internetit në klikimin e imazhit të postimit"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Nëse një postim ka një URL, hapni faqen e internetit duke klikuar në imazh"
+        override val settingsManageBanSectionDomains = "Domenet"
+        override val settingsManageBanDomainPlaceholder = "Nënvarg i URL-së për të përjashtuar"
+        override val settingsManageBanSectionStopWords = "Fjalët"
+        override val settingsManageBanStopWordPlaceholder = "Shprehje e ndaluar"
+        override val settingsSubtitleRandomThemeColor =
+            "Ndryshoni ngjyrën e temës në çdo nisje të aplikacionit"
+        override val settingsItemAlternateMarkdownRendering =
+            "Aktivizo interpretimin alternativ të Markdown"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Konfiguro shiritin e poshtëm të navigimit"
+        override val selectTabNavigationTitle = "Zgjidhni një seksion"
+        override val messageAuthIssueSegue0 = "Mund të provoni një nga veprimet e mëposhtme:"
+        override val messageAuthIssueSegue1 = "forco refresh"
+        override val messageAuthIssueSegue2 = "hyni përsëri"
+        override val messageAuthIssueSegue3 = "pastroni të dhënat e aplikacionit"
     }

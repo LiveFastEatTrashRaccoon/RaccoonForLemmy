@@ -337,7 +337,7 @@ internal val PtStrings =
         override val moderatorZoneTitle = "Ferramentas para moderadores"
         override val moderatorZoneActionContents = "Conteúdos para moderar"
         override val messageAuthIssue =
-            "Ocorreu um erro ao buscar dados do utilizador. Tente atualizar a tela"
+            "Ocorreu um erro ao buscar dados, possivelmente seu token expirou."
         override val banReasonPlaceholder = "Razão (opcional)"
         override val banItemPermanent = "Proibição permanente"
         override val banItemRemoveData = "Remover dados"
@@ -431,4 +431,24 @@ internal val PtStrings =
         override val messageReadAllInboxSuccess = "Todos os itens foram marcados como lidos"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Usar avatar como ícone da secção \"Perfil\" na barra de navegação inferior"
+        override val settingsItemRandomThemeColor = "Usar cor aleatória"
+        override val settingsSubtitleRandomThemeColor =
+            "Altere a cor do tema a cada inicialização do aplicativo"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Abrir a página da web ao clicar na imagem da postagem"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Se uma postagem tiver um URL, abrir a página web clicando na imagem"
+        override val settingsManageBanDomainPlaceholder = "Substring do URL a ser excluído"
+        override val settingsManageBanSectionDomains = "Domínios"
+        override val settingsManageBanSectionStopWords = "Palavras"
+        override val settingsManageBanStopWordPlaceholder = "Expressão proibida"
+        override val messageAuthIssueSegue1 = "forçar atualização"
+        override val messageAuthIssueSegue3 = "limpar os dados do aplicativo"
+        override val settingsItemAlternateMarkdownRendering =
+            "Habilitar renderização Markdown alternativa"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Configurar barra de navegação inferior"
+        override val selectTabNavigationTitle = "Selecione uma seção"
+        override val messageAuthIssueSegue0 = "Você pode tentar uma das seguintes ações:"
+        override val messageAuthIssueSegue2 = "fazer login novamente"
     }

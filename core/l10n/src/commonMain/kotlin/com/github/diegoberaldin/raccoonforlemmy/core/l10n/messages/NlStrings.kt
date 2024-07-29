@@ -137,7 +137,7 @@ internal val NlStrings =
         override val postDetailCrossPosts = "ook geplaatst op:"
         override val postDetailLoadMoreComments = "Meer reacties laden"
         override val postHourShort = "u"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Inloggen"
         override val profileDayShort = "d"
@@ -338,7 +338,7 @@ internal val NlStrings =
         override val moderatorZoneTitle = "Hulpmiddelen voor moderators"
         override val moderatorZoneActionContents = "Inhoud tot matig"
         override val messageAuthIssue =
-            "Er is een fout opgetreden tijdens het ophalen van gebruikersgegevens. Probeer het scherm te vernieuwen"
+            "Er is een fout opgetreden bij het ophalen van gegevens. Mogelijk is uw token verlopen."
         override val banReasonPlaceholder = "Reden (optioneel)"
         override val banItemPermanent = "Permanente verbanning"
         override val banItemRemoveData = "Gegevens verwijderen"
@@ -368,7 +368,7 @@ internal val NlStrings =
         override val actionSearchInComments = "Zoek in opmerkingen"
         override val advancedSettingsDefaultLanguage = "Standaardtaal in de editor"
         override val undetermined = "Ongedefinieerd"
-        override val exploreResultTypeTitle = "Resultaattype"
+        override val exploreResultTypeTitle = "Type zoekresultaat"
         override val communityActionEdit = "Gemeenschap bewerken"
         override val editCommunityHeaderTextual = "Tekstuele informatie"
         override val editCommunityItemSidebar = "Zijbalk"
@@ -428,6 +428,27 @@ internal val NlStrings =
         override val actionRestore = "Herstellen"
         override val settingsInboxPreviewMaxLines = "Maximaal aantal regels in inboxkaarten"
         override val settingsDefaultExploreResultType = "Standaard zoekresultaattype voor Explore"
+        override val messageReadAllInboxSuccess = "Alle items zijn gemarkeerd als gelezen"
+        override val settingsSubtitleRandomThemeColor =
+            "Verander de themakleur bij elke app-opstart"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Gebruik avatar als profielpictogram in de onderste navigatiebalk"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Open de webpagina door op de afbeelding te klikken"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Als een bericht een URL heeft, opent u de webpagina door op de afbeelding te klikken"
+        override val settingsManageBanSectionDomains = "Domeinen"
+        override val settingsManageBanDomainPlaceholder = "Subtekenreeks van de uit te sluiten URL"
+        override val settingsManageBanSectionStopWords = "Woorden"
+        override val settingsManageBanStopWordPlaceholder = "Verboden uitdrukking"
+        override val settingsItemRandomThemeColor = "Gebruik willekeurige kleur"
+        override val settingsItemAlternateMarkdownRendering =
+            "Schakel alternatieve Markdown-rendering in"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Configureer de onderste navigatiebalk"
+        override val selectTabNavigationTitle = "Selecteer een sectie"
+        override val messageAuthIssueSegue0 = "U kunt een van de volgende acties proberen:"
+        override val messageAuthIssueSegue1 = "geforceerd vernieuwen"
+        override val messageAuthIssueSegue2 = "Log opnieuw in"
+        override val messageAuthIssueSegue3 = "Wis de toepassingsgegevens"
     }
