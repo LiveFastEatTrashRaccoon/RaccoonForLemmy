@@ -453,4 +453,8 @@ internal val FrStrings =
         override val messageAuthIssueSegue2 = "s\'enregistrer à nouveau"
         override val messageAuthIssueSegue1 = "actualiser l\'ecran"
         override val messageAuthIssueSegue3 = "effacer les données de l\'application"
+        override val settingsManageBanDomainPlaceholder = "Sous-chaîne de l\'URL à exclure"
+        override val settingsManageBanSectionStopWords = "Mots"
+        override val settingsManageBanStopWordPlaceholder = "Expression interdite"
+        override val settingsManageBanSectionDomains = "Domaines"
     }

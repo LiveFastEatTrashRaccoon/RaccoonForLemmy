@@ -438,4 +438,8 @@ internal val EoStrings =
         override val messageAuthIssueSegue3 = "purigi la aplikajn datumojn"
         override val messageAuthIssueSegue1 = "forto refreŝigi"
         override val messageAuthIssueSegue2 = "ensaluti denove"
+        override val settingsManageBanDomainPlaceholder = "Subŝnuro de URL ekskludi"
+        override val settingsManageBanSectionDomains = "Domajnoj"
+        override val settingsManageBanSectionStopWords = "Vortoj"
+        override val settingsManageBanStopWordPlaceholder = "Malpermesita esprimo"
     }

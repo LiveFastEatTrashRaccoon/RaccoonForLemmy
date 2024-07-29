@@ -431,13 +431,12 @@ internal open class DefaultStrings : Strings {
     override val settingsItemAlternateMarkdownRendering = "Enable alternate Markdown rendering"
     override val settingsItemConfigureBottomNavigationBar = "Configure bottom navigation bar"
     override val selectTabNavigationTitle = "Select a section"
-    override val messageAuthIssueSegue0 =
-        "You could try one of the following actions:"
+    override val messageAuthIssueSegue3 = "clear the application data"
     override val messageAuthIssueSegue1 = "force refresh"
     override val messageAuthIssueSegue2 = "log in again"
-    override val messageAuthIssueSegue3 = "clear the application data"
+    override val messageAuthIssueSegue0 = "You could try one of the following actions:"
     override val settingsManageBanSectionDomains = "Domains"
     override val settingsManageBanDomainPlaceholder = "Substring of URL to exclude"
-    override val settingsManageBanSectionStopWords = "Words"
     override val settingsManageBanStopWordPlaceholder = "Forbidden expression"
+    override val settingsManageBanSectionStopWords = "Words"
 }
