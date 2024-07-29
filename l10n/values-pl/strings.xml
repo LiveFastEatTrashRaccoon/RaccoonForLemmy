@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">opublikowane również na:</string>
     <string name="postDetailLoadMoreComments">Załaduj więcej komentarzy</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Login</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Projektowanie</string>
     <string name="moderatorZoneTitle">Narzędzia dla moderatorów</string>
     <string name="moderatorZoneActionContents">Treść do moderacji</string>
-    <string name="messageAuthIssue">Wystąpił błąd podczas pobierania danych użytkownika. Spróbuj odświeżyć ekran</string>
+    <string name="messageAuthIssue">Wystąpił błąd podczas pobierania danych. Prawdopodobnie Twój token wygasł.</string>
     <string name="banReasonPlaceholder">Powód (opcjonalnie)</string>
     <string name="banItemPermanent">Stały zakaz</string>
     <string name="banItemRemoveData">Usuń dane</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Szukaj w komentarzach</string>
     <string name="advancedSettingsDefaultLanguage">Domyślny język w edytorze</string>
     <string name="undetermined">Nieokreślony</string>
-    <string name="exploreResultTypeTitle">Typ wyniku</string>
+    <string name="exploreResultTypeTitle">Typ wyniku wyszukiwania</string>
     <string name="communityActionEdit">Edytuj społeczność</string>
     <string name="editCommunityHeaderTextual">Informacje tekstowe</string>
     <string name="editCommunityItemSidebar">Pasek boczny</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Przywrócić</string>
     <string name="settingsInboxPreviewMaxLines">Maksymalna liczba linii w kartach skrzynki odbiorczej</string>
     <string name="settingsDefaultExploreResultType">Domyślny typ wyniku wyszukiwania dla Eksploruj</string>
+    <string name="messageReadAllInboxSuccess">Wszystkie pozycje zostały oznaczone jako przeczytane</string>
+    <string name="settingsItemRandomThemeColor">Użyj losowego koloru</string>
+    <string name="settingsSubtitleRandomThemeColor">Zmień kolor motywu przy każdym uruchomieniu aplikacji</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Użyj awatara jako ikony profilu na dolnym pasku nawigacyjnym</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Otwórz stronę internetową po kliknięciu obrazu wpisu</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Jeśli post ma adres URL, otwórz stronę internetową po kliknięciu obrazu</string>
+    <string name="settingsManageBanDomainPlaceholder">Podciąg adresu URL do wykluczenia</string>
+    <string name="settingsManageBanSectionDomains">Domeny</string>
+    <string name="settingsManageBanSectionStopWords">Słowa</string>
+    <string name="settingsManageBanStopWordPlaceholder">Zakazane wyrażenie</string>
+    <string name="settingsItemAlternateMarkdownRendering">Włącz alternatywne renderowanie Markdown</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Skonfiguruj dolny pasek nawigacyjny</string>
+    <string name="selectTabNavigationTitle">Wybierz sekcję</string>
+    <string name="messageAuthIssueSegue0">Możesz wypróbować jedno z następujących działań:</string>
+    <string name="messageAuthIssueSegue3">wyczyść dane aplikacji</string>
+    <string name="messageAuthIssueSegue1">wymuś odświeżenie</string>
+    <string name="messageAuthIssueSegue2">Zaloguj się jeszcze raz</string>
 </resources>
