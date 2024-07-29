@@ -425,4 +425,8 @@
     <string name="messageAuthIssueSegue2">o tawa insa lon tenpo nanpa tu</string>
     <string name="messageAuthIssueSegue3">o weka e sona pi ilo nanpa ni</string>
     <string name="messageAuthIssueSegue0">sina ken lukin e ni:</string>
+    <string name="settingsManageBanSectionDomains">nimi linluwi</string>
+    <string name="settingsManageBanDomainPlaceholder">o weka e sitelen pi nimi linluwi</string>
+    <string name="settingsManageBanSectionStopWords">nimi</string>
+    <string name="settingsManageBanStopWordPlaceholder">o weka e sitelen</string>
 </resources>

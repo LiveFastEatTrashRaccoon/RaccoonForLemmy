@@ -187,7 +187,7 @@
     <string name="settingsEnableCrashReport">Ativar relatório de falhas</string>
     <string name="settingsEnableDoubleTap">Ativar gestos de duplo toque</string>
     <string name="settingsEnableSwipeActions">Ativar gestos de deslize</string>
-    <string name="settingsFullHeightImages">Imagens em tamanho original</string>
+    <string name="settingsFullHeightImages">Imagens em toda altura</string>
     <string name="settingsIncludeNsfw">Incluir conteúdo NSFW</string>
     <string name="settingsLanguage">Idioma</string>
     <string name="settingsNavigationBarTitlesVisible">Mostrar descrição na barra de navegação</string>
@@ -389,9 +389,9 @@
     <string name="settingsUrlOpeningModeExternal">Navegador externo</string>
     <string name="settingsUrlOpeningModeCustomTabs">Abas personalizadas</string>
     <string name="settingsFullWidthImages">Imagens em toda a largura</string>
-    <string name="contentScaleFit">Ajustar o tamanho</string>
-    <string name="contentScaleFillWidth">Preencher a largura</string>
-    <string name="contentScaleFillHeight">Preencher a altura</string>
+    <string name="contentScaleFit">Encaixar na tela</string>
+    <string name="contentScaleFillWidth">Em toda largura</string>
+    <string name="contentScaleFillHeight">Em toda altura</string>
     <string name="settingsCommentIndentAmount">Grau de indentação em comentários</string>
     <string name="postActionUnhide">Reverter ocultação</string>
     <string name="adminActionPurge">Purgar</string>
@@ -426,4 +426,6 @@
     <string name="messageAuthIssueSegue3">limpar os dados do app</string>
     <string name="messageAuthIssueSegue1">forçar a atualização</string>
     <string name="messageAuthIssueSegue2">fazer login de novo</string>
+    <string name="settingsManageBanDomainPlaceholder">Sequência de caracteres da URL a excluir</string>
+    <string name="settingsManageBanSectionDomains">Domínios</string>
 </resources>

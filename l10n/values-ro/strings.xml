@@ -425,4 +425,8 @@
     <string name="messageAuthIssueSegue3">ștergere datele aplicației</string>
     <string name="messageAuthIssueSegue1">reîmprospătare forțată</string>
     <string name="messageAuthIssueSegue2">a se conecta din nou</string>
+    <string name="settingsManageBanDomainPlaceholder">Subșir de URL de exclus</string>
+    <string name="settingsManageBanSectionDomains">Domenii</string>
+    <string name="settingsManageBanSectionStopWords">Cuvinte</string>
+    <string name="settingsManageBanStopWordPlaceholder">Expresie interzisă</string>
 </resources>

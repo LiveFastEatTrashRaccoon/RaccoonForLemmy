@@ -425,4 +425,8 @@
     <string name="messageAuthIssueSegue3">purigi la aplikajn datumojn</string>
     <string name="messageAuthIssueSegue1">forto refreŝigi</string>
     <string name="messageAuthIssueSegue2">ensaluti denove</string>
+    <string name="settingsManageBanDomainPlaceholder">Subŝnuro de URL ekskludi</string>
+    <string name="settingsManageBanSectionDomains">Domajnoj</string>
+    <string name="settingsManageBanSectionStopWords">Vortoj</string>
+    <string name="settingsManageBanStopWordPlaceholder">Malpermesita esprimo</string>
 </resources>
