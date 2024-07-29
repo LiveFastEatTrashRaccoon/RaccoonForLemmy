@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">كما تم نشره على:</string>
     <string name="postDetailLoadMoreComments">تصفح المزيد</string>
     <string name="postHourShort">ساعات</string>
-    <string name="postMinuteShort">دقائق</string>
+    <string name="postMinuteShort">دقيقة</string>
     <string name="postSecondShort">ثواني</string>
     <string name="profileButtonLogin">تسجيل الدخول</string>
     <string name="profileDayShort">أيام</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">المسودات</string>
     <string name="moderatorZoneTitle">أدوات للمشرفين</string>
     <string name="moderatorZoneActionContents">محتويات إلى معتدلة</string>
-    <string name="messageAuthIssue">حدث خطأ أثناء جلب بيانات المستخدم، حاول تحديث الشاشة</string>
+    <string name="messageAuthIssue">حدث خطأ أثناء جلب البيانات، ربما انتهت صلاحية الرمز المميز الخاص بك.</string>
     <string name="banReasonPlaceholder">لسبب (اختياري)</string>
     <string name="banItemPermanent">فرض حظر دائم</string>
     <string name="banItemRemoveData">إزالة البيانات</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">البحث في التعليقات</string>
     <string name="advancedSettingsDefaultLanguage">للغة الافتراضية في المحرر</string>
     <string name="undetermined">غير معرف</string>
-    <string name="exploreResultTypeTitle">نوع النتيجة</string>
+    <string name="exploreResultTypeTitle">نوع نتيجة البحث</string>
     <string name="communityActionEdit">تحرير المجتمع</string>
     <string name="editCommunityHeaderTextual">معلومات نصية</string>
     <string name="editCommunityItemSidebar">الشريط الجانبي</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">يعيد</string>
     <string name="settingsInboxPreviewMaxLines">الحد الأقصى لعدد الخطوط في بطاقات البريد الوارد</string>
     <string name="settingsDefaultExploreResultType">وع نتيجة البحث الافتراضي للاستكشاف</string>
+    <string name="settingsItemRandomThemeColor">استخدام لون عشوائي</string>
+    <string name="settingsSubtitleRandomThemeColor">تغيير لون السمة عند كل بدء تشغيل التطبيق</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">استخدم الصورة الرمزية كرمز للملف الشخصي في شريط التنقل السفلي</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">افتح صفحة الويب عند النقر على مشاركة الصورة</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">إذا كان المنشور يحتوي على عنوان URL، فافتح صفحة الويب عند النقر على الصورة</string>
+    <string name="settingsManageBanSectionDomains">المجالات</string>
+    <string name="settingsManageBanDomainPlaceholder">سلسلة فرعية من عنوان URL المطلوب استبعاده</string>
+    <string name="settingsManageBanSectionStopWords">كلمات</string>
+    <string name="settingsManageBanStopWordPlaceholder">التعبير الممنوع</string>
+    <string name="messageReadAllInboxSuccess">تم وضع علامة على كافة العناصر كمقروءة</string>
+    <string name="settingsItemAlternateMarkdownRendering">تمكين عرض Markdown البديل</string>
+    <string name="settingsItemConfigureBottomNavigationBar">تكوين شريط التنقل السفلي</string>
+    <string name="selectTabNavigationTitle">حدد قسمًا</string>
+    <string name="messageAuthIssueSegue0">يمكنك تجربة أحد الإجراءات التالية:</string>
+    <string name="messageAuthIssueSegue1">تحديث القوة</string>
+    <string name="messageAuthIssueSegue2">تسجيل الدخول مرة أخرى</string>
+    <string name="messageAuthIssueSegue3">مسح بيانات التطبيق</string>
 </resources>

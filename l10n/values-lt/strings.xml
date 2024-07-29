@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">taip pat paskelbta:</string>
     <string name="postDetailLoadMoreComments">rodyti daugiau komentarų</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Prisijungti</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Juodraščiai</string>
     <string name="moderatorZoneTitle">Priemonės moderatoriams</string>
     <string name="moderatorZoneActionContents">Turinys vidutinis</string>
-    <string name="messageAuthIssue">Gaunant vartotojo duomenis įvyko klaida. Pabandykite atnaujinti ekraną</string>
+    <string name="messageAuthIssue">Gaunant duomenis įvyko klaida, galbūt baigėsi jūsų prieigos rakto galiojimo laikas.</string>
     <string name="banReasonPlaceholder">Priežastis (neprivaloma)</string>
     <string name="banItemPermanent">Nuolatinis draudimas</string>
     <string name="banItemRemoveData">Pašalinti duomenis</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Ieškokite komentaruose</string>
     <string name="advancedSettingsDefaultLanguage">Numatytoji kalba redaktoriuje</string>
     <string name="undetermined">Neapibrėžtas</string>
-    <string name="exploreResultTypeTitle">Rezultato tipas</string>
+    <string name="exploreResultTypeTitle">Paieškos rezultato tipas</string>
     <string name="communityActionEdit">Redaguoti bendruomenę</string>
     <string name="editCommunityHeaderTextual">Tekstinė informacija</string>
     <string name="editCommunityItemSidebar">Šoninė juosta</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Atkurti</string>
     <string name="settingsInboxPreviewMaxLines">Maksimalus eilučių skaičius gautųjų kortelėse</string>
     <string name="settingsDefaultExploreResultType">Numatytasis Naršymo paieškos rezultatų tipas</string>
+    <string name="messageReadAllInboxSuccess">Visi elementai pažymėti kaip perskaityti</string>
+    <string name="settingsItemRandomThemeColor">Naudokite atsitiktinę spalvą</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Atidarykite tinklalapį ant vaizdo įrašo</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Jei įrašas turi URL, atidarykite tinklalapį spustelėję vaizdą</string>
+    <string name="settingsManageBanSectionDomains">Domenai</string>
+    <string name="settingsManageBanSectionStopWords">Žodžiai</string>
+    <string name="settingsManageBanStopWordPlaceholder">Draudžiama išraiška</string>
+    <string name="settingsManageBanDomainPlaceholder">URL poeilutė, kurią norite išskirti</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Naudokite avatarą kaip profilio piktogramą apatinėje naršymo juostoje</string>
+    <string name="settingsSubtitleRandomThemeColor">Keiskite temos spalvą kiekvieną kartą paleidžiant programą</string>
+    <string name="settingsItemAlternateMarkdownRendering">Įgalinti alternatyvų žymėjimo atvaizdavimą</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Konfigūruoti apatinę naršymo juostą</string>
+    <string name="selectTabNavigationTitle">Pasirinkite skyrių</string>
+    <string name="messageAuthIssueSegue0">Galite išbandyti vieną iš šių veiksmų:</string>
+    <string name="messageAuthIssueSegue3">išvalyti programos duomenis</string>
+    <string name="messageAuthIssueSegue1">priverstinai atnaujinti</string>
+    <string name="messageAuthIssueSegue2">prisijunkite dar kartą</string>
 </resources>

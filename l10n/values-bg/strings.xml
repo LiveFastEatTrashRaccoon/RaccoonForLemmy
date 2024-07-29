@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">също така публикуван на:</string>
     <string name="postDetailLoadMoreComments">Зареждане на още коментари</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">мин</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Вход</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Чернови</string>
     <string name="moderatorZoneTitle">Инструменти за модератори</string>
     <string name="moderatorZoneActionContents">Съдържание за модериране</string>
-    <string name="messageAuthIssue">Възникна грешка при извличането на потребителски данни, опитайте да обновите екрана</string>
+    <string name="messageAuthIssue">Възникна грешка при извличането на данни, вероятно вашият токен е изтекъл.</string>
     <string name="banReasonPlaceholder">Причина (по избор)</string>
     <string name="banItemPermanent">Постоянна забрана</string>
     <string name="banItemRemoveData">Премахване на данни</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Търсете в коментарите</string>
     <string name="advancedSettingsDefaultLanguage">Език по подразбиране в редактора</string>
     <string name="undetermined">Недефиниран</string>
-    <string name="exploreResultTypeTitle">Тип резултат</string>
+    <string name="exploreResultTypeTitle">Тип резултат от търсенето</string>
     <string name="communityActionEdit">Редактиране на общността</string>
     <string name="editCommunityHeaderTextual">Текстова информация</string>
     <string name="editCommunityItemSidebar">Странична лента</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Възстанови</string>
     <string name="settingsInboxPreviewMaxLines">Максимален брой редове във входящите карти</string>
     <string name="settingsDefaultExploreResultType">ип резултати от търсенето по подразбиране за Explore</string>
+    <string name="messageReadAllInboxSuccess">Всички елементи са маркирани като прочетени</string>
+    <string name="settingsItemRandomThemeColor">Използвайте произволен цвят</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Използвайте аватара като икона на профил в долната лента за навигация</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Отворете уеб страницата при щракване върху изображението за публикуване</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Ако дадена публикация има URL, отворете уеб страницата при щракване върху изображение</string>
+    <string name="settingsManageBanDomainPlaceholder">Подниз на URL за изключване</string>
+    <string name="settingsManageBanSectionDomains">Домейни</string>
+    <string name="settingsManageBanSectionStopWords">Думи</string>
+    <string name="settingsManageBanStopWordPlaceholder">Забранено изразяване</string>
+    <string name="settingsSubtitleRandomThemeColor">Променете цвета на темата при всяко стартиране на приложението</string>
+    <string name="settingsItemAlternateMarkdownRendering">Активиране на алтернативно изобразяване на Markdown</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Конфигурирайте долната лента за навигация</string>
+    <string name="selectTabNavigationTitle">Изберете раздел</string>
+    <string name="messageAuthIssueSegue0">Можете да опитате едно от следните действия:</string>
+    <string name="messageAuthIssueSegue3">изчистете данните на приложението</string>
+    <string name="messageAuthIssueSegue1">принудително опресняване</string>
+    <string name="messageAuthIssueSegue2">влезте отново</string>
 </resources>

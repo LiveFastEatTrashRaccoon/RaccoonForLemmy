@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">även postat till:</string>
     <string name="postDetailLoadMoreComments">Ladda fler kommentarer</string>
     <string name="postHourShort">t</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Logga in</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Utkast</string>
     <string name="moderatorZoneTitle">Verktyg för moderatorer</string>
     <string name="moderatorZoneActionContents">Innehållet till måttligt</string>
-    <string name="messageAuthIssue">Ett fel uppstod när användardata skulle hämtas, försök att uppdatera skärmen</string>
+    <string name="messageAuthIssue">Ett fel uppstod när data hämtades, möjligen har din token gått ut.</string>
     <string name="banReasonPlaceholder">Orsak (valfritt)</string>
     <string name="banItemPermanent">Permanent förbud</string>
     <string name="banItemRemoveData">Ta bort data</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Sök i kommentarer</string>
     <string name="advancedSettingsDefaultLanguage">Standardspråk i editorn</string>
     <string name="undetermined">Odefinierad</string>
-    <string name="exploreResultTypeTitle">Resultattyp</string>
+    <string name="exploreResultTypeTitle">Sökresultattyp</string>
     <string name="communityActionEdit">Redigera grupp</string>
     <string name="editCommunityHeaderTextual">Textinformation</string>
     <string name="editCommunityItemSidebar">Sidofält</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Återställ</string>
     <string name="settingsInboxPreviewMaxLines">Max antal rader i inkorgskort</string>
     <string name="settingsDefaultExploreResultType">Standard sökresultattyp för Utforska</string>
+    <string name="messageReadAllInboxSuccess">Alla objekt har markerats som lästa</string>
+    <string name="settingsItemRandomThemeColor">Använd slumpmässig färg</string>
+    <string name="settingsSubtitleRandomThemeColor">Ändra temafärg vid varje appstart</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Använd avatar som profilikon i det nedre navigeringsfältet</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Öppna webbsidan när du klickar på bilden</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Om ett inlägg har en URL, öppna webbsidan på bildklick</string>
+    <string name="settingsManageBanSectionDomains">Domäner</string>
+    <string name="settingsManageBanDomainPlaceholder">Delsträng av URL att utesluta</string>
+    <string name="settingsManageBanSectionStopWords">Ord</string>
+    <string name="settingsManageBanStopWordPlaceholder">Förbjudet uttryck</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Konfigurera nedre navigeringsfältet</string>
+    <string name="settingsItemAlternateMarkdownRendering">Aktivera alternativ Markdown-rendering</string>
+    <string name="selectTabNavigationTitle">Välj ett avsnitt</string>
+    <string name="messageAuthIssueSegue0">Du kan prova någon av följande åtgärder:</string>
+    <string name="messageAuthIssueSegue1">tvinga fram uppdatering</string>
+    <string name="messageAuthIssueSegue2">logga in igen</string>
+    <string name="messageAuthIssueSegue3">rensa applikationsdata</string>
 </resources>

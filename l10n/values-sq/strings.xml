@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Draftet</string>
     <string name="moderatorZoneTitle">Mjete për moderatorët</string>
     <string name="moderatorZoneActionContents">Përmbajtja për të moderuar</string>
-    <string name="messageAuthIssue">Ndodhi një gabim gjatë marrjes së të dhënave të përdoruesit, provoni të rifreskoni ekranin</string>
+    <string name="messageAuthIssue">Ndodhi një gabim gjatë marrjes së të dhënave, ndoshta kodi juaj ka skaduar.</string>
     <string name="banReasonPlaceholder">Arsyeja (opsionale)</string>
     <string name="banItemPermanent">Ndalim i përhershëm</string>
     <string name="banItemRemoveData">Hiq të dhënat</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Kërkoni në komente</string>
     <string name="advancedSettingsDefaultLanguage">Gjuha e parazgjedhur në redaktues</string>
     <string name="undetermined">E papërcaktuar</string>
-    <string name="exploreResultTypeTitle">Lloji i rezultatit</string>
+    <string name="exploreResultTypeTitle">Lloji i rezultatit të kërkimit</string>
     <string name="communityActionEdit">Redakto komunitetin</string>
     <string name="editCommunityHeaderTextual">Informacioni tekstual</string>
     <string name="editCommunityItemSidebar">Shiriti anësor</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Rivendos</string>
     <string name="settingsInboxPreviewMaxLines">Numri maksimal i rreshtave në kartat e kutisë hyrëse</string>
     <string name="settingsDefaultExploreResultType">Lloji i parazgjedhur i rezultatit të kërkimit për Eksploro</string>
+    <string name="messageReadAllInboxSuccess">Të gjithë artikujt janë shënuar si të lexuar</string>
+    <string name="settingsItemRandomThemeColor">Përdorni një ngjyrë të rastësishme</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Përdorni avatarin si ikonë të profilit në shiritin e poshtëm të navigimit</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Hapni faqen e internetit në klikimin e imazhit të postimit</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Nëse një postim ka një URL, hapni faqen e internetit duke klikuar në imazh</string>
+    <string name="settingsManageBanSectionDomains">Domenet</string>
+    <string name="settingsManageBanDomainPlaceholder">Nënvarg i URL-së për të përjashtuar</string>
+    <string name="settingsManageBanSectionStopWords">Fjalët</string>
+    <string name="settingsManageBanStopWordPlaceholder">Shprehje e ndaluar</string>
+    <string name="settingsSubtitleRandomThemeColor">Ndryshoni ngjyrën e temës në çdo nisje të aplikacionit</string>
+    <string name="settingsItemAlternateMarkdownRendering">Aktivizo interpretimin alternativ të Markdown</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Konfiguro shiritin e poshtëm të navigimit</string>
+    <string name="selectTabNavigationTitle">Zgjidhni një seksion</string>
+    <string name="messageAuthIssueSegue0">Mund të provoni një nga veprimet e mëposhtme:</string>
+    <string name="messageAuthIssueSegue1">forco refresh</string>
+    <string name="messageAuthIssueSegue2">hyni përsëri</string>
+    <string name="messageAuthIssueSegue3">pastroni të dhënat e aplikacionit</string>
 </resources>

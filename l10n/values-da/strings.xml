@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">også sendt til:</string>
     <string name="postDetailLoadMoreComments">Indlæs flere kommentarer</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Log ind</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Udkast</string>
     <string name="moderatorZoneTitle">Værktøjer til moderatorer</string>
     <string name="moderatorZoneActionContents">Indhold til moderat</string>
-    <string name="messageAuthIssue">Der opstod en fejl under hentning af brugerdata. Prøv at opdatere skærmen</string>
+    <string name="messageAuthIssue">Der opstod en fejl under hentning af data, muligvis er dit token udløbet.</string>
     <string name="banReasonPlaceholder">Årsag (valgfrit)</string>
     <string name="banItemPermanent">Permanent forbud</string>
     <string name="banItemRemoveData">Fjern data</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Søg i kommentarer</string>
     <string name="advancedSettingsDefaultLanguage">Standardsprog i editoren</string>
     <string name="undetermined">Udefineret</string>
-    <string name="exploreResultTypeTitle">Resultattype</string>
+    <string name="exploreResultTypeTitle">Søgeresultattype</string>
     <string name="communityActionEdit">Rediger fællesskab</string>
     <string name="editCommunityHeaderTextual">Tekstmæssige oplysninger</string>
     <string name="editCommunityItemSidebar">Sidebjælke</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Gendan</string>
     <string name="settingsInboxPreviewMaxLines">Max antal linjer i indbakkekort</string>
     <string name="settingsDefaultExploreResultType">Standard søgeresultattype for Udforsk</string>
+    <string name="messageReadAllInboxSuccess">Alle elementer er blevet markeret som læst</string>
+    <string name="settingsItemRandomThemeColor">Brug tilfældig farve</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Brug avatar som profilikon i nederste navigationslinje</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Åbn webside på post billede klik</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Hvis et indlæg har en URL, skal du åbne webside ved billedklik</string>
+    <string name="settingsManageBanDomainPlaceholder">Understreng af URL, der skal ekskluderes</string>
+    <string name="settingsManageBanSectionDomains">Domæner</string>
+    <string name="settingsManageBanSectionStopWords">Ord</string>
+    <string name="settingsManageBanStopWordPlaceholder">Forbudt udtryk</string>
+    <string name="settingsSubtitleRandomThemeColor">Skift temafarve ved hver appstart</string>
+    <string name="settingsItemAlternateMarkdownRendering">Aktiver alternativ Markdown-gengivelse</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Konfigurer nederste navigationslinje</string>
+    <string name="selectTabNavigationTitle">Vælg en sektion</string>
+    <string name="messageAuthIssueSegue0">Du kan prøve en af følgende handlinger:</string>
+    <string name="messageAuthIssueSegue3">ryd applikationsdataene</string>
+    <string name="messageAuthIssueSegue1">fremtvinge opdatering</string>
+    <string name="messageAuthIssueSegue2">logge ind igen</string>
 </resources>

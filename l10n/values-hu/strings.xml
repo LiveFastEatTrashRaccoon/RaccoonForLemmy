@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">szintén közzétéve:</string>
     <string name="postDetailLoadMoreComments">További hozzászólások betöltése</string>
     <string name="postHourShort">óra</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">per</string>
     <string name="postSecondShort">mp.</string>
     <string name="profileButtonLogin">Bejelentkezés</string>
     <string name="profileDayShort">nap</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Tervezetek</string>
     <string name="moderatorZoneTitle">Eszközök moderátorok számára</string>
     <string name="moderatorZoneActionContents">Tartalom moderálandó</string>
-    <string name="messageAuthIssue">Hiba történt a felhasználói adatok lekérése közben, próbálja meg frissíteni a képernyőt</string>
+    <string name="messageAuthIssue">Hiba történt az adatok lekérése közben, valószínűleg a tokenje lejárt.</string>
     <string name="banReasonPlaceholder">Ok (nem kötelező)</string>
     <string name="banItemPermanent">Végleges eltiltás</string>
     <string name="banItemRemoveData">Távolítsa el az adatokat</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Keress a megjegyzésekben</string>
     <string name="advancedSettingsDefaultLanguage">Alapértelmezett nyelv a szerkesztőben</string>
     <string name="undetermined">Határozatlan</string>
-    <string name="exploreResultTypeTitle">Az eredmény típusa</string>
+    <string name="exploreResultTypeTitle">Keresési eredmény típusa</string>
     <string name="communityActionEdit">Közösség szerkesztése</string>
     <string name="editCommunityHeaderTextual">Szöveges információk</string>
     <string name="editCommunityItemSidebar">Oldalsáv</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">visszaállítás</string>
     <string name="settingsInboxPreviewMaxLines">Maximális sorok száma a postafiók kártyákban</string>
     <string name="settingsDefaultExploreResultType">A Felfedezés alapértelmezett keresési eredménytípusa</string>
+    <string name="messageReadAllInboxSuccess">Minden tétel olvasottként meg lett jelölve</string>
+    <string name="settingsItemRandomThemeColor">Használjon véletlenszerű színt</string>
+    <string name="settingsSubtitleRandomThemeColor">Változtassa meg a téma színét minden alkalmazás indításakor</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">A weboldal megnyitása a kép közzétételére kattintva</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Ha egy bejegyzésnek van URL-je, nyissa meg a weboldalt a képre kattintva</string>
+    <string name="settingsManageBanDomainPlaceholder">A kizárandó URL részkarakterlánca</string>
+    <string name="settingsManageBanSectionDomains">Domainek</string>
+    <string name="settingsManageBanSectionStopWords">Szavak</string>
+    <string name="settingsManageBanStopWordPlaceholder">Tiltott kifejezés</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Használja az avatart profilikonként az alsó navigációs sávban</string>
+    <string name="settingsItemAlternateMarkdownRendering">Alternatív Markdown megjelenítés engedélyezése</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Konfigurálja az alsó navigációs sávot</string>
+    <string name="selectTabNavigationTitle">Válasszon egy szakaszt</string>
+    <string name="messageAuthIssueSegue0">Megpróbálhatja a következő műveletek egyikét:</string>
+    <string name="messageAuthIssueSegue3">törölje az alkalmazás adatait</string>
+    <string name="messageAuthIssueSegue1">erőltesse a frissítést</string>
+    <string name="messageAuthIssueSegue2">jelentkezz be újra</string>
 </resources>

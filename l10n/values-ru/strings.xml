@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">также опубликовано в:</string>
     <string name="postDetailLoadMoreComments">Загрузить больше комментариев</string>
     <string name="postHourShort">ч</string>
-    <string name="postMinuteShort">м</string>
+    <string name="postMinuteShort">мин</string>
     <string name="postSecondShort">с</string>
     <string name="profileButtonLogin">Вход</string>
     <string name="profileDayShort">д</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Черновики</string>
     <string name="moderatorZoneTitle">Инструменты для модераторов</string>
     <string name="moderatorZoneActionContents">Содержание для модерации</string>
-    <string name="messageAuthIssue">Произошла ошибка при получении пользовательских данных. Попробуйте обновить экран.</string>
+    <string name="messageAuthIssue">Произошла ошибка при получении данных, возможно, срок действия вашего токена истек.</string>
     <string name="banReasonPlaceholder">Причина (необязательно)</string>
     <string name="banItemPermanent">Постоянный бан</string>
     <string name="banItemRemoveData">Удалить данные</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Искать в комментариях</string>
     <string name="advancedSettingsDefaultLanguage">Язык по умолчанию в редакторе</string>
     <string name="undetermined">Неопределенный</string>
-    <string name="exploreResultTypeTitle">Тип результата</string>
+    <string name="exploreResultTypeTitle">Тип результата поиска</string>
     <string name="communityActionEdit">Изменить сообщество</string>
     <string name="editCommunityHeaderTextual">Текстовая информация</string>
     <string name="editCommunityItemSidebar">Боковая панель</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Восстановить</string>
     <string name="settingsInboxPreviewMaxLines">Максимальное количество строк во входящих карточках</string>
     <string name="settingsDefaultExploreResultType">Тип результатов поиска по умолчанию для Explore</string>
+    <string name="messageReadAllInboxSuccess">Все статьи отмечены как прочитанные</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Открыть веб-страницу при нажатии на изображение публикации</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Если у публикации есть URL-адрес, откройте веб-страницу по щелчку изображения</string>
+    <string name="settingsManageBanSectionDomains">Домены</string>
+    <string name="settingsManageBanSectionStopWords">Слова</string>
+    <string name="settingsManageBanStopWordPlaceholder">Запрещенное выражение</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Использовать аватар в качестве значка профиля в нижней панели навигации</string>
+    <string name="settingsItemRandomThemeColor">Использовать случайный цвет</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Настроить нижнюю панель навигации</string>
+    <string name="messageAuthIssueSegue3">очистить данные приложения</string>
+    <string name="settingsSubtitleRandomThemeColor">Изменение цвета темы при каждом запуске приложения</string>
+    <string name="messageAuthIssueSegue1">принудительное обновление</string>
+    <string name="settingsManageBanDomainPlaceholder">Подстрока URL, которую нужно исключить</string>
+    <string name="settingsItemAlternateMarkdownRendering">Включить альтернативный рендеринг Markdown</string>
+    <string name="selectTabNavigationTitle">Выберите раздел</string>
+    <string name="messageAuthIssueSegue0">Вы можете попробовать одно из следующих действий:</string>
+    <string name="messageAuthIssueSegue2">войдите снова</string>
 </resources>

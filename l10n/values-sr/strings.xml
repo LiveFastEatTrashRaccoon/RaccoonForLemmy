@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">такође објављено на:</string>
     <string name="postDetailLoadMoreComments">Учитајте још коментара</string>
     <string name="postHourShort">х</string>
-    <string name="postMinuteShort">м</string>
+    <string name="postMinuteShort">мин</string>
     <string name="postSecondShort">с</string>
     <string name="profileButtonLogin">Пријавите се</string>
     <string name="profileDayShort">д</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Нацрти</string>
     <string name="moderatorZoneTitle">Алати за модерирање</string>
     <string name="moderatorZoneActionContents">Садржај за модерирање</string>
-    <string name="messageAuthIssue">Дошло је до грешке при преузимању корисничких података, покушајте да освежите екран</string>
+    <string name="messageAuthIssue">Дошло је до грешке при преузимању података, можда је ваш токен истекао.</string>
     <string name="banReasonPlaceholder">Разлог (опционо)</string>
     <string name="banItemPermanent">Трајна забрана</string>
     <string name="banItemRemoveData">Уклоните податке</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Тражи у коментарима</string>
     <string name="advancedSettingsDefaultLanguage">Подразумевани језик у уређивачу</string>
     <string name="undetermined">Недефинисан</string>
-    <string name="exploreResultTypeTitle">Тип резултата</string>
+    <string name="exploreResultTypeTitle">Тип резултата претраге</string>
     <string name="communityActionEdit">Уредите заједницу</string>
     <string name="editCommunityHeaderTextual">Текстуалне информације</string>
     <string name="editCommunityItemSidebar">Бочна трака</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Ресторе</string>
     <string name="settingsInboxPreviewMaxLines">Максималан број линија у картицама пријемног сандучет</string>
     <string name="settingsDefaultExploreResultType">Подразумевани тип резултата претраге за Истраживање</string>
+    <string name="messageReadAllInboxSuccess">Све ставке су означене као прочитане</string>
+    <string name="settingsItemRandomThemeColor">Користите насумичне боје</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Отворите веб страницу кликом на слику поста</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Ако пост има УРЛ, отворите веб страницу кликом на слику</string>
+    <string name="settingsManageBanSectionDomains">Домаинс</string>
+    <string name="settingsManageBanDomainPlaceholder">Подниз УРЛ-а за изузимање</string>
+    <string name="settingsManageBanSectionStopWords">Речи</string>
+    <string name="settingsManageBanStopWordPlaceholder">Забрањено изражавање</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Користите аватар као икону профила на доњој траци за навигацију</string>
+    <string name="settingsSubtitleRandomThemeColor">Промените боју теме при сваком покретању апликације</string>
+    <string name="settingsItemAlternateMarkdownRendering">Омогући алтернативно Маркдовн рендеровање</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Конфигуришите доњу траку за навигацију</string>
+    <string name="selectTabNavigationTitle">Изаберите одељак</string>
+    <string name="messageAuthIssueSegue0">Можете покушати једну од следећих радњи:</string>
+    <string name="messageAuthIssueSegue1">принудно освежавање</string>
+    <string name="messageAuthIssueSegue2">пријавите се поново</string>
+    <string name="messageAuthIssueSegue3">обришите податке апликације</string>
 </resources>
