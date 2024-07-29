@@ -425,4 +425,8 @@
     <string name="messageAuthIssueSegue3">sonraí an fheidhmchláir a ghlanadh</string>
     <string name="messageAuthIssueSegue1">fórsa athnuachan</string>
     <string name="messageAuthIssueSegue2">logáil isteach arís</string>
+    <string name="settingsManageBanDomainPlaceholder">Fotheaghrán an URL le eisiamh</string>
+    <string name="settingsManageBanSectionDomains">Fearainn</string>
+    <string name="settingsManageBanSectionStopWords">Focail</string>
+    <string name="settingsManageBanStopWordPlaceholder">Léiriú toirmiscthe</string>
 </resources>
