@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">arī izlikts:</string>
     <string name="postDetailLoadMoreComments">Ielādēt vairāk komentāru</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Pieslēgties</string>
     <string name="profileDayShort">d.</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Melnraksti</string>
     <string name="moderatorZoneTitle">Rīki moderatoriem</string>
     <string name="moderatorZoneActionContents">Saturs līdz mērenam</string>
-    <string name="messageAuthIssue">Ienesot lietotāja datus, radās kļūda. Mēģiniet atsvaidzināt ekrānu</string>
+    <string name="messageAuthIssue">Ienesot datus, radās kļūda, iespējams, jūsu pilnvaras derīguma termiņš ir beidzies.</string>
     <string name="banReasonPlaceholder">Iemesls (pēc izvēles)</string>
     <string name="banItemPermanent">Pastāvīgs aizliegums</string>
     <string name="banItemRemoveData">Noņemiet datus</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Meklējiet komentāros</string>
     <string name="advancedSettingsDefaultLanguage">Redaktora noklusējuma valoda</string>
     <string name="undetermined">nenoteikts</string>
-    <string name="exploreResultTypeTitle">Rezultāta veids</string>
+    <string name="exploreResultTypeTitle">Meklēšanas rezultāta veids</string>
     <string name="communityActionEdit">Rediģēt kopienu</string>
     <string name="editCommunityHeaderTextual">Teksta informācija</string>
     <string name="editCommunityItemSidebar">Sānjosla</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Atjaunot</string>
     <string name="settingsInboxPreviewMaxLines">Maksimālais rindu skaits iesūtnes kartītēs</string>
     <string name="settingsDefaultExploreResultType">Noklusējuma meklēšanas rezultāta veids funkcijai Izpētīt</string>
+    <string name="messageReadAllInboxSuccess">Visi vienumi ir atzīmēti kā izlasīti</string>
+    <string name="settingsItemRandomThemeColor">Izmantojiet nejaušas krāsas</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Atveriet tīmekļa lapu, noklikšķinot uz attēla ievietošanas</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Ja ziņai ir URL, atveriet tīmekļa lapu, noklikšķinot uz attēla</string>
+    <string name="settingsManageBanDomainPlaceholder">Izslēdzamā URL apakšvirkne</string>
+    <string name="settingsManageBanSectionDomains">Domēni</string>
+    <string name="settingsManageBanSectionStopWords">Vārdi</string>
+    <string name="settingsManageBanStopWordPlaceholder">Aizliegta izpausme</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Izmantojiet iemiesojumu kā profila ikonu apakšējā navigācijas joslā</string>
+    <string name="settingsSubtitleRandomThemeColor">Mainiet motīva krāsu katrā lietotnes palaišanas reizē</string>
+    <string name="settingsItemAlternateMarkdownRendering">Iespējot alternatīvu Markdown renderēšanu</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Konfigurējiet apakšējo navigācijas joslu</string>
+    <string name="selectTabNavigationTitle">Izvēlieties sadaļu</string>
+    <string name="messageAuthIssueSegue0">Varat izmēģināt kādu no šīm darbībām:</string>
+    <string name="messageAuthIssueSegue3">notīriet lietojumprogrammas datus</string>
+    <string name="messageAuthIssueSegue1">piespiest atsvaidzināt</string>
+    <string name="messageAuthIssueSegue2">piesakieties vēlreiz</string>
 </resources>
