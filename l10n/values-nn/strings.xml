@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">også postet på:</string>
     <string name="postDetailLoadMoreComments">last inn flere kommentarer</string>
     <string name="postHourShort">T</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Pålogging</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Utkast</string>
     <string name="moderatorZoneTitle">Verktøy for moderatorer</string>
     <string name="moderatorZoneActionContents">Innhold å moderere</string>
-    <string name="messageAuthIssue">Det oppstod en feil under henting av brukerdata. Prøv å oppdatere skjermen</string>
+    <string name="messageAuthIssue">Det oppsto en feil under henting av data, muligens tokenet ditt har utløpt.</string>
     <string name="banReasonPlaceholder">Årsak (valgfritt)</string>
     <string name="banItemPermanent">Permanent forbud</string>
     <string name="banItemRemoveData">Fjern data</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Søk i kommentarfeltet</string>
     <string name="advancedSettingsDefaultLanguage">Standardspråk i editoren</string>
     <string name="undetermined">Udefinert</string>
-    <string name="exploreResultTypeTitle">Resultattype</string>
+    <string name="exploreResultTypeTitle">Søkeresultattype</string>
     <string name="communityActionEdit">Rediger fellesskap</string>
     <string name="editCommunityHeaderTextual">Tekstinformasjon</string>
     <string name="editCommunityItemSidebar">Sidefelt</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Restaurere</string>
     <string name="settingsInboxPreviewMaxLines">Maks antall linjer i innbokskort</string>
     <string name="settingsDefaultExploreResultType">Standard søkeresultattype for Utforsk</string>
+    <string name="messageReadAllInboxSuccess">Alle elementer er merket som lest</string>
+    <string name="settingsItemRandomThemeColor">Bruk tilfeldig farge</string>
+    <string name="settingsSubtitleRandomThemeColor">Endre temafarge ved hver appoppstart</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Bruk avatar som profilikon i nederste navigasjonslinje</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Åpne nettsiden ved å legge inn bildeklikk</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Hvis et innlegg har en URL, åpne nettsiden ved bildeklikk</string>
+    <string name="settingsManageBanSectionDomains">Domener</string>
+    <string name="settingsManageBanDomainPlaceholder">Understreng av URL som skal ekskluderes</string>
+    <string name="settingsManageBanSectionStopWords">Ord</string>
+    <string name="settingsManageBanStopWordPlaceholder">Forbudt uttrykk</string>
+    <string name="messageAuthIssueSegue1">tvinge oppdatering</string>
+    <string name="settingsItemAlternateMarkdownRendering">Aktiver alternativ Markdown-gjengivelse</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Konfigurer den nederste navigasjonslinjen</string>
+    <string name="selectTabNavigationTitle">Velg en seksjon</string>
+    <string name="messageAuthIssueSegue0">Du kan prøve en av følgende handlinger:</string>
+    <string name="messageAuthIssueSegue2">logge på igjen</string>
+    <string name="messageAuthIssueSegue3">slett applikasjonsdataene</string>
 </resources>
