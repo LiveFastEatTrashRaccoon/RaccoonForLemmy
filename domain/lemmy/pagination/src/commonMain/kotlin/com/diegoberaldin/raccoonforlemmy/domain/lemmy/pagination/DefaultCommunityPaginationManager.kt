@@ -17,7 +17,6 @@ internal class DefaultCommunityPaginationManager(
     private val communityRepository: CommunityRepository,
 ) : CommunityPaginationManager {
     override var canFetchMore: Boolean = true
-        private set
     override val history: MutableList<CommunityModel> = mutableListOf()
 
     private var specification: CommunityPaginationSpecification? = null

@@ -35,7 +35,6 @@ internal class DefaultPostPaginationManager(
     notificationCenter: NotificationCenter,
 ) : PostPaginationManager {
     override var canFetchMore: Boolean = true
-        private set
     override val history: MutableList<PostModel> = mutableListOf()
 
     private var specification: PostPaginationSpecification? = null
@@ -301,16 +300,15 @@ internal class DefaultPostPaginationManager(
         }
     }
 
-    private fun List<PostModel>.filterByUrlDomain(): List<PostModel> {
-        return filter { post ->
+    private fun List<PostModel>.filterByUrlDomain(): List<PostModel> =
+        filter { post ->
             blockedDomains?.takeIf { it.isNotEmpty() }?.let { blockList ->
                 blockList.none { domain -> post.url?.contains(domain) ?: true }
             } ?: true
         }
-    }
 
-    private fun List<PostModel>.filterByStopWords(): List<PostModel> {
-        return filter { post ->
+    private fun List<PostModel>.filterByStopWords(): List<PostModel> =
+        filter { post ->
             stopWords?.takeIf { it.isNotEmpty() }?.let { stopWordList ->
                 stopWordList.none { domain ->
                     post.title.contains(
@@ -320,7 +318,6 @@ internal class DefaultPostPaginationManager(
                 }
             } ?: true
         }
-    }
 
     private fun handlePostUpdate(post: PostModel) {
         val index = history.indexOfFirst { it.id == post.id }.takeIf { it >= 0 } ?: return

@@ -82,6 +82,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResult
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toInt
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.uniqueIdentifier
 import com.github.diegoberaldin.raccoonforlemmy.unit.explore.components.ExploreTopBar
 import com.github.diegoberaldin.raccoonforlemmy.unit.web.WebViewScreen
 import com.github.diegoberaldin.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
@@ -307,7 +308,7 @@ class ExploreScreen(
                                 }
                             }
                         }
-                        items(uiState.results, key = { getItemKey(it) }) { result ->
+                        items(uiState.results, key = { it.uniqueIdentifier }) { result ->
                             when (result) {
                                 is SearchResult.Community -> {
                                     CommunityItem(

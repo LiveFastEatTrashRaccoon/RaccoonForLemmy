@@ -1,14 +1,14 @@
 package com.github.diegoberaldin.raccoonforlemmy.unit.explore
 
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.ExplorePaginationManager
+import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.ExplorePaginationSpecification
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenter
 import com.github.diegoberaldin.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.AccountRepository
-import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.SettingsRepository
-import com.github.diegoberaldin.raccoonforlemmy.core.persistence.repository.StopWordRepository
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.imagepreload.ImagePreloadManager
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.github.diegoberaldin.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -19,6 +19,7 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResult
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.SortType
+import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.imageUrl
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toListingType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSearchResultType
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.toSortType
@@ -27,7 +28,6 @@ import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.Communit
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.PostRepository
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
@@ -45,7 +45,7 @@ class ExploreViewModel(
     private val apiConfigRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
-    private val userRepository: UserRepository,
+    private val paginationManager: ExplorePaginationManager,
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
     private val themeRepository: ThemeRepository,
@@ -53,15 +53,12 @@ class ExploreViewModel(
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
     private val getSortTypesUseCase: GetSortTypesUseCase,
+    private val imagePreloadManager: ImagePreloadManager,
     private val lemmyValueCache: LemmyValueCache,
-    private val accountRepository: AccountRepository,
-    private val domainBlocklistRepository: DomainBlocklistRepository,
-    private val stopWordRepository: StopWordRepository,
 ) : DefaultMviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect>(
         initialState = ExploreMviModel.UiState(),
     ),
     ExploreMviModel {
-    private var currentPage: Int = 1
     private val isOnOtherInstance: Boolean get() = otherInstance.isNotEmpty()
     private val notificationEventKey: String
         get() =
@@ -72,8 +69,6 @@ class ExploreViewModel(
                     append(otherInstance)
                 }
             }
-    private var blockedDomains: List<String>? = null
-    private var stopWords: List<String>? = null
 
     init {
         screenModelScope.launch {
@@ -362,16 +357,23 @@ class ExploreViewModel(
     }
 
     private suspend fun refresh(initial: Boolean = false) {
-        currentPage = 1
-        val accountId = accountRepository.getActive()?.id
-        blockedDomains = domainBlocklistRepository.get(accountId)
-        stopWords = stopWordRepository.get(accountId)
+        paginationManager.reset(
+            ExplorePaginationSpecification(
+                listingType = uiState.value.listingType,
+                sortType = uiState.value.sortType,
+                query = uiState.value.searchText,
+                includeNsfw = settingsRepository.currentSettings.value.includeNsfw,
+                searchPostTitleOnly = settingsRepository.currentSettings.value.searchPostTitleOnly,
+                otherInstance = otherInstance,
+                resultType = uiState.value.resultType,
+            ),
+        )
         updateState {
             it.copy(
+                initial = initial,
                 canFetchMore = true,
                 refreshing = !initial,
                 loading = false,
-                initial = initial,
             )
         }
         loadNextPage()
@@ -384,161 +386,28 @@ class ExploreViewModel(
             return
         }
         updateState { it.copy(loading = true) }
-        val searchText = uiState.value.searchText
-        val auth = identityRepository.authToken.value
-        val refreshing = currentState.refreshing
-        val listingType = currentState.listingType
-        val sortType = currentState.sortType
-        val resultType = currentState.resultType
-        val settings = settingsRepository.currentSettings.value
-        val itemList =
-            communityRepository.search(
-                query = searchText,
-                auth = auth,
-                resultType = resultType,
-                page = currentPage,
-                listingType = listingType,
-                sortType = sortType,
-                instance = otherInstance,
-            )
-        val additionalResolvedCommunity =
-            if (resultType == SearchResultType.All ||
-                resultType == SearchResultType.Communities &&
-                currentPage == 1 &&
-                searchText.isNotEmpty()
-            ) {
-                communityRepository.getResolved(
-                    query = searchText,
-                    auth = auth,
-                )
-            } else {
-                null
+
+        val results = paginationManager.loadNextPage()
+        if (uiState.value.autoLoadImages) {
+            results.forEach { res ->
+                (res as? SearchResult.Post)?.model?.imageUrl?.takeIf { it.isNotEmpty() }
+                    ?.also { url ->
+                        imagePreloadManager.preload(url)
+                    }
             }
-        val additionalResolvedUser =
-            if (resultType == SearchResultType.All ||
-                resultType == SearchResultType.Users &&
-                currentPage == 1 &&
-                searchText.isNotEmpty()
-            ) {
-                userRepository.getResolved(
-                    query = searchText,
-                    auth = auth,
-                )
-            } else {
-                null
-            }
-        if (itemList.isNotEmpty()) {
-            currentPage++
         }
-        val itemsToAdd =
-            itemList
-                .filter { item ->
-                    if (settings.includeNsfw) {
-                        true
-                    } else {
-                        isSafeForWork(item)
-                    }
-                }.filter {
-                    when (it) {
-                        is SearchResult.Post -> {
-                            val filteredByDomain =
-                                blockedDomains?.takeIf { l -> l.isNotEmpty() }?.let { blockList ->
-                                    blockList.none { domain ->
-                                        it.model.url?.contains(domain) ?: true
-                                    }
-                                } ?: true
-                            val filteredByStopWord =
-                                stopWords?.takeIf { l -> l.isNotEmpty() }?.let { stopWordList ->
-                                    stopWordList.none { domain ->
-                                        it.model.title.contains(other = domain, ignoreCase = true)
-                                    }
-                                } ?: true
-                            filteredByDomain && filteredByStopWord
-                        }
-
-                        else -> true
-                    }
-                }
-                .let {
-                    when (resultType) {
-                        SearchResultType.Communities -> {
-                            if (additionalResolvedCommunity != null &&
-                                it.none { r ->
-                                    r is SearchResult.Community && r.model.id == additionalResolvedCommunity.id
-                                }
-                            ) {
-                                it + SearchResult.Community(additionalResolvedCommunity)
-                            } else {
-                                it
-                            }
-                        }
-
-                        SearchResultType.Users -> {
-                            if (additionalResolvedUser != null &&
-                                it.none { r ->
-                                    r is SearchResult.User && r.model.id == additionalResolvedUser.id
-                                }
-                            ) {
-                                it + SearchResult.User(additionalResolvedUser)
-                            } else {
-                                it
-                            }
-                        }
-
-                        SearchResultType.Posts -> {
-                            if (settings.searchPostTitleOnly && searchText.isNotEmpty()) {
-                                // apply the more restrictive title-only search
-                                it
-                                    .filterIsInstance<SearchResult.Post>()
-                                    .filter { r ->
-                                        r.model.title.contains(
-                                            other = searchText,
-                                            ignoreCase = true,
-                                        )
-                                    }
-                            } else {
-                                it
-                            }
-                        }
-
-                        else -> it
-                    }
-                }.filter { item ->
-                    if (refreshing) {
-                        true
-                    } else {
-                        // prevents accidental duplication
-                        currentState.results.none { other -> getItemKey(item) == getItemKey(other) }
-                    }
-                }
         updateState {
-            val newItems =
-                if (refreshing) {
-                    itemsToAdd
-                } else {
-                    it.results + itemsToAdd
-                }
             it.copy(
-                results = newItems,
+                results = results,
                 loading = false,
-                canFetchMore = itemList.isNotEmpty(),
+                canFetchMore = paginationManager.canFetchMore,
                 refreshing = false,
             )
         }
     }
 
-    private fun isSafeForWork(element: SearchResult): Boolean =
-        when (element) {
-            is SearchResult.Community -> !element.model.nsfw
-            is SearchResult.Post -> !element.model.nsfw
-            is SearchResult.Comment -> true
-            is SearchResult.User -> true
-            else -> false
-        }
-
     private fun handleLogout() {
         screenModelScope.launch {
-            currentPage = 1
             updateState {
                 it.copy(
                     listingType = ListingType.Local,
@@ -914,11 +783,3 @@ class ExploreViewModel(
         }
     }
 }
-
-internal fun getItemKey(result: SearchResult): String =
-    when (result) {
-        is SearchResult.Post -> "post" + result.model.id.toString() + result.model.updateDate
-        is SearchResult.Comment -> "comment" + result.model.id.toString() + result.model.updateDate
-        is SearchResult.User -> "user" + result.model.id.toString()
-        is SearchResult.Community -> "community" + result.model.id.toString()
-    }

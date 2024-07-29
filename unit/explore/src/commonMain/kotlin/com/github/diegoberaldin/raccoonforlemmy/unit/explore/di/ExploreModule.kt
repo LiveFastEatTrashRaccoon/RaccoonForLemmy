@@ -11,9 +11,8 @@ val exploreModule =
                 otherInstance = params[0],
                 apiConfigRepository = get(),
                 identityRepository = get(),
-                accountRepository = get(),
+                paginationManager = get(),
                 communityRepository = get(),
-                userRepository = get(),
                 postRepository = get(),
                 commentRepository = get(),
                 themeRepository = get(),
@@ -22,8 +21,7 @@ val exploreModule =
                 hapticFeedback = get(),
                 getSortTypesUseCase = get(),
                 lemmyValueCache = get(),
-                domainBlocklistRepository = get(),
-                stopWordRepository = get(),
+                imagePreloadManager = get(),
             )
         }
     }
