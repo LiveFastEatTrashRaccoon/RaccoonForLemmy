@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">také zveřejněno na:</string>
     <string name="postDetailLoadMoreComments">Načíst více komentářů</string>
     <string name="postHourShort">hod</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">sek.</string>
     <string name="profileButtonLogin">Přihlášení</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Pracovní verze</string>
     <string name="moderatorZoneTitle">Nástroje pro moderátory</string>
     <string name="moderatorZoneActionContents">Obsah k moderování</string>
-    <string name="messageAuthIssue">Při načítání uživatelských dat došlo k chybě, zkuste obnovit obrazovku</string>
+    <string name="messageAuthIssue">Při načítání dat došlo k chybě, pravděpodobně vypršela platnost vašeho tokenu.</string>
     <string name="banReasonPlaceholder">Důvod (volitelné)</string>
     <string name="banItemPermanent">Trvalý zákaz</string>
     <string name="banItemRemoveData">Odebrat data</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Hledejte v komentářích</string>
     <string name="advancedSettingsDefaultLanguage">Výchozí jazyk v editoru</string>
     <string name="undetermined">Nedefinováno</string>
-    <string name="exploreResultTypeTitle">Typ výsledku</string>
+    <string name="exploreResultTypeTitle">Typ výsledku hledání</string>
     <string name="communityActionEdit">Upravit komunitu</string>
     <string name="editCommunityHeaderTextual">Textové informace</string>
     <string name="editCommunityItemSidebar">Postranní panel</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Obnovit</string>
     <string name="settingsInboxPreviewMaxLines">Maximální počet řádků na kartách doručené pošty</string>
     <string name="settingsDefaultExploreResultType">Výchozí typ výsledku vyhledávání pro Prozkoumat</string>
+    <string name="messageReadAllInboxSuccess">Všechny položky byly označeny jako přečtené</string>
+    <string name="settingsItemRandomThemeColor">Použijte náhodnou barvu</string>
+    <string name="settingsSubtitleRandomThemeColor">Změňte barvu motivu při každém spuštění aplikace</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Použijte avatar jako ikonu profilu v dolní navigační liště</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Otevřete webovou stránku kliknutím na obrázek příspěvku</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Pokud má příspěvek adresu URL, kliknutím na obrázek otevřete webovou stránku</string>
+    <string name="settingsManageBanDomainPlaceholder">Podřetězec adresy URL k vyloučení</string>
+    <string name="settingsManageBanSectionDomains">Domény</string>
+    <string name="settingsManageBanSectionStopWords">Slova</string>
+    <string name="settingsManageBanStopWordPlaceholder">Zakázaný výraz</string>
+    <string name="settingsItemAlternateMarkdownRendering">Povolit alternativní vykreslování Markdown</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Nakonfigurujte spodní navigační lištu</string>
+    <string name="selectTabNavigationTitle">Vyberte sekci</string>
+    <string name="messageAuthIssueSegue0">Můžete zkusit jednu z následujících akcí:</string>
+    <string name="messageAuthIssueSegue3">vymazat data aplikace</string>
+    <string name="messageAuthIssueSegue1">vynutit obnovení</string>
+    <string name="messageAuthIssueSegue2">přihlaste se znovu</string>
 </resources>
