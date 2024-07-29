@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">postitatud ka:</string>
     <string name="postDetailLoadMoreComments">Laadi veel kommentaare</string>
     <string name="postHourShort">t</string>
-    <string name="postMinuteShort">k</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Logi sisse</string>
     <string name="profileDayShort">p</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Mustandid</string>
     <string name="moderatorZoneTitle">Tööriistad moderaatoritele</string>
     <string name="moderatorZoneActionContents">Sisu mõõdukaks</string>
-    <string name="messageAuthIssue">Kasutajaandmete toomisel ilmnes viga. Proovige ekraani värskendada</string>
+    <string name="messageAuthIssue">Andmete toomisel ilmnes viga. Võimalik, et teie luba on aegunud.</string>
     <string name="banReasonPlaceholder">Põhjus (valikuline)</string>
     <string name="banItemPermanent">Alaline keeld</string>
     <string name="banItemRemoveData">Eemalda andmed</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Otsi kommentaaridest</string>
     <string name="advancedSettingsDefaultLanguage">Vaikimisi keel redaktoris</string>
     <string name="undetermined">Määratlemata</string>
-    <string name="exploreResultTypeTitle">Tulemuse tüüp</string>
+    <string name="exploreResultTypeTitle">Otsingutulemuste tüüp</string>
     <string name="communityActionEdit">Redigeeri kogukonda</string>
     <string name="editCommunityHeaderTextual">Tekstiline teave</string>
     <string name="editCommunityItemSidebar">Külgriba</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Taastama</string>
     <string name="settingsInboxPreviewMaxLines">Maksimaalne ridade arv postkasti kaartidel</string>
     <string name="settingsDefaultExploreResultType">Avastamise vaikeotsingutulemuse tüüp</string>
+    <string name="messageReadAllInboxSuccess">Kõik üksused on märgitud loetuks</string>
+    <string name="settingsItemRandomThemeColor">Kasutage juhuslikku värvi</string>
+    <string name="settingsSubtitleRandomThemeColor">Muutke teema värvi iga rakenduse käivitamisel</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Kasutage avatari profiiliikoonina alumisel navigeerimisribal</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Ava veebileht, klõpsates pildil</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Kui postitusel on URL, avage veebileht pildiklõpsuga</string>
+    <string name="settingsManageBanDomainPlaceholder">Välistatava URL-i alamstring</string>
+    <string name="settingsManageBanSectionDomains">Domeenid</string>
+    <string name="settingsManageBanSectionStopWords">Sõnad</string>
+    <string name="settingsManageBanStopWordPlaceholder">Keelatud väljendus</string>
+    <string name="settingsItemAlternateMarkdownRendering">Luba alternatiivne Markdowni renderdamine</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Alumise navigeerimisriba seadistamine</string>
+    <string name="selectTabNavigationTitle">Valige jaotis</string>
+    <string name="messageAuthIssueSegue0">Võite proovida ühte järgmistest toimingutest:</string>
+    <string name="messageAuthIssueSegue3">tühjendage rakenduse andmed</string>
+    <string name="messageAuthIssueSegue1">sundida värskendama</string>
+    <string name="messageAuthIssueSegue2">logi uuesti sisse</string>
 </resources>
