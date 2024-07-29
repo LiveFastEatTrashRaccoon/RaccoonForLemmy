@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">julkaistu myös:</string>
     <string name="postDetailLoadMoreComments">Lataa lisää kommentteja</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Kirjaudu sisään</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Luonnokset</string>
     <string name="moderatorZoneTitle">Työkaluja moderaattoreille</string>
     <string name="moderatorZoneActionContents">Sisältö keskitettäväksi</string>
-    <string name="messageAuthIssue">Käyttäjätietoja haettaessa tapahtui virhe. Yritä päivittää näyttö</string>
+    <string name="messageAuthIssue">Tietoa noudettaessa tapahtui virhe. Tokenisi on mahdollisesti vanhentunut.</string>
     <string name="banReasonPlaceholder">Syy (valinnainen)</string>
     <string name="banItemPermanent">Pysyvä kielto</string>
     <string name="banItemRemoveData">Poista tiedot</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Palauttaa</string>
     <string name="settingsInboxPreviewMaxLines">Saapuneiden korttien rivien enimmäismäärä</string>
     <string name="settingsDefaultExploreResultType">Tutkimuksen oletushakutulostyyppi</string>
+    <string name="messageReadAllInboxSuccess">Kaikki kohteet on merkitty luetuiksi</string>
+    <string name="settingsSubtitleRandomThemeColor">Vaihda teeman väriä jokaisen sovelluksen käynnistyksen yhteydessä</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Avaa verkkosivu napsauttamalla kuvan julkaisua</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Jos viestillä on URL-osoite, avaa verkkosivu napsauttamalla kuvaa</string>
+    <string name="settingsManageBanSectionDomains">Verkkotunnukset</string>
+    <string name="settingsManageBanDomainPlaceholder">Poissuljettavan URL-osoitteen alamerkkijono</string>
+    <string name="settingsManageBanSectionStopWords">Sanat</string>
+    <string name="settingsManageBanStopWordPlaceholder">Kielletty ilmaisu</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Käytä avataria profiilikuvakkeena alanavigointipalkissa</string>
+    <string name="settingsItemAlternateMarkdownRendering">Ota käyttöön vaihtoehtoinen Markdown-renderöinti</string>
+    <string name="settingsItemRandomThemeColor">Käytä satunnaisia värejä</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Määritä alempi navigointipalkki</string>
+    <string name="selectTabNavigationTitle">Valitse osio</string>
+    <string name="messageAuthIssueSegue0">Voit kokeilla jotakin seuraavista toimista:</string>
+    <string name="messageAuthIssueSegue1">pakottaa päivittämään</string>
+    <string name="messageAuthIssueSegue2">Kirjaudu uudelleen</string>
+    <string name="messageAuthIssueSegue3">tyhjennä sovellustiedot</string>
 </resources>
