@@ -151,7 +151,7 @@
     <string name="postDetailCrossPosts">auch gepostet in:</string>
     <string name="postDetailLoadMoreComments">Weitere Kommentare laden</string>
     <string name="postHourShort">Std</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">Min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Anmelden</string>
     <string name="profileDayShort">t</string>
@@ -344,7 +344,7 @@
     <string name="navigationDrawerTitleDrafts">Entwürfe</string>
     <string name="moderatorZoneTitle">Moderationstools</string>
     <string name="moderatorZoneActionContents">Moderierte Inhalte</string>
-    <string name="messageAuthIssue">Beim Abrufen der Benutzerdaten ist ein Fehler aufgetreten. Versuche den Bildschirm zu aktualisieren</string>
+    <string name="messageAuthIssue">Beim Abrufen der Daten ist ein Fehler aufgetreten. Möglicherweise ist Ihr Token abgelaufen.</string>
     <string name="banReasonPlaceholder">Begründung (optional)</string>
     <string name="banItemPermanent">Permanenter Bann</string>
     <string name="banItemRemoveData">Daten entfernen</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Wiederherstellen</string>
     <string name="settingsInboxPreviewMaxLines">Maximale Anzahl von Zeilen in Posteingangskarten</string>
     <string name="settingsDefaultExploreResultType">Standard-Suchergebnistyp für Explore</string>
+    <string name="messageReadAllInboxSuccess">Alle Artikel wurden als gelesen markiert</string>
+    <string name="settingsItemRandomThemeColor">Verwenden Sie eine zufällige Farbe</string>
+    <string name="settingsSubtitleRandomThemeColor">Ändern Sie die Designfarbe bei jedem App-Start</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Verwenden Sie den Avatar als Profilsymbol in der unteren Navigationsleiste</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Öffnen Sie die Webseite, indem Sie auf das Beitragsbild klicken</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Wenn ein Beitrag eine URL hat, öffnen Sie die Webseite beim Klicken auf das Bild</string>
+    <string name="settingsManageBanDomainPlaceholder">Teilzeichenfolge der auszuschließenden URL</string>
+    <string name="settingsManageBanSectionDomains">Domänen</string>
+    <string name="settingsManageBanSectionStopWords">Wörter</string>
+    <string name="settingsManageBanStopWordPlaceholder">Verbotener Ausdruck</string>
+    <string name="settingsItemAlternateMarkdownRendering">Aktivieren Sie alternatives Markdown-Rendering</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Konfigurieren Sie die untere Navigationsleiste</string>
+    <string name="selectTabNavigationTitle">Wählen Sie einen Abschnitt aus</string>
+    <string name="messageAuthIssueSegue0">Sie können eine der folgenden Aktionen ausprobieren:</string>
+    <string name="messageAuthIssueSegue3">Löschen Sie die Anwendungsdaten</string>
+    <string name="messageAuthIssueSegue1">Aktualisierung erzwingen</string>
+    <string name="messageAuthIssueSegue2">nochmal anmelden</string>
 </resources>
