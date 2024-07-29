@@ -187,6 +187,9 @@ class ManageBanViewModel(
     }
 
     private fun blockDomain(domain: String) {
+        if (domain.isBlank()) {
+            return
+        }
         val newValues =
             if (originalBlockedDomains.contains(domain)) {
                 originalBlockedDomains
@@ -214,6 +217,9 @@ class ManageBanViewModel(
     }
 
     private fun addStopWord(word: String) {
+        if (word.isBlank()) {
+            return
+        }
         val newValues =
             if (originalStopWords.contains(word)) {
                 originalStopWords
