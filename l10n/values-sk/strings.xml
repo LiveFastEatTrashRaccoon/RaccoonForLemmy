@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">tiež odoslané na:</string>
     <string name="postDetailLoadMoreComments">Načítať ďalšie komentáre</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Prihlásenie</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Koncepty</string>
     <string name="moderatorZoneTitle">Nástroje pre moderátorov</string>
     <string name="moderatorZoneActionContents">Obsah moderovať</string>
-    <string name="messageAuthIssue">Pri načítavaní údajov používateľa sa vyskytla chyba, skúste obnoviť obrazovku</string>
+    <string name="messageAuthIssue">Pri načítavaní údajov sa vyskytla chyba, pravdepodobne vypršala platnosť vášho tokenu.</string>
     <string name="banReasonPlaceholder">Dôvod (voliteľné)</string>
     <string name="banItemPermanent">Trvalý zákaz</string>
     <string name="banItemRemoveData">Odstráňte údaje</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Hľadajte v komentároch</string>
     <string name="advancedSettingsDefaultLanguage">Predvolený jazyk v editore</string>
     <string name="undetermined">Nedefinované</string>
-    <string name="exploreResultTypeTitle">Typ výsledku</string>
+    <string name="exploreResultTypeTitle">Typ výsledku vyhľadávania</string>
     <string name="communityActionEdit">Upraviť komunitu</string>
     <string name="editCommunityHeaderTextual">Textové informácie</string>
     <string name="editCommunityItemSidebar">Bočný panel</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Obnoviť</string>
     <string name="settingsInboxPreviewMaxLines">Maximálny počet riadkov na kartách doručenej pošty</string>
     <string name="settingsDefaultExploreResultType">Predvolený typ výsledku vyhľadávania pre Preskúmať</string>
+    <string name="messageReadAllInboxSuccess">Všetky položky boli označené ako prečítané</string>
+    <string name="settingsItemRandomThemeColor">Použite náhodnú farbu</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Použite avatar ako ikonu profilu v dolnom navigačnom paneli</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Otvorte webovú stránku kliknutím na obrázok príspevku</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Ak má príspevok adresu URL, kliknutím na obrázok otvorte webovú stránku</string>
+    <string name="settingsManageBanSectionDomains">Domény</string>
+    <string name="settingsManageBanDomainPlaceholder">Podreťazec adresy URL, ktorý sa má vylúčiť</string>
+    <string name="settingsManageBanSectionStopWords">Slová</string>
+    <string name="settingsManageBanStopWordPlaceholder">Zakázaný výraz</string>
+    <string name="settingsSubtitleRandomThemeColor">Zmeňte farbu motívu pri každom spustení aplikácie</string>
+    <string name="settingsItemAlternateMarkdownRendering">Povoliť alternatívne vykresľovanie Markdown</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Nakonfigurujte spodný navigačný panel</string>
+    <string name="selectTabNavigationTitle">Vyberte sekciu</string>
+    <string name="messageAuthIssueSegue0">Môžete vyskúšať jednu z nasledujúcich akcií:</string>
+    <string name="messageAuthIssueSegue1">vynútiť obnovenie</string>
+    <string name="messageAuthIssueSegue2">prihláste sa znova</string>
+    <string name="messageAuthIssueSegue3">vymazať údaje aplikácie</string>
 </resources>
