@@ -425,4 +425,8 @@
     <string name="messageAuthIssueSegue2">effettuare nuovamente l\'accesso</string>
     <string name="messageAuthIssueSegue0">Si consiglia di intraprendere una delle seguenti azioni:</string>
     <string name="messageAuthIssueSegue1">forzare l\'aggiornamento</string>
+    <string name="settingsManageBanDomainPlaceholder">Sottostringa URL da escludere</string>
+    <string name="settingsManageBanSectionDomains">Domini</string>
+    <string name="settingsManageBanSectionStopWords">Parole</string>
+    <string name="settingsManageBanStopWordPlaceholder">Espressione vietata</string>
 </resources>
