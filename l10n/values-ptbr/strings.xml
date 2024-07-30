@@ -187,7 +187,7 @@
     <string name="settingsEnableCrashReport">Ativar relatório de falhas</string>
     <string name="settingsEnableDoubleTap">Ativar gestos de duplo toque</string>
     <string name="settingsEnableSwipeActions">Ativar gestos de deslize</string>
-    <string name="settingsFullHeightImages">Imagens em toda altura</string>
+    <string name="settingsFullHeightImages">Imagem com altura original</string>
     <string name="settingsIncludeNsfw">Incluir conteúdo NSFW</string>
     <string name="settingsLanguage">Idioma</string>
     <string name="settingsNavigationBarTitlesVisible">Mostrar descrição na barra de navegação</string>
@@ -388,7 +388,7 @@
     <string name="settingsUrlOpeningModeInternal">No app</string>
     <string name="settingsUrlOpeningModeExternal">Navegador externo</string>
     <string name="settingsUrlOpeningModeCustomTabs">Abas personalizadas</string>
-    <string name="settingsFullWidthImages">Imagens em toda a largura</string>
+    <string name="settingsFullWidthImages">Imagem com largura original</string>
     <string name="contentScaleFit">Encaixar na tela</string>
     <string name="contentScaleFillWidth">Em toda largura</string>
     <string name="contentScaleFillHeight">Em toda altura</string>
@@ -428,4 +428,6 @@
     <string name="messageAuthIssueSegue2">fazer login de novo</string>
     <string name="settingsManageBanDomainPlaceholder">Sequência de caracteres da URL a excluir</string>
     <string name="settingsManageBanSectionDomains">Domínios</string>
+    <string name="settingsManageBanSectionStopWords">Palavras</string>
+    <string name="settingsManageBanStopWordPlaceholder">Frases proibidas</string>
 </resources>
