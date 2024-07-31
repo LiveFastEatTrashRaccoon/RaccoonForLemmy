@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">postuar edhe në:</string>
     <string name="postDetailLoadMoreComments">Shfaq me shume komente</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Hyr</string>
     <string name="profileDayShort">d</string>
