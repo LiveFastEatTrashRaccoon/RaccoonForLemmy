@@ -6,9 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -41,8 +43,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -111,7 +111,6 @@ class CreateCommentScreen(
         val galleryHelper = remember { getGalleryHelper() }
         var openImagePicker by remember { mutableStateOf(false) }
         var rawContent by remember { mutableStateOf<Any?>(null) }
-        val commentFocusRequester = remember { FocusRequester() }
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
         val themeRepository = remember { getThemeRepository() }
@@ -327,8 +326,7 @@ class CreateCommentScreen(
                     modifier =
                         Modifier
                             .align(Alignment.BottomCenter)
-                            .background(MaterialTheme.colorScheme.background)
-                            .fillMaxWidth(),
+                            .background(MaterialTheme.colorScheme.background),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     SectionSelector(
@@ -357,7 +355,6 @@ class CreateCommentScreen(
                         TextField(
                             modifier =
                                 Modifier
-                                    .focusRequester(commentFocusRequester)
                                     .heightIn(min = 300.dp, max = 400.dp)
                                     .fillMaxWidth(),
                             colors =
@@ -411,6 +408,8 @@ class CreateCommentScreen(
                             )
                         }
                     }
+
+                    Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
 
                 // bottom part with user name and toolbar

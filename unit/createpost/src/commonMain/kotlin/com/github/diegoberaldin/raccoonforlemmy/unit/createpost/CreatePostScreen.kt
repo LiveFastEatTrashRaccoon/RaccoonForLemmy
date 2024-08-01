@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -605,6 +606,8 @@ class CreatePostScreen(
                             downVoteEnabled = uiState.downVoteEnabled,
                         )
                     }
+
+                    Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
 
                 // bottom part with user name and toolbar
