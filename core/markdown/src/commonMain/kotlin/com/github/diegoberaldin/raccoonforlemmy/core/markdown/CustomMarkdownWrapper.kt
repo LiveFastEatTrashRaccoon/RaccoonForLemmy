@@ -1,7 +1,6 @@
 package com.github.diegoberaldin.raccoonforlemmy.core.markdown
 
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -36,8 +35,6 @@ import com.mikepenz.markdown.model.markdownPadding
 import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
-import org.intellij.markdown.parser.MarkdownParser
 import kotlin.math.floor
 
 private val String.containsSpoiler: Boolean
