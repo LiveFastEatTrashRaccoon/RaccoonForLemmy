@@ -66,7 +66,7 @@ fun CustomMarkdownWrapper(
     onClick: (() -> Unit)?,
     onDoubleClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
-) {
+) {/*
     if (enableAlternateRendering) {
         val parsedMarkdown = MarkdownParser(GFMFlavourDescriptor()).buildMarkdownTreeFromString(content)
         parsedMarkdown.children.forEachIndexed { index, child ->
@@ -83,7 +83,7 @@ fun CustomMarkdownWrapper(
             }
         }
         return
-    }
+    }*/
 
     val maxHeightDp =
         with(LocalDensity.current) {
