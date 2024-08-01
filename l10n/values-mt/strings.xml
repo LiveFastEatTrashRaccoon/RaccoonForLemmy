@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">imtella\' wkoll fuq:</string>
     <string name="postDetailLoadMoreComments">Tella\' iktar kummenti</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Idħol</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Abbozzi</string>
     <string name="moderatorZoneTitle">Għodda għall-moderaturi</string>
     <string name="moderatorZoneActionContents">Kontenut għall-moderat</string>
-    <string name="messageAuthIssue">Żball seħħ waqt li ġġib id-dejta tal-utent, ipprova aġġorna l-iskrin</string>
+    <string name="messageAuthIssue">Sar żball waqt li kienet qed iġġib id-dejta, possibbilment it-token tiegħek skada.</string>
     <string name="banReasonPlaceholder">Raġuni (mhux obbligatorju)</string>
     <string name="banItemPermanent">Projbizzjoni permanenti</string>
     <string name="banItemRemoveData">Neħħi d-data</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Fittex fil-kummenti</string>
     <string name="advancedSettingsDefaultLanguage">Lingwa default fl-editur</string>
     <string name="undetermined">Mhux definit</string>
-    <string name="exploreResultTypeTitle">Tip ta\' riżultat</string>
+    <string name="exploreResultTypeTitle">Tip ta\' riżultat tat-tfittxija</string>
     <string name="communityActionEdit">Editja komunità</string>
     <string name="editCommunityHeaderTextual">Informazzjoni testwali</string>
     <string name="editCommunityItemSidebar">Istrixxa tal-ġenb</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Irrestawra</string>
     <string name="settingsInboxPreviewMaxLines">Numru massimu ta' linji fil-karti tal-inbox</string>
     <string name="settingsDefaultExploreResultType">Tip ta' riżultat tat-tfittxija default għal Esplora</string>
+    <string name="messageReadAllInboxSuccess">L-oġġetti kollha ġew immarkati bħala moqrija</string>
+    <string name="settingsItemRandomThemeColor">Uża kulur każwali</string>
+    <string name="settingsSubtitleRandomThemeColor">Ibdel il-kulur tat-tema f\'kull istartjar tal-app</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Uża l-avatar bħala ikona tal-profil fil-bar tan-navigazzjoni t\'isfel</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Iftaħ il-paġna tal-web fuq ikklikkja l-immaġni tal-post</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Jekk post ikollu URL, iftaħ il-paġna tal-web fuq ikklikkja immaġni</string>
+    <string name="settingsManageBanDomainPlaceholder">Substring tal-URL biex teskludi</string>
+    <string name="settingsManageBanSectionStopWords">Kliem</string>
+    <string name="settingsManageBanStopWordPlaceholder">Espressjoni pprojbita</string>
+    <string name="settingsManageBanSectionDomains">Dominji</string>
+    <string name="settingsItemAlternateMarkdownRendering">Ippermetti r-rendiment alternattiv ta\' Markdown</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Ikkonfigura l-bar tan-navigazzjoni tal-qiegħ</string>
+    <string name="selectTabNavigationTitle">Agħżel taqsima</string>
+    <string name="messageAuthIssueSegue0">Tista\' tipprova waħda mill-azzjonijiet li ġejjin:</string>
+    <string name="messageAuthIssueSegue3">ċara d-dejta tal-applikazzjoni</string>
+    <string name="messageAuthIssueSegue1">iġiegħel l-aġġornament</string>
+    <string name="messageAuthIssueSegue2">erġa\' illoggja</string>
 </resources>

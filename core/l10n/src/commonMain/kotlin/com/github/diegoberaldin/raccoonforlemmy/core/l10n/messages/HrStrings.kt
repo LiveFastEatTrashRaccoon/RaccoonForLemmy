@@ -136,7 +136,7 @@ internal val HrStrings =
         override val postDetailCrossPosts = "također objavljeno na:"
         override val postDetailLoadMoreComments = "Učitaj više komentara"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Prijava"
         override val profileDayShort = "d"
@@ -337,7 +337,7 @@ internal val HrStrings =
         override val moderatorZoneTitle = "Alati za moderatore"
         override val moderatorZoneActionContents = "Sadržaj za moderiranje"
         override val messageAuthIssue =
-            "Došlo je do pogreške prilikom dohvaćanja korisničkih podataka, pokušajte osvježiti zaslon"
+            "Došlo je do pogreške prilikom dohvaćanja podataka, moguće je da je vaš token istekao."
         override val banReasonPlaceholder = "Razlog (neobavezno)"
         override val banItemPermanent = "Trajna zabrana"
         override val banItemRemoveData = "Ukloni podatke"
@@ -367,7 +367,7 @@ internal val HrStrings =
         override val actionSearchInComments = "Tražite u komentarima"
         override val advancedSettingsDefaultLanguage = "Zadani jezik u uređivaču"
         override val undetermined = "Nedefiniran"
-        override val exploreResultTypeTitle = "Vrsta rezultata"
+        override val exploreResultTypeTitle = "Vrsta rezultata pretraživanja"
         override val communityActionEdit = "Uredi zajednicu"
         override val editCommunityHeaderTextual = "Tekstualne informacije"
         override val editCommunityItemSidebar = "Bočna traka"
@@ -428,6 +428,27 @@ internal val HrStrings =
         override val settingsInboxPreviewMaxLines = "Maksimalan broj redaka u ulaznim karticama"
         override val settingsDefaultExploreResultType =
             "Zadana vrsta rezultata pretraživanja za Istraživanje"
+        override val settingsItemRandomThemeColor = "Koristite nasumične boje"
+        override val settingsSubtitleRandomThemeColor =
+            "Promijenite boju teme pri svakom pokretanju aplikacije"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Otvori web stranicu klikom na sliku objave"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Ako post ima URL, otvorite web stranicu klikom na sliku"
+        override val settingsManageBanDomainPlaceholder = "Podniz URL-a za izuzimanje"
+        override val settingsManageBanSectionDomains = "Domene"
+        override val settingsManageBanSectionStopWords = "Riječi"
+        override val settingsManageBanStopWordPlaceholder = "Zabranjeno izražavanje"
+        override val messageReadAllInboxSuccess = "Sve stavke su označene kao pročitane"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Koristite avatar kao ikonu profila na donjoj navigacijskoj traci"
+        override val settingsItemAlternateMarkdownRendering =
+            "Omogući alternativno Markdown renderiranje"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Konfigurirajte donju navigacijsku traku"
+        override val selectTabNavigationTitle = "Odaberite odjeljak"
+        override val messageAuthIssueSegue0 = "Možete pokušati jednu od sljedećih radnji:"
+        override val messageAuthIssueSegue3 = "očistite podatke aplikacije"
+        override val messageAuthIssueSegue1 = "prisilno osvježiti"
+        override val messageAuthIssueSegue2 = "ponovno se prijavite"
     }

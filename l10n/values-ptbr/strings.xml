@@ -187,7 +187,7 @@
     <string name="settingsEnableCrashReport">Ativar relatório de falhas</string>
     <string name="settingsEnableDoubleTap">Ativar gestos de duplo toque</string>
     <string name="settingsEnableSwipeActions">Ativar gestos de deslize</string>
-    <string name="settingsFullHeightImages">Imagens em tamanho original</string>
+    <string name="settingsFullHeightImages">Imagem com altura original</string>
     <string name="settingsIncludeNsfw">Incluir conteúdo NSFW</string>
     <string name="settingsLanguage">Idioma</string>
     <string name="settingsNavigationBarTitlesVisible">Mostrar descrição na barra de navegação</string>
@@ -329,7 +329,7 @@
     <string name="navigationDrawerTitleDrafts">Rascunhos</string>
     <string name="moderatorZoneTitle">Ferramentas de moderadores</string>
     <string name="moderatorZoneActionContents">Conteúdos para moderar</string>
-    <string name="messageAuthIssue">Ocorreu um erro ao buscar dados do usuário. Tente atualizar a tela</string>
+    <string name="messageAuthIssue">Ocorreu um erro durante processamento dos dados, pode ser que seu token expirou.</string>
     <string name="banReasonPlaceholder">Motivo (opcional)</string>
     <string name="banItemPermanent">Bloqueio permanente</string>
     <string name="banItemRemoveData">Remover dados</string>
@@ -388,10 +388,10 @@
     <string name="settingsUrlOpeningModeInternal">No app</string>
     <string name="settingsUrlOpeningModeExternal">Navegador externo</string>
     <string name="settingsUrlOpeningModeCustomTabs">Abas personalizadas</string>
-    <string name="settingsFullWidthImages">Imagens em toda a largura</string>
-    <string name="contentScaleFit">Ajustar o tamanho</string>
-    <string name="contentScaleFillWidth">Preencher a largura</string>
-    <string name="contentScaleFillHeight">Preencher a altura</string>
+    <string name="settingsFullWidthImages">Imagem com largura original</string>
+    <string name="contentScaleFit">Encaixar na tela</string>
+    <string name="contentScaleFillWidth">Em toda largura</string>
+    <string name="contentScaleFillHeight">Em toda altura</string>
     <string name="settingsCommentIndentAmount">Grau de indentação em comentários</string>
     <string name="postActionUnhide">Reverter ocultação</string>
     <string name="adminActionPurge">Purgar</string>
@@ -419,4 +419,15 @@
     <string name="settingsSubtitleRandomThemeColor">Alterar a cor do tema em cada inicialização do app</string>
     <string name="settingsItemOpenPostWebPageOnImageClick">Abrir site ao clicar na imagem de post</string>
     <string name="settingsSubtitleOpenPostWebPageOnImageClick">Se um post tiver URL, ao clicar na imagem você será redirecionado ao site</string>
+    <string name="settingsItemAlternateMarkdownRendering">Usar a renderização alternativa de marcação</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Configurar a barra de navegação</string>
+    <string name="selectTabNavigationTitle">Selecione uma opção</string>
+    <string name="messageAuthIssueSegue0">Você pode tentar uma das opções:</string>
+    <string name="messageAuthIssueSegue3">limpar os dados do app</string>
+    <string name="messageAuthIssueSegue1">forçar a atualização</string>
+    <string name="messageAuthIssueSegue2">fazer login de novo</string>
+    <string name="settingsManageBanDomainPlaceholder">Sequência de caracteres da URL a excluir</string>
+    <string name="settingsManageBanSectionDomains">Domínios</string>
+    <string name="settingsManageBanSectionStopWords">Palavras</string>
+    <string name="settingsManageBanStopWordPlaceholder">Frases proibidas</string>
 </resources>

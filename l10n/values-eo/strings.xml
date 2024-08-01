@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">ankaŭ poŝtita al:</string>
     <string name="postDetailLoadMoreComments">Ŝarĝi pliajn komentojn</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Ensaluti</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Malnetoj</string>
     <string name="moderatorZoneTitle">Iloj por moderigaĵoj</string>
     <string name="moderatorZoneActionContents">Enhavon moderigi</string>
-    <string name="messageAuthIssue">Okazis eraro dum venigado de uzantdatenoj, provu refreŝigi la ekranon</string>
+    <string name="messageAuthIssue">Okazis eraro dum venigado de datumoj, eble via ĵetono eksvalidiĝis.</string>
     <string name="banReasonPlaceholder">Kialo (laŭvola)</string>
     <string name="banItemPermanent">Konstanta malpermeso</string>
     <string name="banItemRemoveData">Forigi datumojn</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Restaŭri</string>
     <string name="settingsInboxPreviewMaxLines">Maksimuma nombro da linioj en enirkestokartoj</string>
     <string name="settingsDefaultExploreResultType">Defaŭlta serĉrezulto-tipo por esploro</string>
+    <string name="messageReadAllInboxSuccess">Ĉiuj eroj estis markitaj kiel legitaj</string>
+    <string name="settingsItemRandomThemeColor">Uzi hazardan koloron</string>
+    <string name="settingsSubtitleRandomThemeColor">Ŝanĝi etkoloron ĉe ĉiu aplikaĵo</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Uzi avataron kiel profilikonon en la malsupra navigadbreto</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Malfermi retpaĝon sur afiŝbilda klako</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Se afiŝo havas URL, malfermi retpaĝon per bilda klako</string>
+    <string name="settingsItemAlternateMarkdownRendering">Ebligi alternan Markdown-bildigon</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Agordi malsupran navigadbreton</string>
+    <string name="selectTabNavigationTitle">Elekti sekcion</string>
+    <string name="messageAuthIssueSegue0">Vi povus provi unu el la sekvaj agoj:</string>
+    <string name="messageAuthIssueSegue3">purigi la aplikajn datumojn</string>
+    <string name="messageAuthIssueSegue1">forto refreŝigi</string>
+    <string name="messageAuthIssueSegue2">ensaluti denove</string>
+    <string name="settingsManageBanDomainPlaceholder">Subŝnuro de URL ekskludi</string>
+    <string name="settingsManageBanSectionDomains">Domajnoj</string>
+    <string name="settingsManageBanSectionStopWords">Vortoj</string>
+    <string name="settingsManageBanStopWordPlaceholder">Malpermesita esprimo</string>
 </resources>

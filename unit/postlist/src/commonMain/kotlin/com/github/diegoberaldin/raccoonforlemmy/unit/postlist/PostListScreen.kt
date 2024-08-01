@@ -343,8 +343,7 @@ class PostListScreen : Screen {
                         Modifier
                             .padding(
                                 top = padding.calculateTopPadding(),
-                            ).fillMaxWidth()
-                            .then(
+                            ).then(
                                 if (connection != null && settings.hideNavigationBarWhileScrolling) {
                                     Modifier.nestedScroll(connection)
                                 } else {
@@ -517,7 +516,7 @@ class PostListScreen : Screen {
                                     uiState.actionsOnSwipeToEndPosts.toSwipeActions(
                                         canEdit = post.creator?.id == uiState.currentUserId,
                                     ),
-                                    content = {
+                                content = {
                                     PostCard(
                                         post = post,
                                         postLayout = uiState.postLayout,

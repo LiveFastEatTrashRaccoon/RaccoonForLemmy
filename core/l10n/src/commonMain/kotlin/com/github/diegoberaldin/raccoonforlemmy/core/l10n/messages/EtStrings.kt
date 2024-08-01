@@ -136,7 +136,7 @@ internal val EtStrings =
         override val postDetailCrossPosts = "postitatud ka:"
         override val postDetailLoadMoreComments = "Laadi veel kommentaare"
         override val postHourShort = "t"
-        override val postMinuteShort = "k"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Logi sisse"
         override val profileDayShort = "p"
@@ -336,7 +336,7 @@ internal val EtStrings =
         override val moderatorZoneTitle = "Tööriistad moderaatoritele"
         override val moderatorZoneActionContents = "Sisu mõõdukaks"
         override val messageAuthIssue =
-            "Kasutajaandmete toomisel ilmnes viga. Proovige ekraani värskendada"
+            "Andmete toomisel ilmnes viga. Võimalik, et teie luba on aegunud."
         override val banReasonPlaceholder = "Põhjus (valikuline)"
         override val banItemPermanent = "Alaline keeld"
         override val banItemRemoveData = "Eemalda andmed"
@@ -367,7 +367,7 @@ internal val EtStrings =
         override val actionSearchInComments = "Otsi kommentaaridest"
         override val advancedSettingsDefaultLanguage = "Vaikimisi keel redaktoris"
         override val undetermined = "Määratlemata"
-        override val exploreResultTypeTitle = "Tulemuse tüüp"
+        override val exploreResultTypeTitle = "Otsingutulemuste tüüp"
         override val communityActionEdit = "Redigeeri kogukonda"
         override val editCommunityHeaderTextual = "Tekstiline teave"
         override val editCommunityItemSidebar = "Külgriba"
@@ -427,6 +427,26 @@ internal val EtStrings =
         override val actionRestore = "Taastama"
         override val settingsInboxPreviewMaxLines = "Maksimaalne ridade arv postkasti kaartidel"
         override val settingsDefaultExploreResultType = "Avastamise vaikeotsingutulemuse tüüp"
+        override val messageReadAllInboxSuccess = "Kõik üksused on märgitud loetuks"
+        override val settingsItemRandomThemeColor = "Kasutage juhuslikku värvi"
+        override val settingsSubtitleRandomThemeColor =
+            "Muutke teema värvi iga rakenduse käivitamisel"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Kasutage avatari profiiliikoonina alumisel navigeerimisribal"
+        override val settingsItemOpenPostWebPageOnImageClick = "Ava veebileht, klõpsates pildil"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Kui postitusel on URL, avage veebileht pildiklõpsuga"
+        override val settingsManageBanDomainPlaceholder = "Välistatava URL-i alamstring"
+        override val settingsManageBanSectionDomains = "Domeenid"
+        override val settingsManageBanSectionStopWords = "Sõnad"
+        override val settingsManageBanStopWordPlaceholder = "Keelatud väljendus"
+        override val settingsItemAlternateMarkdownRendering =
+            "Luba alternatiivne Markdowni renderdamine"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Alumise navigeerimisriba seadistamine"
+        override val selectTabNavigationTitle = "Valige jaotis"
+        override val messageAuthIssueSegue0 = "Võite proovida ühte järgmistest toimingutest:"
+        override val messageAuthIssueSegue3 = "tühjendage rakenduse andmed"
+        override val messageAuthIssueSegue1 = "sundida värskendama"
+        override val messageAuthIssueSegue2 = "logi uuesti sisse"
     }

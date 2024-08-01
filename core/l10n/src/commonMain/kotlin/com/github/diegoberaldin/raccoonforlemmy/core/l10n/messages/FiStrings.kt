@@ -136,7 +136,7 @@ internal val FiStrings =
         override val postDetailCrossPosts = "julkaistu myös:"
         override val postDetailLoadMoreComments = "Lataa lisää kommentteja"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Kirjaudu sisään"
         override val profileDayShort = "d"
@@ -335,7 +335,7 @@ internal val FiStrings =
         override val moderatorZoneTitle = "Työkaluja moderaattoreille"
         override val moderatorZoneActionContents = "Sisältö keskitettäväksi"
         override val messageAuthIssue =
-            "Käyttäjätietoja haettaessa tapahtui virhe. Yritä päivittää näyttö"
+            "Tietoa noudettaessa tapahtui virhe. Tokenisi on mahdollisesti vanhentunut."
         override val banReasonPlaceholder = "Syy (valinnainen)"
         override val banItemPermanent = "Pysyvä kielto"
         override val banItemRemoveData = "Poista tiedot"
@@ -423,6 +423,27 @@ internal val FiStrings =
         override val actionRestore = "Palauttaa"
         override val settingsInboxPreviewMaxLines = "Saapuneiden korttien rivien enimmäismäärä"
         override val settingsDefaultExploreResultType = "Tutkimuksen oletushakutulostyyppi"
+        override val messageReadAllInboxSuccess = "Kaikki kohteet on merkitty luetuiksi"
+        override val settingsSubtitleRandomThemeColor =
+            "Vaihda teeman väriä jokaisen sovelluksen käynnistyksen yhteydessä"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Avaa verkkosivu napsauttamalla kuvan julkaisua"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Jos viestillä on URL-osoite, avaa verkkosivu napsauttamalla kuvaa"
+        override val settingsManageBanSectionDomains = "Verkkotunnukset"
+        override val settingsManageBanDomainPlaceholder =
+            "Poissuljettavan URL-osoitteen alamerkkijono"
+        override val settingsManageBanSectionStopWords = "Sanat"
+        override val settingsManageBanStopWordPlaceholder = "Kielletty ilmaisu"
         override val settingsUseAvatarAsProfileNavigationIcon =
-            "Käytä avataria profiilikuvakkeena navigointipalkin alaosassa"
+            "Käytä avataria profiilikuvakkeena alanavigointipalkissa"
+        override val settingsItemAlternateMarkdownRendering =
+            "Ota käyttöön vaihtoehtoinen Markdown-renderöinti"
+        override val settingsItemRandomThemeColor = "Käytä satunnaisia värejä"
+        override val settingsItemConfigureBottomNavigationBar = "Määritä alempi navigointipalkki"
+        override val selectTabNavigationTitle = "Valitse osio"
+        override val messageAuthIssueSegue0 = "Voit kokeilla jotakin seuraavista toimista:"
+        override val messageAuthIssueSegue1 = "pakottaa päivittämään"
+        override val messageAuthIssueSegue2 = "Kirjaudu uudelleen"
+        override val messageAuthIssueSegue3 = "tyhjennä sovellustiedot"
     }

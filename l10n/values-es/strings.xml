@@ -426,4 +426,8 @@
     <string name="messageAuthIssueSegue1">forzar actualización</string>
     <string name="messageAuthIssueSegue2">volver a iniciar sesión</string>
     <string name="messageAuthIssueSegue3">borrar los datos de la aplicación</string>
+    <string name="settingsManageBanSectionDomains">Dominios</string>
+    <string name="settingsManageBanDomainPlaceholder">Substring de una url a excluir</string>
+    <string name="settingsManageBanSectionStopWords">Palabras</string>
+    <string name="settingsManageBanStopWordPlaceholder">Expresión prohibida</string>
 </resources>

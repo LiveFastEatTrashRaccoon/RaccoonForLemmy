@@ -90,7 +90,7 @@ internal val ArStrings =
         override val inboxListingTypeTitle = "نوع البريد الوارد"
         override val inboxListingTypeUnread = "غير مقروءة"
         override val inboxNotLoggedMessage =
-            "لم تقم بتسجيل الدخول حاليًا.\nيرجى إضافة حساب من شاشة الملف الشخصي لرؤية صندوق الوارد الخاص بكn"
+            "لم تقم بتسجيل الدخول حاليًا.\nيرجى إضافة حساب من شاشة الملف الشخصي لرؤية صندوق الوارد الخاص بك"
         override val inboxSectionMentions = "عدد المرات التي ذكر فيها"
         override val inboxSectionMessages = "رسائل"
         override val inboxSectionReplies = "الردود"
@@ -136,7 +136,7 @@ internal val ArStrings =
         override val postDetailCrossPosts = "كما تم نشره على:"
         override val postDetailLoadMoreComments = "تصفح المزيد"
         override val postHourShort = "ساعات"
-        override val postMinuteShort = "دقائق"
+        override val postMinuteShort = "دقيقة"
         override val postSecondShort = "ثواني"
         override val profileButtonLogin = "تسجيل الدخول"
         override val profileDayShort = "أيام"
@@ -335,7 +335,8 @@ internal val ArStrings =
         override val navigationDrawerTitleDrafts = "المسودات"
         override val moderatorZoneTitle = "أدوات للمشرفين"
         override val moderatorZoneActionContents = "محتويات إلى معتدلة"
-        override val messageAuthIssue = "حدث خطأ أثناء جلب بيانات المستخدم، حاول تحديث الشاشة"
+        override val messageAuthIssue =
+            "حدث خطأ أثناء جلب البيانات، ربما انتهت صلاحية الرمز المميز الخاص بك."
         override val banReasonPlaceholder = "لسبب (اختياري)"
         override val banItemPermanent = "فرض حظر دائم"
         override val banItemRemoveData = "إزالة البيانات"
@@ -364,7 +365,7 @@ internal val ArStrings =
         override val actionSearchInComments = "البحث في التعليقات"
         override val advancedSettingsDefaultLanguage = "للغة الافتراضية في المحرر"
         override val undetermined = "غير معرف"
-        override val exploreResultTypeTitle = "نوع النتيجة"
+        override val exploreResultTypeTitle = "نوع نتيجة البحث"
         override val communityActionEdit = "تحرير المجتمع"
         override val editCommunityHeaderTextual = "معلومات نصية"
         override val editCommunityItemSidebar = "الشريط الجانبي"
@@ -422,6 +423,25 @@ internal val ArStrings =
         override val settingsInboxPreviewMaxLines =
             "الحد الأقصى لعدد الخطوط في بطاقات البريد الوارد"
         override val settingsDefaultExploreResultType = "وع نتيجة البحث الافتراضي للاستكشاف"
+        override val settingsItemRandomThemeColor = "استخدام لون عشوائي"
+        override val settingsSubtitleRandomThemeColor = "تغيير لون السمة عند كل بدء تشغيل التطبيق"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "استخدم الصورة الرمزية كرمز للملف الشخصي في شريط التنقل السفلي"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "افتح صفحة الويب عند النقر على مشاركة الصورة"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "إذا كان المنشور يحتوي على عنوان URL، فافتح صفحة الويب عند النقر على الصورة"
+        override val settingsManageBanSectionDomains = "المجالات"
+        override val settingsManageBanDomainPlaceholder =
+            "سلسلة فرعية من عنوان URL المطلوب استبعاده"
+        override val settingsManageBanSectionStopWords = "كلمات"
+        override val settingsManageBanStopWordPlaceholder = "التعبير الممنوع"
+        override val messageReadAllInboxSuccess = "تم وضع علامة على كافة العناصر كمقروءة"
+        override val settingsItemAlternateMarkdownRendering = "تمكين عرض Markdown البديل"
+        override val settingsItemConfigureBottomNavigationBar = "تكوين شريط التنقل السفلي"
+        override val selectTabNavigationTitle = "حدد قسمًا"
+        override val messageAuthIssueSegue0 = "يمكنك تجربة أحد الإجراءات التالية:"
+        override val messageAuthIssueSegue1 = "تحديث القوة"
+        override val messageAuthIssueSegue2 = "تسجيل الدخول مرة أخرى"
+        override val messageAuthIssueSegue3 = "مسح بيانات التطبيق"
     }

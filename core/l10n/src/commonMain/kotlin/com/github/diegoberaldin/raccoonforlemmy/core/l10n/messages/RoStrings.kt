@@ -446,4 +446,8 @@ internal val RoStrings =
         override val messageAuthIssueSegue3 = "ștergere datele aplicației"
         override val messageAuthIssueSegue1 = "reîmprospătare forțată"
         override val messageAuthIssueSegue2 = "a se conecta din nou"
+        override val settingsManageBanDomainPlaceholder = "Subșir de URL de exclus"
+        override val settingsManageBanSectionDomains = "Domenii"
+        override val settingsManageBanSectionStopWords = "Cuvinte"
+        override val settingsManageBanStopWordPlaceholder = "Expresie interzisă"
     }

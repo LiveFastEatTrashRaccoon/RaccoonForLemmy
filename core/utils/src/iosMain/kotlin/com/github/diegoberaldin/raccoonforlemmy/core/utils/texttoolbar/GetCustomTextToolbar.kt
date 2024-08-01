@@ -1,4 +1,4 @@
-package com.github.diegoberaldin.raccoonforlemmy.unit.rawcontent.di
+package com.github.diegoberaldin.raccoonforlemmy.core.utils.texttoolbar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalTextToolbar
@@ -6,11 +6,8 @@ import androidx.compose.ui.platform.TextToolbar
 
 @Composable
 actual fun getCustomTextToolbar(
-    isLogged: Boolean,
-    quoteActionLabel: String,
+    quoteActionLabel: String?,
     shareActionLabel: String,
     onShare: () -> Unit,
-    onQuote: () -> Unit,
-): TextToolbar {
-    return LocalTextToolbar.current
-}
+    onQuote: (() -> Unit)?,
+): TextToolbar = LocalTextToolbar.current

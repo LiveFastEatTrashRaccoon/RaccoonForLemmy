@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -56,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -142,6 +145,18 @@ class FilteredContentsScreen(
         val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
         val scope = rememberCoroutineScope()
         val snackbarHostState = remember { SnackbarHostState() }
+        val navigationCanPop by navigationCoordinator.canPop.collectAsState()
+        val isTopLevel = !navigationCanPop
+        val connection =
+            if (isTopLevel) {
+                navigationCoordinator.getBottomBarScrollConnection()
+            } else {
+                null
+            }
+        val bottomNavigationInset =
+            with(LocalDensity.current) {
+                WindowInsets.navigationBars.getBottom(this).toDp()
+            }
 
         LaunchedEffect(model) {
             model.effects
@@ -259,6 +274,16 @@ class FilteredContentsScreen(
                         ),
                 ) {
                     FloatingActionButtonMenu(
+                        modifier =
+                            Modifier.then(
+                                if (isTopLevel) {
+                                    Modifier.padding(
+                                        bottom = Spacing.xxxl + Spacing.s + bottomNavigationInset,
+                                    )
+                                } else {
+                                    Modifier
+                                },
+                            ),
                         items =
                             buildList {
                                 this +=
@@ -295,6 +320,13 @@ class FilteredContentsScreen(
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
+                        ).navigationBarsPadding()
+                        .then(
+                            if (connection != null && settings.hideNavigationBarWhileScrolling) {
+                                Modifier.nestedScroll(connection)
+                            } else {
+                                Modifier
+                            },
                         ).then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)

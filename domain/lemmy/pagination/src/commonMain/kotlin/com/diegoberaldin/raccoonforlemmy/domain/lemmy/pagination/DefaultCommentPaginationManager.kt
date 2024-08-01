@@ -24,7 +24,6 @@ internal class DefaultCommentPaginationManager(
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : CommentPaginationManager {
     override var canFetchMore: Boolean = true
-        private set
 
     private var specification: CommentPaginationSpecification? = null
     private var currentPage: Int = 1

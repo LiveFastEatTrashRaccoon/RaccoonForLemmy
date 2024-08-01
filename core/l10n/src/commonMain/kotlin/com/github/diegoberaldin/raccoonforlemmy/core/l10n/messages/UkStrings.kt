@@ -137,7 +137,7 @@ internal val UkStrings =
         override val postDetailCrossPosts = "також опубліковано за адресою:"
         override val postDetailLoadMoreComments = "Завантажити більше коментарів"
         override val postHourShort = "г"
-        override val postMinuteShort = "х"
+        override val postMinuteShort = "хвил"
         override val postSecondShort = "с"
         override val profileButtonLogin = "Вхід"
         override val profileDayShort = "д"
@@ -338,7 +338,7 @@ internal val UkStrings =
         override val moderatorZoneTitle = "Інструменти для модераторів"
         override val moderatorZoneActionContents = "Вміст модерувати"
         override val messageAuthIssue =
-            "Під час отримання даних користувача сталася помилка. Спробуйте оновити екран"
+            "Під час отримання даних сталася помилка, можливо, термін дії вашого маркера минув."
         override val banReasonPlaceholder = "Причина (необов\'язково)"
         override val banItemPermanent = "Постійний бан"
         override val banItemRemoveData = "Видалити дані"
@@ -367,7 +367,7 @@ internal val UkStrings =
         override val actionSearchInComments = "Шукайте в коментарях"
         override val advancedSettingsDefaultLanguage = "Мова за замовчуванням у редакторі"
         override val undetermined = "Невизначено"
-        override val exploreResultTypeTitle = "Тип результату"
+        override val exploreResultTypeTitle = "Тип результату пошуку"
         override val communityActionEdit = "Редагувати спільноту"
         override val editCommunityHeaderTextual = "Текстова інформація"
         override val editCommunityItemSidebar = "Бічна панель"
@@ -430,6 +430,26 @@ internal val UkStrings =
             "Максимальна кількість рядків у картках вхідних повідомлень"
         override val settingsDefaultExploreResultType =
             "Тип результатів пошуку за умовчанням для Explore"
+        override val messageReadAllInboxSuccess = "Усі елементи позначено як прочитані"
+        override val settingsItemRandomThemeColor = "Використовуйте випадковий колір"
+        override val settingsSubtitleRandomThemeColor =
+            "Змінюйте колір теми під час кожного запуску програми"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Відкрити веб-сторінку, клацнувши зображення публікації"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Якщо публікація має URL-адресу, відкрийте веб-сторінку, клацнувши зображення"
+        override val settingsManageBanDomainPlaceholder = "Підрядок URL-адреси для виключення"
+        override val settingsManageBanSectionDomains = "Домени"
+        override val settingsManageBanSectionStopWords = "Слова"
+        override val settingsManageBanStopWordPlaceholder = "Заборонене вираження"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Використовуйте аватар як значок профілю на нижній панелі навігації"
+        override val settingsItemAlternateMarkdownRendering =
+            "Увімкнути альтернативне відтворення Markdown"
+        override val settingsItemConfigureBottomNavigationBar = "Налаштувати нижню панель навігації"
+        override val selectTabNavigationTitle = "Виберіть розділ"
+        override val messageAuthIssueSegue0 = "Ви можете спробувати одну з таких дій:"
+        override val messageAuthIssueSegue3 = "очистити дані програми"
+        override val messageAuthIssueSegue1 = "примусово оновити"
+        override val messageAuthIssueSegue2 = "увійдіть знову"
     }

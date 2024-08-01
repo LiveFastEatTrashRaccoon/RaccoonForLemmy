@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Taslaklar</string>
     <string name="moderatorZoneTitle">Moderatörler için araçlar</string>
     <string name="moderatorZoneActionContents">Denetlenecek içerikler</string>
-    <string name="messageAuthIssue">Kullanıcı verileri alınırken bir hata oluştu, ekranı yenilemeyi deneyin</string>
+    <string name="messageAuthIssue">Veriler alınırken bir hata oluştu. Muhtemelen jetonunuzun süresi dolmuştur.</string>
     <string name="banReasonPlaceholder">Sebep (isteğe bağlı)</string>
     <string name="banItemPermanent">Kalıcı yasak</string>
     <string name="banItemRemoveData">Verileri kaldır</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Yorumlarda ara</string>
     <string name="advancedSettingsDefaultLanguage">Düzenleyicideki varsayılan dil</string>
     <string name="undetermined">Tanımsız</string>
-    <string name="exploreResultTypeTitle">Sonuç türü</string>
+    <string name="exploreResultTypeTitle">Arama sonucu türü</string>
     <string name="communityActionEdit">Topluluğu düzenle</string>
     <string name="editCommunityHeaderTextual">Metinsel bilgi</string>
     <string name="editCommunityItemSidebar">Kenar çubuğu</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Eski haline getirmek</string>
     <string name="settingsInboxPreviewMaxLines">Gelen kutusu kartlarındaki maksimum satır sayısı</string>
     <string name="settingsDefaultExploreResultType">Keşfet için varsayılan arama sonucu türü</string>
+    <string name="messageReadAllInboxSuccess">Tüm öğeler okundu olarak işaretlendi</string>
+    <string name="settingsItemRandomThemeColor">Rastgele renk kullan</string>
+    <string name="settingsSubtitleRandomThemeColor">Her uygulama başlangıcında tema rengini değiştirin</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Alt gezinme çubuğunda avatarı profil simgesi olarak kullan</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Gönderi resmi tıklandığında web sayfasını açın</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Bir gönderinin URL\'si varsa görsele tıkladığınızda web sayfasını açın</string>
+    <string name="settingsManageBanDomainPlaceholder">Hariç tutulacak URL alt dizesi</string>
+    <string name="settingsManageBanSectionDomains">Alanlar</string>
+    <string name="settingsManageBanSectionStopWords">Kelimeler</string>
+    <string name="settingsManageBanStopWordPlaceholder">Yasak ifade</string>
+    <string name="settingsItemAlternateMarkdownRendering">Alternatif Markdown oluşturmayı etkinleştir</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Alt gezinme çubuğunu yapılandırın</string>
+    <string name="selectTabNavigationTitle">Bir bölüm seçin</string>
+    <string name="messageAuthIssueSegue0">Aşağıdaki işlemlerden birini deneyebilirsiniz:</string>
+    <string name="messageAuthIssueSegue3">uygulama verilerini temizle</string>
+    <string name="messageAuthIssueSegue1">yenilemeye zorla</string>
+    <string name="messageAuthIssueSegue2">Tekrar giriş yap</string>
 </resources>

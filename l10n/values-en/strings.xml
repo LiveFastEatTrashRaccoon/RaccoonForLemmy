@@ -425,4 +425,8 @@
     <string name="messageAuthIssueSegue1">force refresh</string>
     <string name="messageAuthIssueSegue2">log in again</string>
     <string name="messageAuthIssueSegue0">You could try one of the following actions:</string>
+    <string name="settingsManageBanSectionDomains">Domains</string>
+    <string name="settingsManageBanDomainPlaceholder">Substring of URL to exclude</string>
+    <string name="settingsManageBanStopWordPlaceholder">Forbidden expression</string>
+    <string name="settingsManageBanSectionStopWords">Words</string>
 </resources>

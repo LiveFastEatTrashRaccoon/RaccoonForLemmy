@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">ook geplaatst op:</string>
     <string name="postDetailLoadMoreComments">Meer reacties laden</string>
     <string name="postHourShort">u</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Inloggen</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Concepten</string>
     <string name="moderatorZoneTitle">Hulpmiddelen voor moderators</string>
     <string name="moderatorZoneActionContents">Inhoud tot matig</string>
-    <string name="messageAuthIssue">Er is een fout opgetreden tijdens het ophalen van gebruikersgegevens. Probeer het scherm te vernieuwen</string>
+    <string name="messageAuthIssue">Er is een fout opgetreden bij het ophalen van gegevens. Mogelijk is uw token verlopen.</string>
     <string name="banReasonPlaceholder">Reden (optioneel)</string>
     <string name="banItemPermanent">Permanente verbanning</string>
     <string name="banItemRemoveData">Gegevens verwijderen</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Zoek in opmerkingen</string>
     <string name="advancedSettingsDefaultLanguage">Standaardtaal in de editor</string>
     <string name="undetermined">Ongedefinieerd</string>
-    <string name="exploreResultTypeTitle">Resultaattype</string>
+    <string name="exploreResultTypeTitle">Type zoekresultaat</string>
     <string name="communityActionEdit">Gemeenschap bewerken</string>
     <string name="editCommunityHeaderTextual">Tekstuele informatie</string>
     <string name="editCommunityItemSidebar">Zijbalk</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Herstellen</string>
     <string name="settingsInboxPreviewMaxLines">Maximaal aantal regels in inboxkaarten</string>
     <string name="settingsDefaultExploreResultType">Standaard zoekresultaattype voor Explore</string>
+    <string name="messageReadAllInboxSuccess">Alle items zijn gemarkeerd als gelezen</string>
+    <string name="settingsSubtitleRandomThemeColor">Verander de themakleur bij elke app-opstart</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Gebruik avatar als profielpictogram in de onderste navigatiebalk</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Open de webpagina door op de afbeelding te klikken</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Als een bericht een URL heeft, opent u de webpagina door op de afbeelding te klikken</string>
+    <string name="settingsManageBanSectionDomains">Domeinen</string>
+    <string name="settingsManageBanDomainPlaceholder">Subtekenreeks van de uit te sluiten URL</string>
+    <string name="settingsManageBanSectionStopWords">Woorden</string>
+    <string name="settingsManageBanStopWordPlaceholder">Verboden uitdrukking</string>
+    <string name="settingsItemRandomThemeColor">Gebruik willekeurige kleur</string>
+    <string name="settingsItemAlternateMarkdownRendering">Schakel alternatieve Markdown-rendering in</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Configureer de onderste navigatiebalk</string>
+    <string name="selectTabNavigationTitle">Selecteer een sectie</string>
+    <string name="messageAuthIssueSegue0">U kunt een van de volgende acties proberen:</string>
+    <string name="messageAuthIssueSegue1">geforceerd vernieuwen</string>
+    <string name="messageAuthIssueSegue2">Log opnieuw in</string>
+    <string name="messageAuthIssueSegue3">Wis de toepassingsgegevens</string>
 </resources>

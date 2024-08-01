@@ -137,7 +137,7 @@ internal val DaStrings =
         override val postDetailCrossPosts = "også sendt til:"
         override val postDetailLoadMoreComments = "Indlæs flere kommentarer"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Log ind"
         override val profileDayShort = "d"
@@ -336,7 +336,7 @@ internal val DaStrings =
         override val moderatorZoneTitle = "Værktøjer til moderatorer"
         override val moderatorZoneActionContents = "Indhold til moderat"
         override val messageAuthIssue =
-            "Der opstod en fejl under hentning af brugerdata. Prøv at opdatere skærmen"
+            "Der opstod en fejl under hentning af data, muligvis er dit token udløbet."
         override val banReasonPlaceholder = "Årsag (valgfrit)"
         override val banItemPermanent = "Permanent forbud"
         override val banItemRemoveData = "Fjern data"
@@ -366,7 +366,7 @@ internal val DaStrings =
         override val actionSearchInComments = "Søg i kommentarer"
         override val advancedSettingsDefaultLanguage = "Standardsprog i editoren"
         override val undetermined = "Udefineret"
-        override val exploreResultTypeTitle = "Resultattype"
+        override val exploreResultTypeTitle = "Søgeresultattype"
         override val communityActionEdit = "Rediger fællesskab"
         override val editCommunityHeaderTextual = "Tekstmæssige oplysninger"
         override val editCommunityItemSidebar = "Sidebjælke"
@@ -426,6 +426,25 @@ internal val DaStrings =
         override val actionRestore = "Gendan"
         override val settingsInboxPreviewMaxLines = "Max antal linjer i indbakkekort"
         override val settingsDefaultExploreResultType = "Standard søgeresultattype for Udforsk"
+        override val messageReadAllInboxSuccess = "Alle elementer er blevet markeret som læst"
+        override val settingsItemRandomThemeColor = "Brug tilfældig farve"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Brug avatar som profilikon i nederste navigationslinje"
+        override val settingsItemOpenPostWebPageOnImageClick = "Åbn webside på post billede klik"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Hvis et indlæg har en URL, skal du åbne webside ved billedklik"
+        override val settingsManageBanDomainPlaceholder = "Understreng af URL, der skal ekskluderes"
+        override val settingsManageBanSectionDomains = "Domæner"
+        override val settingsManageBanSectionStopWords = "Ord"
+        override val settingsManageBanStopWordPlaceholder = "Forbudt udtryk"
+        override val settingsSubtitleRandomThemeColor = "Skift temafarve ved hver appstart"
+        override val settingsItemAlternateMarkdownRendering =
+            "Aktiver alternativ Markdown-gengivelse"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Konfigurer nederste navigationslinje"
+        override val selectTabNavigationTitle = "Vælg en sektion"
+        override val messageAuthIssueSegue0 = "Du kan prøve en af følgende handlinger:"
+        override val messageAuthIssueSegue3 = "ryd applikationsdataene"
+        override val messageAuthIssueSegue1 = "fremtvinge opdatering"
+        override val messageAuthIssueSegue2 = "logge ind igen"
     }

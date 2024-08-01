@@ -426,4 +426,8 @@
     <string name="messageAuthIssueSegue2">s\'enregistrer à nouveau</string>
     <string name="messageAuthIssueSegue1">actualiser l\'ecran</string>
     <string name="messageAuthIssueSegue3">effacer les données de l\'application</string>
+    <string name="settingsManageBanDomainPlaceholder">Sous-chaîne de l\'URL à exclure</string>
+    <string name="settingsManageBanSectionStopWords">Mots</string>
+    <string name="settingsManageBanStopWordPlaceholder">Expression interdite</string>
+    <string name="settingsManageBanSectionDomains">Domaines</string>
 </resources>

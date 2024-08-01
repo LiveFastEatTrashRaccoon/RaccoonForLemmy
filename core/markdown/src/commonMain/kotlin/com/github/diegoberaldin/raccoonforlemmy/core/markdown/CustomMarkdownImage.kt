@@ -26,18 +26,22 @@ import org.intellij.markdown.ast.getTextInNode
 internal fun CustomMarkdownImage(
     node: ASTNode,
     content: String,
-    onOpenImage: ((String) -> Unit)?,
+    blurred: Boolean = false,
     autoLoadImages: Boolean,
+    onOpenImage: ((String) -> Unit)?,
 ) {
     val link =
         runCatching {
-            node.findChildOfTypeRecursive(MarkdownElementTypes.LINK_DESTINATION)
+            node
+                .findChildOfTypeRecursive(MarkdownElementTypes.LINK_DESTINATION)
                 ?.getTextInNode(content)
-                ?.toString().orEmpty()
+                ?.toString()
+                .orEmpty()
         }.getOrElse { "" }
     CustomMarkdownImage(
         url = link,
         autoLoadImages = autoLoadImages,
+        blurred = blurred,
         onOpenImage = onOpenImage,
     )
 }
@@ -47,8 +51,9 @@ private const val LOADING_ANIMATION_DURATION = 1000
 @Composable
 internal fun CustomMarkdownImage(
     url: String,
+    blurred: Boolean = false,
+    autoLoadImages: Boolean = true,
     onOpenImage: ((String) -> Unit)?,
-    autoLoadImages: Boolean,
 ) {
     if (url.isBlank()) {
         return
@@ -65,6 +70,7 @@ internal fun CustomMarkdownImage(
                 ),
         url = url,
         autoload = autoLoadImages,
+        blurred = blurred,
         quality = FilterQuality.Low,
         contentScale = ContentScale.FillWidth,
         onFailure = {

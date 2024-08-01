@@ -157,7 +157,7 @@ internal val DeStrings =
         override val postDetailCrossPosts = "auch gepostet in:"
         override val postDetailLoadMoreComments = "Weitere Kommentare laden"
         override val postHourShort = "Std"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "Min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Anmelden"
         override val profileDayShort = "t"
@@ -355,7 +355,7 @@ internal val DeStrings =
         override val moderatorZoneTitle = "Moderationstools"
         override val moderatorZoneActionContents = "Moderierte Inhalte"
         override val messageAuthIssue =
-            "Beim Abrufen der Benutzerdaten ist ein Fehler aufgetreten. Versuche den Bildschirm zu aktualisieren"
+            "Beim Abrufen der Daten ist ein Fehler aufgetreten. Möglicherweise ist Ihr Token abgelaufen."
         override val banReasonPlaceholder = "Begründung (optional)"
         override val banItemPermanent = "Permanenter Bann"
         override val banItemRemoveData = "Daten entfernen"
@@ -430,6 +430,28 @@ internal val DeStrings =
         override val settingsInboxPreviewMaxLines =
             "Maximale Anzahl von Zeilen in Posteingangskarten"
         override val settingsDefaultExploreResultType = "Standard-Suchergebnistyp für Explore"
+        override val messageReadAllInboxSuccess = "Alle Artikel wurden als gelesen markiert"
+        override val settingsItemRandomThemeColor = "Verwenden Sie eine zufällige Farbe"
+        override val settingsSubtitleRandomThemeColor =
+            "Ändern Sie die Designfarbe bei jedem App-Start"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Verwenden Sie den Avatar als Profilsymbol in der unteren Navigationsleiste"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Öffnen Sie die Webseite, indem Sie auf das Beitragsbild klicken"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Wenn ein Beitrag eine URL hat, öffnen Sie die Webseite beim Klicken auf das Bild"
+        override val settingsManageBanDomainPlaceholder =
+            "Teilzeichenfolge der auszuschließenden URL"
+        override val settingsManageBanSectionDomains = "Domänen"
+        override val settingsManageBanSectionStopWords = "Wörter"
+        override val settingsManageBanStopWordPlaceholder = "Verbotener Ausdruck"
+        override val settingsItemAlternateMarkdownRendering =
+            "Aktivieren Sie alternatives Markdown-Rendering"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Konfigurieren Sie die untere Navigationsleiste"
+        override val selectTabNavigationTitle = "Wählen Sie einen Abschnitt aus"
+        override val messageAuthIssueSegue0 = "Sie können eine der folgenden Aktionen ausprobieren:"
+        override val messageAuthIssueSegue3 = "Löschen Sie die Anwendungsdaten"
+        override val messageAuthIssueSegue1 = "Aktualisierung erzwingen"
+        override val messageAuthIssueSegue2 = "nochmal anmelden"
     }

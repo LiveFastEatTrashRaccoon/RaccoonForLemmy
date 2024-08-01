@@ -435,8 +435,12 @@ internal val TokStrings =
             "o kepeken e nanpa ante pi ilo Makadon"
         override val settingsItemConfigureBottomNavigationBar = "o ante e lukin pi linja anpa"
         override val selectTabNavigationTitle = "o anu e ijo wan"
-        override val messageAuthIssueSegue0 = "sina ken lukin e ni:"
         override val messageAuthIssueSegue1 = "o kama sona lon tenpo nanpa tu"
         override val messageAuthIssueSegue2 = "o tawa insa lon tenpo nanpa tu"
         override val messageAuthIssueSegue3 = "o weka e sona pi ilo nanpa ni"
+        override val messageAuthIssueSegue0 = "sina ken lukin e ni:"
+        override val settingsManageBanSectionDomains = "nimi linluwi"
+        override val settingsManageBanDomainPlaceholder = "o weka e sitelen pi nimi linluwi"
+        override val settingsManageBanSectionStopWords = "nimi"
+        override val settingsManageBanStopWordPlaceholder = "o weka e sitelen"
     }

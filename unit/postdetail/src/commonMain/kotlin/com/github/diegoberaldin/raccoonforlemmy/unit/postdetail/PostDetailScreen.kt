@@ -761,7 +761,7 @@ class PostDetailScreen(
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        ).fillMaxSize(),
+                        ),
             ) {
                 Column(
                     modifier =

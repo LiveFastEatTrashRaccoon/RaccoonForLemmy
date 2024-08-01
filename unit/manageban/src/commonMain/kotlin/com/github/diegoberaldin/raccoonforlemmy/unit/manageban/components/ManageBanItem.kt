@@ -32,16 +32,14 @@ import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.github.diegoberaldin.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.toLocalDp
-import com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.data.InstanceModel
 
 @Composable
-fun InstanceItem(
-    instance: InstanceModel,
+internal fun ManageBanItem(
+    title: String,
     modifier: Modifier = Modifier,
     options: List<Option> = emptyList(),
     onOptionSelected: ((OptionId) -> Unit)? = null,
 ) {
-    val name = instance.domain
     val iconSize = 30.dp
     val fullColor = MaterialTheme.colorScheme.onBackground
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
@@ -59,12 +57,12 @@ fun InstanceItem(
     ) {
         PlaceholderImage(
             size = iconSize,
-            title = name,
+            title = title,
         )
 
         Text(
             modifier = Modifier.weight(1f),
-            text = name,
+            text = title,
             style = MaterialTheme.typography.bodyLarge,
             color = fullColor,
         )

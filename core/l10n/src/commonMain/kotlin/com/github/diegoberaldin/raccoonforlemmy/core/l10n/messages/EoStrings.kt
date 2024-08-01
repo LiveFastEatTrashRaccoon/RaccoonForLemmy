@@ -136,7 +136,7 @@ internal val EoStrings =
         override val postDetailCrossPosts = "ankaŭ poŝtita al:"
         override val postDetailLoadMoreComments = "Ŝarĝi pliajn komentojn"
         override val postHourShort = "h"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Ensaluti"
         override val profileDayShort = "d"
@@ -335,7 +335,7 @@ internal val EoStrings =
         override val moderatorZoneTitle = "Iloj por moderigaĵoj"
         override val moderatorZoneActionContents = "Enhavon moderigi"
         override val messageAuthIssue =
-            "Okazis eraro dum venigado de uzantdatenoj, provu refreŝigi la ekranon"
+            "Okazis eraro dum venigado de datumoj, eble via ĵetono eksvalidiĝis."
         override val banReasonPlaceholder = "Kialo (laŭvola)"
         override val banItemPermanent = "Konstanta malpermeso"
         override val banItemRemoveData = "Forigi datumojn"
@@ -422,6 +422,24 @@ internal val EoStrings =
         override val actionRestore = "Restaŭri"
         override val settingsInboxPreviewMaxLines = "Maksimuma nombro da linioj en enirkestokartoj"
         override val settingsDefaultExploreResultType = "Defaŭlta serĉrezulto-tipo por esploro"
+        override val messageReadAllInboxSuccess = "Ĉiuj eroj estis markitaj kiel legitaj"
+        override val settingsItemRandomThemeColor = "Uzi hazardan koloron"
+        override val settingsSubtitleRandomThemeColor = "Ŝanĝi etkoloron ĉe ĉiu aplikaĵo"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Uzi avataron kiel profilikonon en la malsupra navigadbreto"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Malfermi retpaĝon sur afiŝbilda klako"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Se afiŝo havas URL, malfermi retpaĝon per bilda klako"
+        override val settingsItemAlternateMarkdownRendering = "Ebligi alternan Markdown-bildigon"
+        override val settingsItemConfigureBottomNavigationBar = "Agordi malsupran navigadbreton"
+        override val selectTabNavigationTitle = "Elekti sekcion"
+        override val messageAuthIssueSegue0 = "Vi povus provi unu el la sekvaj agoj:"
+        override val messageAuthIssueSegue3 = "purigi la aplikajn datumojn"
+        override val messageAuthIssueSegue1 = "forto refreŝigi"
+        override val messageAuthIssueSegue2 = "ensaluti denove"
+        override val settingsManageBanDomainPlaceholder = "Subŝnuro de URL ekskludi"
+        override val settingsManageBanSectionDomains = "Domajnoj"
+        override val settingsManageBanSectionStopWords = "Vortoj"
+        override val settingsManageBanStopWordPlaceholder = "Malpermesita esprimo"
     }

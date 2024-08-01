@@ -38,7 +38,7 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.share.getShareHelper
-import com.github.diegoberaldin.raccoonforlemmy.unit.rawcontent.di.getCustomTextToolbar
+import com.github.diegoberaldin.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,7 +66,12 @@ fun RawContentDialog(
             val query = clipboardManager.getText()?.text.orEmpty()
             onQuote?.invoke(query)
         }
-    val quoteActionLabel = LocalStrings.current.actionQuote
+    val quoteActionLabel =
+        if (isLogged) {
+            LocalStrings.current.actionQuote
+        } else {
+            null
+    }
     val shareActionLabel = LocalStrings.current.postActionShare
     val fullColor = MaterialTheme.colorScheme.onBackground
 
@@ -75,7 +80,8 @@ fun RawContentDialog(
     ) {
         Column(
             modifier =
-                Modifier.background(color = MaterialTheme.colorScheme.surface)
+                Modifier
+                    .background(color = MaterialTheme.colorScheme.surface)
                     .padding(vertical = Spacing.s),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -104,7 +110,6 @@ fun RawContentDialog(
                             CompositionLocalProvider(
                                 LocalTextToolbar provides
                                     getCustomTextToolbar(
-                                        isLogged = isLogged,
                                         quoteActionLabel = quoteActionLabel,
                                         shareActionLabel = shareActionLabel,
                                         onShare = onShareLambda,
@@ -138,7 +143,6 @@ fun RawContentDialog(
                             CompositionLocalProvider(
                                 LocalTextToolbar provides
                                     getCustomTextToolbar(
-                                        isLogged = isLogged,
                                         quoteActionLabel = quoteActionLabel,
                                         shareActionLabel = shareActionLabel,
                                         onShare = onShareLambda,
@@ -173,7 +177,6 @@ fun RawContentDialog(
                             CompositionLocalProvider(
                                 LocalTextToolbar provides
                                     getCustomTextToolbar(
-                                        isLogged = isLogged,
                                         quoteActionLabel = quoteActionLabel,
                                         shareActionLabel = shareActionLabel,
                                         onShare = onShareLambda,

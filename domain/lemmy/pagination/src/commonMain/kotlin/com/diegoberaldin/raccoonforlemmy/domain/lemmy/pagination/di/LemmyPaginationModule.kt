@@ -4,9 +4,11 @@ import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.CommentPaginati
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.DefaultCommentPaginationManager
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.DefaultCommunityPaginationManager
+import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.DefaultExplorePaginationManager
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.DefaultMultiCommunityPaginator
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.DefaultPostNavigationManager
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.DefaultPostPaginationManager
+import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.ExplorePaginationManager
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.MultiCommunityPaginator
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.PostNavigationManager
 import com.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination.PostPaginationManager
@@ -22,11 +24,14 @@ val paginationModule =
         factory<PostPaginationManager> {
             DefaultPostPaginationManager(
                 identityRepository = get(),
+                accountRepository = get(),
                 postRepository = get(),
                 communityRepository = get(),
                 userRepository = get(),
                 multiCommunityPaginator = get(),
                 notificationCenter = get(),
+                domainBlocklistRepository = get(),
+                stopWordRepository = get(),
             )
         }
         factory<CommentPaginationManager> {
@@ -46,6 +51,16 @@ val paginationModule =
             DefaultCommunityPaginationManager(
                 identityRepository = get(),
                 communityRepository = get(),
+            )
+        }
+        factory<ExplorePaginationManager> {
+            DefaultExplorePaginationManager(
+                identityRepository = get(),
+                accountRepository = get(),
+                communityRepository = get(),
+                userRepository = get(),
+                domainBlocklistRepository = get(),
+                stopWordRepository = get(),
             )
         }
     }

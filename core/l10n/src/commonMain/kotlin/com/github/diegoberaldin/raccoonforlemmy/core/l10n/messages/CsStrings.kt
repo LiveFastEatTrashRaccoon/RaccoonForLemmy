@@ -136,7 +136,7 @@ internal val CsStrings =
         override val postDetailCrossPosts = "také zveřejněno na:"
         override val postDetailLoadMoreComments = "Načíst více komentářů"
         override val postHourShort = "hod"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "sek."
         override val profileButtonLogin = "Přihlášení"
         override val profileDayShort = "d"
@@ -337,7 +337,7 @@ internal val CsStrings =
         override val moderatorZoneTitle = "Nástroje pro moderátory"
         override val moderatorZoneActionContents = "Obsah k moderování"
         override val messageAuthIssue =
-            "Při načítání uživatelských dat došlo k chybě, zkuste obnovit obrazovku"
+            "Při načítání dat došlo k chybě, pravděpodobně vypršela platnost vašeho tokenu."
         override val banReasonPlaceholder = "Důvod (volitelné)"
         override val banItemPermanent = "Trvalý zákaz"
         override val banItemRemoveData = "Odebrat data"
@@ -366,7 +366,7 @@ internal val CsStrings =
         override val actionSearchInComments = "Hledejte v komentářích"
         override val advancedSettingsDefaultLanguage = "Výchozí jazyk v editoru"
         override val undetermined = "Nedefinováno"
-        override val exploreResultTypeTitle = "Typ výsledku"
+        override val exploreResultTypeTitle = "Typ výsledku hledání"
         override val communityActionEdit = "Upravit komunitu"
         override val editCommunityHeaderTextual = "Textové informace"
         override val editCommunityItemSidebar = "Postranní panel"
@@ -428,6 +428,27 @@ internal val CsStrings =
             "Maximální počet řádků na kartách doručené pošty"
         override val settingsDefaultExploreResultType =
             "Výchozí typ výsledku vyhledávání pro Prozkoumat"
+        override val messageReadAllInboxSuccess = "Všechny položky byly označeny jako přečtené"
+        override val settingsItemRandomThemeColor = "Použijte náhodnou barvu"
+        override val settingsSubtitleRandomThemeColor =
+            "Změňte barvu motivu při každém spuštění aplikace"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Použijte avatar jako ikonu profilu v dolní navigační liště"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Otevřete webovou stránku kliknutím na obrázek příspěvku"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Pokud má příspěvek adresu URL, kliknutím na obrázek otevřete webovou stránku"
+        override val settingsManageBanDomainPlaceholder = "Podřetězec adresy URL k vyloučení"
+        override val settingsManageBanSectionDomains = "Domény"
+        override val settingsManageBanSectionStopWords = "Slova"
+        override val settingsManageBanStopWordPlaceholder = "Zakázaný výraz"
+        override val settingsItemAlternateMarkdownRendering =
+            "Povolit alternativní vykreslování Markdown"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Nakonfigurujte spodní navigační lištu"
+        override val selectTabNavigationTitle = "Vyberte sekci"
+        override val messageAuthIssueSegue0 = "Můžete zkusit jednu z následujících akcí:"
+        override val messageAuthIssueSegue3 = "vymazat data aplikace"
+        override val messageAuthIssueSegue1 = "vynutit obnovení"
+        override val messageAuthIssueSegue2 = "přihlaste se znovu"
     }

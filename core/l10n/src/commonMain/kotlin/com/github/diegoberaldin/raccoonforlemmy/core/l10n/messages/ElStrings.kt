@@ -137,7 +137,7 @@ internal val ElStrings =
         override val postDetailCrossPosts = "επίσης αναρτήθηκε σε:"
         override val postDetailLoadMoreComments = "Φόρτωση περισσότερων σχολίων"
         override val postHourShort = "ώρ"
-        override val postMinuteShort = "λ"
+        override val postMinuteShort = "λεπ."
         override val postSecondShort = "δ"
         override val profileButtonLogin = "Σύνδεση"
         override val profileDayShort = "ημ"
@@ -339,7 +339,7 @@ internal val ElStrings =
         override val moderatorZoneTitle = "Εργαλεία για συντονιστές"
         override val moderatorZoneActionContents = "Περιεχόμενα για μέτρια"
         override val messageAuthIssue =
-            "Παρουσιάστηκε σφάλμα κατά την ανάκτηση δεδομένων χρήστη, δοκιμάστε να ανανεώσετε την οθόνη"
+            "Παρουσιάστηκε σφάλμα κατά την ανάκτηση δεδομένων, πιθανώς το διακριτικό σας έχει λήξει."
         override val banReasonPlaceholder = "Αιτία (προαιρετικό)"
         override val banItemPermanent = "Μόνιμη απαγόρευση"
         override val banItemRemoveData = "Κατάργηση δεδομένων"
@@ -371,7 +371,7 @@ internal val ElStrings =
         override val advancedSettingsDefaultLanguage =
             "Προεπιλεγμένη γλώσσα στο πρόγραμμα επεξεργασίας"
         override val undetermined = "Απροσδιόριστος"
-        override val exploreResultTypeTitle = "Τύπος αποτελέσματος"
+        override val exploreResultTypeTitle = "Τύπος αποτελεσμάτων αναζήτησης"
         override val communityActionEdit = "Επεξεργασία κοινότητας"
         override val editCommunityHeaderTextual = "Κειμενικές πληροφορίες"
         override val editCommunityItemSidebar = "Πλαϊνή γραμμή"
@@ -435,6 +435,27 @@ internal val ElStrings =
             "Μέγιστος αριθμός γραμμών σε κάρτες εισερχομένων"
         override val settingsDefaultExploreResultType =
             "Προεπιλεγμένος τύπος αποτελεσμάτων αναζήτησης για Εξερεύνηση"
+        override val messageReadAllInboxSuccess = "Όλα τα στοιχεία έχουν επισημανθεί ως αναγνωσμένα"
+        override val settingsItemRandomThemeColor = "Χρησιμοποιήστε τυχαίο χρώμα"
+        override val settingsSubtitleRandomThemeColor =
+            "Αλλάξτε το χρώμα του θέματος σε κάθε εκκίνηση εφαρμογής"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Χρησιμοποιήστε το avatar ως εικονίδιο προφίλ στην κάτω γραμμή πλοήγησης"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Ανοίξτε την ιστοσελίδα με κλικ στην εικόνα ανάρτησης"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Εάν μια ανάρτηση έχει διεύθυνση URL, ανοίξτε την ιστοσελίδα κάνοντας κλικ στην εικόνα"
+        override val settingsManageBanDomainPlaceholder = "Υποσυμβολοσειρά URL προς εξαίρεση"
+        override val settingsManageBanSectionDomains = "Τομείς"
+        override val settingsManageBanSectionStopWords = "Λόγια"
+        override val settingsManageBanStopWordPlaceholder = "Απαγορευμένη έκφραση"
+        override val settingsItemAlternateMarkdownRendering =
+            "Ενεργοποίηση εναλλακτικής απόδοσης Markdown"
+        override val settingsItemConfigureBottomNavigationBar = "Διαμόρφωση κάτω γραμμής πλοήγησης"
+        override val selectTabNavigationTitle = "Επιλέξτε μια ενότητα"
+        override val messageAuthIssueSegue0 =
+            "Μπορείτε να δοκιμάσετε μία από τις παρακάτω ενέργειες:"
+        override val messageAuthIssueSegue3 = "διαγράψτε τα δεδομένα της εφαρμογής"
+        override val messageAuthIssueSegue1 = "δύναμη ανανέωσης"
+        override val messageAuthIssueSegue2 = "συνδεθείτε ξανά"
     }

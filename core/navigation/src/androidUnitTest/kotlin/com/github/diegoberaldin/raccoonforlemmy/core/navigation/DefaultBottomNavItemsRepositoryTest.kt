@@ -29,7 +29,7 @@ class DefaultBottomNavItemsRepositoryTest {
 
             assertEquals(BottomNavItemsRepository.DEFAULT_ITEMS, res)
             coVerify {
-                keyStore.get("BottomNavItemsRepository.items", emptyList())
+                keyStore.get("$KEY_PREFIX.items", emptyList())
             }
         }
 
@@ -42,7 +42,7 @@ class DefaultBottomNavItemsRepositoryTest {
 
             assertEquals(ITEMS, res)
             coVerify {
-                keyStore.get("BottomNavItemsRepository.items", emptyList())
+                keyStore.get("$KEY_PREFIX.items", emptyList())
             }
         }
 
@@ -56,7 +56,7 @@ class DefaultBottomNavItemsRepositoryTest {
 
             assertEquals(BottomNavItemsRepository.DEFAULT_ITEMS, res)
             coVerify {
-                keyStore.get("BottomNavItemsRepository.$accountId.items", emptyList())
+                keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
             }
         }
 
@@ -70,7 +70,7 @@ class DefaultBottomNavItemsRepositoryTest {
 
             assertEquals(ITEMS, res)
             coVerify {
-                keyStore.get("BottomNavItemsRepository.$accountId.items", emptyList())
+                keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
             }
         }
 
@@ -81,13 +81,13 @@ class DefaultBottomNavItemsRepositoryTest {
             val accountId = 2L
             every {
                 keyStore.get(
-                    "BottomNavItemsRepository.$otherAccountId.items",
+                    "$KEY_PREFIX.$otherAccountId.items",
                     any<List<String>>(),
                 )
             } returns ITEMS_IDS
             every {
                 keyStore.get(
-                    "BottomNavItemsRepository.$accountId.items",
+                    "$KEY_PREFIX.$accountId.items",
                     any<List<String>>(),
                 )
             } returns emptyList()
@@ -96,7 +96,7 @@ class DefaultBottomNavItemsRepositoryTest {
 
             assertEquals(BottomNavItemsRepository.DEFAULT_ITEMS, res)
             coVerify {
-                keyStore.get("BottomNavItemsRepository.$accountId.items", emptyList())
+                keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
             }
         }
 
@@ -106,13 +106,13 @@ class DefaultBottomNavItemsRepositoryTest {
             val otherAccountId = 1
             every {
                 keyStore.get(
-                    "BottomNavItemsRepository.$otherAccountId.items",
+                    "$KEY_PREFIX.$otherAccountId.items",
                     any<List<String>>(),
                 )
             } returns ITEMS_IDS
             every {
                 keyStore.get(
-                    "BottomNavItemsRepository.items",
+                    "$KEY_PREFIX.items",
                     any<List<String>>(),
                 )
             } returns emptyList()
@@ -121,7 +121,7 @@ class DefaultBottomNavItemsRepositoryTest {
 
             assertEquals(BottomNavItemsRepository.DEFAULT_ITEMS, res)
             coVerify {
-                keyStore.get("BottomNavItemsRepository.items", emptyList())
+                keyStore.get("$KEY_PREFIX.items", emptyList())
             }
         }
 
@@ -131,7 +131,7 @@ class DefaultBottomNavItemsRepositoryTest {
             sut.update(accountId = null, items = ITEMS)
 
             coVerify {
-                keyStore.save("BottomNavItemsRepository.items", ITEMS_IDS)
+                keyStore.save("$KEY_PREFIX.items", ITEMS_IDS)
             }
         }
 
@@ -143,7 +143,7 @@ class DefaultBottomNavItemsRepositoryTest {
             sut.update(accountId = accountId, items = ITEMS)
 
             coVerify {
-                keyStore.save("BottomNavItemsRepository.1.items", ITEMS_IDS)
+                keyStore.save("$KEY_PREFIX.$accountId.items", ITEMS_IDS)
             }
         }
 
@@ -157,5 +157,6 @@ class DefaultBottomNavItemsRepositoryTest {
                 TabNavigationSection.Inbox,
                 TabNavigationSection.Settings,
             )
+        private const val KEY_PREFIX = "BottomNavItemsRepository"
     }
 }

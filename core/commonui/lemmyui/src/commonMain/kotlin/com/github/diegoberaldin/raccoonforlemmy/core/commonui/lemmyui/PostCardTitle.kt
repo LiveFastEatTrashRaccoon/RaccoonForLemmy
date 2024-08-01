@@ -69,6 +69,7 @@ fun PostCardTitle(
     val enableAlternateMarkdownRendering by settingsRepository.currentSettings
         .map { it.enableAlternateMarkdownRendering }
         .collectAsState(false)
+
     SelectionContainer {
         CustomMarkdownWrapper(
             modifier = modifier.padding(horizontal = Spacing.xxs),
@@ -103,7 +104,9 @@ fun PostCardTitle(
                 rememberCallbackArgs { url ->
                     navigationCoordinator.handleUrl(
                         url = url,
-                        openingMode = settingsRepository.currentSettings.value.urlOpeningMode.toUrlOpeningMode(),
+                        openingMode =
+                            settingsRepository.currentSettings.value.urlOpeningMode
+                                .toUrlOpeningMode(),
                         uriHandler = uriHandler,
                         customTabsHelper = customTabsHelper,
                         onOpenCommunity = onOpenCommunity,

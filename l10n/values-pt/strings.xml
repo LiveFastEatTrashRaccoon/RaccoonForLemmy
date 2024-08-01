@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Rascunhos</string>
     <string name="moderatorZoneTitle">Ferramentas para moderadores</string>
     <string name="moderatorZoneActionContents">Conteúdos para moderar</string>
-    <string name="messageAuthIssue">Ocorreu um erro ao buscar dados do utilizador. Tente atualizar a tela</string>
+    <string name="messageAuthIssue">Ocorreu um erro ao buscar dados, possivelmente seu token expirou.</string>
     <string name="banReasonPlaceholder">Razão (opcional)</string>
     <string name="banItemPermanent">Proibição permanente</string>
     <string name="banItemRemoveData">Remover dados</string>
@@ -414,4 +414,19 @@
     <string name="settingsDefaultExploreResultType">Tipo de resultado de pesquisa padrão para Explorar</string>
     <string name="messageReadAllInboxSuccess">Todos os itens foram marcados como lidos</string>
     <string name="settingsUseAvatarAsProfileNavigationIcon">Usar avatar como ícone da secção \"Perfil\" na barra de navegação inferior</string>
+    <string name="settingsItemRandomThemeColor">Usar cor aleatória</string>
+    <string name="settingsSubtitleRandomThemeColor">Altere a cor do tema a cada inicialização do aplicativo</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Abrir a página da web ao clicar na imagem da postagem</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Se uma postagem tiver um URL, abrir a página web clicando na imagem</string>
+    <string name="settingsManageBanDomainPlaceholder">Substring do URL a ser excluído</string>
+    <string name="settingsManageBanSectionDomains">Domínios</string>
+    <string name="settingsManageBanSectionStopWords">Palavras</string>
+    <string name="settingsManageBanStopWordPlaceholder">Expressão proibida</string>
+    <string name="messageAuthIssueSegue1">forçar atualização</string>
+    <string name="messageAuthIssueSegue3">limpar os dados do aplicativo</string>
+    <string name="settingsItemAlternateMarkdownRendering">Habilitar renderização Markdown alternativa</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Configurar barra de navegação inferior</string>
+    <string name="selectTabNavigationTitle">Selecione uma seção</string>
+    <string name="messageAuthIssueSegue0">Você pode tentar uma das seguintes ações:</string>
+    <string name="messageAuthIssueSegue2">fazer login novamente</string>
 </resources>

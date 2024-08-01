@@ -40,6 +40,7 @@ kotlin {
 
                 implementation(projects.core.notifications)
                 implementation(projects.core.utils)
+                implementation(projects.core.persistence)
 
                 implementation(projects.domain.identity)
                 implementation(projects.domain.lemmy.data)

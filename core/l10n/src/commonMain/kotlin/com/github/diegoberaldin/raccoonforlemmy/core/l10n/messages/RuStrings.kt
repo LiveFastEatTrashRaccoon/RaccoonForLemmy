@@ -136,7 +136,7 @@ internal val RuStrings =
         override val postDetailCrossPosts = "также опубликовано в:"
         override val postDetailLoadMoreComments = "Загрузить больше комментариев"
         override val postHourShort = "ч"
-        override val postMinuteShort = "м"
+        override val postMinuteShort = "мин"
         override val postSecondShort = "с"
         override val profileButtonLogin = "Вход"
         override val profileDayShort = "д"
@@ -337,7 +337,7 @@ internal val RuStrings =
         override val moderatorZoneTitle = "Инструменты для модераторов"
         override val moderatorZoneActionContents = "Содержание для модерации"
         override val messageAuthIssue =
-            "Произошла ошибка при получении пользовательских данных. Попробуйте обновить экран."
+            "Произошла ошибка при получении данных, возможно, срок действия вашего токена истек."
         override val banReasonPlaceholder = "Причина (необязательно)"
         override val banItemPermanent = "Постоянный бан"
         override val banItemRemoveData = "Удалить данные"
@@ -368,7 +368,7 @@ internal val RuStrings =
         override val actionSearchInComments = "Искать в комментариях"
         override val advancedSettingsDefaultLanguage = "Язык по умолчанию в редакторе"
         override val undetermined = "Неопределенный"
-        override val exploreResultTypeTitle = "Тип результата"
+        override val exploreResultTypeTitle = "Тип результата поиска"
         override val communityActionEdit = "Изменить сообщество"
         override val editCommunityHeaderTextual = "Текстовая информация"
         override val editCommunityItemSidebar = "Боковая панель"
@@ -430,6 +430,26 @@ internal val RuStrings =
             "Максимальное количество строк во входящих карточках"
         override val settingsDefaultExploreResultType =
             "Тип результатов поиска по умолчанию для Explore"
+        override val messageReadAllInboxSuccess = "Все статьи отмечены как прочитанные"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Открыть веб-страницу при нажатии на изображение публикации"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Если у публикации есть URL-адрес, откройте веб-страницу по щелчку изображения"
+        override val settingsManageBanSectionDomains = "Домены"
+        override val settingsManageBanSectionStopWords = "Слова"
+        override val settingsManageBanStopWordPlaceholder = "Запрещенное выражение"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Использовать аватар в качестве значка профиля в нижней панели навигации"
+        override val settingsItemRandomThemeColor = "Использовать случайный цвет"
+        override val settingsItemConfigureBottomNavigationBar = "Настроить нижнюю панель навигации"
+        override val messageAuthIssueSegue3 = "очистить данные приложения"
+        override val settingsSubtitleRandomThemeColor =
+            "Изменение цвета темы при каждом запуске приложения"
+        override val messageAuthIssueSegue1 = "принудительное обновление"
+        override val settingsManageBanDomainPlaceholder = "Подстрока URL, которую нужно исключить"
+        override val settingsItemAlternateMarkdownRendering =
+            "Включить альтернативный рендеринг Markdown"
+        override val selectTabNavigationTitle = "Выберите раздел"
+        override val messageAuthIssueSegue0 = "Вы можете попробовать одно из следующих действий:"
+        override val messageAuthIssueSegue2 = "войдите снова"
     }

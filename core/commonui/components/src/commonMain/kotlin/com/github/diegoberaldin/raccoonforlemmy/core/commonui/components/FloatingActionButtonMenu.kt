@@ -39,7 +39,6 @@ import com.github.diegoberaldin.raccoonforlemmy.core.appearance.data.UiTheme
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.CornerSize
-import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.IconSize
 import com.github.diegoberaldin.raccoonforlemmy.core.appearance.theme.Spacing
 import com.github.diegoberaldin.raccoonforlemmy.core.utils.compose.onClick
 
@@ -112,12 +111,13 @@ fun FloatingActionButtonMenu(
                 ) {
                     Row(
                         modifier =
-                            Modifier.onClick(
-                                onClick = {
-                                    fabExpanded = false
-                                    item.onSelected?.invoke()
-                                },
-                            ).padding(end = 15.dp),
+                            Modifier
+                                .onClick(
+                                    onClick = {
+                                        fabExpanded = false
+                                        item.onSelected?.invoke()
+                                    },
+                                ).padding(end = 6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
@@ -129,21 +129,21 @@ fun FloatingActionButtonMenu(
                                         color = MaterialTheme.colorScheme.surfaceVariant,
                                         shape = RoundedCornerShape(CornerSize.s),
                                     ).padding(
-                                        vertical = Spacing.xs,
-                                        horizontal = Spacing.s,
+                                        vertical = Spacing.s,
+                                        horizontal = Spacing.m,
                                     ),
                             text = item.text,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onBackground,
                         )
                         Icon(
                             modifier =
                                 Modifier
-                                    .size(IconSize.l)
+                                    .size(42.dp)
                                     .background(
                                         color = MaterialTheme.colorScheme.primaryContainer,
                                         shape = CircleShape,
-                                    ).padding(6.dp),
+                                    ).padding(10.dp),
                             imageVector = item.icon,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -157,11 +157,12 @@ fun FloatingActionButtonMenu(
         val fabContainerColor =
             when (theme) {
                 UiTheme.Black ->
-                    schemeProvider.getColorScheme(
-                        theme = UiTheme.Dark,
-                        dynamic = dynamicColors,
-                        customSeed = seedColor,
-                    ).primaryContainer
+                    schemeProvider
+                        .getColorScheme(
+                            theme = UiTheme.Dark,
+                            dynamic = dynamicColors,
+                            customSeed = seedColor,
+                        ).primaryContainer
 
                 else -> MaterialTheme.colorScheme.primaryContainer
             }

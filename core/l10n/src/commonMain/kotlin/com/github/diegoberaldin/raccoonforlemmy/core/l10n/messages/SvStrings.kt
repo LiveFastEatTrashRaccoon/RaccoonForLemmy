@@ -136,7 +136,7 @@ internal val SvStrings =
         override val postDetailCrossPosts = "även postat till:"
         override val postDetailLoadMoreComments = "Ladda fler kommentarer"
         override val postHourShort = "t"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "min"
         override val postSecondShort = "s"
         override val profileButtonLogin = "Logga in"
         override val profileDayShort = "d"
@@ -336,7 +336,7 @@ internal val SvStrings =
         override val moderatorZoneTitle = "Verktyg för moderatorer"
         override val moderatorZoneActionContents = "Innehållet till måttligt"
         override val messageAuthIssue =
-            "Ett fel uppstod när användardata skulle hämtas, försök att uppdatera skärmen"
+            "Ett fel uppstod när data hämtades, möjligen har din token gått ut."
         override val banReasonPlaceholder = "Orsak (valfritt)"
         override val banItemPermanent = "Permanent förbud"
         override val banItemRemoveData = "Ta bort data"
@@ -366,7 +366,7 @@ internal val SvStrings =
         override val actionSearchInComments = "Sök i kommentarer"
         override val advancedSettingsDefaultLanguage = "Standardspråk i editorn"
         override val undetermined = "Odefinierad"
-        override val exploreResultTypeTitle = "Resultattyp"
+        override val exploreResultTypeTitle = "Sökresultattyp"
         override val communityActionEdit = "Redigera grupp"
         override val editCommunityHeaderTextual = "Textinformation"
         override val editCommunityItemSidebar = "Sidofält"
@@ -426,6 +426,26 @@ internal val SvStrings =
         override val actionRestore = "Återställ"
         override val settingsInboxPreviewMaxLines = "Max antal rader i inkorgskort"
         override val settingsDefaultExploreResultType = "Standard sökresultattyp för Utforska"
+        override val messageReadAllInboxSuccess = "Alla objekt har markerats som lästa"
+        override val settingsItemRandomThemeColor = "Använd slumpmässig färg"
+        override val settingsSubtitleRandomThemeColor = "Ändra temafärg vid varje appstart"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Använd avatar som profilikon i det nedre navigeringsfältet"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Öppna webbsidan när du klickar på bilden"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Om ett inlägg har en URL, öppna webbsidan på bildklick"
+        override val settingsManageBanSectionDomains = "Domäner"
+        override val settingsManageBanDomainPlaceholder = "Delsträng av URL att utesluta"
+        override val settingsManageBanSectionStopWords = "Ord"
+        override val settingsManageBanStopWordPlaceholder = "Förbjudet uttryck"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Konfigurera nedre navigeringsfältet"
+        override val settingsItemAlternateMarkdownRendering =
+            "Aktivera alternativ Markdown-rendering"
+        override val selectTabNavigationTitle = "Välj ett avsnitt"
+        override val messageAuthIssueSegue0 = "Du kan prova någon av följande åtgärder:"
+        override val messageAuthIssueSegue1 = "tvinga fram uppdatering"
+        override val messageAuthIssueSegue2 = "logga in igen"
+        override val messageAuthIssueSegue3 = "rensa applikationsdata"
     }

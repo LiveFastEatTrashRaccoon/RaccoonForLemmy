@@ -472,7 +472,8 @@ class AccountSettingsScreen : Screen {
 
         if (openDisplayNameEditDialog) {
             EditTextualInfoDialog(
-                title = LocalStrings.current.settingsWebDisplayName,
+                title = LocalStrings.current.postActionEdit,
+                label = LocalStrings.current.settingsWebDisplayName,
                 value = uiState.displayName,
                 onClose =
                     rememberCallbackArgs(model) { newValue ->
@@ -486,7 +487,8 @@ class AccountSettingsScreen : Screen {
 
         if (openEmailEditDialog) {
             EditTextualInfoDialog(
-                title = LocalStrings.current.settingsWebEmail,
+                title = LocalStrings.current.postActionEdit,
+                label = LocalStrings.current.settingsWebEmail,
                 value = uiState.email,
                 onClose =
                     rememberCallbackArgs(model) { newValue ->
@@ -500,7 +502,8 @@ class AccountSettingsScreen : Screen {
 
         if (openMatrixUserIdEditDialog) {
             EditTextualInfoDialog(
-                title = LocalStrings.current.settingsWebMatrix,
+                title = LocalStrings.current.postActionEdit,
+                label = LocalStrings.current.settingsWebMatrix,
                 value = uiState.matrixUserId,
                 onClose =
                     rememberCallbackArgs(model) { newValue ->

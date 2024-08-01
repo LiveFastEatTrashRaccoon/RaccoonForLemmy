@@ -445,9 +445,13 @@ internal val ItStrings =
         override val selectTabNavigationTitle = "Seleziona una sezione"
         override val settingsItemConfigureBottomNavigationBar =
             "Configura barra di navigazione inferiore"
+        override val messageAuthIssueSegue3 = "cancellare i dati dell\'applicazione"
+        override val messageAuthIssueSegue2 = "effettuare nuovamente l\'accesso"
         override val messageAuthIssueSegue0 =
             "Si consiglia di intraprendere una delle seguenti azioni:"
         override val messageAuthIssueSegue1 = "forzare l\'aggiornamento"
-        override val messageAuthIssueSegue2 = "effettuare nuovamente l\'accesso"
-        override val messageAuthIssueSegue3 = " cancellare i dati dell\'applicazione"
+        override val settingsManageBanDomainPlaceholder = "Sottostringa URL da escludere"
+        override val settingsManageBanSectionDomains = "Domini"
+        override val settingsManageBanSectionStopWords = "Parole"
+        override val settingsManageBanStopWordPlaceholder = "Espressione vietata"
     }

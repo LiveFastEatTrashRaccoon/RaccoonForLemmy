@@ -136,7 +136,7 @@ internal val HuStrings =
         override val postDetailCrossPosts = "szintén közzétéve:"
         override val postDetailLoadMoreComments = "További hozzászólások betöltése"
         override val postHourShort = "óra"
-        override val postMinuteShort = "m"
+        override val postMinuteShort = "per"
         override val postSecondShort = "mp."
         override val profileButtonLogin = "Bejelentkezés"
         override val profileDayShort = "nap"
@@ -338,7 +338,7 @@ internal val HuStrings =
         override val moderatorZoneTitle = "Eszközök moderátorok számára"
         override val moderatorZoneActionContents = "Tartalom moderálandó"
         override val messageAuthIssue =
-            "Hiba történt a felhasználói adatok lekérése közben, próbálja meg frissíteni a képernyőt"
+            "Hiba történt az adatok lekérése közben, valószínűleg a tokenje lejárt."
         override val banReasonPlaceholder = "Ok (nem kötelező)"
         override val banItemPermanent = "Végleges eltiltás"
         override val banItemRemoveData = "Távolítsa el az adatokat"
@@ -368,7 +368,7 @@ internal val HuStrings =
         override val actionSearchInComments = "Keress a megjegyzésekben"
         override val advancedSettingsDefaultLanguage = "Alapértelmezett nyelv a szerkesztőben"
         override val undetermined = "Határozatlan"
-        override val exploreResultTypeTitle = "Az eredmény típusa"
+        override val exploreResultTypeTitle = "Keresési eredmény típusa"
         override val communityActionEdit = "Közösség szerkesztése"
         override val editCommunityHeaderTextual = "Szöveges információk"
         override val editCommunityItemSidebar = "Oldalsáv"
@@ -432,6 +432,27 @@ internal val HuStrings =
         override val settingsInboxPreviewMaxLines = "Maximális sorok száma a postafiók kártyákban"
         override val settingsDefaultExploreResultType =
             "A Felfedezés alapértelmezett keresési eredménytípusa"
+        override val messageReadAllInboxSuccess = "Minden tétel olvasottként meg lett jelölve"
+        override val settingsItemRandomThemeColor = "Használjon véletlenszerű színt"
+        override val settingsSubtitleRandomThemeColor =
+            "Változtassa meg a téma színét minden alkalmazás indításakor"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "A weboldal megnyitása a kép közzétételére kattintva"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Ha egy bejegyzésnek van URL-je, nyissa meg a weboldalt a képre kattintva"
+        override val settingsManageBanDomainPlaceholder = "A kizárandó URL részkarakterlánca"
+        override val settingsManageBanSectionDomains = "Domainek"
+        override val settingsManageBanSectionStopWords = "Szavak"
+        override val settingsManageBanStopWordPlaceholder = "Tiltott kifejezés"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Használja az avatart profilikonként az alsó navigációs sávban"
+        override val settingsItemAlternateMarkdownRendering =
+            "Alternatív Markdown megjelenítés engedélyezése"
+        override val settingsItemConfigureBottomNavigationBar =
+            "Konfigurálja az alsó navigációs sávot"
+        override val selectTabNavigationTitle = "Válasszon egy szakaszt"
+        override val messageAuthIssueSegue0 = "Megpróbálhatja a következő műveletek egyikét:"
+        override val messageAuthIssueSegue3 = "törölje az alkalmazás adatait"
+        override val messageAuthIssueSegue1 = "erőltesse a frissítést"
+        override val messageAuthIssueSegue2 = "jelentkezz be újra"
     }

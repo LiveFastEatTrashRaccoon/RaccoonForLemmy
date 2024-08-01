@@ -337,7 +337,7 @@ internal val TrStrings =
         override val moderatorZoneTitle = "Moderatörler için araçlar"
         override val moderatorZoneActionContents = "Denetlenecek içerikler"
         override val messageAuthIssue =
-            "Kullanıcı verileri alınırken bir hata oluştu, ekranı yenilemeyi deneyin"
+            "Veriler alınırken bir hata oluştu. Muhtemelen jetonunuzun süresi dolmuştur."
         override val banReasonPlaceholder = "Sebep (isteğe bağlı)"
         override val banItemPermanent = "Kalıcı yasak"
         override val banItemRemoveData = "Verileri kaldır"
@@ -367,7 +367,7 @@ internal val TrStrings =
         override val actionSearchInComments = "Yorumlarda ara"
         override val advancedSettingsDefaultLanguage = "Düzenleyicideki varsayılan dil"
         override val undetermined = "Tanımsız"
-        override val exploreResultTypeTitle = "Sonuç türü"
+        override val exploreResultTypeTitle = "Arama sonucu türü"
         override val communityActionEdit = "Topluluğu düzenle"
         override val editCommunityHeaderTextual = "Metinsel bilgi"
         override val editCommunityItemSidebar = "Kenar çubuğu"
@@ -427,6 +427,26 @@ internal val TrStrings =
         override val settingsInboxPreviewMaxLines =
             "Gelen kutusu kartlarındaki maksimum satır sayısı"
         override val settingsDefaultExploreResultType = "Keşfet için varsayılan arama sonucu türü"
+        override val messageReadAllInboxSuccess = "Tüm öğeler okundu olarak işaretlendi"
+        override val settingsItemRandomThemeColor = "Rastgele renk kullan"
+        override val settingsSubtitleRandomThemeColor =
+            "Her uygulama başlangıcında tema rengini değiştirin"
         override val settingsUseAvatarAsProfileNavigationIcon =
             "Alt gezinme çubuğunda avatarı profil simgesi olarak kullan"
+        override val settingsItemOpenPostWebPageOnImageClick =
+            "Gönderi resmi tıklandığında web sayfasını açın"
+        override val settingsSubtitleOpenPostWebPageOnImageClick =
+            "Bir gönderinin URL\'si varsa görsele tıkladığınızda web sayfasını açın"
+        override val settingsManageBanDomainPlaceholder = "Hariç tutulacak URL alt dizesi"
+        override val settingsManageBanSectionDomains = "Alanlar"
+        override val settingsManageBanSectionStopWords = "Kelimeler"
+        override val settingsManageBanStopWordPlaceholder = "Yasak ifade"
+        override val settingsItemAlternateMarkdownRendering =
+            "Alternatif Markdown oluşturmayı etkinleştir"
+        override val settingsItemConfigureBottomNavigationBar = "Alt gezinme çubuğunu yapılandırın"
+        override val selectTabNavigationTitle = "Bir bölüm seçin"
+        override val messageAuthIssueSegue0 = "Aşağıdaki işlemlerden birini deneyebilirsiniz:"
+        override val messageAuthIssueSegue3 = "uygulama verilerini temizle"
+        override val messageAuthIssueSegue1 = "yenilemeye zorla"
+        override val messageAuthIssueSegue2 = "Tekrar giriş yap"
     }

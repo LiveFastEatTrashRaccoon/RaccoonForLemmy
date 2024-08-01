@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">također objavljeno na:</string>
     <string name="postDetailLoadMoreComments">Učitaj više komentara</string>
     <string name="postHourShort">h</string>
-    <string name="postMinuteShort">m</string>
+    <string name="postMinuteShort">min</string>
     <string name="postSecondShort">s</string>
     <string name="profileButtonLogin">Prijava</string>
     <string name="profileDayShort">d</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Nacrti</string>
     <string name="moderatorZoneTitle">Alati za moderatore</string>
     <string name="moderatorZoneActionContents">Sadržaj za moderiranje</string>
-    <string name="messageAuthIssue">Došlo je do pogreške prilikom dohvaćanja korisničkih podataka, pokušajte osvježiti zaslon</string>
+    <string name="messageAuthIssue">Došlo je do pogreške prilikom dohvaćanja podataka, moguće je da je vaš token istekao.</string>
     <string name="banReasonPlaceholder">Razlog (neobavezno)</string>
     <string name="banItemPermanent">Trajna zabrana</string>
     <string name="banItemRemoveData">Ukloni podatke</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Tražite u komentarima</string>
     <string name="advancedSettingsDefaultLanguage">Zadani jezik u uređivaču</string>
     <string name="undetermined">Nedefiniran</string>
-    <string name="exploreResultTypeTitle">Vrsta rezultata</string>
+    <string name="exploreResultTypeTitle">Vrsta rezultata pretraživanja</string>
     <string name="communityActionEdit">Uredi zajednicu</string>
     <string name="editCommunityHeaderTextual">Tekstualne informacije</string>
     <string name="editCommunityItemSidebar">Bočna traka</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Vratiti</string>
     <string name="settingsInboxPreviewMaxLines">Maksimalan broj redaka u ulaznim karticama</string>
     <string name="settingsDefaultExploreResultType">Zadana vrsta rezultata pretraživanja za Istraživanje</string>
+    <string name="settingsItemRandomThemeColor">Koristite nasumične boje</string>
+    <string name="settingsSubtitleRandomThemeColor">Promijenite boju teme pri svakom pokretanju aplikacije</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Otvori web stranicu klikom na sliku objave</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Ako post ima URL, otvorite web stranicu klikom na sliku</string>
+    <string name="settingsManageBanDomainPlaceholder">Podniz URL-a za izuzimanje</string>
+    <string name="settingsManageBanSectionDomains">Domene</string>
+    <string name="settingsManageBanSectionStopWords">Riječi</string>
+    <string name="settingsManageBanStopWordPlaceholder">Zabranjeno izražavanje</string>
+    <string name="messageReadAllInboxSuccess">Sve stavke su označene kao pročitane</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Koristite avatar kao ikonu profila na donjoj navigacijskoj traci</string>
+    <string name="settingsItemAlternateMarkdownRendering">Omogući alternativno Markdown renderiranje</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Konfigurirajte donju navigacijsku traku</string>
+    <string name="selectTabNavigationTitle">Odaberite odjeljak</string>
+    <string name="messageAuthIssueSegue0">Možete pokušati jednu od sljedećih radnji:</string>
+    <string name="messageAuthIssueSegue3">očistite podatke aplikacije</string>
+    <string name="messageAuthIssueSegue1">prisilno osvježiti</string>
+    <string name="messageAuthIssueSegue2">ponovno se prijavite</string>
 </resources>

@@ -132,7 +132,7 @@
     <string name="postDetailCrossPosts">також опубліковано за адресою:</string>
     <string name="postDetailLoadMoreComments">Завантажити більше коментарів</string>
     <string name="postHourShort">г</string>
-    <string name="postMinuteShort">х</string>
+    <string name="postMinuteShort">хвил</string>
     <string name="postSecondShort">с</string>
     <string name="profileButtonLogin">Вхід</string>
     <string name="profileDayShort">д</string>
@@ -328,7 +328,7 @@
     <string name="navigationDrawerTitleDrafts">Чернетки</string>
     <string name="moderatorZoneTitle">Інструменти для модераторів</string>
     <string name="moderatorZoneActionContents">Вміст модерувати</string>
-    <string name="messageAuthIssue">Під час отримання даних користувача сталася помилка. Спробуйте оновити екран</string>
+    <string name="messageAuthIssue">Під час отримання даних сталася помилка, можливо, термін дії вашого маркера минув.</string>
     <string name="banReasonPlaceholder">Причина (необов\'язково)</string>
     <string name="banItemPermanent">Постійний бан</string>
     <string name="banItemRemoveData">Видалити дані</string>
@@ -356,7 +356,7 @@
     <string name="actionSearchInComments">Шукайте в коментарях</string>
     <string name="advancedSettingsDefaultLanguage">Мова за замовчуванням у редакторі</string>
     <string name="undetermined">Невизначено</string>
-    <string name="exploreResultTypeTitle">Тип результату</string>
+    <string name="exploreResultTypeTitle">Тип результату пошуку</string>
     <string name="communityActionEdit">Редагувати спільноту</string>
     <string name="editCommunityHeaderTextual">Текстова інформація</string>
     <string name="editCommunityItemSidebar">Бічна панель</string>
@@ -412,4 +412,21 @@
     <string name="actionRestore">Відновлення</string>
     <string name="settingsInboxPreviewMaxLines">Максимальна кількість рядків у картках вхідних повідомлень</string>
     <string name="settingsDefaultExploreResultType">Тип результатів пошуку за умовчанням для Explore</string>
+    <string name="messageReadAllInboxSuccess">Усі елементи позначено як прочитані</string>
+    <string name="settingsItemRandomThemeColor">Використовуйте випадковий колір</string>
+    <string name="settingsSubtitleRandomThemeColor">Змінюйте колір теми під час кожного запуску програми</string>
+    <string name="settingsItemOpenPostWebPageOnImageClick">Відкрити веб-сторінку, клацнувши зображення публікації</string>
+    <string name="settingsSubtitleOpenPostWebPageOnImageClick">Якщо публікація має URL-адресу, відкрийте веб-сторінку, клацнувши зображення</string>
+    <string name="settingsManageBanDomainPlaceholder">Підрядок URL-адреси для виключення</string>
+    <string name="settingsManageBanSectionDomains">Домени</string>
+    <string name="settingsManageBanSectionStopWords">Слова</string>
+    <string name="settingsManageBanStopWordPlaceholder">Заборонене вираження</string>
+    <string name="settingsUseAvatarAsProfileNavigationIcon">Використовуйте аватар як значок профілю на нижній панелі навігації</string>
+    <string name="settingsItemAlternateMarkdownRendering">Увімкнути альтернативне відтворення Markdown</string>
+    <string name="settingsItemConfigureBottomNavigationBar">Налаштувати нижню панель навігації</string>
+    <string name="selectTabNavigationTitle">Виберіть розділ</string>
+    <string name="messageAuthIssueSegue0">Ви можете спробувати одну з таких дій:</string>
+    <string name="messageAuthIssueSegue3">очистити дані програми</string>
+    <string name="messageAuthIssueSegue1">примусово оновити</string>
+    <string name="messageAuthIssueSegue2">увійдіть знову</string>
 </resources>

@@ -446,9 +446,12 @@ internal val EsStrings =
         override val settingsItemConfigureBottomNavigationBar =
             "Configurar la barra de navegación inferior"
         override val selectTabNavigationTitle = "Seleccionar una sección"
-        override val messageAuthIssueSegue0 =
-            "Puedes intentar una de las siguientes acciones:"
+        override val messageAuthIssueSegue0 = "Puedes intentar una de las siguientes acciones:"
         override val messageAuthIssueSegue1 = "forzar actualización"
         override val messageAuthIssueSegue2 = "volver a iniciar sesión"
         override val messageAuthIssueSegue3 = "borrar los datos de la aplicación"
+        override val settingsManageBanSectionDomains = "Dominios"
+        override val settingsManageBanDomainPlaceholder = "Substring de una url a excluir"
+        override val settingsManageBanSectionStopWords = "Palabras"
+        override val settingsManageBanStopWordPlaceholder = "Expresión prohibida"
     }
