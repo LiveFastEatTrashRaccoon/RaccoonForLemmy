@@ -34,6 +34,7 @@ fun PostCardBody(
     text: String,
     maxLines: Int? = null,
     autoLoadImages: Boolean = true,
+    blurImages: Boolean = false,
     markRead: Boolean = false,
     highlightText: String? = null,
     onClick: (() -> Unit)? = null,
@@ -90,11 +91,14 @@ fun PostCardBody(
                     ),
                 highlightText = highlightText,
                 enableAlternateRendering = enableAlternateMarkdownRendering,
+                blurImages = blurImages,
                 onOpenUrl =
                     rememberCallbackArgs { url ->
                         navigationCoordinator.handleUrl(
                             url = url,
-                            openingMode = settingsRepository.currentSettings.value.urlOpeningMode.toUrlOpeningMode(),
+                            openingMode =
+                                settingsRepository.currentSettings.value.urlOpeningMode
+                                    .toUrlOpeningMode(),
                             uriHandler = uriHandler,
                             customTabsHelper = customTabsHelper,
                             onOpenCommunity = onOpenCommunity,

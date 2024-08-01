@@ -59,6 +59,7 @@ fun CustomMarkdownWrapper(
     maxLines: Int? = null,
     highlightText: String?,
     enableAlternateRendering: Boolean = false,
+    blurImages: Boolean = false,
     onOpenUrl: ((String) -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
     onClick: (() -> Unit)?,
@@ -119,6 +120,7 @@ fun CustomMarkdownWrapper(
                         CustomMarkdownImage(
                             url = link,
                             autoLoadImages = autoLoadImages,
+                            blurred = blurImages,
                             onOpenImage = onOpenImage,
                         )
                     }
@@ -136,8 +138,9 @@ fun CustomMarkdownWrapper(
                 CustomMarkdownImage(
                     node = model.node,
                     content = content,
-                    onOpenImage = onOpenImage,
                     autoLoadImages = autoLoadImages,
+                    blurred = blurImages,
+                    onOpenImage = onOpenImage,
                 )
             },
         )

@@ -696,6 +696,7 @@ private fun ExtendedPost(
                                 autoLoadImages = autoLoadImages,
                                 markRead = markRead,
                                 highlightText = highlightText,
+                                blurImages = blurNsfw && post.nsfw,
                                 onClick = {
                                     if (textSelection) {
                                         focusManager.clearFocus(true)
