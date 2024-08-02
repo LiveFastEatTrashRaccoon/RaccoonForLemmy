@@ -64,7 +64,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.unit.configurenavbar"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar"
     compileSdk =
         libs.versions.android.targetSdk
             .get()

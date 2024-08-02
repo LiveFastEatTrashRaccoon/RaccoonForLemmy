@@ -60,7 +60,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.navigation"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.core.navigation"
     compileSdk =
         libs.versions.android.targetSdk
             .get()

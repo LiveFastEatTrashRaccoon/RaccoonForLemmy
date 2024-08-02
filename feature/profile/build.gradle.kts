@@ -90,7 +90,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.feature.profile"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.feature.profile"
     compileSdk =
         libs.versions.android.targetSdk
             .get()

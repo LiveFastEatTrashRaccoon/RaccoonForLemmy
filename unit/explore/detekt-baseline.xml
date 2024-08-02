@@ -20,8 +20,8 @@
     <ID>MaxLineLength:ExploreScreen.kt$ExploreScreen$imageVector = if (uiState.searchText.isEmpty()) Icons.Default.Search else Icons.Default.Clear</ID>
     <ID>MaxLineLength:ExploreScreen.kt$ExploreScreen$onDoubleClick</ID>
     <ID>MaxLineLength:ExploreViewModel.kt$ExploreViewModel$if</ID>
-    <ID>NewLineAtEndOfFile:ExploreModule.kt$com.github.diegoberaldin.raccoonforlemmy.unit.explore.di.ExploreModule.kt</ID>
-    <ID>NewLineAtEndOfFile:ExploreViewModel.kt$com.github.diegoberaldin.raccoonforlemmy.unit.explore.ExploreViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:ExploreModule.kt$com.livefast.eattrash.raccoonforlemmy.unit.explore.di.ExploreModule.kt</ID>
+    <ID>NewLineAtEndOfFile:ExploreViewModel.kt$com.livefast.eattrash.raccoonforlemmy.unit.explore.ExploreViewModel.kt</ID>
     <ID>TooGenericExceptionCaught:ExploreViewModel.kt$ExploreViewModel$e: Throwable</ID>
     <ID>TooManyFunctions:ExploreViewModel.kt$ExploreViewModel : ExploreMviModelDefaultMviModel</ID>
   </CurrentIssues>

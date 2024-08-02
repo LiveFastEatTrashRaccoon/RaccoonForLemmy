@@ -74,7 +74,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.unit.drawer"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.unit.drawer"
     compileSdk =
         libs.versions.android.targetSdk
             .get()

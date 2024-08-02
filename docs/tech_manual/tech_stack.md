@@ -24,8 +24,8 @@ were used in the past. Nonetheless, and this lesson was learned the hard way, ea
 compactness mean that things will go smooth in the future, and as the project grew the navigation
 library started to show its limits. Part of them were addressed by encapsulating the transition 
 logic (to push/pop screens into the navigation stack and open/close modal bottom sheets) into a 
-centralized component <a href="https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/core/navigation/src/commonMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/navigation/NavigationCoordinator.kt">NavigationCoordinator.kt</a>.
-Something similar was done for the navigation drawer in <a href="https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/core/navigation/src/commonMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/navigation/DrawerCoordinator.kt">DrawerCoordinator.kt</a>.
+centralized component NavigationCoordinator.kt.
+Something similar was done for the navigation drawer in DrawerCoordinator.kt.
 Even the DI integration with Koin was not pain-free, the <code>:core:navigation</code> module contains
 some glue code that is used to work around some of the issues that were encountered.
 </dd>

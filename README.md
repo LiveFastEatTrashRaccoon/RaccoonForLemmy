@@ -3,68 +3,25 @@
   <img src="https://img.shields.io/badge/Gradle-8.8-02303A?logo=gradle" />
   <img src="https://img.shields.io/badge/Android-26+-34A853?logo=android" />
   <img src="https://img.shields.io/badge/Compose-1.6.7-4285F4?logo=jetpackcompose" />
-  <img src="https://img.shields.io/github/license/diegoberaldin/RaccoonForLemmy" />
-  <img src="https://github.com/diegoberaldin/RaccoonForLemmy/actions/workflows/android.yml/badge.svg" />
   <a href="https://hosted.weblate.org/engage/raccoonforlemmy/"><img src="https://hosted.weblate.org/widget/raccoonforlemmy/status-badge.png" /></a>
   <img alt="Matrix" src="https://img.shields.io/matrix/raccoon4lemmy:matrix.org" />
 </div>
 
 <br />
 
-<div align="center">
-  <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/4db86e14-5966-411c-ae63-fad45aa10e04" width="240" height="auto" />
-</div>
-
 # Raccoon for Lemmy
 
 A Kotlin Multiplatform client for Lemmy (mainly Android).
-
-<div align="center">
-  <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;">
-    <a href="https://github.com/ImranR98/Obtainium/releases"><img width="200" src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/c341aeee-f779-41f0-b230-0c3081da3de5" /></a>
-    <a href="https://play.google.com/store/apps/details?id=com.github.diegoberaldin.raccoonforlemmy.android"><img width="200" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" /></a>
-    <a href="https://apt.izzysoft.de/fdroid/index/apk/com.github.diegoberaldin.raccoonforlemmy.android"><img width="200"  src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/5d8c0e3d-552f-488e-b032-987aeadd4c4a" /></a>
-  </div>
-</div>
 
 Raccoon is a client for the federated aggregation and discussion platform Lemmy.
 
 The project started as an exercise to play around with Kotlin Multiplatform (KMP) and Compose
 multiplatform and gradually grew as a fully functional client with many features.
 
-Have a look at the [User manual](https://diegoberaldin.github.io/RaccoonForLemmy/user_manual/main)
+Have a look at the User manual
 for a more detailed explanation or
-the [Technical manual](https://diegoberaldin.github.io/RaccoonForLemmy/tech_manual/main)
+the Technical manual
 for some technical notes.
-
-<div align="center">
-<table>
-  <tr>
-    <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/8b05b41f-c338-481c-9ee0-6b440651d04b" width="310" alt="home screen" />
-    </td>
-    <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/2c5a9ca0-7077-4ca6-9151-5f51588c1343" width="310" alt="post detail" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/c326fb31-c5b9-4dc6-8cdc-2faf40d50a82" width="310" alt="community detail" />
-    </td>
-    <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/30af6355-0312-4d6c-86ac-580229f29979" width="310" alt="explore screen" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/4028a389-84b7-44b4-bf8e-71004e529d56" width="310" alt="inbox screen" />
-    </td>
-    <td>
-      <img src="https://github.com/diegoberaldin/RaccoonForLemmy/assets/2738294/223a4c67-7554-454e-99db-56bd840591f8" width="310" alt="settings screen" />
-    </td>
-  </tr>
-</table>
-</div>
 
 ## Main features
 
@@ -170,20 +127,20 @@ The project uses the following technologies:
   rendering
 
 More info about the technologies used in the project can be found in
-the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md).
+the CONTRIBUTING.md.
 
 ## Want to leave your feedback or report a bug?
 
-- use the [Matrix room](https://matrix.to/#/#raccoon4lemmy:matrix.org) to chat in real time with
+- use the Matrix room to chat in real time with
   other team members;
 - open an issue on this
-  project's [issue tracker](https://github.com/diegoberaldin/RaccoonForLemmy/issues) to report bugs
+  project's issue tracker to report bugs
   or request new features
-- create a post on the project's [community](https://lemmy.world/c/raccoonforlemmy) on
+- create a post on the project's community on
   Lemmy.world for broader questions, opinions, personal feedback, suggestions, insults or whatever
   you feel like writing
 - if you are a translator and want to help out with l10n or submit some corrections, check out the
-  project [on Weblate](https://hosted.weblate.org/projects/raccoonforlemmy/), so you can review the
+  project on Weblate, so you can review the
   existing messages or add missing ones.
 
 Please remember: every contribution is welcome and everyone's opinion matters here. This is a

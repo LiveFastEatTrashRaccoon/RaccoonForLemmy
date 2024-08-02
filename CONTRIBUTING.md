@@ -100,26 +100,26 @@ whatever, remember that we are raccoons, and we follow these principles:
 
 There are many ways you can interact with members of the community:
 
-- use the [Lemmy community](https://lemmy.world/c/raccoonforlemmy) to receive updates about the new
+- use the Lemmy community to receive updates about the new
   releases, participate into public discussions in the Lemmy style and provide your feedback or even
   share your memes about raccoons with any other interested people;
-- use the [GitHub issue tracker](https://github.com/diegoberaldin/RaccoonForLemmy/issues) to report
+- use the GitHub issue tracker to report
   bugs or request features;
-- use the [GitHub discussion section](https://github.com/diegoberaldin/RaccoonForLemmy/discussions)
+- use the GitHub discussion section
   for technical questions about the release roadmap, questions about app internationalization, etc.;
 - finally, if none of the above methods fits your needs you can write an email or send a private
   message to the original developer (my personal information are in the GitHub profile).
 
 Always remember the guidelines
-contained [here](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CODE_OF_CONDUCT.md)
-and [here](#22-code-of-conduct) to interact
+contained here
+and here to interact
 with other people: our values are important and should be applied even with each other and not only
 with end users.
 
 ### 3.2 Create bug reports
 
 The preferred way to submit a bug report is
-the [GitHub issue tracker](https://github.com/diegoberaldin/RaccoonForLemmy/issues).
+the GitHub issue tracker.
 
 - use the "New issue" button to open the creation form
 - in the "Add a title" field give a synthetic description of the issue, if it affects a specific
@@ -140,7 +140,7 @@ the [GitHub issue tracker](https://github.com/diegoberaldin/RaccoonForLemmy/issu
 ### 3.3 Request features
 
 As for bug reports, the preferred way for feature or change requests is
-the [GitHub issue tracker](https://github.com/diegoberaldin/RaccoonForLemmy/issues).
+the GitHub issue tracker.
 In this case, you should:
 
 - insert a short description in the title field, if the feature is specific to some app domain you
@@ -210,10 +210,10 @@ Finally, if you want you can change the rest of the code (e.g. the language dial
 the following:
 
 - in
-  [Extensions.kt](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/core/utils/src/commonMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/utils/Extensions.kt)
+  Extensions.kt
   add your flag and language name (mapping your language code to the values)
 - add an option (using your language code) in the `values` array
-  in [LanguageBottomSheet.kt](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/core/commonui/modals/src/commonMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/commonui/modals/LanguageBottomSheet.kt)
+  in LanguageBottomSheet.kt
 
 That's it! You can test that everything works by launching the development app.
 
@@ -225,7 +225,7 @@ if the adjective and the noun would start in every language with the same sound 
 humorous pairs like in English ("hilarious hedgehog", "frolicsome frog", etc.).
 
 If you have proposals, want to submit l10n fixes/improvements to existing ones, you can
-use [this discussion](https://github.com/diegoberaldin/RaccoonForLemmy/discussions/378) and post an
+use this discussion and post an
 answer, we will reach out to you and solve the issue.
 
 ### 3.5 Submit a pull request
@@ -298,7 +298,7 @@ The modules can be grouped into five groups:
 
 For more detailed information about the contents of each group and the purpose of each module,
 please refer
-to [this page](https://diegoberaldin.github.io/RaccoonForLemmy/tech_manual/main#module-structure).
+to this page.
 
 ## 6. Conventions
 

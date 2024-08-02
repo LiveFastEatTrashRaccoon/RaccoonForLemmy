@@ -4,7 +4,7 @@
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:Mappings.kt$internal fun ModlogItemType.toDto(): ModlogActionType</ID>
     <ID>CyclomaticComplexMethod:Mappings.kt$internal fun SortType.toDto()</ID>
-    <ID>CyclomaticComplexMethod:Mappings.kt$internal fun com.github.diegoberaldin.raccoonforlemmy.core.api.dto.SortType.toModel(): SortType?</ID>
+    <ID>CyclomaticComplexMethod:Mappings.kt$internal fun com.livefast.eattrash.raccoonforlemmy.core.api.dto.SortType.toModel(): SortType?</ID>
     <ID>LongParameterList:CommentRepository.kt$CommentRepository$( parentId: Long, auth: String? = null, instance: String? = null, limit: Int = DEFAULT_PAGE_SIZE, type: ListingType = ListingType.All, sort: SortType = SortType.New, maxDepth: Int = MAX_COMMENT_DEPTH, )</ID>
     <ID>LongParameterList:CommentRepository.kt$CommentRepository$( postId: Long? = null, auth: String? = null, instance: String? = null, page: Int, limit: Int = DEFAULT_PAGE_SIZE, type: ListingType = ListingType.All, sort: SortType = SortType.New, maxDepth: Int = MAX_COMMENT_DEPTH, )</ID>
     <ID>LongParameterList:CommunityRepository.kt$CommunityRepository$( auth: String?, userId: Long, communityId: Long, ban: Boolean, removeData: Boolean = false, reason: String? = null, expires: Long? = null, )</ID>
@@ -23,7 +23,7 @@
     <ID>TooManyFunctions:DefaultCommunityRepository.kt$DefaultCommunityRepository : CommunityRepository</ID>
     <ID>TooManyFunctions:DefaultPostRepository.kt$DefaultPostRepository : PostRepository</ID>
     <ID>TooManyFunctions:DefaultUserRepository.kt$DefaultUserRepository : UserRepository</ID>
-    <ID>TooManyFunctions:Mappings.kt$com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.repository.utils.Mappings.kt</ID>
+    <ID>TooManyFunctions:Mappings.kt$com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.Mappings.kt</ID>
     <ID>TooManyFunctions:PostRepository.kt$PostRepository</ID>
     <ID>TooManyFunctions:UserRepository.kt$UserRepository</ID>
     <ID>WildcardImport:DefaultPostRepository.kt$import io.ktor.client.request.forms.*</ID>
