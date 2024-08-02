@@ -58,7 +58,6 @@ fun CustomMarkdownWrapper(
     maxLines: Int? = null,
     highlightText: String?,
     enableAlternateRendering: Boolean = false,
-    blurImages: Boolean = false,
     onOpenUrl: ((String) -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
     onClick: (() -> Unit)?,
@@ -136,7 +135,6 @@ fun CustomMarkdownWrapper(
                         CustomMarkdownImage(
                             url = link,
                             autoLoadImages = autoLoadImages,
-                            blurred = blurImages,
                             onOpenImage = onOpenImage,
                         )
                     }
@@ -170,9 +168,8 @@ fun CustomMarkdownWrapper(
                 CustomMarkdownImage(
                     node = model.node,
                     content = content,
-                    autoLoadImages = autoLoadImages,
-                    blurred = blurImages,
                     onOpenImage = onOpenImage,
+                    autoLoadImages = autoLoadImages,
                 )
             },
             blockQuote = { model ->
@@ -193,28 +190,28 @@ fun CustomMarkdownWrapper(
     CompositionLocalProvider(
         LocalUriHandler provides customUriHandler,
         LocalDensity provides
-            Density(
-                density = LocalDensity.current.density,
-                fontScale = LocalDensity.current.fontScale * GLOBAL_SCALE_FACTOR,
-            ),
+                Density(
+                    density = LocalDensity.current.density,
+                    fontScale = LocalDensity.current.fontScale * GLOBAL_SCALE_FACTOR,
+                ),
     ) {
         Markdown(
             modifier =
-                modifier
-                    .heightIn(min = 0.dp, max = maxHeightDp)
-                    .onClick(
-                        onClick = {
-                            if (!isOpeningUrl) {
-                                onClick?.invoke()
-                            }
-                        },
-                        onLongClick = {
-                            onLongClick?.invoke()
-                        },
-                        onDoubleClick = {
-                            onDoubleClick?.invoke()
-                        },
-                    ),
+            modifier
+                .heightIn(min = 0.dp, max = maxHeightDp)
+                .onClick(
+                    onClick = {
+                        if (!isOpeningUrl) {
+                            onClick?.invoke()
+                        }
+                    },
+                    onLongClick = {
+                        onLongClick?.invoke()
+                    },
+                    onDoubleClick = {
+                        onDoubleClick?.invoke()
+                    },
+                ),
             content = content.sanitize(),
             colors = colors,
             typography = typography,
