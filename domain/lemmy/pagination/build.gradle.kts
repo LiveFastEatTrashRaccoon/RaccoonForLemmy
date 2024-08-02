@@ -59,7 +59,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.domain.lemmy.pagination"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination"
     compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

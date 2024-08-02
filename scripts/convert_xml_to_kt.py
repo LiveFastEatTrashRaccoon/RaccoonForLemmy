@@ -9,7 +9,7 @@
 # where xx is the language code and yy is the country code.
 #
 # Output files are saved in
-#   core/l10n/src/commonMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/l10n/messages
+#   core/l10n/src/commonMain/kotlin/com/livefast.eattrash/raccoonforlemmy/core/l10n/messages
 # and will have the XxYyStrings.kt naming scheme.
 #
 # Usage:
@@ -40,7 +40,7 @@ def unescape(str_xml):
 
 def write_l10n_to_file(lang_code, country_code, messages, output_path):
     with open(output_path, "w") as file_handle:
-        file_handle.write("package com.github.diegoberaldin.raccoonforlemmy.core.l10n.messages\n")
+        file_handle.write("package com.livefast.eattrash.raccoonforlemmy.core.l10n.messages\n")
         file_handle.write("\n")
         if lang_code == "en" and len(country_code) == 0:
             file_handle.write("internal open class DefaultStrings : Strings {\n")
@@ -69,12 +69,12 @@ def main():
         country_code = sys.argv[2]
     source_file = "../l10n/values-{0}{1}/strings.xml".format(lang_code, country_code)
     if lang_code == "en" and len(country_code) == 0:
-        dest_file = "../core/l10n/src/commonMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/l10n/messages/DefaultStrings.kt"
+        dest_file = "../core/l10n/src/commonMain/kotlin/com/livefast.eattrash/raccoonforlemmy/core/l10n/messages/DefaultStrings.kt"
     else:
         # add support for formats like zh-rCN
         if country_code.startswith("-r"):
             country_code = country_code[2:]
-        dest_file = "../core/l10n/src/commonMain/kotlin/com/github/diegoberaldin/raccoonforlemmy/core/l10n/messages/{0}{1}Strings.kt".format(lang_code.capitalize(), country_code.capitalize())
+        dest_file = "../core/l10n/src/commonMain/kotlin/com/livefast.eattrash/raccoonforlemmy/core/l10n/messages/{0}{1}Strings.kt".format(lang_code.capitalize(), country_code.capitalize())
     convert(lang_code, country_code, source_file, dest_file)
 
 if __name__ == "__main__":

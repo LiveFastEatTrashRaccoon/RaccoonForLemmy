@@ -126,7 +126,7 @@ The settings screen allows you to customize the look and behaviour of your app.
 reserved for the app, e.g.
 
 ```
-/sdcard/Android/data/com.github.diegoberaldin.raccoonforlemmy.android.dev/files/Documents/crash_report.txt
+/sdcard/Android/data/com.livefast.eattrash.raccoonforlemmy.android.dev/files/Documents/crash_report.txt
 ```
 
 via adb or the "Device Explorer" if you are using Android Studio.
@@ -148,7 +148,7 @@ This screen allows to configure colors and fonts of the UI:
 
 By the way, if you like Android dynamic colors and you think that on Lemmy there are plenty of
 beautiful images you could set as your home screen background, have a look
-at [this side project](https://github.com/diegoberaldin/CommonGround) of mine. It is a simple app
+at this side project of mine. It is a simple app
 that allows you to configure remote image sources from the Lemmy-verse, preview how they look like
 and set them easily as wallpapers for your home and lock screens.
 

@@ -70,7 +70,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.unit.managesubscriptions"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions"
     compileSdk =
         libs.versions.android.targetSdk
             .get()

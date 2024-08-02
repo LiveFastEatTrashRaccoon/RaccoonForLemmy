@@ -74,7 +74,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.unit.filteredcontents"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents"
     compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

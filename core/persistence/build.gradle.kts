@@ -71,7 +71,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.persistence"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.core.persistence"
     compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -81,7 +81,7 @@ android {
 sqldelight {
     databases {
         create("AppDatabase") {
-            packageName.set("com.github.diegoberaldin.raccoonforlemmy.core.persistence.entities")
+            packageName.set("com.livefast.eattrash.raccoonforlemmy.core.persistence.entities")
             srcDirs.setFrom("src/commonMain/sqldelight")
         }
     }

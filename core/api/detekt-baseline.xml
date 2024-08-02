@@ -16,8 +16,8 @@
     <ID>MagicNumber:DefaultServiceProvider.kt$DefaultServiceProvider$600_000</ID>
     <ID>TooManyFunctions:CommentService.kt$CommentService</ID>
     <ID>TooManyFunctions:PostService.kt$PostService</ID>
-    <ID>WildcardImport:CommentService.kt$import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.*</ID>
-    <ID>WildcardImport:PostService.kt$import com.github.diegoberaldin.raccoonforlemmy.core.api.dto.*</ID>
+    <ID>WildcardImport:CommentService.kt$import com.livefast.eattrash.raccoonforlemmy.core.api.dto.*</ID>
+    <ID>WildcardImport:PostService.kt$import com.livefast.eattrash.raccoonforlemmy.core.api.dto.*</ID>
     <ID>WildcardImport:PostService.kt$import io.ktor.client.request.forms.*</ID>
   </CurrentIssues>
 </SmellBaseline>

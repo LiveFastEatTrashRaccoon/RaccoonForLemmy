@@ -71,7 +71,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.unit.instanceinfo"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.unit.instanceinfo"
     compileSdk =
         libs.versions.android.targetSdk
             .get()

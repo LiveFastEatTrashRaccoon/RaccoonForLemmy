@@ -69,7 +69,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.core.commonui.detailopener.impl"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.impl"
     compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

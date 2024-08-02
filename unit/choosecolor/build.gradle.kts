@@ -56,7 +56,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.unit.choosecolor"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.unit.choosecolor"
     compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

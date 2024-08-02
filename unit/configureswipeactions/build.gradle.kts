@@ -64,7 +64,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.unit.configureswipeactions"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions"
     compileSdk = libs.versions.android.targetSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

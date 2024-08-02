@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    namespace = "com.github.diegoberaldin.raccoonforlemmy.android"
+    namespace = "com.livefast.eattrash.raccoonforlemmy.android"
     compileSdk =
         libs.versions.android.targetSdk
             .get()
             .toInt()
     defaultConfig {
-        applicationId = "com.github.diegoberaldin.raccoonforlemmy.android"
+        applicationId = "com.livefast.eattrash.raccoonforlemmy.android"
         minSdk =
             libs.versions.android.minSdk
                 .get()

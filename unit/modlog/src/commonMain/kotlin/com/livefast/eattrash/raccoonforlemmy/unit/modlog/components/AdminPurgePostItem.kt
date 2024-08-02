@@ -1,0 +1,40 @@
+package com.livefast.eattrash.raccoonforlemmy.unit.modlog.components
+
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.buildAnnotatedString
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ModlogItem
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
+
+@Composable
+internal fun AdminPurgePostItem(
+    item: ModlogItem.AdminPurgePost,
+    modifier: Modifier = Modifier,
+    autoLoadImages: Boolean = true,
+    preferNicknames: Boolean = true,
+    postLayout: PostLayout = PostLayout.Card,
+    onOpenUser: ((UserModel) -> Unit)? = null,
+) {
+    InnerModlogItem(
+        modifier = modifier,
+        autoLoadImages = autoLoadImages,
+        preferNicknames = preferNicknames,
+        date = item.date,
+        postLayout = postLayout,
+        moderator = item.admin,
+        onOpenUser = onOpenUser,
+        innerContent = {
+            Text(
+                text =
+                    buildAnnotatedString {
+                        append(LocalStrings.current.modlogItemPostPurged)
+                    },
+                style = MaterialTheme.typography.bodySmall,
+            )
+        },
+    )
+}

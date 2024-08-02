@@ -169,26 +169,26 @@ You are **awesome**… THANKS ❤️🦝️❤️
 If what you have read so far sounds interesting and you want to know more, here are some useful
 links:
 
-- check out the [User manual](user_manual/main);
-- have a look at the more detailed documentation in the [Technical manual](tech_manual/main);
+- check out the User manual;
+- have a look at the more detailed documentation in the Technical manual;
 - consult
-  the [CONTRIBUTING.md](https://github.com/diegoberaldin/RaccoonForLemmy/blob/master/CONTRIBUTING.md)
+  the CONTRIBUTING.md
   on GitHub.
 
 If, on the other hand, you just want to interact with the community, provide suggestions, report
 bugs, contribute with translations or tell your opinion, you can:
 
-- use the [Matrix room](https://matrix.to/#/#raccoon4lemmy:matrix.org) to chat in real time with
+- use the Matrix room to chat in real time with
   other team members;
-- check out this project [on Weblate](https://hosted.weblate.org/projects/raccoonforlemmy/) to
+- check out this project on Weblate to
   contribute with new translations or improve the existing ones;
-- use the [Lemmy community](https://lemmy.world/c/raccoonforlemmy) to receive updates about the new
+- use the Lemmy community to receive updates about the new
   releases, participate into public discussions in the Lemmy style and provide your feedback or even
   share your memes about raccoons with any other interested people;
-- use the [GitHub issue tracker](https://github.com/diegoberaldin/RaccoonForLemmy/issues) to report
+- use the GitHub issue tracker to report
   bugs or request features;
-- use the [GitHub discussion section](https://github.com/diegoberaldin/RaccoonForLemmy/discussions)
+- use the GitHub discussion section
   for technical questions about the release roadmap, questions about app internationalization, etc.;
 - finally, if none of the above methods fits your needs you
-  can [write an email](mailto:raccoonforlemmy@gmail.com) or send a private
-  message on Lemmy to the [original developer](https://feddit.it/u/DieguiTux8623).
+  can write an email or send a private
+  message on Lemmy to the original developer.
