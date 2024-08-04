@@ -4,8 +4,14 @@
   <img src="https://img.shields.io/badge/Android-26+-34A853?logo=android" />
   <img src="https://img.shields.io/badge/Compose-1.6.7-4285F4?logo=jetpackcompose" />
 </div>
-This is an archive of the Raccoon For Lemmy project.  The package has been renamed, and all broken linked content <em>should</em> now be fixed. 
+This is an archive of the Raccoon For Lemmy project.  The package has been renamed, and all broken linked content <em>should</em> now be fixed.
+
+Below is a slightly modified version of the original README. 
 <br />
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/N7-X/RaccoonForLemmy/master/androidApp/src/main/ic_launcher-playstore.png" width="250" height="auto" />
+</div>
 
 # Raccoon for Lemmy
 
