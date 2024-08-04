@@ -58,6 +58,7 @@ fun CustomMarkdownWrapper(
     maxLines: Int? = null,
     highlightText: String?,
     enableAlternateRendering: Boolean = false,
+    blurImages: Boolean = false,
     onOpenUrl: ((String) -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
     onClick: (() -> Unit)?,
