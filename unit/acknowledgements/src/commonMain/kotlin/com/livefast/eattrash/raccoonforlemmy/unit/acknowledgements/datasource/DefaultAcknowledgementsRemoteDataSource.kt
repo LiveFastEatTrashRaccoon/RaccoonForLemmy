@@ -30,6 +30,6 @@ internal class DefaultAcknowledgementsRemoteDataSource(
 
     companion object {
         private const val JSON_URL =
-            "https://example.com"
+            "https://raw.githubusercontent.com/N7-X/RaccoonForLemmy/master/docs/acknowledgements.json"
     }
 }

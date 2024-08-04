@@ -3,10 +3,8 @@
   <img src="https://img.shields.io/badge/Gradle-8.8-02303A?logo=gradle" />
   <img src="https://img.shields.io/badge/Android-26+-34A853?logo=android" />
   <img src="https://img.shields.io/badge/Compose-1.6.7-4285F4?logo=jetpackcompose" />
-  <a href="https://hosted.weblate.org/engage/raccoonforlemmy/"><img src="https://hosted.weblate.org/widget/raccoonforlemmy/status-badge.png" /></a>
-  <img alt="Matrix" src="https://img.shields.io/matrix/raccoon4lemmy:matrix.org" />
 </div>
-
+This is an archive of the Raccoon For Lemmy project.  The package has been renamed, and all broken linked content <em>should</em> now be fixed. 
 <br />
 
 # Raccoon for Lemmy
