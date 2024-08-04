@@ -130,7 +130,7 @@ fun CommentCard(
                     modifier =
                     Modifier
                         .padding(top = Spacing.xxs)
-                        .width(indentAmount.dp)
+                        .width(barWidth)
                         .height(commentHeight.toLocalDp())
                         .background(color = barColor, shape = RoundedCornerShape(indentAmount / 2)),
                 )
