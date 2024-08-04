@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -112,48 +113,54 @@ fun CommentCard(
 
     CompositionLocalProvider(
         LocalTextToolbar provides
-            getCustomTextToolbar(
-                shareActionLabel = shareActionLabel,
-                onShare = onShareLambda,
-            ),
+                getCustomTextToolbar(
+                    shareActionLabel = shareActionLabel,
+                    onShare = onShareLambda,
+                ),
     ) {
-        Column(
+        Row(
             modifier = modifier,
         ) {
             Box(
-                modifier =
+                modifier = Modifier
+                    .width((indentAmount * comment.depth).dp)
+            )
+            if (indentAmount > 0 && comment.depth > 0) {
+                Box(
+                    modifier =
                     Modifier
-                        .onClick(
-                            onClick = {
-                                if (textSelection) {
-                                    focusManager.clearFocus()
-                                    textSelection = false
-                                } else {
-                                    onClick?.invoke()
-                                }
-                            },
-                            onDoubleClick = onDoubleClick ?: {},
-                        ).padding(
-                            start =
-                                indentAmount
-                                    .takeIf {
-                                        it > 0 && comment.depth > 0
-                                    }?.let {
-                                        (it * comment.depth).dp + Spacing.xxxs
-                                    } ?: 0.dp,
-                        ),
+                        .padding(top = Spacing.xxs)
+                        .width(indentAmount.dp)
+                        .height(commentHeight.toLocalDp())
+                        .background(color = barColor, shape = RoundedCornerShape(indentAmount / 2)),
+                )
+            }
+            Box(
+                modifier =
+                Modifier
+                    .onClick(
+                        onClick = {
+                            if (textSelection) {
+                                focusManager.clearFocus()
+                                textSelection = false
+                            } else {
+                                onClick?.invoke()
+                            }
+                        },
+                        onDoubleClick = onDoubleClick ?: {},
+                    ),
             ) {
                 Column(
                     modifier =
-                        Modifier
-                            .padding(start = barWidth)
-                            .fillMaxWidth()
-                            .padding(
-                                vertical = Spacing.xxs,
-                                horizontal = Spacing.s,
-                            ).onGloballyPositioned {
-                                commentHeight = it.size.toSize().height
-                            },
+                    Modifier
+                        .padding(start = barWidth)
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = Spacing.xxs,
+                            horizontal = Spacing.s,
+                        ).onGloballyPositioned {
+                            commentHeight = it.size.toSize().height
+                        },
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     CommunityAndCreatorInfo(
@@ -170,13 +177,13 @@ fun CommentCard(
                         isAdmin = isAdmin,
                         isBot = comment.creator?.bot.takeIf { showBot } ?: false,
                         onOpenCreator =
-                            rememberCallbackArgs { user ->
-                                onOpenCreator?.invoke(user, "")
-                            },
+                        rememberCallbackArgs { user ->
+                            onOpenCreator?.invoke(user, "")
+                        },
                         onOpenCommunity =
-                            rememberCallbackArgs { community ->
-                                onOpenCommunity?.invoke(community, "")
-                            },
+                        rememberCallbackArgs { community ->
+                            onOpenCommunity?.invoke(community, "")
+                        },
                         onToggleExpanded = onToggleExpanded,
                     )
                     if (comment.removed) {
@@ -197,11 +204,11 @@ fun CommentCard(
                         CustomizedContent(ContentFontClass.Comment) {
                             CompositionLocalProvider(
                                 LocalDensity provides
-                                    Density(
-                                        density = LocalDensity.current.density,
-                                        // additional downscale for font in comments
-                                        fontScale = LocalDensity.current.fontScale * COMMENT_TEXT_SCALE_FACTOR,
-                                    ),
+                                        Density(
+                                            density = LocalDensity.current.density,
+                                            // additional downscale for font in comments
+                                            fontScale = LocalDensity.current.fontScale * COMMENT_TEXT_SCALE_FACTOR,
+                                        ),
                             ) {
                                 PostCardBody(
                                     text = comment.text.orEmpty(),
@@ -250,16 +257,6 @@ fun CommentCard(
                         updateDate = comment.updateDate,
                         options = options,
                         onOptionSelected = onOptionSelected,
-                    )
-                }
-                if (indentAmount > 0 && comment.depth > 0) {
-                    Box(
-                        modifier =
-                            Modifier
-                                .padding(top = Spacing.xxs)
-                                .width(barWidth)
-                                .height(commentHeight.toLocalDp())
-                                .background(color = barColor, shape = RoundedCornerShape(barWidth / 2)),
                     )
                 }
             }
