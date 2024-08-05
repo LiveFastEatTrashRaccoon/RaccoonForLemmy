@@ -117,14 +117,14 @@ that could be filled.
 
 Developing a new client was an opportunity to add all the good features that were "scattered" across
 different apps, e.g. the feature richness of [Liftoff](https://github.com/liftoff-app/liftoff),
-themulti-community feature of [Summit](https://github.com/idunnololz/summit-for-lemmy) and the
+the multi-community feature of [Summit](https://github.com/idunnololz/summit-for-lemmy) and the
 polished UI of the really great [Thunder](https://github.com/thunder-app/thunder) and so on.
 This app tries to be configurable enough to make users feel "at home" and choose what they want,
 while at the same time having a not too cluttered interface.
 
 In the third place, this app has been a means to dig deeper inside Lemmy's internals and become more
 humble and patient towards other apps because there are technical difficulties in having to deal
-with a platform likeLemmy.
+with a platform like Lemmy.
 
 This project _is_ all about experimenting and learning, so please be patient.
 
