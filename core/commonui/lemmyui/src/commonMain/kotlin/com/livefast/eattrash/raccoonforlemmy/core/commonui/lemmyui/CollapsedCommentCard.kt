@@ -27,13 +27,15 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
-private const val INDENT_AMOUNT = 2
+private val BAR_BASE_WIDTH_UNIT = 1.25.dp
 
 @Composable
 fun CollapsedCommentCard(
     comment: CommentModel,
     modifier: Modifier = Modifier,
     voteFormat: VoteFormat = VoteFormat.Aggregated,
+    indentAmount: Int = 2,
+    barThickness: Int = 1,
     autoLoadImages: Boolean = true,
     preferNicknames: Boolean = true,
     showScores: Boolean = true,
@@ -54,12 +56,18 @@ fun CollapsedCommentCard(
     val themeRepository = remember { getThemeRepository() }
     val commentBarTheme by themeRepository.commentBarTheme.collectAsState()
     var commentHeight by remember { mutableStateOf(0f) }
-    val barWidth = 2.dp
     val barColor =
         themeRepository.getCommentBarColor(
             depth = comment.depth,
             commentBarTheme = commentBarTheme,
         )
+    val barWidth =
+        if (comment.depth > 0) {
+            BAR_BASE_WIDTH_UNIT * barThickness
+        } else {
+            0.dp
+        }
+
     Row(
         modifier =
         modifier.onClick(
@@ -67,8 +75,7 @@ fun CollapsedCommentCard(
         ),
     ) {
         Box(
-            modifier = Modifier
-                .width((INDENT_AMOUNT * comment.depth).dp),
+            modifier = Modifier.width((indentAmount * comment.depth).dp),
         )
         if (comment.depth > 0) {
             Box(
