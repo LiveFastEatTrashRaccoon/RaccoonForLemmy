@@ -8,45 +8,37 @@
 <br />
 
 <div align="center">
-  <img src="https://github.com/old/RaccoonForLemmy/assets/2738294/6785188f-9c2a-4622-ab6b-5aa116d27c31" width="250" height="auto" />
+  <img src="https://github.com/user-attachments/assets/47265cc3-2bb0-4c9b-8dfa-4923dea22571" width="250" height="auto" />
 </div>
 
 # Raccoon for Lemmy
 
-A Kotlin Multiplatform Mobile client for Lemmy.
+A Kotlin Multiplatform client for Lemmy.
 
 <div align="center">
 <table>
   <tr>
     <td>
-      <img src="https://github.com/old/RaccoonForLemmy/assets/2738294/a41fe45c-b1be-44bb-b044-fd6ef38bc205" width="310" alt="home screen" />
+      <img src="https://github.com/user-attachments/assets/4f260197-3902-4f95-b2d1-c58c50bdd484" width="310" alt="home screen" />
     </td>
     <td>
-      <img src="https://github.com/old/RaccoonForLemmy/assets/2738294/a95bfe7b-fdab-4810-a1be-c6baf3270a51" width="310" alt="post detail" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="https://github.com/old/RaccoonForLemmy/assets/2738294/621ab6ae-a08d-4a2a-a68b-e1c6924325e9" width="310" alt="explore screen" />
-    </td>
-    <td>
-      <img src="https://github.com/old/RaccoonForLemmy/assets/2738294/93df3d76-efd0-47c8-a135-c7fae8caf9ca" width="310" alt="community detail" />
+      <img src="https://github.com/user-attachments/assets/49425175-8949-4aec-bea0-185143fc7096" width="310" alt="post detail" />
     </td>
   </tr>
   <tr>
     <td>
-      <img src="https://github.com/old/RaccoonForLemmy/assets/2738294/103bd28d-f75e-4faa-8805-7ba21dc4a98d" width="310" alt="inbox screen" />
+      <img src="https://github.com/user-attachments/assets/b3866545-8a32-4a3c-b32f-87ddcc8a7b65" width="310" alt="explore screen" />
     </td>
     <td>
-      <img src="https://github.com/old/RaccoonForLemmy/assets/2738294/d1fff835-11a8-47ed-86c7-c04a531f890e" width="310" alt="settings screen" />
+      <img src="https://github.com/user-attachments/assets/36249619-57d6-4710-9111-21fcbf624a0c" width="310" alt="community detail" />
     </td>
   </tr>
   <tr>
     <td>
-      <img src="https://github.com/old/RaccoonForLemmy/assets/2738294/3529a977-3cb8-4465-a828-ee43bf056f77" width="310" alt="community info" />
+      <img src="https://github.com/user-attachments/assets/70a5996d-fbcb-4d71-9d46-27a20e6b0b94" width="310" alt="inbox screen" />
     </td>
     <td>
-      <img src="https://github.com/old/RaccoonForLemmy/assets/2738294/b97f7e7f-57ee-4fe5-8f84-386b2c4ac111" width="310" alt="instance info" />
+      <img src="https://github.com/user-attachments/assets/f1f9097e-b935-4bcf-9956-714fadc41e85" width="310" alt="settings screen" />
     </td>
   </tr>
 </table>
@@ -69,86 +61,86 @@ Please be willing to contribute if you can, instead of being ready to demand. Th
 ## Main features
 
 - view post feed and comments with different listing and sort types;
-- possibility to upvote and downvote (with optional swipe actions);
+- possibility to upvote and downvote (with configurable swipe actions);
 - community and user detail;
-- user profile with one's own posts, comments and saved items;
+- review your own posts and comments (created by you, bookmarked, liked/disliked);
 - inbox with replies, mentions and direct messages;
 - global search on Lemmy with different result types (all, posts, comments, user, communities);
 - create and edit new posts (with optional images);
+- cross-post contents to other communities;
 - reply to post and comments (and edit replies);
 - mark posts as read and hide read contents;
 - custom appearance (color scheme, fonts, text sizes, post layout, etc.);
 - custom localization (independent of system settings);
-- block users, communities and instances (the latter requires Lemmy >= 0.19);
+- block users, communities and instances;
 - report post and comments to moderators;
 - support for multiple accounts (and multiple instances) with account-specific settings;
 - lazy scrolling (referred to as "zombie mode");
 - explore all the communities on a given instance in guest mode;
 - multi-community (community aggregation);
-- community moderation tools and moderation log.
+- community moderation, instance moderation and moderation log;
+- save posts and comments you are creating as drafts to edit them later.
 
 Most clients for Lemmy currently offer the first points (with various degrees of completion), so
-there is nothing special about Raccoon for Lemmy, whereas the last ones are less common and are
-directed to more picky users (like me) who like to explore the Lemmy ecosystem and want to be able
-to group feed contents arbitrarily.
+there is nothing special about Raccoon, whereas the last ones are less common and are directed to
+more demanding users.
 
-I like to be able to customize the appearance of my apps, so the ability to change font face or
-size and colors was of paramount importance to me. Similarly, I like when I can use an app in my
-native language and change the UI language independently from the system language, so localization
-is a first-class citizen in this project too.
+Concerning customization, the ability to change some aspects like font face or size and app colors,
+vote format, bar transparency and so on was of paramount importance from the very beginning.
+Similarly, users should be able to use the app in their native language and change the UI language
+independently of the system language.
 
-If you are a moderator of a community, it is also good to be able to moderate content from your
-mobile device instead of using the web interface, but in-app moderation is rare in the existing
-clients (and even more so in _open source_ clients). Raccoon For Lemmy is trying to bridge this gap
-and offers some extent of moderation tools (feature post, lock post, distinguish comment, remove
-post/comment, ban users and the ability to revert any of these actions).
+This app is also intended for moderators who want to use their mobile device, offering moderation
+tools (feature post, lock post, distinguish comment, remove post/comment, ban users) and the ability
+to revert any of these actions. It also has admin tools (purge users/posts/comments/communities,
+feature posts locally, hide/unhide communities) to simplify admin moderation without having to
+switch to the web UI.
 
-The application is under active development, so expect new features to be added over time. Have a
-look on the issues labeled with "feature" in the issue tracker to get an idea of what's going to
-come next.
+The project is under active development, so expect new features to be added over time. Have a look
+on the issues labeled with "feature" in the issue tracker to get an idea of what's going to come next.
 
-If you have ideas, feedback, suggestions or comments remember to speak up and use your
-voice. You can add reports or request features and they will be considered.
+If you have ideas, feedback, suggestions or comments remember to speak up and use your voice. You
+can add reports or request features and they will be considered.
 
 ## Why was the project started?
 
 Because raccoons are so adorable, aren't they? 🦝🦝🦝
 
-Joking apart, one of the main goals was to experiment with KMP and learn how to properly deal
-with the challenges of a multiplatform environment, and a medium-sized project like this was an
-ideal testing ground for that technology.
+Joking apart, one of the main goals was to experiment with KMP and learn how to properly deal with
+the challenges of a multiplatform environment, and a medium-sized project like this was an ideal
+testing ground for that technology.
 
-Secondly, as a means to dig deeper inside Lemmy's internals and become more humble and patient
-towards other apps whenever I found anything lacking or not implemented in an optimal way (according
-to my taste).
+Secondly, I felt that the Android ecosystem of Lemmy apps was a little "poor" with few native apps
+(fewer open source), while the "market" is dominated by iOS and cross-platform clients.
+I️ ❤️ Kotlin, I ❤️ Free and Open Source Software and I ❤️ native app development, so there was a niche
+that could be filled.
 
-In the third place, I felt that the Android ecosystem of Lemmy apps was a little "poor" with few
-native apps (fewer open source), while the "market" is dominated by iOS and cross platform clients.
-I️ ❤️ Kotlin, I ❤️ Free and Open Source Software and I ❤️ native app development, so there was a
-"niche" that needed to be filled.
+Developing a new client was an opportunity to add all the good features that were "scattered" across
+different apps, e.g. the feature richness of [Liftoff](https://github.com/liftoff-app/liftoff),
+the multi-community feature of [Summit](https://github.com/idunnololz/summit-for-lemmy) and the
+polished UI of the really great [Thunder](https://github.com/thunder-app/thunder) and so on.
+This app tries to be configurable enough to make users feel "at home" and choose what they want,
+while at the same time having a not too cluttered interface.
 
-Moreover, developing a new client was an opportunity to add all the features that I needed and that
-were "scattered" across different apps, e.g. I liked the feature richness
-of [Liftoff](https://github.com/liftoff-app/liftoff) (e.g. the possibility to explore all the
-communities of an external instance in guest mode), the multi-community feature of
-[Summit](https://github.com/idunnololz/summit-for-lemmy) and the polished UI of the really great
-[Thunder](https://github.com/thunder-app/thunder) and I wished I could have them all in the same
-app.
+In the third place, this app has been a means to dig deeper inside Lemmy's internals and become more
+humble and patient towards other apps because there are technical difficulties in having to deal
+with a platform like Lemmy.
 
-This involves a high level of discretion and personal taste, I know, but this project _is_ all
-about experimenting and learning.
+This project _is_ all about experimenting and learning, so please be patient.
 
-## Technologies used:
+## Technical notes:
 
 - [Koin](https://github.com/InsertKoinIO/koin) for dependency injection
 - [Voyager](https://github.com/adrielcafe/voyager) for screen navigation
 - [Ktor](https://github.com/ktorio/ktor) and [Ktorfit](https://github.com/Foso/Ktorfit) for
   networking
-- [Moko resources](https://github.com/icerockdev/moko-resources) for resource management
+- [Lyricist](https://github.com/adrielcafe/lyricist) for l10n
 - [Multiplatform settings](https://github.com/russhwolf/multiplatform-settings) for encrypted
   preferences
 - [SQLDelight](https://github.com/cashapp/sqldelight)
   and [SQLCipher](https://github.com/sqlcipher/sqlcipher) for local persistence
+- [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) for
+  Markdown rendering
 
 More info about the technologies used in the project can be found in
 the [CONTRIBUTING.md](https://github.com/livefasteattrashraccoon/RaccoonForLemmy/blob/master/CONTRIBUTING.md#51-tech-stack).
@@ -157,9 +149,11 @@ the [CONTRIBUTING.md](https://github.com/livefasteattrashraccoon/RaccoonForLemmy
 
 Here are some options to install the application on your device.
 
-<a href="https://github.com/ImranR98/Obtainium/releases">
-  <img src="https://img.shields.io/badge/Install with:-Obtainium-4d29a0" />
-</a>
+<div align="center">
+  <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;">
+    <a href="https://github.com/ImranR98/Obtainium/releases"><img width="200" src="https://github.com/user-attachments/assets/377575fe-a651-4420-afad-8dee21618c44" /></a>
+  </div>
+</div>
 
 <br />
 
@@ -170,7 +164,7 @@ Here are some options to install the application on your device.
   or request new features
 - if you are a translator and want to help out with l10n or submit some corrections but you don't
   feel confident with repository forks, pull requests, managing resource files, etc. feel free to
-  drop an email or contact me in any way.
+  drop an email or contact the maintainers in any way.
 
 Please remember: every contribution is welcome and everyone's opinion matters here. This is a
 community project, open source, ad-free and free of charge, and it belongs to us all so don't be
