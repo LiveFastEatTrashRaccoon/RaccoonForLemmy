@@ -122,8 +122,7 @@ fun CommentCard(
             modifier = modifier,
         ) {
             Box(
-                modifier = Modifier
-                    .width((indentAmount * comment.depth).dp)
+                modifier = Modifier.width((indentAmount * comment.depth).dp),
             )
             if (indentAmount > 0 && comment.depth > 0) {
                 Box(

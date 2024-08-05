@@ -1534,6 +1534,8 @@ class PostDetailScreen(
                                                 autoLoadImages = uiState.autoLoadImages,
                                                 showScores = uiState.showScores,
                                                 actionButtonsActive = uiState.isLogged,
+                                                indentAmount = uiState.commentIndentAmount,
+                                                barThickness = uiState.commentBarThickness,
                                                 onToggleExpanded =
                                                     rememberCallback(model) {
                                                         model.reduce(
