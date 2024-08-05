@@ -79,14 +79,14 @@ Please be willing to contribute if you can, instead of being ready to demand. Th
 - explore all the communities on a given instance in guest mode;
 - multi-community (community aggregation);
 - community moderation, instance moderation and moderation log;
-- save posts and comments you are creating as drafts to edit them later;
+- save posts and comments you are creating as drafts to edit them later.
 
 Most clients for Lemmy currently offer the first points (with various degrees of completion), so
 there is nothing special about Raccoon, whereas the last ones are less common and are directed to
 more demanding users.
 
 Concerning customization, the ability to change some aspects like font face or size and app colors,
-vote format, bartransparency and so on was of paramount importance from the very beginning.
+vote format, bar transparency and so on was of paramount importance from the very beginning.
 Similarly, users should be able to use the app in their native language and change the UI language
 independently of the system language.
 
@@ -117,7 +117,7 @@ that could be filled.
 
 Developing a new client was an opportunity to add all the good features that were "scattered" across
 different apps, e.g. the feature richness of [Liftoff](https://github.com/liftoff-app/liftoff),
-themulti-community feature of[Summit](https://github.com/idunnololz/summit-for-lemmy) and the
+themulti-community feature of [Summit](https://github.com/idunnololz/summit-for-lemmy) and the
 polished UI of the really great [Thunder](https://github.com/thunder-app/thunder) and so on.
 This app tries to be configurable enough to make users feel "at home" and choose what they want,
 while at the same time having a not too cluttered interface.
