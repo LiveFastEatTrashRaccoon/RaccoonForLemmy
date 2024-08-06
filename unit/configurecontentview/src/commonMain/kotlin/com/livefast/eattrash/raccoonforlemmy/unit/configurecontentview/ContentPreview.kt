@@ -105,7 +105,7 @@ Ut enim ad minim veniam, quis *nostrud* exercitation ullamco laboris nisi ut ali
 velit esse cillum dolore eu fugiat nulla pariatur.
                 """.trimIndent(),
             thumbnailUrl = "https://feddit.it/pictrs/image/f677007a-166a-43b0-aea8-4c41ae1a35e8.webp?format=webp",
-            url = "https://example.com",
+            url = "https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy",
             publishDate = "2024-01-01T12:00:00Z",
             upvotes = 2,
             downvotes = 1,
