@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.MultiColorPreview
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -102,6 +103,13 @@ fun CustomBottomSheet(
                                 description = item.text,
                             )
                         }
+
+                        if (item.postMultiColorIcon != null){
+                            MultiColorPreview(
+                                colors = item.postMultiColorIcon.colors,
+                                modifier = item.postMultiColorIcon.modifier,
+                            )
+                        }
                     }
                 }
             }
@@ -145,4 +153,10 @@ data class CustomBottomSheetItem(
     val text: String,
     val postTextIcon: ImageVector? = null,
     val postTextPainter: Painter? = null,
+    val postMultiColorIcon: MultiColorIconPreviewIcon? = null,
+)
+
+data class MultiColorIconPreviewIcon(
+    val colors: List<Color>,
+    val modifier: Modifier,
 )
