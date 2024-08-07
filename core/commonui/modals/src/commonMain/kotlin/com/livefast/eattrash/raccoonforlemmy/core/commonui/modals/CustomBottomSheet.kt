@@ -35,75 +35,71 @@ fun CustomBottomSheet(
     contentPostTextPainter: List<Painter?>? = null,
     contentPostTextIcon: List<ImageVector?>? = null,
 ) {
-    if (!isOpen) {
-        return
-    }
-
-    ModalBottomSheet(
-        onDismissRequest = { onDismiss?.invoke() },
-        sheetState = sheetState,
-    ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            text = headerText,
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Column(
-            modifier = Modifier
-                .padding(
-                    top = Spacing.s,
-                    start = Spacing.s,
-                    end = Spacing.s,
-                    bottom = Spacing.xxxl,
-                ),
+    if (isOpen) {
+        ModalBottomSheet(
+            onDismissRequest = { onDismiss?.invoke() },
+            sheetState = sheetState,
         ) {
-            contentText.forEachIndexed { index, text ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = Color.Transparent,
-                            shape = MaterialTheme.shapes.large,
-                        )
-                        .clickable {
-                            onSelection(index)
-                            onDismiss?.invoke()
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                text = headerText,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Column(
+                modifier = Modifier
+                    .padding(
+                        top = Spacing.s,
+                        start = Spacing.s,
+                        end = Spacing.s,
+                        bottom = Spacing.xxxl,
+                    ),
+            ) {
+                contentText.forEachIndexed { index, text ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = Color.Transparent,
+                                shape = MaterialTheme.shapes.large,
+                            )
+                            .clickable {
+                                onSelection(index)
+                                onDismiss?.invoke()
+                            }
+                            .padding(
+                                horizontal = Spacing.interItem,
+                                vertical = Spacing.interItem,
+                            ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val prePaint = contentPreTextPainter?.getOrNull(index)
+                        val preIcon = contentPreTextIcon?.getOrNull(index)
+                        if (prePaint != null || preIcon != null) {
+                            BottomSheetRowIcon(
+                                icon = preIcon,
+                                painter = prePaint,
+                                description = text,
+                            )
                         }
-                        .padding(
-                            horizontal = Spacing.interItem,
-                            vertical = Spacing.interItem,
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val prePaint = contentPreTextPainter?.getOrNull(index)
-                    val preIcon = contentPreTextIcon?.getOrNull(index)
-                    if (prePaint != null || preIcon != null)
-                    {
-                        BottomSheetRowIcon(
-                            icon = preIcon,
-                            painter = prePaint,
-                            description = text,
+
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = text.toString(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
-                    }
 
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = text.toString(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
+                        val postPaint = contentPostTextPainter?.getOrNull(index)
+                        val postIcon = contentPostTextIcon?.getOrNull(index)
 
-                    val postPaint = contentPostTextPainter?.getOrNull(index)
-                    val postIcon = contentPostTextIcon?.getOrNull(index)
-
-                    if (postPaint != null || postIcon != null)
-                    {
-                        BottomSheetRowIcon(
-                            icon = postIcon,
-                            painter = postPaint,
-                            description = text,
-                        )
+                        if (postPaint != null || postIcon != null) {
+                            BottomSheetRowIcon(
+                                icon = postIcon,
+                                painter = postPaint,
+                                description = text,
+                            )
+                        }
                     }
                 }
             }
