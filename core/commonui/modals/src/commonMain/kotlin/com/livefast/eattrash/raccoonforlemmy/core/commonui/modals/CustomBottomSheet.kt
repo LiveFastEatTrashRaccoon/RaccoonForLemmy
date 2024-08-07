@@ -32,11 +32,7 @@ fun CustomBottomSheet(
     onDismiss: (() -> Unit)? = null,
     onSelection: ((Int) -> Unit),
     headerText: String,
-    contentPreTextPainter: List<Painter?>? = null,
-    contentPreTextIcon: List<ImageVector?>? = null,
-    contentText: List<String?>,
-    contentPostTextPainter: List<Painter?>? = null,
-    contentPostTextIcon: List<ImageVector?>? = null,
+    content: List<CustomBottomSheetItem>
 ) {
     if (isOpen) {
         ModalBottomSheet(
@@ -58,7 +54,7 @@ fun CustomBottomSheet(
                         bottom = Spacing.xxxl,
                     ),
             ) {
-                contentText.forEachIndexed { index, text ->
+                content.forEachIndexed { index, item ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -80,31 +76,30 @@ fun CustomBottomSheet(
                             ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        val prePaint = contentPreTextPainter?.getOrNull(index)
-                        val preIcon = contentPreTextIcon?.getOrNull(index)
+                        val prePaint = item.preTextPainter
+                        val preIcon = item.preTextIcon
                         if (prePaint != null || preIcon != null) {
                             BottomSheetRowIcon(
                                 icon = preIcon,
                                 painter = prePaint,
-                                description = text,
+                                description = item.text,
                             )
                         }
 
                         Text(
                             modifier = Modifier.weight(1f),
-                            text = text.toString(),
+                            text = item.text,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onBackground,
                         )
 
-                        val postPaint = contentPostTextPainter?.getOrNull(index)
-                        val postIcon = contentPostTextIcon?.getOrNull(index)
-
+                        val postPaint = item.postTextPainter
+                        val postIcon = item.postTextIcon
                         if (postPaint != null || postIcon != null) {
                             BottomSheetRowIcon(
                                 icon = postIcon,
                                 painter = postPaint,
-                                description = text,
+                                description = item.text,
                             )
                         }
                     }
@@ -143,3 +138,11 @@ fun BottomSheetRowIcon(
         )
     }
 }
+
+data class CustomBottomSheetItem(
+    val preTextIcon: ImageVector? = null,
+    val preTextPainter: Painter? = null,
+    val text: String,
+    val postTextIcon: ImageVector? = null,
+    val postTextPainter: Painter? = null,
+)

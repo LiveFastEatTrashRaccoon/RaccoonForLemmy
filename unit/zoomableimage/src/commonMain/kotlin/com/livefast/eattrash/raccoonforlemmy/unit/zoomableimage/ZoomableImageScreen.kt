@@ -45,6 +45,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDrop
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ZoomableImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -261,9 +262,13 @@ class ZoomableImageScreen(
                 }
             },
             headerText = LocalStrings.current.postActionShare,
-            contentText = listOf(
-                LocalStrings.current.shareModeUrl,
-                LocalStrings.current.shareModeFile,
+            content = listOf(
+                CustomBottomSheetItem(
+                    text = LocalStrings.current.shareModeUrl,
+                ),
+                CustomBottomSheetItem(
+                    text = LocalStrings.current.shareModeFile,
+                ),
             ),
         )
 

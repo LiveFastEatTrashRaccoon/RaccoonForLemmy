@@ -43,6 +43,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -305,17 +306,23 @@ class SettingsColorAndFontScreen : Screen {
                 )
             },
             headerText = LocalStrings.current.settingsUiTheme,
-            contentText = listOf(
-                uiThemeList[0].toReadableName(),
-                uiThemeList[1].toReadableName(),
-                uiThemeList[2].toReadableName(),
-                uiThemeList[3].toReadableName(),
+            content = listOf(
+                CustomBottomSheetItem(
+                    text = uiThemeList[0].toReadableName(),
+                    postTextIcon = uiThemeList[0]?.toIcon(),
+                ),
+                CustomBottomSheetItem(
+                    text = uiThemeList[1].toReadableName(),
+                    postTextIcon = uiThemeList[1]?.toIcon(),
+                ),
+                CustomBottomSheetItem(
+                    text = uiThemeList[2].toReadableName(),
+                    postTextIcon = uiThemeList[2]?.toIcon(),
+                ),
+                CustomBottomSheetItem(
+                    text = uiThemeList[3].toReadableName(),
+                ),
             ),
-            contentPostTextIcon = listOf(
-                uiThemeList[0]?.toIcon(),
-                uiThemeList[1]?.toIcon(),
-                uiThemeList[2]?.toIcon(),
-            )
         )
     }
 }
