@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -33,15 +35,18 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toFontScale
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ThemeBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
@@ -64,6 +69,7 @@ class SettingsColorAndFontScreen : Screen {
         val model = getScreenModel<SettingsColorAndFontMviModel>()
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
+        val notificationCenter = remember { getNotificationCenter() }
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val themeRepository = remember { getThemeRepository() }
@@ -75,7 +81,10 @@ class SettingsColorAndFontScreen : Screen {
             } else {
                 UiTheme.Light
             }
+        val sheetState = rememberModalBottomSheetState()
+        val sheetScope = rememberCoroutineScope()
         var uiFontSizeWorkaround by remember { mutableStateOf(true) }
+        var bottomSheetIsOpen by remember { mutableStateOf(false) }
 
         LaunchedEffect(themeRepository) {
             themeRepository.uiFontScale
@@ -136,11 +145,9 @@ class SettingsColorAndFontScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.settingsUiTheme,
                         value = uiState.uiTheme.toReadableName(),
-                        onTap =
-                            rememberCallback {
-                                val sheet = ThemeBottomSheet()
-                                navigationCoordinator.showBottomSheet(sheet)
-                            },
+                        onTap = {
+                            bottomSheetIsOpen = true
+                        }
                     )
 
                     // dynamic colors
@@ -276,5 +283,39 @@ class SettingsColorAndFontScreen : Screen {
                 }
             }
         }
+
+        // Placing theme list here for neatness & code review
+        val uiThemeList = listOf(
+            UiTheme.Light,
+            UiTheme.Dark,
+            UiTheme.Black,
+            null,
+        )
+
+        CustomBottomSheet(
+            isOpen = bottomSheetIsOpen,
+            sheetScope = sheetScope,
+            sheetState = sheetState,
+            onDismiss = {
+                bottomSheetIsOpen = false
+            },
+            onSelection = { selection ->
+                notificationCenter.send(
+                    NotificationCenterEvent.ChangeTheme(uiThemeList[selection]),
+                )
+            },
+            headerText = LocalStrings.current.settingsUiTheme,
+            contentText = listOf(
+                uiThemeList[0].toReadableName(),
+                uiThemeList[1].toReadableName(),
+                uiThemeList[2].toReadableName(),
+                uiThemeList[3].toReadableName(),
+            ),
+            contentPostTextIcon = listOf(
+                uiThemeList[0]?.toIcon(),
+                uiThemeList[1]?.toIcon(),
+                uiThemeList[2]?.toIcon(),
+            )
+        )
     }
 }
