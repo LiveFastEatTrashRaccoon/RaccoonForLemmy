@@ -20,12 +20,15 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomBottomSheet(
     isOpen: Boolean,
     sheetState: SheetState,
+    sheetScope: CoroutineScope,
     onDismiss: (() -> Unit)? = null,
     onSelection: ((Int) -> Unit),
     headerText: String,
@@ -65,7 +68,11 @@ fun CustomBottomSheet(
                             )
                             .clickable {
                                 onSelection(index)
-                                onDismiss?.invoke()
+                                sheetScope.launch {
+                                    sheetState.hide()
+                                }.invokeOnCompletion {
+                                    onDismiss?.invoke()
+                                }
                             }
                             .padding(
                                 horizontal = Spacing.interItem,

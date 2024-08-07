@@ -26,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -81,6 +82,7 @@ class SettingsColorAndFontScreen : Screen {
                 UiTheme.Light
             }
         val sheetState = rememberModalBottomSheetState()
+        val sheetScope = rememberCoroutineScope()
         var uiFontSizeWorkaround by remember { mutableStateOf(true) }
         var bottomSheetIsOpen by remember { mutableStateOf(false) }
 
@@ -292,6 +294,7 @@ class SettingsColorAndFontScreen : Screen {
 
         CustomBottomSheet(
             isOpen = bottomSheetIsOpen,
+            sheetScope = sheetScope,
             sheetState = sheetState,
             onDismiss = {
                 bottomSheetIsOpen = false

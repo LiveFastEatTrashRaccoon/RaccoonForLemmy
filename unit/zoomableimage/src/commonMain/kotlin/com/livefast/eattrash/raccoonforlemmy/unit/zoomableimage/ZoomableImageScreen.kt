@@ -28,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,6 +75,7 @@ class ZoomableImageScreen(
         val shareHelper = remember { getShareHelper() }
         val notificationCenter = remember { getNotificationCenter() }
         val sheetState = rememberModalBottomSheetState()
+        val sheetScope = rememberCoroutineScope()
         var bottomSheetIsOpen by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
@@ -237,6 +239,7 @@ class ZoomableImageScreen(
         CustomBottomSheet(
             isOpen = bottomSheetIsOpen,
             sheetState = sheetState,
+            sheetScope = sheetScope,
             onDismiss = {
                 bottomSheetIsOpen = false
             },
