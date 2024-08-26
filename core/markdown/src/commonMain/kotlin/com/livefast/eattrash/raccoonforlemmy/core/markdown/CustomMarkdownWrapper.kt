@@ -1,6 +1,11 @@
 package com.livefast.eattrash.raccoonforlemmy.core.markdown
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -17,10 +22,12 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isUnspecified
+import androidx.compose.ui.unit.sp
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
 import com.mikepenz.markdown.compose.Markdown
@@ -38,15 +45,114 @@ import kotlinx.coroutines.launch
 import org.intellij.markdown.ast.ASTNode
 import kotlin.math.floor
 
-private val String.containsSpoiler: Boolean
-    get() = SpoilerRegex.spoilerOpening.containsMatchIn(this)
-
 private val String.isImage: Boolean
     get() = ImageRegex.image.matches(this)
 
 private const val MAX_LINES_SCALE_FACTOR = 0.97f
 private const val GLOBAL_SCALE_FACTOR = 0.99f
 private const val LINK_DELAY = 250L
+
+@Composable
+fun CustomMarkdownWrapperController(
+    content: String,
+    modifier: Modifier,
+    colors: MarkdownColors = markdownColor(),
+    typography: MarkdownTypography = markdownTypography(),
+    padding: MarkdownPadding = markdownPadding(),
+    autoLoadImages: Boolean,
+    maxLines: Int? = null,
+    highlightText: String?,
+    enableAlternateRendering: Boolean = false,
+    blurImages: Boolean = false,
+    onOpenUrl: ((String) -> Unit)?,
+    onOpenImage: ((String) -> Unit)?,
+    onClick: (() -> Unit)?,
+    onDoubleClick: (() -> Unit)?,
+    onLongClick: (() -> Unit)?,
+) {
+    if (SpoilerRegex.spoilerOpening.containsMatchIn(content)) {
+        var previousIndex = 0
+        Column {
+            SpoilerRegex.spoilerFull.findAll(content).forEach {
+                if (previousIndex < it.range.first) {
+                    CustomMarkdownWrapper(
+                        content = content.substring(previousIndex, it.range.first - 1),
+                        modifier = modifier,
+                        colors = colors,
+                        typography = typography,
+                        padding = padding,
+                        autoLoadImages = autoLoadImages,
+                        maxLines = maxLines,
+                        highlightText = highlightText,
+                        enableAlternateRendering = enableAlternateRendering,
+                        blurImages = blurImages,
+                        onOpenUrl = onOpenUrl,
+                        onOpenImage = onOpenImage,
+                        onClick = onClick,
+                        onDoubleClick = onDoubleClick,
+                        onLongClick = onLongClick,
+                    )
+                }
+                markdownSpoilerBlock(
+                    content = content.substring(it.range.first, it.range.last + 1),
+                    modifier = modifier,
+                    colors = colors,
+                    typography = typography,
+                    padding = padding,
+                    autoLoadImages = autoLoadImages,
+                    maxLines = maxLines,
+                    highlightText = highlightText,
+                    enableAlternateRendering = enableAlternateRendering,
+                    blurImages = blurImages,
+                    onOpenUrl = onOpenUrl,
+                    onOpenImage = onOpenImage,
+                    onClick = onClick,
+                    onDoubleClick = onDoubleClick,
+                    onLongClick = onLongClick,
+                )
+                previousIndex = it.range.last
+            }
+            if (previousIndex < content.length - 1) {
+                CustomMarkdownWrapper(
+                    content = content.substring(previousIndex, content.length - 1),
+                    modifier = modifier,
+                    colors = colors,
+                    typography = typography,
+                    padding = padding,
+                    autoLoadImages = autoLoadImages,
+                    maxLines = maxLines,
+                    highlightText = highlightText,
+                    enableAlternateRendering = enableAlternateRendering,
+                    blurImages = blurImages,
+                    onOpenUrl = onOpenUrl,
+                    onOpenImage = onOpenImage,
+                    onClick = onClick,
+                    onDoubleClick = onDoubleClick,
+                    onLongClick = onLongClick,
+                )
+            }
+        }
+    }
+    else {
+        CustomMarkdownWrapper(
+            content = content,
+            modifier = modifier,
+            colors = colors,
+            typography = typography,
+            padding = padding,
+            autoLoadImages = autoLoadImages,
+            maxLines = maxLines,
+            highlightText = highlightText,
+            enableAlternateRendering = enableAlternateRendering,
+            blurImages = blurImages,
+            onOpenUrl = onOpenUrl,
+            onOpenImage = onOpenImage,
+            onClick = onClick,
+            onDoubleClick = onDoubleClick,
+            onLongClick = onLongClick,
+        )
+    }
+}
 
 @Composable
 fun CustomMarkdownWrapper(
@@ -66,6 +172,7 @@ fun CustomMarkdownWrapper(
     onDoubleClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
 ) {
+
     val maxHeightDp =
         with(LocalDensity.current) {
             if (maxLines == null) {
@@ -105,10 +212,6 @@ fun CustomMarkdownWrapper(
                         endIndex = model.node.endOffset,
                     )
                 when {
-                    substring.containsSpoiler -> {
-                        CustomMarkdownSpoiler(content = substring)
-                    }
-
                     substring.isImage -> {
                         val res = ImageRegex.image.find(substring)
                         val link =
@@ -148,28 +251,28 @@ fun CustomMarkdownWrapper(
     CompositionLocalProvider(
         LocalUriHandler provides customUriHandler,
         LocalDensity provides
-            Density(
-                density = LocalDensity.current.density,
-                fontScale = LocalDensity.current.fontScale * GLOBAL_SCALE_FACTOR,
-            ),
+                Density(
+                    density = LocalDensity.current.density,
+                    fontScale = LocalDensity.current.fontScale * GLOBAL_SCALE_FACTOR,
+                ),
     ) {
         Markdown(
             modifier =
-                modifier
-                    .heightIn(min = 0.dp, max = maxHeightDp)
-                    .onClick(
-                        onClick = {
-                            if (!isOpeningUrl) {
-                                onClick?.invoke()
-                            }
-                        },
-                        onLongClick = {
-                            onLongClick?.invoke()
-                        },
-                        onDoubleClick = {
-                            onDoubleClick?.invoke()
-                        },
-                    ),
+            modifier
+                .heightIn(min = 0.dp, max = maxHeightDp)
+                .onClick(
+                    onClick = {
+                        if (!isOpeningUrl) {
+                            onClick?.invoke()
+                        }
+                    },
+                    onLongClick = {
+                        onLongClick?.invoke()
+                    },
+                    onDoubleClick = {
+                        onDoubleClick?.invoke()
+                    },
+                ),
             content = content.sanitize(),
             colors = colors,
             typography = typography,
@@ -215,4 +318,128 @@ internal fun markdownParagraphWithHighlights(
         modifier = modifier,
         style = style,
     )
+}
+
+@Composable
+internal fun markdownSpoilerBlock(
+    content: String,
+    modifier: Modifier,
+    colors: MarkdownColors = markdownColor(),
+    typography: MarkdownTypography = markdownTypography(),
+    padding: MarkdownPadding = markdownPadding(),
+    autoLoadImages: Boolean,
+    maxLines: Int? = null,
+    highlightText: String?,
+    enableAlternateRendering: Boolean = false,
+    blurImages: Boolean = false,
+    onOpenUrl: ((String) -> Unit)?,
+    onOpenImage: ((String) -> Unit)?,
+    onClick: (() -> Unit)?,
+    onDoubleClick: (() -> Unit)?,
+    onLongClick: (() -> Unit)?,
+) {
+    val matches = SpoilerRegex.spoilerOpening.findAll(content)
+    val spoilerTitle = matches.first().groups["title"]?.value.orEmpty()
+    val spoilerBody = content.replaceFirst(SpoilerRegex.spoilerOpening, "")
+    val spoilerModifier = Modifier
+        .padding(
+            start = 9.dp,
+            bottom = 9.dp,
+        )
+    var isExpanded by remember { mutableStateOf(false) }
+    Column(
+        modifier = Modifier
+            .clickable {
+                isExpanded = !isExpanded
+            }
+    ) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = buildAnnotatedString {
+                withStyle(SpanStyle(fontSize = 20.sp)) {
+                    append(
+                        if (isExpanded) {
+                            "▼︎ "
+                        }
+                        else {
+                            "▶︎ "
+                        }
+                    )
+                }
+                append(spoilerTitle)
+            }
+        )
+        if (isExpanded) {
+            if (matches.count() > 1) {
+                var previousIndex = 0
+                Column(
+                    modifier = spoilerModifier
+                ) {
+                    SpoilerRegex.spoilerFull.findAll(spoilerBody).forEach {
+                        if (previousIndex < it.range.first) {
+                            CustomMarkdownWrapper(
+                                content = spoilerBody.substring(previousIndex, it.range.first - 1),
+                                modifier = modifier,
+                                colors = colors,
+                                typography = typography,
+                                padding = padding,
+                                autoLoadImages = autoLoadImages,
+                                maxLines = maxLines,
+                                highlightText = highlightText,
+                                enableAlternateRendering = enableAlternateRendering,
+                                blurImages = blurImages,
+                                onOpenUrl = onOpenUrl,
+                                onOpenImage = onOpenImage,
+                                onClick = onClick,
+                                onDoubleClick = onDoubleClick,
+                                onLongClick = onLongClick,
+                            )
+                        }
+                        markdownSpoilerBlock(
+                            content = spoilerBody.substring(it.range.first, it.range.last + 1),
+                            modifier = modifier,
+                            colors = colors,
+                            typography = typography,
+                            padding = padding,
+                            autoLoadImages = autoLoadImages,
+                            maxLines = maxLines,
+                            highlightText = highlightText,
+                            enableAlternateRendering = enableAlternateRendering,
+                            blurImages = blurImages,
+                            onOpenUrl = onOpenUrl,
+                            onOpenImage = onOpenImage,
+                            onClick = onClick,
+                            onDoubleClick = onDoubleClick,
+                            onLongClick = onLongClick,
+                        )
+                        previousIndex = it.range.last + 1
+                    }
+                }
+            }
+            else {
+                Column(
+                    modifier = spoilerModifier
+                ) {
+                    CustomMarkdownWrapper(
+                        content = spoilerBody,
+                        modifier = modifier,
+                        colors = colors,
+                        typography = typography,
+                        padding = padding,
+                        autoLoadImages = autoLoadImages,
+                        maxLines = maxLines,
+                        highlightText = highlightText,
+                        enableAlternateRendering = enableAlternateRendering,
+                        blurImages = blurImages,
+                        onOpenUrl = onOpenUrl,
+                        onOpenImage = onOpenImage,
+                        onClick = onClick,
+                        onDoubleClick = onDoubleClick,
+                        onLongClick = onLongClick,
+                    )
+                }
+            }
+        }
+    }
 }

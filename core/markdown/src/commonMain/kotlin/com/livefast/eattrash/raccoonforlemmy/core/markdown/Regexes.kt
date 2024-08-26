@@ -1,8 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.core.markdown
 
 internal object SpoilerRegex {
-    val spoilerOpening = Regex("(:::\\s?spoiler\\s+)(?<title>.*)")
-    val spoilerClosing = Regex(":::")
+    val spoilerOpening = Regex("(:{3,}\\s?spoiler\\s+)(?<title>.*)")
+    val spoilerClosing = Regex(":{3,}")
+    val spoilerFull = Regex(":{3,}\\s?spoiler\\s.*(?=\\n)(.|\\n)+?(:{3,}\\v|\\Z)")
 }
 
 internal object LemmyLinkRegex {
