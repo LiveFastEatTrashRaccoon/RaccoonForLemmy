@@ -71,12 +71,37 @@ fun CustomMarkdownWrapperController(
     onLongClick: (() -> Unit)?,
 ) {
     if (SpoilerRegex.spoilerOpening.containsMatchIn(content)) {
+        val codeBlockMatches = Regex("`{3,}(.|\\n)+?(`{3,})").findAll(content)
         var previousIndex = 0
         Column {
-            SpoilerRegex.spoilerFull.findAll(content).forEach {
-                if (previousIndex < it.range.first) {
-                    CustomMarkdownWrapper(
-                        content = content.substring(previousIndex, it.range.first - 1),
+            SpoilerRegex.spoilerFull.findAll(content)
+                .filter{ spoiler ->
+                    codeBlockMatches.none { codeBlock ->
+                        codeBlock.range.first < spoiler.range.first && codeBlock.range.last > spoiler.range.last
+                    }
+                }
+                .forEach { spoiler ->
+                    if (previousIndex < spoiler.range.first) {
+                        CustomMarkdownWrapper(
+                            content = content.substring(previousIndex, spoiler.range.first - 1),
+                            modifier = modifier,
+                            colors = colors,
+                            typography = typography,
+                            padding = padding,
+                            autoLoadImages = autoLoadImages,
+                            maxLines = maxLines,
+                            highlightText = highlightText,
+                            enableAlternateRendering = enableAlternateRendering,
+                            blurImages = blurImages,
+                            onOpenUrl = onOpenUrl,
+                            onOpenImage = onOpenImage,
+                            onClick = onClick,
+                            onDoubleClick = onDoubleClick,
+                            onLongClick = onLongClick,
+                        )
+                    }
+                    markdownSpoilerBlock(
+                        content = content.substring(previousIndex, spoiler.range.last + 1),
                         modifier = modifier,
                         colors = colors,
                         typography = typography,
@@ -92,26 +117,8 @@ fun CustomMarkdownWrapperController(
                         onDoubleClick = onDoubleClick,
                         onLongClick = onLongClick,
                     )
+                    previousIndex = spoiler.range.last
                 }
-                markdownSpoilerBlock(
-                    content = content.substring(it.range.first, it.range.last + 1),
-                    modifier = modifier,
-                    colors = colors,
-                    typography = typography,
-                    padding = padding,
-                    autoLoadImages = autoLoadImages,
-                    maxLines = maxLines,
-                    highlightText = highlightText,
-                    enableAlternateRendering = enableAlternateRendering,
-                    blurImages = blurImages,
-                    onOpenUrl = onOpenUrl,
-                    onOpenImage = onOpenImage,
-                    onClick = onClick,
-                    onDoubleClick = onDoubleClick,
-                    onLongClick = onLongClick,
-                )
-                previousIndex = it.range.last
-            }
             if (previousIndex < content.length - 1) {
                 CustomMarkdownWrapper(
                     content = content.substring(previousIndex, content.length - 1),
