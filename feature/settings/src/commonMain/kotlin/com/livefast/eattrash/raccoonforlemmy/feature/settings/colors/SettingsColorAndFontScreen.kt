@@ -8,17 +8,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +27,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -39,11 +39,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomBottomSheetItem
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -82,10 +83,8 @@ class SettingsColorAndFontScreen : Screen {
             } else {
                 UiTheme.Light
             }
-        val sheetState = rememberModalBottomSheetState()
-        val sheetScope = rememberCoroutineScope()
         var uiFontSizeWorkaround by remember { mutableStateOf(true) }
-        var bottomSheetIsOpen by remember { mutableStateOf(false) }
+        var uiThemeBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(themeRepository) {
             themeRepository.uiFontScale
@@ -147,7 +146,7 @@ class SettingsColorAndFontScreen : Screen {
                         title = LocalStrings.current.settingsUiTheme,
                         value = uiState.uiTheme.toReadableName(),
                         onTap = {
-                            bottomSheetIsOpen = true
+                            uiThemeBottomSheetOpened = true
                         }
                     )
 
@@ -285,44 +284,39 @@ class SettingsColorAndFontScreen : Screen {
             }
         }
 
-        // Placing theme list here for neatness & code review
-        val uiThemeList = listOf(
-            UiTheme.Light,
-            UiTheme.Dark,
-            UiTheme.Black,
-            null,
-        )
-
-        CustomBottomSheet(
-            isOpen = bottomSheetIsOpen,
-            sheetScope = sheetScope,
-            sheetState = sheetState,
-            onDismiss = {
-                bottomSheetIsOpen = false
-            },
-            onSelection = { selection ->
-                notificationCenter.send(
-                    NotificationCenterEvent.ChangeTheme(uiThemeList[selection]),
+        if (uiThemeBottomSheetOpened) {
+            val items =
+                listOf(
+                    UiTheme.Light,
+                    UiTheme.Dark,
+                    UiTheme.Black,
+                    null,
                 )
-            },
-            headerText = LocalStrings.current.settingsUiTheme,
-            content = listOf(
-                CustomBottomSheetItem(
-                    text = uiThemeList[0].toReadableName(),
-                    postTextIcon = uiThemeList[0]?.toIcon(),
-                ),
-                CustomBottomSheetItem(
-                    text = uiThemeList[1].toReadableName(),
-                    postTextIcon = uiThemeList[1]?.toIcon(),
-                ),
-                CustomBottomSheetItem(
-                    text = uiThemeList[2].toReadableName(),
-                    postTextIcon = uiThemeList[2]?.toIcon(),
-                ),
-                CustomBottomSheetItem(
-                    text = uiThemeList[3].toReadableName(),
-                ),
-            ),
-        )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsUiTheme,
+                items = items.map {
+                    CustomModalBottomSheetItem(
+                        label = it.toReadableName(),
+                        trailingContent = {
+                            if (it != null) {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = it.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            }
+                        }
+                    )},
+                onSelected = { index ->
+                    uiThemeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeTheme(items[index])
+                        )
+                    }
+                },
+            )
+        }
     }
 }
