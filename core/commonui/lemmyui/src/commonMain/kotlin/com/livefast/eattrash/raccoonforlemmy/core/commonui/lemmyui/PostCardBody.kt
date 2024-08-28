@@ -15,7 +15,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeReposito
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.readContentAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
-import com.livefast.eattrash.raccoonforlemmy.core.markdown.CustomMarkdownWrapper
+import com.livefast.eattrash.raccoonforlemmy.core.markdown.CustomMarkdownWrapperController
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
@@ -60,7 +60,7 @@ fun PostCardBody(
 
     if (text.isNotEmpty()) {
         SelectionContainer {
-            CustomMarkdownWrapper(
+            CustomMarkdownWrapperController(
                 modifier = modifier.padding(horizontal = Spacing.xxs),
                 content = text,
                 maxLines = maxLines,
