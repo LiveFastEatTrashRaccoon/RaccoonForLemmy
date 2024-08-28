@@ -364,8 +364,8 @@ class SettingsColorAndFontScreen : Screen {
                     },
                 onSelected = { index ->
                     if (index != null) {
+                        customColorBottomSheetOpened = false
                         if (index in appColorRepository.getColors().indices) {
-                            customColorBottomSheetOpened = false
                             notificationCenter.send(
                                 NotificationCenterEvent.ChangeColor(
                                     appColorRepository.getColors()[index].toColor()
@@ -374,6 +374,9 @@ class SettingsColorAndFontScreen : Screen {
                         } else {
                             customColorPickerDialogOpened = true
                         }
+                    }
+                    else {
+                        customColorBottomSheetOpened = false
                     }
                 },
             )
