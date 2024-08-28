@@ -9,6 +9,15 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.service.PrivateMessageServ
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.SearchService
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.SiteService
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.UserService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.createAuthService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.createCommentService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.createCommunityService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.createModlogService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.createPostService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.createPrivateMessageService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.createSearchService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.createSiteService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.createUserService
 import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngineFactory
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
@@ -31,34 +40,24 @@ internal class DefaultServiceProvider(
     }
 
     override var currentInstance: String = DEFAULT_INSTANCE
-        private set
 
     override lateinit var auth: AuthService
-        private set
 
     override lateinit var post: PostService
-        private set
 
     override lateinit var community: CommunityService
-        private set
 
     override lateinit var user: UserService
-        private set
 
     override lateinit var site: SiteService
-        private set
 
     override lateinit var comment: CommentService
-        private set
 
     override lateinit var search: SearchService
-        private set
 
     override lateinit var privateMessages: PrivateMessageService
-        private set
 
     override lateinit var modLog: ModlogService
-        private set
 
     private val baseUrl: String get() = "https://$currentInstance/api/$VERSION/"
 
@@ -107,15 +106,14 @@ internal class DefaultServiceProvider(
                 .baseUrl(baseUrl)
                 .httpClient(client)
                 .build()
-        auth = ktorfit.create()
-        post = ktorfit.create()
-        community = ktorfit.create()
-        user = ktorfit.create()
-        site = ktorfit.create()
-        comment = ktorfit.create()
-        search = ktorfit.create()
-        privateMessages = ktorfit.create()
-        privateMessages = ktorfit.create()
-        modLog = ktorfit.create()
+        auth = ktorfit.createAuthService()
+        post = ktorfit.createPostService()
+        community = ktorfit.createCommunityService()
+        user = ktorfit.createUserService()
+        site = ktorfit.createSiteService()
+        comment = ktorfit.createCommentService()
+        search = ktorfit.createSearchService()
+        privateMessages = ktorfit.createPrivateMessageService()
+        modLog = ktorfit.createModlogService()
     }
 }

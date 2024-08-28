@@ -7,20 +7,20 @@ androidx-crypto = "1.0.0"
 androidx-media3 = "1.4.1"
 androidx-splashscreen = "1.0.1"
 androidx-work = "2.9.1"
-android-gradle = "8.5.1"
+android-gradle = "8.5.2"
 coil = "2.7.0"
-colorpicker = "1.1.2"
 compose = "1.6.11"
 detekt = "1.23.6"
 kamel = "0.9.5"
 koin = "3.5.6"
-kotlin = "2.0.0"
+kotlin = "2.0.20"
 kotlincrypto = "0.5.1"
 kotlinx-coroutines = "1.8.1"
 kotlinx-serialization-json = "1.7.1"
-ksp = "2.0.0-1.0.23"
+ksp = "2.0.20-1.0.24"
 ktor = "2.3.12"
-ktorfit = "2.0.0-rc01"
+ktorfit = "2.0.1"
+ktorfit-ksp = "2.0.1-1.0.24"
 lyricist = "1.7.0"
 materialKolor = "1.7.0"
 mockk = "1.13.12"
@@ -35,7 +35,6 @@ voyager = "1.0.0"
 
 android-targetSdk = "34"
 android-minSdk = "26"
-material3Android = "1.2.1"
 
 [libraries]
 
@@ -77,7 +76,7 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-contentnegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit" }
+ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit-ksp" }
 ktorfit-lib = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
 
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
@@ -108,7 +107,6 @@ reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reo
 
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
-androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 
 [plugins]
 
