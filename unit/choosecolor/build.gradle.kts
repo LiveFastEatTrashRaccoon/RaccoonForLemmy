@@ -36,6 +36,7 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
 
+                implementation(libs.compose.colorpicker)
                 implementation(libs.voyager.navigator)
 
                 implementation(projects.core.utils)

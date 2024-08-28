@@ -48,7 +48,12 @@ fun CustomModalBottomSheet(
         },
         content = {
             Column(
-                modifier = Modifier.padding(bottom = Spacing.xl),
+                modifier = Modifier
+                    .padding(
+                        start = Spacing.m,
+                        end = Spacing.m,
+                        bottom = Spacing.xl
+                    ),
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
