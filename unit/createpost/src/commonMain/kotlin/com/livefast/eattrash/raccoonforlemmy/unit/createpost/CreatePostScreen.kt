@@ -2,15 +2,12 @@ package com.livefast.eattrash.raccoonforlemmy.unit.createpost
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -239,8 +236,12 @@ class CreatePostScreen(
         }
 
         Scaffold(
-            modifier = Modifier.navigationBarsPadding(),
-            topBar = {
+            modifier =
+                Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .navigationBarsPadding()
+                    .safeImePadding(),
+                topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
@@ -308,313 +309,10 @@ class CreatePostScreen(
                     )
                 }
             },
-        ) { padding ->
-            Box(
-                modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).consumeWindowInsets(padding)
-                        .safeImePadding()
-                        .fillMaxSize(),
-            ) {
-                Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()),
-                ) {
-                    // community
-                    if (forceCommunitySelection) {
-                        TextField(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .onFocusChanged(
-                                        rememberCallbackArgs { state ->
-                                            if (state.hasFocus) {
-                                                openSelectCommunity = true
-                                            }
-                                        },
-                                    ),
-                            colors =
-                                TextFieldDefaults.colors(
-                                    focusedContainerColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    disabledContainerColor = Color.Transparent,
-                                ),
-                            label = {
-                                Text(
-                                    text = LocalStrings.current.createPostCommunity,
-                                    style = MaterialTheme.typography.titleMedium,
-                                )
-                            },
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Groups,
-                                    contentDescription = null,
-                                )
-                            },
-                            textStyle = typography.bodyMedium,
-                            value = uiState.communityInfo,
-                            readOnly = true,
-                            singleLine = true,
-                            onValueChange = {},
-                            isError = uiState.communityError != null,
-                            supportingText = {
-                                val error = uiState.communityError
-                                if (error != null) {
-                                    Text(
-                                        text = error.toReadableMessage(),
-                                        color = MaterialTheme.colorScheme.error,
-                                    )
-                                }
-                            },
-                        )
-                    }
-
-                    // title
-                    TextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors =
-                            TextFieldDefaults.colors(
-                                focusedContainerColor = Color.Transparent,
-                                unfocusedContainerColor = Color.Transparent,
-                                disabledContainerColor = Color.Transparent,
-                            ),
-                        label = {
-                            Text(
-                                text = LocalStrings.current.createPostName,
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                        },
-                        textStyle = typography.titleMedium,
-                        value = uiState.title,
-                        singleLine = true,
-                        trailingIcon = {
-                            if (uiState.url.isNotBlank()) {
-                                Text(
-                                    modifier =
-                                        Modifier
-                                            .padding(horizontal = Spacing.s)
-                                            .background(
-                                                color = MaterialTheme.colorScheme.primary,
-                                                shape = RoundedCornerShape(CornerSize.m),
-                                            ).padding(Spacing.xs)
-                                            .onClick(
-                                                onClick = {
-                                                    model.reduce(CreatePostMviModel.Intent.AutoFillTitle)
-                                                },
-                                            ),
-                                    text = "auto".uppercase(),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontFamily = FontFamily.Default,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                )
-                            }
-                        },
-                        keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                                autoCorrect = true,
-                                imeAction = ImeAction.Next,
-                                capitalization = KeyboardCapitalization.Sentences,
-                            ),
-                        keyboardActions =
-                            KeyboardActions(onNext = {
-                                urlFocusRequester.requestFocus()
-                            }),
-                        onValueChange =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(CreatePostMviModel.Intent.SetTitle(value))
-                            },
-                        isError = uiState.titleError != null,
-                        supportingText = {
-                            val error = uiState.titleError
-                            if (error != null) {
-                                Text(
-                                    text = error.toReadableMessage(),
-                                    color = MaterialTheme.colorScheme.error,
-                                )
-                            }
-                        },
-                    )
-
-                    // image
-                    TextField(
-                        modifier = Modifier.fillMaxWidth().focusRequester(urlFocusRequester),
-                        colors =
-                            TextFieldDefaults.colors(
-                                focusedContainerColor = Color.Transparent,
-                                unfocusedContainerColor = Color.Transparent,
-                                disabledContainerColor = Color.Transparent,
-                            ),
-                        label = {
-                            Text(
-                                text = LocalStrings.current.createPostUrl,
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                        },
-                        trailingIcon = {
-                            Icon(
-                                modifier =
-                                    Modifier.onClick(
-                                        onClick = {
-                                            openImagePicker = true
-                                        },
-                                    ),
-                                imageVector = Icons.Default.Image,
-                                contentDescription = null,
-                            )
-                        },
-                        textStyle =
-                            typography.bodyMedium.copy(
-                                fontFamily = FontFamily.Monospace,
-                            ),
-                        value = uiState.url,
-                        singleLine = true,
-                        keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                                autoCorrect = false,
-                                imeAction = ImeAction.Next,
-                            ),
-                        keyboardActions =
-                            KeyboardActions(onNext = {
-                                bodyFocusRequester.requestFocus()
-                            }),
-                        onValueChange =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(CreatePostMviModel.Intent.SetUrl(value))
-                            },
-                        isError = uiState.urlError != null,
-                        supportingText = {
-                            val error = uiState.urlError
-                            if (error != null) {
-                                Text(
-                                    text = error.toReadableMessage(),
-                                    color = MaterialTheme.colorScheme.error,
-                                )
-                            }
-                        },
-                    )
-
-                    // NSFW
-                    Row(
-                        modifier =
-                            Modifier.fillMaxWidth().padding(
-                                vertical = Spacing.s,
-                                horizontal = Spacing.m,
-                            ),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = LocalStrings.current.createPostNsfw,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Switch(
-                            checked = uiState.nsfw,
-                            onCheckedChange =
-                                rememberCallbackArgs(model) { value ->
-                                    model.reduce(CreatePostMviModel.Intent.ChangeNsfw(value))
-                                },
-                        )
-                    }
-
-                    SectionSelector(
-                        titles =
-                            listOf(
-                                LocalStrings.current.createPostTabEditor,
-                                LocalStrings.current.createPostTabPreview,
-                            ),
-                        currentSection =
-                            when (uiState.section) {
-                                CreatePostSection.Preview -> 1
-                                else -> 0
-                            },
-                        onSectionSelected =
-                            rememberCallbackArgs(model) { id ->
-                                val section =
-                                    when (id) {
-                                        1 -> CreatePostSection.Preview
-                                        else -> CreatePostSection.Edit
-                                    }
-                                model.reduce(CreatePostMviModel.Intent.ChangeSection(section))
-                            },
-                    )
-
-                    if (uiState.section == CreatePostSection.Edit) {
-                        TextField(
-                            modifier =
-                                Modifier
-                                    .heightIn(min = 300.dp, max = 400.dp)
-                                    .fillMaxWidth()
-                                    .focusRequester(bodyFocusRequester),
-                            colors =
-                                TextFieldDefaults.colors(
-                                    focusedContainerColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    disabledContainerColor = Color.Transparent,
-                                ),
-                            label = {
-                                Text(
-                                    text = LocalStrings.current.createPostBody,
-                                    style = MaterialTheme.typography.titleMedium,
-                                )
-                            },
-                            textStyle = typography.bodyMedium,
-                            value = uiState.bodyValue,
-                            keyboardOptions =
-                                KeyboardOptions(
-                                    keyboardType = KeyboardType.Text,
-                                    autoCorrect = true,
-                                    capitalization = KeyboardCapitalization.Sentences,
-                                ),
-                            onValueChange = { value ->
-                                model.reduce(CreatePostMviModel.Intent.ChangeBodyValue(value))
-                            },
-                            isError = uiState.bodyError != null,
-                            supportingText = {
-                                val error = uiState.bodyError
-                                if (error != null) {
-                                    Text(
-                                        text = error.toReadableMessage(),
-                                        color = MaterialTheme.colorScheme.error,
-                                    )
-                                }
-                            },
-                        )
-                    } else {
-                        val post =
-                            PostModel(
-                                text = uiState.bodyValue.text,
-                                title = uiState.title,
-                                url = uiState.url,
-                                thumbnailUrl = uiState.url,
-                            )
-
-                        PostCard(
-                            post = post,
-                            postLayout = uiState.postLayout,
-                            fullHeightImage = uiState.fullHeightImages,
-                            fullWidthImage = uiState.fullWidthImages,
-                            includeFullBody = true,
-                            voteFormat = uiState.voteFormat,
-                            autoLoadImages = uiState.autoLoadImages,
-                            preferNicknames = uiState.preferNicknames,
-                            showScores = uiState.showScores,
-                            downVoteEnabled = uiState.downVoteEnabled,
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(Spacing.xxxl))
-                }
-
-                // bottom part with user name and toolbar
+            bottomBar = {
                 Column(
                     modifier =
                         Modifier
-                            .align(Alignment.BottomCenter)
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.background)
                             .padding(bottom = Spacing.xs),
@@ -666,6 +364,304 @@ class CreatePostScreen(
                         )
                     }
                 }
+            },
+        ) { padding ->
+            Column(
+                modifier =
+                    Modifier
+                        .padding(
+                            top = padding.calculateTopPadding(),
+                            bottom = padding.calculateBottomPadding(),
+                        ).consumeWindowInsets(padding)
+                        .verticalScroll(rememberScrollState()),
+            ) {
+                // community
+                if (forceCommunitySelection) {
+                    TextField(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .onFocusChanged(
+                                    rememberCallbackArgs { state ->
+                                        if (state.hasFocus) {
+                                            openSelectCommunity = true
+                                        }
+                                    },
+                                ),
+                        colors =
+                            TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                disabledContainerColor = Color.Transparent,
+                            ),
+                        label = {
+                            Text(
+                                text = LocalStrings.current.createPostCommunity,
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Groups,
+                                contentDescription = null,
+                            )
+                        },
+                        textStyle = typography.bodyMedium,
+                        value = uiState.communityInfo,
+                        readOnly = true,
+                        singleLine = true,
+                        onValueChange = {},
+                        isError = uiState.communityError != null,
+                        supportingText = {
+                            val error = uiState.communityError
+                            if (error != null) {
+                                Text(
+                                    text = error.toReadableMessage(),
+                                    color = MaterialTheme.colorScheme.error,
+                                )
+                            }
+                        },
+                    )
+                }
+
+                // title
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors =
+                        TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                        ),
+                    label = {
+                        Text(
+                            text = LocalStrings.current.createPostName,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    },
+                    textStyle = typography.titleMedium,
+                    value = uiState.title,
+                    singleLine = true,
+                    trailingIcon = {
+                        if (uiState.url.isNotBlank()) {
+                            Text(
+                                modifier =
+                                    Modifier
+                                        .padding(horizontal = Spacing.s)
+                                        .background(
+                                            color = MaterialTheme.colorScheme.primary,
+                                            shape = RoundedCornerShape(CornerSize.m),
+                                        ).padding(Spacing.xs)
+                                        .onClick(
+                                            onClick = {
+                                                model.reduce(CreatePostMviModel.Intent.AutoFillTitle)
+                                            },
+                                        ),
+                                text = "auto".uppercase(),
+                                style = MaterialTheme.typography.labelSmall,
+                                fontFamily = FontFamily.Default,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                            )
+                        }
+                    },
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            autoCorrect = true,
+                            imeAction = ImeAction.Next,
+                            capitalization = KeyboardCapitalization.Sentences,
+                        ),
+                    keyboardActions =
+                        KeyboardActions(onNext = {
+                            urlFocusRequester.requestFocus()
+                        }),
+                    onValueChange =
+                        rememberCallbackArgs(model) { value ->
+                            model.reduce(CreatePostMviModel.Intent.SetTitle(value))
+                        },
+                    isError = uiState.titleError != null,
+                    supportingText = {
+                        val error = uiState.titleError
+                        if (error != null) {
+                            Text(
+                                text = error.toReadableMessage(),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    },
+                )
+
+                // image
+                TextField(
+                    modifier = Modifier.fillMaxWidth().focusRequester(urlFocusRequester),
+                    colors =
+                        TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                        ),
+                    label = {
+                        Text(
+                            text = LocalStrings.current.createPostUrl,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    },
+                    trailingIcon = {
+                        Icon(
+                            modifier =
+                                Modifier.onClick(
+                                    onClick = {
+                                        openImagePicker = true
+                                    },
+                                ),
+                            imageVector = Icons.Default.Image,
+                            contentDescription = null,
+                        )
+                    },
+                    textStyle =
+                        typography.bodyMedium.copy(
+                            fontFamily = FontFamily.Monospace,
+                        ),
+                    value = uiState.url,
+                    singleLine = true,
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            autoCorrect = false,
+                            imeAction = ImeAction.Next,
+                        ),
+                    keyboardActions =
+                        KeyboardActions(onNext = {
+                            bodyFocusRequester.requestFocus()
+                        }),
+                    onValueChange =
+                        rememberCallbackArgs(model) { value ->
+                            model.reduce(CreatePostMviModel.Intent.SetUrl(value))
+                        },
+                    isError = uiState.urlError != null,
+                    supportingText = {
+                        val error = uiState.urlError
+                        if (error != null) {
+                            Text(
+                                text = error.toReadableMessage(),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    },
+                )
+
+                // NSFW
+                Row(
+                    modifier =
+                        Modifier.fillMaxWidth().padding(
+                            vertical = Spacing.s,
+                            horizontal = Spacing.m,
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = LocalStrings.current.createPostNsfw,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Switch(
+                        checked = uiState.nsfw,
+                        onCheckedChange =
+                            rememberCallbackArgs(model) { value ->
+                                model.reduce(CreatePostMviModel.Intent.ChangeNsfw(value))
+                            },
+                    )
+                }
+
+                SectionSelector(
+                    titles =
+                        listOf(
+                            LocalStrings.current.createPostTabEditor,
+                            LocalStrings.current.createPostTabPreview,
+                        ),
+                    currentSection =
+                        when (uiState.section) {
+                            CreatePostSection.Preview -> 1
+                            else -> 0
+                        },
+                    onSectionSelected =
+                        rememberCallbackArgs(model) { id ->
+                            val section =
+                                when (id) {
+                                    1 -> CreatePostSection.Preview
+                                    else -> CreatePostSection.Edit
+                                }
+                            model.reduce(CreatePostMviModel.Intent.ChangeSection(section))
+                        },
+                )
+
+                if (uiState.section == CreatePostSection.Edit) {
+                    TextField(
+                        modifier =
+                            Modifier
+                                .height(400.dp)
+                                .fillMaxWidth()
+                                .focusRequester(bodyFocusRequester),
+                        colors =
+                            TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                disabledContainerColor = Color.Transparent,
+                            ),
+                        label = {
+                            Text(
+                                text = LocalStrings.current.createPostBody,
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        },
+                        textStyle = typography.bodyMedium,
+                        value = uiState.bodyValue,
+                        keyboardOptions =
+                            KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                autoCorrect = true,
+                                capitalization = KeyboardCapitalization.Sentences,
+                            ),
+                        onValueChange = { value ->
+                            model.reduce(CreatePostMviModel.Intent.ChangeBodyValue(value))
+                        },
+                        isError = uiState.bodyError != null,
+                        supportingText = {
+                            val error = uiState.bodyError
+                            if (error != null) {
+                                Text(
+                                    text = error.toReadableMessage(),
+                                    color = MaterialTheme.colorScheme.error,
+                                )
+                            }
+                        },
+                    )
+                } else {
+                    val post =
+                        PostModel(
+                            text = uiState.bodyValue.text,
+                            title = uiState.title,
+                            url = uiState.url,
+                            thumbnailUrl = uiState.url,
+                        )
+
+                    PostCard(
+                        post = post,
+                        postLayout = uiState.postLayout,
+                        fullHeightImage = uiState.fullHeightImages,
+                        fullWidthImage = uiState.fullWidthImages,
+                        includeFullBody = true,
+                        voteFormat = uiState.voteFormat,
+                        autoLoadImages = uiState.autoLoadImages,
+                        preferNicknames = uiState.preferNicknames,
+                        showScores = uiState.showScores,
+                        downVoteEnabled = uiState.downVoteEnabled,
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(Spacing.xxxl))
             }
 
             if (selectLanguageDialogOpen) {

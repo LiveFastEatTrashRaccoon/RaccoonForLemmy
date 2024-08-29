@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -164,7 +162,11 @@ class CreateCommentScreen(
         }
 
         Scaffold(
-            modifier = Modifier.navigationBarsPadding(),
+            modifier =
+                Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .navigationBarsPadding()
+                    .safeImePadding(),
             topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
@@ -229,15 +231,73 @@ class CreateCommentScreen(
                     },
                 )
             },
+            bottomBar = {
+                // bottom part with user name and toolbar
+                Column(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.background)
+                            .padding(bottom = Spacing.xs),
+                ) {
+                    if (uiState.currentUser.isNotEmpty()) {
+                        Text(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        start = Spacing.m,
+                                        end = Spacing.m,
+                                        bottom = Spacing.s,
+                                    ),
+                            text =
+                                buildString {
+                                    append(LocalStrings.current.postReplySourceAccount)
+                                    append(" ")
+                                    append(uiState.currentUser)
+                                    if (uiState.currentInstance.isNotEmpty()) {
+                                        append("@")
+                                        append(uiState.currentInstance)
+                                    }
+                                },
+                            color = MaterialTheme.colorScheme.onBackground,
+                            style = MaterialTheme.typography.labelSmall,
+                            textDecoration = TextDecoration.Underline,
+                            textAlign = TextAlign.End,
+                        )
+                    }
+
+                    TextFormattingBar(
+                        modifier =
+                            Modifier
+                                .padding(
+                                    top = Spacing.s,
+                                    start = Spacing.s,
+                                    end = Spacing.s,
+                                ),
+                        textFieldValue = uiState.textValue,
+                        onTextFieldValueChanged = { value ->
+                            model.reduce(CreateCommentMviModel.Intent.ChangeTextValue(value))
+                        },
+                        onSelectImage = {
+                            openImagePicker = true
+                        },
+                        currentLanguageId = uiState.currentLanguageId,
+                        availableLanguages = uiState.availableLanguages,
+                        onSelectLanguage = {
+                            selectLanguageDialogOpen = true
+                        },
+                    )
+                }
+            },
         ) { padding ->
             Box(
                 modifier =
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        ).consumeWindowInsets(padding)
-                        .safeImePadding()
-                        .fillMaxSize(),
+                            bottom = padding.calculateBottomPadding(),
+                        ).consumeWindowInsets(padding),
             ) {
                 // reference post or comment
                 Box(
@@ -355,7 +415,7 @@ class CreateCommentScreen(
                         TextField(
                             modifier =
                                 Modifier
-                                    .heightIn(min = 300.dp, max = 400.dp)
+                                    .height(400.dp)
                                     .fillMaxWidth(),
                             colors =
                                 TextFieldDefaults.colors(
@@ -395,14 +455,12 @@ class CreateCommentScreen(
                         Box(
                             modifier =
                                 Modifier
-                                    .heightIn(min = 300.dp, max = 500.dp)
-                                    .fillMaxWidth(),
+                                    .height(400.dp)
+                                    .fillMaxWidth()
+                                    .padding(Spacing.s)
+                                    .verticalScroll(rememberScrollState()),
                         ) {
                             PostCardBody(
-                                modifier =
-                                    Modifier
-                                        .padding(Spacing.s)
-                                        .verticalScroll(rememberScrollState()),
                                 text = uiState.textValue.text,
                                 autoLoadImages = uiState.autoLoadImages,
                             )
@@ -410,65 +468,6 @@ class CreateCommentScreen(
                     }
 
                     Spacer(modifier = Modifier.height(Spacing.xxxl))
-                }
-
-                // bottom part with user name and toolbar
-                Column(
-                    modifier =
-                        Modifier
-                            .align(Alignment.BottomCenter)
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(bottom = Spacing.xs),
-                ) {
-                    if (uiState.currentUser.isNotEmpty()) {
-                        Text(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        start = Spacing.m,
-                                        end = Spacing.m,
-                                        bottom = Spacing.s,
-                                    ),
-                            text =
-                                buildString {
-                                    append(LocalStrings.current.postReplySourceAccount)
-                                    append(" ")
-                                    append(uiState.currentUser)
-                                    if (uiState.currentInstance.isNotEmpty()) {
-                                        append("@")
-                                        append(uiState.currentInstance)
-                                    }
-                                },
-                            color = MaterialTheme.colorScheme.onBackground,
-                            style = MaterialTheme.typography.labelSmall,
-                            textDecoration = TextDecoration.Underline,
-                            textAlign = TextAlign.End,
-                        )
-                    }
-
-                    TextFormattingBar(
-                        modifier =
-                            Modifier
-                                .padding(
-                                    top = Spacing.s,
-                                    start = Spacing.s,
-                                    end = Spacing.s,
-                                ),
-                        textFieldValue = uiState.textValue,
-                        onTextFieldValueChanged = { value ->
-                            model.reduce(CreateCommentMviModel.Intent.ChangeTextValue(value))
-                        },
-                        onSelectImage = {
-                            openImagePicker = true
-                        },
-                        currentLanguageId = uiState.currentLanguageId,
-                        availableLanguages = uiState.availableLanguages,
-                        onSelectLanguage = {
-                            selectLanguageDialogOpen = true
-                        },
-                    )
                 }
             }
 
