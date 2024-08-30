@@ -34,16 +34,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.CommentBarTheme
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.FontScale
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.scaleFactor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toDownVoteColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toFontScale
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toIcon
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toReplyColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toSaveColor
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUpVoteColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getAppColorRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
@@ -52,6 +58,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toReadableName
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.MultiColorPreview
 import com.livefast.eattrash.raccoonforlemmy.unit.choosecolor.CustomColorPickerDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
@@ -63,13 +70,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.ui.components.SettingsColorRow
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.ui.components.SettingsMultiColorRow
-import com.livefast.eattrash.raccoonforlemmy.unit.choosecolor.CommentBarThemeBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.unit.choosefont.FontFamilyBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.unit.choosefont.FontScaleBottomSheet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -108,11 +111,11 @@ class SettingsColorAndFontScreen : Screen {
         var uiThemeBottomSheetOpened by remember { mutableStateOf(false) }
         var customColorBottomSheetOpened by remember { mutableStateOf(false) }
         var voteThemeBottomSheetOpened by remember { mutableStateOf(false) }
-        var customColorTypeSelection by remember { mutableStateOf(CustomColorType.None) }
         var commentBarColorsBottomSheetOpened by remember { mutableStateOf(false) }
         var fontFamilyBottomSheetOpened by remember { mutableStateOf(false) }
         var fontScaleBottomSheetOpened by remember { mutableStateOf(false) }
         var customColorPickerDialogOpened by remember { mutableStateOf(false) }
+        var customColorTypeSelection by remember { mutableStateOf(CustomColorType.None) }
 
         LaunchedEffect(themeRepository) {
             themeRepository.uiFontScale
@@ -175,7 +178,7 @@ class SettingsColorAndFontScreen : Screen {
                         value = uiState.uiTheme.toReadableName(),
                         onTap = {
                             uiThemeBottomSheetOpened = true
-                        }
+                        },
                     )
 
                     // dynamic colors
@@ -215,7 +218,7 @@ class SettingsColorAndFontScreen : Screen {
                                 ).primary,
                         onTap = {
                             customColorBottomSheetOpened = true
-                        }
+                        },
                     )
 
                     if (uiState.isLogged) {
@@ -226,7 +229,7 @@ class SettingsColorAndFontScreen : Screen {
                             onTap = {
                                 customColorTypeSelection = CustomColorType.UpvoteColor
                                 voteThemeBottomSheetOpened = true
-                            }
+                            },
                         )
                         SettingsColorRow(
                             title = LocalStrings.current.settingsDownvoteColor,
@@ -234,7 +237,7 @@ class SettingsColorAndFontScreen : Screen {
                             onTap = {
                                 customColorTypeSelection = CustomColorType.DownvoteColor
                                 voteThemeBottomSheetOpened = true
-                            }
+                            },
                         )
                         SettingsColorRow(
                             title = LocalStrings.current.settingsReplyColor,
@@ -242,7 +245,7 @@ class SettingsColorAndFontScreen : Screen {
                             onTap = {
                                 customColorTypeSelection = CustomColorType.ReplyColor
                                 voteThemeBottomSheetOpened = true
-                            }
+                            },
                         )
                         SettingsColorRow(
                             title = LocalStrings.current.settingsSaveColor,
@@ -252,7 +255,7 @@ class SettingsColorAndFontScreen : Screen {
                             onTap = {
                                 customColorTypeSelection = CustomColorType.SaveColor
                                 voteThemeBottomSheetOpened = true
-                            }
+                            },
                         )
                     }
 
@@ -262,33 +265,27 @@ class SettingsColorAndFontScreen : Screen {
                     SettingsMultiColorRow(
                         title = LocalStrings.current.settingsCommentBarTheme,
                         values = commentBarColors,
-                        onTap =
-                            rememberCallback {
-                                val screen = CommentBarThemeBottomSheet()
-                                navigationCoordinator.showBottomSheet(screen)
-                            },
+                        onTap = {
+                            commentBarColorsBottomSheetOpened = true
+                        },
                     )
 
                     // font family
                     SettingsRow(
                         title = LocalStrings.current.settingsUiFontFamily,
                         value = uiState.uiFontFamily.toReadableName(),
-                        onTap =
-                            rememberCallback {
-                                val sheet = FontFamilyBottomSheet()
-                                navigationCoordinator.showBottomSheet(sheet)
-                            },
+                        onTap = {
+                            fontFamilyBottomSheetOpened = true
+                        },
                     )
 
                     // font scale
                     SettingsRow(
                         title = LocalStrings.current.settingsUiFontScale,
                         value = uiState.uiFontScale.toFontScale().toReadableName(),
-                        onTap =
-                            rememberCallback {
-                                val sheet = FontScaleBottomSheet()
-                                navigationCoordinator.showBottomSheet(sheet)
-                            },
+                        onTap = {
+                            fontScaleBottomSheetOpened = true
+                        },
                     )
                 }
             }
@@ -300,22 +297,20 @@ class SettingsColorAndFontScreen : Screen {
                     UiTheme.Light,
                     UiTheme.Dark,
                     UiTheme.Black,
-                    null,
+                    UiTheme.Default,
                 )
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsUiTheme,
-                items = items.map {
+                items = items.map { theme ->
                     CustomModalBottomSheetItem(
-                        label = it.toReadableName(),
+                        label = theme.toReadableName(),
                         trailingContent = {
-                            if (it != null) {
-                                Icon(
-                                    modifier = Modifier.size(IconSize.m),
-                                    imageVector = it.toIcon(),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            }
+                            Icon(
+                                modifier = Modifier.size(IconSize.m),
+                                imageVector = theme.toIcon(),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
                         }
                     )},
                 onSelected = { index ->
@@ -363,8 +358,8 @@ class SettingsColorAndFontScreen : Screen {
                         )
                     },
                 onSelected = { index ->
+                    customColorBottomSheetOpened = false
                     if (index != null) {
-                        customColorBottomSheetOpened = false
                         if (index in appColorRepository.getColors().indices) {
                             notificationCenter.send(
                                 NotificationCenterEvent.ChangeColor(
@@ -373,10 +368,8 @@ class SettingsColorAndFontScreen : Screen {
                             )
                         } else {
                             customColorPickerDialogOpened = true
+                            customColorBottomSheetOpened = true
                         }
-                    }
-                    else {
-                        customColorBottomSheetOpened = false
                     }
                 },
             )
@@ -387,8 +380,8 @@ class SettingsColorAndFontScreen : Screen {
                 CustomColorPickerDialog(
                     initialValue = current ?: MaterialTheme.colorScheme.primary,
                     onClose = { newColor ->
-                        customColorBottomSheetOpened = false
                         customColorPickerDialogOpened = false
+                        customColorBottomSheetOpened = false
                         if (newColor != null) {
                             notificationCenter.send(NotificationCenterEvent.ChangeColor(newColor))
                         }
@@ -471,27 +464,27 @@ class SettingsColorAndFontScreen : Screen {
                         )
                     },
                 onSelected = { index ->
+                    voteThemeBottomSheetOpened = false
                     if (index != null) {
                         if (index in items.indices) {
-                            voteThemeBottomSheetOpened = false
                             notificationCenter.send(
                                 NotificationCenterEvent.ChangeActionColor(
                                     color =
                                     when (customColorTypeSelection) {
                                         CustomColorType.UpvoteColor -> {
-                                            items.get(index).toUpVoteColor()
+                                            items[index].toUpVoteColor()
                                         }
 
                                         CustomColorType.DownvoteColor -> {
-                                            items.get(index).toDownVoteColor()
+                                            items[index].toDownVoteColor()
                                         }
 
                                         CustomColorType.ReplyColor -> {
-                                            items.get(index).toReplyColor()
+                                            items[index].toReplyColor()
                                         }
 
                                         CustomColorType.SaveColor -> {
-                                            items.get(index).toSaveColor()
+                                            items[index].toSaveColor()
                                         }
 
                                         else -> {
@@ -505,6 +498,7 @@ class SettingsColorAndFontScreen : Screen {
                         }
                         else {
                             customColorPickerDialogOpened = true
+                            voteThemeBottomSheetOpened = true
                         }
                     }
                 },
@@ -516,13 +510,14 @@ class SettingsColorAndFontScreen : Screen {
                 CustomColorPickerDialog(
                     initialValue = current ?: MaterialTheme.colorScheme.primary,
                     onClose = { newColor ->
-                        voteThemeBottomSheetOpened = false
                         customColorPickerDialogOpened = false
+                        voteThemeBottomSheetOpened = false
                         if (newColor != null) {
-                            notificationCenter.send(NotificationCenterEvent.ChangeColor(newColor))
-                            NotificationCenterEvent.ChangeActionColor(
-                                color = newColor,
-                                actionType = customColorTypeSelection.ordinal
+                            notificationCenter.send(
+                                NotificationCenterEvent.ChangeActionColor(
+                                    color = newColor,
+                                    actionType = customColorTypeSelection.ordinal
+                                )
                             )
                         }
                         customColorTypeSelection = CustomColorType.None
@@ -531,8 +526,94 @@ class SettingsColorAndFontScreen : Screen {
             }
         }
 
-        if (commentBarColorsBottomSheetOpened) {}
-        if (fontFamilyBottomSheetOpened) {}
-        if (fontScaleBottomSheetOpened) {}
+        if (commentBarColorsBottomSheetOpened) {
+            val items =
+                listOf(
+                    CommentBarTheme.Blue,
+                    CommentBarTheme.Green,
+                    CommentBarTheme.Red,
+                    CommentBarTheme.Rainbow,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsCommentBarTheme,
+                items = items.map { barTheme ->
+                    CustomModalBottomSheetItem(
+                        label = barTheme.toReadableName(),
+                        trailingContent = {
+                            val colors = themeRepository.getCommentBarColors(barTheme)
+                            MultiColorPreview(
+                                modifier = Modifier.size(36.dp),
+                                colors = colors,
+                            )
+                        }
+                    )
+                },
+                onSelected = { index ->
+                    commentBarColorsBottomSheetOpened = false
+                    if (index != null && index in items.indices) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeCommentBarTheme(
+                                value = items[index]
+                            )
+                        )
+                    }
+                },
+            )
+        }
+
+        if (fontFamilyBottomSheetOpened) {
+            val items =
+                listOf(
+                    UiFontFamily.Poppins,
+                    UiFontFamily.NotoSans,
+                    UiFontFamily.CharisSIL,
+                    UiFontFamily.Default,
+                ).map { it.toInt() }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsUiFontFamily,
+                items = items.map{ fontFamily ->
+                    CustomModalBottomSheetItem(
+                        label = fontFamily.toUiFontFamily().toReadableName()
+                    )
+                },
+                onSelected = { index ->
+                    fontFamilyBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeFontFamily(items[index].toUiFontFamily())
+                        )
+                    }
+                },
+            )
+        }
+
+        if (fontScaleBottomSheetOpened) {
+            val items =
+                listOf(
+                    FontScale.Largest,
+                    FontScale.Larger,
+                    FontScale.Large,
+                    FontScale.Normal,
+                    FontScale.Small,
+                    FontScale.Smaller,
+                    FontScale.Smallest,
+                ).map { it.scaleFactor }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsUiFontScale,
+                items = items.map { font ->
+                    CustomModalBottomSheetItem(
+                        label = font.toFontScale().toReadableName()
+                    )
+                },
+                onSelected = { index ->
+                    fontScaleBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeUiFontSize(items[index])
+                        )
+                    }
+                },
+            )
+        }
     }
 }
