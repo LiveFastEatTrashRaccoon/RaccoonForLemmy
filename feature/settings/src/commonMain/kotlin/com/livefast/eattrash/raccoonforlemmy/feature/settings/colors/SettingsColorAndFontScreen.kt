@@ -310,7 +310,7 @@ class SettingsColorAndFontScreen : Screen {
                         trailingContent = {
                             if (it != null) {
                                 Icon(
-                                    modifier = Modifier.size(IconSize.l),
+                                    modifier = Modifier.size(IconSize.m),
                                     imageVector = it.toIcon(),
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.onBackground,
@@ -342,7 +342,7 @@ class SettingsColorAndFontScreen : Screen {
                                         modifier =
                                             Modifier
                                                 .padding(start = Spacing.xs)
-                                                .size(size = IconSize.l)
+                                                .size(size = IconSize.m)
                                                 .background(
                                                     color = theme.toColor(),
                                                     shape = CircleShape,
@@ -433,7 +433,7 @@ class SettingsColorAndFontScreen : Screen {
                                     Box(
                                         modifier =
                                             Modifier
-                                                .size(IconSize.l)
+                                                .size(IconSize.m)
                                                 .background(
                                                     color =
                                                         when(customColorTypeSelection) {

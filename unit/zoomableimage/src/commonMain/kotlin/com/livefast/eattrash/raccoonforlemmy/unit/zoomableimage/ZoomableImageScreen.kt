@@ -243,22 +243,22 @@ class ZoomableImageScreen(
                 items = items.map { CustomModalBottomSheetItem(label = it) },
                 onSelected = { index ->
                     imageShareBottomSheetOpened = false
-                    when(index) {
-                        0 -> {
-                            val event =
+                    if (index != null) {
+                        if (index == 0) {
+                            notificationCenter.send(
                                 NotificationCenterEvent.ShareImageModeSelected.ModeUrl(url)
-                            notificationCenter.send(event)
+                            )
                         }
-                        else -> {
-                            val event =
+                        else {
+                            notificationCenter.send(
                                 NotificationCenterEvent.ShareImageModeSelected.ModeFile(
                                     url = url,
                                     source = source,
                                 )
-                            notificationCenter.send(event)
+                            )
                         }
                     }
-                }
+                },
             )
         }
     }
