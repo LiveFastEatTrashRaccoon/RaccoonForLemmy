@@ -20,7 +20,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -28,7 +27,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,9 +40,9 @@ import androidx.compose.ui.unit.DpOffset
 import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ZoomableImage
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -74,9 +72,7 @@ class ZoomableImageScreen(
         val drawerCoordinator = remember { getDrawerCoordinator() }
         val shareHelper = remember { getShareHelper() }
         val notificationCenter = remember { getNotificationCenter() }
-        val sheetState = rememberModalBottomSheetState()
-        val sheetScope = rememberCoroutineScope()
-        var bottomSheetIsOpen by remember { mutableStateOf(false) }
+        var imageShareBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects.onEach {
@@ -135,7 +131,7 @@ class ZoomableImageScreen(
                                     .onClick(
                                         onClick = {
                                             if (shareHelper.supportsShareImage) {
-                                                bottomSheetIsOpen = true
+                                                imageShareBottomSheetOpened = true
                                             } else {
                                                 notificationCenter.send(
                                                     NotificationCenterEvent.ShareImageModeSelected.ModeUrl(url),
@@ -236,39 +232,34 @@ class ZoomableImageScreen(
                 },
         )
 
-        CustomBottomSheet(
-            isOpen = bottomSheetIsOpen,
-            sheetState = sheetState,
-            sheetScope = sheetScope,
-            onDismiss = {
-                bottomSheetIsOpen = false
-            },
-            onSelection = {
-                when(it) {
-                    0 -> {
-                        val event =
-                            NotificationCenterEvent.ShareImageModeSelected.ModeUrl(url)
-                        notificationCenter.send(event)
-                    }
-                    else -> {
-                        val event =
-                            NotificationCenterEvent.ShareImageModeSelected.ModeFile(
-                                url = url,
-                                source = source,
+        if (imageShareBottomSheetOpened) {
+            val items =
+                listOf(
+                    LocalStrings.current.shareModeUrl,
+                    LocalStrings.current.shareModeFile,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.postActionShare,
+                items = items.map { CustomModalBottomSheetItem(label = it) },
+                onSelected = { index ->
+                    imageShareBottomSheetOpened = false
+                    if (index != null) {
+                        if (index == 0) {
+                            notificationCenter.send(
+                                NotificationCenterEvent.ShareImageModeSelected.ModeUrl(url)
                             )
-                        notificationCenter.send(event)
+                        }
+                        else {
+                            notificationCenter.send(
+                                NotificationCenterEvent.ShareImageModeSelected.ModeFile(
+                                    url = url,
+                                    source = source,
+                                )
+                            )
+                        }
                     }
-                }
-            },
-            headerText = LocalStrings.current.postActionShare,
-            contentText = listOf(
-                LocalStrings.current.shareModeUrl,
-                LocalStrings.current.shareModeFile,
-            ),
-        )
-
-        if (uiState.loading) {
-            ProgressHud()
+                },
+            )
         }
     }
 }
