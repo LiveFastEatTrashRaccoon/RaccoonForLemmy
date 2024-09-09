@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
@@ -26,14 +29,15 @@ fun SettingsFormattedInfo(
     Box(
         modifier =
             modifier
-                .fillMaxWidth()
-                .padding(
-                    vertical = Spacing.xs,
-                    horizontal = Spacing.m,
-                ).onClick(
+                .clip(RoundedCornerShape(CornerSize.xxl))
+                .onClick(
                     onClick = {
                         onEdit?.invoke()
                     },
+                ).fillMaxWidth()
+                .padding(
+                    vertical = Spacing.xs,
+                    horizontal = Spacing.m,
                 ),
     ) {
         Column(
