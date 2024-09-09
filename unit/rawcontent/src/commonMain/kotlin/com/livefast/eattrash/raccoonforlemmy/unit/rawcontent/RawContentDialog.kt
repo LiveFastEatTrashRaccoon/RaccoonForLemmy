@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 
@@ -56,14 +55,12 @@ fun RawContentDialog(
 ) {
     val clipboardManager = LocalClipboardManager.current
     val shareHelper = remember { getShareHelper() }
-    val onShareLambda =
-        rememberCallback {
-            val query = clipboardManager.getText()?.text.orEmpty()
+    val onShareLambda: () -> Unit = {
+        val query = clipboardManager.getText()?.text.orEmpty()
             shareHelper.share(query)
         }
-    val onQuoteLambda =
-        rememberCallback {
-            val query = clipboardManager.getText()?.text.orEmpty()
+    val onQuoteLambda: () -> Unit = {
+        val query = clipboardManager.getText()?.text.orEmpty()
             onQuote?.invoke(query)
         }
     val quoteActionLabel =

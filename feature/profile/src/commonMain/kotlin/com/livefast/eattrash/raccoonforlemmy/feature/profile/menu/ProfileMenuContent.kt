@@ -20,7 +20,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
 
 @Composable
 internal fun ProfileMenuContent(
@@ -38,35 +37,31 @@ internal fun ProfileMenuContent(
         SettingsRow(
             title = LocalStrings.current.navigationDrawerTitleSubscriptions,
             icon = Icons.Default.Book,
-            onTap =
-                rememberCallback {
-                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions)
-                },
+            onTap = {
+                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions)
+            },
         )
         if (isBookmarksVisible) {
             SettingsRow(
                 title = LocalStrings.current.navigationDrawerTitleBookmarks,
                 icon = Icons.Default.Bookmark,
-                onTap =
-                    rememberCallback {
-                        notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Bookmarks)
-                    },
+                onTap = {
+                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Bookmarks)
+                },
             )
         }
         SettingsRow(
             title = LocalStrings.current.navigationDrawerTitleDrafts,
             icon = Icons.Default.Drafts,
-            onTap =
-                rememberCallback {
-                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Drafts)
-                },
+            onTap = {
+                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Drafts)
+            },
         )
         SettingsRow(
             title = LocalStrings.current.profileUpvotesDownvotes,
             icon = Icons.Default.ThumbsUpDown,
-            onTap =
-                rememberCallback {
-                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Votes)
+            onTap = {
+                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Votes)
                 },
         )
 
@@ -74,9 +69,8 @@ internal fun ProfileMenuContent(
             SettingsRow(
                 title = LocalStrings.current.moderatorZoneTitle,
                 icon = Icons.Default.Shield,
-                onTap =
-                    rememberCallback {
-                        notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone)
+                onTap = {
+                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone)
                     },
             )
         }
@@ -84,9 +78,8 @@ internal fun ProfileMenuContent(
             SettingsRow(
                 title = LocalStrings.current.actionCreateCommunity,
                 icon = Icons.Default.GroupAdd,
-                onTap =
-                    rememberCallback {
-                        notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity)
+                onTap = {
+                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity)
                     },
             )
         }
@@ -94,8 +87,7 @@ internal fun ProfileMenuContent(
         SettingsRow(
             title = LocalStrings.current.manageAccountsTitle,
             icon = Icons.Default.ManageAccounts,
-            onTap =
-                rememberCallback {
+            onTap = {
                     notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts)
                 },
         )
@@ -105,8 +97,7 @@ internal fun ProfileMenuContent(
         SettingsRow(
             title = LocalStrings.current.actionLogout,
             icon = Icons.AutoMirrored.Default.Logout,
-            onTap =
-                rememberCallback {
+            onTap = {
                     notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Logout)
                 },
         )

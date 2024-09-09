@@ -59,7 +59,6 @@ fun TextFormattingBar(
             Icon(
                 modifier =
                     Modifier.onClick(
-                        key = textFieldValue,
                         onClick = {
                             val selection = textFieldValue.selection
                             val newValue =
@@ -111,7 +110,6 @@ fun TextFormattingBar(
             Icon(
                 modifier =
                     Modifier.onClick(
-                        key = textFieldValue,
                         onClick = {
                             val selection = textFieldValue.selection
                             val newValue =
@@ -163,7 +161,6 @@ fun TextFormattingBar(
             Icon(
                 modifier =
                     Modifier.onClick(
-                        key = textFieldValue,
                         onClick = {
                             val selection = textFieldValue.selection
                             val newValue =
@@ -232,7 +229,6 @@ fun TextFormattingBar(
             Icon(
                 modifier =
                     Modifier.onClick(
-                        key = textFieldValue,
                         onClick = {
                             val newValue =
                                 textFieldValue.let {
@@ -286,7 +282,6 @@ fun TextFormattingBar(
             Icon(
                 modifier =
                     Modifier.onClick(
-                        key = textFieldValue,
                         onClick = {
                             val newValue =
                                 textFieldValue.let {
@@ -338,7 +333,6 @@ fun TextFormattingBar(
             Icon(
                 modifier =
                     Modifier.onClick(
-                        key = textFieldValue,
                         onClick = {
                             val newValue =
                                 textFieldValue.let {
@@ -371,7 +365,6 @@ fun TextFormattingBar(
             Icon(
                 modifier =
                     Modifier.onClick(
-                        key = textFieldValue,
                         onClick = {
                             val newValue =
                                 textFieldValue.let {
@@ -404,7 +397,6 @@ fun TextFormattingBar(
             Icon(
                 modifier =
                     Modifier.onClick(
-                        key = textFieldValue,
                         onClick = {
                             val newValue =
                                 textFieldValue.let {
@@ -443,17 +435,17 @@ fun TextFormattingBar(
                                 color = MaterialTheme.colorScheme.onBackground,
                                 width = Dp.Hairline,
                                 shape = RoundedCornerShape(CornerSize.m),
-                            )
-                            .clickable(onClick = onSelectLanguage)
+                            ).clickable(onClick = onSelectLanguage)
                             .padding(Spacing.xxxs),
                     contentAlignment = Alignment.Center,
                 ) {
                     val languageCode =
-                        availableLanguages.firstOrNull { l ->
-                            l.id == currentLanguageId
-                        }?.takeIf { l ->
-                            l.id > 0 // undetermined language
-                        }?.code ?: "λ"
+                        availableLanguages
+                            .firstOrNull { l ->
+                                l.id == currentLanguageId
+                            }?.takeIf { l ->
+                                l.id > 0 // undetermined language
+                            }?.code ?: "λ"
                     Text(
                         text = languageCode,
                         style = MaterialTheme.typography.labelSmall,

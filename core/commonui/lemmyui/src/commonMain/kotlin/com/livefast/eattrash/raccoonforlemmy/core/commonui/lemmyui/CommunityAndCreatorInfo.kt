@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -88,6 +89,9 @@ fun CommunityAndCreatorInfo(
                     CustomImage(
                         modifier =
                             Modifier
+                                .size(iconSize)
+                                .padding(Spacing.xxxs)
+                                .clip(RoundedCornerShape(iconSize / 2))
                                 .onClick(
                                     onClick = {
                                         if (community != null) {
@@ -95,24 +99,18 @@ fun CommunityAndCreatorInfo(
                                         }
                                     },
                                     onDoubleClick = onDoubleClick ?: {},
-                                ).padding(Spacing.xxxs)
-                                .size(iconSize)
-                                .clip(RoundedCornerShape(iconSize / 2)),
+                                ),
                         url = communityIcon,
                         quality = FilterQuality.Low,
                         contentScale = ContentScale.FillBounds,
                     )
                 } else {
                     PlaceholderImage(
-                        modifier =
-                            Modifier.onClick(
-                                onClick = {
-                                    if (community != null) {
-                                        onOpenCommunity?.invoke(community)
-                                    }
-                                },
-                                onDoubleClick = onDoubleClick ?: {},
-                            ),
+                        onClick = {
+                            if (community != null) {
+                                onOpenCommunity?.invoke(community)
+                            }
+                        },
                         size = iconSize,
                         title = communityName,
                     )
@@ -122,6 +120,9 @@ fun CommunityAndCreatorInfo(
                     CustomImage(
                         modifier =
                             Modifier
+                                .size(iconSize)
+                                .padding(Spacing.xxxs)
+                                .clip(RoundedCornerShape(iconSize / 2))
                                 .onClick(
                                     onClick = {
                                         if (creator != null) {
@@ -129,24 +130,18 @@ fun CommunityAndCreatorInfo(
                                         }
                                     },
                                     onDoubleClick = onDoubleClick ?: {},
-                                ).padding(Spacing.xxxs)
-                                .size(iconSize)
-                                .clip(RoundedCornerShape(iconSize / 2)),
+                                ),
                         url = creatorAvatar,
                         quality = FilterQuality.Low,
                         contentScale = ContentScale.FillBounds,
                     )
                 } else {
                     PlaceholderImage(
-                        modifier =
-                            Modifier.onClick(
-                                onClick = {
-                                    if (creator != null) {
-                                        onOpenCreator?.invoke(creator)
-                                    }
-                                },
-                                onDoubleClick = onDoubleClick ?: {},
-                            ),
+                        onClick = {
+                            if (creator != null) {
+                                onOpenCreator?.invoke(creator)
+                            }
+                        },
                         size = iconSize,
                         title = creatorName,
                     )
@@ -160,6 +155,7 @@ fun CommunityAndCreatorInfo(
                         modifier =
                             Modifier
                                 .onClick(
+                                    indication = null,
                                     onClick = {
                                         onOpenCommunity?.invoke(community)
                                     },
@@ -176,6 +172,7 @@ fun CommunityAndCreatorInfo(
                         modifier =
                             Modifier
                                 .onClick(
+                                    indication = null,
                                     onClick = {
                                         onOpenCreator?.invoke(creator)
                                     },
@@ -251,26 +248,22 @@ fun CommunityAndCreatorInfo(
                 )
             }
             if (indicatorExpanded != null) {
-                val expandedModifier =
-                    Modifier
-                        .padding(end = Spacing.xs)
-                        .onClick(
-                            onClick = {
-                                onToggleExpanded?.invoke()
-                            },
+                IconButton(
+                    onClick = {
+                        onToggleExpanded?.invoke()
+                    },
+                ) {
+                    if (indicatorExpanded) {
+                        Icon(
+                            imageVector = Icons.Default.ExpandLess,
+                            contentDescription = null,
                         )
-                if (indicatorExpanded) {
-                    Icon(
-                        modifier = expandedModifier,
-                        imageVector = Icons.Default.ExpandLess,
-                        contentDescription = null,
-                    )
-                } else {
-                    Icon(
-                        modifier = expandedModifier,
-                        imageVector = Icons.Default.ExpandMore,
-                        contentDescription = null,
-                    )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.ExpandMore,
+                            contentDescription = null,
+                        )
+                    }
                 }
             }
         }

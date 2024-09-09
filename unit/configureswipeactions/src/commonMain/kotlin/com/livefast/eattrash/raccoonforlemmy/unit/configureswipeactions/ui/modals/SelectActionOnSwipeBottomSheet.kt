@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.modals
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,12 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.BottomSheetHeader
@@ -65,8 +64,7 @@ class SelectActionOnSwipeBottomSheet(
                                 .padding(
                                     horizontal = Spacing.s,
                                     vertical = Spacing.s,
-                                )
-                                .fillMaxWidth()
+                                ).fillMaxWidth()
                                 .onClick(
                                     onClick = {
                                         notificationCenter.send(
@@ -87,10 +85,10 @@ class SelectActionOnSwipeBottomSheet(
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         value.toIcon()?.also { icon ->
-                            Image(
+                            Icon(
                                 imageVector = icon,
                                 contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                                tint = MaterialTheme.colorScheme.onBackground,
                             )
                         }
                     }

@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -99,14 +100,11 @@ internal fun ChatCard(
             )
         } else {
             PlaceholderImage(
-                modifier =
-                    Modifier.onClick(
-                        onClick = {
-                            if (user != null) {
-                                onOpenUser?.invoke(user)
-                            }
-                        },
-                    ),
+                onClick = {
+                    if (user != null) {
+                        onOpenUser?.invoke(user)
+                    }
+                },
                 size = iconSize,
                 title = creatorName,
             )
@@ -158,22 +156,24 @@ internal fun ChatCard(
                         Spacer(modifier = Modifier.size(IconSize.m))
                         Spacer(modifier = Modifier.weight(1f))
                         if (options.isNotEmpty()) {
-                            Icon(
+                            IconButton(
                                 modifier =
-                                    Modifier.size(IconSize.m)
+                                    Modifier
+                                        .size(IconSize.m)
                                         .padding(Spacing.xs)
                                         .onGloballyPositioned {
                                             optionsOffset = it.positionInParent()
-                                        }
-                                        .onClick(
-                                            onClick = {
-                                                optionsExpanded = true
-                                            },
-                                        ),
-                                imageVector = Icons.Default.MoreHoriz,
-                                contentDescription = null,
-                                tint = ancillaryColor,
-                            )
+                                        },
+                                onClick = {
+                                    optionsExpanded = true
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.MoreHoriz,
+                                    contentDescription = null,
+                                    tint = ancillaryColor,
+                                )
+                            }
                         }
                     }
 

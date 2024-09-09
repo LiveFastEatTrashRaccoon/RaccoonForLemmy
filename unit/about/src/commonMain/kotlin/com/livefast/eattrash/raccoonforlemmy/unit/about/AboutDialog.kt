@@ -18,6 +18,7 @@ import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -67,161 +68,163 @@ class AboutDialog : Screen {
                 notificationCenter.send(NotificationCenterEvent.CloseDialog)
             },
         ) {
-            Column(
-                modifier =
-                    Modifier
-                        .background(color = MaterialTheme.colorScheme.surface)
-                        .padding(vertical = Spacing.s),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = LocalStrings.current.settingsAbout,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                Spacer(modifier = Modifier.height(Spacing.s))
-                LazyColumn(
+            Surface {
+                Column(
                     modifier =
                         Modifier
-                            .padding(vertical = Spacing.s, horizontal = Spacing.m)
-                            .heightIn(max = 400.dp),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                            .background(color = MaterialTheme.colorScheme.surface)
+                            .padding(vertical = Spacing.s),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    item {
-                        AboutItem(
-                            text = LocalStrings.current.settingsAboutAppVersion,
-                            value = uiState.version,
-                        )
-                    }
-                    item {
-                        AboutItem(
-                            text = LocalStrings.current.settingsAboutChangelog,
-                            vector = Icons.Default.OpenInBrowser,
-                            textDecoration = TextDecoration.Underline,
-                            onClick = {
-                                navigationCoordinator.handleUrl(
-                                    url = AboutConstants.CHANGELOG_URL,
-                                    openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                    uriHandler = uriHandler,
-                                    customTabsHelper = customTabsHelper,
-                                    onOpenWeb = { url ->
-                                        navigationCoordinator.pushScreen(WebViewScreen(url))
-                                    },
-                                )
-                            },
-                        )
-                    }
-                    item {
-                        Button(
-                            onClick = {
-                                navigationCoordinator.handleUrl(
-                                    url = AboutConstants.REPORT_URL,
-                                    openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                    uriHandler = uriHandler,
-                                    customTabsHelper = customTabsHelper,
-                                    onOpenWeb = { url ->
-                                        navigationCoordinator.pushScreen(WebViewScreen(url))
-                                    },
-                                )
-                            },
-                        ) {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = LocalStrings.current.settingsAboutReportGithub,
-                                style = MaterialTheme.typography.labelLarge,
+                    Text(
+                        text = LocalStrings.current.settingsAbout,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                    Spacer(modifier = Modifier.height(Spacing.s))
+                    LazyColumn(
+                        modifier =
+                            Modifier
+                                .padding(vertical = Spacing.s, horizontal = Spacing.m)
+                                .heightIn(max = 400.dp),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                    ) {
+                        item {
+                            AboutItem(
+                                text = LocalStrings.current.settingsAboutAppVersion,
+                                value = uiState.version,
                             )
                         }
-                        Button(
-                            onClick = {
-                                runCatching {
-                                    uriHandler.openUri("mailto:${AboutConstants.REPORT_EMAIL_ADDRESS}")
-                                }
-                            },
-                        ) {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = LocalStrings.current.settingsAboutReportEmail,
-                                style = MaterialTheme.typography.labelLarge,
+                        item {
+                            AboutItem(
+                                text = LocalStrings.current.settingsAboutChangelog,
+                                vector = Icons.Default.OpenInBrowser,
+                                textDecoration = TextDecoration.Underline,
+                                onClick = {
+                                    navigationCoordinator.handleUrl(
+                                        url = AboutConstants.CHANGELOG_URL,
+                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
+                                        uriHandler = uriHandler,
+                                        customTabsHelper = customTabsHelper,
+                                        onOpenWeb = { url ->
+                                            navigationCoordinator.pushScreen(WebViewScreen(url))
+                                        },
+                                    )
+                                },
                             )
                         }
-                    }
-                    item {
-                        AboutItem(
-                            painter = coreResources.github,
-                            text = LocalStrings.current.settingsAboutViewGithub,
-                            textDecoration = TextDecoration.Underline,
-                            onClick = {
-                                navigationCoordinator.handleUrl(
-                                    url = AboutConstants.WEBSITE_URL,
-                                    openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                    uriHandler = uriHandler,
-                                    customTabsHelper = customTabsHelper,
-                                    onOpenWeb = { url ->
-                                        navigationCoordinator.pushScreen(WebViewScreen(url))
-                                    },
+                        item {
+                            Button(
+                                onClick = {
+                                    navigationCoordinator.handleUrl(
+                                        url = AboutConstants.REPORT_URL,
+                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
+                                        uriHandler = uriHandler,
+                                        customTabsHelper = customTabsHelper,
+                                        onOpenWeb = { url ->
+                                            navigationCoordinator.pushScreen(WebViewScreen(url))
+                                        },
+                                    )
+                                },
+                            ) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = LocalStrings.current.settingsAboutReportGithub,
+                                    style = MaterialTheme.typography.labelLarge,
                                 )
-                            },
-                        )
-                    }
-                    item {
-                        AboutItem(
-                            vector = Icons.Default.Shop,
-                            text = LocalStrings.current.settingsAboutViewGooglePlay,
-                            textDecoration = TextDecoration.Underline,
-                            onClick = {
-                                navigationCoordinator.handleUrl(
-                                    url = AboutConstants.GOOGLE_PLAY_URL,
-                                    openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                    uriHandler = uriHandler,
-                                    customTabsHelper = customTabsHelper,
-                                    onOpenWeb = { url ->
-                                        navigationCoordinator.pushScreen(WebViewScreen(url))
-                                    },
+                            }
+                            Button(
+                                onClick = {
+                                    runCatching {
+                                        uriHandler.openUri("mailto:${AboutConstants.REPORT_EMAIL_ADDRESS}")
+                                    }
+                                },
+                            ) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = LocalStrings.current.settingsAboutReportEmail,
+                                    style = MaterialTheme.typography.labelLarge,
                                 )
-                            },
-                        )
-                    }
-                    item {
-                        AboutItem(
-                            painter = coreResources.lemmy,
-                            text = LocalStrings.current.settingsAboutViewLemmy,
-                            textDecoration = TextDecoration.Underline,
-                            onClick = {
-                                detailOpener.openCommunityDetail(
-                                    community = CommunityModel(name = AboutConstants.LEMMY_COMMUNITY_NAME),
-                                    otherInstance = AboutConstants.LEMMY_COMMUNITY_INSTANCE,
-                                )
-                            },
-                        )
-                    }
+                            }
+                        }
+                        item {
+                            AboutItem(
+                                painter = coreResources.github,
+                                text = LocalStrings.current.settingsAboutViewGithub,
+                                textDecoration = TextDecoration.Underline,
+                                onClick = {
+                                    navigationCoordinator.handleUrl(
+                                        url = AboutConstants.WEBSITE_URL,
+                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
+                                        uriHandler = uriHandler,
+                                        customTabsHelper = customTabsHelper,
+                                        onOpenWeb = { url ->
+                                            navigationCoordinator.pushScreen(WebViewScreen(url))
+                                        },
+                                    )
+                                },
+                            )
+                        }
+                        item {
+                            AboutItem(
+                                vector = Icons.Default.Shop,
+                                text = LocalStrings.current.settingsAboutViewGooglePlay,
+                                textDecoration = TextDecoration.Underline,
+                                onClick = {
+                                    navigationCoordinator.handleUrl(
+                                        url = AboutConstants.GOOGLE_PLAY_URL,
+                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
+                                        uriHandler = uriHandler,
+                                        customTabsHelper = customTabsHelper,
+                                        onOpenWeb = { url ->
+                                            navigationCoordinator.pushScreen(WebViewScreen(url))
+                                        },
+                                    )
+                                },
+                            )
+                        }
+                        item {
+                            AboutItem(
+                                painter = coreResources.lemmy,
+                                text = LocalStrings.current.settingsAboutViewLemmy,
+                                textDecoration = TextDecoration.Underline,
+                                onClick = {
+                                    detailOpener.openCommunityDetail(
+                                        community = CommunityModel(name = AboutConstants.LEMMY_COMMUNITY_NAME),
+                                        otherInstance = AboutConstants.LEMMY_COMMUNITY_INSTANCE,
+                                    )
+                                },
+                            )
+                        }
 
-                    item {
-                        AboutItem(
-                            text = LocalStrings.current.settingsAboutLicences,
-                            vector = Icons.Default.Gavel,
-                            textDecoration = TextDecoration.Underline,
-                            onClick = {
-                                navigationCoordinator.pushScreen(LicencesScreen())
-                            },
-                        )
+                        item {
+                            AboutItem(
+                                text = LocalStrings.current.settingsAboutLicences,
+                                vector = Icons.Default.Gavel,
+                                textDecoration = TextDecoration.Underline,
+                                onClick = {
+                                    navigationCoordinator.pushScreen(LicencesScreen())
+                                },
+                            )
+                        }
+                        item {
+                            AboutItem(
+                                text = LocalStrings.current.settingsAboutAcknowledgements,
+                                vector = Icons.Default.VolunteerActivism,
+                                textDecoration = TextDecoration.Underline,
+                                onClick = {
+                                    navigationCoordinator.pushScreen(AcknowledgementsScreen())
+                                },
+                            )
+                        }
                     }
-                    item {
-                        AboutItem(
-                            text = LocalStrings.current.settingsAboutAcknowledgements,
-                            vector = Icons.Default.VolunteerActivism,
-                            textDecoration = TextDecoration.Underline,
-                            onClick = {
-                                navigationCoordinator.pushScreen(AcknowledgementsScreen())
-                            },
-                        )
+                    Button(
+                        onClick = {
+                            notificationCenter.send(NotificationCenterEvent.CloseDialog)
+                        },
+                    ) {
+                        Text(text = LocalStrings.current.buttonClose)
                     }
-                }
-                Button(
-                    onClick = {
-                        notificationCenter.send(NotificationCenterEvent.CloseDialog)
-                    },
-                ) {
-                    Text(text = LocalStrings.current.buttonClose)
                 }
             }
         }

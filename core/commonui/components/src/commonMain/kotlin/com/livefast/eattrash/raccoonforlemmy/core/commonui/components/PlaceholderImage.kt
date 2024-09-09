@@ -10,22 +10,32 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
 fun PlaceholderImage(
-    modifier: Modifier = Modifier,
     size: Dp,
     title: String,
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
 ) {
     Box(
         modifier =
             modifier
-                .padding(Spacing.xxxs)
+                .clip(RoundedCornerShape(size / 2))
+                .then(
+                    if (onClick != null) {
+                        Modifier.onClick(onClick = { onClick() })
+                    } else {
+                        Modifier
+                    },
+                ).padding(Spacing.xxxs)
                 .size(size)
                 .background(
                     color = MaterialTheme.colorScheme.primary,

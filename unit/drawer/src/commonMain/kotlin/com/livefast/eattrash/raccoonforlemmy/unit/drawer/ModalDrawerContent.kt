@@ -45,7 +45,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordin
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
@@ -119,14 +118,12 @@ object ModalDrawerContent : Tab {
                 user = uiState.user,
                 instance = uiState.instance,
                 autoLoadImages = uiState.autoLoadImages,
-                onOpenChangeInstance =
-                    rememberCallback(model) {
-                        navigationCoordinator.showBottomSheet(SelectInstanceBottomSheet())
-                    },
-                onOpenSwitchAccount =
-                    rememberCallback {
-                        navigationCoordinator.showBottomSheet(ManageAccountsScreen())
-                    },
+                onOpenChangeInstance = {
+                    navigationCoordinator.showBottomSheet(SelectInstanceBottomSheet())
+                },
+                onOpenSwitchAccount = {
+                    navigationCoordinator.showBottomSheet(ManageAccountsScreen())
+                },
             )
 
             HorizontalDivider(
@@ -142,10 +139,9 @@ object ModalDrawerContent : Tab {
                 val pullRefreshState =
                     rememberPullRefreshState(
                         refreshing = uiState.refreshing,
-                        onRefresh =
-                            rememberCallback(model) {
-                                model.reduce(ModalDrawerMviModel.Intent.Refresh)
-                            },
+                        onRefresh = {
+                            model.reduce(ModalDrawerMviModel.Intent.Refresh)
+                        },
                     )
                 Box(
                     modifier =
@@ -190,11 +186,10 @@ object ModalDrawerContent : Tab {
                                     DrawerShortcut(
                                         title = listingType.toReadableName(),
                                         icon = listingType.toIcon(),
-                                        onSelected =
-                                            rememberCallback(coordinator) {
-                                                scope.launch {
-                                                    focusManager.clearFocus()
-                                                    navigationCoordinator.popUntilRoot()
+                                        onSelected = {
+                                            scope.launch {
+                                                focusManager.clearFocus()
+                                                navigationCoordinator.popUntilRoot()
                                                     coordinator.toggleDrawer()
                                                     delay(50)
                                                     coordinator.sendEvent(
@@ -210,11 +205,10 @@ object ModalDrawerContent : Tab {
                                     DrawerShortcut(
                                         title = LocalStrings.current.navigationSettings,
                                         icon = Icons.Default.Settings,
-                                        onSelected =
-                                            rememberCallback(coordinator) {
-                                                scope.launch {
-                                                    focusManager.clearFocus()
-                                                    navigationCoordinator.popUntilRoot()
+                                        onSelected = {
+                                            scope.launch {
+                                                focusManager.clearFocus()
+                                                navigationCoordinator.popUntilRoot()
                                                     coordinator.toggleDrawer()
                                                     delay(50)
 
@@ -266,15 +260,11 @@ object ModalDrawerContent : Tab {
                                     }
                                 },
                                 onToggleFavorite =
-                                    if (!uiState.enableToggleFavorite) {
-                                        null
-                                    } else {
-                                        rememberCallback(model) {
-                                            model.reduce(
-                                                ModalDrawerMviModel.Intent.ToggleFavorite(community.id),
+                                {
+                                        model.reduce(
+                                            ModalDrawerMviModel.Intent.ToggleFavorite(community.id),
                                             )
-                                        }
-                                    },
+                                }.takeIf { uiState.enableToggleFavorite },
                             )
                         }
 
@@ -298,15 +288,11 @@ object ModalDrawerContent : Tab {
                                     }
                                 },
                                 onToggleFavorite =
-                                    if (!uiState.enableToggleFavorite) {
-                                        null
-                                    } else {
-                                        rememberCallback(model) {
-                                            model.reduce(
-                                                ModalDrawerMviModel.Intent.ToggleFavorite(community.id),
-                                            )
-                                        }
-                                    },
+                                {
+                                        model.reduce(
+                                            ModalDrawerMviModel.Intent.ToggleFavorite(community.id),
+                                        )
+                                    }.takeIf { uiState.enableToggleFavorite },
                             )
                         }
                     }
@@ -362,11 +348,10 @@ object ModalDrawerContent : Tab {
                         DrawerShortcut(
                             title = LocalStrings.current.navigationSettings,
                             icon = Icons.Default.Settings,
-                            onSelected =
-                                rememberCallback(coordinator) {
-                                    scope.launch {
-                                        focusManager.clearFocus()
-                                        navigationCoordinator.popUntilRoot()
+                            onSelected = {
+                                scope.launch {
+                                    focusManager.clearFocus()
+                                    navigationCoordinator.popUntilRoot()
                                         coordinator.toggleDrawer()
                                         delay(50)
 

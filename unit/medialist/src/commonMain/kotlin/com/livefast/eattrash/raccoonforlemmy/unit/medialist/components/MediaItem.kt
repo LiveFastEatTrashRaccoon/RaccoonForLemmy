@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.medialist.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +17,7 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
@@ -31,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.Dp
@@ -141,7 +140,7 @@ internal fun MediaItem(
                     Modifier.padding(
                         vertical = Spacing.xs,
                         horizontal = Spacing.s,
-                ),
+                    ),
                 date = media.date,
                 options = options,
                 onOptionSelected = onOptionSelected,
@@ -187,38 +186,38 @@ private fun MediaFooter(
                 )
             }
             if (options.isNotEmpty()) {
-                Icon(
+                IconButton(
                     modifier =
-                    Modifier
-                        .size(IconSize.m)
+                        Modifier
+                            .size(IconSize.m)
                             .padding(Spacing.xs)
                             .padding(top = Spacing.xxs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            }.onClick(
-                                onClick = {
-                                    optionsExpanded = true
-                                },
-                            ),
-                    imageVector = Icons.Default.MoreHoriz,
-                    contentDescription = null,
-                    tint = ancillaryColor,
-                )
+                            },
+                    onClick = {
+                        optionsExpanded = true
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreHoriz,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                }
             }
             Spacer(modifier = Modifier.weight(1f))
             if (onOpen != null) {
-                Image(
-                    modifier =
-                        buttonModifier
-                            .onClick(
-                                onClick = {
-                                    onOpen.invoke()
-                                },
-                            ),
-                    imageVector = Icons.AutoMirrored.Default.OpenInNew,
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                )
+                IconButton(
+                    onClick = {
+                        onOpen.invoke()
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.OpenInNew,
+                        contentDescription = null,
+                    )
+                }
             }
         }
         CustomDropDown(

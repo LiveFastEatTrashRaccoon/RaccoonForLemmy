@@ -32,8 +32,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -70,17 +68,15 @@ fun InboxCard(
 ) {
     var textSelection by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
-    val onClickPost =
-        rememberCallback {
-            onClick.invoke(mention.post)
-        }
+    val onClickPost = {
+        onClick.invoke(mention.post)
+    }
     val shareHelper = remember { getShareHelper() }
     val clipboardManager = LocalClipboardManager.current
-    val onShareLambda =
-        rememberCallback {
-            val query = clipboardManager.getText()?.text.orEmpty()
-            shareHelper.share(query)
-        }
+    val onShareLambda = {
+        val query = clipboardManager.getText()?.text.orEmpty()
+        shareHelper.share(query)
+    }
     val shareActionLabel = LocalStrings.current.postActionShare
 
     Box(
@@ -101,15 +97,14 @@ fun InboxCard(
                         Modifier.background(MaterialTheme.colorScheme.background)
                     },
                 ).onClick(
-                    onClick =
-                        rememberCallback {
-                            if (textSelection) {
-                                focusManager.clearFocus()
-                                textSelection = false
-                            } else {
-                                onClickPost()
-                            }
-                        },
+                    onClick = {
+                        if (textSelection) {
+                            focusManager.clearFocus()
+                            textSelection = false
+                        } else {
+                            onClickPost()
+                        }
+                    },
                 ),
     ) {
         CompositionLocalProvider(
@@ -126,9 +121,9 @@ fun InboxCard(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                        .onClick(
-                            onClick = onClickPost,
-                        ).padding(horizontal = Spacing.s),
+                            .onClick(
+                                onClick = onClickPost,
+                            ).padding(horizontal = Spacing.s),
                     mention = mention,
                     type = type,
                 )
@@ -155,9 +150,9 @@ fun InboxCard(
                             modifier =
                                 Modifier
                                     .fillMaxWidth()
-                                .padding(
-                                    horizontal = Spacing.s,
-                                ),
+                                    .padding(
+                                        horizontal = Spacing.s,
+                                    ),
                             text = previewText,
                             autoLoadImages = autoLoadImages,
                             onOpenImage = onImageClick,
@@ -169,8 +164,7 @@ fun InboxCard(
                                     onClickPost.invoke()
                                 }
                             },
-                            onOpenUser =
-                                rememberCallbackArgs { user, instance ->
+                            onOpenUser = { user, instance ->
                                 onOpenCreator(user, instance)
                             },
                             onLongClick = {
@@ -182,12 +176,12 @@ fun InboxCard(
                 InboxReplySubtitle(
                     modifier =
                         Modifier
-                        .onClick(onClick = onClickPost)
-                        .padding(
-                            start = Spacing.s,
-                            end = Spacing.s,
-                            top = Spacing.s,
-                        ),
+                            .onClick(onClick = onClickPost)
+                            .padding(
+                                start = Spacing.s,
+                                end = Spacing.s,
+                                top = Spacing.s,
+                            ),
                     creator = mention.creator,
                     community = mention.community,
                     autoLoadImages = autoLoadImages,
@@ -203,8 +197,7 @@ fun InboxCard(
                     downVoteEnabled = downVoteEnabled,
                     options = options,
                     onOpenCommunity = onOpenCommunity,
-                    onOpenCreator =
-                        rememberCallbackArgs { user ->
+                    onOpenCreator = { user ->
                         onOpenCreator(user, "")
                     },
                     onUpVote = onUpVote,

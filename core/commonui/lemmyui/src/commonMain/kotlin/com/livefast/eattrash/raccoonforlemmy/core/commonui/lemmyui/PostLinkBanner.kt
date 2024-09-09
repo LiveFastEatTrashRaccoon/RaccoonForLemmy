@@ -13,19 +13,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
 fun PostLinkBanner(
     modifier: Modifier = Modifier,
     url: String,
+    onClick: (() -> Unit)? = null,
 ) {
     if (url.isNotEmpty()) {
         Row(
             modifier =
                 modifier
+                    .clip(RoundedCornerShape(CornerSize.l))
+                    .onClick(onClick = { onClick?.invoke() })
                     .background(
                         color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f),
                         shape = RoundedCornerShape(CornerSize.l),

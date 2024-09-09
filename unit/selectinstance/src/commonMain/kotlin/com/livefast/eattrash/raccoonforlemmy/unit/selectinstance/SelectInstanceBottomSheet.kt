@@ -43,8 +43,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.components.SelectInstanceItem
 import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.dialog.ChangeInstanceDialog
 import kotlinx.coroutines.flow.launchIn
@@ -108,17 +106,15 @@ class SelectInstanceBottomSheet : Screen {
                 BottomSheetHeader(LocalStrings.current.dialogTitleChangeInstance)
                 IconButton(
                     modifier = Modifier.align(Alignment.TopEnd),
-                    content = {
-                        Icon(
-                            imageVector = Icons.Default.AddCircle,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
-                    },
                     onClick = {
                         changeInstanceDialogOpen = true
                     },
-                )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AddCircle,
+                        contentDescription = null,
+                    )
+                }
             }
             LazyColumn(
                 state = lazyListState,
@@ -162,16 +158,14 @@ class SelectInstanceBottomSheet : Screen {
                             SelectInstanceItem(
                                 instance = instance,
                                 isActive = isActive,
-                                onDragStarted =
-                                    rememberCallback(model) {
-                                        model.reduce(SelectInstanceMviModel.Intent.HapticIndication)
-                                    },
-                                onClick =
-                                    rememberCallback(model) {
-                                        model.reduce(
-                                            SelectInstanceMviModel.Intent.SelectInstance(instance),
-                                        )
-                                    },
+                                onDragStarted = {
+                                    model.reduce(SelectInstanceMviModel.Intent.HapticIndication)
+                                },
+                                onClick = {
+                                    model.reduce(
+                                        SelectInstanceMviModel.Intent.SelectInstance(instance),
+                                    )
+                                },
                                 reorderableScope = this,
                                 options =
                                     buildList {
@@ -183,16 +177,15 @@ class SelectInstanceBottomSheet : Screen {
                                                 )
                                         }
                                     },
-                                onOptionSelected =
-                                    rememberCallbackArgs { optionId ->
-                                        when (optionId) {
-                                            OptionId.Delete -> {
-                                                instanceToDelete = instance
-                                            }
-
-                                            else -> Unit
+                                onOptionSelected = { optionId ->
+                                    when (optionId) {
+                                        OptionId.Delete -> {
+                                            instanceToDelete = instance
                                         }
-                                    },
+
+                                        else -> Unit
+                                    }
+                                },
                             )
                         }
                     }

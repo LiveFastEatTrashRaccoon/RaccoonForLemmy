@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,10 +21,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.LanguageModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,10 +59,9 @@ fun SelectLanguageDialog(
                     LanguageItem(
                         name = lang.name,
                         selected = (currentLanguageId ?: 0L) == lang.id,
-                        onSelected =
-                            rememberCallback {
-                                onSelect?.invoke(lang.id)
-                            },
+                        onSelected = {
+                            onSelect?.invoke(lang.id)
+                        },
                     )
                 }
             }
@@ -86,6 +87,7 @@ private fun LanguageItem(
     Row(
         modifier =
             modifier
+                .clip(RoundedCornerShape(CornerSize.xxl))
                 .fillMaxWidth()
                 .onClick(
                     onClick = {

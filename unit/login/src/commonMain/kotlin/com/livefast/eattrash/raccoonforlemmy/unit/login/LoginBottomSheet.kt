@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.login
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,7 +46,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.ImeAction
@@ -64,8 +62,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.autofill
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.getCustomTabsHelper
@@ -125,17 +121,16 @@ class LoginBottomSheet : Screen {
                         )
                     },
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     actions = {
                         IconButton(
@@ -156,7 +151,6 @@ class LoginBottomSheet : Screen {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.HelpOutline,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onBackground,
                             )
                         }
                     },
@@ -213,10 +207,9 @@ class LoginBottomSheet : Screen {
                                 autoCorrect = false,
                                 imeAction = ImeAction.Next,
                             ),
-                        onValueChange =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(LoginMviModel.Intent.SetInstanceName(value))
-                            },
+                        onValueChange = { value ->
+                            model.reduce(LoginMviModel.Intent.SetInstanceName(value))
+                        },
                         supportingText = {
                             val error = uiState.instanceNameError
                             if (error != null) {
@@ -231,12 +224,11 @@ class LoginBottomSheet : Screen {
                                 Icon(
                                     modifier =
                                         Modifier.onClick(
-                                            onClick =
-                                                rememberCallback(model) {
-                                                    model.reduce(
-                                                        LoginMviModel.Intent.SetInstanceName(""),
-                                                    )
-                                                },
+                                            onClick = {
+                                                model.reduce(
+                                                    LoginMviModel.Intent.SetInstanceName(""),
+                                                )
+                                            },
                                         ),
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = null,
@@ -278,10 +270,9 @@ class LoginBottomSheet : Screen {
                                 autoCorrect = false,
                                 imeAction = ImeAction.Next,
                             ),
-                        onValueChange =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(LoginMviModel.Intent.SetUsername(value))
-                            },
+                        onValueChange = { value ->
+                            model.reduce(LoginMviModel.Intent.SetUsername(value))
+                        },
                         supportingText = {
                             val error = uiState.usernameError
                             if (error != null) {
@@ -324,33 +315,31 @@ class LoginBottomSheet : Screen {
                                 keyboardType = KeyboardType.Password,
                                 imeAction = ImeAction.Next,
                             ),
-                        onValueChange =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(LoginMviModel.Intent.SetPassword(value))
-                            },
+                        onValueChange = { value ->
+                            model.reduce(LoginMviModel.Intent.SetPassword(value))
+                        },
                         visualTransformation = transformation,
                         trailingIcon = {
-                            Image(
-                                modifier =
-                                    Modifier.onClick(
-                                        onClick = {
-                                            transformation =
-                                                if (transformation == VisualTransformation.None) {
-                                                    PasswordVisualTransformation()
-                                                } else {
-                                                    VisualTransformation.None
-                                                }
+                            IconButton(
+                                onClick = {
+                                    transformation =
+                                        if (transformation == VisualTransformation.None) {
+                                            PasswordVisualTransformation()
+                                        } else {
+                                            VisualTransformation.None
+                                        }
+                                },
+                            ) {
+                                Icon(
+                                    imageVector =
+                                        if (transformation == VisualTransformation.None) {
+                                            Icons.Default.VisibilityOff
+                                        } else {
+                                            Icons.Default.Visibility
                                         },
-                                    ),
-                                imageVector =
-                                    if (transformation == VisualTransformation.None) {
-                                        Icons.Default.VisibilityOff
-                                    } else {
-                                        Icons.Default.Visibility
-                                    },
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
-                            )
+                                    contentDescription = null,
+                                )
+                            }
                         },
                         supportingText = {
                             val error = uiState.passwordError
@@ -388,10 +377,9 @@ class LoginBottomSheet : Screen {
                                 keyboardType = KeyboardType.Password,
                                 imeAction = ImeAction.Done,
                             ),
-                        onValueChange =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(LoginMviModel.Intent.SetTotp2faToken(value))
-                            },
+                        onValueChange = { value ->
+                            model.reduce(LoginMviModel.Intent.SetTotp2faToken(value))
+                        },
                         visualTransformation = PasswordVisualTransformation(),
                     )
 
@@ -399,11 +387,10 @@ class LoginBottomSheet : Screen {
 
                     Button(
                         modifier = Modifier.padding(top = Spacing.l),
-                        onClick =
-                            rememberCallback(model) {
-                                focusManager.clearFocus()
-                                model.reduce(LoginMviModel.Intent.Confirm)
-                            },
+                        onClick = {
+                            focusManager.clearFocus()
+                            model.reduce(LoginMviModel.Intent.Confirm)
+                        },
                     ) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(Spacing.s),

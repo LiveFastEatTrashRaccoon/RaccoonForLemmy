@@ -19,7 +19,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.markdown.CustomMarkdownWrapper
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.getCustomTabsHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toUrlOpeningMode
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -100,25 +99,23 @@ fun PostCardTitle(
                 ),
             highlightText = highlightText,
             enableAlternateRendering = enableAlternateMarkdownRendering,
-            onOpenUrl =
-                rememberCallbackArgs { url ->
-                    navigationCoordinator.handleUrl(
-                        url = url,
-                        openingMode =
-                            settingsRepository.currentSettings.value.urlOpeningMode
-                                .toUrlOpeningMode(),
-                        uriHandler = uriHandler,
-                        customTabsHelper = customTabsHelper,
-                        onOpenCommunity = onOpenCommunity,
-                        onOpenUser = onOpenUser,
-                        onOpenPost = onOpenPost,
-                        onOpenWeb = onOpenWeb,
-                    )
-                },
-            onOpenImage =
-                rememberCallbackArgs { url ->
-                    onOpenImage?.invoke(url)
-                },
+            onOpenUrl = { url ->
+                navigationCoordinator.handleUrl(
+                    url = url,
+                    openingMode =
+                        settingsRepository.currentSettings.value.urlOpeningMode
+                            .toUrlOpeningMode(),
+                    uriHandler = uriHandler,
+                    customTabsHelper = customTabsHelper,
+                    onOpenCommunity = onOpenCommunity,
+                    onOpenUser = onOpenUser,
+                    onOpenPost = onOpenPost,
+                    onOpenWeb = onOpenWeb,
+                )
+            },
+            onOpenImage = { url ->
+                onOpenImage?.invoke(url)
+            },
             onClick = onClick,
             onDoubleClick = onDoubleClick,
             onLongClick = onLongClick,

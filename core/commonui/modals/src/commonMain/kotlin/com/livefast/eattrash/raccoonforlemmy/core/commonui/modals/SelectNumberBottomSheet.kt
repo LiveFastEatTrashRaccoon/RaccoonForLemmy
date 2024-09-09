@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,7 +21,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import cafe.adriel.voyager.core.screen.Screen
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.BottomSheetHeader
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
@@ -71,81 +75,83 @@ class SelectNumberBottomSheet(
         val notificationCenter = remember { getNotificationCenter() }
         var customDialogOpened by remember { mutableStateOf(false) }
 
-        Column(
-            modifier =
-                Modifier
-                    .windowInsetsPadding(WindowInsets.navigationBars)
-                    .padding(
-                        top = Spacing.s,
-                        start = Spacing.s,
-                        end = Spacing.s,
-                        bottom = Spacing.m,
-                    ),
-            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-        ) {
-            BottomSheetHeader(title = type.toReadableTitle())
+        Surface {
             Column(
-                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                modifier =
+                    Modifier
+                        .windowInsetsPadding(WindowInsets.navigationBars)
+                        .padding(
+                            top = Spacing.s,
+                            start = Spacing.s,
+                            end = Spacing.s,
+                            bottom = Spacing.m,
+                        ),
+                verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
-                for (value in values) {
-                    Row(
-                        modifier =
-                            Modifier
-                                .padding(
-                                    horizontal = Spacing.s,
-                                    vertical = Spacing.s,
-                                ).fillMaxWidth()
-                                .onClick(
-                                    onClick = {
-                                        if (value != null && value < 0) {
-                                            customDialogOpened = true
-                                        } else {
-                                            notificationCenter.send(
-                                                NotificationCenterEvent.SelectNumberBottomSheetClosed(
-                                                    value = value,
-                                                    type = type.toInt(),
-                                                ),
-                                            )
-                                            navigationCoordinator.hideBottomSheet()
-                                        }
-                                    },
-                                ),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        val text =
-                            when {
-                                value == null -> LocalStrings.current.settingsPostBodyMaxLinesUnlimited
-                                value < 0 -> LocalStrings.current.settingsColorCustom
-                                else -> value.toString()
-                            }
-                        Text(
-                            text = text,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
+                BottomSheetHeader(title = type.toReadableTitle())
+                Column(
+                    modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                ) {
+                    for (value in values) {
+                        Row(
+                            modifier =
+                                Modifier
+                                    .clip(RoundedCornerShape(CornerSize.xxl))
+                                    .onClick(
+                                        onClick = {
+                                            if (value != null && value < 0) {
+                                                customDialogOpened = true
+                                            } else {
+                                                notificationCenter.send(
+                                                    NotificationCenterEvent.SelectNumberBottomSheetClosed(
+                                                        value = value,
+                                                        type = type.toInt(),
+                                                    ),
+                                                )
+                                                navigationCoordinator.hideBottomSheet()
+                                            }
+                                        },
+                                    ).padding(
+                                        horizontal = Spacing.s,
+                                        vertical = Spacing.s,
+                                    ).fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            val text =
+                                when {
+                                    value == null -> LocalStrings.current.settingsPostBodyMaxLinesUnlimited
+                                    value < 0 -> LocalStrings.current.settingsColorCustom
+                                    else -> value.toString()
+                                }
+                            Text(
+                                text = text,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
                     }
                 }
             }
-        }
 
-        if (customDialogOpened) {
-            NumberPickerDialog(
-                title = LocalStrings.current.settingsColorCustom,
-                initialValue = initialValue ?: 0,
-                onClose = {
-                    customDialogOpened = false
-                },
-                onSubmit = { value ->
-                    notificationCenter.send(
-                        NotificationCenterEvent.SelectNumberBottomSheetClosed(
-                            value = value,
-                            type = type.toInt(),
-                        ),
-                    )
-                    navigationCoordinator.hideBottomSheet()
-                },
-            )
+            if (customDialogOpened) {
+                NumberPickerDialog(
+                    title = LocalStrings.current.settingsColorCustom,
+                    initialValue = initialValue ?: 0,
+                    onClose = {
+                        customDialogOpened = false
+                    },
+                    onSubmit = { value ->
+                        notificationCenter.send(
+                            NotificationCenterEvent.SelectNumberBottomSheetClosed(
+                                value = value,
+                                type = type.toInt(),
+                            ),
+                        )
+                        navigationCoordinator.hideBottomSheet()
+                    },
+                )
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,7 +65,7 @@ internal fun ConfigureNavBarItem(
 
         Spacer(modifier = Modifier.weight(1f))
         Box {
-            Icon(
+            IconButton(
                 modifier =
                     Modifier
                         .size(IconSize.m)
@@ -79,15 +80,17 @@ internal fun ConfigureNavBarItem(
                             },
                         ).onGloballyPositioned {
                             optionsOffset = it.positionInParent()
-                        }.onClick(
-                            onClick = {
-                                optionsMenuOpen = true
-                            },
-                        ),
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null,
-                tint = ancillaryColor,
-            )
+                        },
+                onClick = {
+                    optionsMenuOpen = true
+                },
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = null,
+                    tint = ancillaryColor,
+                )
+            }
 
             CustomDropDown(
                 expanded = optionsMenuOpen,
