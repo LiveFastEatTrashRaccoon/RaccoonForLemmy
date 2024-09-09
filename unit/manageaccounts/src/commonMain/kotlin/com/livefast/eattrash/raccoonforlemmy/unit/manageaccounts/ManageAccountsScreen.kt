@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,7 +36,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginBottomSheet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -59,41 +59,41 @@ class ManageAccountsScreen : Screen {
                 }.launchIn(this)
         }
 
-        Column(
-            modifier =
-                Modifier
-                    .windowInsetsPadding(WindowInsets.navigationBars)
-                    .padding(
-                        top = Spacing.s,
-                        bottom = Spacing.m,
-                    ),
-            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            BottomSheetHeader(LocalStrings.current.manageAccountsTitle)
-            LazyColumn(
-                modifier = Modifier.padding(top = Spacing.m).height(250.dp),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+        Surface {
+            Column(
+                modifier =
+                    Modifier
+                        .windowInsetsPadding(WindowInsets.navigationBars)
+                        .padding(
+                            top = Spacing.s,
+                            bottom = Spacing.m,
+                        ),
+                verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                itemsIndexed(uiState.accounts) { idx, account ->
-                    AccountItem(
-                        modifier = Modifier.fillMaxWidth(),
-                        account = account,
-                        autoLoadImages = uiState.autoLoadImages,
-                        onClick = {
-                            model.reduce(ManageAccountsMviModel.Intent.SwitchAccount(idx))
-                        },
-                        options =
-                            buildList {
-                                this +=
-                                    Option(
-                                        OptionId.Delete,
-                                        LocalStrings.current.commentActionDelete,
-                                    )
+                BottomSheetHeader(LocalStrings.current.manageAccountsTitle)
+                LazyColumn(
+                    modifier = Modifier.padding(top = Spacing.m).height(250.dp),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    itemsIndexed(uiState.accounts) { idx, account ->
+                        AccountItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            account = account,
+                            autoLoadImages = uiState.autoLoadImages,
+                            onClick = {
+                                model.reduce(ManageAccountsMviModel.Intent.SwitchAccount(idx))
                             },
-                        onOptionSelected =
-                            rememberCallbackArgs(model) { optionId ->
+                            options =
+                                buildList {
+                                    this +=
+                                        Option(
+                                            OptionId.Delete,
+                                            LocalStrings.current.commentActionDelete,
+                                        )
+                                },
+                            onOptionSelected = { optionId ->
                                 when (optionId) {
                                     OptionId.Delete -> {
                                         indexToDelete = idx
@@ -102,55 +102,56 @@ class ManageAccountsScreen : Screen {
                                     else -> Unit
                                 }
                             },
-                    )
+                        )
+                    }
                 }
-            }
 
-            Button(
-                modifier = Modifier.padding(vertical = Spacing.m),
-                onClick = {
-                    navigationCoordinator.hideBottomSheet()
-                    navigationCoordinator.pushScreen(LoginBottomSheet())
-                },
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
-                    verticalAlignment = Alignment.CenterVertically,
+                Button(
+                    modifier = Modifier.padding(vertical = Spacing.m),
+                    onClick = {
+                        navigationCoordinator.hideBottomSheet()
+                        navigationCoordinator.pushScreen(LoginBottomSheet())
+                    },
                 ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
-                    Text(LocalStrings.current.manageAccountsButtonAdd)
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                        Text(LocalStrings.current.manageAccountsButtonAdd)
+                    }
                 }
             }
-        }
 
-        indexToDelete?.also { idx ->
-            AlertDialog(
-                onDismissRequest = {
-                    indexToDelete = null
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            indexToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonCancel)
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            model.reduce(ManageAccountsMviModel.Intent.DeleteAccount(idx))
-                            indexToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonConfirm)
-                    }
-                },
-                text = {
-                    Text(text = LocalStrings.current.messageAreYouSure)
-                },
-            )
+            indexToDelete?.also { idx ->
+                AlertDialog(
+                    onDismissRequest = {
+                        indexToDelete = null
+                    },
+                    dismissButton = {
+                        Button(
+                            onClick = {
+                                indexToDelete = null
+                            },
+                        ) {
+                            Text(text = LocalStrings.current.buttonCancel)
+                        }
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                model.reduce(ManageAccountsMviModel.Intent.DeleteAccount(idx))
+                                indexToDelete = null
+                            },
+                        ) {
+                            Text(text = LocalStrings.current.buttonConfirm)
+                        }
+                    },
+                    text = {
+                        Text(text = LocalStrings.current.messageAreYouSure)
+                    },
+                )
+            }
         }
     }
 }

@@ -3,7 +3,6 @@ package com.livefast.eattrash.raccoonforlemmy.unit.manageban
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +23,8 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -44,7 +45,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -67,9 +67,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditTextualInf
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.unit.manageban.components.ManageBanItem
 import com.livefast.eattrash.raccoonforlemmy.unit.manageban.components.ManageBanItemPlaceholder
 import kotlinx.coroutines.flow.launchIn
@@ -147,17 +144,16 @@ class ManageBanScreen : Screen {
                     },
                     navigationIcon = {
                         if (navigationCoordinator.canPop.value) {
-                            Image(
-                                modifier =
-                                    Modifier.onClick(
-                                        onClick = {
-                                            navigationCoordinator.popScreen()
-                                        },
-                                    ),
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                            )
+                            IconButton(
+                                onClick = {
+                                    navigationCoordinator.popScreen()
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    contentDescription = null,
+                                )
+                            }
                         }
                     },
                 )
@@ -190,26 +186,24 @@ class ManageBanScreen : Screen {
                                     FloatingActionButtonMenuItem(
                                         icon = Icons.Default.ExpandLess,
                                         text = LocalStrings.current.actionBackToTop,
-                                        onSelected =
-                                            rememberCallback {
-                                                scope.launch {
-                                                    runCatching {
-                                                        lazyListState.scrollToItem(0)
-                                                        topAppBarState.heightOffset = 0f
-                                                        topAppBarState.contentOffset = 0f
-                                                    }
+                                        onSelected = {
+                                            scope.launch {
+                                                runCatching {
+                                                    lazyListState.scrollToItem(0)
+                                                    topAppBarState.heightOffset = 0f
+                                                    topAppBarState.contentOffset = 0f
                                                 }
-                                            },
+                                            }
+                                        },
                                     )
                                 if (uiState.section == ManageBanSection.Domains) {
                                     this +=
                                         FloatingActionButtonMenuItem(
                                             icon = Icons.Default.AddCircle,
                                             text = LocalStrings.current.buttonAdd,
-                                            onSelected =
-                                                rememberCallback {
-                                                    addDomainDialogOpen = true
-                                                },
+                                            onSelected = {
+                                                addDomainDialogOpen = true
+                                            },
                                         )
                                 }
                                 if (uiState.section == ManageBanSection.StopWords) {
@@ -217,10 +211,9 @@ class ManageBanScreen : Screen {
                                         FloatingActionButtonMenuItem(
                                             icon = Icons.Default.AddCircle,
                                             text = LocalStrings.current.buttonAdd,
-                                            onSelected =
-                                                rememberCallback {
-                                                    addStopWordDialogOpen = true
-                                                },
+                                            onSelected = {
+                                                addStopWordDialogOpen = true
+                                            },
                                         )
                                 }
                             },
@@ -231,10 +224,9 @@ class ManageBanScreen : Screen {
             val pullRefreshState =
                 rememberPullRefreshState(
                     refreshing = uiState.refreshing,
-                    onRefresh =
-                        rememberCallback(model) {
-                            model.reduce(ManageBanMviModel.Intent.Refresh)
-                        },
+                    onRefresh = {
+                        model.reduce(ManageBanMviModel.Intent.Refresh)
+                    },
                 )
             Column(
                 modifier =
@@ -341,20 +333,19 @@ class ManageBanScreen : Screen {
                                                             LocalStrings.current.settingsManageBanActionUnban,
                                                         )
                                                 },
-                                            onOptionSelected =
-                                                rememberCallbackArgs(user) { optionId ->
-                                                    when (optionId) {
-                                                        OptionId.Unban -> {
-                                                            model.reduce(
-                                                                ManageBanMviModel.Intent.UnblockUser(
-                                                                    user.id,
-                                                                ),
-                                                            )
-                                                        }
-
-                                                        else -> Unit
+                                            onOptionSelected = { optionId ->
+                                                when (optionId) {
+                                                    OptionId.Unban -> {
+                                                        model.reduce(
+                                                            ManageBanMviModel.Intent.UnblockUser(
+                                                                user.id,
+                                                            ),
+                                                        )
                                                     }
-                                                },
+
+                                                    else -> Unit
+                                                }
+                                            },
                                         )
                                     }
                                 }
@@ -397,20 +388,19 @@ class ManageBanScreen : Screen {
                                                             LocalStrings.current.settingsManageBanActionUnban,
                                                         )
                                                 },
-                                            onOptionSelected =
-                                                rememberCallbackArgs(community) { optionId ->
-                                                    when (optionId) {
-                                                        OptionId.Unban -> {
-                                                            model.reduce(
-                                                                ManageBanMviModel.Intent.UnblockCommunity(
-                                                                    community.id,
-                                                                ),
-                                                            )
-                                                        }
-
-                                                        else -> Unit
+                                            onOptionSelected = { optionId ->
+                                                when (optionId) {
+                                                    OptionId.Unban -> {
+                                                        model.reduce(
+                                                            ManageBanMviModel.Intent.UnblockCommunity(
+                                                                community.id,
+                                                            ),
+                                                        )
                                                     }
-                                                },
+
+                                                    else -> Unit
+                                                }
+                                            },
                                         )
                                     }
                                 }
@@ -451,20 +441,19 @@ class ManageBanScreen : Screen {
                                                             LocalStrings.current.settingsManageBanActionUnban,
                                                         )
                                                 },
-                                            onOptionSelected =
-                                                rememberCallbackArgs(instance) { optionId ->
-                                                    when (optionId) {
-                                                        OptionId.Unban -> {
-                                                            model.reduce(
-                                                                ManageBanMviModel.Intent.UnblockInstance(
-                                                                    instance.id,
-                                                                ),
-                                                            )
-                                                        }
-
-                                                        else -> Unit
+                                            onOptionSelected = { optionId ->
+                                                when (optionId) {
+                                                    OptionId.Unban -> {
+                                                        model.reduce(
+                                                            ManageBanMviModel.Intent.UnblockInstance(
+                                                                instance.id,
+                                                            ),
+                                                        )
                                                     }
-                                                },
+
+                                                    else -> Unit
+                                                }
+                                            },
                                         )
                                     }
                                 }
@@ -505,20 +494,19 @@ class ManageBanScreen : Screen {
                                                             LocalStrings.current.settingsManageBanActionUnban,
                                                         )
                                                 },
-                                            onOptionSelected =
-                                                rememberCallbackArgs(domain) { optionId ->
-                                                    when (optionId) {
-                                                        OptionId.Unban -> {
-                                                            model.reduce(
-                                                                ManageBanMviModel.Intent.UnblockDomain(
-                                                                    domain,
-                                                                ),
-                                                            )
-                                                        }
-
-                                                        else -> Unit
+                                            onOptionSelected = { optionId ->
+                                                when (optionId) {
+                                                    OptionId.Unban -> {
+                                                        model.reduce(
+                                                            ManageBanMviModel.Intent.UnblockDomain(
+                                                                domain,
+                                                            ),
+                                                        )
                                                     }
-                                                },
+
+                                                    else -> Unit
+                                                }
+                                            },
                                         )
                                     }
                                 }
@@ -559,20 +547,19 @@ class ManageBanScreen : Screen {
                                                             LocalStrings.current.settingsManageBanActionUnban,
                                                         )
                                                 },
-                                            onOptionSelected =
-                                                rememberCallbackArgs(domain) { optionId ->
-                                                    when (optionId) {
-                                                        OptionId.Unban -> {
-                                                            model.reduce(
-                                                                ManageBanMviModel.Intent.RemoveStopWord(
-                                                                    domain,
-                                                                ),
-                                                            )
-                                                        }
-
-                                                        else -> Unit
+                                            onOptionSelected = { optionId ->
+                                                when (optionId) {
+                                                    OptionId.Unban -> {
+                                                        model.reduce(
+                                                            ManageBanMviModel.Intent.RemoveStopWord(
+                                                                domain,
+                                                            ),
+                                                        )
                                                     }
-                                                },
+
+                                                    else -> Unit
+                                                }
+                                            },
                                         )
                                     }
                                 }
@@ -596,13 +583,12 @@ class ManageBanScreen : Screen {
                 title = LocalStrings.current.buttonAdd,
                 label = LocalStrings.current.settingsManageBanDomainPlaceholder,
                 value = "",
-                onClose =
-                    rememberCallbackArgs(model) { newValue ->
-                        addDomainDialogOpen = false
-                        newValue?.also {
-                            model.reduce(ManageBanMviModel.Intent.BlockDomain(it))
-                        }
-                    },
+                onClose = { newValue ->
+                    addDomainDialogOpen = false
+                    newValue?.also {
+                        model.reduce(ManageBanMviModel.Intent.BlockDomain(it))
+                    }
+                },
             )
         }
         if (addStopWordDialogOpen) {
@@ -610,13 +596,12 @@ class ManageBanScreen : Screen {
                 title = LocalStrings.current.buttonAdd,
                 label = LocalStrings.current.settingsManageBanStopWordPlaceholder,
                 value = "",
-                onClose =
-                    rememberCallbackArgs(model) { newValue ->
-                        addStopWordDialogOpen = false
-                        newValue?.also {
-                            model.reduce(ManageBanMviModel.Intent.AddStopWord(it))
-                        }
-                    },
+                onClose = { newValue ->
+                    addStopWordDialogOpen = false
+                    newValue?.also {
+                        model.reduce(ManageBanMviModel.Intent.AddStopWord(it))
+                    }
+                },
             )
         }
     }

@@ -90,8 +90,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordin
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon.rememberKeepScreenOn
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -204,34 +202,27 @@ class PostListScreen : Screen {
                     scrollBehavior = scrollBehavior,
                     topAppBarState = topAppBarState,
                     edgeToEdge = settings.edgeToEdge,
-                    onHamburgerTapped =
-                        rememberCallback {
-                            scope.launch {
-                                drawerCoordinator.toggleDrawer()
+                    onHamburgerTapped = {
+                        scope.launch {
+                            drawerCoordinator.toggleDrawer()
                             }
                         },
-                    onSelectListingType =
-                        rememberCallback {
-                            val sheet =
-                                ListingTypeBottomSheet(
+                    onSelectListingType = {
+                        val sheet =
+                            ListingTypeBottomSheet(
                                     isLogged = uiState.isLogged,
                                     screenKey = "postList",
                                 )
                             navigationCoordinator.showBottomSheet(sheet)
                         },
                     onSelectInstance =
-                        if (!uiState.isLogged) {
-                            rememberCallback {
-                                navigationCoordinator.showBottomSheet(SelectInstanceBottomSheet())
-                            }
-                        } else {
-                            null
-                        },
-                    onSelectSortType =
-                        rememberCallback {
-                            val sheet =
-                                SortBottomSheet(
-                                    values = uiState.availableSortTypes.map { it.toInt() },
+                    {
+                            navigationCoordinator.showBottomSheet(SelectInstanceBottomSheet())
+                    }.takeIf { uiState.isLogged },
+                    onSelectSortType = {
+                        val sheet =
+                            SortBottomSheet(
+                                values = uiState.availableSortTypes.map { it.toInt() },
                                     expandTop = true,
                                     screenKey = "postList",
                                 )
@@ -263,31 +254,32 @@ class PostListScreen : Screen {
                                         FloatingActionButtonMenuItem(
                                             icon = Icons.Default.SyncDisabled,
                                             text = LocalStrings.current.actionDeactivateZombieMode,
-                                            onSelected =
-                                                rememberCallback(model) {
-                                                    model.reduce(PostListMviModel.Intent.PauseZombieMode)
-                                                },
+                                            onSelected = {
+                                                model.reduce(PostListMviModel.Intent.PauseZombieMode)
+                                            },
                                         )
                                 } else {
                                     this +=
                                         FloatingActionButtonMenuItem(
                                             icon = Icons.Default.Sync,
                                             text = LocalStrings.current.actionActivateZombieMode,
-                                            onSelected =
-                                                rememberCallback(model) {
-                                                    model.reduce(PostListMviModel.Intent.StartZombieMode(-1))
-                                                },
+                                            onSelected = {
+                                                model.reduce(
+                                                    PostListMviModel.Intent.StartZombieMode(
+                                                        -1,
+                                                    ),
+                                                )
+                                            },
                                         )
                                 }
                                 this +=
                                     FloatingActionButtonMenuItem(
                                         icon = Icons.Default.ExpandLess,
                                         text = LocalStrings.current.actionBackToTop,
-                                        onSelected =
-                                            rememberCallback {
-                                                scope.launch {
-                                                    runCatching {
-                                                        lazyListState.scrollToItem(0)
+                                        onSelected = {
+                                            scope.launch {
+                                                runCatching {
+                                                    lazyListState.scrollToItem(0)
                                                         topAppBarState.heightOffset = 0f
                                                         topAppBarState.contentOffset = 0f
                                                     }
@@ -299,11 +291,10 @@ class PostListScreen : Screen {
                                         FloatingActionButtonMenuItem(
                                             icon = Icons.Default.ClearAll,
                                             text = LocalStrings.current.actionClearRead,
-                                            onSelected =
-                                                rememberCallback {
-                                                    model.reduce(PostListMviModel.Intent.ClearRead)
-                                                    scope.launch {
-                                                        runCatching {
+                                            onSelected = {
+                                                model.reduce(PostListMviModel.Intent.ClearRead)
+                                                scope.launch {
+                                                    runCatching {
                                                             lazyListState.scrollToItem(0)
                                                             topAppBarState.heightOffset = 0f
                                                             topAppBarState.contentOffset = 0f
@@ -316,12 +307,11 @@ class PostListScreen : Screen {
                                         FloatingActionButtonMenuItem(
                                             icon = Icons.Default.Create,
                                             text = LocalStrings.current.actionCreatePost,
-                                            onSelected =
-                                                rememberCallback {
-                                                    detailOpener.openCreatePost(
-                                                        forceCommunitySelection = true,
-                                                    )
-                                                },
+                                            onSelected = {
+                                                detailOpener.openCreatePost(
+                                                    forceCommunitySelection = true,
+                                                )
+                                            },
                                         )
                                 }
                             },
@@ -333,8 +323,7 @@ class PostListScreen : Screen {
                 val pullRefreshState =
                     rememberPullRefreshState(
                         refreshing = uiState.refreshing,
-                        onRefresh =
-                            rememberCallback(model) {
+                        onRefresh = {
                                 model.reduce(PostListMviModel.Intent.Refresh())
                             },
                     )
@@ -405,41 +394,35 @@ class PostListScreen : Screen {
                                                     )
                                                 },
                                                 backgroundColor = upVoteColor ?: defaultUpvoteColor,
-                                                onTriggered =
-                                                    rememberCallback {
-                                                        model.reduce(
-                                                            PostListMviModel.Intent.UpVotePost(
-                                                                post.id,
-                                                            ),
+                                                onTriggered = {
+                                                    model.reduce(
+                                                        PostListMviModel.Intent.UpVotePost(
+                                                            post.id,
+                                                        ),
                                                         )
                                                     },
                                             )
 
                                         ActionOnSwipe.DownVote ->
-                                            if (!uiState.downVoteEnabled) {
-                                                null
-                                            } else {
-                                                SwipeAction(
-                                                    swipeContent = {
-                                                        Icon(
-                                                            imageVector = Icons.Default.ArrowCircleDown,
-                                                            contentDescription = null,
-                                                            tint = Color.White,
-                                                        )
-                                                    },
-                                                    backgroundColor =
-                                                        downVoteColor
-                                                            ?: defaultDownVoteColor,
-                                                    onTriggered =
-                                                        rememberCallback {
-                                                            model.reduce(
-                                                                PostListMviModel.Intent.DownVotePost(
-                                                                    post.id,
-                                                                ),
-                                                            )
-                                                        },
-                                                )
-                                            }
+                                            SwipeAction(
+                                                swipeContent = {
+                                                    Icon(
+                                                        imageVector = Icons.Default.ArrowCircleDown,
+                                                        contentDescription = null,
+                                                        tint = Color.White,
+                                                    )
+                                                },
+                                                backgroundColor =
+                                                    downVoteColor
+                                                        ?: defaultDownVoteColor,
+                                                onTriggered = {
+                                                    model.reduce(
+                                                        PostListMviModel.Intent.DownVotePost(
+                                                            post.id,
+                                                        ),
+                                                    )
+                                                },
+                                            ).takeIf { uiState.downVoteEnabled }
 
                                         ActionOnSwipe.Reply ->
                                             SwipeAction(
@@ -451,10 +434,9 @@ class PostListScreen : Screen {
                                                     )
                                                 },
                                                 backgroundColor = replyColor ?: defaultReplyColor,
-                                                onTriggered =
-                                                    rememberCallback {
-                                                        detailOpener.openReply(originalPost = post)
-                                                    },
+                                                onTriggered = {
+                                                    detailOpener.openReply(originalPost = post)
+                                                },
                                             )
 
                                         ActionOnSwipe.Save ->
@@ -467,20 +449,16 @@ class PostListScreen : Screen {
                                                     )
                                                 },
                                                 backgroundColor = saveColor ?: defaultSaveColor,
-                                                onTriggered =
-                                                    rememberCallback {
-                                                        model.reduce(
-                                                            PostListMviModel.Intent.SavePost(
-                                                                post.id,
-                                                            ),
-                                                        )
+                                                onTriggered = {
+                                                    model.reduce(
+                                                        PostListMviModel.Intent.SavePost(
+                                                            post.id,
+                                                        ),
+                                                    )
                                                     },
                                             )
 
                                         ActionOnSwipe.Edit ->
-                                            if (!canEdit) {
-                                                null
-                                            } else {
                                                 SwipeAction(
                                                     swipeContent = {
                                                         Icon(
@@ -490,12 +468,10 @@ class PostListScreen : Screen {
                                                         )
                                                     },
                                                     backgroundColor = MaterialTheme.colorScheme.tertiary,
-                                                    onTriggered =
-                                                        rememberCallback {
+                                                    onTriggered = {
                                                             detailOpener.openCreatePost(editedPost = post)
-                                                        },
-                                                )
-                                            }
+                                                },
+                                                ).takeIf { canEdit }
 
                                         else -> null
                                     }
@@ -504,10 +480,9 @@ class PostListScreen : Screen {
                             SwipeActionCard(
                                 modifier = Modifier.fillMaxWidth(),
                                 enabled = uiState.swipeActionsEnabled,
-                                onGestureBegin =
-                                    rememberCallback(model) {
+                                onGestureBegin = {
                                         model.reduce(PostListMviModel.Intent.HapticIndication)
-                                    },
+                                },
                                 swipeToStartActions =
                                     uiState.actionsOnSwipeToStartPosts.toSwipeActions(
                                         canEdit = post.creator?.id == uiState.currentUserId,
@@ -532,86 +507,72 @@ class PostListScreen : Screen {
                                         fadeRead = uiState.fadeReadPosts,
                                         showUnreadComments = uiState.showUnreadComments,
                                         downVoteEnabled = uiState.downVoteEnabled,
-                                        onClick =
-                                            rememberCallback(model) {
+                                        onClick = {
                                                 model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
-                                                model.reduce(PostListMviModel.Intent.WillOpenDetail)
-                                                detailOpener.openPostDetail(post)
-                                            },
+                                            model.reduce(PostListMviModel.Intent.WillOpenDetail)
+                                            detailOpener.openPostDetail(post)
+                                        },
                                         onDoubleClick =
-                                            if (!uiState.doubleTapActionEnabled || !uiState.isLogged) {
-                                                null
-                                            } else {
-                                                rememberCallback(model) {
-                                                    model.reduce(
-                                                        PostListMviModel.Intent.UpVotePost(post.id),
-                                                    )
-                                                }
-                                            },
-                                        onOpenCommunity =
-                                            rememberCallbackArgs { community, instance ->
-                                                detailOpener.openCommunityDetail(
-                                                    community = community,
-                                                    otherInstance = instance,
+                                        {
+                                            model.reduce(
+                                                    PostListMviModel.Intent.UpVotePost(post.id),
                                                 )
-                                            },
-                                        onOpenCreator =
-                                            rememberCallbackArgs { user, instance ->
+                                            }.takeIf { uiState.doubleTapActionEnabled && uiState.isLogged },
+                                        onOpenCommunity = { community, instance ->
+                                            detailOpener.openCommunityDetail(
+                                                community = community,
+                                                otherInstance = instance,
+                                            )
+                                        },
+                                        onOpenCreator = { user, instance ->
                                                 detailOpener.openUserDetail(
-                                                    user = user,
-                                                    otherInstance = instance,
-                                                )
-                                            },
-                                        onOpenPost =
-                                            rememberCallbackArgs { p, instance ->
+                                                user = user,
+                                                otherInstance = instance,
+                                            )
+                                        },
+                                        onOpenPost = { p, instance ->
                                                 detailOpener.openPostDetail(
-                                                    post = p,
-                                                    otherInstance = instance,
+                                                post = p,
+                                                otherInstance = instance,
+                                            )
+                                        },
+                                        onOpenWeb = { url ->
+                                            navigationCoordinator.pushScreen(WebViewScreen(url))
+                                        },
+                                        onUpVote = {
+                                                if (uiState.isLogged) {
+                                                model.reduce(
+                                                    PostListMviModel.Intent.UpVotePost(post.id),
                                                 )
-                                            },
-                                        onOpenWeb =
-                                            rememberCallbackArgs { url ->
-                                                navigationCoordinator.pushScreen(WebViewScreen(url))
-                                            },
-                                        onUpVote =
-                                            rememberCallback(model) {
+                                            }
+                                        },
+                                        onDownVote = {
                                                 if (uiState.isLogged) {
                                                     model.reduce(
-                                                        PostListMviModel.Intent.UpVotePost(post.id),
-                                                    )
-                                                }
+                                                    PostListMviModel.Intent.DownVotePost(
+                                                        post.id,
+                                                    ),
+                                                )
+                                            }
                                             },
-                                        onDownVote =
-                                            rememberCallback(model) {
-                                                if (uiState.isLogged) {
-                                                    model.reduce(
-                                                        PostListMviModel.Intent.DownVotePost(
-                                                            post.id,
-                                                        ),
-                                                    )
-                                                }
-                                            },
-                                        onSave =
-                                            rememberCallback(model) {
+                                        onSave = {
                                                 if (uiState.isLogged) {
                                                     model.reduce(PostListMviModel.Intent.SavePost(post.id))
-                                                }
+                                            }
                                             },
-                                        onReply =
-                                            rememberCallback(model) {
+                                        onReply = {
                                                 if (uiState.isLogged) {
                                                     model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
-                                                    model.reduce(PostListMviModel.Intent.WillOpenDetail)
+                                                model.reduce(PostListMviModel.Intent.WillOpenDetail)
                                                     detailOpener.openPostDetail(post)
                                                 }
                                             },
-                                        onOpenImage =
-                                            rememberCallbackArgs(model, post) { url ->
+                                        onOpenImage = { url ->
                                                 model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
-                                                navigationCoordinator.pushScreen(
-                                                    ZoomableImageScreen(
+                                            navigationCoordinator.pushScreen(
+                                                ZoomableImageScreen(
                                                         url = url,
-                                                        source = post.community?.readableHandle.orEmpty(),
+                                                    source = post.community?.readableHandle.orEmpty(),
                                                     ),
                                                 )
                                             },
@@ -669,16 +630,15 @@ class PostListScreen : Screen {
                                                         )
                                                 }
                                             },
-                                        onOptionSelected =
-                                            rememberCallbackArgs(model) { optionId ->
+                                        onOptionSelected = { optionId ->
                                                 when (optionId) {
                                                     OptionId.Delete -> {
-                                                        itemIdToDelete = post.id
-                                                    }
+                                                    itemIdToDelete = post.id
+                                                }
 
-                                                    OptionId.Edit -> {
-                                                        detailOpener.openCreatePost(editedPost = post)
-                                                    }
+                                                OptionId.Edit -> {
+                                                    detailOpener.openCreatePost(editedPost = post)
+                                                }
 
                                                     OptionId.Report -> {
                                                         val screen =
@@ -785,10 +745,9 @@ class PostListScreen : Screen {
                                         verticalAlignment = Alignment.CenterVertically,
                                     ) {
                                         Button(
-                                            onClick =
-                                                rememberCallback(model) {
+                                            onClick = {
                                                     model.reduce(PostListMviModel.Intent.LoadNextPage)
-                                                },
+                                            },
                                         ) {
                                             Text(
                                                 text = LocalStrings.current.postListLoadMorePosts,
@@ -851,8 +810,7 @@ class PostListScreen : Screen {
                     )
                     Button(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
-                        onClick =
-                            rememberCallback {
+                        onClick = {
                                 model.reduce(PostListMviModel.Intent.Refresh(hardReset = true))
                             },
                     ) {
@@ -874,21 +832,19 @@ class PostListScreen : Screen {
                         upVotes = content.upvotes,
                         downVotes = content.downvotes,
                         isLogged = uiState.isLogged,
-                        onDismiss =
-                            rememberCallback {
+                        onDismiss = {
                                 rawContent = null
                             },
-                        onQuote =
-                            rememberCallbackArgs { quotation ->
-                                rawContent = null
-                                if (quotation != null) {
-                                    detailOpener.openReply(
-                                        originalPost = content,
-                                        initialText =
-                                            buildString {
-                                                append("> ")
-                                                append(quotation)
-                                                append("\n\n")
+                        onQuote = { quotation ->
+                            rawContent = null
+                            if (quotation != null) {
+                                detailOpener.openReply(
+                                    originalPost = content,
+                                    initialText =
+                                        buildString {
+                                            append("> ")
+                                            append(quotation)
+                                            append("\n\n")
                                             },
                                     )
                                 }

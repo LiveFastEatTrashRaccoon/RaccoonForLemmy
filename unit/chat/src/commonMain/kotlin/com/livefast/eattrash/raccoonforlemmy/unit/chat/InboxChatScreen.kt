@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.chat
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +27,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -47,7 +48,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -68,9 +68,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.TextFormattingBar
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
@@ -166,17 +163,16 @@ class InboxChatScreen(
                         }
                     },
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
                     },
                 )
             },
@@ -250,15 +246,14 @@ class InboxChatScreen(
                             openImagePicker = true
                         },
                         lastActionIcon = Icons.AutoMirrored.Default.Send,
-                        onLastAction =
-                            rememberCallback {
-                                model.reduce(
-                                    InboxChatMviModel.Intent.SubmitNewMessage(
-                                        textFieldValue.text,
-                                    ),
-                                )
-                                textFieldValue = TextFieldValue(text = "")
-                            },
+                        onLastAction = {
+                            model.reduce(
+                                InboxChatMviModel.Intent.SubmitNewMessage(
+                                    textFieldValue.text,
+                                ),
+                            )
+                            textFieldValue = TextFieldValue(text = "")
+                        },
                     )
                 }
             },
@@ -296,42 +291,37 @@ class InboxChatScreen(
                                 isMyMessage = isMyMessage,
                                 content = content,
                                 date = date,
-                                onOpenImage =
-                                    rememberCallbackArgs { url ->
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                source = message.creator?.readableHandle.orEmpty(),
-                                            ),
-                                        )
-                                    },
-                                onOpenCommunity =
-                                    rememberCallbackArgs { community, instance ->
-                                        detailOpener.openCommunityDetail(
-                                            community = community,
-                                            otherInstance = instance,
-                                        )
-                                    },
-                                onOpenUser =
-                                    rememberCallbackArgs { user, instance ->
-                                        detailOpener.openUserDetail(
-                                            user = user,
-                                            otherInstance = instance,
-                                        )
-                                    },
-                                onOpenPost =
-                                    rememberCallbackArgs { post, instance ->
-                                        detailOpener.openPostDetail(
-                                            post = post,
-                                            otherInstance = instance,
-                                        )
-                                    },
-                                onOpenWeb =
-                                    rememberCallbackArgs { url ->
-                                        navigationCoordinator.pushScreen(
-                                            WebViewScreen(url),
-                                        )
-                                    },
+                                onOpenImage = { url ->
+                                    navigationCoordinator.pushScreen(
+                                        ZoomableImageScreen(
+                                            url = url,
+                                            source = message.creator?.readableHandle.orEmpty(),
+                                        ),
+                                    )
+                                },
+                                onOpenCommunity = { community, instance ->
+                                    detailOpener.openCommunityDetail(
+                                        community = community,
+                                        otherInstance = instance,
+                                    )
+                                },
+                                onOpenUser = { user, instance ->
+                                    detailOpener.openUserDetail(
+                                        user = user,
+                                        otherInstance = instance,
+                                    )
+                                },
+                                onOpenPost = { post, instance ->
+                                    detailOpener.openPostDetail(
+                                        post = post,
+                                        otherInstance = instance,
+                                    )
+                                },
+                                onOpenWeb = { url ->
+                                    navigationCoordinator.pushScreen(
+                                        WebViewScreen(url),
+                                    )
+                                },
                                 options =
                                     buildList {
                                         this +=
@@ -352,29 +342,28 @@ class InboxChatScreen(
                                                 )
                                         }
                                     },
-                                onOptionSelected =
-                                    rememberCallbackArgs { optionId ->
-                                        when (optionId) {
-                                            OptionId.Edit -> {
-                                                model.reduce(
-                                                    InboxChatMviModel.Intent.EditMessage(message.id),
-                                                )
-                                                message.content?.also {
-                                                    textFieldValue = TextFieldValue(text = it)
-                                                }
+                                onOptionSelected = { optionId ->
+                                    when (optionId) {
+                                        OptionId.Edit -> {
+                                            model.reduce(
+                                                InboxChatMviModel.Intent.EditMessage(message.id),
+                                            )
+                                            message.content?.also {
+                                                textFieldValue = TextFieldValue(text = it)
                                             }
-
-                                            OptionId.SeeRaw -> {
-                                                rawContent = message
-                                            }
-
-                                            OptionId.Delete -> {
-                                                itemIdToDelete = message.id
-                                            }
-
-                                            else -> Unit
                                         }
-                                    },
+
+                                        OptionId.SeeRaw -> {
+                                            rawContent = message
+                                        }
+
+                                        OptionId.Delete -> {
+                                            itemIdToDelete = message.id
+                                        }
+
+                                        else -> Unit
+                                    }
+                                },
                             )
                             Spacer(modifier = Modifier.height(Spacing.s))
                         }
