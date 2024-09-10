@@ -1,21 +1,27 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.datetime
 
-import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.time.Period
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.GregorianCalendar
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.abs
 
 actual fun epochMillis(): Long = System.currentTimeMillis()
 
+private fun getDateTimeFormatter(pattern: String) =
+    DateTimeFormatter
+        .ofPattern(pattern)
+        .withLocale(Locale.US)
+        .withZone(TimeZone.getTimeZone("UTC").toZoneId())
+
+private val safeFormatter = getDateTimeFormatter("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
+
 actual fun Long.toIso8601Timestamp(): String? {
-    val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US)
-    formatter.timeZone = TimeZone.getTimeZone("UTC")
-    val date = Date(this)
-    return formatter.format(date)
+    val date = LocalDateTime.ofEpochSecond(this, 0, ZoneOffset.UTC)
+    return safeFormatter.format(date)
 }
 
 actual fun getFormattedDate(
@@ -36,7 +42,7 @@ actual fun getPrettyDate(
     minuteLabel: String,
     secondLabel: String,
 ): String {
-    val now = GregorianCalendar().toZonedDateTime()
+    val now = ZonedDateTime.now()
     val date = getDateFromIso8601Timestamp(iso8601Timestamp)
     val delta = Period.between(date.toLocalDate(), now.toLocalDate())
     val years = delta.years
@@ -44,7 +50,7 @@ actual fun getPrettyDate(
     val days = delta.days
     val nowSeconds = now.toEpochSecond()
     val dateSeconds = date.toEpochSecond()
-    val diffSeconds = (nowSeconds - dateSeconds)
+    val diffSeconds = abs(nowSeconds - dateSeconds)
     val hours = ((diffSeconds % 86400) / 3600) % 24
     val minutes = ((diffSeconds % 3600) / 60) % 60
     val seconds = diffSeconds % 60
@@ -90,6 +96,4 @@ actual fun getPrettyDate(
     }
 }
 
-private fun getDateFromIso8601Timestamp(string: String): ZonedDateTime {
-    return ZonedDateTime.parse(string)
-}
+private fun getDateFromIso8601Timestamp(string: String): ZonedDateTime = ZonedDateTime.parse(string)
