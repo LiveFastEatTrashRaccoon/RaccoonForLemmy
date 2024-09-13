@@ -34,8 +34,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getD
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.otherUser
 import com.livefast.eattrash.raccoonforlemmy.unit.chat.InboxChatScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.messages.components.ChatCard
@@ -59,37 +57,38 @@ class InboxMessagesScreen : Tab {
         val detailOpener = remember { getDetailOpener() }
 
         LaunchedEffect(navigationCoordinator) {
-            navigationCoordinator.onDoubleTabSelection.onEach { section ->
-                runCatching {
-                    if (section == TabNavigationSection.Inbox) {
-                        lazyListState.scrollToItem(0)
-                    }
-                }
-            }.launchIn(this)
-        }
-        LaunchedEffect(model) {
-            model.effects.onEach { effect ->
-                when (effect) {
-                    is InboxMessagesMviModel.Effect.UpdateUnreadItems -> {
-                        navigationCoordinator.setInboxUnread(effect.value)
-                    }
-
-                    InboxMessagesMviModel.Effect.BackToTop -> {
-                        runCatching {
+            navigationCoordinator.onDoubleTabSelection
+                .onEach { section ->
+                    runCatching {
+                        if (section == TabNavigationSection.Inbox) {
                             lazyListState.scrollToItem(0)
                         }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
+        }
+        LaunchedEffect(model) {
+            model.effects
+                .onEach { effect ->
+                    when (effect) {
+                        is InboxMessagesMviModel.Effect.UpdateUnreadItems -> {
+                            navigationCoordinator.setInboxUnread(effect.value)
+                        }
+
+                        InboxMessagesMviModel.Effect.BackToTop -> {
+                            runCatching {
+                                lazyListState.scrollToItem(0)
+                            }
+                        }
+                    }
+                }.launchIn(this)
         }
 
         val pullRefreshState =
             rememberPullRefreshState(
                 refreshing = uiState.refreshing,
-                onRefresh =
-                    rememberCallback(model) {
-                        model.reduce(InboxMessagesMviModel.Intent.Refresh)
-                    },
+                onRefresh = {
+                    model.reduce(InboxMessagesMviModel.Intent.Refresh)
+                },
             )
         Box(
             modifier = Modifier.pullRefresh(pullRefreshState),
@@ -125,19 +124,17 @@ class InboxMessagesScreen : Tab {
                         autoLoadImages = uiState.autoLoadImages,
                         lastMessage = chat.content.orEmpty(),
                         lastMessageDate = chat.publishDate,
-                        onOpenUser =
-                            rememberCallbackArgs { user ->
-                                detailOpener.openUserDetail(user, "")
-                            },
-                        onOpen =
-                            rememberCallback {
-                                val userId = chat.otherUser(uiState.currentUserId)?.id
-                                if (userId != null) {
-                                    navigationCoordinator.pushScreen(
-                                        InboxChatScreen(userId),
-                                    )
-                                }
-                            },
+                        onOpenUser = { user ->
+                            detailOpener.openUserDetail(user, "")
+                        },
+                        onOpen = {
+                            val userId = chat.otherUser(uiState.currentUserId)?.id
+                            if (userId != null) {
+                                navigationCoordinator.pushScreen(
+                                    InboxChatScreen(userId),
+                                )
+                            }
+                        },
                     )
                 }
                 item {

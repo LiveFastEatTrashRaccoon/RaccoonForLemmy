@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -44,8 +45,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.getPrettyNumber
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -93,17 +92,16 @@ class CommunityInfoScreen(
                         )
                     },
                     actions = {
-                        Icon(
-                            modifier =
-                                Modifier.padding(horizontal = Spacing.xs).onClick(
-                                    onClick = {
-                                        navigationCoordinator.closeSideMenu()
-                                    },
-                                ),
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.closeSideMenu()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                            )
+                        }
                     },
                 )
             },
@@ -223,14 +221,13 @@ class CommunityInfoScreen(
                                 ModeratorCell(
                                     autoLoadImages = uiState.autoLoadImages,
                                     user = user,
-                                    onOpenUser =
-                                        rememberCallbackArgs { _ ->
-                                            navigationCoordinator.closeSideMenu()
-                                            scope.launch {
-                                                delay(100)
-                                                detailOpener.openUserDetail(user, "")
-                                            }
-                                        },
+                                    onOpenUser = { _ ->
+                                        navigationCoordinator.closeSideMenu()
+                                        scope.launch {
+                                            delay(100)
+                                            detailOpener.openUserDetail(user, "")
+                                        }
+                                    },
                                 )
                             }
                         }

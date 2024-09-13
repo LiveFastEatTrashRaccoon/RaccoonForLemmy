@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.drafts
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +25,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,7 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,9 +55,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.unit.drafts.components.DraftCard
@@ -77,10 +74,9 @@ class DraftsScreen : Screen {
         val pullRefreshState =
             rememberPullRefreshState(
                 refreshing = uiState.refreshing,
-                onRefresh =
-                    rememberCallback(model) {
-                        model.reduce(DraftsMviModel.Intent.Refresh)
-                    },
+                onRefresh = {
+                    model.reduce(DraftsMviModel.Intent.Refresh)
+                },
             )
         val detailOpener = remember { getDetailOpener() }
         var itemToDelete by remember { mutableStateOf<DraftModel?>(null) }
@@ -94,17 +90,16 @@ class DraftsScreen : Screen {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     title = {
                         Text(
@@ -197,18 +192,17 @@ class DraftsScreen : Screen {
                                 DraftCard(
                                     draft = draft,
                                     postLayout = uiState.postLayout,
-                                    onOpen =
-                                        rememberCallback {
-                                            detailOpener.openCreatePost(
-                                                draftId = draft.id,
-                                                communityId = draft.communityId,
-                                                initialText = draft.body,
-                                                initialTitle = draft.title,
-                                                initialUrl = draft.url,
-                                                initialNsfw = draft.nsfw,
-                                                forceCommunitySelection = true,
-                                            )
-                                        },
+                                    onOpen = {
+                                        detailOpener.openCreatePost(
+                                            draftId = draft.id,
+                                            communityId = draft.communityId,
+                                            initialText = draft.body,
+                                            initialTitle = draft.title,
+                                            initialUrl = draft.url,
+                                            initialNsfw = draft.nsfw,
+                                            forceCommunitySelection = true,
+                                        )
+                                    },
                                     options =
                                         buildList {
                                             this +=
@@ -217,18 +211,17 @@ class DraftsScreen : Screen {
                                                     LocalStrings.current.commentActionDelete,
                                                 )
                                         },
-                                    onOptionSelected =
-                                        rememberCallbackArgs { optionId ->
-                                            when (optionId) {
-                                                OptionId.Delete -> {
-                                                    draft.id?.also {
-                                                        itemToDelete = draft
-                                                    }
+                                    onOptionSelected = { optionId ->
+                                        when (optionId) {
+                                            OptionId.Delete -> {
+                                                draft.id?.also {
+                                                    itemToDelete = draft
                                                 }
-
-                                                else -> Unit
                                             }
-                                        },
+
+                                            else -> Unit
+                                        }
+                                    },
                                 )
                                 if (uiState.postLayout != PostLayout.Card) {
                                     HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
@@ -265,21 +258,20 @@ class DraftsScreen : Screen {
                                 DraftCard(
                                     draft = draft,
                                     postLayout = uiState.postLayout,
-                                    onOpen =
-                                        rememberCallback {
-                                            detailOpener.openReply(
-                                                draftId = draft.id,
-                                                originalPost =
-                                                    PostModel(
-                                                        id = draft.postId ?: 0,
-                                                    ),
-                                                originalComment =
-                                                    draft.parentId?.let {
-                                                        CommentModel(id = it, text = "")
-                                                    },
-                                                initialText = draft.body,
-                                            )
-                                        },
+                                    onOpen = {
+                                        detailOpener.openReply(
+                                            draftId = draft.id,
+                                            originalPost =
+                                                PostModel(
+                                                    id = draft.postId ?: 0,
+                                                ),
+                                            originalComment =
+                                                draft.parentId?.let {
+                                                    CommentModel(id = it, text = "")
+                                                },
+                                            initialText = draft.body,
+                                        )
+                                    },
                                     options =
                                         buildList {
                                             this +=
@@ -288,18 +280,17 @@ class DraftsScreen : Screen {
                                                     LocalStrings.current.commentActionDelete,
                                                 )
                                         },
-                                    onOptionSelected =
-                                        rememberCallbackArgs { optionId ->
-                                            when (optionId) {
-                                                OptionId.Delete -> {
-                                                    draft.id?.also {
-                                                        itemToDelete = draft
-                                                    }
+                                    onOptionSelected = { optionId ->
+                                        when (optionId) {
+                                            OptionId.Delete -> {
+                                                draft.id?.also {
+                                                    itemToDelete = draft
                                                 }
-
-                                                else -> Unit
                                             }
-                                        },
+
+                                            else -> Unit
+                                        }
+                                    },
                                 )
                                 if (uiState.postLayout != PostLayout.Card) {
                                     HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))

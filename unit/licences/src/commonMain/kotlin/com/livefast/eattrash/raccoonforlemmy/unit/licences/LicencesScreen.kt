@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.licences
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +12,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,7 +25,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
 import cafe.adriel.voyager.core.screen.Screen
@@ -70,18 +70,16 @@ class LicencesScreen : Screen {
                     },
                     navigationIcon = {
                         if (navigationCoordinator.canPop.value) {
-                            Image(
-                                modifier =
-                                    Modifier
-                                        .onClick(
-                                            onClick = {
-                                                navigationCoordinator.popScreen()
-                                            },
-                                        ),
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                            )
+                            IconButton(
+                                onClick = {
+                                    navigationCoordinator.popScreen()
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    contentDescription = null,
+                                )
+                            }
                         }
                     },
                 )
@@ -92,8 +90,7 @@ class LicencesScreen : Screen {
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        )
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        ).nestedScroll(scrollBehavior.nestedScrollConnection)
                         .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
@@ -108,7 +105,9 @@ class LicencesScreen : Screen {
                                         if (item.url.isNotBlank()) {
                                             navigationCoordinator.handleUrl(
                                                 url = item.url,
-                                                openingMode = settingsRepository.currentSettings.value.urlOpeningMode.toUrlOpeningMode(),
+                                                openingMode =
+                                                    settingsRepository.currentSettings.value.urlOpeningMode
+                                                        .toUrlOpeningMode(),
                                                 uriHandler = uriHandler,
                                                 customTabsHelper = customTabsHelper,
                                                 onOpenWeb = { url ->

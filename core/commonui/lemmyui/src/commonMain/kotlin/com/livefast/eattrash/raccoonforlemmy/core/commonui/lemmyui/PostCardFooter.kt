@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -93,6 +94,7 @@ fun PostCardFooter(
         Box(
             modifier =
                 modifier.onClick(
+                    indication = null,
                     onClick = {
                         onClick?.invoke()
                     },
@@ -112,28 +114,26 @@ fun PostCardFooter(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(
+                        IconButton(
                             modifier =
                                 buttonModifier
                                     .padding(
                                         top = 3.5.dp,
                                         end = 3.5.dp,
                                         bottom = 3.5.dp,
-                                    ).then(
-                                        if (actionButtonsActive) {
-                                            Modifier.onClick(
-                                                onClick = {
-                                                    onReply?.invoke()
-                                                },
-                                            )
-                                        } else {
-                                            Modifier
-                                        },
                                     ),
-                            imageVector = Icons.AutoMirrored.Default.Chat,
-                            contentDescription = null,
-                            tint = ancillaryColor,
-                        )
+                            enabled = actionButtonsActive,
+                            onClick = {
+                                onReply?.invoke()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.Chat,
+                                contentDescription = null,
+                                tint = ancillaryColor,
+                            )
+                        }
+
                         Text(
                             text = "$comments",
                             style = MaterialTheme.typography.labelMedium,
@@ -193,22 +193,24 @@ fun PostCardFooter(
                     }
                 }
                 if (options.isNotEmpty()) {
-                    Icon(
+                    IconButton(
                         modifier =
                             Modifier
                                 .size(IconSize.m)
                                 .padding(Spacing.xs)
                                 .onGloballyPositioned {
                                     optionsOffset = it.positionInParent()
-                                }.onClick(
-                                    onClick = {
-                                        optionsMenuOpen = true
-                                    },
-                                ),
-                        imageVector = Icons.Default.MoreHoriz,
-                        contentDescription = null,
-                        tint = ancillaryColor,
-                    )
+                                },
+                        onClick = {
+                            optionsMenuOpen = true
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreHoriz,
+                            contentDescription = null,
+                            tint = ancillaryColor,
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 if (actionButtonsActive) {

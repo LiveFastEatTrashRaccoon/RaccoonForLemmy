@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
@@ -67,21 +68,21 @@ fun ModdedCommentCard(
 ) {
     Box(
         modifier =
-            modifier.then(
-                if (postLayout == PostLayout.Card) {
-                    Modifier
-                        .shadow(elevation = 5.dp, shape = RoundedCornerShape(CornerSize.l))
-                        .clip(RoundedCornerShape(CornerSize.l))
-                        .padding(horizontal = Spacing.xs)
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                            shape = RoundedCornerShape(CornerSize.l),
-                        )
-                        .padding(vertical = Spacing.xs)
-                } else {
-                    Modifier.background(MaterialTheme.colorScheme.background)
-                },
-            ).clickable(onClick = { onOpen?.invoke() }),
+            modifier
+                .then(
+                    if (postLayout == PostLayout.Card) {
+                        Modifier
+                            .shadow(elevation = 5.dp, shape = RoundedCornerShape(CornerSize.l))
+                            .clip(RoundedCornerShape(CornerSize.l))
+                            .padding(horizontal = Spacing.xs)
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                                shape = RoundedCornerShape(CornerSize.l),
+                            ).padding(vertical = Spacing.xs)
+                    } else {
+                        Modifier.background(MaterialTheme.colorScheme.background)
+                    },
+                ).clickable(onClick = { onOpen?.invoke() }),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
@@ -158,23 +159,25 @@ private fun ModdedCommentFooter(
             }
             Spacer(modifier = Modifier.weight(1f))
             if (options.isNotEmpty()) {
-                Icon(
+                IconButton(
                     modifier =
-                        Modifier.size(IconSize.m)
+                        Modifier
+                            .size(IconSize.m)
                             .padding(Spacing.xs)
                             .padding(top = Spacing.xxs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            }
-                            .onClick(
-                                onClick = {
-                                    optionsExpanded = true
-                                },
-                            ),
-                    imageVector = Icons.Default.MoreHoriz,
-                    contentDescription = null,
-                    tint = ancillaryColor,
-                )
+                            },
+                    onClick = {
+                        optionsExpanded = true
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreHoriz,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                }
             }
         }
         CustomDropDown(

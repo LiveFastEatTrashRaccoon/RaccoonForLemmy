@@ -61,12 +61,9 @@ internal fun ModeratedCommunityCell(
             )
         } else {
             PlaceholderImage(
-                modifier =
-                    Modifier.onClick(
-                        onClick = {
-                            onOpenCommunity?.invoke(community)
-                        },
-                    ),
+                onClick = {
+                    onOpenCommunity?.invoke(community)
+                },
                 size = iconSize,
                 title = name,
             )

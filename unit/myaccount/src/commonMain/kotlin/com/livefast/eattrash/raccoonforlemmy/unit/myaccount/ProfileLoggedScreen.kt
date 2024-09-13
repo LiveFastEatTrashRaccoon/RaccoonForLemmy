@@ -66,8 +66,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -141,10 +139,9 @@ object ProfileLoggedScreen : Tab {
             val pullRefreshState =
                 rememberPullRefreshState(
                     refreshing = uiState.refreshing,
-                    onRefresh =
-                        rememberCallback(model) {
-                            model.reduce(ProfileLoggedMviModel.Intent.Refresh)
-                        },
+                    onRefresh = {
+                        model.reduce(ProfileLoggedMviModel.Intent.Refresh)
+                    },
                 )
             Box(
                 modifier = Modifier.pullRefresh(pullRefreshState),
@@ -243,15 +240,14 @@ object ProfileLoggedScreen : Tab {
                                 UserHeader(
                                     user = user,
                                     autoLoadImages = uiState.autoLoadImages,
-                                    onOpenImage =
-                                        rememberCallbackArgs(user) { url ->
-                                            navigationCoordinator.pushScreen(
-                                                ZoomableImageScreen(
-                                                    url = url,
-                                                    source = user.readableHandle,
-                                                ),
-                                            )
-                                        },
+                                    onOpenImage = { url ->
+                                        navigationCoordinator.pushScreen(
+                                            ZoomableImageScreen(
+                                                url = url,
+                                                source = user.readableHandle,
+                                            ),
+                                        )
+                                    },
                                 )
                             }
                         }
@@ -268,17 +264,16 @@ object ProfileLoggedScreen : Tab {
                                         ProfileLoggedSection.Comments -> 1
                                         else -> 0
                                     },
-                                onSectionSelected =
-                                    rememberCallbackArgs(model) { idx ->
-                                        val section =
-                                            when (idx) {
-                                                1 -> ProfileLoggedSection.Comments
-                                                else -> ProfileLoggedSection.Posts
-                                            }
-                                        model.reduce(
-                                            ProfileLoggedMviModel.Intent.ChangeSection(section),
-                                        )
-                                    },
+                                onSectionSelected = { idx ->
+                                    val section =
+                                        when (idx) {
+                                            1 -> ProfileLoggedSection.Comments
+                                            else -> ProfileLoggedSection.Posts
+                                        }
+                                    model.reduce(
+                                        ProfileLoggedMviModel.Intent.ChangeSection(section),
+                                    )
+                                },
                             )
                         }
                         if (uiState.section == ProfileLoggedSection.Posts) {
@@ -313,67 +308,57 @@ object ProfileLoggedScreen : Tab {
                                     hideAuthor = true,
                                     blurNsfw = false,
                                     downVoteEnabled = uiState.downVoteEnabled,
-                                    onClick =
-                                        rememberCallback(model) {
-                                            model.reduce(ProfileLoggedMviModel.Intent.WillOpenDetail)
-                                            detailOpener.openPostDetail(post)
-                                        },
-                                    onReply =
-                                        rememberCallback(model) {
-                                            model.reduce(ProfileLoggedMviModel.Intent.WillOpenDetail)
-                                            detailOpener.openPostDetail(post)
-                                        },
-                                    onOpenCommunity =
-                                        rememberCallbackArgs { community, instance ->
-                                            detailOpener.openCommunityDetail(community, instance)
-                                        },
-                                    onOpenCreator =
-                                        rememberCallbackArgs { user, instance ->
-                                            detailOpener.openUserDetail(user, instance)
-                                        },
-                                    onOpenPost =
-                                        rememberCallbackArgs { p, instance ->
-                                            detailOpener.openPostDetail(p, instance)
-                                        },
-                                    onOpenWeb =
-                                        rememberCallbackArgs { url ->
-                                            navigationCoordinator.pushScreen(
-                                                WebViewScreen(url),
-                                            )
-                                        },
-                                    onOpenImage =
-                                        rememberCallbackArgs { url ->
-                                            navigationCoordinator.pushScreen(
-                                                ZoomableImageScreen(
-                                                    url = url,
-                                                    source = post.community?.readableHandle.orEmpty(),
-                                                ),
-                                            )
-                                        },
-                                    onUpVote =
-                                        rememberCallback(model) {
-                                            model.reduce(
-                                                ProfileLoggedMviModel.Intent.UpVotePost(
-                                                    id = post.id,
-                                                ),
-                                            )
-                                        },
-                                    onDownVote =
-                                        rememberCallback(model) {
-                                            model.reduce(
-                                                ProfileLoggedMviModel.Intent.DownVotePost(
-                                                    id = post.id,
-                                                ),
-                                            )
-                                        },
-                                    onSave =
-                                        rememberCallback(model) {
-                                            model.reduce(
-                                                ProfileLoggedMviModel.Intent.SavePost(
-                                                    id = post.id,
-                                                ),
-                                            )
-                                        },
+                                    onClick = {
+                                        model.reduce(ProfileLoggedMviModel.Intent.WillOpenDetail)
+                                        detailOpener.openPostDetail(post)
+                                    },
+                                    onReply = {
+                                        model.reduce(ProfileLoggedMviModel.Intent.WillOpenDetail)
+                                        detailOpener.openPostDetail(post)
+                                    },
+                                    onOpenCommunity = { community, instance ->
+                                        detailOpener.openCommunityDetail(community, instance)
+                                    },
+                                    onOpenCreator = { user, instance ->
+                                        detailOpener.openUserDetail(user, instance)
+                                    },
+                                    onOpenPost = { p, instance ->
+                                        detailOpener.openPostDetail(p, instance)
+                                    },
+                                    onOpenWeb = { url ->
+                                        navigationCoordinator.pushScreen(
+                                            WebViewScreen(url),
+                                        )
+                                    },
+                                    onOpenImage = { url ->
+                                        navigationCoordinator.pushScreen(
+                                            ZoomableImageScreen(
+                                                url = url,
+                                                source = post.community?.readableHandle.orEmpty(),
+                                            ),
+                                        )
+                                    },
+                                    onUpVote = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.UpVotePost(
+                                                id = post.id,
+                                            ),
+                                        )
+                                    },
+                                    onDownVote = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.DownVotePost(
+                                                id = post.id,
+                                            ),
+                                        )
+                                    },
+                                    onSave = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.SavePost(
+                                                id = post.id,
+                                            ),
+                                        )
+                                    },
                                     options =
                                         buildList {
                                             this +=
@@ -410,59 +395,58 @@ object ProfileLoggedScreen : Tab {
                                                     )
                                             }
                                         },
-                                    onOptionSelected =
-                                        rememberCallbackArgs(model) { optionId ->
-                                            when (optionId) {
-                                                OptionId.Delete -> {
-                                                    postIdToDelete = post.id
-                                                }
+                                    onOptionSelected = { optionId ->
+                                        when (optionId) {
+                                            OptionId.Delete -> {
+                                                postIdToDelete = post.id
+                                            }
 
-                                                OptionId.Edit -> {
-                                                    detailOpener.openCreatePost(
-                                                        editedPost = post,
-                                                    )
-                                                }
+                                            OptionId.Edit -> {
+                                                detailOpener.openCreatePost(
+                                                    editedPost = post,
+                                                )
+                                            }
 
-                                                OptionId.SeeRaw -> {
-                                                    rawContent = post
-                                                }
+                                            OptionId.SeeRaw -> {
+                                                rawContent = post
+                                            }
 
-                                                OptionId.CrossPost -> {
-                                                    detailOpener.openCreatePost(
-                                                        crossPost = post,
-                                                        forceCommunitySelection = true,
-                                                    )
-                                                }
+                                            OptionId.CrossPost -> {
+                                                detailOpener.openCreatePost(
+                                                    crossPost = post,
+                                                    forceCommunitySelection = true,
+                                                )
+                                            }
 
-                                                OptionId.Share -> {
-                                                    val urls =
-                                                        listOfNotNull(
-                                                            post.originalUrl,
-                                                            "https://${uiState.instance}/post/${post.id}",
-                                                        ).distinct()
-                                                    if (urls.size == 1) {
-                                                        model.reduce(
-                                                            ProfileLoggedMviModel.Intent.Share(
-                                                                urls.first(),
-                                                            ),
-                                                        )
-                                                    } else {
-                                                        val screen = ShareBottomSheet(urls = urls)
-                                                        navigationCoordinator.showBottomSheet(screen)
-                                                    }
-                                                }
-
-                                                OptionId.Restore -> {
+                                            OptionId.Share -> {
+                                                val urls =
+                                                    listOfNotNull(
+                                                        post.originalUrl,
+                                                        "https://${uiState.instance}/post/${post.id}",
+                                                    ).distinct()
+                                                if (urls.size == 1) {
                                                     model.reduce(
-                                                        ProfileLoggedMviModel.Intent.RestorePost(
-                                                            post.id,
+                                                        ProfileLoggedMviModel.Intent.Share(
+                                                            urls.first(),
                                                         ),
                                                     )
+                                                } else {
+                                                    val screen = ShareBottomSheet(urls = urls)
+                                                    navigationCoordinator.showBottomSheet(screen)
                                                 }
-
-                                                else -> Unit
                                             }
-                                        },
+
+                                            OptionId.Restore -> {
+                                                model.reduce(
+                                                    ProfileLoggedMviModel.Intent.RestorePost(
+                                                        post.id,
+                                                    ),
+                                                )
+                                            }
+
+                                            else -> Unit
+                                        }
+                                    },
                                 )
                                 if (uiState.postLayout != PostLayout.Card) {
                                     HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
@@ -512,56 +496,50 @@ object ProfileLoggedScreen : Tab {
                                     hideAuthor = true,
                                     indentAmount = 0,
                                     downVoteEnabled = uiState.downVoteEnabled,
-                                    onImageClick =
-                                        rememberCallbackArgs { url ->
-                                            navigationCoordinator.pushScreen(
-                                                ZoomableImageScreen(
-                                                    url = url,
-                                                    source = comment.community?.readableHandle.orEmpty(),
-                                                ),
-                                            )
-                                        },
-                                    onOpenCommunity =
-                                        rememberCallbackArgs { community, instance ->
-                                            detailOpener.openCommunityDetail(community, instance)
-                                        },
+                                    onImageClick = { url ->
+                                        navigationCoordinator.pushScreen(
+                                            ZoomableImageScreen(
+                                                url = url,
+                                                source = comment.community?.readableHandle.orEmpty(),
+                                            ),
+                                        )
+                                    },
+                                    onOpenCommunity = { community, instance ->
+                                        detailOpener.openCommunityDetail(community, instance)
+                                    },
                                     onClick = {
                                         detailOpener.openPostDetail(
                                             post = PostModel(id = comment.postId),
                                             highlightCommentId = comment.id,
                                         )
                                     },
-                                    onReply =
-                                        rememberCallback {
-                                            detailOpener.openReply(
-                                                originalPost = PostModel(id = comment.postId),
-                                                originalComment = comment,
-                                            )
-                                        },
-                                    onUpVote =
-                                        rememberCallback(model) {
-                                            model.reduce(
-                                                ProfileLoggedMviModel.Intent.UpVoteComment(
-                                                    id = comment.id,
-                                                ),
-                                            )
-                                        },
-                                    onDownVote =
-                                        rememberCallback(model) {
-                                            model.reduce(
-                                                ProfileLoggedMviModel.Intent.DownVoteComment(
-                                                    id = comment.id,
-                                                ),
-                                            )
-                                        },
-                                    onSave =
-                                        rememberCallback(model) {
-                                            model.reduce(
-                                                ProfileLoggedMviModel.Intent.SaveComment(
-                                                    id = comment.id,
-                                                ),
-                                            )
-                                        },
+                                    onReply = {
+                                        detailOpener.openReply(
+                                            originalPost = PostModel(id = comment.postId),
+                                            originalComment = comment,
+                                        )
+                                    },
+                                    onUpVote = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.UpVoteComment(
+                                                id = comment.id,
+                                            ),
+                                        )
+                                    },
+                                    onDownVote = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.DownVoteComment(
+                                                id = comment.id,
+                                            ),
+                                        )
+                                    },
+                                    onSave = {
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.SaveComment(
+                                                id = comment.id,
+                                            ),
+                                        )
+                                    },
                                     options =
                                         buildList {
                                             this +=
@@ -593,56 +571,55 @@ object ProfileLoggedScreen : Tab {
                                                     )
                                             }
                                         },
-                                    onOptionSelected =
-                                        rememberCallbackArgs(model) { optionId ->
-                                            when (optionId) {
-                                                OptionId.Delete -> {
-                                                    commentIdToDelete = comment.id
-                                                }
+                                    onOptionSelected = { optionId ->
+                                        when (optionId) {
+                                            OptionId.Delete -> {
+                                                commentIdToDelete = comment.id
+                                            }
 
-                                                OptionId.Edit -> {
-                                                    detailOpener.openReply(
-                                                        originalPost = PostModel(id = comment.postId),
-                                                        editedComment = comment,
-                                                    )
-                                                }
+                                            OptionId.Edit -> {
+                                                detailOpener.openReply(
+                                                    originalPost = PostModel(id = comment.postId),
+                                                    editedComment = comment,
+                                                )
+                                            }
 
-                                                OptionId.SeeRaw -> {
-                                                    rawContent = comment
-                                                }
+                                            OptionId.SeeRaw -> {
+                                                rawContent = comment
+                                            }
 
-                                                OptionId.Share -> {
-                                                    val urls =
-                                                        listOfNotNull(
-                                                            comment.originalUrl,
-                                                            "https://${uiState.instance}/comment/${comment.id}",
-                                                        ).distinct()
-                                                    if (urls.size == 1) {
-                                                        model.reduce(
-                                                            ProfileLoggedMviModel.Intent.Share(
-                                                                urls.first(),
-                                                            ),
-                                                        )
-                                                    } else {
-                                                        val screen =
-                                                            ShareBottomSheet(urls = urls)
-                                                        navigationCoordinator.showBottomSheet(
-                                                            screen,
-                                                        )
-                                                    }
-                                                }
-
-                                                OptionId.Restore -> {
+                                            OptionId.Share -> {
+                                                val urls =
+                                                    listOfNotNull(
+                                                        comment.originalUrl,
+                                                        "https://${uiState.instance}/comment/${comment.id}",
+                                                    ).distinct()
+                                                if (urls.size == 1) {
                                                     model.reduce(
-                                                        ProfileLoggedMviModel.Intent.RestoreComment(
-                                                            comment.id,
+                                                        ProfileLoggedMviModel.Intent.Share(
+                                                            urls.first(),
                                                         ),
                                                     )
+                                                } else {
+                                                    val screen =
+                                                        ShareBottomSheet(urls = urls)
+                                                    navigationCoordinator.showBottomSheet(
+                                                        screen,
+                                                    )
                                                 }
-
-                                                else -> Unit
                                             }
-                                        },
+
+                                            OptionId.Restore -> {
+                                                model.reduce(
+                                                    ProfileLoggedMviModel.Intent.RestoreComment(
+                                                        comment.id,
+                                                    ),
+                                                )
+                                            }
+
+                                            else -> Unit
+                                        }
+                                    },
                                 )
                                 HorizontalDivider(
                                     modifier = Modifier.padding(vertical = Spacing.xxxs),
@@ -675,10 +652,9 @@ object ProfileLoggedScreen : Tab {
                                         horizontalArrangement = Arrangement.Center,
                                     ) {
                                         Button(
-                                            onClick =
-                                                rememberCallback(model) {
-                                                    model.reduce(ProfileLoggedMviModel.Intent.LoadNextPage)
-                                                },
+                                            onClick = {
+                                                model.reduce(ProfileLoggedMviModel.Intent.LoadNextPage)
+                                            },
                                         ) {
                                             Text(
                                                 text =
@@ -732,25 +708,23 @@ object ProfileLoggedScreen : Tab {
                         text = content.text,
                         upVotes = content.upvotes,
                         downVotes = content.downvotes,
-                        onDismiss =
-                            rememberCallback {
-                                rawContent = null
-                            },
-                        onQuote =
-                            rememberCallbackArgs { quotation ->
-                                rawContent = null
-                                if (quotation != null) {
-                                    detailOpener.openReply(
-                                        originalPost = content,
-                                        initialText =
-                                            buildString {
-                                                append("> ")
-                                                append(quotation)
-                                                append("\n\n")
-                                            },
-                                    )
-                                }
-                            },
+                        onDismiss = {
+                            rawContent = null
+                        },
+                        onQuote = { quotation ->
+                            rawContent = null
+                            if (quotation != null) {
+                                detailOpener.openReply(
+                                    originalPost = content,
+                                    initialText =
+                                        buildString {
+                                            append("> ")
+                                            append(quotation)
+                                            append("\n\n")
+                                        },
+                                )
+                            }
+                        },
                     )
                 }
 
@@ -764,22 +738,21 @@ object ProfileLoggedScreen : Tab {
                         onDismiss = {
                             rawContent = null
                         },
-                        onQuote =
-                            rememberCallbackArgs { quotation ->
-                                rawContent = null
-                                if (quotation != null) {
-                                    detailOpener.openReply(
-                                        originalPost = PostModel(id = content.postId),
-                                        originalComment = content,
-                                        initialText =
-                                            buildString {
-                                                append("> ")
-                                                append(quotation)
-                                                append("\n\n")
-                                            },
-                                    )
-                                }
-                            },
+                        onQuote = { quotation ->
+                            rawContent = null
+                            if (quotation != null) {
+                                detailOpener.openReply(
+                                    originalPost = PostModel(id = content.postId),
+                                    originalComment = content,
+                                    initialText =
+                                        buildString {
+                                            append("> ")
+                                            append(quotation)
+                                            append("\n\n")
+                                        },
+                                )
+                            }
+                        },
                     )
                 }
             }

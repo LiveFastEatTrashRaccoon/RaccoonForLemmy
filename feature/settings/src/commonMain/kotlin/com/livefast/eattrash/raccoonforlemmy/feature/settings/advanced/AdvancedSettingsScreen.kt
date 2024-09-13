@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.advanced
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +17,8 @@ import androidx.compose.material.icons.filled.DisplaySettings
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.Science
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -36,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.toSize
@@ -62,9 +62,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBo
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SliderBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.getPrettyDuration
 import com.livefast.eattrash.raccoonforlemmy.core.utils.fs.getFileSystemManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
@@ -130,17 +127,16 @@ class AdvancedSettingsScreen : Screen {
                     },
                     navigationIcon = {
                         if (navigationCoordinator.canPop.value) {
-                            Image(
-                                modifier =
-                                    Modifier.onClick(
-                                        onClick = {
-                                            navigationCoordinator.popScreen()
-                                        },
-                                    ),
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                            )
+                            IconButton(
+                                onClick = {
+                                    navigationCoordinator.popScreen()
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    contentDescription = null,
+                                )
+                            }
                         }
                     },
                 )
@@ -175,24 +171,22 @@ class AdvancedSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsNavigationBarTitlesVisible,
                         value = uiState.navBarTitlesVisible,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    AdvancedSettingsMviModel.Intent.ChangeNavBarTitlesVisible(value),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                AdvancedSettingsMviModel.Intent.ChangeNavBarTitlesVisible(value),
+                            )
+                        },
                     )
 
                     // edge to edge
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsEdgeToEdge,
                         value = uiState.edgeToEdge,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    AdvancedSettingsMviModel.Intent.ChangeEdgeToEdge(value),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                AdvancedSettingsMviModel.Intent.ChangeEdgeToEdge(value),
+                            )
+                        },
                     )
 
                     // system bar theme
@@ -206,11 +200,10 @@ class AdvancedSettingsScreen : Screen {
                         SettingsRow(
                             title = LocalStrings.current.settingsBarTheme,
                             value = barThemeName,
-                            onTap =
-                                rememberCallback {
-                                    val sheet = BarThemeBottomSheet()
-                                    navigationCoordinator.showBottomSheet(sheet)
-                                },
+                            onTap = {
+                                val sheet = BarThemeBottomSheet()
+                                navigationCoordinator.showBottomSheet(sheet)
+                            },
                         )
                     }
 
@@ -218,14 +211,13 @@ class AdvancedSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsHideNavigationBar,
                         value = uiState.hideNavigationBarWhileScrolling,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    AdvancedSettingsMviModel.Intent.ChangeHideNavigationBarWhileScrolling(
-                                        value,
-                                    ),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                AdvancedSettingsMviModel.Intent.ChangeHideNavigationBarWhileScrolling(
+                                    value,
+                                ),
+                            )
+                        },
                     )
 
                     SettingsHeader(
@@ -237,24 +229,22 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsFadeReadPosts,
                             value = uiState.fadeReadPosts,
-                            onValueChanged =
-                                rememberCallbackArgs(model) { value ->
-                                    model.reduce(
-                                        AdvancedSettingsMviModel.Intent.ChangeFadeReadPosts(value),
-                                    )
-                                },
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    AdvancedSettingsMviModel.Intent.ChangeFadeReadPosts(value),
+                                )
+                            },
                         )
 
                         // show unread comment number
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsShowUnreadComments,
                             value = uiState.showUnreadComments,
-                            onValueChanged =
-                                rememberCallbackArgs(model) { value ->
-                                    model.reduce(
-                                        AdvancedSettingsMviModel.Intent.ChangeShowUnreadComments(value),
-                                    )
-                                },
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    AdvancedSettingsMviModel.Intent.ChangeShowUnreadComments(value),
+                                )
+                            },
                         )
                     }
 
@@ -262,29 +252,27 @@ class AdvancedSettingsScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.settingsDefaultExploreResultType,
                         value = uiState.defaultExploreResultType.toReadableName(),
-                        onTap =
-                            rememberCallback {
-                                val sheet =
-                                    ResultTypeBottomSheet(
-                                        screenKey = "advancedSettings",
-                                    )
-                                navigationCoordinator.showBottomSheet(sheet)
-                            },
+                        onTap = {
+                            val sheet =
+                                ResultTypeBottomSheet(
+                                    screenKey = "advancedSettings",
+                                )
+                            navigationCoordinator.showBottomSheet(sheet)
+                        },
                     )
 
                     // default explore listing type
                     SettingsRow(
                         title = LocalStrings.current.settingsDefaultExploreType,
                         value = uiState.defaultExploreType.toReadableName(),
-                        onTap =
-                            rememberCallback {
-                                val sheet =
-                                    ListingTypeBottomSheet(
-                                        isLogged = uiState.isLogged,
-                                        screenKey = "advancedSettings",
-                                    )
-                                navigationCoordinator.showBottomSheet(sheet)
-                            },
+                        onTap = {
+                            val sheet =
+                                ListingTypeBottomSheet(
+                                    isLogged = uiState.isLogged,
+                                    screenKey = "advancedSettings",
+                                )
+                            navigationCoordinator.showBottomSheet(sheet)
+                        },
                     )
                     if (uiState.isLogged) {
                         // default inbox type
@@ -296,11 +284,10 @@ class AdvancedSettingsScreen : Screen {
                                 } else {
                                     LocalStrings.current.inboxListingTypeAll
                                 },
-                            onTap =
-                                rememberCallback {
-                                    val sheet = InboxTypeSheet()
-                                    navigationCoordinator.showBottomSheet(sheet)
-                                },
+                            onTap = {
+                                val sheet = InboxTypeSheet()
+                                navigationCoordinator.showBottomSheet(sheet)
+                            },
                         )
 
                         // inbox preview max lines
@@ -312,23 +299,22 @@ class AdvancedSettingsScreen : Screen {
                                 } else {
                                     uiState.inboxPreviewMaxLines.toString()
                                 },
-                            onTap =
-                                rememberCallback {
-                                    val screen =
-                                        SelectNumberBottomSheet(
-                                            values =
-                                                listOf(
-                                                    1,
-                                                    10,
-                                                    50,
-                                                    -1, // custom number
-                                                    null, // unlimited
-                                                ),
-                                            type = SelectNumberBottomSheetType.InboxPreviewMaxLines,
-                                            initialValue = uiState.inboxPreviewMaxLines,
-                                        )
-                                    navigationCoordinator.showBottomSheet(screen)
-                                },
+                            onTap = {
+                                val screen =
+                                    SelectNumberBottomSheet(
+                                        values =
+                                            listOf(
+                                                1,
+                                                10,
+                                                50,
+                                                -1, // custom number
+                                                null, // unlimited
+                                            ),
+                                        type = SelectNumberBottomSheetType.InboxPreviewMaxLines,
+                                        initialValue = uiState.inboxPreviewMaxLines,
+                                    )
+                                navigationCoordinator.showBottomSheet(screen)
+                            },
                         )
                     }
 
@@ -343,10 +329,9 @@ class AdvancedSettingsScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.advancedSettingsDefaultLanguage,
                         value = languageValue,
-                        onTap =
-                            rememberCallback {
-                                languageDialogOpened = true
-                            },
+                        onTap = {
+                            languageDialogOpened = true
+                        },
                     )
 
                     // open post web page on image click
@@ -354,38 +339,35 @@ class AdvancedSettingsScreen : Screen {
                         title = LocalStrings.current.settingsItemOpenPostWebPageOnImageClick,
                         subtitle = LocalStrings.current.settingsSubtitleOpenPostWebPageOnImageClick,
                         value = uiState.openPostWebPageOnImageClick,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    AdvancedSettingsMviModel.Intent.ChangeOpenPostWebPageOnImageClick(
-                                        value,
-                                    ),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                AdvancedSettingsMviModel.Intent.ChangeOpenPostWebPageOnImageClick(
+                                    value,
+                                ),
+                            )
+                        },
                     )
 
                     // infinite scrolling
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsInfiniteScrollDisabled,
                         value = uiState.infiniteScrollDisabled,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    AdvancedSettingsMviModel.Intent.ChangeInfiniteScrollDisabled(value),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                AdvancedSettingsMviModel.Intent.ChangeInfiniteScrollDisabled(value),
+                            )
+                        },
                     )
 
                     // auto-expand comments
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsAutoExpandComments,
                         value = uiState.autoExpandComments,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    AdvancedSettingsMviModel.Intent.ChangeAutoExpandComments(value),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                AdvancedSettingsMviModel.Intent.ChangeAutoExpandComments(value),
+                            )
+                        },
                     )
 
                     if (uiState.isLogged) {
@@ -393,14 +375,13 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsMarkAsReadWhileScrolling,
                             value = uiState.markAsReadWhileScrolling,
-                            onValueChanged =
-                                rememberCallbackArgs(model) { value ->
-                                    model.reduce(
-                                        AdvancedSettingsMviModel.Intent.ChangeMarkAsReadWhileScrolling(
-                                            value,
-                                        ),
-                                    )
-                                },
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    AdvancedSettingsMviModel.Intent.ChangeMarkAsReadWhileScrolling(
+                                        value,
+                                    ),
+                                )
+                            },
                         )
                     }
 
@@ -413,14 +394,13 @@ class AdvancedSettingsScreen : Screen {
                                 minutesLabel = LocalStrings.current.postMinuteShort,
                                 hoursLabel = LocalStrings.current.homeSortTypeTop6Hours,
                             ),
-                        onTap =
-                            rememberCallback {
-                                val sheet =
-                                    DurationBottomSheet(
-                                        type = DurationBottomSheetType.ZOMBIE_MODE_INTERVAL,
-                                    )
-                                navigationCoordinator.showBottomSheet(sheet)
-                            },
+                        onTap = {
+                            val sheet =
+                                DurationBottomSheet(
+                                    type = DurationBottomSheetType.ZOMBIE_MODE_INTERVAL,
+                                )
+                            navigationCoordinator.showBottomSheet(sheet)
+                        },
                     )
 
                     // zombie scroll amount
@@ -436,30 +416,28 @@ class AdvancedSettingsScreen : Screen {
                                 append(pt)
                                 append(LocalStrings.current.settingsPointsShort)
                             },
-                        onTap =
-                            rememberCallback {
-                                val sheet =
-                                    SliderBottomSheet(
-                                        min = 0f,
-                                        max = screenWidth,
-                                        initial = uiState.zombieModeScrollAmount,
-                                    )
-                                navigationCoordinator.showBottomSheet(sheet)
-                            },
+                        onTap = {
+                            val sheet =
+                                SliderBottomSheet(
+                                    min = 0f,
+                                    max = screenWidth,
+                                    initial = uiState.zombieModeScrollAmount,
+                                )
+                            navigationCoordinator.showBottomSheet(sheet)
+                        },
                     )
 
                     // enable buttons to scroll between comments
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsEnableButtonsToScrollBetweenComments,
                         value = uiState.enableButtonsToScrollBetweenComments,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    AdvancedSettingsMviModel.Intent.ChangeEnableButtonsToScrollBetweenComments(
-                                        value,
-                                    ),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                AdvancedSettingsMviModel.Intent.ChangeEnableButtonsToScrollBetweenComments(
+                                    value,
+                                ),
+                            )
+                        },
                     )
 
                     SettingsHeader(
@@ -470,12 +448,11 @@ class AdvancedSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsAutoLoadImages,
                         value = uiState.autoLoadImages,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    AdvancedSettingsMviModel.Intent.ChangeAutoLoadImages(value),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                AdvancedSettingsMviModel.Intent.ChangeAutoLoadImages(value),
+                            )
+                        },
                     )
 
                     if (uiState.imageSourceSupported) {
@@ -484,12 +461,11 @@ class AdvancedSettingsScreen : Screen {
                             title = LocalStrings.current.settingsItemImageSourcePath,
                             subtitle = LocalStrings.current.settingsSubtitleImageSourcePath,
                             value = uiState.imageSourcePath,
-                            onValueChanged =
-                                rememberCallbackArgs(model) { value ->
-                                    model.reduce(
-                                        AdvancedSettingsMviModel.Intent.ChangeImageSourcePath(value),
-                                    )
-                                },
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    AdvancedSettingsMviModel.Intent.ChangeImageSourcePath(value),
+                                )
+                            },
                         )
                     }
 
@@ -500,24 +476,22 @@ class AdvancedSettingsScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.settingsItemConfigureBottomNavigationBar,
                         disclosureIndicator = true,
-                        onTap =
-                            rememberCallback {
-                                navigationCoordinator.pushScreen(ConfigureNavBarScreen())
-                            },
+                        onTap = {
+                            navigationCoordinator.pushScreen(ConfigureNavBarScreen())
+                        },
                     )
                     if (uiState.alternateMarkdownRenderingItemVisible) {
                         // alternate Markdown rendering
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsItemAlternateMarkdownRendering,
                             value = uiState.enableAlternateMarkdownRendering,
-                            onValueChanged =
-                                rememberCallbackArgs(model) { value ->
-                                    model.reduce(
-                                        AdvancedSettingsMviModel.Intent.ChangeEnableAlternateMarkdownRendering(
-                                            value,
-                                        ),
-                                    )
-                                },
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    AdvancedSettingsMviModel.Intent.ChangeEnableAlternateMarkdownRendering(
+                                        value,
+                                    ),
+                                )
+                            },
                         )
                     }
                     if (uiState.isLogged) {
@@ -525,40 +499,37 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsEnableToggleFavoriteInNavDrawer,
                             value = uiState.enableToggleFavoriteInNavDrawer,
-                            onValueChanged =
-                                rememberCallbackArgs(model) { value ->
-                                    model.reduce(
-                                        AdvancedSettingsMviModel.Intent.ChangeEnableToggleFavoriteInNavDrawer(
-                                            value,
-                                        ),
-                                    )
-                                },
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    AdvancedSettingsMviModel.Intent.ChangeEnableToggleFavoriteInNavDrawer(
+                                        value,
+                                    ),
+                                )
+                            },
                         )
 
                         // double tap
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsEnableDoubleTap,
                             value = uiState.enableDoubleTapAction,
-                            onValueChanged =
-                                rememberCallbackArgs(model) { value ->
-                                    model.reduce(
-                                        AdvancedSettingsMviModel.Intent.ChangeEnableDoubleTapAction(
-                                            value,
-                                        ),
-                                    )
-                                },
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    AdvancedSettingsMviModel.Intent.ChangeEnableDoubleTapAction(
+                                        value,
+                                    ),
+                                )
+                            },
                         )
                     }
                     // search posts only in title
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsSearchPostsTitleOnly,
                         value = uiState.searchPostTitleOnly,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    AdvancedSettingsMviModel.Intent.ChangeSearchPostTitleOnly(value),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                AdvancedSettingsMviModel.Intent.ChangeSearchPostTitleOnly(value),
+                            )
+                        },
                     )
 
                     if (uiState.isLogged) {
@@ -603,28 +574,25 @@ class AdvancedSettingsScreen : Screen {
                                     append(" ")
                                     append(LocalStrings.current.requiresRestart)
                                 },
-                            onTap =
-                                rememberCallback {
-                                    val sheet = AppIconBottomSheet()
-                                    navigationCoordinator.showBottomSheet(sheet)
-                                },
+                            onTap = {
+                                val sheet = AppIconBottomSheet()
+                                navigationCoordinator.showBottomSheet(sheet)
+                            },
                         )
                     }
 
                     if (uiState.supportSettingsImportExport) {
                         SettingsRow(
                             title = LocalStrings.current.settingsExport,
-                            onTap =
-                                rememberCallback(model) {
-                                    model.reduce(AdvancedSettingsMviModel.Intent.ExportSettings)
-                                },
+                            onTap = {
+                                model.reduce(AdvancedSettingsMviModel.Intent.ExportSettings)
+                            },
                         )
                         SettingsRow(
                             title = LocalStrings.current.settingsImport,
-                            onTap =
-                                rememberCallback {
-                                    fileInputOpened = true
-                                },
+                            onTap = {
+                                fileInputOpened = true
+                            },
                         )
                     }
 
@@ -633,14 +601,13 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsUseAvatarAsProfileNavigationIcon,
                             value = uiState.useAvatarAsProfileNavigationIcon,
-                            onValueChanged =
-                                rememberCallbackArgs(model) { value ->
-                                    model.reduce(
-                                        AdvancedSettingsMviModel.Intent.ChangeUseAvatarAsProfileNavigationIcon(
-                                            value,
-                                        ),
-                                    )
-                                },
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    AdvancedSettingsMviModel.Intent.ChangeUseAvatarAsProfileNavigationIcon(
+                                        value,
+                                    ),
+                                )
+                            },
                         )
                     }
 

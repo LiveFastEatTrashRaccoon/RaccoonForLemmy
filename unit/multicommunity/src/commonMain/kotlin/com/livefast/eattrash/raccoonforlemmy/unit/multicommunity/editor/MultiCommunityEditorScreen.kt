@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -61,7 +59,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -99,17 +96,16 @@ class MultiCommunityEditorScreen(
                         )
                     },
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     actions = {
                         IconButton(
@@ -222,14 +218,13 @@ class MultiCommunityEditorScreen(
                                                     it
                                                 }
                                             }.onClick(
-                                                onClick =
-                                                    rememberCallback(model) {
-                                                        model.reduce(
-                                                            MultiCommunityEditorMviModel.Intent.SelectImage(
-                                                                idx,
-                                                            ),
-                                                        )
-                                                    },
+                                                onClick = {
+                                                    model.reduce(
+                                                        MultiCommunityEditorMviModel.Intent.SelectImage(
+                                                            idx,
+                                                        ),
+                                                    )
+                                                },
                                             ),
                                     url = url,
                                     contentScale = ContentScale.FillBounds,

@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.reportlist.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +17,7 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
@@ -31,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -82,13 +81,11 @@ internal fun InnerReportCard(
                         .shadow(
                             elevation = 5.dp,
                             shape = RoundedCornerShape(CornerSize.l),
-                        )
-                        .clip(RoundedCornerShape(CornerSize.l))
+                        ).clip(RoundedCornerShape(CornerSize.l))
                         .background(
                             color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
                             shape = RoundedCornerShape(CornerSize.l),
-                        )
-                        .padding(vertical = Spacing.xs)
+                        ).padding(vertical = Spacing.xs)
                 } else {
                     Modifier.background(MaterialTheme.colorScheme.background)
                 },
@@ -118,8 +115,7 @@ internal fun InnerReportCard(
                                     width = 1.dp,
                                     color = MaterialTheme.colorScheme.secondary,
                                     shape = RoundedCornerShape(CornerSize.l),
-                                )
-                                .padding(all = Spacing.s),
+                                ).padding(all = Spacing.s),
                     ) {
                         originalContent()
                     }
@@ -226,38 +222,38 @@ private fun ReportFooter(
                 )
             }
             if (options.isNotEmpty()) {
-                Icon(
+                IconButton(
                     modifier =
-                        Modifier.size(IconSize.m)
+                        Modifier
+                            .size(IconSize.m)
                             .padding(Spacing.xs)
                             .padding(top = Spacing.xxs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            }
-                            .onClick(
-                                onClick = {
-                                    optionsExpanded = true
-                                },
-                            ),
-                    imageVector = Icons.Default.MoreHoriz,
-                    contentDescription = null,
-                    tint = ancillaryColor,
-                )
+                            },
+                    onClick = {
+                        optionsExpanded = true
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreHoriz,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                }
             }
             Spacer(modifier = Modifier.weight(1f))
             if (onOpenResolve != null) {
-                Image(
-                    modifier =
-                        buttonModifier
-                            .onClick(
-                                onClick = {
-                                    onOpenResolve.invoke()
-                                },
-                            ),
-                    imageVector = Icons.AutoMirrored.Default.OpenInNew,
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                )
+                IconButton(
+                    onClick = {
+                        onOpenResolve.invoke()
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.OpenInNew,
+                        contentDescription = null,
+                    )
+                }
             }
         }
         CustomDropDown(

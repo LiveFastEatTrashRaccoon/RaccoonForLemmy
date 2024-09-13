@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -188,21 +189,24 @@ fun InboxReplySubtitle(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
-                        Icon(
+                        IconButton(
                             modifier =
-                                buttonModifier.padding(
-                                    top = 3.5.dp,
-                                    bottom = 3.5.dp,
-                                    end = 3.5.dp,
-                                ).onClick(
-                                    onClick = {
-                                        onReply?.invoke()
-                                    },
-                                ),
-                            imageVector = Icons.AutoMirrored.Default.Chat,
-                            contentDescription = null,
-                            tint = ancillaryColor,
-                        )
+                                buttonModifier
+                                    .padding(
+                                        top = 3.5.dp,
+                                        bottom = 3.5.dp,
+                                        end = 3.5.dp,
+                                    ),
+                            onClick = {
+                                onReply?.invoke()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.Chat,
+                                contentDescription = null,
+                                tint = ancillaryColor,
+                            )
+                        }
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
@@ -220,23 +224,26 @@ fun InboxReplySubtitle(
                             )
                         }
                         if (options.isNotEmpty()) {
-                            Icon(
+                            IconButton(
                                 modifier =
-                                    Modifier.size(IconSize.m)
+                                    Modifier
+                                        .size(IconSize.m)
                                         .padding(Spacing.xs)
                                         .onGloballyPositioned {
                                             optionsOffset = it.positionInParent()
-                                        }
-                                        .onClick(
-                                            onClick = {
-                                                optionsExpanded = true
-                                            },
-                                        ),
-                                imageVector = Icons.Default.MoreHoriz,
-                                contentDescription = null,
-                                tint = ancillaryColor,
-                            )
+                                        },
+                                onClick = {
+                                    optionsExpanded = true
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.MoreHoriz,
+                                    contentDescription = null,
+                                    tint = ancillaryColor,
+                                )
+                            }
                         }
+
                         Spacer(modifier = Modifier.weight(1f))
                         FeedbackButton(
                             modifier =

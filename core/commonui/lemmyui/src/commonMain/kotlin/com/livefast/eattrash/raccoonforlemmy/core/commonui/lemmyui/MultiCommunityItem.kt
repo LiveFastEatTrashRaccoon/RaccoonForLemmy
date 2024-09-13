@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -61,7 +62,9 @@ fun MultiCommunityItem(
         if (communityIcon.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier =
-                    Modifier.padding(Spacing.xxxs).size(iconSize)
+                    Modifier
+                        .padding(Spacing.xxxs)
+                        .size(iconSize)
                         .clip(RoundedCornerShape(iconSize / 2)),
                 url = communityIcon,
                 contentScale = ContentScale.FillBounds,
@@ -89,22 +92,24 @@ fun MultiCommunityItem(
 
         if (options.isNotEmpty()) {
             Box {
-                Icon(
+                IconButton(
                     modifier =
-                        Modifier.size(IconSize.m)
+                        Modifier
+                            .size(IconSize.m)
                             .padding(Spacing.xs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            }
-                            .onClick(
-                                onClick = {
-                                    optionsMenuOpen = true
-                                },
-                            ),
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = null,
-                    tint = ancillaryColor,
-                )
+                            },
+                    onClick = {
+                        optionsMenuOpen = true
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                }
 
                 CustomDropDown(
                     expanded = optionsMenuOpen,

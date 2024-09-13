@@ -23,7 +23,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.handleUrl
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.getCustomTabsHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toUrlOpeningMode
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostReportModel
@@ -71,20 +70,17 @@ internal fun PostReportCard(
                             ),
                         text = title,
                         autoLoadImages = autoLoadImages,
-                        onOpenUser =
-                            rememberCallbackArgs { user, instance ->
-                                detailOpener.openUserDetail(user, instance)
-                            },
-                        onOpenPost =
-                            rememberCallbackArgs { post, instance ->
-                                detailOpener.openPostDetail(post, instance)
-                            },
-                        onOpenWeb =
-                            rememberCallbackArgs { url ->
-                                navigationCoordinator.pushScreen(
-                                    WebViewScreen(url),
-                                )
-                            },
+                        onOpenUser = { user, instance ->
+                            detailOpener.openUserDetail(user, instance)
+                        },
+                        onOpenPost = { post, instance ->
+                            detailOpener.openPostDetail(post, instance)
+                        },
+                        onOpenWeb = { url ->
+                            navigationCoordinator.pushScreen(
+                                WebViewScreen(url),
+                            )
+                        },
                     )
                 }
                 report.imageUrl.takeIf { it.isNotEmpty() }?.also { imageUrl ->
@@ -106,38 +102,33 @@ internal fun PostReportCard(
                             ),
                         text = text,
                         autoLoadImages = autoLoadImages,
-                        onOpenUser =
-                            rememberCallbackArgs { user, instance ->
-                                detailOpener.openUserDetail(user, instance)
-                            },
-                        onOpenPost =
-                            rememberCallbackArgs { post, instance ->
-                                detailOpener.openPostDetail(post, instance)
-                            },
-                        onOpenWeb =
-                            rememberCallbackArgs { url ->
-                                navigationCoordinator.pushScreen(
-                                    WebViewScreen(url),
-                                )
-                            },
+                        onOpenUser = { user, instance ->
+                            detailOpener.openUserDetail(user, instance)
+                        },
+                        onOpenPost = { post, instance ->
+                            detailOpener.openPostDetail(post, instance)
+                        },
+                        onOpenWeb = { url ->
+                            navigationCoordinator.pushScreen(
+                                WebViewScreen(url),
+                            )
+                        },
                     )
                 }
                 report.originalUrl?.also { url ->
                     PostLinkBanner(
-                        modifier =
-                            Modifier
-                                .padding(top = Spacing.s, bottom = Spacing.xxs)
-                                .onClick(
-                                    onClick = {
-                                        navigationCoordinator.handleUrl(
-                                            url = url,
-                                            openingMode = settingsRepository.currentSettings.value.urlOpeningMode.toUrlOpeningMode(),
-                                            uriHandler = uriHandler,
-                                            customTabsHelper = customTabsHelper,
-                                        )
-                                    },
-                                ),
+                        modifier = Modifier.padding(top = Spacing.s, bottom = Spacing.xxs),
                         url = url,
+                        onClick = {
+                            navigationCoordinator.handleUrl(
+                                url = url,
+                                openingMode =
+                                    settingsRepository.currentSettings.value.urlOpeningMode
+                                        .toUrlOpeningMode(),
+                                uriHandler = uriHandler,
+                                customTabsHelper = customTabsHelper,
+                            )
+                        },
                     )
                 }
             }

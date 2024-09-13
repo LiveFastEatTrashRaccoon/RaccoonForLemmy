@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -48,8 +46,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHu
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import kotlinx.coroutines.flow.launchIn
@@ -78,18 +74,19 @@ class ModerateWithReasonScreen(
         val focusManager = LocalFocusManager.current
 
         LaunchedEffect(model) {
-            model.effects.onEach {
-                when (it) {
-                    is ModerateWithReasonMviModel.Effect.Failure -> {
-                        snackbarHostState.showSnackbar(it.message ?: genericError)
-                    }
+            model.effects
+                .onEach {
+                    when (it) {
+                        is ModerateWithReasonMviModel.Effect.Failure -> {
+                            snackbarHostState.showSnackbar(it.message ?: genericError)
+                        }
 
-                    ModerateWithReasonMviModel.Effect.Success -> {
-                        navigationCoordinator.showGlobalMessage(message = successMessage, delay = 1.seconds)
-                        navigationCoordinator.popScreen()
+                        ModerateWithReasonMviModel.Effect.Success -> {
+                            navigationCoordinator.showGlobalMessage(message = successMessage, delay = 1.seconds)
+                            navigationCoordinator.popScreen()
+                        }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
 
         Scaffold(
@@ -98,17 +95,16 @@ class ModerateWithReasonScreen(
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.padding(start = Spacing.s).onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     title = {
                         val title =
@@ -132,18 +128,16 @@ class ModerateWithReasonScreen(
                     actions = {
                         IconButton(
                             modifier = Modifier.padding(horizontal = Spacing.xs),
-                            content = {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.Send,
-                                    contentDescription = null,
-                                )
+                            onClick = {
+                                focusManager.clearFocus()
+                                model.reduce(ModerateWithReasonMviModel.Intent.Submit)
                             },
-                            onClick =
-                                rememberCallback(model) {
-                                    focusManager.clearFocus()
-                                    model.reduce(ModerateWithReasonMviModel.Intent.Submit)
-                                },
-                        )
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.Send,
+                                contentDescription = null,
+                            )
+                        }
                     },
                 )
             },
@@ -162,8 +156,7 @@ class ModerateWithReasonScreen(
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        )
-                        .consumeWindowInsets(padding)
+                        ).consumeWindowInsets(padding)
                         .safeImePadding(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,

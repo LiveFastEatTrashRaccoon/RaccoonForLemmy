@@ -36,7 +36,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
 
 class SelectCommunityDialog : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -47,11 +46,10 @@ class SelectCommunityDialog : Screen {
         val notificationCenter = remember { getNotificationCenter() }
 
         BasicAlertDialog(
-            onDismissRequest =
-                rememberCallback {
-                    model.reduce(SelectCommunityMviModel.Intent.SetSearch(""))
-                    notificationCenter.send(NotificationCenterEvent.CloseDialog)
-                },
+            onDismissRequest = {
+                model.reduce(SelectCommunityMviModel.Intent.SetSearch(""))
+                notificationCenter.send(NotificationCenterEvent.CloseDialog)
+            },
         ) {
             Column(
                 modifier =

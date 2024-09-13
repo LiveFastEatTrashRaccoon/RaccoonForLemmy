@@ -9,16 +9,20 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toReadableName
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.BottomSheetHeader
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
@@ -33,9 +37,10 @@ class VoteFormatBottomSheet : Screen {
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val notificationCenter = remember { getNotificationCenter() }
 
-        Column(
-            modifier =
-                Modifier
+        Surface {
+            Column(
+                modifier =
+                    Modifier
                     .windowInsetsPadding(WindowInsets.navigationBars)
                     .padding(
                         top = Spacing.s,
@@ -43,47 +48,48 @@ class VoteFormatBottomSheet : Screen {
                         end = Spacing.s,
                         bottom = Spacing.m,
                     ),
-            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-        ) {
-            BottomSheetHeader(LocalStrings.current.settingsVoteFormat)
-            val values =
-                listOf(
-                    VoteFormat.Aggregated,
-                    VoteFormat.Separated,
-                    VoteFormat.Percentage,
-                    VoteFormat.Hidden,
-                )
-            Column(
-                modifier =
-                    Modifier
+                verticalArrangement = Arrangement.spacedBy(Spacing.s),
+            ) {
+                BottomSheetHeader(LocalStrings.current.settingsVoteFormat)
+                val values =
+                    listOf(
+                        VoteFormat.Aggregated,
+                        VoteFormat.Separated,
+                        VoteFormat.Percentage,
+                        VoteFormat.Hidden,
+                    )
+                Column(
+                    modifier =
+                        Modifier
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-            ) {
-                for (value in values) {
-                    Row(
-                        modifier =
-                            Modifier
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                ) {
+                    for (value in values) {
+                        Row(
+                            modifier =
+                                Modifier
+                                    .clip(RoundedCornerShape(CornerSize.xxl))
+                                    .onClick(
+                                        onClick = {
+                                            notificationCenter.send(
+                                                NotificationCenterEvent.ChangeVoteFormat(value),
+                                            )
+                                            navigationCoordinator.hideBottomSheet()
+                                        },
+                                    )
                                 .padding(
                                     horizontal = Spacing.s,
                                     vertical = Spacing.s,
-                                )
-                                .fillMaxWidth()
-                                .onClick(
-                                    onClick = {
-                                        notificationCenter.send(
-                                            NotificationCenterEvent.ChangeVoteFormat(value),
-                                        )
-                                        navigationCoordinator.hideBottomSheet()
-                                    },
-                                ),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = value.toReadableName(),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
+                                    ).fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = value.toReadableName(),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
                     }
                 }
             }

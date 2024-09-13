@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.web
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,6 +8,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
@@ -18,7 +18,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -59,17 +58,16 @@ class WebViewScreen(
                     title = {},
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     actions = {
                         Icon(
@@ -90,9 +88,10 @@ class WebViewScreen(
             },
         ) { padding ->
             Box(
-                modifier = Modifier.padding(
-                    top = padding.calculateTopPadding(),
-                ),
+                modifier =
+                    Modifier.padding(
+                        top = padding.calculateTopPadding(),
+                    ),
             ) {
                 val webNavigator = rememberWebViewNavigator()
 

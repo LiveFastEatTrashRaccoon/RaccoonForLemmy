@@ -4,7 +4,6 @@ import androidx.compose.animation.core.InfiniteRepeatableSpec
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,6 +28,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -50,7 +50,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import cafe.adriel.voyager.core.screen.Screen
@@ -71,9 +70,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditTextualInf
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import kotlinx.coroutines.flow.launchIn
@@ -165,22 +161,20 @@ class EditCommunityScreen(
                     },
                     navigationIcon = {
                         if (navigationCoordinator.canPop.value) {
-                            Image(
-                                modifier =
-                                    Modifier
-                                        .onClick(
-                                            onClick = {
-                                                if (uiState.hasUnsavedChanges) {
-                                                    confirmBackWithUnsavedChangesDialog = true
-                                                } else {
-                                                    navigationCoordinator.popScreen()
-                                                }
-                                            },
-                                        ),
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                            )
+                            IconButton(
+                                onClick = {
+                                    if (uiState.hasUnsavedChanges) {
+                                        confirmBackWithUnsavedChangesDialog = true
+                                    } else {
+                                        navigationCoordinator.popScreen()
+                                    }
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    contentDescription = null,
+                                )
+                            }
                         }
                     },
                     actions = {
@@ -253,10 +247,9 @@ class EditCommunityScreen(
                             title = LocalStrings.current.multiCommunityEditorName,
                             value = uiState.name,
                             valueStyle = contentTypography.bodyMedium,
-                            onEdit =
-                                rememberCallback {
-                                    openNameEditDialog = true
-                                },
+                            onEdit = {
+                                openNameEditDialog = true
+                            },
                         )
                     }
 
@@ -274,10 +267,9 @@ class EditCommunityScreen(
                                 .size(avatarSize)
                                 .clip(RoundedCornerShape(avatarSize / 2)),
                         url = uiState.icon,
-                        onEdit =
-                            rememberCallback {
-                                openIconPicker = true
-                            },
+                        onEdit = {
+                            openIconPicker = true
+                        },
                     )
 
                     // banner
@@ -286,10 +278,9 @@ class EditCommunityScreen(
                         imageModifier = Modifier.fillMaxWidth().aspectRatio(3.5f),
                         contentScale = ContentScale.Crop,
                         url = uiState.banner,
-                        onEdit =
-                            rememberCallback {
-                                openBannerPicker = true
-                            },
+                        onEdit = {
+                            openBannerPicker = true
+                        },
                     )
 
                     SettingsHeader(
@@ -302,19 +293,17 @@ class EditCommunityScreen(
                         title = LocalStrings.current.settingsWebDisplayName,
                         value = uiState.title,
                         valueStyle = contentTypography.bodyMedium,
-                        onEdit =
-                            rememberCallback {
-                                openTitleEditDialog = true
-                            },
+                        onEdit = {
+                            openTitleEditDialog = true
+                        },
                     )
                     // sidebar
                     SettingsFormattedInfo(
                         title = LocalStrings.current.editCommunityItemSidebar,
                         value = uiState.description,
-                        onEdit =
-                            rememberCallback {
-                                openDescriptionEditDialog = true
-                            },
+                        onEdit = {
+                            openDescriptionEditDialog = true
+                        },
                     )
 
                     SettingsHeader(
@@ -325,32 +314,29 @@ class EditCommunityScreen(
                     SettingsSwitchRow(
                         title = LocalStrings.current.createPostNsfw,
                         value = uiState.nsfw,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(EditCommunityMviModel.Intent.ChangeNsfw(value))
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(EditCommunityMviModel.Intent.ChangeNsfw(value))
+                        },
                     )
                     SettingsSwitchRow(
                         title = LocalStrings.current.editCommunityItemPostingRestrictedToMods,
                         value = uiState.postingRestrictedToMods,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    EditCommunityMviModel.Intent.ChangePostingRestrictedToMods(
-                                        value,
-                                    ),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                EditCommunityMviModel.Intent.ChangePostingRestrictedToMods(
+                                    value,
+                                ),
+                            )
+                        },
                     )
 
                     SettingsRow(
                         title = LocalStrings.current.editCommunityItemVisibility,
                         value = uiState.visibilityType.toReadableName(),
-                        onTap =
-                            rememberCallback {
-                                val sheet = CommunityVisibilityBottomSheet()
-                                navigationCoordinator.showBottomSheet(sheet)
-                            },
+                        onTap = {
+                            val sheet = CommunityVisibilityBottomSheet()
+                            navigationCoordinator.showBottomSheet(sheet)
+                        },
                     )
 
                     Spacer(modifier = Modifier.height(Spacing.m))
@@ -377,13 +363,12 @@ class EditCommunityScreen(
                 title = LocalStrings.current.postActionEdit,
                 label = LocalStrings.current.multiCommunityEditorName,
                 value = uiState.title,
-                onClose =
-                    rememberCallbackArgs(model) { newValue ->
-                        openNameEditDialog = false
-                        newValue?.also {
-                            model.reduce(EditCommunityMviModel.Intent.ChangeName(it))
-                        }
-                    },
+                onClose = { newValue ->
+                    openNameEditDialog = false
+                    newValue?.also {
+                        model.reduce(EditCommunityMviModel.Intent.ChangeName(it))
+                    }
+                },
             )
         }
 
@@ -392,13 +377,12 @@ class EditCommunityScreen(
                 title = LocalStrings.current.postActionEdit,
                 label = LocalStrings.current.settingsWebDisplayName,
                 value = uiState.title,
-                onClose =
-                    rememberCallbackArgs(model) { newValue ->
-                        openTitleEditDialog = false
-                        newValue?.also {
-                            model.reduce(EditCommunityMviModel.Intent.ChangeTitle(it))
-                        }
-                    },
+                onClose = { newValue ->
+                    openTitleEditDialog = false
+                    newValue?.also {
+                        model.reduce(EditCommunityMviModel.Intent.ChangeTitle(it))
+                    }
+                },
             )
         }
 
@@ -406,13 +390,12 @@ class EditCommunityScreen(
             EditFormattedInfoDialog(
                 title = LocalStrings.current.settingsWebBio,
                 value = uiState.description,
-                onClose =
-                    rememberCallbackArgs(model) { newValue ->
-                        openDescriptionEditDialog = false
-                        newValue?.also {
-                            model.reduce(EditCommunityMviModel.Intent.ChangeDescription(it))
-                        }
-                    },
+                onClose = { newValue ->
+                    openDescriptionEditDialog = false
+                    newValue?.also {
+                        model.reduce(EditCommunityMviModel.Intent.ChangeDescription(it))
+                    }
+                },
             )
         }
 

@@ -61,12 +61,9 @@ internal fun ModeratorCell(
             )
         } else {
             PlaceholderImage(
-                modifier =
-                    Modifier.onClick(
-                        onClick = {
-                            onOpenUser?.invoke(user)
-                        },
-                    ),
+                onClick = {
+                    onOpenUser?.invoke(user)
+                },
                 size = iconSize,
                 title = creatorName,
             )

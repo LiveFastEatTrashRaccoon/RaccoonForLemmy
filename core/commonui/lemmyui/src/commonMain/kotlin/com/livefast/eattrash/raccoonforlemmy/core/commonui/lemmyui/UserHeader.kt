@@ -19,6 +19,7 @@ import androidx.compose.material.icons.automirrored.filled.Reply
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -96,7 +97,8 @@ fun UserHeader(
             if (userAvatar.isNotEmpty() && autoLoadImages) {
                 CustomImage(
                     modifier =
-                        Modifier.padding(Spacing.xxxs)
+                        Modifier
+                            .padding(Spacing.xxxs)
                             .size(IconSize.xxl)
                             .clip(RoundedCornerShape(IconSize.xxl / 2))
                             .onClick(
@@ -204,15 +206,17 @@ fun UserHeader(
                     Spacer(modifier = Modifier.weight(1f))
 
                     if (onInfo != null) {
-                        Icon(
-                            modifier =
-                                Modifier
-                                    .padding(end = Spacing.s)
-                                    .size(iconSize)
-                                    .onClick(onClick = onInfo),
-                            imageVector = Icons.Default.Info,
-                            contentDescription = null,
-                        )
+                        IconButton(
+                            modifier = Modifier.padding(end = Spacing.s).size(iconSize),
+                            onClick = {
+                                onInfo?.invoke()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = null,
+                            )
+                        }
                     }
                 }
             }

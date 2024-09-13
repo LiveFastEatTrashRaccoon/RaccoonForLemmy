@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.colors
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +16,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -59,7 +58,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.MultiColorPreview
-import com.livefast.eattrash.raccoonforlemmy.unit.choosecolor.CustomColorPickerDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
@@ -69,10 +67,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.ui.components.SettingsColorRow
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.ui.components.SettingsMultiColorRow
+import com.livefast.eattrash.raccoonforlemmy.unit.choosecolor.CustomColorPickerDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -145,17 +142,16 @@ class SettingsColorAndFontScreen : Screen {
                     },
                     navigationIcon = {
                         if (navigationCoordinator.canPop.value) {
-                            Image(
-                                modifier =
-                                    Modifier.onClick(
-                                        onClick = {
-                                            navigationCoordinator.popScreen()
-                                        },
-                                    ),
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                            )
+                            IconButton(
+                                onClick = {
+                                    navigationCoordinator.popScreen()
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    contentDescription = null,
+                                )
+                            }
                         }
                     },
                 )
@@ -186,12 +182,11 @@ class SettingsColorAndFontScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsDynamicColors,
                             value = uiState.dynamicColors,
-                            onValueChanged =
-                                rememberCallbackArgs(model) { value ->
-                                    model.reduce(
-                                        SettingsColorAndFontMviModel.Intent.ChangeDynamicColors(value),
-                                    )
-                                },
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    SettingsColorAndFontMviModel.Intent.ChangeDynamicColors(value),
+                                )
+                            },
                         )
                     }
                     // random color
@@ -199,12 +194,11 @@ class SettingsColorAndFontScreen : Screen {
                         title = LocalStrings.current.settingsItemRandomThemeColor,
                         subtitle = LocalStrings.current.settingsSubtitleRandomThemeColor,
                         value = uiState.randomColor,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(
-                                    SettingsColorAndFontMviModel.Intent.ChangeRandomColor(value),
-                                )
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(
+                                SettingsColorAndFontMviModel.Intent.ChangeRandomColor(value),
+                            )
+                        },
                     )
 
                     // custom scheme seed color
@@ -301,23 +295,25 @@ class SettingsColorAndFontScreen : Screen {
                 )
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsUiTheme,
-                items = items.map { theme ->
-                    CustomModalBottomSheetItem(
-                        label = theme.toReadableName(),
-                        trailingContent = {
-                            Icon(
-                                modifier = Modifier.size(IconSize.m),
-                                imageVector = theme.toIcon(),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-                    )},
+                items =
+                    items.map { theme ->
+                        CustomModalBottomSheetItem(
+                            label = theme.toReadableName(),
+                            trailingContent = {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = theme.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            },
+                        )
+                    },
                 onSelected = { index ->
                     uiThemeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
-                            NotificationCenterEvent.ChangeTheme(items[index])
+                            NotificationCenterEvent.ChangeTheme(items[index]),
                         )
                     }
                 },
@@ -329,33 +325,35 @@ class SettingsColorAndFontScreen : Screen {
                 title = LocalStrings.current.settingsCustomSeedColor,
                 items =
                     buildList {
-                        this += appColorRepository.getColors().map { theme ->
+                        this +=
+                            appColorRepository.getColors().map { theme ->
+                                CustomModalBottomSheetItem(
+                                    label = theme.toReadableName(),
+                                    trailingContent = {
+                                        Box(
+                                            modifier =
+                                                Modifier
+                                                    .padding(start = Spacing.xs)
+                                                    .size(size = IconSize.m)
+                                                    .background(
+                                                        color = theme.toColor(),
+                                                        shape = CircleShape,
+                                                    ),
+                                        )
+                                    },
+                                )
+                            }
+                        this +=
                             CustomModalBottomSheetItem(
-                                label = theme.toReadableName(),
+                                label = LocalStrings.current.settingsColorCustom,
                                 trailingContent = {
-                                    Box(
-                                        modifier =
-                                            Modifier
-                                                .padding(start = Spacing.xs)
-                                                .size(size = IconSize.m)
-                                                .background(
-                                                    color = theme.toColor(),
-                                                    shape = CircleShape,
-                                                ),
+                                    Icon(
+                                        imageVector = Icons.Default.ChevronRight,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onBackground,
                                     )
                                 },
                             )
-                        }
-                        this += CustomModalBottomSheetItem(
-                            label = LocalStrings.current.settingsColorCustom,
-                            trailingContent = {
-                                Image(
-                                    imageVector = Icons.Default.ChevronRight,
-                                    contentDescription = null,
-                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                                )
-                            }
-                        )
                     },
                 onSelected = { index ->
                     customColorBottomSheetOpened = false
@@ -363,8 +361,8 @@ class SettingsColorAndFontScreen : Screen {
                         if (index in appColorRepository.getColors().indices) {
                             notificationCenter.send(
                                 NotificationCenterEvent.ChangeColor(
-                                    appColorRepository.getColors()[index].toColor()
-                                )
+                                    appColorRepository.getColors()[index].toColor(),
+                                ),
                             )
                         } else {
                             customColorPickerDialogOpened = true
@@ -400,7 +398,7 @@ class SettingsColorAndFontScreen : Screen {
                 )
             CustomModalBottomSheet(
                 title =
-                    when(customColorTypeSelection) {
+                    when (customColorTypeSelection) {
                         CustomColorType.UpvoteColor -> {
                             LocalStrings.current.settingsUpvoteColor
                         }
@@ -419,49 +417,51 @@ class SettingsColorAndFontScreen : Screen {
                     },
                 items =
                     buildList {
-                        this += items.map { barTheme ->
+                        this +=
+                            items.map { barTheme ->
+                                CustomModalBottomSheetItem(
+                                    label = barTheme.toReadableName(),
+                                    trailingContent = {
+                                        Box(
+                                            modifier =
+                                                Modifier
+                                                    .size(IconSize.m)
+                                                    .background(
+                                                        color =
+                                                            when (customColorTypeSelection) {
+                                                                CustomColorType.UpvoteColor -> {
+                                                                    barTheme.toUpVoteColor()
+                                                                }
+                                                                CustomColorType.DownvoteColor -> {
+                                                                    barTheme.toDownVoteColor()
+                                                                }
+                                                                CustomColorType.ReplyColor -> {
+                                                                    barTheme.toReplyColor()
+                                                                }
+                                                                CustomColorType.SaveColor -> {
+                                                                    barTheme.toSaveColor()
+                                                                }
+                                                                else -> {
+                                                                    Color.Unspecified
+                                                                }
+                                                            },
+                                                        shape = CircleShape,
+                                                    ),
+                                        )
+                                    },
+                                )
+                            }
+                        this +=
                             CustomModalBottomSheetItem(
-                                label = barTheme.toReadableName(),
+                                label = LocalStrings.current.settingsColorCustom,
                                 trailingContent = {
-                                    Box(
-                                        modifier =
-                                            Modifier
-                                                .size(IconSize.m)
-                                                .background(
-                                                    color =
-                                                        when(customColorTypeSelection) {
-                                                            CustomColorType.UpvoteColor -> {
-                                                                barTheme.toUpVoteColor()
-                                                            }
-                                                            CustomColorType.DownvoteColor -> {
-                                                                barTheme.toDownVoteColor()
-                                                            }
-                                                            CustomColorType.ReplyColor -> {
-                                                                barTheme.toReplyColor()
-                                                            }
-                                                            CustomColorType.SaveColor -> {
-                                                                barTheme.toSaveColor()
-                                                            }
-                                                            else -> {
-                                                                Color.Unspecified
-                                                            }
-                                                        },
-                                                    shape = CircleShape,
-                                                ),
+                                    Icon(
+                                        imageVector = Icons.Default.ChevronRight,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onBackground,
                                     )
                                 },
                             )
-                        }
-                        this += CustomModalBottomSheetItem(
-                            label = LocalStrings.current.settingsColorCustom,
-                            trailingContent = {
-                                Image(
-                                    imageVector = Icons.Default.ChevronRight,
-                                    contentDescription = null,
-                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                                )
-                            }
-                        )
                     },
                 onSelected = { index ->
                     voteThemeBottomSheetOpened = false
@@ -470,33 +470,32 @@ class SettingsColorAndFontScreen : Screen {
                             notificationCenter.send(
                                 NotificationCenterEvent.ChangeActionColor(
                                     color =
-                                    when (customColorTypeSelection) {
-                                        CustomColorType.UpvoteColor -> {
-                                            items[index].toUpVoteColor()
-                                        }
+                                        when (customColorTypeSelection) {
+                                            CustomColorType.UpvoteColor -> {
+                                                items[index].toUpVoteColor()
+                                            }
 
-                                        CustomColorType.DownvoteColor -> {
-                                            items[index].toDownVoteColor()
-                                        }
+                                            CustomColorType.DownvoteColor -> {
+                                                items[index].toDownVoteColor()
+                                            }
 
-                                        CustomColorType.ReplyColor -> {
-                                            items[index].toReplyColor()
-                                        }
+                                            CustomColorType.ReplyColor -> {
+                                                items[index].toReplyColor()
+                                            }
 
-                                        CustomColorType.SaveColor -> {
-                                            items[index].toSaveColor()
-                                        }
+                                            CustomColorType.SaveColor -> {
+                                                items[index].toSaveColor()
+                                            }
 
-                                        else -> {
-                                            Color.Unspecified
-                                        }
-                                    },
-                                    actionType = customColorTypeSelection.ordinal
-                                )
+                                            else -> {
+                                                Color.Unspecified
+                                            }
+                                        },
+                                    actionType = customColorTypeSelection.ordinal,
+                                ),
                             )
                             customColorTypeSelection = CustomColorType.None
-                        }
-                        else {
+                        } else {
                             customColorPickerDialogOpened = true
                             voteThemeBottomSheetOpened = true
                         }
@@ -516,8 +515,8 @@ class SettingsColorAndFontScreen : Screen {
                             notificationCenter.send(
                                 NotificationCenterEvent.ChangeActionColor(
                                     color = newColor,
-                                    actionType = customColorTypeSelection.ordinal
-                                )
+                                    actionType = customColorTypeSelection.ordinal,
+                                ),
                             )
                         }
                         customColorTypeSelection = CustomColorType.None
@@ -536,25 +535,26 @@ class SettingsColorAndFontScreen : Screen {
                 )
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsCommentBarTheme,
-                items = items.map { barTheme ->
-                    CustomModalBottomSheetItem(
-                        label = barTheme.toReadableName(),
-                        trailingContent = {
-                            val colors = themeRepository.getCommentBarColors(barTheme)
-                            MultiColorPreview(
-                                modifier = Modifier.size(36.dp),
-                                colors = colors,
-                            )
-                        }
-                    )
-                },
+                items =
+                    items.map { barTheme ->
+                        CustomModalBottomSheetItem(
+                            label = barTheme.toReadableName(),
+                            trailingContent = {
+                                val colors = themeRepository.getCommentBarColors(barTheme)
+                                MultiColorPreview(
+                                    modifier = Modifier.size(36.dp),
+                                    colors = colors,
+                                )
+                            },
+                        )
+                    },
                 onSelected = { index ->
                     commentBarColorsBottomSheetOpened = false
                     if (index != null && index in items.indices) {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeCommentBarTheme(
-                                value = items[index]
-                            )
+                                value = items[index],
+                            ),
                         )
                     }
                 },
@@ -571,16 +571,17 @@ class SettingsColorAndFontScreen : Screen {
                 ).map { it.toInt() }
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsUiFontFamily,
-                items = items.map{ fontFamily ->
-                    CustomModalBottomSheetItem(
-                        label = fontFamily.toUiFontFamily().toReadableName()
-                    )
-                },
+                items =
+                    items.map { fontFamily ->
+                        CustomModalBottomSheetItem(
+                            label = fontFamily.toUiFontFamily().toReadableName(),
+                        )
+                    },
                 onSelected = { index ->
                     fontFamilyBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
-                            NotificationCenterEvent.ChangeFontFamily(items[index].toUiFontFamily())
+                            NotificationCenterEvent.ChangeFontFamily(items[index].toUiFontFamily()),
                         )
                     }
                 },
@@ -600,16 +601,17 @@ class SettingsColorAndFontScreen : Screen {
                 ).map { it.scaleFactor }
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsUiFontScale,
-                items = items.map { font ->
-                    CustomModalBottomSheetItem(
-                        label = font.toFontScale().toReadableName()
-                    )
-                },
+                items =
+                    items.map { font ->
+                        CustomModalBottomSheetItem(
+                            label = font.toFontScale().toReadableName(),
+                        )
+                    },
                 onSelected = { index ->
                     fontScaleBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
-                            NotificationCenterEvent.ChangeUiFontSize(items[index])
+                            NotificationCenterEvent.ChangeUiFontSize(items[index]),
                         )
                     }
                 },

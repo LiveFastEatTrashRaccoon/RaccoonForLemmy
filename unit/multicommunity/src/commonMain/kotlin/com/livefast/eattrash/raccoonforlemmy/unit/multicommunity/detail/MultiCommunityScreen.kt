@@ -3,7 +3,6 @@ package com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -35,6 +34,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,7 +53,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
@@ -83,9 +82,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.getAdditionalLabel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -176,17 +172,16 @@ class MultiCommunityScreen(
                     },
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     actions = {
                         val additionalLabel = sortType.getAdditionalLabel()
@@ -202,25 +197,22 @@ class MultiCommunityScreen(
                             Spacer(modifier = Modifier.width(Spacing.xs))
                         }
                         if (sortType != null) {
-                            Image(
-                                modifier =
-                                    Modifier
-                                        .padding(horizontal = Spacing.xs)
-                                        .onClick(
-                                            onClick = {
-                                                val sheet =
-                                                    SortBottomSheet(
-                                                        values = uiState.availableSortTypes.map { it.toInt() },
-                                                        expandTop = true,
-                                                        screenKey = "multiCommunity",
-                                                    )
-                                                navigationCoordinator.showBottomSheet(sheet)
-                                            },
-                                        ),
-                                imageVector = sortType.toIcon(),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                            )
+                            IconButton(
+                                onClick = {
+                                    val sheet =
+                                        SortBottomSheet(
+                                            values = uiState.availableSortTypes.map { it.toInt() },
+                                            expandTop = true,
+                                            screenKey = "multiCommunity",
+                                        )
+                                    navigationCoordinator.showBottomSheet(sheet)
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = sortType.toIcon(),
+                                    contentDescription = null,
+                                )
+                            }
                         }
                     },
                 )
@@ -244,32 +236,30 @@ class MultiCommunityScreen(
                                     FloatingActionButtonMenuItem(
                                         icon = Icons.Default.ExpandLess,
                                         text = LocalStrings.current.actionBackToTop,
-                                        onSelected =
-                                            rememberCallback {
-                                                scope.launch {
-                                                    runCatching {
-                                                        lazyListState.scrollToItem(0)
-                                                        topAppBarState.heightOffset = 0f
-                                                        topAppBarState.contentOffset = 0f
-                                                    }
+                                        onSelected = {
+                                            scope.launch {
+                                                runCatching {
+                                                    lazyListState.scrollToItem(0)
+                                                    topAppBarState.heightOffset = 0f
+                                                    topAppBarState.contentOffset = 0f
                                                 }
-                                            },
+                                            }
+                                        },
                                     )
                                 this +=
                                     FloatingActionButtonMenuItem(
                                         icon = Icons.Default.ClearAll,
                                         text = LocalStrings.current.actionClearRead,
-                                        onSelected =
-                                            rememberCallback {
-                                                model.reduce(MultiCommunityMviModel.Intent.ClearRead)
-                                                scope.launch {
-                                                    runCatching {
-                                                        lazyListState.scrollToItem(0)
-                                                        topAppBarState.heightOffset = 0f
-                                                        topAppBarState.contentOffset = 0f
-                                                    }
+                                        onSelected = {
+                                            model.reduce(MultiCommunityMviModel.Intent.ClearRead)
+                                            scope.launch {
+                                                runCatching {
+                                                    lazyListState.scrollToItem(0)
+                                                    topAppBarState.heightOffset = 0f
+                                                    topAppBarState.contentOffset = 0f
                                                 }
-                                            },
+                                            }
+                                        },
                                     )
                             },
                     )
@@ -279,10 +269,9 @@ class MultiCommunityScreen(
             val pullRefreshState =
                 rememberPullRefreshState(
                     refreshing = uiState.refreshing,
-                    onRefresh =
-                        rememberCallback(model) {
-                            model.reduce(MultiCommunityMviModel.Intent.Refresh)
-                        },
+                    onRefresh = {
+                        model.reduce(MultiCommunityMviModel.Intent.Refresh)
+                    },
                 )
             Box(
                 modifier =
@@ -338,18 +327,14 @@ class MultiCommunityScreen(
                                                 )
                                             },
                                             backgroundColor = upVoteColor ?: defaultUpvoteColor,
-                                            onTriggered =
-                                                rememberCallback {
-                                                    model.reduce(
-                                                        MultiCommunityMviModel.Intent.UpVotePost(post.id),
-                                                    )
-                                                },
+                                            onTriggered = {
+                                                model.reduce(
+                                                    MultiCommunityMviModel.Intent.UpVotePost(post.id),
+                                                )
+                                            },
                                         )
 
                                     ActionOnSwipe.DownVote ->
-                                        if (!uiState.downVoteEnabled) {
-                                            null
-                                        } else {
                                             SwipeAction(
                                                 swipeContent = {
                                                     Icon(
@@ -359,16 +344,14 @@ class MultiCommunityScreen(
                                                     )
                                                 },
                                                 backgroundColor = downVoteColor ?: defaultDownVoteColor,
-                                                onTriggered =
-                                                    rememberCallback {
-                                                        model.reduce(
-                                                            MultiCommunityMviModel.Intent.DownVotePost(
-                                                                post.id,
-                                                            ),
-                                                        )
-                                                    },
-                                            )
-                                        }
+                                            onTriggered = {
+                                                model.reduce(
+                                                    MultiCommunityMviModel.Intent.DownVotePost(
+                                                        post.id,
+                                                    ),
+                                                )
+                                            },
+                                        ).takeIf { uiState.downVoteEnabled }
 
                                     ActionOnSwipe.Reply ->
                                         SwipeAction(
@@ -380,10 +363,9 @@ class MultiCommunityScreen(
                                                 )
                                             },
                                             backgroundColor = replyColor ?: defaultReplyColor,
-                                            onTriggered =
-                                                rememberCallback {
-                                                    detailOpener.openReply(originalPost = post)
-                                                },
+                                            onTriggered = {
+                                                detailOpener.openReply(originalPost = post)
+                                            },
                                         )
 
                                     ActionOnSwipe.Save ->
@@ -396,14 +378,13 @@ class MultiCommunityScreen(
                                                 )
                                             },
                                             backgroundColor = saveColor ?: defaultSaveColor,
-                                            onTriggered =
-                                                rememberCallback {
-                                                    model.reduce(
-                                                        MultiCommunityMviModel.Intent.SavePost(
-                                                            id = post.id,
-                                                        ),
-                                                    )
-                                                },
+                                            onTriggered = {
+                                                model.reduce(
+                                                    MultiCommunityMviModel.Intent.SavePost(
+                                                        id = post.id,
+                                                    ),
+                                                )
+                                            },
                                         )
 
                                     else -> null
@@ -413,10 +394,9 @@ class MultiCommunityScreen(
                         SwipeActionCard(
                             modifier = Modifier.fillMaxWidth(),
                             enabled = uiState.swipeActionsEnabled,
-                            onGestureBegin =
-                                rememberCallback(model) {
-                                    model.reduce(MultiCommunityMviModel.Intent.HapticIndication)
-                                },
+                            onGestureBegin = {
+                                model.reduce(MultiCommunityMviModel.Intent.HapticIndication)
+                            },
                             swipeToStartActions = uiState.actionsOnSwipeToStartPosts.toSwipeActions(),
                             swipeToEndActions =
                                 if (uiState.isLogged) {
@@ -445,78 +425,57 @@ class MultiCommunityScreen(
                                         detailOpener.openPostDetail(post)
                                     },
                                     onDoubleClick =
-                                        if (uiState.swipeActionsEnabled) {
-                                            null
-                                        } else {
-                                            rememberCallback(model) {
-                                                model.reduce(
-                                                    MultiCommunityMviModel.Intent.UpVotePost(
-                                                        id = post.id,
-                                                        feedback = true,
-                                                    ),
-                                                )
-                                            }
-                                        },
-                                    onOpenCommunity =
-                                        rememberCallbackArgs { community, instance ->
-                                            detailOpener.openCommunityDetail(community, instance)
-                                        },
-                                    onOpenCreator =
-                                        rememberCallbackArgs { user, instance ->
-                                            detailOpener.openUserDetail(user, instance)
-                                        },
-                                    onOpenPost =
-                                        rememberCallbackArgs { post, instance ->
-                                            detailOpener.openPostDetail(
-                                                post = post,
-                                                otherInstance = instance,
-                                            )
-                                        },
-                                    onOpenWeb =
-                                        rememberCallbackArgs { url ->
-                                            navigationCoordinator.pushScreen(
-                                                WebViewScreen(url),
-                                            )
-                                        },
-                                    onUpVote =
-                                        rememberCallback(model) {
+                                    {
                                             model.reduce(
                                                 MultiCommunityMviModel.Intent.UpVotePost(
                                                     id = post.id,
+                                                    feedback = true,
                                                 ),
                                             )
-                                        },
-                                    onDownVote =
-                                        rememberCallback(model) {
-                                            model.reduce(
-                                                MultiCommunityMviModel.Intent.DownVotePost(
-                                                    id = post.id,
-                                                ),
-                                            )
-                                        },
-                                    onSave =
-                                        rememberCallback(model) {
-                                            model.reduce(
-                                                MultiCommunityMviModel.Intent.SavePost(
-                                                    id = post.id,
-                                                ),
-                                            )
-                                        },
-                                    onReply =
-                                        rememberCallback(model) {
-                                            model.reduce(MultiCommunityMviModel.Intent.WillOpenDetail)
-                                            detailOpener.openPostDetail(post)
-                                        },
-                                    onOpenImage =
-                                        rememberCallbackArgs { url ->
-                                            model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))
-                                            navigationCoordinator.pushScreen(
-                                                ZoomableImageScreen(
-                                                    url = url,
-                                                    source = post.community?.readableHandle.orEmpty(),
-                                                ),
-                                            )
-                                        },
+                                        }.takeIf { uiState.swipeActionsEnabled },
+                                    onOpenCommunity = { community, instance ->
+                                        detailOpener.openCommunityDetail(community, instance)
+                                    },
+                                    onOpenCreator = { user, instance ->
+                                        detailOpener.openUserDetail(user, instance)
+                                    },
+                                    onOpenPost = { post, instance ->
+                                        detailOpener.openPostDetail(
+                                            post = post,
+                                            otherInstance = instance,
+                                        )
+                                    },
+                                    onOpenWeb = { url ->
+                                        navigationCoordinator.pushScreen(WebViewScreen(url))
+                                    },
+                                    onUpVote = {
+                                        model.reduce(
+                                            MultiCommunityMviModel.Intent.UpVotePost(id = post.id),
+                                        )
+                                    },
+                                    onDownVote = {
+                                        model.reduce(
+                                            MultiCommunityMviModel.Intent.DownVotePost(id = post.id),
+                                        )
+                                    },
+                                    onSave = {
+                                        model.reduce(
+                                            MultiCommunityMviModel.Intent.SavePost(id = post.id),
+                                        )
+                                    },
+                                    onReply = {
+                                        model.reduce(MultiCommunityMviModel.Intent.WillOpenDetail)
+                                        detailOpener.openPostDetail(post)
+                                    },
+                                    onOpenImage = { url ->
+                                        model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))
+                                        navigationCoordinator.pushScreen(
+                                            ZoomableImageScreen(
+                                                url = url,
+                                                source = post.community?.readableHandle.orEmpty(),
+                                            ),
+                                        )
+                                    },
                                     options =
                                         buildList {
                                             this +=
@@ -616,10 +575,9 @@ class MultiCommunityScreen(
                                     horizontalArrangement = Arrangement.Center,
                                 ) {
                                     Button(
-                                        onClick =
-                                            rememberCallback(model) {
-                                                model.reduce(MultiCommunityMviModel.Intent.LoadNextPage)
-                                            },
+                                        onClick = {
+                                            model.reduce(MultiCommunityMviModel.Intent.LoadNextPage)
+                                        },
                                     ) {
                                         Text(
                                             text = LocalStrings.current.postListLoadMorePosts,

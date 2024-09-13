@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +12,7 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
@@ -75,12 +74,13 @@ class ZoomableImageScreen(
         var imageShareBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
-            model.effects.onEach {
-                when (it) {
-                    ZoomableImageMviModel.Effect.ShareSuccess -> snackbarHostState.showSnackbar(successMessage)
-                    ZoomableImageMviModel.Effect.ShareFailure -> snackbarHostState.showSnackbar(errorMessage)
-                }
-            }.launchIn(this)
+            model.effects
+                .onEach {
+                    when (it) {
+                        ZoomableImageMviModel.Effect.ShareSuccess -> snackbarHostState.showSnackbar(successMessage)
+                        ZoomableImageMviModel.Effect.ShareFailure -> snackbarHostState.showSnackbar(errorMessage)
+                    }
+                }.launchIn(this)
         }
         LaunchedEffect(key) {
             drawerCoordinator.setGesturesEnabled(false)
@@ -96,17 +96,16 @@ class ZoomableImageScreen(
                 TopAppBar(
                     title = {},
                     navigationIcon = {
-                        Icon(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     actions = {
                         Icon(
@@ -154,21 +153,23 @@ class ZoomableImageScreen(
                                 }
                             var optionsExpanded by remember { mutableStateOf(false) }
                             var optionsOffset by remember { mutableStateOf(Offset.Zero) }
-                            Image(
+                            IconButton(
                                 modifier =
                                     Modifier
                                         .padding(horizontal = Spacing.xs)
                                         .onGloballyPositioned {
                                             optionsOffset = it.positionInParent()
-                                        }.onClick(
-                                            onClick = {
-                                                optionsExpanded = true
-                                            },
-                                        ),
-                                imageVector = Icons.Default.AspectRatio,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                            )
+                                        },
+                                onClick = {
+                                    optionsExpanded = true
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.AspectRatio,
+                                    contentDescription = null,
+                                )
+                            }
+
                             CustomDropDown(
                                 expanded = optionsExpanded,
                                 onDismiss = {
@@ -218,8 +219,7 @@ class ZoomableImageScreen(
                             Modifier
                                 .padding(
                                     top = padding.calculateTopPadding(),
-                                )
-                                .fillMaxWidth()
+                                ).fillMaxWidth()
                                 .background(Color.Black),
                         contentAlignment = Alignment.Center,
                     ) {
@@ -246,15 +246,14 @@ class ZoomableImageScreen(
                     if (index != null) {
                         if (index == 0) {
                             notificationCenter.send(
-                                NotificationCenterEvent.ShareImageModeSelected.ModeUrl(url)
+                                NotificationCenterEvent.ShareImageModeSelected.ModeUrl(url),
                             )
-                        }
-                        else {
+                        } else {
                             notificationCenter.send(
                                 NotificationCenterEvent.ShareImageModeSelected.ModeFile(
                                     url = url,
                                     source = source,
-                                )
+                                ),
                             )
                         }
                     }

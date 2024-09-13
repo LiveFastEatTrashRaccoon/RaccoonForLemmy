@@ -48,8 +48,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAVideo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAnImage
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.getShareHelper
@@ -237,11 +235,10 @@ private fun CompactPost(
             .orEmpty()
     val shareHelper = remember { getShareHelper() }
     val clipboardManager = LocalClipboardManager.current
-    val onShareLambda =
-        rememberCallback {
-            val query = clipboardManager.getText()?.text.orEmpty()
-            shareHelper.share(query)
-        }
+    val onShareLambda = {
+        val query = clipboardManager.getText()?.text.orEmpty()
+        shareHelper.share(query)
+    }
     val shareActionLabel = LocalStrings.current.postActionShare
 
     CompositionLocalProvider(
@@ -279,14 +276,12 @@ private fun CompactPost(
                 locked = post.locked,
                 markRead = markRead,
                 isFromModerator = isFromModerator,
-                onOpenCommunity =
-                    rememberCallbackArgs { community ->
-                        onOpenCommunity?.invoke(community, "")
-                    },
-                onOpenCreator =
-                    rememberCallbackArgs { user ->
-                        onOpenCreator?.invoke(user, "")
-                    },
+                onOpenCommunity = { community ->
+                    onOpenCommunity?.invoke(community, "")
+                },
+                onOpenCreator = { user ->
+                    onOpenCreator?.invoke(user, "")
+                },
                 autoLoadImages = autoLoadImages,
                 preferNicknames = preferNicknames,
                 onDoubleClick = onDoubleClick,
@@ -341,23 +336,22 @@ private fun CompactPost(
                             url = post.videoUrl,
                             blurred = blurNsfw && post.nsfw,
                             autoLoadImages = autoLoadImages,
-                            onOpen =
-                                rememberCallback {
-                                    if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
-                                        navigationCoordinator.handleUrl(
-                                            url = postLinkUrl,
-                                            openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                            uriHandler = uriHandler,
-                                            customTabsHelper = customTabsHelper,
-                                            onOpenWeb = onOpenWeb,
-                                            onOpenCommunity = onOpenCommunity,
-                                            onOpenPost = onOpenPost,
-                                            onOpenUser = onOpenCreator,
-                                        )
-                                    } else {
-                                        onClick?.invoke()
-                                    }
-                                },
+                            onOpen = {
+                                if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
+                                    navigationCoordinator.handleUrl(
+                                        url = postLinkUrl,
+                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
+                                        uriHandler = uriHandler,
+                                        customTabsHelper = customTabsHelper,
+                                        onOpenWeb = onOpenWeb,
+                                        onOpenCommunity = onOpenCommunity,
+                                        onOpenPost = onOpenPost,
+                                        onOpenUser = onOpenCreator,
+                                    )
+                                } else {
+                                    onClick?.invoke()
+                                }
+                            },
                         )
                     } else {
                         PostCardImage(
@@ -383,23 +377,22 @@ private fun CompactPost(
                                 )
                             },
                             blurred = blurNsfw && post.nsfw,
-                            onImageClick =
-                                rememberCallbackArgs { url ->
-                                    if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
-                                        navigationCoordinator.handleUrl(
-                                            url = postLinkUrl,
-                                            openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                            uriHandler = uriHandler,
-                                            customTabsHelper = customTabsHelper,
-                                            onOpenWeb = onOpenWeb,
-                                            onOpenCommunity = onOpenCommunity,
-                                            onOpenPost = onOpenPost,
-                                            onOpenUser = onOpenCreator,
-                                        )
-                                    } else {
-                                        onOpenImage?.invoke(url)
-                                    }
-                                },
+                            onImageClick = { url ->
+                                if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
+                                    navigationCoordinator.handleUrl(
+                                        url = postLinkUrl,
+                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
+                                        uriHandler = uriHandler,
+                                        customTabsHelper = customTabsHelper,
+                                        onOpenWeb = onOpenWeb,
+                                        onOpenCommunity = onOpenCommunity,
+                                        onOpenPost = onOpenPost,
+                                        onOpenUser = onOpenCreator,
+                                    )
+                                } else {
+                                    onOpenImage?.invoke(url)
+                                }
+                            },
                             onDoubleClick = onDoubleClick,
                         )
                     }
@@ -496,11 +489,10 @@ private fun ExtendedPost(
             }.orEmpty()
     val shareHelper = remember { getShareHelper() }
     val clipboardManager = LocalClipboardManager.current
-    val onShareLambda =
-        rememberCallback {
-            val query = clipboardManager.getText()?.text.orEmpty()
-            shareHelper.share(query)
-        }
+    val onShareLambda = {
+        val query = clipboardManager.getText()?.text.orEmpty()
+        shareHelper.share(query)
+    }
     val shareActionLabel = LocalStrings.current.postActionShare
 
     CompositionLocalProvider(
@@ -536,14 +528,12 @@ private fun ExtendedPost(
                 locked = post.locked,
                 markRead = markRead,
                 isFromModerator = isFromModerator,
-                onOpenCommunity =
-                    rememberCallbackArgs { community ->
-                        onOpenCommunity?.invoke(community, "")
-                    },
-                onOpenCreator =
-                    rememberCallbackArgs { user ->
-                        onOpenCreator?.invoke(user, "")
-                    },
+                onOpenCommunity = { community ->
+                    onOpenCommunity?.invoke(community, "")
+                },
+                onOpenCreator = { user ->
+                    onOpenCreator?.invoke(user, "")
+                },
                 autoLoadImages = autoLoadImages,
                 preferNicknames = preferNicknames,
                 onDoubleClick = onDoubleClick,
@@ -645,23 +635,22 @@ private fun ExtendedPost(
                                 ),
                         imageUrl = post.imageUrl,
                         blurred = blurNsfw && post.nsfw,
-                        onImageClick =
-                            rememberCallbackArgs { url ->
-                                if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
-                                    navigationCoordinator.handleUrl(
-                                        url = postLinkUrl,
-                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                        uriHandler = uriHandler,
-                                        customTabsHelper = customTabsHelper,
-                                        onOpenWeb = onOpenWeb,
-                                        onOpenCommunity = onOpenCommunity,
-                                        onOpenPost = onOpenPost,
-                                        onOpenUser = onOpenCreator,
-                                    )
-                                } else {
-                                    onOpenImage?.invoke(url)
-                                }
-                            },
+                        onImageClick = { url ->
+                            if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
+                                navigationCoordinator.handleUrl(
+                                    url = postLinkUrl,
+                                    openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
+                                    uriHandler = uriHandler,
+                                    customTabsHelper = customTabsHelper,
+                                    onOpenWeb = onOpenWeb,
+                                    onOpenCommunity = onOpenCommunity,
+                                    onOpenPost = onOpenPost,
+                                    onOpenUser = onOpenCreator,
+                                )
+                            } else {
+                                onOpenImage?.invoke(url)
+                            }
+                        },
                         onDoubleClick = onDoubleClick,
                         autoLoadImages = autoLoadImages,
                     )
@@ -687,12 +676,7 @@ private fun ExtendedPost(
                                             end = Spacing.s,
                                         ),
                                 text = post.text,
-                                maxLines =
-                                    if (limitBodyHeight) {
-                                        settings.postBodyMaxLines
-                                    } else {
-                                        null
-                                    },
+                                maxLines = settings.postBodyMaxLines.takeIf { limitBodyHeight },
                                 autoLoadImages = autoLoadImages,
                                 markRead = markRead,
                                 highlightText = highlightText,
@@ -727,22 +711,20 @@ private fun ExtendedPost(
                                     bottom = Spacing.xxs,
                                     start = Spacing.s,
                                     end = Spacing.s,
-                                ).onClick(
-                                    onClick = {
-                                        navigationCoordinator.handleUrl(
-                                            url = postLinkUrl,
-                                            openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                            uriHandler = uriHandler,
-                                            customTabsHelper = customTabsHelper,
-                                            onOpenWeb = onOpenWeb,
-                                            onOpenCommunity = onOpenCommunity,
-                                            onOpenPost = onOpenPost,
-                                            onOpenUser = onOpenCreator,
-                                        )
-                                    },
-                                    onDoubleClick = onDoubleClick ?: {},
                                 ),
                         url = postLinkUrl,
+                        onClick = {
+                            navigationCoordinator.handleUrl(
+                                url = postLinkUrl,
+                                openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
+                                uriHandler = uriHandler,
+                                customTabsHelper = customTabsHelper,
+                                onOpenWeb = onOpenWeb,
+                                onOpenCommunity = onOpenCommunity,
+                                onOpenPost = onOpenPost,
+                                onOpenUser = onOpenCreator,
+                            )
+                        },
                     )
                 }
             }

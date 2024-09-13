@@ -16,6 +16,7 @@ import androidx.compose.material.icons.outlined.Pending
 import androidx.compose.material.icons.outlined.RemoveCircleOutline
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -68,7 +69,7 @@ fun CommunityItem(
     val iconSize = if (small) IconSize.m else IconSize.l
     val fullColor = MaterialTheme.colorScheme.onBackground
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
-    val highlightColor = Color(255,194,10,150)
+    val highlightColor = Color(255, 194, 10, 150)
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     var optionsMenuOpen by remember { mutableStateOf(false) }
 
@@ -104,25 +105,28 @@ fun CommunityItem(
             modifier = Modifier.weight(1f).padding(start = Spacing.xs),
         ) {
             Text(
-                text = buildAnnotatedStringWithHighlights(
-                    text = title,
-                    highlightText = highlightText,
-                    highlightColor = highlightColor,
-                ),
+                text =
+                    buildAnnotatedStringWithHighlights(
+                        text = title,
+                        highlightText = highlightText,
+                        highlightColor = highlightColor,
+                    ),
                 style = MaterialTheme.typography.bodyLarge,
                 color = fullColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = buildAnnotatedStringWithHighlights(
-                    text = buildString {
-                        append("!")
-                        append(communityHandle)
-                    },
-                    highlightText = highlightText,
-                    highlightColor = highlightColor,
-                ),
+                text =
+                    buildAnnotatedStringWithHighlights(
+                        text =
+                            buildString {
+                                append("!")
+                                append(communityHandle)
+                            },
+                        highlightText = highlightText,
+                        highlightColor = highlightColor,
+                    ),
                 style = MaterialTheme.typography.bodySmall,
                 color = ancillaryColor,
             )
@@ -158,51 +162,54 @@ fun CommunityItem(
             }
 
             showSubscribeButton -> {
-                Icon(
-                    modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .onClick(
-                                onClick = { onSubscribe?.invoke() },
-                            ),
-                    imageVector =
-                        when (community.subscribed) {
-                            true -> {
-                                Icons.Outlined.RemoveCircleOutline
-                            }
+                IconButton(
+                    modifier = Modifier.size(IconSize.m),
+                    onClick = {
+                        onSubscribe?.invoke()
+                    },
+                ) {
+                    Icon(
+                        imageVector =
+                            when (community.subscribed) {
+                                true -> {
+                                    Icons.Outlined.RemoveCircleOutline
+                                }
 
-                            false -> {
-                                Icons.Outlined.AddCircleOutline
-                            }
+                                false -> {
+                                    Icons.Outlined.AddCircleOutline
+                                }
 
-                            else -> {
-                                Icons.Outlined.Pending
-                            }
-                        },
-                    contentDescription = "",
-                    tint = ancillaryColor,
-                )
+                                else -> {
+                                    Icons.Outlined.Pending
+                                }
+                            },
+                        contentDescription = "",
+                        tint = ancillaryColor,
+                    )
+                }
             }
         }
 
         if (options.isNotEmpty()) {
             Box {
-                Icon(
+                IconButton(
                     modifier =
-                        Modifier.size(IconSize.m)
+                        Modifier
+                            .size(IconSize.m)
                             .padding(Spacing.xs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            }
-                            .onClick(
-                                onClick = {
-                                    optionsMenuOpen = true
-                                },
-                            ),
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = null,
-                    tint = ancillaryColor,
-                )
+                            },
+                    onClick = {
+                        optionsMenuOpen = true
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                }
 
                 CustomDropDown(
                     expanded = optionsMenuOpen,

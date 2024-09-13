@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.profile.main
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
@@ -11,6 +10,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.CurrentScreen
@@ -48,7 +47,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.menu.ProfileSideMenuScreen
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.notlogged.ProfileNotLoggedScreen
@@ -178,19 +176,18 @@ internal object ProfileMainScreen : Tab {
                         },
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        scope.launch {
-                                            drawerCoordinator.toggleDrawer()
-                                        }
-                                    },
-                                ),
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    drawerCoordinator.toggleDrawer()
+                                }
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     title = {
                         Text(
@@ -201,21 +198,18 @@ internal object ProfileMainScreen : Tab {
                     },
                     actions = {
                         if (uiState.logged == true) {
-                            Icon(
-                                modifier =
-                                    Modifier
-                                        .padding(horizontal = Spacing.xs)
-                                        .onClick(
-                                            onClick = {
-                                                navigationCoordinator.openSideMenu(
-                                                    ProfileSideMenuScreen(),
-                                                )
-                                            },
-                                        ),
-                                imageVector = Icons.AutoMirrored.Default.MenuOpen,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onBackground,
-                            )
+                            IconButton(
+                                onClick = {
+                                    navigationCoordinator.openSideMenu(
+                                        ProfileSideMenuScreen(),
+                                    )
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Default.MenuOpen,
+                                    contentDescription = null,
+                                )
+                            }
                         }
                     },
                 )

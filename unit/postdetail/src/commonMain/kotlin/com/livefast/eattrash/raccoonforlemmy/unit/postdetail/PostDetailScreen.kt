@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,6 +52,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -76,7 +76,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -125,8 +124,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
@@ -323,24 +320,21 @@ class PostDetailScreen(
                         )
                     },
                     actions = {
-                        Image(
-                            modifier =
-                                Modifier
-                                    .padding(horizontal = Spacing.xs)
-                                    .onClick(
-                                        onClick = {
-                                            val sheet =
-                                                SortBottomSheet(
-                                                    comments = true,
-                                                    values = uiState.availableSortTypes.map { it.toInt() },
-                                                )
-                                            navigationCoordinator.showBottomSheet(sheet)
-                                        },
-                                    ),
-                            imageVector = uiState.sortType.toIcon(),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                val sheet =
+                                    SortBottomSheet(
+                                        comments = true,
+                                        values = uiState.availableSortTypes.map { it.toInt() },
+                                    )
+                                navigationCoordinator.showBottomSheet(sheet)
+                            },
+                        ) {
+                            Icon(
+                                imageVector = uiState.sortType.toIcon(),
+                                contentDescription = null,
+                            )
+                        }
 
                         // options menu
                         Box {
@@ -481,20 +475,22 @@ class PostDetailScreen(
                                 }
                             var optionsExpanded by remember { mutableStateOf(false) }
                             var optionsOffset by remember { mutableStateOf(Offset.Zero) }
-                            Image(
+                            IconButton(
                                 modifier =
                                     Modifier
                                         .onGloballyPositioned {
                                             optionsOffset = it.positionInParent()
-                                        }.onClick(
-                                            onClick = {
-                                                optionsExpanded = true
-                                            },
-                                        ),
-                                imageVector = Icons.Default.MoreVert,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                            )
+                                        },
+                                onClick = {
+                                    optionsExpanded = true
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.MoreVert,
+                                    contentDescription = null,
+                                )
+                            }
+
                             CustomDropDown(
                                 expanded = optionsExpanded,
                                 onDismiss = {
@@ -671,17 +667,16 @@ class PostDetailScreen(
                     },
                     navigationIcon = {
                         if (navigationCoordinator.canPop.value) {
-                            Image(
-                                modifier =
-                                    Modifier.onClick(
-                                        onClick = {
-                                            navigationCoordinator.popScreen()
-                                        },
-                                    ),
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                            )
+                            IconButton(
+                                onClick = {
+                                    navigationCoordinator.popScreen()
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    contentDescription = null,
+                                )
+                            }
                         }
                     },
                 )
@@ -715,28 +710,26 @@ class PostDetailScreen(
                                     FloatingActionButtonMenuItem(
                                         icon = Icons.Default.ExpandLess,
                                         text = LocalStrings.current.actionBackToTop,
-                                        onSelected =
-                                            rememberCallback {
-                                                scope.launch {
-                                                    runCatching {
-                                                        lazyListState.scrollToItem(0)
-                                                        topAppBarState.heightOffset = 0f
-                                                        topAppBarState.contentOffset = 0f
-                                                    }
+                                        onSelected = {
+                                            scope.launch {
+                                                runCatching {
+                                                    lazyListState.scrollToItem(0)
+                                                    topAppBarState.heightOffset = 0f
+                                                    topAppBarState.contentOffset = 0f
                                                 }
-                                            },
+                                            }
+                                        },
                                     )
                                 if (uiState.isLogged && !isOnOtherInstance) {
                                     this +=
                                         FloatingActionButtonMenuItem(
                                             icon = Icons.AutoMirrored.Default.Reply,
                                             text = LocalStrings.current.actionReply,
-                                            onSelected =
-                                                rememberCallback {
-                                                    detailOpener.openReply(
-                                                        originalPost = uiState.post,
-                                                    )
-                                                },
+                                            onSelected = {
+                                                detailOpener.openReply(
+                                                    originalPost = uiState.post,
+                                                )
+                                            },
                                         )
                                 }
                             },
@@ -795,10 +788,9 @@ class PostDetailScreen(
                     val pullRefreshState =
                         rememberPullRefreshState(
                             refreshing = uiState.refreshing,
-                            onRefresh =
-                                rememberCallback(model) {
-                                    model.reduce(PostDetailMviModel.Intent.Refresh)
-                                },
+                            onRefresh = {
+                                model.reduce(PostDetailMviModel.Intent.Refresh)
+                            },
                         )
 
                     Box(
@@ -846,68 +838,59 @@ class PostDetailScreen(
                                         blurNsfw = false,
                                         downVoteEnabled = uiState.downVoteEnabled,
                                         highlightText = uiState.searchText,
-                                        onOpenCommunity =
-                                            rememberCallbackArgs { community, instance ->
-                                                detailOpener.openCommunityDetail(community, instance)
-                                            },
-                                        onOpenCreator =
-                                            rememberCallbackArgs { user, instance ->
-                                                detailOpener.openUserDetail(user, instance)
-                                            },
-                                        onOpenPost =
-                                            rememberCallbackArgs { p, instance ->
-                                                detailOpener.openPostDetail(p, instance)
-                                            },
-                                        onOpenWeb =
-                                            rememberCallbackArgs { url ->
-                                                navigationCoordinator.pushScreen(
-                                                    WebViewScreen(url),
-                                                )
-                                            },
-                                        onUpVote =
-                                            rememberCallback(model) {
-                                                if (uiState.isLogged && !isOnOtherInstance) {
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.UpVotePost(),
-                                                    )
-                                                }
-                                            },
-                                        onDownVote =
-                                            rememberCallback(model) {
-                                                if (uiState.isLogged && !isOnOtherInstance) {
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.DownVotePost(),
-                                                    )
-                                                }
-                                            },
-                                        onSave =
-                                            rememberCallback(model) {
+                                        onOpenCommunity = { community, instance ->
+                                            detailOpener.openCommunityDetail(community, instance)
+                                        },
+                                        onOpenCreator = { user, instance ->
+                                            detailOpener.openUserDetail(user, instance)
+                                        },
+                                        onOpenPost = { p, instance ->
+                                            detailOpener.openPostDetail(p, instance)
+                                        },
+                                        onOpenWeb = { url ->
+                                            navigationCoordinator.pushScreen(
+                                                WebViewScreen(url),
+                                            )
+                                        },
+                                        onUpVote = {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
                                                 model.reduce(
-                                                    PostDetailMviModel.Intent.SavePost(
-                                                        post = uiState.post,
-                                                    ),
+                                                    PostDetailMviModel.Intent.UpVotePost(),
                                                 )
-                                            },
-                                        onReply =
-                                            rememberCallback {
-                                                if (uiState.isLogged && !isOnOtherInstance) {
-                                                    detailOpener.openReply(
-                                                        originalPost = uiState.post,
-                                                    )
-                                                }
-                                            },
-                                        onOpenImage =
-                                            rememberCallbackArgs { url ->
-                                                navigationCoordinator.pushScreen(
-                                                    ZoomableImageScreen(
-                                                        url = url,
-                                                        source =
-                                                            uiState.post.community
-                                                                ?.readableHandle
-                                                                .orEmpty(),
-                                                    ),
+                                            }
+                                        },
+                                        onDownVote = {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
+                                                model.reduce(
+                                                    PostDetailMviModel.Intent.DownVotePost(),
                                                 )
-                                            },
+                                            }
+                                        },
+                                        onSave = {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.SavePost(
+                                                    post = uiState.post,
+                                                ),
+                                            )
+                                        },
+                                        onReply = {
+                                            if (uiState.isLogged && !isOnOtherInstance) {
+                                                detailOpener.openReply(
+                                                    originalPost = uiState.post,
+                                                )
+                                            }
+                                        },
+                                        onOpenImage = { url ->
+                                            navigationCoordinator.pushScreen(
+                                                ZoomableImageScreen(
+                                                    url = url,
+                                                    source =
+                                                        uiState.post.community
+                                                            ?.readableHandle
+                                                            .orEmpty(),
+                                                ),
+                                            )
+                                        },
                                     )
                                     if (uiState.postLayout != PostLayout.Card) {
                                         HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
@@ -1003,41 +986,35 @@ class PostDetailScreen(
                                                             backgroundColor =
                                                                 upVoteColor
                                                                     ?: defaultUpvoteColor,
-                                                            onTriggered =
-                                                                rememberCallback {
-                                                                    model.reduce(
-                                                                        PostDetailMviModel.Intent.UpVoteComment(
-                                                                            comment.id,
-                                                                        ),
-                                                                    )
-                                                                },
+                                                            onTriggered = {
+                                                                model.reduce(
+                                                                    PostDetailMviModel.Intent.UpVoteComment(
+                                                                        comment.id,
+                                                                    ),
+                                                                )
+                                                            },
                                                         )
 
                                                     ActionOnSwipe.DownVote ->
-                                                        if (!uiState.downVoteEnabled) {
-                                                            null
-                                                        } else {
-                                                            SwipeAction(
-                                                                swipeContent = {
-                                                                    Icon(
-                                                                        imageVector = Icons.Default.ArrowCircleDown,
-                                                                        contentDescription = null,
-                                                                        tint = Color.White,
-                                                                    )
-                                                                },
-                                                                backgroundColor =
-                                                                    downVoteColor
-                                                                        ?: defaultDownVoteColor,
-                                                                onTriggered =
-                                                                    rememberCallback(model) {
-                                                                        model.reduce(
-                                                                            PostDetailMviModel.Intent.DownVoteComment(
-                                                                                comment.id,
-                                                                            ),
-                                                                        )
-                                                                    },
-                                                            )
-                                                        }
+                                                        SwipeAction(
+                                                            swipeContent = {
+                                                                Icon(
+                                                                    imageVector = Icons.Default.ArrowCircleDown,
+                                                                    contentDescription = null,
+                                                                    tint = Color.White,
+                                                                )
+                                                            },
+                                                            backgroundColor =
+                                                                downVoteColor
+                                                                    ?: defaultDownVoteColor,
+                                                            onTriggered = {
+                                                                model.reduce(
+                                                                    PostDetailMviModel.Intent.DownVoteComment(
+                                                                        comment.id,
+                                                                    ),
+                                                                )
+                                                            },
+                                                        ).takeIf { uiState.downVoteEnabled }
 
                                                     ActionOnSwipe.Reply ->
                                                         SwipeAction(
@@ -1051,13 +1028,12 @@ class PostDetailScreen(
                                                             backgroundColor =
                                                                 replyColor
                                                                     ?: defaultReplyColor,
-                                                            onTriggered =
-                                                                rememberCallback {
-                                                                    detailOpener.openReply(
-                                                                        originalPost = uiState.post,
-                                                                        originalComment = comment,
-                                                                    )
-                                                                },
+                                                            onTriggered = {
+                                                                detailOpener.openReply(
+                                                                    originalPost = uiState.post,
+                                                                    originalComment = comment,
+                                                                )
+                                                            },
                                                         )
 
                                                     ActionOnSwipe.Save ->
@@ -1072,42 +1048,36 @@ class PostDetailScreen(
                                                             backgroundColor =
                                                                 saveColor
                                                                     ?: defaultSaveColor,
-                                                            onTriggered =
-                                                                rememberCallback(model) {
-                                                                    model.reduce(
-                                                                        PostDetailMviModel.Intent.SaveComment(
-                                                                            commentId = comment.id,
-                                                                        ),
-                                                                    )
-                                                                },
+                                                            onTriggered = {
+                                                                model.reduce(
+                                                                    PostDetailMviModel.Intent.SaveComment(
+                                                                        commentId = comment.id,
+                                                                    ),
+                                                                )
+                                                            },
                                                         )
 
                                                     ActionOnSwipe.Edit ->
-                                                        if (!canEdit) {
-                                                            null
-                                                        } else {
-                                                            SwipeAction(
-                                                                swipeContent = {
-                                                                    Icon(
-                                                                        imageVector = Icons.Default.Edit,
-                                                                        contentDescription = null,
-                                                                        tint = Color.White,
-                                                                    )
-                                                                },
-                                                                backgroundColor = MaterialTheme.colorScheme.tertiary,
-                                                                onTriggered =
-                                                                    rememberCallback {
-                                                                        detailOpener.openReply(
-                                                                            originalPost = PostModel(id = comment.postId),
-                                                                            originalComment =
-                                                                                comment.parentId?.let { parentId ->
-                                                                                    CommentModel(id = parentId)
-                                                                                },
-                                                                            editedComment = comment,
-                                                                        )
-                                                                    },
-                                                            )
-                                                        }
+                                                        SwipeAction(
+                                                            swipeContent = {
+                                                                Icon(
+                                                                    imageVector = Icons.Default.Edit,
+                                                                    contentDescription = null,
+                                                                    tint = Color.White,
+                                                                )
+                                                            },
+                                                            backgroundColor = MaterialTheme.colorScheme.tertiary,
+                                                            onTriggered = {
+                                                                detailOpener.openReply(
+                                                                    originalPost = PostModel(id = comment.postId),
+                                                                    originalComment =
+                                                                        comment.parentId?.let { parentId ->
+                                                                            CommentModel(id = parentId)
+                                                                        },
+                                                                    editedComment = comment,
+                                                                )
+                                                            },
+                                                        ).takeIf { canEdit }
 
                                                     else -> null
                                                 }
@@ -1117,10 +1087,9 @@ class PostDetailScreen(
                                             SwipeActionCard(
                                                 modifier = Modifier.fillMaxWidth(),
                                                 enabled = uiState.swipeActionsEnabled,
-                                                onGestureBegin =
-                                                    rememberCallback(model) {
-                                                        model.reduce(PostDetailMviModel.Intent.HapticIndication)
-                                                    },
+                                                onGestureBegin = {
+                                                    model.reduce(PostDetailMviModel.Intent.HapticIndication)
+                                                },
                                                 swipeToStartActions =
                                                     uiState.actionsOnSwipeToStartComments.toSwipeActions(
                                                         canEdit = comment.creator?.id == uiState.currentUserId,
@@ -1173,110 +1142,92 @@ class PostDetailScreen(
                                                         actionButtonsActive = uiState.isLogged,
                                                         downVoteEnabled = uiState.downVoteEnabled,
                                                         highlightText = uiState.searchText,
-                                                        onToggleExpanded =
-                                                            rememberCallback(model) {
-                                                                model.reduce(
-                                                                    PostDetailMviModel.Intent.ToggleExpandComment(
-                                                                        comment.id,
-                                                                    ),
-                                                                )
-                                                            },
-                                                        onClick =
-                                                            rememberCallback(model) {
-                                                                model.reduce(
-                                                                    PostDetailMviModel.Intent.ToggleExpandComment(
-                                                                        comment.id,
-                                                                    ),
-                                                                )
-                                                            },
+                                                        onToggleExpanded = {
+                                                            model.reduce(
+                                                                PostDetailMviModel.Intent.ToggleExpandComment(
+                                                                    comment.id,
+                                                                ),
+                                                            )
+                                                        },
+                                                        onClick = {
+                                                            model.reduce(
+                                                                PostDetailMviModel.Intent.ToggleExpandComment(
+                                                                    comment.id,
+                                                                ),
+                                                            )
+                                                        },
                                                         onDoubleClick =
-                                                            if (!uiState.doubleTapActionEnabled) {
-                                                                null
-                                                            } else {
-                                                                rememberCallback(model) {
-                                                                    model.reduce(
-                                                                        PostDetailMviModel.Intent.UpVoteComment(
-                                                                            commentId = comment.id,
-                                                                            feedback = true,
-                                                                        ),
-                                                                    )
-                                                                }
-                                                            },
-                                                        onUpVote =
-                                                            rememberCallback(model) {
-                                                                if (uiState.isLogged && !isOnOtherInstance) {
-                                                                    model.reduce(
-                                                                        PostDetailMviModel.Intent.UpVoteComment(
-                                                                            commentId = comment.id,
-                                                                        ),
-                                                                    )
-                                                                }
-                                                            },
-                                                        onDownVote =
-                                                            rememberCallback(model) {
-                                                                if (uiState.isLogged && !isOnOtherInstance) {
-                                                                    model.reduce(
-                                                                        PostDetailMviModel.Intent.DownVoteComment(
-                                                                            commentId = comment.id,
-                                                                        ),
-                                                                    )
-                                                                }
-                                                            },
-                                                        onSave =
-                                                            rememberCallback(model) {
-                                                                if (uiState.isLogged && !isOnOtherInstance) {
-                                                                    model.reduce(
-                                                                        PostDetailMviModel.Intent.SaveComment(
-                                                                            commentId = comment.id,
-                                                                        ),
-                                                                    )
-                                                                }
-                                                            },
-                                                        onReply =
-                                                            rememberCallback {
-                                                                if (uiState.isLogged && !isOnOtherInstance) {
-                                                                    detailOpener.openReply(
-                                                                        originalPost = uiState.post,
-                                                                        originalComment = comment,
-                                                                    )
-                                                                }
-                                                            },
-                                                        onOpenCreator =
-                                                            rememberCallbackArgs { user, instance ->
-                                                                detailOpener.openUserDetail(
-                                                                    user,
-                                                                    instance,
-                                                                )
-                                                            },
-                                                        onOpenCommunity =
-                                                            rememberCallbackArgs { community, instance ->
-                                                                detailOpener.openCommunityDetail(
-                                                                    community,
-                                                                    instance,
-                                                                )
-                                                            },
-                                                        onOpenPost =
-                                                            rememberCallbackArgs { p, instance ->
-                                                                detailOpener.openPostDetail(p, instance)
-                                                            },
-                                                        onOpenWeb =
-                                                            rememberCallbackArgs { url ->
-                                                                navigationCoordinator.pushScreen(
-                                                                    WebViewScreen(url),
-                                                                )
-                                                            },
-                                                        onImageClick =
-                                                            rememberCallbackArgs { url ->
-                                                                navigationCoordinator.pushScreen(
-                                                                    ZoomableImageScreen(
-                                                                        url = url,
-                                                                        source =
-                                                                            uiState.post.community
-                                                                                ?.readableHandle
-                                                                                .orEmpty(),
+                                                            {
+                                                                model.reduce(
+                                                                    PostDetailMviModel.Intent.UpVoteComment(
+                                                                        commentId = comment.id,
+                                                                        feedback = true,
                                                                     ),
                                                                 )
-                                                            },
+                                                            }.takeIf { uiState.doubleTapActionEnabled },
+                                                        onUpVote =
+                                                            {
+                                                                model.reduce(
+                                                                    PostDetailMviModel.Intent.UpVoteComment(
+                                                                        commentId = comment.id,
+                                                                    ),
+                                                                )
+                                                            }.takeIf { uiState.isLogged && !isOnOtherInstance },
+                                                        onDownVote =
+                                                            {
+                                                                model.reduce(
+                                                                    PostDetailMviModel.Intent.DownVoteComment(
+                                                                        commentId = comment.id,
+                                                                    ),
+                                                                )
+                                                            }.takeIf { uiState.isLogged && !isOnOtherInstance },
+                                                        onSave =
+                                                            {
+                                                                model.reduce(
+                                                                    PostDetailMviModel.Intent.SaveComment(
+                                                                        commentId = comment.id,
+                                                                    ),
+                                                                )
+                                                            }.takeIf { uiState.isLogged && !isOnOtherInstance },
+                                                        onReply = {
+                                                            if (uiState.isLogged && !isOnOtherInstance) {
+                                                                detailOpener.openReply(
+                                                                    originalPost = uiState.post,
+                                                                    originalComment = comment,
+                                                                )
+                                                            }
+                                                        },
+                                                        onOpenCreator = { user, instance ->
+                                                            detailOpener.openUserDetail(
+                                                                user,
+                                                                instance,
+                                                            )
+                                                        },
+                                                        onOpenCommunity = { community, instance ->
+                                                            detailOpener.openCommunityDetail(
+                                                                community,
+                                                                instance,
+                                                            )
+                                                        },
+                                                        onOpenPost = { p, instance ->
+                                                            detailOpener.openPostDetail(p, instance)
+                                                        },
+                                                        onOpenWeb = { url ->
+                                                            navigationCoordinator.pushScreen(
+                                                                WebViewScreen(url),
+                                                            )
+                                                        },
+                                                        onImageClick = { url ->
+                                                            navigationCoordinator.pushScreen(
+                                                                ZoomableImageScreen(
+                                                                    url = url,
+                                                                    source =
+                                                                        uiState.post.community
+                                                                            ?.readableHandle
+                                                                            .orEmpty(),
+                                                                ),
+                                                            )
+                                                        },
                                                         options =
                                                             buildList {
                                                                 this +=
@@ -1380,144 +1331,141 @@ class PostDetailScreen(
                                                                     }
                                                                 }
                                                             },
-                                                        onOptionSelected =
-                                                            rememberCallbackArgs(
-                                                                model,
-                                                            ) { optionId ->
-                                                                when (optionId) {
-                                                                    OptionId.Delete -> {
-                                                                        commentIdToDelete = comment.id
-                                                                    }
-
-                                                                    OptionId.Edit -> {
-                                                                        detailOpener.openReply(
-                                                                            originalPost = PostModel(id = comment.postId),
-                                                                            originalComment =
-                                                                                comment.parentId?.let {
-                                                                                    CommentModel(id = it)
-                                                                                },
-                                                                            editedComment = comment,
-                                                                        )
-                                                                    }
-
-                                                                    OptionId.Report -> {
-                                                                        val screen =
-                                                                            ModerateWithReasonScreen(
-                                                                                actionId = ModerateWithReasonAction.ReportComment.toInt(),
-                                                                                contentId = comment.id,
-                                                                            )
-                                                                        navigationCoordinator.pushScreen(
-                                                                            screen,
-                                                                        )
-                                                                    }
-
-                                                                    OptionId.SeeRaw -> {
-                                                                        rawContent = comment
-                                                                    }
-
-                                                                    OptionId.DistinguishComment ->
-                                                                        model.reduce(
-                                                                            PostDetailMviModel.Intent.ModDistinguishComment(
-                                                                                comment.id,
-                                                                            ),
-                                                                        )
-
-                                                                    OptionId.Remove -> {
-                                                                        val screen =
-                                                                            ModerateWithReasonScreen(
-                                                                                actionId = ModerateWithReasonAction.RemoveComment.toInt(),
-                                                                                contentId = comment.id,
-                                                                            )
-                                                                        navigationCoordinator.pushScreen(
-                                                                            screen,
-                                                                        )
-                                                                    }
-
-                                                                    OptionId.BanUser -> {
-                                                                        comment.creator?.id?.also { userId ->
-                                                                            val screen =
-                                                                                BanUserScreen(
-                                                                                    userId = userId,
-                                                                                    communityId =
-                                                                                        uiState.post.community?.id
-                                                                                            ?: 0,
-                                                                                    newValue = comment.creator?.banned != true,
-                                                                                    commentId = comment.id,
-                                                                                )
-                                                                            navigationCoordinator.pushScreen(
-                                                                                screen,
-                                                                            )
-                                                                        }
-                                                                    }
-
-                                                                    OptionId.AddMod -> {
-                                                                        comment.creator?.id?.also { userId ->
-                                                                            model.reduce(
-                                                                                PostDetailMviModel.Intent.ModToggleModUser(
-                                                                                    userId,
-                                                                                ),
-                                                                            )
-                                                                        }
-                                                                    }
-
-                                                                    OptionId.Purge -> {
-                                                                        val screen =
-                                                                            ModerateWithReasonScreen(
-                                                                                actionId = ModerateWithReasonAction.PurgeComment.toInt(),
-                                                                                contentId = comment.id,
-                                                                            )
-                                                                        navigationCoordinator.pushScreen(
-                                                                            screen,
-                                                                        )
-                                                                    }
-
-                                                                    OptionId.PurgeCreator -> {
-                                                                        comment.creator?.id?.also { userId ->
-                                                                            val screen =
-                                                                                ModerateWithReasonScreen(
-                                                                                    actionId = ModerateWithReasonAction.PurgeUser.toInt(),
-                                                                                    contentId = userId,
-                                                                                )
-                                                                            navigationCoordinator.pushScreen(
-                                                                                screen,
-                                                                            )
-                                                                        }
-                                                                    }
-
-                                                                    OptionId.Share -> {
-                                                                        val urls =
-                                                                            listOfNotNull(
-                                                                                comment.originalUrl,
-                                                                                "https://${uiState.instance}/comment/${comment.id}",
-                                                                            ).distinct()
-                                                                        if (urls.size == 1) {
-                                                                            model.reduce(
-                                                                                PostDetailMviModel.Intent.Share(
-                                                                                    urls.first(),
-                                                                                ),
-                                                                            )
-                                                                        } else {
-                                                                            val screen =
-                                                                                ShareBottomSheet(
-                                                                                    urls = urls,
-                                                                                )
-                                                                            navigationCoordinator.showBottomSheet(
-                                                                                screen,
-                                                                            )
-                                                                        }
-                                                                    }
-
-                                                                    OptionId.Restore -> {
-                                                                        model.reduce(
-                                                                            PostDetailMviModel.Intent.RestoreComment(
-                                                                                comment.id,
-                                                                            ),
-                                                                        )
-                                                                    }
-
-                                                                    else -> Unit
+                                                        onOptionSelected = { optionId ->
+                                                            when (optionId) {
+                                                                OptionId.Delete -> {
+                                                                    commentIdToDelete = comment.id
                                                                 }
-                                                            },
+
+                                                                OptionId.Edit -> {
+                                                                    detailOpener.openReply(
+                                                                        originalPost = PostModel(id = comment.postId),
+                                                                        originalComment =
+                                                                            comment.parentId?.let {
+                                                                                CommentModel(id = it)
+                                                                            },
+                                                                        editedComment = comment,
+                                                                    )
+                                                                }
+
+                                                                OptionId.Report -> {
+                                                                    val screen =
+                                                                        ModerateWithReasonScreen(
+                                                                            actionId = ModerateWithReasonAction.ReportComment.toInt(),
+                                                                            contentId = comment.id,
+                                                                        )
+                                                                    navigationCoordinator.pushScreen(
+                                                                        screen,
+                                                                    )
+                                                                }
+
+                                                                OptionId.SeeRaw -> {
+                                                                    rawContent = comment
+                                                                }
+
+                                                                OptionId.DistinguishComment ->
+                                                                    model.reduce(
+                                                                        PostDetailMviModel.Intent.ModDistinguishComment(
+                                                                            comment.id,
+                                                                        ),
+                                                                    )
+
+                                                                OptionId.Remove -> {
+                                                                    val screen =
+                                                                        ModerateWithReasonScreen(
+                                                                            actionId = ModerateWithReasonAction.RemoveComment.toInt(),
+                                                                            contentId = comment.id,
+                                                                        )
+                                                                    navigationCoordinator.pushScreen(
+                                                                        screen,
+                                                                    )
+                                                                }
+
+                                                                OptionId.BanUser -> {
+                                                                    comment.creator?.id?.also { userId ->
+                                                                        val screen =
+                                                                            BanUserScreen(
+                                                                                userId = userId,
+                                                                                communityId =
+                                                                                    uiState.post.community?.id
+                                                                                        ?: 0,
+                                                                                newValue = comment.creator?.banned != true,
+                                                                                commentId = comment.id,
+                                                                            )
+                                                                        navigationCoordinator.pushScreen(
+                                                                            screen,
+                                                                        )
+                                                                    }
+                                                                }
+
+                                                                OptionId.AddMod -> {
+                                                                    comment.creator?.id?.also { userId ->
+                                                                        model.reduce(
+                                                                            PostDetailMviModel.Intent.ModToggleModUser(
+                                                                                userId,
+                                                                            ),
+                                                                        )
+                                                                    }
+                                                                }
+
+                                                                OptionId.Purge -> {
+                                                                    val screen =
+                                                                        ModerateWithReasonScreen(
+                                                                            actionId = ModerateWithReasonAction.PurgeComment.toInt(),
+                                                                            contentId = comment.id,
+                                                                        )
+                                                                    navigationCoordinator.pushScreen(
+                                                                        screen,
+                                                                    )
+                                                                }
+
+                                                                OptionId.PurgeCreator -> {
+                                                                    comment.creator?.id?.also { userId ->
+                                                                        val screen =
+                                                                            ModerateWithReasonScreen(
+                                                                                actionId = ModerateWithReasonAction.PurgeUser.toInt(),
+                                                                                contentId = userId,
+                                                                            )
+                                                                        navigationCoordinator.pushScreen(
+                                                                            screen,
+                                                                        )
+                                                                    }
+                                                                }
+
+                                                                OptionId.Share -> {
+                                                                    val urls =
+                                                                        listOfNotNull(
+                                                                            comment.originalUrl,
+                                                                            "https://${uiState.instance}/comment/${comment.id}",
+                                                                        ).distinct()
+                                                                    if (urls.size == 1) {
+                                                                        model.reduce(
+                                                                            PostDetailMviModel.Intent.Share(
+                                                                                urls.first(),
+                                                                            ),
+                                                                        )
+                                                                    } else {
+                                                                        val screen =
+                                                                            ShareBottomSheet(
+                                                                                urls = urls,
+                                                                            )
+                                                                        navigationCoordinator.showBottomSheet(
+                                                                            screen,
+                                                                        )
+                                                                    }
+                                                                }
+
+                                                                OptionId.Restore -> {
+                                                                    model.reduce(
+                                                                        PostDetailMviModel.Intent.RestoreComment(
+                                                                            comment.id,
+                                                                        ),
+                                                                    )
+                                                                }
+
+                                                                else -> Unit
+                                                            }
+                                                        },
                                                     )
                                                 },
                                             )
@@ -1536,68 +1484,61 @@ class PostDetailScreen(
                                                 actionButtonsActive = uiState.isLogged,
                                                 indentAmount = uiState.commentIndentAmount,
                                                 barThickness = uiState.commentBarThickness,
-                                                onToggleExpanded =
-                                                    rememberCallback(model) {
+                                                onToggleExpanded = {
+                                                    model.reduce(
+                                                        PostDetailMviModel.Intent.ToggleExpandComment(
+                                                            comment.id,
+                                                        ),
+                                                    )
+                                                },
+                                                onClick = {
+                                                    model.reduce(
+                                                        PostDetailMviModel.Intent.ToggleExpandComment(
+                                                            comment.id,
+                                                        ),
+                                                    )
+                                                },
+                                                onUpVote = {
+                                                    if (uiState.isLogged && !isOnOtherInstance) {
                                                         model.reduce(
-                                                            PostDetailMviModel.Intent.ToggleExpandComment(
-                                                                comment.id,
+                                                            PostDetailMviModel.Intent.UpVoteComment(
+                                                                commentId = comment.id,
                                                             ),
                                                         )
-                                                    },
-                                                onClick =
-                                                    rememberCallback(model) {
+                                                    }
+                                                },
+                                                onDownVote = {
+                                                    if (uiState.isLogged && !isOnOtherInstance) {
                                                         model.reduce(
-                                                            PostDetailMviModel.Intent.ToggleExpandComment(
-                                                                comment.id,
+                                                            PostDetailMviModel.Intent.DownVoteComment(
+                                                                commentId = comment.id,
                                                             ),
                                                         )
-                                                    },
-                                                onUpVote =
-                                                    rememberCallback(model) {
-                                                        if (uiState.isLogged && !isOnOtherInstance) {
-                                                            model.reduce(
-                                                                PostDetailMviModel.Intent.UpVoteComment(
-                                                                    commentId = comment.id,
-                                                                ),
-                                                            )
-                                                        }
-                                                    },
-                                                onDownVote =
-                                                    rememberCallback(model) {
-                                                        if (uiState.isLogged && !isOnOtherInstance) {
-                                                            model.reduce(
-                                                                PostDetailMviModel.Intent.DownVoteComment(
-                                                                    commentId = comment.id,
-                                                                ),
-                                                            )
-                                                        }
-                                                    },
-                                                onSave =
-                                                    rememberCallback(model) {
-                                                        if (uiState.isLogged && !isOnOtherInstance) {
-                                                            model.reduce(
-                                                                PostDetailMviModel.Intent.SaveComment(
-                                                                    commentId = comment.id,
-                                                                ),
-                                                            )
-                                                        }
-                                                    },
-                                                onReply =
-                                                    rememberCallback {
-                                                        if (uiState.isLogged && !isOnOtherInstance) {
-                                                            detailOpener.openReply(
-                                                                originalPost = uiState.post,
-                                                                originalComment = comment,
-                                                            )
-                                                        }
-                                                    },
-                                                onOpenCreator =
-                                                    rememberCallbackArgs { user ->
-                                                        detailOpener.openUserDetail(
-                                                            user,
-                                                            otherInstanceName,
+                                                    }
+                                                },
+                                                onSave = {
+                                                    if (uiState.isLogged && !isOnOtherInstance) {
+                                                        model.reduce(
+                                                            PostDetailMviModel.Intent.SaveComment(
+                                                                commentId = comment.id,
+                                                            ),
                                                         )
-                                                    },
+                                                    }
+                                                },
+                                                onReply = {
+                                                    if (uiState.isLogged && !isOnOtherInstance) {
+                                                        detailOpener.openReply(
+                                                            originalPost = uiState.post,
+                                                            originalComment = comment,
+                                                        )
+                                                    }
+                                                },
+                                                onOpenCreator = { user ->
+                                                    detailOpener.openUserDetail(
+                                                        user,
+                                                        otherInstanceName,
+                                                    )
+                                                },
                                                 options =
                                                     buildList {
                                                         this +=
@@ -1672,91 +1613,90 @@ class PostDetailScreen(
                                                             }
                                                         }
                                                     },
-                                                onOptionSelected =
-                                                    rememberCallbackArgs(model) { optionId ->
-                                                        when (optionId) {
-                                                            OptionId.Delete -> {
-                                                                commentIdToDelete = comment.id
-                                                            }
-
-                                                            OptionId.Edit -> {
-                                                                detailOpener.openReply(
-                                                                    originalPost = PostModel(id = comment.postId),
-                                                                    originalComment =
-                                                                        comment.parentId?.let {
-                                                                            CommentModel(id = it)
-                                                                        },
-                                                                    editedComment = comment,
-                                                                )
-                                                            }
-
-                                                            OptionId.Report -> {
-                                                                val screen =
-                                                                    ModerateWithReasonScreen(
-                                                                        actionId = ModerateWithReasonAction.ReportComment.toInt(),
-                                                                        contentId = comment.id,
-                                                                    )
-                                                                navigationCoordinator.pushScreen(screen)
-                                                            }
-
-                                                            OptionId.SeeRaw -> {
-                                                                rawContent = comment
-                                                            }
-
-                                                            OptionId.DistinguishComment ->
-                                                                model.reduce(
-                                                                    PostDetailMviModel.Intent.ModDistinguishComment(
-                                                                        comment.id,
-                                                                    ),
-                                                                )
-
-                                                            OptionId.Remove -> {
-                                                                val screen =
-                                                                    ModerateWithReasonScreen(
-                                                                        actionId = ModerateWithReasonAction.RemoveComment.toInt(),
-                                                                        contentId = comment.id,
-                                                                    )
-                                                                navigationCoordinator.pushScreen(screen)
-                                                            }
-
-                                                            OptionId.BanUser -> {
-                                                                comment.creator?.id?.also { userId ->
-                                                                    val screen =
-                                                                        BanUserScreen(
-                                                                            userId = userId,
-                                                                            communityId =
-                                                                                uiState.post.community?.id
-                                                                                    ?: 0,
-                                                                            newValue = comment.creator?.banned != true,
-                                                                            commentId = comment.id,
-                                                                        )
-                                                                    navigationCoordinator.pushScreen(
-                                                                        screen,
-                                                                    )
-                                                                }
-                                                            }
-
-                                                            OptionId.AddMod -> {
-                                                                comment.creator?.id?.also { userId ->
-                                                                    model.reduce(
-                                                                        PostDetailMviModel.Intent.ModToggleModUser(
-                                                                            userId,
-                                                                        ),
-                                                                    )
-                                                                }
-                                                            }
-
-                                                            OptionId.Restore -> {
-                                                                model.reduce(
-                                                                    PostDetailMviModel.Intent.RestoreComment(
-                                                                        comment.id,
-                                                                    ),
-                                                                )
-                                                            }
-
-                                                            else -> Unit
+                                                onOptionSelected = { optionId ->
+                                                    when (optionId) {
+                                                        OptionId.Delete -> {
+                                                            commentIdToDelete = comment.id
                                                         }
-                                                    },
+
+                                                        OptionId.Edit -> {
+                                                            detailOpener.openReply(
+                                                                originalPost = PostModel(id = comment.postId),
+                                                                originalComment =
+                                                                    comment.parentId?.let {
+                                                                        CommentModel(id = it)
+                                                                    },
+                                                                editedComment = comment,
+                                                            )
+                                                        }
+
+                                                        OptionId.Report -> {
+                                                            val screen =
+                                                                ModerateWithReasonScreen(
+                                                                    actionId = ModerateWithReasonAction.ReportComment.toInt(),
+                                                                    contentId = comment.id,
+                                                                )
+                                                            navigationCoordinator.pushScreen(screen)
+                                                        }
+
+                                                        OptionId.SeeRaw -> {
+                                                            rawContent = comment
+                                                        }
+
+                                                        OptionId.DistinguishComment ->
+                                                            model.reduce(
+                                                                PostDetailMviModel.Intent.ModDistinguishComment(
+                                                                    comment.id,
+                                                                ),
+                                                            )
+
+                                                        OptionId.Remove -> {
+                                                            val screen =
+                                                                ModerateWithReasonScreen(
+                                                                    actionId = ModerateWithReasonAction.RemoveComment.toInt(),
+                                                                    contentId = comment.id,
+                                                                )
+                                                            navigationCoordinator.pushScreen(screen)
+                                                        }
+
+                                                        OptionId.BanUser -> {
+                                                            comment.creator?.id?.also { userId ->
+                                                                val screen =
+                                                                    BanUserScreen(
+                                                                        userId = userId,
+                                                                        communityId =
+                                                                            uiState.post.community?.id
+                                                                                ?: 0,
+                                                                        newValue = comment.creator?.banned != true,
+                                                                        commentId = comment.id,
+                                                                    )
+                                                                navigationCoordinator.pushScreen(
+                                                                    screen,
+                                                                )
+                                                            }
+                                                        }
+
+                                                        OptionId.AddMod -> {
+                                                            comment.creator?.id?.also { userId ->
+                                                                model.reduce(
+                                                                    PostDetailMviModel.Intent.ModToggleModUser(
+                                                                        userId,
+                                                                    ),
+                                                                )
+                                                            }
+                                                        }
+
+                                                        OptionId.Restore -> {
+                                                            model.reduce(
+                                                                PostDetailMviModel.Intent.RestoreComment(
+                                                                    comment.id,
+                                                                ),
+                                                            )
+                                                        }
+
+                                                        else -> Unit
+                                                    }
+                                                },
                                             )
                                         }
                                     }
@@ -1773,14 +1713,13 @@ class PostDetailScreen(
                                             horizontalArrangement = Arrangement.Center,
                                         ) {
                                             Button(
-                                                onClick =
-                                                    rememberCallback(model) {
-                                                        model.reduce(
-                                                            PostDetailMviModel.Intent.FetchMoreComments(
-                                                                parentId = comment.id,
-                                                            ),
-                                                        )
-                                                    },
+                                                onClick = {
+                                                    model.reduce(
+                                                        PostDetailMviModel.Intent.FetchMoreComments(
+                                                            parentId = comment.id,
+                                                        ),
+                                                    )
+                                                },
                                             ) {
                                                 Text(
                                                     text =
@@ -1856,10 +1795,9 @@ class PostDetailScreen(
                                             Row {
                                                 Spacer(modifier = Modifier.weight(1f))
                                                 Button(
-                                                    onClick =
-                                                        rememberCallback(model) {
-                                                            model.reduce(PostDetailMviModel.Intent.Refresh)
-                                                        },
+                                                    onClick = {
+                                                        model.reduce(PostDetailMviModel.Intent.Refresh)
+                                                    },
                                                 ) {
                                                     Text(
                                                         text = LocalStrings.current.buttonRetry,
@@ -1911,10 +1849,9 @@ class PostDetailScreen(
                                         .weight(1f)
                                         .padding(vertical = Spacing.s)
                                         .onClick(
-                                            onClick =
-                                                rememberCallback(model) {
-                                                    model.reduce(PostDetailMviModel.Intent.NavigatePrevious)
-                                                },
+                                            onClick = {
+                                                model.reduce(PostDetailMviModel.Intent.NavigatePrevious)
+                                            },
                                         ),
                                 imageVector = Icons.AutoMirrored.Default.NavigateBefore,
                                 contentDescription = null,
@@ -1927,13 +1864,12 @@ class PostDetailScreen(
                                     .weight(1f)
                                     .padding(vertical = Spacing.s)
                                     .onClick(
-                                        onClick =
-                                            rememberCallback(lazyListState) {
-                                                val idx = lazyListState.firstVisibleItemIndex
-                                                model.reduce(
-                                                    PostDetailMviModel.Intent.NavigatePreviousComment(idx),
-                                                )
-                                            },
+                                        onClick = {
+                                            val idx = lazyListState.firstVisibleItemIndex
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.NavigatePreviousComment(idx),
+                                            )
+                                        },
                                     ),
                             imageVector = Icons.Default.KeyboardArrowUp,
                             contentDescription = null,
@@ -1945,13 +1881,12 @@ class PostDetailScreen(
                                     .weight(1f)
                                     .padding(vertical = Spacing.s)
                                     .onClick(
-                                        onClick =
-                                            rememberCallback(lazyListState) {
-                                                val idx = lazyListState.firstVisibleItemIndex
-                                                model.reduce(
-                                                    PostDetailMviModel.Intent.NavigateNextComment(idx),
-                                                )
-                                            },
+                                        onClick = {
+                                            val idx = lazyListState.firstVisibleItemIndex
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.NavigateNextComment(idx),
+                                            )
+                                        },
                                     ),
                             imageVector = Icons.Default.KeyboardArrowDown,
                             contentDescription = null,
@@ -1964,10 +1899,9 @@ class PostDetailScreen(
                                         .weight(1f)
                                         .padding(vertical = Spacing.s)
                                         .onClick(
-                                            onClick =
-                                                rememberCallback(model) {
-                                                    model.reduce(PostDetailMviModel.Intent.NavigateNext)
-                                                },
+                                            onClick = {
+                                                model.reduce(PostDetailMviModel.Intent.NavigateNext)
+                                            },
                                         ),
                                 imageVector = Icons.AutoMirrored.Default.NavigateNext,
                                 contentDescription = null,
@@ -1991,25 +1925,23 @@ class PostDetailScreen(
                         upVotes = content.upvotes,
                         downVotes = content.downvotes,
                         isLogged = uiState.isLogged,
-                        onDismiss =
-                            rememberCallback {
-                                rawContent = null
-                            },
-                        onQuote =
-                            rememberCallbackArgs { quotation ->
-                                rawContent = null
-                                if (quotation != null) {
-                                    detailOpener.openReply(
-                                        originalPost = content,
-                                        initialText =
-                                            buildString {
-                                                append("> ")
-                                                append(quotation)
-                                                append("\n\n")
-                                            },
-                                    )
-                                }
-                            },
+                        onDismiss = {
+                            rawContent = null
+                        },
+                        onQuote = { quotation ->
+                            rawContent = null
+                            if (quotation != null) {
+                                detailOpener.openReply(
+                                    originalPost = content,
+                                    initialText =
+                                        buildString {
+                                            append("> ")
+                                            append(quotation)
+                                            append("\n\n")
+                                        },
+                                )
+                            }
+                        },
                     )
                 }
 
@@ -2021,26 +1953,24 @@ class PostDetailScreen(
                         downVotes = content.downvotes,
                         publishDate = content.publishDate,
                         updateDate = content.updateDate,
-                        onDismiss =
-                            rememberCallback {
-                                rawContent = null
-                            },
-                        onQuote =
-                            rememberCallbackArgs { quotation ->
-                                rawContent = null
-                                if (quotation != null) {
-                                    detailOpener.openReply(
-                                        originalPost = uiState.post,
-                                        originalComment = content,
-                                        initialText =
-                                            buildString {
-                                                append("> ")
-                                                append(quotation)
-                                                append("\n\n")
-                                            },
-                                    )
-                                }
-                            },
+                        onDismiss = {
+                            rawContent = null
+                        },
+                        onQuote = { quotation ->
+                            rawContent = null
+                            if (quotation != null) {
+                                detailOpener.openReply(
+                                    originalPost = uiState.post,
+                                    originalComment = content,
+                                    initialText =
+                                        buildString {
+                                            append("> ")
+                                            append(quotation)
+                                            append("\n\n")
+                                        },
+                                )
+                            }
+                        },
                     )
                 }
             }

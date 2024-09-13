@@ -10,7 +10,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ModlogItem
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
@@ -32,12 +31,11 @@ internal fun HideCommunityItem(
         postLayout = postLayout,
         moderator = item.admin,
         onOpenUser = onOpenUser,
-        onOpen =
-            rememberCallback {
-                item.admin?.also {
-                    onOpenUser?.invoke(it)
-                }
-            },
+        onOpen = {
+            item.admin?.also {
+                onOpenUser?.invoke(it)
+            }
+        },
         innerContent = {
             Text(
                 text =

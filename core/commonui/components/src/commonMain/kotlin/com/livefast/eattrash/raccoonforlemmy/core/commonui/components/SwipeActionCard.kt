@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -54,66 +53,66 @@ fun SwipeActionCard(
         var lastProgress by remember { mutableStateOf(0.0f) }
         val dismissState =
             rememberNoFlingSwipeToDismissBoxState(
-                confirmValueChange =
-                    rememberCallbackArgs { value ->
-                        when (value) {
-                            SwipeToDismissBoxValue.StartToEnd -> {
-                                val enableSecondAction = swipeToEndActions.size > 1
-                                if (lastProgress >= SECOND_ACTION_THRESHOLD && enableSecondAction && secondNotified) {
-                                    swipeToEndActions.getOrNull(1)?.onTriggered?.invoke()
-                                } else {
-                                    swipeToEndActions.firstOrNull()?.onTriggered?.invoke()
-                                }
+                confirmValueChange = { value ->
+                    when (value) {
+                        SwipeToDismissBoxValue.StartToEnd -> {
+                            val enableSecondAction = swipeToEndActions.size > 1
+                            if (lastProgress >= SECOND_ACTION_THRESHOLD && enableSecondAction && secondNotified) {
+                                swipeToEndActions.getOrNull(1)?.onTriggered?.invoke()
+                            } else {
+                                swipeToEndActions.firstOrNull()?.onTriggered?.invoke()
                             }
-
-                            SwipeToDismissBoxValue.EndToStart -> {
-                                val enableSecondAction = swipeToStartActions.size > 1
-                                if (lastProgress >= SECOND_ACTION_THRESHOLD && enableSecondAction && secondNotified) {
-                                    swipeToStartActions.getOrNull(1)?.onTriggered?.invoke()
-                                } else {
-                                    swipeToStartActions.firstOrNull()?.onTriggered?.invoke()
-                                }
-                            }
-
-                            else -> Unit
                         }
-                        notified = false
-                        secondNotified = false
-                        // return false to stay dismissed
-                        false
-                    },
+
+                        SwipeToDismissBoxValue.EndToStart -> {
+                            val enableSecondAction = swipeToStartActions.size > 1
+                            if (lastProgress >= SECOND_ACTION_THRESHOLD && enableSecondAction && secondNotified) {
+                                swipeToStartActions.getOrNull(1)?.onTriggered?.invoke()
+                            } else {
+                                swipeToStartActions.firstOrNull()?.onTriggered?.invoke()
+                            }
+                        }
+
+                        else -> Unit
+                    }
+                    notified = false
+                    secondNotified = false
+                    // return false to stay dismissed
+                    false
+                },
             )
         LaunchedEffect(dismissState, swipeToEndActions, swipeToEndActions) {
-            snapshotFlow { dismissState.progress }.onEach { progress ->
-                val enableSecondAction =
-                    when (dismissState.targetValue) {
-                        SwipeToDismissBoxValue.Settled -> false
-                        SwipeToDismissBoxValue.StartToEnd -> swipeToEndActions.size > 1
-                        SwipeToDismissBoxValue.EndToStart -> swipeToStartActions.size > 1
-                    }
-
-                if (!enableSecondAction) {
-                    when {
-                        progress in FIRST_ACTION_THRESHOLD..<1.0f && !notified -> {
-                            notified = true
-                            gestureBeginCallback?.invoke()
-                        }
-                    }
-                } else {
-                    when {
-                        progress in FIRST_ACTION_THRESHOLD..<SECOND_ACTION_THRESHOLD && !notified -> {
-                            notified = true
-                            gestureBeginCallback?.invoke()
+            snapshotFlow { dismissState.progress }
+                .onEach { progress ->
+                    val enableSecondAction =
+                        when (dismissState.targetValue) {
+                            SwipeToDismissBoxValue.Settled -> false
+                            SwipeToDismissBoxValue.StartToEnd -> swipeToEndActions.size > 1
+                            SwipeToDismissBoxValue.EndToStart -> swipeToStartActions.size > 1
                         }
 
-                        progress in SECOND_ACTION_THRESHOLD..<1.0f && !secondNotified -> {
-                            secondNotified = true
-                            gestureBeginCallback?.invoke()
+                    if (!enableSecondAction) {
+                        when {
+                            progress in FIRST_ACTION_THRESHOLD..<1.0f && !notified -> {
+                                notified = true
+                                gestureBeginCallback?.invoke()
+                            }
+                        }
+                    } else {
+                        when {
+                            progress in FIRST_ACTION_THRESHOLD..<SECOND_ACTION_THRESHOLD && !notified -> {
+                                notified = true
+                                gestureBeginCallback?.invoke()
+                            }
+
+                            progress in SECOND_ACTION_THRESHOLD..<1.0f && !secondNotified -> {
+                                secondNotified = true
+                                gestureBeginCallback?.invoke()
+                            }
                         }
                     }
-                }
-                lastProgress = progress
-            }.launchIn(this)
+                    lastProgress = progress
+                }.launchIn(this)
         }
 
         SwipeToDismissBox(
@@ -148,7 +147,8 @@ fun SwipeActionCard(
                         else -> Alignment.CenterEnd
                     }
                 Box(
-                    Modifier.fillMaxSize()
+                    Modifier
+                        .fillMaxSize()
                         .background(bgColor)
                         .padding(horizontal = 20.dp),
                     contentAlignment = alignment,

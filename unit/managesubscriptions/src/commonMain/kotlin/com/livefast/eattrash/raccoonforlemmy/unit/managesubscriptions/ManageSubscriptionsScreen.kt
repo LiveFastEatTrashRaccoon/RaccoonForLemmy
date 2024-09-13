@@ -3,7 +3,6 @@ package com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +29,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -50,7 +50,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -73,8 +72,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNest
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail.MultiCommunityScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorScreen
 import kotlinx.coroutines.flow.launchIn
@@ -143,17 +140,16 @@ class ManageSubscriptionsScreen : Screen {
                     },
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        navigatorCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigatorCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
                     },
                 )
             },
@@ -176,16 +172,15 @@ class ManageSubscriptionsScreen : Screen {
                                     FloatingActionButtonMenuItem(
                                         icon = Icons.Default.ExpandLess,
                                         text = LocalStrings.current.actionBackToTop,
-                                        onSelected =
-                                            rememberCallback {
-                                                scope.launch {
-                                                    runCatching {
-                                                        lazyListState.scrollToItem(0)
-                                                        topAppBarState.heightOffset = 0f
-                                                        topAppBarState.contentOffset = 0f
-                                                    }
+                                        onSelected = {
+                                            scope.launch {
+                                                runCatching {
+                                                    lazyListState.scrollToItem(0)
+                                                    topAppBarState.heightOffset = 0f
+                                                    topAppBarState.contentOffset = 0f
                                                 }
-                                            },
+                                            }
+                                        },
                                     )
                             },
                     )
@@ -227,10 +222,9 @@ class ManageSubscriptionsScreen : Screen {
                 val pullRefreshState =
                     rememberPullRefreshState(
                         refreshing = uiState.refreshing,
-                        onRefresh =
-                            rememberCallback(model) {
-                                model.reduce(ManageSubscriptionsMviModel.Intent.Refresh)
-                            },
+                        onRefresh = {
+                            model.reduce(ManageSubscriptionsMviModel.Intent.Refresh)
+                        },
                     )
                 Box(
                     modifier =
@@ -258,21 +252,16 @@ class ManageSubscriptionsScreen : Screen {
                                     color = MaterialTheme.colorScheme.onBackground,
                                 )
                                 Spacer(modifier = Modifier.weight(1f))
-                                Icon(
-                                    modifier =
-                                        Modifier
-                                            .padding(horizontal = Spacing.xs)
-                                            .onClick(
-                                                onClick = {
-                                                    navigatorCoordinator.pushScreen(
-                                                        MultiCommunityEditorScreen(),
-                                                    )
-                                                },
-                                            ),
-                                    imageVector = Icons.Default.AddCircle,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
+                                IconButton(
+                                    onClick = {
+                                        navigatorCoordinator.pushScreen(MultiCommunityEditorScreen())
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.AddCircle,
+                                        contentDescription = null,
+                                    )
+                                }
                             }
                         }
                         items(uiState.multiCommunities) { community ->
@@ -305,24 +294,23 @@ class ManageSubscriptionsScreen : Screen {
                                                 LocalStrings.current.commentActionDelete,
                                             )
                                     },
-                                onOptionSelected =
-                                    rememberCallbackArgs(model) { optionId ->
-                                        when (optionId) {
-                                            OptionId.Edit -> {
-                                                navigatorCoordinator.pushScreen(
-                                                    MultiCommunityEditorScreen(community.id),
-                                                )
-                                            }
-
-                                            OptionId.Delete -> {
-                                                community.id?.also {
-                                                    multiCommunityIdToDelete = it
-                                                }
-                                            }
-
-                                            else -> Unit
+                                onOptionSelected = { optionId ->
+                                    when (optionId) {
+                                        OptionId.Edit -> {
+                                            navigatorCoordinator.pushScreen(
+                                                MultiCommunityEditorScreen(community.id),
+                                            )
                                         }
-                                    },
+
+                                        OptionId.Delete -> {
+                                            community.id?.also {
+                                                multiCommunityIdToDelete = it
+                                            }
+                                        }
+
+                                        else -> Unit
+                                    }
+                                },
                             )
                         }
                         item {
@@ -374,28 +362,27 @@ class ManageSubscriptionsScreen : Screen {
                                                 },
                                             )
                                     },
-                                onOptionSelected =
-                                    rememberCallbackArgs(model) { optionId ->
-                                        when (optionId) {
-                                            OptionId.Unsubscribe -> {
-                                                model.reduce(
-                                                    ManageSubscriptionsMviModel.Intent.Unsubscribe(
-                                                        community.id,
-                                                    ),
-                                                )
-                                            }
-
-                                            OptionId.Favorite -> {
-                                                model.reduce(
-                                                    ManageSubscriptionsMviModel.Intent.ToggleFavorite(
-                                                        community.id,
-                                                    ),
-                                                )
-                                            }
-
-                                            else -> Unit
+                                onOptionSelected = { optionId ->
+                                    when (optionId) {
+                                        OptionId.Unsubscribe -> {
+                                            model.reduce(
+                                                ManageSubscriptionsMviModel.Intent.Unsubscribe(
+                                                    community.id,
+                                                ),
+                                            )
                                         }
-                                    },
+
+                                        OptionId.Favorite -> {
+                                            model.reduce(
+                                                ManageSubscriptionsMviModel.Intent.ToggleFavorite(
+                                                    community.id,
+                                                ),
+                                            )
+                                        }
+
+                                        else -> Unit
+                                    }
+                                },
                             )
                         }
 

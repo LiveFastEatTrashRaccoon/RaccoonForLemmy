@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.ban
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -50,9 +48,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsIntVa
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import kotlinx.coroutines.flow.launchIn
@@ -90,18 +85,19 @@ class BanUserScreen(
         val focusManager = LocalFocusManager.current
 
         LaunchedEffect(model) {
-            model.effects.onEach {
-                when (it) {
-                    is BanUserMviModel.Effect.Failure -> {
-                        snackbarHostState.showSnackbar(it.message ?: genericError)
-                    }
+            model.effects
+                .onEach {
+                    when (it) {
+                        is BanUserMviModel.Effect.Failure -> {
+                            snackbarHostState.showSnackbar(it.message ?: genericError)
+                        }
 
-                    BanUserMviModel.Effect.Success -> {
-                        navigationCoordinator.showGlobalMessage(message = successMessage, delay = 1.seconds)
-                        navigationCoordinator.popScreen()
+                        BanUserMviModel.Effect.Success -> {
+                            navigationCoordinator.showGlobalMessage(message = successMessage, delay = 1.seconds)
+                            navigationCoordinator.popScreen()
+                        }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
 
         Scaffold(
@@ -110,17 +106,16 @@ class BanUserScreen(
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.padding(start = Spacing.s).onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     title = {
                         val title =
@@ -137,19 +132,16 @@ class BanUserScreen(
                     },
                     actions = {
                         IconButton(
-                            modifier = Modifier.padding(horizontal = Spacing.xs),
-                            content = {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.Send,
-                                    contentDescription = null,
-                                )
+                            onClick = {
+                                focusManager.clearFocus()
+                                model.reduce(BanUserMviModel.Intent.Submit)
                             },
-                            onClick =
-                                rememberCallback(model) {
-                                    focusManager.clearFocus()
-                                    model.reduce(BanUserMviModel.Intent.Submit)
-                                },
-                        )
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.Send,
+                                contentDescription = null,
+                            )
+                        }
                     },
                 )
             },
@@ -215,34 +207,30 @@ class BanUserScreen(
                     SettingsSwitchRow(
                         title = LocalStrings.current.banItemPermanent,
                         value = uiState.permanent,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(BanUserMviModel.Intent.ChangePermanent(value))
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(BanUserMviModel.Intent.ChangePermanent(value))
+                        },
                     )
 
                     if (!uiState.permanent) {
                         SettingsIntValueRow(
                             title = LocalStrings.current.banItemDurationDays,
                             value = uiState.days,
-                            onIncrement =
-                                rememberCallback {
-                                    model.reduce(BanUserMviModel.Intent.IncrementDays)
-                                },
-                            onDecrement =
-                                rememberCallback {
-                                    model.reduce(BanUserMviModel.Intent.DecrementDays)
-                                },
+                            onIncrement = {
+                                model.reduce(BanUserMviModel.Intent.IncrementDays)
+                            },
+                            onDecrement = {
+                                model.reduce(BanUserMviModel.Intent.DecrementDays)
+                            },
                         )
                     }
 
                     SettingsSwitchRow(
                         title = LocalStrings.current.banItemRemoveData,
                         value = uiState.removeData,
-                        onValueChanged =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(BanUserMviModel.Intent.ChangeRemoveData(value))
-                            },
+                        onValueChanged = { value ->
+                            model.reduce(BanUserMviModel.Intent.ChangeRemoveData(value))
+                        },
                     )
                 }
 

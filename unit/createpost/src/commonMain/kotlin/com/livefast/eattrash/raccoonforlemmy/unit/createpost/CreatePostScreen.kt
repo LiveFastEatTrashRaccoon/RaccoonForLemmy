@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.createpost
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,7 +48,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -77,8 +75,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
@@ -241,21 +237,20 @@ class CreatePostScreen(
                     .background(MaterialTheme.colorScheme.background)
                     .navigationBarsPadding()
                     .safeImePadding(),
-                topBar = {
+            topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.padding(start = Spacing.s).onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     title = {
                         Text(
@@ -271,32 +266,26 @@ class CreatePostScreen(
                     actions = {
                         if (uiState.editedPost == null) {
                             IconButton(
-                                modifier = Modifier.padding(horizontal = Spacing.xs),
-                                content = {
-                                    Icon(
-                                        imageVector = Icons.Default.Save,
-                                        contentDescription = null,
-                                    )
+                                onClick = {
+                                    model.reduce(CreatePostMviModel.Intent.SaveDraft)
                                 },
-                                onClick =
-                                    rememberCallback(model) {
-                                        model.reduce(CreatePostMviModel.Intent.SaveDraft)
-                                    },
-                            )
-                        }
-                        IconButton(
-                            modifier = Modifier.padding(horizontal = Spacing.xs),
-                            content = {
+                            ) {
                                 Icon(
-                                    imageVector = Icons.AutoMirrored.Default.Send,
+                                    imageVector = Icons.Default.Save,
                                     contentDescription = null,
                                 )
+                            }
+                        }
+                        IconButton(
+                            onClick = {
+                                model.reduce(CreatePostMviModel.Intent.Send)
                             },
-                            onClick =
-                                rememberCallback(model) {
-                                    model.reduce(CreatePostMviModel.Intent.Send)
-                                },
-                        )
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.Send,
+                                contentDescription = null,
+                            )
+                        }
                     },
                 )
             },
@@ -381,13 +370,11 @@ class CreatePostScreen(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .onFocusChanged(
-                                    rememberCallbackArgs { state ->
-                                        if (state.hasFocus) {
-                                            openSelectCommunity = true
-                                        }
-                                    },
-                                ),
+                                .onFocusChanged { state ->
+                                    if (state.hasFocus) {
+                                        openSelectCommunity = true
+                                    }
+                                },
                         colors =
                             TextFieldDefaults.colors(
                                 focusedContainerColor = Color.Transparent,
@@ -476,10 +463,9 @@ class CreatePostScreen(
                         KeyboardActions(onNext = {
                             urlFocusRequester.requestFocus()
                         }),
-                    onValueChange =
-                        rememberCallbackArgs(model) { value ->
-                            model.reduce(CreatePostMviModel.Intent.SetTitle(value))
-                        },
+                    onValueChange = { value ->
+                        model.reduce(CreatePostMviModel.Intent.SetTitle(value))
+                    },
                     isError = uiState.titleError != null,
                     supportingText = {
                         val error = uiState.titleError
@@ -535,10 +521,9 @@ class CreatePostScreen(
                         KeyboardActions(onNext = {
                             bodyFocusRequester.requestFocus()
                         }),
-                    onValueChange =
-                        rememberCallbackArgs(model) { value ->
-                            model.reduce(CreatePostMviModel.Intent.SetUrl(value))
-                        },
+                    onValueChange = { value ->
+                        model.reduce(CreatePostMviModel.Intent.SetUrl(value))
+                    },
                     isError = uiState.urlError != null,
                     supportingText = {
                         val error = uiState.urlError
@@ -568,10 +553,9 @@ class CreatePostScreen(
                     Spacer(modifier = Modifier.weight(1f))
                     Switch(
                         checked = uiState.nsfw,
-                        onCheckedChange =
-                            rememberCallbackArgs(model) { value ->
-                                model.reduce(CreatePostMviModel.Intent.ChangeNsfw(value))
-                            },
+                        onCheckedChange = { value ->
+                            model.reduce(CreatePostMviModel.Intent.ChangeNsfw(value))
+                        },
                     )
                 }
 
@@ -586,15 +570,14 @@ class CreatePostScreen(
                             CreatePostSection.Preview -> 1
                             else -> 0
                         },
-                    onSectionSelected =
-                        rememberCallbackArgs(model) { id ->
-                            val section =
-                                when (id) {
-                                    1 -> CreatePostSection.Preview
-                                    else -> CreatePostSection.Edit
-                                }
-                            model.reduce(CreatePostMviModel.Intent.ChangeSection(section))
-                        },
+                    onSectionSelected = { id ->
+                        val section =
+                            when (id) {
+                                1 -> CreatePostSection.Preview
+                                else -> CreatePostSection.Edit
+                            }
+                        model.reduce(CreatePostMviModel.Intent.ChangeSection(section))
+                    },
                 )
 
                 if (uiState.section == CreatePostSection.Edit) {
@@ -668,15 +651,13 @@ class CreatePostScreen(
                 SelectLanguageDialog(
                     languages = uiState.availableLanguages,
                     currentLanguageId = uiState.currentLanguageId,
-                    onSelect =
-                        rememberCallbackArgs { langId ->
-                            model.reduce(CreatePostMviModel.Intent.ChangeLanguage(langId))
-                            selectLanguageDialogOpen = false
-                        },
-                    onDismiss =
-                        rememberCallback {
-                            selectLanguageDialogOpen = false
-                        },
+                    onSelect = { langId ->
+                        model.reduce(CreatePostMviModel.Intent.ChangeLanguage(langId))
+                        selectLanguageDialogOpen = false
+                    },
+                    onDismiss = {
+                        selectLanguageDialogOpen = false
+                    },
                 )
             }
 

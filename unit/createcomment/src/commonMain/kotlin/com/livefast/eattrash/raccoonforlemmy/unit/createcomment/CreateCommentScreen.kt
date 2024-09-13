@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.createcomment
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,7 +41,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -69,9 +67,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
@@ -171,17 +166,16 @@ class CreateCommentScreen(
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
-                        Image(
-                            modifier =
-                                Modifier.padding(start = Spacing.s).onClick(
-                                    onClick = {
-                                        navigationCoordinator.popScreen()
-                                    },
-                                ),
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        )
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                            )
+                        }
                     },
                     title = {
                         Text(
@@ -202,32 +196,27 @@ class CreateCommentScreen(
                     actions = {
                         if (uiState.editedComment == null) {
                             IconButton(
-                                modifier = Modifier.padding(horizontal = Spacing.xs),
-                                content = {
-                                    Icon(
-                                        imageVector = Icons.Default.Save,
-                                        contentDescription = null,
-                                    )
+                                onClick = {
+                                    model.reduce(CreateCommentMviModel.Intent.SaveDraft)
                                 },
-                                onClick =
-                                    rememberCallback(model) {
-                                        model.reduce(CreateCommentMviModel.Intent.SaveDraft)
-                                    },
-                            )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Save,
+                                    contentDescription = null,
+                                )
+                            }
                         }
                         IconButton(
                             modifier = Modifier.padding(horizontal = Spacing.xs),
-                            content = {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.Send,
-                                    contentDescription = null,
-                                )
+                            onClick = {
+                                model.reduce(CreateCommentMviModel.Intent.Send)
                             },
-                            onClick =
-                                rememberCallback(model) {
-                                    model.reduce(CreateCommentMviModel.Intent.Send)
-                                },
-                        )
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.Send,
+                                contentDescription = null,
+                            )
+                        }
                     },
                 )
             },
@@ -400,15 +389,14 @@ class CreateCommentScreen(
                                 CreatePostSection.Preview -> 1
                                 else -> 0
                             },
-                        onSectionSelected =
-                            rememberCallbackArgs { id ->
-                                val section =
-                                    when (id) {
-                                        1 -> CreatePostSection.Preview
-                                        else -> CreatePostSection.Edit
-                                    }
-                                model.reduce(CreateCommentMviModel.Intent.ChangeSection(section))
-                            },
+                        onSectionSelected = { id ->
+                            val section =
+                                when (id) {
+                                    1 -> CreatePostSection.Preview
+                                    else -> CreatePostSection.Edit
+                                }
+                            model.reduce(CreateCommentMviModel.Intent.ChangeSection(section))
+                        },
                     )
 
                     if (uiState.section == CreatePostSection.Edit) {
@@ -518,15 +506,13 @@ class CreateCommentScreen(
                 SelectLanguageDialog(
                     languages = uiState.availableLanguages,
                     currentLanguageId = uiState.currentLanguageId,
-                    onSelect =
-                        rememberCallbackArgs { langId ->
-                            model.reduce(CreateCommentMviModel.Intent.ChangeLanguage(langId))
-                            selectLanguageDialogOpen = false
-                        },
-                    onDismiss =
-                        rememberCallback {
-                            selectLanguageDialogOpen = false
-                        },
+                    onSelect = { langId ->
+                        model.reduce(CreateCommentMviModel.Intent.ChangeLanguage(langId))
+                        selectLanguageDialogOpen = false
+                    },
+                    onDismiss = {
+                        selectLanguageDialogOpen = false
+                    },
                 )
             }
         }

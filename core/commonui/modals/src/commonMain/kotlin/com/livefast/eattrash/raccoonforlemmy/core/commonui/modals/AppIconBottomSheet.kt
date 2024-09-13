@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -32,46 +33,48 @@ class AppIconBottomSheet : Screen {
         val notificationCenter = remember { getNotificationCenter() }
         val coreResources = remember { getCoreResources() }
 
-        Column(
-            modifier =
-                Modifier
-                    .windowInsetsPadding(WindowInsets.navigationBars)
-                    .padding(
-                        top = Spacing.s,
-                        start = Spacing.s,
-                        end = Spacing.s,
-                        bottom = Spacing.m,
-                    ),
-            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-        ) {
-            BottomSheetHeader(LocalStrings.current.settingsAppIcon)
-            val values =
-                listOf(
-                    AppIconVariant.Default,
-                    AppIconVariant.Alt1,
-                    AppIconVariant.Alt2,
-                )
+        Surface {
             Column(
-                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                modifier =
+                    Modifier
+                        .windowInsetsPadding(WindowInsets.navigationBars)
+                        .padding(
+                            top = Spacing.s,
+                            start = Spacing.s,
+                            end = Spacing.s,
+                            bottom = Spacing.m,
+                        ),
+                verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
-                for (value in values) {
-                    SettingsRow(
-                        modifier = Modifier.padding(vertical = Spacing.xxs),
-                        title = value.toReadableName(),
-                        painter =
-                            when (value) {
-                                AppIconVariant.Alt2 -> coreResources.appIconAlt2
-                                AppIconVariant.Alt1 -> coreResources.appIconAlt1
-                                else -> coreResources.appIconDefault
-                            },
-                        onTap = {
-                            navigationCoordinator.hideBottomSheet()
-                            notificationCenter.send(
-                                NotificationCenterEvent.AppIconVariantSelected(value.toInt()),
-                            )
-                        },
+                BottomSheetHeader(LocalStrings.current.settingsAppIcon)
+                val values =
+                    listOf(
+                        AppIconVariant.Default,
+                        AppIconVariant.Alt1,
+                        AppIconVariant.Alt2,
                     )
+                Column(
+                    modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                ) {
+                    for (value in values) {
+                        SettingsRow(
+                            modifier = Modifier.padding(vertical = Spacing.xxs),
+                            title = value.toReadableName(),
+                            painter =
+                                when (value) {
+                                    AppIconVariant.Alt2 -> coreResources.appIconAlt2
+                                    AppIconVariant.Alt1 -> coreResources.appIconAlt1
+                                    else -> coreResources.appIconDefault
+                                },
+                            onTap = {
+                                navigationCoordinator.hideBottomSheet()
+                                notificationCenter.send(
+                                    NotificationCenterEvent.AppIconVariantSelected(value.toInt()),
+                                )
+                            },
+                        )
+                    }
                 }
             }
         }

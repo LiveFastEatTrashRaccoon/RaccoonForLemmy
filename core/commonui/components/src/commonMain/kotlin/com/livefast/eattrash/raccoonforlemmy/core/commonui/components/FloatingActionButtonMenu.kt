@@ -32,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -109,15 +110,13 @@ fun FloatingActionButtonMenu(
                     enter = enterTransition,
                     exit = exitTransition,
                 ) {
+                    val onClickAction: () -> Unit = {
+                        fabExpanded = false
+                        item.onSelected?.invoke()
+                    }
                     Row(
                         modifier =
-                            Modifier
-                                .onClick(
-                                    onClick = {
-                                        fabExpanded = false
-                                        item.onSelected?.invoke()
-                                    },
-                                ).padding(end = 6.dp),
+                            Modifier.padding(end = 6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
@@ -125,6 +124,8 @@ fun FloatingActionButtonMenu(
                             modifier =
                                 Modifier
                                     .padding(horizontal = Spacing.xs)
+                                    .clip(RoundedCornerShape(CornerSize.s))
+                                    .onClick(onClick = onClickAction)
                                     .background(
                                         color = MaterialTheme.colorScheme.surfaceVariant,
                                         shape = RoundedCornerShape(CornerSize.s),
@@ -140,6 +141,8 @@ fun FloatingActionButtonMenu(
                             modifier =
                                 Modifier
                                     .size(42.dp)
+                                    .clip(CircleShape)
+                                    .onClick(onClick = onClickAction)
                                     .background(
                                         color = MaterialTheme.colorScheme.primaryContainer,
                                         shape = CircleShape,

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,7 +60,7 @@ fun UserItem(
     val iconSize = 30.dp
     val fullColor = MaterialTheme.colorScheme.onBackground
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
-    val highlightColor = Color(255,194,10,150)
+    val highlightColor = Color(255, 194, 10, 150)
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     var optionsMenuOpen by remember { mutableStateOf(false) }
 
@@ -75,7 +76,9 @@ fun UserItem(
         if (avatar.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier =
-                    Modifier.padding(Spacing.xxxs).size(iconSize)
+                    Modifier
+                        .padding(Spacing.xxxs)
+                        .size(iconSize)
                         .clip(RoundedCornerShape(iconSize / 2)),
                 url = avatar,
                 quality = FilterQuality.Low,
@@ -92,7 +95,8 @@ fun UserItem(
             modifier = Modifier.weight(1f).padding(start = Spacing.xs),
         ) {
             Text(
-                text = buildAnnotatedStringWithHighlights(
+                text =
+                    buildAnnotatedStringWithHighlights(
                         text = displayName,
                         highlightText = highlightText,
                         highlightColor = highlightColor,
@@ -103,14 +107,16 @@ fun UserItem(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = buildAnnotatedStringWithHighlights(
-                    text = buildString {
-                        append("!")
-                        append(userHandle)
-                    },
-                    highlightText = highlightText,
-                    highlightColor = highlightColor,
-                ),
+                text =
+                    buildAnnotatedStringWithHighlights(
+                        text =
+                            buildString {
+                                append("!")
+                                append(userHandle)
+                            },
+                        highlightText = highlightText,
+                        highlightColor = highlightColor,
+                    ),
                 style = MaterialTheme.typography.bodySmall,
                 color = ancillaryColor,
             )
@@ -118,22 +124,24 @@ fun UserItem(
 
         if (options.isNotEmpty()) {
             Box {
-                Icon(
+                IconButton(
                     modifier =
-                        Modifier.size(IconSize.m)
+                        Modifier
+                            .size(IconSize.m)
                             .padding(Spacing.xs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            }
-                            .onClick(
-                                onClick = {
-                                    optionsMenuOpen = true
-                                },
-                            ),
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = null,
-                    tint = ancillaryColor,
-                )
+                            },
+                    onClick = {
+                        optionsMenuOpen = true
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                }
 
                 CustomDropDown(
                     expanded = optionsMenuOpen,

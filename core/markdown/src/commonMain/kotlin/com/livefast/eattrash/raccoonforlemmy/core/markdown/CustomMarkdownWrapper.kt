@@ -74,13 +74,13 @@ fun CustomMarkdownWrapperController(
         val codeBlockMatches = Regex("`{3,}(.|\\n)+?(`{3,})").findAll(content)
         var previousIndex = 0
         Column {
-            SpoilerRegex.spoilerFull.findAll(content)
-                .filter{ spoiler ->
+            SpoilerRegex.spoilerFull
+                .findAll(content)
+                .filter { spoiler ->
                     codeBlockMatches.none { codeBlock ->
                         codeBlock.range.first < spoiler.range.first && codeBlock.range.last > spoiler.range.last
                     }
-                }
-                .forEach { spoiler ->
+                }.forEach { spoiler ->
                     if (previousIndex < spoiler.range.first) {
                         CustomMarkdownWrapper(
                             content = content.substring(previousIndex, spoiler.range.first - 1),
@@ -139,8 +139,7 @@ fun CustomMarkdownWrapperController(
                 )
             }
         }
-    }
-    else {
+    } else {
         CustomMarkdownWrapper(
             content = content,
             modifier = modifier,
@@ -179,7 +178,6 @@ fun CustomMarkdownWrapper(
     onDoubleClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
 ) {
-
     val maxHeightDp =
         with(LocalDensity.current) {
             if (maxLines == null) {
@@ -258,28 +256,29 @@ fun CustomMarkdownWrapper(
     CompositionLocalProvider(
         LocalUriHandler provides customUriHandler,
         LocalDensity provides
-                Density(
-                    density = LocalDensity.current.density,
-                    fontScale = LocalDensity.current.fontScale * GLOBAL_SCALE_FACTOR,
-                ),
+            Density(
+                density = LocalDensity.current.density,
+                fontScale = LocalDensity.current.fontScale * GLOBAL_SCALE_FACTOR,
+            ),
     ) {
         Markdown(
             modifier =
-            modifier
-                .heightIn(min = 0.dp, max = maxHeightDp)
-                .onClick(
-                    onClick = {
-                        if (!isOpeningUrl) {
-                            onClick?.invoke()
-                        }
-                    },
-                    onLongClick = {
-                        onLongClick?.invoke()
-                    },
-                    onDoubleClick = {
-                        onDoubleClick?.invoke()
-                    },
-                ),
+                modifier
+                    .heightIn(min = 0.dp, max = maxHeightDp)
+                    .onClick(
+                        indication = null,
+                        onClick = {
+                            if (!isOpeningUrl) {
+                                onClick?.invoke()
+                            }
+                        },
+                        onLongClick = {
+                            onLongClick?.invoke()
+                        },
+                        onDoubleClick = {
+                            onDoubleClick?.invoke()
+                        },
+                    ),
             content = content.sanitize(),
             colors = colors,
             typography = typography,
@@ -346,42 +345,50 @@ internal fun markdownSpoilerBlock(
     onLongClick: (() -> Unit)?,
 ) {
     val matches = SpoilerRegex.spoilerOpening.findAll(content)
-    val spoilerTitle = matches.first().groups["title"]?.value.orEmpty()
+    val spoilerTitle =
+        matches
+            .first()
+            .groups["title"]
+            ?.value
+            .orEmpty()
     val spoilerBody = content.replaceFirst(SpoilerRegex.spoilerOpening, "")
-    val spoilerModifier = Modifier
-        .padding(
-            start = 9.dp,
-            bottom = 9.dp,
-        )
+    val spoilerModifier =
+        Modifier
+            .padding(
+                start = 9.dp,
+                bottom = 9.dp,
+            )
     var isExpanded by remember { mutableStateOf(false) }
     Column(
-        modifier = Modifier
-            .clickable {
-                isExpanded = !isExpanded
-            }
+        modifier =
+            Modifier
+                .clickable {
+                    isExpanded = !isExpanded
+                },
     ) {
         Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = buildAnnotatedString {
-                withStyle(SpanStyle(fontSize = 20.sp)) {
-                    append(
-                        if (isExpanded) {
-                            "▼︎ "
-                        }
-                        else {
-                            "▶︎ "
-                        }
-                    )
-                }
-                append(spoilerTitle)
-            }
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
+            text =
+                buildAnnotatedString {
+                    withStyle(SpanStyle(fontSize = 20.sp)) {
+                        append(
+                            if (isExpanded) {
+                                "▼︎ "
+                            } else {
+                                "▶︎ "
+                            },
+                        )
+                    }
+                    append(spoilerTitle)
+                },
         )
         if (isExpanded) {
             if (matches.count() > 1) {
                 var previousIndex = 0
                 Column(
-                    modifier = spoilerModifier
+                    modifier = spoilerModifier,
                 ) {
                     SpoilerRegex.spoilerFull.findAll(spoilerBody).forEach {
                         if (previousIndex < it.range.first) {
@@ -423,10 +430,9 @@ internal fun markdownSpoilerBlock(
                         previousIndex = it.range.last + 1
                     }
                 }
-            }
-            else {
+            } else {
                 Column(
-                    modifier = spoilerModifier
+                    modifier = spoilerModifier,
                 ) {
                     CustomMarkdownWrapper(
                         content = spoilerBody,

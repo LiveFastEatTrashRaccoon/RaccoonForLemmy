@@ -46,7 +46,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.rememberCallbackArgs
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.getPrettyNumber
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -292,14 +291,13 @@ class UserInfoScreen(
                                 ModeratedCommunityCell(
                                     autoLoadImages = uiState.autoLoadImages,
                                     community = community,
-                                    onOpenCommunity =
-                                        rememberCallbackArgs { _ ->
-                                            navigationCoordinator.closeSideMenu()
-                                            scope.launch {
-                                                delay(100)
-                                                detailOpener.openCommunityDetail(community)
-                                            }
-                                        },
+                                    onOpenCommunity = { _ ->
+                                        navigationCoordinator.closeSideMenu()
+                                        scope.launch {
+                                            delay(100)
+                                            detailOpener.openCommunityDetail(community)
+                                        }
+                                    },
                                 )
                             }
                         }

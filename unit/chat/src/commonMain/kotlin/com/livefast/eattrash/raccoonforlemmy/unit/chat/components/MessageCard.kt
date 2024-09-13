@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -115,22 +116,24 @@ internal fun MessageCard(
         }
         Box(
             modifier =
-                Modifier.then(
-                    if (isMyMessage) {
-                        Modifier.padding(start = longDistance, end = mediumDistance)
-                    } else {
-                        Modifier.padding(end = longDistance, start = mediumDistance)
-                    },
-                ).background(
-                    color = color,
-                    shape =
-                        RoundedCornerShape(
-                            topStart = if (isMyMessage) CornerSize.m else 0.dp,
-                            topEnd = if (isMyMessage) 0.dp else CornerSize.m,
-                            bottomStart = CornerSize.m,
-                            bottomEnd = CornerSize.m,
-                        ),
-                ).fillMaxWidth().padding(Spacing.s),
+                Modifier
+                    .then(
+                        if (isMyMessage) {
+                            Modifier.padding(start = longDistance, end = mediumDistance)
+                        } else {
+                            Modifier.padding(end = longDistance, start = mediumDistance)
+                        },
+                    ).background(
+                        color = color,
+                        shape =
+                            RoundedCornerShape(
+                                topStart = if (isMyMessage) CornerSize.m else 0.dp,
+                                topEnd = if (isMyMessage) 0.dp else CornerSize.m,
+                                bottomStart = CornerSize.m,
+                                bottomEnd = CornerSize.m,
+                            ),
+                    ).fillMaxWidth()
+                    .padding(Spacing.s),
         ) {
             CustomizedContent(ContentFontClass.Body) {
                 Column {
@@ -148,23 +151,24 @@ internal fun MessageCard(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             if (options.isNotEmpty()) {
-                                Icon(
+                                IconButton(
                                     modifier =
                                         Modifier
                                             .size(IconSize.m)
                                             .padding(Spacing.xs)
                                             .onGloballyPositioned {
                                                 optionsOffset = it.positionInParent()
-                                            }
-                                            .onClick(
-                                                onClick = {
-                                                    optionsExpanded = true
-                                                },
-                                            ),
-                                    imageVector = Icons.Default.MoreHoriz,
-                                    contentDescription = null,
-                                    tint = ancillaryColor,
-                                )
+                                            },
+                                    onClick = {
+                                        optionsExpanded = true
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.MoreHoriz,
+                                        contentDescription = null,
+                                        tint = ancillaryColor,
+                                    )
+                                }
                             }
                             Spacer(modifier = Modifier.weight(1f))
 

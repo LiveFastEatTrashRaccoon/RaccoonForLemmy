@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.modals
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,12 +12,15 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,8 +29,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.draw.clip
 import cafe.adriel.voyager.core.screen.Screen
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.BottomSheetHeader
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
@@ -57,45 +60,47 @@ class SortBottomSheet(
 ) : Screen {
     @Composable
     override fun Content() {
-        Column(
-            modifier =
-                Modifier
-                    .windowInsetsPadding(WindowInsets.navigationBars)
-                    .padding(
-                        top = Spacing.s,
-                        start = Spacing.s,
-                        end = Spacing.s,
-                        bottom = Spacing.m,
-                    ),
-            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-        ) {
-            var level by remember { mutableStateOf<SortBottomSheetLevel>(SortBottomSheetLevel.Main) }
-            Crossfade(
-                targetState = level,
-            ) { currentLevel ->
-                when (currentLevel) {
-                    SortBottomSheetLevel.Main -> {
-                        SortBottomSheetMain(
-                            values = values,
-                            expandTop = expandTop,
-                            comments = comments,
-                            defaultForCommunity = defaultForCommunity,
-                            screenKey = screenKey,
-                            onNavigateUp = {
-                                level = SortBottomSheetLevel.Top
-                            },
-                        )
-                    }
+        Surface {
+            Column(
+                modifier =
+                    Modifier
+                        .windowInsetsPadding(WindowInsets.navigationBars)
+                        .padding(
+                            top = Spacing.s,
+                            start = Spacing.s,
+                            end = Spacing.s,
+                            bottom = Spacing.m,
+                        ),
+                verticalArrangement = Arrangement.spacedBy(Spacing.s),
+            ) {
+                var level by remember { mutableStateOf<SortBottomSheetLevel>(SortBottomSheetLevel.Main) }
+                Crossfade(
+                    targetState = level,
+                ) { currentLevel ->
+                    when (currentLevel) {
+                        SortBottomSheetLevel.Main -> {
+                            SortBottomSheetMain(
+                                values = values,
+                                expandTop = expandTop,
+                                comments = comments,
+                                defaultForCommunity = defaultForCommunity,
+                                screenKey = screenKey,
+                                onNavigateUp = {
+                                    level = SortBottomSheetLevel.Top
+                                },
+                            )
+                        }
 
-                    SortBottomSheetLevel.Top -> {
-                        SortBottomSheetTop(
-                            comments = comments,
-                            defaultForCommunity = defaultForCommunity,
-                            screenKey = screenKey,
-                            onNavigateDown = {
-                                level = SortBottomSheetLevel.Main
-                            },
-                        )
+                        SortBottomSheetLevel.Top -> {
+                            SortBottomSheetTop(
+                                comments = comments,
+                                defaultForCommunity = defaultForCommunity,
+                                screenKey = screenKey,
+                                onNavigateDown = {
+                                    level = SortBottomSheetLevel.Main
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -125,11 +130,7 @@ private fun SortBottomSheetMain(
                 Row(
                     modifier =
                         Modifier
-                            .padding(
-                                horizontal = Spacing.s,
-                                vertical = Spacing.s,
-                            )
-                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(CornerSize.xxl))
                             .onClick(
                                 onClick = {
                                     if (sortValue == SortType.Top.Generic && expandTop) {
@@ -152,7 +153,10 @@ private fun SortBottomSheetMain(
                                         navigationCoordinator.hideBottomSheet()
                                     }
                                 },
-                            ),
+                            ).padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            ).fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     val name =
@@ -168,7 +172,7 @@ private fun SortBottomSheetMain(
                         color = MaterialTheme.colorScheme.onBackground,
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Image(
+                    Icon(
                         imageVector =
                             if (sortValue == SortType.Top.Generic && expandTop) {
                                 Icons.Default.ChevronRight
@@ -176,7 +180,7 @@ private fun SortBottomSheetMain(
                                 sortValue.toIcon()
                             },
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                        tint = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }
@@ -212,18 +216,16 @@ private fun SortBottomSheetTop(
             Row(
                 modifier = Modifier.padding(start = Spacing.xxs),
             ) {
-                Icon(
-                    modifier =
-                        Modifier
-                            .onClick(
-                                onClick = {
-                                    onNavigateDown()
-                                },
-                            ),
-                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                    tint = MaterialTheme.colorScheme.onBackground,
-                    contentDescription = null,
-                )
+                IconButton(
+                    onClick = {
+                        onNavigateDown()
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                        contentDescription = null,
+                    )
+                }
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
@@ -236,11 +238,7 @@ private fun SortBottomSheetTop(
                 Row(
                     modifier =
                         Modifier
-                            .padding(
-                                horizontal = Spacing.s,
-                                vertical = Spacing.s,
-                            )
-                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(CornerSize.xxl))
                             .onClick(
                                 onClick = {
                                     val event =
@@ -259,7 +257,10 @@ private fun SortBottomSheetTop(
                                     notificationCenter.send(event)
                                     navigationCoordinator.hideBottomSheet()
                                 },
-                            ),
+                            ).padding(
+                                horizontal = Spacing.s,
+                                vertical = Spacing.s,
+                            ).fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
@@ -268,10 +269,10 @@ private fun SortBottomSheetTop(
                         color = MaterialTheme.colorScheme.onBackground,
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Image(
+                    Icon(
                         imageVector = sortValue.toIcon(),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                        tint = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }

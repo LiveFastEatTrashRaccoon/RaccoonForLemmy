@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
@@ -63,21 +64,21 @@ fun DraftCard(
 ) {
     Box(
         modifier =
-            modifier.then(
-                if (postLayout == PostLayout.Card) {
-                    Modifier
-                        .padding(horizontal = Spacing.xs)
-                        .shadow(elevation = 5.dp, shape = RoundedCornerShape(CornerSize.l))
-                        .clip(RoundedCornerShape(CornerSize.l))
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                            shape = RoundedCornerShape(CornerSize.l),
-                        )
-                        .padding(vertical = Spacing.s)
-                } else {
-                    Modifier.background(MaterialTheme.colorScheme.background)
-                },
-            ).onClick(onClick = onOpen),
+            modifier
+                .then(
+                    if (postLayout == PostLayout.Card) {
+                        Modifier
+                            .padding(horizontal = Spacing.xs)
+                            .shadow(elevation = 5.dp, shape = RoundedCornerShape(CornerSize.l))
+                            .clip(RoundedCornerShape(CornerSize.l))
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                                shape = RoundedCornerShape(CornerSize.l),
+                            ).padding(vertical = Spacing.s)
+                    } else {
+                        Modifier.background(MaterialTheme.colorScheme.background)
+                    },
+                ).onClick(onClick = onOpen),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
@@ -174,23 +175,25 @@ private fun DraftFooter(
             Spacer(modifier = Modifier.weight(1f))
 
             if (options.isNotEmpty()) {
-                Icon(
+                IconButton(
                     modifier =
-                        Modifier.size(IconSize.m)
+                        Modifier
+                            .size(IconSize.m)
                             .padding(Spacing.xs)
                             .padding(top = Spacing.xxs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            }
-                            .onClick(
-                                onClick = {
-                                    optionsExpanded = true
-                                },
-                            ),
-                    imageVector = Icons.Default.MoreHoriz,
-                    contentDescription = null,
-                    tint = ancillaryColor,
-                )
+                            },
+                    onClick = {
+                        optionsExpanded = true
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreHoriz,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                }
             }
         }
         CustomDropDown(

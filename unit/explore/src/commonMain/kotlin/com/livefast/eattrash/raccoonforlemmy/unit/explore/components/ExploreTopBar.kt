@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.explore.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -11,6 +10,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -25,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
@@ -60,9 +60,10 @@ internal fun ExploreTopBar(
     val scope = rememberCoroutineScope()
     val maxTopInset = Dimensions.maxTopBarInset.toLocalPixel()
     var topInset by remember { mutableStateOf(maxTopInset) }
-    snapshotFlow { topAppBarState.collapsedFraction }.onEach {
-        topInset = maxTopInset * (1 - it)
-    }.launchIn(scope)
+    snapshotFlow { topAppBarState.collapsedFraction }
+        .onEach {
+            topInset = maxTopInset * (1 - it)
+        }.launchIn(scope)
 
     TopAppBar(
         windowInsets =
@@ -75,45 +76,42 @@ internal fun ExploreTopBar(
         navigationIcon = {
             when {
                 otherInstance.isNotEmpty() -> {
-                    Image(
-                        modifier =
-                            Modifier.onClick(
-                                onClick = {
-                                    onBack?.invoke()
-                                },
-                            ),
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                    )
+                    IconButton(
+                        onClick = {
+                            onBack?.invoke()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = null,
+                        )
+                    }
                 }
 
                 onHamburgerTapped != null -> {
-                    Image(
-                        modifier =
-                            Modifier.onClick(
-                                onClick = {
-                                    onHamburgerTapped()
-                                },
-                            ),
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                    )
+                    IconButton(
+                        onClick = {
+                            onHamburgerTapped()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = null,
+                        )
+                    }
                 }
 
                 else -> {
-                    Image(
-                        modifier =
-                            Modifier.onClick(
-                                onClick = {
-                                    onSelectListingType?.invoke()
-                                },
-                            ),
-                        imageVector = listingType.toIcon(),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                    )
+                    IconButton(
+                        onClick = {
+                            onSelectListingType?.invoke()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = listingType.toIcon(),
+                            contentDescription = null,
+                        )
+                    }
                 }
             }
         },
@@ -152,19 +150,16 @@ internal fun ExploreTopBar(
             }
         },
         actions = {
-            Image(
-                modifier =
-                    Modifier
-                        .padding(horizontal = Spacing.xs)
-                        .onClick(
-                            onClick = {
-                                onSelectResultTypeType?.invoke()
-                            },
-                        ),
-                imageVector = resultType.toIcon(),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-            )
+            IconButton(
+                onClick = {
+                    onSelectResultTypeType?.invoke()
+                },
+            ) {
+                Icon(
+                    imageVector = resultType.toIcon(),
+                    contentDescription = null,
+                )
+            }
 
             val additionalLabel = sortType.getAdditionalLabel()
             if (additionalLabel.isNotEmpty()) {
@@ -179,19 +174,16 @@ internal fun ExploreTopBar(
                 Spacer(modifier = Modifier.width(Spacing.xs))
             }
 
-            Image(
-                modifier =
-                    Modifier
-                        .padding(horizontal = Spacing.xs)
-                        .onClick(
-                            onClick = {
-                                onSelectSortType?.invoke()
-                            },
-                        ),
-                imageVector = sortType.toIcon(),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-            )
+            IconButton(
+                onClick = {
+                    onSelectSortType?.invoke()
+                },
+            ) {
+                Icon(
+                    imageVector = sortType.toIcon(),
+                    contentDescription = null,
+                )
+            }
         },
     )
 }
