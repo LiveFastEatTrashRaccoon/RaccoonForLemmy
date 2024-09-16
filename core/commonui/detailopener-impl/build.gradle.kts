@@ -55,6 +55,7 @@ kotlin {
                 implementation(projects.unit.userdetail)
                 implementation(projects.unit.createpost)
                 implementation(projects.unit.createcomment)
+                implementation(projects.unit.web)
             }
         }
         val androidUnitTest by getting {
@@ -70,8 +71,14 @@ kotlin {
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.impl"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }
