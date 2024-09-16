@@ -164,9 +164,6 @@ fun InboxCard(
                                     onClickPost.invoke()
                                 }
                             },
-                            onOpenUser = { user, instance ->
-                                onOpenCreator(user, instance)
-                            },
                             onLongClick = {
                                 textSelection = true
                             },

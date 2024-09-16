@@ -43,7 +43,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTex
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 private val BAR_BASE_WIDTH_UNIT = 1.25.dp
@@ -79,8 +78,6 @@ fun CommentCard(
     onReply: (() -> Unit)? = null,
     onOpenCommunity: ((CommunityModel, String) -> Unit)? = null,
     onOpenCreator: ((UserModel, String) -> Unit)? = null,
-    onOpenPost: ((PostModel, String) -> Unit)? = null,
-    onOpenWeb: ((String) -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
     onToggleExpanded: (() -> Unit)? = null,
 ) {
@@ -219,10 +216,6 @@ fun CommentCard(
                                     highlightText = highlightText,
                                     onOpenImage = onImageClick,
                                     onDoubleClick = onDoubleClick,
-                                    onOpenCommunity = onOpenCommunity,
-                                    onOpenUser = onOpenCreator,
-                                    onOpenPost = onOpenPost,
-                                    onOpenWeb = onOpenWeb,
                                     onLongClick = {
                                         textSelection = true
                                     },

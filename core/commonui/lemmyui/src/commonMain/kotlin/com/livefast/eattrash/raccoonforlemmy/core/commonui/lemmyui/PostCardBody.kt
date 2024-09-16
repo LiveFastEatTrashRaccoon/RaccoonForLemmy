@@ -16,13 +16,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.readContentAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.markdown.CustomMarkdownWrapperController
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.getCustomTabsHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toUrlOpeningMode
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import kotlinx.coroutines.flow.map
@@ -40,14 +34,8 @@ fun PostCardBody(
     onOpenImage: ((String) -> Unit)? = null,
     onDoubleClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
-    onOpenCommunity: ((CommunityModel, String) -> Unit)? = null,
-    onOpenUser: ((UserModel, String) -> Unit)? = null,
-    onOpenPost: ((PostModel, String) -> Unit)? = null,
-    onOpenWeb: ((String) -> Unit)? = null,
 ) {
     val uriHandler = LocalUriHandler.current
-    val customTabsHelper = remember { getCustomTabsHelper() }
-    val navigationCoordinator = remember { getNavigationCoordinator() }
     val settingsRepository = remember { getSettingsRepository() }
     val themeRepository = remember { getThemeRepository() }
     val fontFamily by themeRepository.contentFontFamily.collectAsState()
@@ -92,18 +80,7 @@ fun PostCardBody(
                 enableAlternateRendering = enableAlternateMarkdownRendering,
                 blurImages = blurImages,
                 onOpenUrl = { url ->
-                    navigationCoordinator.handleUrl(
-                        url = url,
-                        openingMode =
-                            settingsRepository.currentSettings.value.urlOpeningMode
-                                .toUrlOpeningMode(),
-                        uriHandler = uriHandler,
-                        customTabsHelper = customTabsHelper,
-                        onOpenCommunity = onOpenCommunity,
-                        onOpenUser = onOpenUser,
-                        onOpenPost = onOpenPost,
-                        onOpenWeb = onOpenWeb,
-                    )
+                    uriHandler.openUri(url)
                 },
                 onOpenImage = { url ->
                     onOpenImage?.invoke(url)
