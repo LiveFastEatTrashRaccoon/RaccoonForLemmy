@@ -56,17 +56,12 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.handleUrl
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.autofill
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.getCustomTabsHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toUrlOpeningMode
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -84,8 +79,6 @@ class LoginBottomSheet : Screen {
         val genericError = LocalStrings.current.messageGenericError
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val uriHandler = LocalUriHandler.current
-        val customTabsHelper = remember { getCustomTabsHelper() }
-        val settingsRepository = remember { getSettingsRepository() }
         val instanceFocusRequester = remember { FocusRequester() }
         val usernameFocusRequester = remember { FocusRequester() }
         val passwordFocusRequester = remember { FocusRequester() }
@@ -135,17 +128,7 @@ class LoginBottomSheet : Screen {
                     actions = {
                         IconButton(
                             onClick = {
-                                navigationCoordinator.handleUrl(
-                                    url = HELP_URL,
-                                    openingMode =
-                                        settingsRepository.currentSettings.value.urlOpeningMode
-                                            .toUrlOpeningMode(),
-                                    uriHandler = uriHandler,
-                                    customTabsHelper = customTabsHelper,
-                                    onOpenWeb = { url ->
-                                        navigationCoordinator.pushScreen(WebViewScreen(url))
-                                    },
-                                )
+                                uriHandler.openUri(HELP_URL)
                             },
                         ) {
                             Icon(

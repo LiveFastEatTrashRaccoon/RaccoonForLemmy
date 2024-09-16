@@ -113,8 +113,6 @@ internal object ProfileMainScreen : Tab {
             notificationCenter
                 .subscribe(NotificationCenterEvent.ProfileSideMenuAction::class)
                 .onEach { evt ->
-                    navigationCoordinator.closeSideMenu()
-
                     when (evt) {
                         NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts -> {
                             navigationCoordinator.showBottomSheet(ManageAccountsScreen())

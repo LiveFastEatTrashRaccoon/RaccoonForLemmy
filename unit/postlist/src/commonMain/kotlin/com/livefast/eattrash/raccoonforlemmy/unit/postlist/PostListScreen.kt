@@ -101,7 +101,6 @@ import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.postlist.components.PostsTopBar
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
 import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.SelectInstanceBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -205,29 +204,29 @@ class PostListScreen : Screen {
                     onHamburgerTapped = {
                         scope.launch {
                             drawerCoordinator.toggleDrawer()
-                            }
-                        },
+                        }
+                    },
                     onSelectListingType = {
                         val sheet =
                             ListingTypeBottomSheet(
-                                    isLogged = uiState.isLogged,
-                                    screenKey = "postList",
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
-                        },
+                                isLogged = uiState.isLogged,
+                                screenKey = "postList",
+                            )
+                        navigationCoordinator.showBottomSheet(sheet)
+                    },
                     onSelectInstance =
-                    {
+                        {
                             navigationCoordinator.showBottomSheet(SelectInstanceBottomSheet())
-                    }.takeIf { uiState.isLogged },
+                        }.takeIf { uiState.isLogged },
                     onSelectSortType = {
                         val sheet =
                             SortBottomSheet(
                                 values = uiState.availableSortTypes.map { it.toInt() },
-                                    expandTop = true,
-                                    screenKey = "postList",
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
-                        },
+                                expandTop = true,
+                                screenKey = "postList",
+                            )
+                        navigationCoordinator.showBottomSheet(sheet)
+                    },
                 )
             },
             floatingActionButton = {
@@ -280,11 +279,11 @@ class PostListScreen : Screen {
                                             scope.launch {
                                                 runCatching {
                                                     lazyListState.scrollToItem(0)
-                                                        topAppBarState.heightOffset = 0f
-                                                        topAppBarState.contentOffset = 0f
-                                                    }
+                                                    topAppBarState.heightOffset = 0f
+                                                    topAppBarState.contentOffset = 0f
                                                 }
-                                            },
+                                            }
+                                        },
                                     )
                                 if (uiState.isLogged) {
                                     this +=
@@ -295,12 +294,12 @@ class PostListScreen : Screen {
                                                 model.reduce(PostListMviModel.Intent.ClearRead)
                                                 scope.launch {
                                                     runCatching {
-                                                            lazyListState.scrollToItem(0)
-                                                            topAppBarState.heightOffset = 0f
-                                                            topAppBarState.contentOffset = 0f
-                                                        }
+                                                        lazyListState.scrollToItem(0)
+                                                        topAppBarState.heightOffset = 0f
+                                                        topAppBarState.contentOffset = 0f
                                                     }
-                                                },
+                                                }
+                                            },
                                         )
 
                                     this +=
@@ -324,8 +323,8 @@ class PostListScreen : Screen {
                     rememberPullRefreshState(
                         refreshing = uiState.refreshing,
                         onRefresh = {
-                                model.reduce(PostListMviModel.Intent.Refresh())
-                            },
+                            model.reduce(PostListMviModel.Intent.Refresh())
+                        },
                     )
                 Box(
                     modifier =
@@ -399,8 +398,8 @@ class PostListScreen : Screen {
                                                         PostListMviModel.Intent.UpVotePost(
                                                             post.id,
                                                         ),
-                                                        )
-                                                    },
+                                                    )
+                                                },
                                             )
 
                                         ActionOnSwipe.DownVote ->
@@ -455,23 +454,23 @@ class PostListScreen : Screen {
                                                             post.id,
                                                         ),
                                                     )
-                                                    },
+                                                },
                                             )
 
                                         ActionOnSwipe.Edit ->
-                                                SwipeAction(
-                                                    swipeContent = {
-                                                        Icon(
-                                                            imageVector = Icons.Default.Edit,
-                                                            contentDescription = null,
-                                                            tint = Color.White,
-                                                        )
-                                                    },
-                                                    backgroundColor = MaterialTheme.colorScheme.tertiary,
-                                                    onTriggered = {
-                                                            detailOpener.openCreatePost(editedPost = post)
+                                            SwipeAction(
+                                                swipeContent = {
+                                                    Icon(
+                                                        imageVector = Icons.Default.Edit,
+                                                        contentDescription = null,
+                                                        tint = Color.White,
+                                                    )
                                                 },
-                                                ).takeIf { canEdit }
+                                                backgroundColor = MaterialTheme.colorScheme.tertiary,
+                                                onTriggered = {
+                                                    detailOpener.openCreatePost(editedPost = post)
+                                                },
+                                            ).takeIf { canEdit }
 
                                         else -> null
                                     }
@@ -481,7 +480,7 @@ class PostListScreen : Screen {
                                 modifier = Modifier.fillMaxWidth(),
                                 enabled = uiState.swipeActionsEnabled,
                                 onGestureBegin = {
-                                        model.reduce(PostListMviModel.Intent.HapticIndication)
+                                    model.reduce(PostListMviModel.Intent.HapticIndication)
                                 },
                                 swipeToStartActions =
                                     uiState.actionsOnSwipeToStartPosts.toSwipeActions(
@@ -508,13 +507,13 @@ class PostListScreen : Screen {
                                         showUnreadComments = uiState.showUnreadComments,
                                         downVoteEnabled = uiState.downVoteEnabled,
                                         onClick = {
-                                                model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
+                                            model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
                                             model.reduce(PostListMviModel.Intent.WillOpenDetail)
                                             detailOpener.openPostDetail(post)
                                         },
                                         onDoubleClick =
-                                        {
-                                            model.reduce(
+                                            {
+                                                model.reduce(
                                                     PostListMviModel.Intent.UpVotePost(post.id),
                                                 )
                                             }.takeIf { uiState.doubleTapActionEnabled && uiState.isLogged },
@@ -525,57 +524,48 @@ class PostListScreen : Screen {
                                             )
                                         },
                                         onOpenCreator = { user, instance ->
-                                                detailOpener.openUserDetail(
+                                            detailOpener.openUserDetail(
                                                 user = user,
                                                 otherInstance = instance,
                                             )
                                         },
-                                        onOpenPost = { p, instance ->
-                                                detailOpener.openPostDetail(
-                                                post = p,
-                                                otherInstance = instance,
-                                            )
-                                        },
-                                        onOpenWeb = { url ->
-                                            navigationCoordinator.pushScreen(WebViewScreen(url))
-                                        },
                                         onUpVote = {
-                                                if (uiState.isLogged) {
+                                            if (uiState.isLogged) {
                                                 model.reduce(
                                                     PostListMviModel.Intent.UpVotePost(post.id),
                                                 )
                                             }
                                         },
                                         onDownVote = {
-                                                if (uiState.isLogged) {
-                                                    model.reduce(
+                                            if (uiState.isLogged) {
+                                                model.reduce(
                                                     PostListMviModel.Intent.DownVotePost(
                                                         post.id,
                                                     ),
                                                 )
                                             }
-                                            },
+                                        },
                                         onSave = {
-                                                if (uiState.isLogged) {
-                                                    model.reduce(PostListMviModel.Intent.SavePost(post.id))
+                                            if (uiState.isLogged) {
+                                                model.reduce(PostListMviModel.Intent.SavePost(post.id))
                                             }
-                                            },
+                                        },
                                         onReply = {
-                                                if (uiState.isLogged) {
-                                                    model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
-                                                model.reduce(PostListMviModel.Intent.WillOpenDetail)
-                                                    detailOpener.openPostDetail(post)
-                                                }
-                                            },
-                                        onOpenImage = { url ->
+                                            if (uiState.isLogged) {
                                                 model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
+                                                model.reduce(PostListMviModel.Intent.WillOpenDetail)
+                                                detailOpener.openPostDetail(post)
+                                            }
+                                        },
+                                        onOpenImage = { url ->
+                                            model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
                                             navigationCoordinator.pushScreen(
                                                 ZoomableImageScreen(
-                                                        url = url,
+                                                    url = url,
                                                     source = post.community?.readableHandle.orEmpty(),
-                                                    ),
-                                                )
-                                            },
+                                                ),
+                                            )
+                                        },
                                         options =
                                             buildList {
                                                 this +=
@@ -631,8 +621,8 @@ class PostListScreen : Screen {
                                                 }
                                             },
                                         onOptionSelected = { optionId ->
-                                                when (optionId) {
-                                                    OptionId.Delete -> {
+                                            when (optionId) {
+                                                OptionId.Delete -> {
                                                     itemIdToDelete = post.id
                                                 }
 
@@ -640,91 +630,91 @@ class PostListScreen : Screen {
                                                     detailOpener.openCreatePost(editedPost = post)
                                                 }
 
-                                                    OptionId.Report -> {
-                                                        val screen =
-                                                            ModerateWithReasonScreen(
-                                                                actionId = ModerateWithReasonAction.ReportPost.toInt(),
-                                                                contentId = post.id,
-                                                            )
-                                                        navigationCoordinator.pushScreen(screen)
-                                                    }
-
-                                                    OptionId.CrossPost -> {
-                                                        detailOpener.openCreatePost(
-                                                            crossPost = post,
-                                                            forceCommunitySelection = true,
+                                                OptionId.Report -> {
+                                                    val screen =
+                                                        ModerateWithReasonScreen(
+                                                            actionId = ModerateWithReasonAction.ReportPost.toInt(),
+                                                            contentId = post.id,
                                                         )
-                                                    }
+                                                    navigationCoordinator.pushScreen(screen)
+                                                }
 
-                                                    OptionId.SeeRaw -> {
-                                                        rawContent = post
-                                                    }
+                                                OptionId.CrossPost -> {
+                                                    detailOpener.openCreatePost(
+                                                        crossPost = post,
+                                                        forceCommunitySelection = true,
+                                                    )
+                                                }
 
-                                                    OptionId.Hide ->
+                                                OptionId.SeeRaw -> {
+                                                    rawContent = post
+                                                }
+
+                                                OptionId.Hide ->
+                                                    model.reduce(
+                                                        PostListMviModel.Intent.Hide(post.id),
+                                                    )
+
+                                                OptionId.Share -> {
+                                                    val urls =
+                                                        listOfNotNull(
+                                                            post.originalUrl,
+                                                            "https://${uiState.instance}/post/${post.id}",
+                                                        ).distinct()
+                                                    if (urls.size == 1) {
                                                         model.reduce(
-                                                            PostListMviModel.Intent.Hide(post.id),
+                                                            PostListMviModel.Intent.Share(urls.first()),
                                                         )
-
-                                                    OptionId.Share -> {
-                                                        val urls =
-                                                            listOfNotNull(
-                                                                post.originalUrl,
-                                                                "https://${uiState.instance}/post/${post.id}",
-                                                            ).distinct()
-                                                        if (urls.size == 1) {
-                                                            model.reduce(
-                                                                PostListMviModel.Intent.Share(urls.first()),
-                                                            )
-                                                        } else {
-                                                            val screen = ShareBottomSheet(urls = urls)
-                                                            navigationCoordinator.showBottomSheet(screen)
-                                                        }
+                                                    } else {
+                                                        val screen = ShareBottomSheet(urls = urls)
+                                                        navigationCoordinator.showBottomSheet(screen)
                                                     }
+                                                }
 
-                                                    OptionId.Block -> {
+                                                OptionId.Block -> {
+                                                    val screen =
+                                                        BlockBottomSheet(
+                                                            userName =
+                                                                post.creator?.readableName(
+                                                                    uiState.preferNicknames,
+                                                                ),
+                                                            userId = post.creator?.id,
+                                                            communityName =
+                                                                post.community?.readableName(
+                                                                    uiState.preferNicknames,
+                                                                ),
+                                                            communityId = post.community?.id,
+                                                            instanceName = post.community?.host,
+                                                            instanceId = post.community?.instanceId,
+                                                            userInstanceName = post.creator?.host,
+                                                            userInstanceId = post.creator?.instanceId,
+                                                        )
+                                                    navigationCoordinator.showBottomSheet(screen)
+                                                }
+
+                                                OptionId.Copy -> {
+                                                    val texts =
+                                                        listOfNotNull(
+                                                            post.title.takeIf { it.isNotBlank() },
+                                                            post.text.takeIf { it.isNotBlank() },
+                                                        ).distinct()
+                                                    if (texts.size == 1) {
+                                                        model.reduce(
+                                                            PostListMviModel.Intent.Copy(texts.first()),
+                                                        )
+                                                    } else {
                                                         val screen =
-                                                            BlockBottomSheet(
-                                                                userName =
-                                                                    post.creator?.readableName(
-                                                                        uiState.preferNicknames,
-                                                                    ),
-                                                                userId = post.creator?.id,
-                                                                communityName =
-                                                                    post.community?.readableName(
-                                                                        uiState.preferNicknames,
-                                                                    ),
-                                                                communityId = post.community?.id,
-                                                                instanceName = post.community?.host,
-                                                                instanceId = post.community?.instanceId,
-                                                                userInstanceName = post.creator?.host,
-                                                                userInstanceId = post.creator?.instanceId,
+                                                            CopyPostBottomSheet(
+                                                                title = post.title,
+                                                                text = post.text,
                                                             )
                                                         navigationCoordinator.showBottomSheet(screen)
                                                     }
-
-                                                    OptionId.Copy -> {
-                                                        val texts =
-                                                            listOfNotNull(
-                                                                post.title.takeIf { it.isNotBlank() },
-                                                                post.text.takeIf { it.isNotBlank() },
-                                                            ).distinct()
-                                                        if (texts.size == 1) {
-                                                            model.reduce(
-                                                                PostListMviModel.Intent.Copy(texts.first()),
-                                                            )
-                                                        } else {
-                                                            val screen =
-                                                                CopyPostBottomSheet(
-                                                                    title = post.title,
-                                                                    text = post.text,
-                                                                )
-                                                            navigationCoordinator.showBottomSheet(screen)
-                                                        }
-                                                    }
-
-                                                    else -> Unit
                                                 }
-                                            },
+
+                                                else -> Unit
+                                            }
+                                        },
                                     )
                                 },
                             )
@@ -746,7 +736,7 @@ class PostListScreen : Screen {
                                     ) {
                                         Button(
                                             onClick = {
-                                                    model.reduce(PostListMviModel.Intent.LoadNextPage)
+                                                model.reduce(PostListMviModel.Intent.LoadNextPage)
                                             },
                                         ) {
                                             Text(
@@ -811,8 +801,8 @@ class PostListScreen : Screen {
                     Button(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         onClick = {
-                                model.reduce(PostListMviModel.Intent.Refresh(hardReset = true))
-                            },
+                            model.reduce(PostListMviModel.Intent.Refresh(hardReset = true))
+                        },
                     ) {
                         Text(LocalStrings.current.buttonRetry)
                     }
@@ -833,8 +823,8 @@ class PostListScreen : Screen {
                         downVotes = content.downvotes,
                         isLogged = uiState.isLogged,
                         onDismiss = {
-                                rawContent = null
-                            },
+                            rawContent = null
+                        },
                         onQuote = { quotation ->
                             rawContent = null
                             if (quotation != null) {
@@ -845,10 +835,10 @@ class PostListScreen : Screen {
                                             append("> ")
                                             append(quotation)
                                             append("\n\n")
-                                            },
-                                    )
-                                }
-                            },
+                                        },
+                                )
+                            }
+                        },
                     )
                 }
             }

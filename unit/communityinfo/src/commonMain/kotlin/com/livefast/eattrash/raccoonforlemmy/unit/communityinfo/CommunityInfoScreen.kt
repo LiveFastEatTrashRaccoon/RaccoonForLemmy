@@ -31,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -50,10 +49,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.getPrettyNumber
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.unit.communityinfo.components.ModeratorCell
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 
 class CommunityInfoScreen(
@@ -71,7 +67,6 @@ class CommunityInfoScreen(
             )
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
-        val scope = rememberCoroutineScope()
         val detailOpener = remember { getDetailOpener() }
 
         Scaffold(
@@ -222,11 +217,7 @@ class CommunityInfoScreen(
                                     autoLoadImages = uiState.autoLoadImages,
                                     user = user,
                                     onOpenUser = { _ ->
-                                        navigationCoordinator.closeSideMenu()
-                                        scope.launch {
-                                            delay(100)
-                                            detailOpener.openUserDetail(user, "")
-                                        }
+                                        detailOpener.openUserDetail(user, "")
                                     },
                                 )
                             }
@@ -239,44 +230,12 @@ class CommunityInfoScreen(
                             modifier = Modifier.fillMaxWidth().padding(top = Spacing.m),
                             text = uiState.community.description,
                             onOpenImage = { url ->
-                                navigationCoordinator.closeSideMenu()
-                                scope.launch {
-                                    delay(100)
-                                    navigationCoordinator.pushScreen(
-                                        ZoomableImageScreen(
-                                            url = url,
-                                            source = uiState.community.readableHandle,
-                                        ),
-                                    )
-                                }
-                            },
-                            onOpenCommunity = { community, instance ->
-                                navigationCoordinator.closeSideMenu()
-                                scope.launch {
-                                    delay(100)
-                                    detailOpener.openCommunityDetail(community, instance)
-                                }
-                            },
-                            onOpenPost = { post, instance ->
-                                navigationCoordinator.closeSideMenu()
-                                scope.launch {
-                                    delay(100)
-                                    detailOpener.openPostDetail(post, instance)
-                                }
-                            },
-                            onOpenUser = { user, instance ->
-                                navigationCoordinator.closeSideMenu()
-                                scope.launch {
-                                    delay(100)
-                                    detailOpener.openUserDetail(user, instance)
-                                }
-                            },
-                            onOpenWeb = { url ->
-                                navigationCoordinator.closeSideMenu()
-                                scope.launch {
-                                    delay(100)
-                                    navigationCoordinator.pushScreen(WebViewScreen(url))
-                                }
+                                navigationCoordinator.pushScreen(
+                                    ZoomableImageScreen(
+                                        url = url,
+                                        source = uiState.community.readableHandle,
+                                    ),
+                                )
                             },
                         )
                     }

@@ -70,7 +70,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -321,14 +320,6 @@ object ProfileLoggedScreen : Tab {
                                     },
                                     onOpenCreator = { user, instance ->
                                         detailOpener.openUserDetail(user, instance)
-                                    },
-                                    onOpenPost = { p, instance ->
-                                        detailOpener.openPostDetail(p, instance)
-                                    },
-                                    onOpenWeb = { url ->
-                                        navigationCoordinator.pushScreen(
-                                            WebViewScreen(url),
-                                        )
                                     },
                                     onOpenImage = { url ->
                                         navigationCoordinator.pushScreen(

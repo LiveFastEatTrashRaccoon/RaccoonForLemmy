@@ -37,16 +37,11 @@ import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.handleUrl
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.getCustomTabsHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toUrlOpeningMode
 import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.components.AcknoledgementItem
 import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.components.AcknoledgementItemPlaceholder
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 
 class AcknowledgementsScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -57,9 +52,7 @@ class AcknowledgementsScreen : Screen {
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val settingsRepository = remember { getSettingsRepository() }
         val uriHandler = LocalUriHandler.current
-        val customTabsHelper = remember { getCustomTabsHelper() }
 
         Scaffold(
             modifier =
@@ -127,19 +120,7 @@ class AcknowledgementsScreen : Screen {
                                     .onClick(
                                         onClick = {
                                             if (!item.url.isNullOrEmpty()) {
-                                                navigationCoordinator.handleUrl(
-                                                    url = item.url,
-                                                    openingMode =
-                                                        settingsRepository.currentSettings.value.urlOpeningMode
-                                                            .toUrlOpeningMode(),
-                                                    uriHandler = uriHandler,
-                                                    customTabsHelper = customTabsHelper,
-                                                    onOpenWeb = { url ->
-                                                        navigationCoordinator.pushScreen(
-                                                            WebViewScreen(url),
-                                                        )
-                                                    },
-                                                )
+                                                uriHandler.openUri(item.url)
                                             }
                                         },
                                     ),
