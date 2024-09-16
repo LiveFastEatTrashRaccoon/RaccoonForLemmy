@@ -1,11 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
-import androidx.compose.ui.platform.UriHandler
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.NavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAVideo
-import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAnImage
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.CustomTabsHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.UrlOpeningMode
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -37,56 +31,6 @@ fun getPostFromUrl(url: String?): Pair<PostModel, String>? {
         post to instance
     } else {
         null
-    }
-}
-
-fun NavigationCoordinator.handleUrl(
-    url: String,
-    openingMode: UrlOpeningMode,
-    uriHandler: UriHandler,
-    customTabsHelper: CustomTabsHelper,
-    onOpenCommunity: ((CommunityModel, String) -> Unit)? = null,
-    onOpenUser: ((UserModel, String) -> Unit)? = null,
-    onOpenPost: ((PostModel, String) -> Unit)? = null,
-    onOpenWeb: ((String) -> Unit)? = null,
-) {
-    val community = getCommunityFromUrl(url)
-    val user = getUserFromUrl(url)
-    val (post, postInstance) = getPostFromUrl(url) ?: (null to null)
-    val isMedia = url.looksLikeAVideo || url.looksLikeAnImage
-
-    when {
-        community != null && !isMedia && onOpenCommunity != null -> {
-            onOpenCommunity.invoke(community, community.host)
-        }
-
-        user != null && !isMedia && onOpenUser != null -> {
-            onOpenUser.invoke(user, user.host)
-        }
-
-        post != null && !isMedia && onOpenPost != null -> {
-            onOpenPost.invoke(post, postInstance.orEmpty())
-        }
-
-        openingMode == UrlOpeningMode.External -> {
-            runCatching {
-                uriHandler.openUri(url)
-            }
-        }
-
-        openingMode == UrlOpeningMode.CustomTabs -> {
-            runCatching {
-                customTabsHelper.handle(url)
-            }.also {
-                it.exceptionOrNull()?.also { e ->
-                    e.printStackTrace()
-                }
-            }
-        }
-
-        else -> {
-            onOpenWeb?.invoke(url)
-        }
     }
 }
 
@@ -186,7 +130,8 @@ private fun extractPost(url: String): PostModel? {
     val match = regex.find(url)
     val id =
         match
-            ?.let { it.groups["postId"]?.value.orEmpty() }?.toLongOrNull()
+            ?.let { it.groups["postId"]?.value.orEmpty() }
+            ?.toLongOrNull()
     return if (id != null) {
         PostModel(id = id)
     } else {
