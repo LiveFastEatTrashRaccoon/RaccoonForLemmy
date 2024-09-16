@@ -49,6 +49,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toColor
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.DraggableSideMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.ProvideCustomUriHandler
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.getCommunityFromUrl
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.getPostFromUrl
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.getUserFromUrl
@@ -282,106 +283,108 @@ fun App(onLoadingFinished: () -> Unit = {}) {
         ProvideStrings(
             lyricist = l10nManager.lyricist,
         ) {
-            CompositionLocalProvider(
-                LocalDensity provides
-                    Density(
-                        density = LocalDensity.current.density,
-                        fontScale = uiFontScale,
-                    ),
-                LocalLayoutDirection provides l10nState.languageTag.toLanguageDirection(),
-            ) {
-                BottomSheetNavigator(
-                    sheetShape =
-                        RoundedCornerShape(
+            ProvideCustomUriHandler {
+                CompositionLocalProvider(
+                    LocalDensity provides
+                        Density(
+                            density = LocalDensity.current.density,
+                            fontScale = uiFontScale,
+                        ),
+                    LocalLayoutDirection provides l10nState.languageTag.toLanguageDirection(),
+                ) {
+                    BottomSheetNavigator(
+                        sheetShape =
+                            RoundedCornerShape(
                             topStart = CornerSize.xl,
                             topEnd = CornerSize.xl,
                         ),
-                    sheetBackgroundColor = MaterialTheme.colorScheme.background,
-                ) { bottomNavigator ->
-                    navigationCoordinator.setBottomNavigator(bottomNavigator)
+                        sheetBackgroundColor = MaterialTheme.colorScheme.background,
+                    ) { bottomNavigator ->
+                        navigationCoordinator.setBottomNavigator(bottomNavigator)
 
-                    Navigator(
-                        screen = MainScreen,
-                        onBackPressed = {
-                            // if the drawer is open, closes it
-                            if (drawerCoordinator.drawerOpened.value) {
-                                scope.launch {
-                                    drawerCoordinator.toggleDrawer()
+                        Navigator(
+                            screen = MainScreen,
+                            onBackPressed = {
+                                // if the drawer is open, closes it
+                                if (drawerCoordinator.drawerOpened.value) {
+                                    scope.launch {
+                                        drawerCoordinator.toggleDrawer()
+                                    }
+                                    return@Navigator false
                                 }
-                                return@Navigator false
-                            }
-                            // if the side menu is open, closes it
-                            if (navigationCoordinator.sideMenuOpened.value) {
-                                navigationCoordinator.closeSideMenu()
-                                return@Navigator false
+                                // if the side menu is open, closes it
+                                if (navigationCoordinator.sideMenuOpened.value) {
+                                    navigationCoordinator.closeSideMenu()
+                                    return@Navigator false
+                                }
+
+                                // otherwise use the screen-provided callback
+                                val callback = navigationCoordinator.getCanGoBackCallback()
+                                callback?.let { it() } ?: true
+                            },
+                        ) { navigator ->
+                            LaunchedEffect(Unit) {
+                                navigationCoordinator.setRootNavigator(navigator)
                             }
 
-                            // otherwise use the screen-provided callback
-                            val callback = navigationCoordinator.getCanGoBackCallback()
-                            callback?.let { it() } ?: true
-                        },
-                    ) { navigator ->
-                        LaunchedEffect(Unit) {
-                            navigationCoordinator.setRootNavigator(navigator)
-                        }
-
-                        ModalNavigationDrawer(
-                            modifier =
-                                Modifier
-                                    .fillMaxSize()
+                            ModalNavigationDrawer(
+                                modifier =
+                                    Modifier
+                                        .fillMaxSize()
                                     .onGloballyPositioned {
                                         screenWidth = it.size.toSize().width
                                     },
-                            drawerState = drawerState,
-                            gesturesEnabled = drawerGesturesEnabled,
-                            drawerContent = {
-                                ModalDrawerSheet {
-                                    TabNavigator(ModalDrawerContent)
-                                }
-                            },
-                        ) {
-                            if (hasBeenInitialized) {
-                                SlideTransition(
-                                    animationSpec =
-                                        tween(
+                                drawerState = drawerState,
+                                gesturesEnabled = drawerGesturesEnabled,
+                                drawerContent = {
+                                    ModalDrawerSheet {
+                                        TabNavigator(ModalDrawerContent)
+                                    }
+                                },
+                            ) {
+                                if (hasBeenInitialized) {
+                                    SlideTransition(
+                                        animationSpec =
+                                            tween(
                                             durationMillis = 250,
                                             easing = FastOutSlowInEasing,
                                         ),
-                                    navigator = navigator,
-                                )
+                                        navigator = navigator,
+                                    )
+                                }
                             }
-                        }
 
-                        // scrim for draggable side menu
-                        AnimatedVisibility(
-                            modifier = Modifier.fillMaxSize(),
-                            visible = sideMenuOpened,
-                        ) {
-                            Surface(
-                                modifier =
-                                    Modifier
+                            // scrim for draggable side menu
+                            AnimatedVisibility(
+                                modifier = Modifier.fillMaxSize(),
+                                visible = sideMenuOpened,
+                            ) {
+                                Surface(
+                                    modifier =
+                                        Modifier
                                         .onClick(
                                             onClick = {
                                                 navigationCoordinator.closeSideMenu()
                                             },
                                         ),
-                                color = DrawerDefaults.scrimColor,
-                            ) {
-                                Box(modifier = Modifier.fillMaxSize())
+                                    color = DrawerDefaults.scrimColor,
+                                ) {
+                                    Box(modifier = Modifier.fillMaxSize())
+                                }
                             }
-                        }
 
-                        // draggable side menu
-                        DraggableSideMenu(
-                            availableWidth = screenWidth.toLocalDp(),
-                            opened = sideMenuOpened,
-                            onDismiss = {
-                                navigationCoordinator.closeSideMenu()
-                            },
-                            content = {
-                                sideMenuContent?.invoke()
-                            },
-                        )
+                            // draggable side menu
+                            DraggableSideMenu(
+                                availableWidth = screenWidth.toLocalDp(),
+                                opened = sideMenuOpened,
+                                onDismiss = {
+                                    navigationCoordinator.closeSideMenu()
+                                },
+                                content = {
+                                    sideMenuContent?.invoke()
+                                },
+                            )
+                        }
                     }
                 }
             }
