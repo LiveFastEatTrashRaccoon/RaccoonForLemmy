@@ -120,13 +120,17 @@ class CreatePostScreen(
         if (openImagePicker) {
             galleryHelper.getImageFromGallery { bytes ->
                 openImagePicker = false
-                model.reduce(CreatePostMviModel.Intent.ImageSelected(bytes))
+                if (bytes.isNotEmpty()) {
+                    model.reduce(CreatePostMviModel.Intent.ImageSelected(bytes))
+                }
             }
         }
         if (openImagePickerInBody) {
             galleryHelper.getImageFromGallery { bytes ->
                 openImagePickerInBody = false
-                model.reduce(CreatePostMviModel.Intent.InsertImageInBody(bytes))
+                if (bytes.isNotEmpty()) {
+                    model.reduce(CreatePostMviModel.Intent.InsertImageInBody(bytes))
+                }
             }
         }
 
