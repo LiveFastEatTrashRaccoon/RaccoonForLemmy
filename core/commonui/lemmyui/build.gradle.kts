@@ -52,6 +52,7 @@ kotlin {
                 implementation(projects.core.utils)
 
                 implementation(projects.domain.lemmy.data)
+                implementation(projects.core.commonui.detailopenerApi)
             }
         }
         val commonTest by getting {

@@ -16,6 +16,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.createcomment.CreateCommentScr
 import com.livefast.eattrash.raccoonforlemmy.unit.createpost.CreatePostScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.postdetail.PostDetailScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.userdetail.UserDetailScreen
+import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -200,5 +201,10 @@ class DefaultDetailOpener(
 
         // start recursive search
         return searchRec()
+    }
+
+    override fun openWebInternal(url: String) {
+        val screen = WebViewScreen(url)
+        navigationCoordinator.pushScreen(screen)
     }
 }

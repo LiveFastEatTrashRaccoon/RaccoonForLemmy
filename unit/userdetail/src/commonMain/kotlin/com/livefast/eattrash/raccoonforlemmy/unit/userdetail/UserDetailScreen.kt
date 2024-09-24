@@ -115,7 +115,6 @@ import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWit
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
 import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.UserInfoScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -698,12 +697,6 @@ class UserDetailScreen(
                                                 otherInstance = instance,
                                             )
                                         },
-                                        onOpenPost = { p, instance ->
-                                            detailOpener.openPostDetail(p, instance)
-                                        },
-                                        onOpenWeb = { url ->
-                                            navigationCoordinator.pushScreen(WebViewScreen(url))
-                                        },
                                         onReply =
                                             {
                                                 model.reduce(UserDetailMviModel.Intent.WillOpenDetail)
@@ -1025,15 +1018,6 @@ class UserDetailScreen(
                                                 user = user,
                                                 otherInstance = instance,
                                             )
-                                        },
-                                        onOpenPost = { post, instance ->
-                                            detailOpener.openPostDetail(
-                                                post = post,
-                                                otherInstance = instance,
-                                            )
-                                        },
-                                        onOpenWeb = { url ->
-                                            navigationCoordinator.pushScreen(WebViewScreen(url))
                                         },
                                         options =
                                             buildList {

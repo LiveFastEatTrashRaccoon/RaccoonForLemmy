@@ -45,15 +45,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAVideo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAnImage
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.getCustomTabsHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toUrlOpeningMode
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -84,8 +81,6 @@ fun PostCard(
     options: List<Option> = emptyList(),
     onOpenCommunity: ((CommunityModel, String) -> Unit)? = null,
     onOpenCreator: ((UserModel, String) -> Unit)? = null,
-    onOpenPost: ((PostModel, String) -> Unit)? = null,
-    onOpenWeb: ((String) -> Unit)? = null,
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
@@ -145,8 +140,6 @@ fun PostCard(
                 options = options,
                 onOpenCommunity = onOpenCommunity,
                 onOpenCreator = onOpenCreator,
-                onOpenPost = onOpenPost,
-                onOpenWeb = onOpenWeb,
                 onUpVote = onUpVote,
                 onDownVote = onDownVote,
                 onSave = onSave,
@@ -175,8 +168,6 @@ fun PostCard(
                 options = options,
                 onOpenCommunity = onOpenCommunity,
                 onOpenCreator = onOpenCreator,
-                onOpenPost = onOpenPost,
-                onOpenWeb = onOpenWeb,
                 onUpVote = onUpVote,
                 onDownVote = onDownVote,
                 onSave = onSave,
@@ -210,8 +201,6 @@ private fun CompactPost(
     options: List<Option>,
     onOpenCommunity: ((CommunityModel, String) -> Unit)?,
     onOpenCreator: ((UserModel, String) -> Unit)?,
-    onOpenPost: ((PostModel, String) -> Unit)?,
-    onOpenWeb: ((String) -> Unit)?,
     onUpVote: (() -> Unit)?,
     onDownVote: (() -> Unit)?,
     onSave: (() -> Unit)?,
@@ -224,8 +213,6 @@ private fun CompactPost(
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     val uriHandler = LocalUriHandler.current
-    val customTabsHelper = remember { getCustomTabsHelper() }
-    val navigationCoordinator = remember { getNavigationCoordinator() }
     var textSelection by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val postLinkUrl =
@@ -315,12 +302,8 @@ private fun CompactPost(
                                     onClick?.invoke()
                                 }
                             },
-                            onOpenCommunity = onOpenCommunity,
-                            onOpenUser = onOpenCreator,
-                            onOpenPost = onOpenPost,
                             onOpenImage = onOpenImage,
                             onDoubleClick = onDoubleClick,
-                            onOpenWeb = onOpenWeb,
                             onLongClick = {
                                 textSelection = true
                             },
@@ -338,16 +321,7 @@ private fun CompactPost(
                             autoLoadImages = autoLoadImages,
                             onOpen = {
                                 if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
-                                    navigationCoordinator.handleUrl(
-                                        url = postLinkUrl,
-                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                        uriHandler = uriHandler,
-                                        customTabsHelper = customTabsHelper,
-                                        onOpenWeb = onOpenWeb,
-                                        onOpenCommunity = onOpenCommunity,
-                                        onOpenPost = onOpenPost,
-                                        onOpenUser = onOpenCreator,
-                                    )
+                                    uriHandler.openUri(postLinkUrl)
                                 } else {
                                     onClick?.invoke()
                                 }
@@ -379,16 +353,7 @@ private fun CompactPost(
                             blurred = blurNsfw && post.nsfw,
                             onImageClick = { url ->
                                 if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
-                                    navigationCoordinator.handleUrl(
-                                        url = postLinkUrl,
-                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                        uriHandler = uriHandler,
-                                        customTabsHelper = customTabsHelper,
-                                        onOpenWeb = onOpenWeb,
-                                        onOpenCommunity = onOpenCommunity,
-                                        onOpenPost = onOpenPost,
-                                        onOpenUser = onOpenCreator,
-                                    )
+                                    uriHandler.openUri(postLinkUrl)
                                 } else {
                                     onOpenImage?.invoke(url)
                                 }
@@ -460,8 +425,6 @@ private fun ExtendedPost(
     options: List<Option>,
     onOpenCommunity: ((CommunityModel, String) -> Unit)?,
     onOpenCreator: ((UserModel, String) -> Unit)?,
-    onOpenPost: ((PostModel, String) -> Unit)?,
-    onOpenWeb: ((String) -> Unit)?,
     onUpVote: (() -> Unit)?,
     onDownVote: (() -> Unit)?,
     onSave: (() -> Unit)?,
@@ -474,8 +437,6 @@ private fun ExtendedPost(
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     val uriHandler = LocalUriHandler.current
-    val customTabsHelper = remember { getCustomTabsHelper() }
-    val navigationCoordinator = remember { getNavigationCoordinator() }
     var textSelection by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val postLinkUrl =
@@ -564,10 +525,6 @@ private fun ExtendedPost(
                         highlightText = highlightText,
                         bolder = showBody,
                         autoLoadImages = autoLoadImages,
-                        onOpenCommunity = onOpenCommunity,
-                        onOpenUser = onOpenCreator,
-                        onOpenPost = onOpenPost,
-                        onOpenWeb = onOpenWeb,
                         onClick = {
                             if (textSelection) {
                                 focusManager.clearFocus(true)
@@ -598,16 +555,7 @@ private fun ExtendedPost(
                         backgroundColor = backgroundColor,
                         onOpen = {
                             if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
-                                navigationCoordinator.handleUrl(
-                                    url = postLinkUrl,
-                                    openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                    uriHandler = uriHandler,
-                                    customTabsHelper = customTabsHelper,
-                                    onOpenWeb = onOpenWeb,
-                                    onOpenCommunity = onOpenCommunity,
-                                    onOpenPost = onOpenPost,
-                                    onOpenUser = onOpenCreator,
-                                )
+                                uriHandler.openUri(postLinkUrl)
                             } else {
                                 onClick?.invoke()
                             }
@@ -637,16 +585,7 @@ private fun ExtendedPost(
                         blurred = blurNsfw && post.nsfw,
                         onImageClick = { url ->
                             if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
-                                navigationCoordinator.handleUrl(
-                                    url = postLinkUrl,
-                                    openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                    uriHandler = uriHandler,
-                                    customTabsHelper = customTabsHelper,
-                                    onOpenWeb = onOpenWeb,
-                                    onOpenCommunity = onOpenCommunity,
-                                    onOpenPost = onOpenPost,
-                                    onOpenUser = onOpenCreator,
-                                )
+                                uriHandler.openUri(postLinkUrl)
                             } else {
                                 onOpenImage?.invoke(url)
                             }
@@ -689,11 +628,7 @@ private fun ExtendedPost(
                                         onClick?.invoke()
                                     }
                                 },
-                                onOpenCommunity = onOpenCommunity,
-                                onOpenUser = onOpenCreator,
-                                onOpenPost = onOpenPost,
                                 onOpenImage = onOpenImage,
-                                onOpenWeb = onOpenWeb,
                                 onDoubleClick = onDoubleClick,
                                 onLongClick = {
                                     textSelection = true
@@ -714,16 +649,7 @@ private fun ExtendedPost(
                                 ),
                         url = postLinkUrl,
                         onClick = {
-                            navigationCoordinator.handleUrl(
-                                url = postLinkUrl,
-                                openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                uriHandler = uriHandler,
-                                customTabsHelper = customTabsHelper,
-                                onOpenWeb = onOpenWeb,
-                                onOpenCommunity = onOpenCommunity,
-                                onOpenPost = onOpenPost,
-                                onOpenUser = onOpenCreator,
-                            )
+                            uriHandler.openUri(postLinkUrl)
                         },
                     )
                 }

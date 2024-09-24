@@ -90,7 +90,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -335,15 +334,15 @@ class MultiCommunityScreen(
                                         )
 
                                     ActionOnSwipe.DownVote ->
-                                            SwipeAction(
-                                                swipeContent = {
-                                                    Icon(
-                                                        imageVector = Icons.Default.ArrowCircleDown,
-                                                        contentDescription = null,
-                                                        tint = Color.White,
-                                                    )
-                                                },
-                                                backgroundColor = downVoteColor ?: defaultDownVoteColor,
+                                        SwipeAction(
+                                            swipeContent = {
+                                                Icon(
+                                                    imageVector = Icons.Default.ArrowCircleDown,
+                                                    contentDescription = null,
+                                                    tint = Color.White,
+                                                )
+                                            },
+                                            backgroundColor = downVoteColor ?: defaultDownVoteColor,
                                             onTriggered = {
                                                 model.reduce(
                                                     MultiCommunityMviModel.Intent.DownVotePost(
@@ -425,7 +424,7 @@ class MultiCommunityScreen(
                                         detailOpener.openPostDetail(post)
                                     },
                                     onDoubleClick =
-                                    {
+                                        {
                                             model.reduce(
                                                 MultiCommunityMviModel.Intent.UpVotePost(
                                                     id = post.id,
@@ -438,15 +437,6 @@ class MultiCommunityScreen(
                                     },
                                     onOpenCreator = { user, instance ->
                                         detailOpener.openUserDetail(user, instance)
-                                    },
-                                    onOpenPost = { post, instance ->
-                                        detailOpener.openPostDetail(
-                                            post = post,
-                                            otherInstance = instance,
-                                        )
-                                    },
-                                    onOpenWeb = { url ->
-                                        navigationCoordinator.pushScreen(WebViewScreen(url))
                                     },
                                     onUpVote = {
                                         model.reduce(

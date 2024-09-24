@@ -96,7 +96,6 @@ import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWit
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -506,14 +505,6 @@ class FilteredContentsScreen(
                                         },
                                         onOpenCreator = { user, instance ->
                                             detailOpener.openUserDetail(user, instance)
-                                        },
-                                        onOpenPost = { p, instance ->
-                                            detailOpener.openPostDetail(p, instance)
-                                        },
-                                        onOpenWeb = { url ->
-                                            navigationCoordinator.pushScreen(
-                                                WebViewScreen(url),
-                                            )
                                         },
                                         onUpVote = {
                                             model.reduce(

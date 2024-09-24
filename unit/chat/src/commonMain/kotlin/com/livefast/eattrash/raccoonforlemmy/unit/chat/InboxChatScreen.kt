@@ -62,7 +62,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.TextFormattingBar
@@ -75,7 +74,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.unit.chat.components.MessageCard
 import com.livefast.eattrash.raccoonforlemmy.unit.chat.components.MessageCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -102,7 +100,6 @@ class InboxChatScreen(
         val typography = contentFontFamily.toTypography()
         var rawContent by remember { mutableStateOf<Any?>(null) }
         val lazyListState = rememberLazyListState()
-        val detailOpener = remember { getDetailOpener() }
         var itemIdToDelete by remember { mutableStateOf<Long?>(null) }
         val focusRequester = remember { FocusRequester() }
 
@@ -297,29 +294,6 @@ class InboxChatScreen(
                                             url = url,
                                             source = message.creator?.readableHandle.orEmpty(),
                                         ),
-                                    )
-                                },
-                                onOpenCommunity = { community, instance ->
-                                    detailOpener.openCommunityDetail(
-                                        community = community,
-                                        otherInstance = instance,
-                                    )
-                                },
-                                onOpenUser = { user, instance ->
-                                    detailOpener.openUserDetail(
-                                        user = user,
-                                        otherInstance = instance,
-                                    )
-                                },
-                                onOpenPost = { post, instance ->
-                                    detailOpener.openPostDetail(
-                                        post = post,
-                                        otherInstance = instance,
-                                    )
-                                },
-                                onOpenWeb = { url ->
-                                    navigationCoordinator.pushScreen(
-                                        WebViewScreen(url),
                                     )
                                 },
                                 options =

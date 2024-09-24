@@ -33,20 +33,15 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.handleUrl
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.di.getCoreResources
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.getCustomTabsHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toUrlOpeningMode
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.unit.about.components.AboutItem
 import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.AcknowledgementsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.licences.LicencesScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 
 class AboutDialog : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -54,10 +49,7 @@ class AboutDialog : Screen {
     override fun Content() {
         val viewModel = getScreenModel<AboutDialogMviModel>()
         val uriHandler = LocalUriHandler.current
-        val customTabsHelper = remember { getCustomTabsHelper() }
         val navigationCoordinator = remember { getNavigationCoordinator() }
-        val settingsRepository = remember { getSettingsRepository() }
-        val settings by settingsRepository.currentSettings.collectAsState()
         val uiState by viewModel.uiState.collectAsState()
         val notificationCenter = remember { getNotificationCenter() }
         val detailOpener = remember { getDetailOpener() }
@@ -101,30 +93,14 @@ class AboutDialog : Screen {
                                 vector = Icons.Default.OpenInBrowser,
                                 textDecoration = TextDecoration.Underline,
                                 onClick = {
-                                    navigationCoordinator.handleUrl(
-                                        url = AboutConstants.CHANGELOG_URL,
-                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                        uriHandler = uriHandler,
-                                        customTabsHelper = customTabsHelper,
-                                        onOpenWeb = { url ->
-                                            navigationCoordinator.pushScreen(WebViewScreen(url))
-                                        },
-                                    )
+                                    uriHandler.openUri(AboutConstants.CHANGELOG_URL)
                                 },
                             )
                         }
                         item {
                             Button(
                                 onClick = {
-                                    navigationCoordinator.handleUrl(
-                                        url = AboutConstants.REPORT_URL,
-                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                        uriHandler = uriHandler,
-                                        customTabsHelper = customTabsHelper,
-                                        onOpenWeb = { url ->
-                                            navigationCoordinator.pushScreen(WebViewScreen(url))
-                                        },
-                                    )
+                                    uriHandler.openUri(AboutConstants.REPORT_URL)
                                 },
                             ) {
                                 Text(
@@ -153,15 +129,7 @@ class AboutDialog : Screen {
                                 text = LocalStrings.current.settingsAboutViewGithub,
                                 textDecoration = TextDecoration.Underline,
                                 onClick = {
-                                    navigationCoordinator.handleUrl(
-                                        url = AboutConstants.WEBSITE_URL,
-                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                        uriHandler = uriHandler,
-                                        customTabsHelper = customTabsHelper,
-                                        onOpenWeb = { url ->
-                                            navigationCoordinator.pushScreen(WebViewScreen(url))
-                                        },
-                                    )
+                                    uriHandler.openUri(AboutConstants.WEBSITE_URL)
                                 },
                             )
                         }
@@ -171,15 +139,7 @@ class AboutDialog : Screen {
                                 text = LocalStrings.current.settingsAboutViewGooglePlay,
                                 textDecoration = TextDecoration.Underline,
                                 onClick = {
-                                    navigationCoordinator.handleUrl(
-                                        url = AboutConstants.GOOGLE_PLAY_URL,
-                                        openingMode = settings.urlOpeningMode.toUrlOpeningMode(),
-                                        uriHandler = uriHandler,
-                                        customTabsHelper = customTabsHelper,
-                                        onOpenWeb = { url ->
-                                            navigationCoordinator.pushScreen(WebViewScreen(url))
-                                        },
-                                    )
+                                    uriHandler.openUri(AboutConstants.GOOGLE_PLAY_URL)
                                 },
                             )
                         }

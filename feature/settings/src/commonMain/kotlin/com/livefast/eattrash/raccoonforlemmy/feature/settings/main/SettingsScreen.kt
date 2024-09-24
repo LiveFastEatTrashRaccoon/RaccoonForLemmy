@@ -45,7 +45,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.handleUrl
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.LanguageBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
@@ -58,7 +57,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificati
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLanguageFlag
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLanguageName
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.UrlOpeningMode
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.getCustomTabsHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
@@ -73,7 +71,6 @@ import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredConte
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.manageban.ManageBanScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.medialist.MediaListScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -93,7 +90,6 @@ class SettingsScreen : Screen {
         var infoDialogOpened by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
         val uriHandler = LocalUriHandler.current
-        val customTabsHelper = remember { getCustomTabsHelper() }
 
         LaunchedEffect(notificationCenter) {
             notificationCenter
@@ -399,15 +395,7 @@ class SettingsScreen : Screen {
                         value = "",
                         disclosureIndicator = true,
                         onTap = {
-                            navigationCoordinator.handleUrl(
-                                url = "https://example.com",
-                                openingMode = uiState.urlOpeningMode,
-                                uriHandler = uriHandler,
-                                customTabsHelper = customTabsHelper,
-                                onOpenWeb = { url ->
-                                    navigationCoordinator.pushScreen(WebViewScreen(url))
-                                },
-                            )
+                            uriHandler.openUri("https://example.com")
                         },
                     )
 

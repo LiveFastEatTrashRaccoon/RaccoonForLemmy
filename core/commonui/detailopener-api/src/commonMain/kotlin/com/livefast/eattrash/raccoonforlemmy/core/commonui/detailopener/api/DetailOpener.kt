@@ -44,4 +44,6 @@ interface DetailOpener {
         initialNsfw: Boolean? = null,
         forceCommunitySelection: Boolean = false,
     )
+
+    fun openWebInternal(url: String)
 }

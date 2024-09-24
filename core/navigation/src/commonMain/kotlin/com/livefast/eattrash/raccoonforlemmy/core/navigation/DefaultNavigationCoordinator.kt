@@ -139,12 +139,14 @@ internal class DefaultNavigationCoordinator(
     }
 
     override fun showBottomSheet(screen: Screen) {
+        closeSideMenu()
         scope.launch {
             bottomSheetChannel.send(NavigationEvent.Show(screen))
         }
     }
 
     override fun pushScreen(screen: Screen) {
+        closeSideMenu()
         scope.launch {
             screenChannel.send(NavigationEvent.Show(screen))
         }
@@ -172,16 +174,20 @@ internal class DefaultNavigationCoordinator(
     }
 
     override fun openSideMenu(screen: Screen) {
-        scope.launch {
-            sideMenuEvents.emit(SideMenuEvents.Open(screen))
-            sideMenuOpened.value = true
+        if (!sideMenuOpened.value) {
+            scope.launch {
+                sideMenuEvents.emit(SideMenuEvents.Open(screen))
+                sideMenuOpened.value = true
+            }
         }
     }
 
     override fun closeSideMenu() {
-        scope.launch {
-            sideMenuEvents.emit(SideMenuEvents.Close)
-            sideMenuOpened.value = false
+        if (sideMenuOpened.value) {
+            scope.launch {
+                sideMenuEvents.emit(SideMenuEvents.Close)
+                sideMenuOpened.value = false
+            }
         }
     }
 

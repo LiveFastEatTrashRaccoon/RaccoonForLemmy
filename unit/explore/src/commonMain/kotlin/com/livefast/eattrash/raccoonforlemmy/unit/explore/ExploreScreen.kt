@@ -82,7 +82,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.uniqueIdentifier
 import com.livefast.eattrash.raccoonforlemmy.unit.explore.components.ExploreTopBar
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -356,17 +355,17 @@ class ExploreScreen(
                                                     )
 
                                                 ActionOnSwipe.DownVote ->
-                                                        SwipeAction(
-                                                            swipeContent = {
-                                                                Icon(
-                                                                    imageVector = Icons.Default.ArrowCircleDown,
-                                                                    contentDescription = null,
-                                                                    tint = Color.White,
-                                                                )
-                                                            },
-                                                            backgroundColor =
-                                                                downVoteColor
-                                                                    ?: defaultDownVoteColor,
+                                                    SwipeAction(
+                                                        swipeContent = {
+                                                            Icon(
+                                                                imageVector = Icons.Default.ArrowCircleDown,
+                                                                contentDescription = null,
+                                                                tint = Color.White,
+                                                            )
+                                                        },
+                                                        backgroundColor =
+                                                            downVoteColor
+                                                                ?: defaultDownVoteColor,
                                                         onTriggered = {
                                                             model.reduce(
                                                                 ExploreMviModel.Intent.DownVotePost(
@@ -455,14 +454,14 @@ class ExploreScreen(
                                                     )
                                                 },
                                                 onDoubleClick =
-                                                {
+                                                    {
                                                         model.reduce(
                                                             ExploreMviModel.Intent.UpVotePost(
-                                                                        id = result.model.id,
-                                                                        feedback = true,
-                                                                    ),
-                                                                )
-                                                }.takeIf { uiState.downVoteEnabled && uiState.isLogged && !isOnOtherInstance },
+                                                                id = result.model.id,
+                                                                feedback = true,
+                                                            ),
+                                                        )
+                                                    }.takeIf { uiState.downVoteEnabled && uiState.isLogged && !isOnOtherInstance },
                                                 onOpenCommunity = { community, instance ->
                                                     detailOpener.openCommunityDetail(
                                                         community = community,
@@ -512,20 +511,6 @@ class ExploreScreen(
                                                         ),
                                                     )
                                                 },
-                                                onOpenPost = { post, instance ->
-                                                    detailOpener.openPostDetail(
-                                                        post = post,
-                                                        otherInstance =
-                                                            instance.takeIf {
-                                                                it.isNotEmpty()
-                                                            } ?: otherInstanceName,
-                                                    )
-                                                },
-                                                onOpenWeb = { url ->
-                                                    navigationCoordinator.pushScreen(
-                                                        WebViewScreen(url),
-                                                    )
-                                                },
                                             )
                                         },
                                     )
@@ -563,15 +548,15 @@ class ExploreScreen(
                                                     )
 
                                                 ActionOnSwipe.DownVote ->
-                                                        SwipeAction(
-                                                            swipeContent = {
-                                                                Icon(
-                                                                    imageVector = Icons.Default.ArrowCircleDown,
-                                                                    contentDescription = null,
-                                                                    tint = Color.White,
-                                                                )
-                                                            },
-                                                            backgroundColor =
+                                                    SwipeAction(
+                                                        swipeContent = {
+                                                            Icon(
+                                                                imageVector = Icons.Default.ArrowCircleDown,
+                                                                contentDescription = null,
+                                                                tint = Color.White,
+                                                            )
+                                                        },
+                                                        backgroundColor =
                                                             downVoteColor
                                                                 ?: defaultDownVoteColor,
                                                         onTriggered = {
@@ -581,7 +566,7 @@ class ExploreScreen(
                                                                 ),
                                                             )
                                                         },
-                                                        ).takeIf { uiState.downVoteEnabled }
+                                                    ).takeIf { uiState.downVoteEnabled }
 
                                                 ActionOnSwipe.Reply ->
                                                     SwipeAction(
@@ -664,21 +649,21 @@ class ExploreScreen(
                                                     )
                                                 },
                                                 onDoubleClick =
-                                                {
-                                                            if (uiState.isLogged) {
-                                                                model.reduce(
-                                                                    ExploreMviModel.Intent.UpVoteComment(
-                                                                        id = result.model.id,
-                                                                        feedback = true,
-                                                                    ),
+                                                    {
+                                                        if (uiState.isLogged) {
+                                                            model.reduce(
+                                                                ExploreMviModel.Intent.UpVoteComment(
+                                                                    id = result.model.id,
+                                                                    feedback = true,
+                                                                ),
                                                             )
                                                         }
                                                     }.takeIf { uiState.doubleTapActionEnabled },
                                                 onUpVote =
-                                                {
-                                                            model.reduce(
-                                                                ExploreMviModel.Intent.UpVoteComment(
-                                                                    id = result.model.id,
+                                                    {
+                                                        model.reduce(
+                                                            ExploreMviModel.Intent.UpVoteComment(
+                                                                id = result.model.id,
                                                             ),
                                                         )
                                                     }.takeIf { uiState.isLogged },
@@ -714,22 +699,6 @@ class ExploreScreen(
                                                             instance.takeIf {
                                                                 it.isNotEmpty()
                                                             } ?: otherInstanceName,
-                                                    )
-                                                },
-                                                onOpenPost = { post, instance ->
-                                                    detailOpener.openPostDetail(
-                                                        post = post,
-                                                        otherInstance =
-                                                            instance.takeIf {
-                                                                it.isNotEmpty()
-                                                            } ?: otherInstanceName,
-                                                    )
-                                                },
-                                                onOpenWeb = { url ->
-                                                    navigationCoordinator.pushScreen(
-                                                        WebViewScreen(
-                                                            url,
-                                                        ),
                                                     )
                                                 },
                                             )

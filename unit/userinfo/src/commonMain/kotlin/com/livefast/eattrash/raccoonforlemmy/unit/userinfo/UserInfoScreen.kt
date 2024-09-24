@@ -51,9 +51,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.getPrettyNumber
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.components.ModeratedCommunityCell
-import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 
@@ -194,46 +192,13 @@ class UserInfoScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                     text = biography,
                                     onOpenImage = { url ->
-                                        navigationCoordinator.closeSideMenu()
                                         scope.launch {
-                                            delay(100)
                                             navigationCoordinator.pushScreen(
                                                 ZoomableImageScreen(
                                                     url = url,
                                                     source = uiState.user.readableHandle,
                                                 ),
                                             )
-                                        }
-                                    },
-                                    onOpenCommunity = { community, instance ->
-                                        navigationCoordinator.closeSideMenu()
-                                        scope.launch {
-                                            delay(100)
-                                            detailOpener.openCommunityDetail(
-                                                community,
-                                                instance,
-                                            )
-                                        }
-                                    },
-                                    onOpenPost = { post, instance ->
-                                        navigationCoordinator.closeSideMenu()
-                                        scope.launch {
-                                            delay(100)
-                                            detailOpener.openPostDetail(post, instance)
-                                        }
-                                    },
-                                    onOpenUser = { user, instance ->
-                                        navigationCoordinator.closeSideMenu()
-                                        scope.launch {
-                                            delay(100)
-                                            detailOpener.openUserDetail(user, instance)
-                                        }
-                                    },
-                                    onOpenWeb = { url ->
-                                        navigationCoordinator.closeSideMenu()
-                                        scope.launch {
-                                            delay(100)
-                                            navigationCoordinator.pushScreen(WebViewScreen(url))
                                         }
                                     },
                                 )
@@ -292,11 +257,7 @@ class UserInfoScreen(
                                     autoLoadImages = uiState.autoLoadImages,
                                     community = community,
                                     onOpenCommunity = { _ ->
-                                        navigationCoordinator.closeSideMenu()
-                                        scope.launch {
-                                            delay(100)
-                                            detailOpener.openCommunityDetail(community)
-                                        }
+                                        detailOpener.openCommunityDetail(community)
                                     },
                                 )
                             }
