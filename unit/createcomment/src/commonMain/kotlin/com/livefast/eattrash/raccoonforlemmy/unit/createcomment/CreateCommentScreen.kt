@@ -466,7 +466,9 @@ class CreateCommentScreen(
             if (openImagePicker) {
                 galleryHelper.getImageFromGallery { bytes ->
                     openImagePicker = false
-                    model.reduce(CreateCommentMviModel.Intent.ImageSelected(bytes))
+                    if (bytes.isNotEmpty()) {
+                        model.reduce(CreateCommentMviModel.Intent.ImageSelected(bytes))
+                    }
                 }
             }
 

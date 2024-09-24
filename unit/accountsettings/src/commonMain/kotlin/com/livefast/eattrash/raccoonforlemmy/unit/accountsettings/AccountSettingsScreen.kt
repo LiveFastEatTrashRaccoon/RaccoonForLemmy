@@ -505,13 +505,17 @@ class AccountSettingsScreen : Screen {
         if (openAvatarPicker) {
             galleryHelper.getImageFromGallery { bytes ->
                 openAvatarPicker = false
-                model.reduce(AccountSettingsMviModel.Intent.AvatarSelected(bytes))
+                if (bytes.isNotEmpty()) {
+                    model.reduce(AccountSettingsMviModel.Intent.AvatarSelected(bytes))
+                }
             }
         }
         if (openBannerPicker) {
             galleryHelper.getImageFromGallery { bytes ->
                 openBannerPicker = false
-                model.reduce(AccountSettingsMviModel.Intent.BannerSelected(bytes))
+                if (bytes.isNotEmpty()) {
+                    model.reduce(AccountSettingsMviModel.Intent.BannerSelected(bytes))
+                }
             }
         }
 

@@ -402,13 +402,17 @@ class EditCommunityScreen(
         if (openIconPicker) {
             galleryHelper.getImageFromGallery { bytes ->
                 openIconPicker = false
-                model.reduce(EditCommunityMviModel.Intent.IconSelected(bytes))
+                if (bytes.isNotEmpty()) {
+                    model.reduce(EditCommunityMviModel.Intent.IconSelected(bytes))
+                }
             }
         }
         if (openBannerPicker) {
             galleryHelper.getImageFromGallery { bytes ->
                 openBannerPicker = false
-                model.reduce(EditCommunityMviModel.Intent.BannerSelected(bytes))
+                if (bytes.isNotEmpty()) {
+                    model.reduce(EditCommunityMviModel.Intent.BannerSelected(bytes))
+                }
             }
         }
 

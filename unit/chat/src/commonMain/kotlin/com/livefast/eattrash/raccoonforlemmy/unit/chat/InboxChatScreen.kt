@@ -393,7 +393,9 @@ class InboxChatScreen(
             if (openImagePicker) {
                 galleryHelper.getImageFromGallery { bytes ->
                     openImagePicker = false
-                    model.reduce(InboxChatMviModel.Intent.ImageSelected(bytes))
+                    if (bytes.isNotEmpty()) {
+                        model.reduce(InboxChatMviModel.Intent.ImageSelected(bytes))
+                    }
                 }
             }
         }
