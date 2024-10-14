@@ -2,7 +2,6 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils.gallery
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.os.Environment
 import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
@@ -68,11 +67,6 @@ class DefaultGalleryHelper(
         val pickMedia =
             rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    resolver.takePersistableUriPermission(
-                        uri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION,
-                    )
-
                     scope.launch(Dispatchers.IO) {
                         resolver.openInputStream(uri)?.use { stream ->
                             val bytes = stream.readBytes()
