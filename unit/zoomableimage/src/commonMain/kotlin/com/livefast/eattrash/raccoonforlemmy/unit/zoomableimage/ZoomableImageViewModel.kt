@@ -104,11 +104,12 @@ class ZoomableImageViewModel(
                         s.substring(idx).takeIf { it.isNotEmpty() } ?: ".jpeg"
                     }
                 withContext(Dispatchers.IO) {
-                    val path = galleryHelper.saveToGallery(
-                        bytes = bytes,
-                        name = "${epochMillis()}$extension",
-                        additionalPathSegment = folder.takeIf { imageSourcePath },
-                    )
+                    val path =
+                        galleryHelper.saveToGallery(
+                            bytes = bytes,
+                            name = "${epochMillis()}$extension",
+                            additionalPathSegment = folder.takeIf { imageSourcePath },
+                        )
 
                     withContext(Dispatchers.Main) {
                         updateState { it.copy(loading = false) }

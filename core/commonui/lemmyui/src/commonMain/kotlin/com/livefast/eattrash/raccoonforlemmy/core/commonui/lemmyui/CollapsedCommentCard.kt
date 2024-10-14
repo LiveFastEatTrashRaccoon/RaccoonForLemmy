@@ -70,9 +70,9 @@ fun CollapsedCommentCard(
 
     Row(
         modifier =
-        modifier.onClick(
-            onClick = onClick ?: {},
-        ),
+            modifier.onClick(
+                onClick = onClick ?: {},
+            ),
     ) {
         Box(
             modifier = Modifier.width((indentAmount * comment.depth).dp),
@@ -80,24 +80,24 @@ fun CollapsedCommentCard(
         if (comment.depth > 0) {
             Box(
                 modifier =
-                Modifier
-                    .padding(top = Spacing.xxs)
-                    .width(barWidth)
-                    .height(commentHeight.toLocalDp())
-                    .background(color = barColor),
+                    Modifier
+                        .padding(top = Spacing.xxs)
+                        .width(barWidth)
+                        .height(commentHeight.toLocalDp())
+                        .background(color = barColor),
             )
         }
         Column(
             modifier =
-            Modifier
-                .padding(start = barWidth)
-                .fillMaxWidth()
-                .padding(
-                    vertical = Spacing.xxs,
-                    horizontal = Spacing.s,
-                ).onGloballyPositioned {
-                    commentHeight = it.size.toSize().height
-                },
+                Modifier
+                    .padding(start = barWidth)
+                    .fillMaxWidth()
+                    .padding(
+                        vertical = Spacing.xxs,
+                        horizontal = Spacing.s,
+                    ).onGloballyPositioned {
+                        commentHeight = it.size.toSize().height
+                    },
         ) {
             CommunityAndCreatorInfo(
                 modifier = Modifier.padding(top = Spacing.xxs),

@@ -67,7 +67,7 @@ internal class CheckNotificationWorker(
         notificationManager.notify(
             NotificationConstants.NOTIFICATION_TAG,
             notificationId,
-            notification
+            notification,
         )
     }
 

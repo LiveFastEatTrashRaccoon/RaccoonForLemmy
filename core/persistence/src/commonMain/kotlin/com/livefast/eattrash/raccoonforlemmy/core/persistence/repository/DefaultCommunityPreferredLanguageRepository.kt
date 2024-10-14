@@ -10,11 +10,11 @@ private const val SETTINGS_KEY = "communityPreferredLanguage"
 internal class DefaultCommunityPreferredLanguageRepository(
     private val keyStore: TemporaryKeyStore,
 ) : CommunityPreferredLanguageRepository {
-
-    override suspend fun get(handle: String): Long? = withContext(Dispatchers.IO) {
-        val map = deserializeMap()
-        map[handle]
-    }
+    override suspend fun get(handle: String): Long? =
+        withContext(Dispatchers.IO) {
+            val map = deserializeMap()
+            map[handle]
+        }
 
     override suspend fun save(
         handle: String,
@@ -46,7 +46,8 @@ internal class DefaultCommunityPreferredLanguageRepository(
             e.key + ":" + e.value
         }
 
-    override suspend fun clear() = withContext(Dispatchers.IO) {
-        keyStore.remove(SETTINGS_KEY)
-    }
+    override suspend fun clear() =
+        withContext(Dispatchers.IO) {
+            keyStore.remove(SETTINGS_KEY)
+        }
 }

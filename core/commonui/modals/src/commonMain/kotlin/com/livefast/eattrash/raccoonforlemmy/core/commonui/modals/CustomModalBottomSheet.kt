@@ -78,27 +78,27 @@ fun CustomModalBottomSheet(
                         ) {
                             Row(
                                 modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .combinedClickable(
-                                        onClick = {
-                                            sheetScope.launch {
-                                                sheetState.hide()
-                                            }.invokeOnCompletion {
-                                                onSelected?.invoke(idx)
-                                            }
-                                        },
-                                        onLongClick = {
-                                            sheetScope.launch {
-                                                sheetState.hide()
-                                            }.invokeOnCompletion {
-                                                onLongPress?.invoke(idx)
-                                            }
-                                        },
-                                    ).padding(
-                                        horizontal = Spacing.m,
-                                        vertical = Spacing.s,
-                                    ),
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .combinedClickable(
+                                            onClick = {
+                                                sheetScope.launch {
+                                                    sheetState.hide()
+                                                }.invokeOnCompletion {
+                                                    onSelected?.invoke(idx)
+                                                }
+                                            },
+                                            onLongClick = {
+                                                sheetScope.launch {
+                                                    sheetState.hide()
+                                                }.invokeOnCompletion {
+                                                    onLongPress?.invoke(idx)
+                                                }
+                                            },
+                                        ).padding(
+                                            horizontal = Spacing.m,
+                                            vertical = Spacing.s,
+                                        ),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(Spacing.s),
                             ) {
@@ -110,8 +110,8 @@ fun CustomModalBottomSheet(
                                     Text(
                                         text = item.label,
                                         style =
-                                        item.customLabelStyle
-                                            ?: MaterialTheme.typography.bodyLarge,
+                                            item.customLabelStyle
+                                                ?: MaterialTheme.typography.bodyLarge,
                                         color = fullColor,
                                     )
                                     if (!item.subtitle.isNullOrEmpty()) {

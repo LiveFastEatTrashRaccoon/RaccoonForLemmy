@@ -5,8 +5,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.preferences.TemporaryKeyStore
 import com.russhwolf.settings.ExperimentalSettingsImplementation
 import com.russhwolf.settings.KeychainSettings
 import com.russhwolf.settings.Settings
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 

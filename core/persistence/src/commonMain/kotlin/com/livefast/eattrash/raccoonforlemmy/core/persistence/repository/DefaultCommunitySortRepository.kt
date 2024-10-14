@@ -10,10 +10,11 @@ private const val SETTINGS_KEY = "communitySort"
 internal class DefaultCommunitySortRepository(
     private val keyStore: TemporaryKeyStore,
 ) : CommunitySortRepository {
-    override suspend fun get(handle: String): Int? = withContext(Dispatchers.IO) {
-        val map = deserializeMap()
-        map[handle]
-    }
+    override suspend fun get(handle: String): Int? =
+        withContext(Dispatchers.IO) {
+            val map = deserializeMap()
+            map[handle]
+        }
 
     override suspend fun save(
         handle: String,
@@ -41,7 +42,8 @@ internal class DefaultCommunitySortRepository(
             e.key + ":" + e.value
         }
 
-    override suspend fun clear() = withContext(Dispatchers.IO) {
-        keyStore.remove(SETTINGS_KEY)
-    }
+    override suspend fun clear() =
+        withContext(Dispatchers.IO) {
+            keyStore.remove(SETTINGS_KEY)
+        }
 }

@@ -62,7 +62,7 @@ internal fun ProfileMenuContent(
             icon = Icons.Default.ThumbsUpDown,
             onTap = {
                 notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Votes)
-                },
+            },
         )
 
         if (isModerator) {
@@ -71,7 +71,7 @@ internal fun ProfileMenuContent(
                 icon = Icons.Default.Shield,
                 onTap = {
                     notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone)
-                    },
+                },
             )
         }
         if (canCreateCommunity) {
@@ -80,7 +80,7 @@ internal fun ProfileMenuContent(
                 icon = Icons.Default.GroupAdd,
                 onTap = {
                     notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity)
-                    },
+                },
             )
         }
 
@@ -88,8 +88,8 @@ internal fun ProfileMenuContent(
             title = LocalStrings.current.manageAccountsTitle,
             icon = Icons.Default.ManageAccounts,
             onTap = {
-                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts)
-                },
+                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts)
+            },
         )
 
         HorizontalDivider()
@@ -98,8 +98,8 @@ internal fun ProfileMenuContent(
             title = LocalStrings.current.actionLogout,
             icon = Icons.AutoMirrored.Default.Logout,
             onTap = {
-                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Logout)
-                },
+                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Logout)
+            },
         )
     }
 }

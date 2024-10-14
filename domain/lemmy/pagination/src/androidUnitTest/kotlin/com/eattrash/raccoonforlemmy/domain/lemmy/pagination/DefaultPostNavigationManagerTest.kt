@@ -120,10 +120,10 @@ class DefaultPostNavigationManagerTest {
             val otherPostId = 1L
             val postId = 2L
             every { postPaginationManager.history } returns
-                    listOf(
-                        PostModel(id = otherPostId),
-                        PostModel(id = postId),
-                    )
+                listOf(
+                    PostModel(id = otherPostId),
+                    PostModel(id = postId),
+                )
 
             val res = sut.getPrevious(postId)
 
@@ -181,10 +181,10 @@ class DefaultPostNavigationManagerTest {
             val otherPostId = 1L
             val postId = 2L
             every { postPaginationManager.history } returns
-                    listOf(
-                        PostModel(id = postId),
-                        PostModel(id = otherPostId),
-                    )
+                listOf(
+                    PostModel(id = postId),
+                    PostModel(id = otherPostId),
+                )
 
             val res = sut.getNext(postId)
 
