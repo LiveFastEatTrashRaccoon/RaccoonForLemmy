@@ -35,6 +35,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    signingConfigs {
+        create("release") {
+            storeFile = File(projectDir, "keystore.jks")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("KEYSTORE_ALIAS")
+            keyPassword = System.getenv("KEY_PASSWORD")
+        }
+    }
     buildTypes {
         getByName("debug") {
             resValue("string", "app_name", "kijetesantakalu")
@@ -49,6 +57,7 @@ android {
                     "proguard-rules.pro",
                 ),
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
