@@ -297,6 +297,14 @@ class DefaultNavigationCoordinatorTest {
     @Test
     fun whenCloseSideMenu_thenInteractionsAreAsExpected() =
         runTest {
+            val screen =
+                object : Screen {
+                    @Composable
+                    override fun Content() {
+                        Box(modifier = Modifier.fillMaxSize())
+                    }
+                }
+            sut.openSideMenu(screen)
             launch {
                 delay(DELAY)
                 sut.closeSideMenu()

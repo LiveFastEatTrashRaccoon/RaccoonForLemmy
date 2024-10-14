@@ -3,7 +3,9 @@
   <img src="https://img.shields.io/badge/Gradle-8.8-02303A?logo=gradle" />
   <img src="https://img.shields.io/badge/Android-26+-34A853?logo=android" />
   <img src="https://img.shields.io/badge/Compose-1.6.7-4285F4?logo=jetpackcompose" />
-  <img src="https://img.shields.io/github/license/livefasteattrashraccoon/raccoonforlemmy" />
+  <img src="https://img.shields.io/github/license/LiveFastEatTrashRaccoon/RaccoonForLemmy" />
+  <img src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/build.yml/badge.svg" />
+  <img src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/unit_tests.yml/badge.svg" />
 </div>
 
 <br />
