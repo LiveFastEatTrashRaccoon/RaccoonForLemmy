@@ -43,7 +43,7 @@ jobs:
         with:
           name: release-artifacts
           path: |
-            androidApp/build/outputs/apk/release/RaccoonForLemmy-release.apk
+            androidApp/build/outputs/apk/release/*.apk
 
       - name: Create Github release
         uses: softprops/action-gh-release@v2
@@ -51,4 +51,4 @@ jobs:
           generate_release_notes: true
           prerelease: true
           files: |
-            androidApp/build/outputs/apk/release/RaccoonForLemmy-release.apk
+            androidApp/build/outputs/apk/release/*.apk
