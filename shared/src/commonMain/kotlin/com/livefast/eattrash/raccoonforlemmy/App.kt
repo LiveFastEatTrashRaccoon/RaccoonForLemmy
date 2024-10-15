@@ -295,9 +295,9 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                     BottomSheetNavigator(
                         sheetShape =
                             RoundedCornerShape(
-                            topStart = CornerSize.xl,
-                            topEnd = CornerSize.xl,
-                        ),
+                                topStart = CornerSize.xl,
+                                topEnd = CornerSize.xl,
+                            ),
                         sheetBackgroundColor = MaterialTheme.colorScheme.background,
                     ) { bottomNavigator ->
                         navigationCoordinator.setBottomNavigator(bottomNavigator)
@@ -331,9 +331,9 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                                 modifier =
                                     Modifier
                                         .fillMaxSize()
-                                    .onGloballyPositioned {
-                                        screenWidth = it.size.toSize().width
-                                    },
+                                        .onGloballyPositioned {
+                                            screenWidth = it.size.toSize().width
+                                        },
                                 drawerState = drawerState,
                                 gesturesEnabled = drawerGesturesEnabled,
                                 drawerContent = {
@@ -346,9 +346,9 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                                     SlideTransition(
                                         animationSpec =
                                             tween(
-                                            durationMillis = 250,
-                                            easing = FastOutSlowInEasing,
-                                        ),
+                                                durationMillis = 250,
+                                                easing = FastOutSlowInEasing,
+                                            ),
                                         navigator = navigator,
                                     )
                                 }
@@ -362,11 +362,11 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                                 Surface(
                                     modifier =
                                         Modifier
-                                        .onClick(
-                                            onClick = {
-                                                navigationCoordinator.closeSideMenu()
-                                            },
-                                        ),
+                                            .onClick(
+                                                onClick = {
+                                                    navigationCoordinator.closeSideMenu()
+                                                },
+                                            ),
                                     color = DrawerDefaults.scrimColor,
                                 ) {
                                     Box(modifier = Modifier.fillMaxSize())

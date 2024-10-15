@@ -41,13 +41,13 @@ class VoteFormatBottomSheet : Screen {
             Column(
                 modifier =
                     Modifier
-                    .windowInsetsPadding(WindowInsets.navigationBars)
-                    .padding(
-                        top = Spacing.s,
-                        start = Spacing.s,
-                        end = Spacing.s,
-                        bottom = Spacing.m,
-                    ),
+                        .windowInsetsPadding(WindowInsets.navigationBars)
+                        .padding(
+                            top = Spacing.s,
+                            start = Spacing.s,
+                            end = Spacing.s,
+                            bottom = Spacing.m,
+                        ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
                 BottomSheetHeader(LocalStrings.current.settingsVoteFormat)
@@ -61,8 +61,8 @@ class VoteFormatBottomSheet : Screen {
                 Column(
                     modifier =
                         Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState()),
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                 ) {
                     for (value in values) {
@@ -78,9 +78,9 @@ class VoteFormatBottomSheet : Screen {
                                             navigationCoordinator.hideBottomSheet()
                                         },
                                     )
-                                .padding(
-                                    horizontal = Spacing.s,
-                                    vertical = Spacing.s,
+                                    .padding(
+                                        horizontal = Spacing.s,
+                                        vertical = Spacing.s,
                                     ).fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {

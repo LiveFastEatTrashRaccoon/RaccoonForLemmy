@@ -19,7 +19,7 @@ interface FabNestedScrollConnection : NestedScrollConnection {
 }
 
 internal class DefaultFabNestedScrollConnection(
-    private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob()),
 ) : FabNestedScrollConnection {
     private val fabVisible = MutableStateFlow(true)
 

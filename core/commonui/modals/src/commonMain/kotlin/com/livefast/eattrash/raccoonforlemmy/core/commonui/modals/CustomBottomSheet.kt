@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
@@ -50,35 +50,37 @@ fun CustomBottomSheet(
                 style = MaterialTheme.typography.titleMedium,
             )
             Column(
-                modifier = Modifier
-                    .padding(
-                        top = Spacing.s,
-                        start = Spacing.s,
-                        end = Spacing.s,
-                        bottom = Spacing.xxxl,
-                    ),
+                modifier =
+                    Modifier
+                        .padding(
+                            top = Spacing.s,
+                            start = Spacing.s,
+                            end = Spacing.s,
+                            bottom = Spacing.xxxl,
+                        ),
             ) {
                 contentText.forEachIndexed { index, text ->
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = Color.Transparent,
-                                shape = MaterialTheme.shapes.large,
-                            )
-                            .clickable {
-                                onSelection(index)
-                                sheetScope.launch {
-                                    sheetState.hide()
-                                }.invokeOnCompletion {
-                                    onDismiss?.invoke()
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color.Transparent,
+                                    shape = MaterialTheme.shapes.large,
+                                )
+                                .clickable {
+                                    onSelection(index)
+                                    sheetScope.launch {
+                                        sheetState.hide()
+                                    }.invokeOnCompletion {
+                                        onDismiss?.invoke()
+                                    }
                                 }
-                            }
-                            .padding(
-                                horizontal = Spacing.interItem,
-                                vertical = Spacing.interItem,
-                            ),
-                        verticalAlignment = Alignment.CenterVertically
+                                .padding(
+                                    horizontal = Spacing.interItem,
+                                    vertical = Spacing.interItem,
+                                ),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         val prePaint = contentPreTextPainter?.getOrNull(index)
                         val preIcon = contentPreTextIcon?.getOrNull(index)
@@ -122,24 +124,25 @@ fun BottomSheetRowIcon(
 ) {
     if (icon != null) {
         Icon(
-            modifier = Modifier.padding(
-                top = Spacing.xxs,
-                end = Spacing.s,
-                bottom = Spacing.xxs,
-            ),
+            modifier =
+                Modifier.padding(
+                    top = Spacing.xxs,
+                    end = Spacing.s,
+                    bottom = Spacing.xxs,
+                ),
             imageVector = icon,
-            contentDescription = description
+            contentDescription = description,
         )
-    }
-    else if (painter != null) {
+    } else if (painter != null) {
         Icon(
-            modifier = Modifier.padding(
-                top = Spacing.xxs,
-                end = Spacing.s,
-                bottom = Spacing.xxs,
-            ),
+            modifier =
+                Modifier.padding(
+                    top = Spacing.xxs,
+                    end = Spacing.s,
+                    bottom = Spacing.xxs,
+                ),
             painter = painter,
-            contentDescription = description
+            contentDescription = description,
         )
     }
 }

@@ -19,23 +19,25 @@ class ProfileMainViewModelTest {
     val dispatcherTestRule = DispatcherTestRule()
 
     @get:Rule(order = 1)
-    val unloggedRule = MviModelTestRule {
-        every { identityRepository.isLogged } returns MutableStateFlow(false)
-        ProfileMainViewModel(
-            identityRepository = identityRepository,
-            logout = logoutUseCase,
-        )
-    }
+    val unloggedRule =
+        MviModelTestRule {
+            every { identityRepository.isLogged } returns MutableStateFlow(false)
+            ProfileMainViewModel(
+                identityRepository = identityRepository,
+                logout = logoutUseCase,
+            )
+        }
 
     @get:Rule(order = 1)
-    val loggedRule = MviModelTestRule {
-        every { identityRepository.isLogged } returns MutableStateFlow(true)
-        every { identityRepository.cachedUser } returns user
-        ProfileMainViewModel(
-            identityRepository = identityRepository,
-            logout = logoutUseCase,
-        )
-    }
+    val loggedRule =
+        MviModelTestRule {
+            every { identityRepository.isLogged } returns MutableStateFlow(true)
+            every { identityRepository.cachedUser } returns user
+            ProfileMainViewModel(
+                identityRepository = identityRepository,
+                logout = logoutUseCase,
+            )
+        }
 
     private val identityRepository = mockk<IdentityRepository>(relaxUnitFun = true)
     private val logoutUseCase = mockk<LogoutUseCase>(relaxUnitFun = true)

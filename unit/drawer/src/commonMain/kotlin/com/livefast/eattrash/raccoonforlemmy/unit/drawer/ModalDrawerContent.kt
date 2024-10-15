@@ -190,13 +190,13 @@ object ModalDrawerContent : Tab {
                                             scope.launch {
                                                 focusManager.clearFocus()
                                                 navigationCoordinator.popUntilRoot()
-                                                    coordinator.toggleDrawer()
-                                                    delay(50)
-                                                    coordinator.sendEvent(
-                                                        DrawerEvent.ChangeListingType(listingType),
-                                                    )
-                                                }
-                                            },
+                                                coordinator.toggleDrawer()
+                                                delay(50)
+                                                coordinator.sendEvent(
+                                                    DrawerEvent.ChangeListingType(listingType),
+                                                )
+                                            }
+                                        },
                                     )
                                 }
                             }
@@ -209,12 +209,12 @@ object ModalDrawerContent : Tab {
                                             scope.launch {
                                                 focusManager.clearFocus()
                                                 navigationCoordinator.popUntilRoot()
-                                                    coordinator.toggleDrawer()
-                                                    delay(50)
+                                                coordinator.toggleDrawer()
+                                                delay(50)
 
-                                                    coordinator.sendEvent(DrawerEvent.OpenSettings)
-                                                }
-                                            },
+                                                coordinator.sendEvent(DrawerEvent.OpenSettings)
+                                            }
+                                        },
                                     )
                                 }
                             }
@@ -260,11 +260,11 @@ object ModalDrawerContent : Tab {
                                     }
                                 },
                                 onToggleFavorite =
-                                {
+                                    {
                                         model.reduce(
                                             ModalDrawerMviModel.Intent.ToggleFavorite(community.id),
-                                            )
-                                }.takeIf { uiState.enableToggleFavorite },
+                                        )
+                                    }.takeIf { uiState.enableToggleFavorite },
                             )
                         }
 
@@ -288,7 +288,7 @@ object ModalDrawerContent : Tab {
                                     }
                                 },
                                 onToggleFavorite =
-                                {
+                                    {
                                         model.reduce(
                                             ModalDrawerMviModel.Intent.ToggleFavorite(community.id),
                                         )
@@ -352,12 +352,12 @@ object ModalDrawerContent : Tab {
                                 scope.launch {
                                     focusManager.clearFocus()
                                     navigationCoordinator.popUntilRoot()
-                                        coordinator.toggleDrawer()
-                                        delay(50)
+                                    coordinator.toggleDrawer()
+                                    delay(50)
 
-                                        coordinator.sendEvent(DrawerEvent.OpenSettings)
-                                    }
-                                },
+                                    coordinator.sendEvent(DrawerEvent.OpenSettings)
+                                }
+                            },
                         )
                     }
                 }

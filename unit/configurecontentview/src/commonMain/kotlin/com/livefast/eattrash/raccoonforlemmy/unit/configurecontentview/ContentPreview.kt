@@ -96,13 +96,13 @@ private object ContentPreviewData {
             title = "Post title",
             text =
                 """
-Lorem ipsum **dolor** sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Lorem ipsum **dolor** sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-Ut enim ad minim veniam, quis *nostrud* exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat:
-- duis aute irure dolor
-- in reprehenderit in voluptate
+                Ut enim ad minim veniam, quis *nostrud* exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat:
+                - duis aute irure dolor
+                - in reprehenderit in voluptate
 
-velit esse cillum dolore eu fugiat nulla pariatur.
+                velit esse cillum dolore eu fugiat nulla pariatur.
                 """.trimIndent(),
             thumbnailUrl = "https://feddit.it/pictrs/image/f677007a-166a-43b0-aea8-4c41ae1a35e8.webp?format=webp",
             url = "https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy",

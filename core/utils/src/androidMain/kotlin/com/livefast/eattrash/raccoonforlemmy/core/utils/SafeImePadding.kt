@@ -10,8 +10,11 @@ import androidx.compose.ui.Modifier
  *
  * This workaround simply ignores the imePadding() modifier in those cases.
  */
-actual fun Modifier.safeImePadding(): Modifier = then(
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        Modifier.imePadding()
-    } else Modifier
-)
+actual fun Modifier.safeImePadding(): Modifier =
+    then(
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Modifier.imePadding()
+        } else {
+            Modifier
+        },
+    )

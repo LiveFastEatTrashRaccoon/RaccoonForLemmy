@@ -57,18 +57,18 @@ fun RawContentDialog(
     val shareHelper = remember { getShareHelper() }
     val onShareLambda: () -> Unit = {
         val query = clipboardManager.getText()?.text.orEmpty()
-            shareHelper.share(query)
-        }
+        shareHelper.share(query)
+    }
     val onQuoteLambda: () -> Unit = {
         val query = clipboardManager.getText()?.text.orEmpty()
-            onQuote?.invoke(query)
-        }
+        onQuote?.invoke(query)
+    }
     val quoteActionLabel =
         if (isLogged) {
             LocalStrings.current.actionQuote
         } else {
             null
-    }
+        }
     val shareActionLabel = LocalStrings.current.postActionShare
     val fullColor = MaterialTheme.colorScheme.onBackground
 

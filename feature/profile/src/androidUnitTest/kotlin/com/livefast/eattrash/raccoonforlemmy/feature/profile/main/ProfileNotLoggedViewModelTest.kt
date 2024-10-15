@@ -20,31 +20,34 @@ class ProfileNotLoggedViewModelTest {
     val dispatcherTestRule = DispatcherTestRule()
 
     @get:Rule(order = 1)
-    val unloggedRule = MviModelTestRule {
-        every { identityRepository.isLogged } returns MutableStateFlow(false)
-        every { identityRepository.authToken } returns MutableStateFlow("")
-        ProfileNotLoggedViewModel(
-            identityRepository = identityRepository,
-        )
-    }
+    val unloggedRule =
+        MviModelTestRule {
+            every { identityRepository.isLogged } returns MutableStateFlow(false)
+            every { identityRepository.authToken } returns MutableStateFlow("")
+            ProfileNotLoggedViewModel(
+                identityRepository = identityRepository,
+            )
+        }
 
     @get:Rule(order = 1)
-    val authErrorRule = MviModelTestRule {
-        every { identityRepository.isLogged } returns MutableStateFlow(false)
-        every { identityRepository.authToken } returns MutableStateFlow("fake-auth-token")
-        ProfileNotLoggedViewModel(
-            identityRepository = identityRepository,
-        )
-    }
+    val authErrorRule =
+        MviModelTestRule {
+            every { identityRepository.isLogged } returns MutableStateFlow(false)
+            every { identityRepository.authToken } returns MutableStateFlow("fake-auth-token")
+            ProfileNotLoggedViewModel(
+                identityRepository = identityRepository,
+            )
+        }
 
     @get:Rule(order = 1)
-    val loggedRule = MviModelTestRule {
-        every { identityRepository.isLogged } returns MutableStateFlow(true)
-        every { identityRepository.authToken } returns MutableStateFlow("fake-auth-token")
-        ProfileNotLoggedViewModel(
-            identityRepository = identityRepository,
-        )
-    }
+    val loggedRule =
+        MviModelTestRule {
+            every { identityRepository.isLogged } returns MutableStateFlow(true)
+            every { identityRepository.authToken } returns MutableStateFlow("fake-auth-token")
+            ProfileNotLoggedViewModel(
+                identityRepository = identityRepository,
+            )
+        }
 
     private val identityRepository = mockk<IdentityRepository>(relaxUnitFun = true)
 
@@ -64,7 +67,6 @@ class ProfileNotLoggedViewModelTest {
             with(authErrorRule) {
                 onState { state ->
                     assertTrue(state.authError)
-
                 }
             }
         }

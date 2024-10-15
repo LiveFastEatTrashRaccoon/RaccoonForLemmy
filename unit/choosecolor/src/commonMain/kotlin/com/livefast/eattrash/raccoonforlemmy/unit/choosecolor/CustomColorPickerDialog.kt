@@ -55,14 +55,14 @@ fun CustomColorPickerDialog(
     ) {
         Column(
             modifier =
-            Modifier
-                .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp))
-                .padding(Spacing.m),
+                Modifier
+                    .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp))
+                    .padding(Spacing.m),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
             Text(
-                text = "", //LocalStrings.current.colorPickerDialogTitle
+                text = "", // LocalStrings.current.colorPickerDialogTitle
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
             )
@@ -70,10 +70,10 @@ fun CustomColorPickerDialog(
 
             HsvColorPicker(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .padding(10.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                        .padding(10.dp),
                 controller = controller,
                 initialColor = initialValue,
                 onColorChanged = { colorEnvelope: ColorEnvelope ->
@@ -85,15 +85,15 @@ fun CustomColorPickerDialog(
 
             Box(
                 modifier =
-                Modifier
-                    .border(
-                        color = selectedColor,
-                        width = 1.dp,
-                        shape = RoundedCornerShape(CornerSize.xxl),
-                    ).padding(
-                        horizontal = Spacing.m,
-                        vertical = Spacing.s,
-                    ),
+                    Modifier
+                        .border(
+                            color = selectedColor,
+                            width = 1.dp,
+                            shape = RoundedCornerShape(CornerSize.xxl),
+                        ).padding(
+                            horizontal = Spacing.m,
+                            vertical = Spacing.s,
+                        ),
             ) {
                 Text(
                     text = "#$selectedColorHex",
