@@ -116,8 +116,13 @@ comment, remove post/comment, ban users and the ability to revert any of these a
 
 ## Credits
 
-A saying from the original developer: «Whenever in doubt, anguish or uncertainty, look at the code
-of Jerboa for Lemmy». It is without any doubt that this project has a gratitude debt
+A saying from the original developer:
+<blockquote>
+«Whenever in doubt, anguish or uncertainty, look at the code
+of Jerboa for Lemmy».
+</blockquote>
+
+It is without any doubt that this project has a gratitude debt
 towards [Jerboa](https://github.com/dessalines/jerboa), mainly in two crucial aspects of the app
 such as comment processing to reconstruct the tree with missing nodes, where the memoized algorithm
 is inspired by Jerboa's.
@@ -169,26 +174,22 @@ You are **awesome**… THANKS ❤️🦝️❤️
 If what you have read so far sounds interesting and you want to know more, here are some useful
 links:
 
-- check out the User manual;
-- have a look at the more detailed documentation in the Technical manual;
+- check out the [User manual](user_manual/main);
+- have a look at the more detailed documentation in the [Technical manual](tech_manual/main);
 - consult
-  the CONTRIBUTING.md
-  on GitHub.
+  the [CONTRIBUTING](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/blob/master/CONTRIBUTING.md)
+  guide.
 
 If, on the other hand, you just want to interact with the community, provide suggestions, report
 bugs, contribute with translations or tell your opinion, you can:
 
-- use the Matrix room to chat in real time with
-  other team members;
-- check out this project on Weblate to
-  contribute with new translations or improve the existing ones;
-- use the Lemmy community to receive updates about the new
+- use the [Lemmy community](https://lemmy.world/c/raccoonforlemmyapp) to receive updates about the
+  new
   releases, participate into public discussions in the Lemmy style and provide your feedback or even
   share your memes about raccoons with any other interested people;
-- use the GitHub issue tracker to report
+- use the GitHub [issue tracker](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/issues)
+  to report
   bugs or request features;
-- use the GitHub discussion section
-  for technical questions about the release roadmap, questions about app internationalization, etc.;
 - finally, if none of the above methods fits your needs you
-  can write an email or send a private
-  message on Lemmy to the original developer.
+  can write an [email](mailto://livefast.eattrash.raccoon@gmail.com) or reach out to me
+  on [Matrix](https://matrix.to/#/@dieguitux8623:matrix.org).
