@@ -381,7 +381,7 @@ class AdvancedSettingsViewModel(
         }
     }
 
-    private fun changeInboxBackgroundCheckPeriod(value: Duration) {
+    private fun changeInboxBackgroundCheckPeriod(value: Duration?) {
         screenModelScope.launch {
             updateState { it.copy(inboxBackgroundCheckPeriod = value) }
             val settings =
