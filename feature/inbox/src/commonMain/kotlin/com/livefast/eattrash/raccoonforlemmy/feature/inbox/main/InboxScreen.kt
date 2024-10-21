@@ -20,8 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.koin.getScreenModel
@@ -32,10 +34,13 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSelector
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.InboxTypeSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.unit.mentions.InboxMentionsScreen
@@ -63,6 +68,8 @@ object InboxScreen : Tab {
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
         val scope = rememberCoroutineScope()
+        val notificationCenter = remember { getNotificationCenter() }
+        var inboxTypeBottomSheetOpened by remember { mutableStateOf(false) }
         val inboxReadAllSuccessMessage = LocalStrings.current.messageReadAllInboxSuccess
 
         LaunchedEffect(model) {
@@ -108,8 +115,7 @@ object InboxScreen : Tab {
                                     .padding(horizontal = Spacing.s)
                                     .onClick(
                                         onClick = {
-                                            val sheet = InboxTypeSheet()
-                                            navigationCoordinator.showBottomSheet(sheet)
+                                            inboxTypeBottomSheetOpened = true
                                         },
                                     ),
                         ) {
@@ -250,6 +256,29 @@ object InboxScreen : Tab {
 
                 else -> Unit
             }
+        }
+
+        if (inboxTypeBottomSheetOpened) {
+            val values =
+                listOf(
+                    LocalStrings.current.inboxListingTypeUnread,
+                    LocalStrings.current.inboxListingTypeAll,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value)
+                    },
+                onSelected = { index ->
+                    inboxTypeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeInboxType(unreadOnly = index == 0),
+                        )
+                    }
+                },
+            )
         }
     }
 }
