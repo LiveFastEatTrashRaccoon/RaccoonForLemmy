@@ -54,6 +54,7 @@ kotlin {
                 implementation(projects.core.notifications)
                 implementation(projects.core.persistence)
                 implementation(projects.core.preferences)
+                implementation(projects.core.resources)
                 implementation(projects.core.utils)
 
                 implementation(projects.domain.lemmy.data)
