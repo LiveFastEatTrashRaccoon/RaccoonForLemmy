@@ -69,7 +69,7 @@ sealed interface NotificationCenterEvent {
     ) : NotificationCenterEvent
 
     data class ChangeInboxBackgroundCheckPeriod(
-        val value: Duration,
+        val value: Duration?,
     ) : NotificationCenterEvent
 
     data class ChangeLanguage(

@@ -1,5 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.advanced
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -44,16 +46,14 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toReadableName
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.AppIconBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.BarThemeBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.DurationBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.DurationBottomSheetType
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.InboxTypeSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ResultTypeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectLanguageDialog
@@ -62,6 +62,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBo
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SliderBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.livefast.eattrash.raccoonforlemmy.core.resources.di.getCoreResources
+import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.AppIconVariant
+import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.toInt
+import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.getPrettyDuration
 import com.livefast.eattrash.raccoonforlemmy.core.utils.fs.getFileSystemManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
@@ -73,6 +79,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 private const val SETTINGS_MIME_TYPE = "application/json"
 private const val SETTINGS_FILE_NAME = "raccoon_settings.json"
@@ -87,15 +94,22 @@ class AdvancedSettingsScreen : Screen {
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val scrollState = rememberScrollState()
+        val notificationCenter = remember { getNotificationCenter() }
         var screenWidth by remember { mutableStateOf(0f) }
-        var languageDialogOpened by remember { mutableStateOf(false) }
         val snackbarHostState = remember { SnackbarHostState() }
         val successMessage = LocalStrings.current.messageOperationSuccessful
         val errorMessage = LocalStrings.current.messageGenericError
         val scope = rememberCoroutineScope()
         val fileSystemManager = remember { getFileSystemManager() }
+        val coreResources = remember { getCoreResources() }
+        var languageDialogOpened by remember { mutableStateOf(false) }
         var fileInputOpened by remember { mutableStateOf(false) }
         var settingsContent by remember { mutableStateOf<String?>(null) }
+        var appIconBottomSheetOpened by remember { mutableStateOf(false) }
+        var barThemeBottomSheetOpened by remember { mutableStateOf(false) }
+        var zombieModeDurationBottomSheetOpened by remember { mutableStateOf(false) }
+        var inboxCheckDurationBottomSheetOpened by remember { mutableStateOf(false) }
+        var inboxTypeBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -201,8 +215,7 @@ class AdvancedSettingsScreen : Screen {
                             title = LocalStrings.current.settingsBarTheme,
                             value = barThemeName,
                             onTap = {
-                                val sheet = BarThemeBottomSheet()
-                                navigationCoordinator.showBottomSheet(sheet)
+                                barThemeBottomSheetOpened = true
                             },
                         )
                     }
@@ -285,8 +298,7 @@ class AdvancedSettingsScreen : Screen {
                                     LocalStrings.current.inboxListingTypeAll
                                 },
                             onTap = {
-                                val sheet = InboxTypeSheet()
-                                navigationCoordinator.showBottomSheet(sheet)
+                                inboxTypeBottomSheetOpened = true
                             },
                         )
 
@@ -395,11 +407,7 @@ class AdvancedSettingsScreen : Screen {
                                 hoursLabel = LocalStrings.current.homeSortTypeTop6Hours,
                             ),
                         onTap = {
-                            val sheet =
-                                DurationBottomSheet(
-                                    type = DurationBottomSheetType.ZOMBIE_MODE_INTERVAL,
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
+                            zombieModeDurationBottomSheetOpened = true
                         },
                     )
 
@@ -548,19 +556,7 @@ class AdvancedSettingsScreen : Screen {
                                     ) ?: LocalStrings.current.never
                                 },
                             onTap = {
-                                val sheet =
-                                    DurationBottomSheet(
-                                        values =
-                                            listOf(
-                                                15.minutes,
-                                                30.minutes,
-                                                1.hours,
-                                                2.hours,
-                                                5.hours,
-                                            ),
-                                        type = DurationBottomSheetType.INBOX_CHECK_PERIOD,
-                                    )
-                                navigationCoordinator.showBottomSheet(sheet)
+                                inboxCheckDurationBottomSheetOpened = true
                             },
                         )
                     }
@@ -575,8 +571,7 @@ class AdvancedSettingsScreen : Screen {
                                     append(LocalStrings.current.requiresRestart)
                                 },
                             onTap = {
-                                val sheet = AppIconBottomSheet()
-                                navigationCoordinator.showBottomSheet(sheet)
+                                appIconBottomSheetOpened = true
                             },
                         )
                     }
@@ -640,6 +635,162 @@ class AdvancedSettingsScreen : Screen {
                 }
                 fileInputOpened = false
             }
+        }
+
+        if (appIconBottomSheetOpened) {
+            val values =
+                listOf(
+                    AppIconVariant.Default,
+                    AppIconVariant.Alt1,
+                    AppIconVariant.Alt2,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsAppIcon,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            leadingContent = {
+                                val painter =
+                                    when (value) {
+                                        AppIconVariant.Alt2 -> coreResources.appIconAlt2
+                                        AppIconVariant.Alt1 -> coreResources.appIconAlt1
+                                        else -> coreResources.appIconDefault
+                                    }
+                                Image(
+                                    modifier = Modifier.size(IconSize.m),
+                                    painter = painter,
+                                    contentDescription = null,
+                                )
+                            },
+                            label = value.toReadableName(),
+                        )
+                    },
+                onSelected = { index ->
+                    appIconBottomSheetOpened = false
+                    if (index != null) {
+                        val value = values[index]
+                        notificationCenter.send(
+                            NotificationCenterEvent.AppIconVariantSelected(value.toInt()),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (barThemeBottomSheetOpened) {
+            val values =
+                listOf(
+                    UiBarTheme.Transparent,
+                    UiBarTheme.Opaque,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsBarTheme,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value.toReadableName())
+                    },
+                onSelected = { index ->
+                    barThemeBottomSheetOpened = false
+                    if (index != null) {
+                        val value = values[index]
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSystemBarTheme(value),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (zombieModeDurationBottomSheetOpened) {
+            val values =
+                listOf(
+                    1.seconds,
+                    2.seconds,
+                    3.seconds,
+                    5.seconds,
+                    10.seconds,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsZombieModeInterval,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label =
+                                value.getPrettyDuration(
+                                    secondsLabel = LocalStrings.current.postSecondShort,
+                                    minutesLabel = LocalStrings.current.postMinuteShort,
+                                    hoursLabel = LocalStrings.current.postHourShort,
+                                ),
+                        )
+                    },
+                onSelected = { index ->
+                    zombieModeDurationBottomSheetOpened = false
+                    if (index != null) {
+                        val value = values[index]
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeZombieInterval(value),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (inboxCheckDurationBottomSheetOpened) {
+            val values =
+                listOf(
+                    null,
+                    15.minutes,
+                    30.minutes,
+                    1.hours,
+                    2.hours,
+                    5.hours,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsInboxBackgroundCheckPeriod,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label =
+                                value?.getPrettyDuration(
+                                    secondsLabel = LocalStrings.current.postSecondShort,
+                                    minutesLabel = LocalStrings.current.postMinuteShort,
+                                    hoursLabel = LocalStrings.current.postHourShort,
+                                ) ?: LocalStrings.current.never,
+                        )
+                    },
+                onSelected = { index ->
+                    inboxCheckDurationBottomSheetOpened = false
+                    if (index != null) {
+                        val value = values[index]
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeInboxBackgroundCheckPeriod(value),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (inboxTypeBottomSheetOpened) {
+            val values =
+                listOf(
+                    LocalStrings.current.inboxListingTypeUnread,
+                    LocalStrings.current.inboxListingTypeAll,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value)
+                    },
+                onSelected = { index ->
+                    inboxTypeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeInboxType(unreadOnly = index == 0),
+                        )
+                    }
+                },
+            )
         }
 
         settingsContent?.also { content ->
