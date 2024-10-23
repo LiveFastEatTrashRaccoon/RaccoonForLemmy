@@ -78,6 +78,7 @@ fun InboxCard(
         shareHelper.share(query)
     }
     val shareActionLabel = LocalStrings.current.postActionShare
+    val cancelActionLabel = LocalStrings.current.buttonCancel
 
     Box(
         modifier =
@@ -111,7 +112,11 @@ fun InboxCard(
             LocalTextToolbar provides
                 getCustomTextToolbar(
                     shareActionLabel = shareActionLabel,
+                    cancelActionLabel = cancelActionLabel,
                     onShare = onShareLambda,
+                    onCancel = {
+                        focusManager.clearFocus(true)
+                    },
                 ),
         ) {
             Column(

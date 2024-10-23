@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -70,55 +71,61 @@ fun RawContentDialog(
             null
         }
     val shareActionLabel = LocalStrings.current.postActionShare
+    val cancelActionLabel = LocalStrings.current.buttonCancel
     val fullColor = MaterialTheme.colorScheme.onBackground
+    val focusManager = LocalFocusManager.current
 
     BasicAlertDialog(
         onDismissRequest = { onDismiss?.invoke() },
     ) {
-        Column(
-            modifier =
-                Modifier
-                    .background(color = MaterialTheme.colorScheme.surface)
-                    .padding(vertical = Spacing.s),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        CompositionLocalProvider(
+            LocalTextToolbar provides
+                getCustomTextToolbar(
+                    quoteActionLabel = quoteActionLabel,
+                    shareActionLabel = shareActionLabel,
+                    cancelActionLabel = cancelActionLabel,
+                    onShare = onShareLambda,
+                    onQuote = onQuoteLambda,
+                    onCancel = {
+                        focusManager.clearFocus(true)
+                    },
+                ),
         ) {
-            Text(
-                text = LocalStrings.current.dialogTitleRawContent,
-                style = MaterialTheme.typography.titleMedium,
-                color = fullColor,
-            )
-            Spacer(modifier = Modifier.height(Spacing.s))
-            LazyColumn(
+            Column(
                 modifier =
                     Modifier
-                        .padding(vertical = Spacing.s, horizontal = Spacing.m)
-                        .heightIn(max = 400.dp),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                        .background(color = MaterialTheme.colorScheme.surface)
+                    .padding(vertical = Spacing.s),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                title?.takeIf { it.trim().isNotEmpty() }?.also {
-                    item {
-                        Column {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = LocalStrings.current.dialogRawContentTitle,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = fullColor,
-                            )
-                            CompositionLocalProvider(
-                                LocalTextToolbar provides
-                                    getCustomTextToolbar(
-                                        quoteActionLabel = quoteActionLabel,
-                                        shareActionLabel = shareActionLabel,
-                                        onShare = onShareLambda,
-                                        onQuote = onQuoteLambda,
-                                    ),
-                            ) {
+                Text(
+                    text = LocalStrings.current.dialogTitleRawContent,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = fullColor,
+                )
+                Spacer(modifier = Modifier.height(Spacing.s))
+                LazyColumn(
+                    modifier =
+                        Modifier
+                            .padding(vertical = Spacing.s, horizontal = Spacing.m)
+                        .heightIn(max = 400.dp),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                ) {
+                    title?.takeIf { it.trim().isNotEmpty() }?.also {
+                        item {
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = LocalStrings.current.dialogRawContentTitle,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = fullColor,
+                                )
                                 SelectionContainer {
                                     Text(
                                         modifier = Modifier.fillMaxWidth(),
                                         text = it,
                                         style =
-                                            MaterialTheme.typography.bodyLarge.copy(
+                                        MaterialTheme.typography.bodyLarge.copy(
                                                 fontFamily = FontFamily.Monospace,
                                             ),
                                         color = fullColor,
@@ -127,31 +134,21 @@ fun RawContentDialog(
                             }
                         }
                     }
-                }
-                url?.takeIf { it.trim().isNotEmpty() }?.also {
-                    item {
-                        Column {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = LocalStrings.current.dialogRawContentUrl,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = fullColor,
-                            )
-                            CompositionLocalProvider(
-                                LocalTextToolbar provides
-                                    getCustomTextToolbar(
-                                        quoteActionLabel = quoteActionLabel,
-                                        shareActionLabel = shareActionLabel,
-                                        onShare = onShareLambda,
-                                        onQuote = onQuoteLambda,
-                                    ),
-                            ) {
+                    url?.takeIf { it.trim().isNotEmpty() }?.also {
+                        item {
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = LocalStrings.current.dialogRawContentUrl,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = fullColor,
+                                )
                                 SelectionContainer {
                                     Text(
                                         modifier = Modifier.fillMaxWidth(),
                                         text = it,
                                         style =
-                                            MaterialTheme.typography.bodyMedium.copy(
+                                        MaterialTheme.typography.bodyMedium.copy(
                                                 fontFamily = FontFamily.Monospace,
                                             ),
                                         color = fullColor,
@@ -160,153 +157,142 @@ fun RawContentDialog(
                             }
                         }
                     }
-                }
-                text?.takeIf { it.trim().isNotEmpty() }?.also {
-                    item {
-                        Column {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = LocalStrings.current.dialogRawContentText,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = fullColor,
-                            )
+                    text?.takeIf { it.trim().isNotEmpty() }?.also {
+                        item {
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = LocalStrings.current.dialogRawContentText,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = fullColor,
+                                )
+                                SelectionContainer {
+                                    Text(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        text = it,
+                                        style =
+                                        MaterialTheme.typography.bodyMedium.copy(
+                                                fontFamily = FontFamily.Monospace,
+                                            ),
+                                        color = fullColor,
+                                    )
+                                }
+                            }
+                        }
+                    }
 
-                            CompositionLocalProvider(
-                                LocalTextToolbar provides
-                                    getCustomTextToolbar(
-                                        quoteActionLabel = quoteActionLabel,
-                                        shareActionLabel = shareActionLabel,
-                                        onShare = onShareLambda,
-                                        onQuote = onQuoteLambda,
-                                    ),
-                            ) {
-                                SelectionContainer {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = it,
-                                        style =
-                                            MaterialTheme.typography.bodyMedium.copy(
-                                                fontFamily = FontFamily.Monospace,
-                                            ),
-                                        color = fullColor,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                publishDate?.takeIf { it.trim().isNotEmpty() }?.also {
-                    item {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                        ) {
+                    publishDate?.takeIf { it.trim().isNotEmpty() }?.also {
+                        item {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Icon(
+                                        modifier = Modifier.size(IconSize.m).padding(1.5.dp),
+                                        imageVector = Icons.Default.Schedule,
+                                        contentDescription = null,
+                                        tint = fullColor,
+                                    )
+                                    Text(
+                                        modifier = Modifier.weight(1f).padding(start = Spacing.xxs),
+                                        text = it,
+                                        style =
+                                            MaterialTheme.typography.bodyMedium.copy(
+                                            fontFamily = FontFamily.Monospace,
+                                        ),
+                                        color = fullColor,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    updateDate?.takeIf { it.trim().isNotEmpty() }?.also {
+                        item {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
                             ) {
                                 Icon(
-                                    modifier = Modifier.size(IconSize.m).padding(1.5.dp),
-                                    imageVector = Icons.Default.Schedule,
+                                    modifier = Modifier.size(IconSize.m).padding(0.25.dp),
+                                    imageVector = Icons.Default.Update,
                                     contentDescription = null,
                                     tint = fullColor,
                                 )
                                 Text(
-                                    modifier = Modifier.weight(1f).padding(start = Spacing.xxs),
+                                    modifier = Modifier.weight(1f),
                                     text = it,
                                     style =
                                         MaterialTheme.typography.bodyMedium.copy(
-                                            fontFamily = FontFamily.Monospace,
-                                        ),
+                                        fontFamily = FontFamily.Monospace,
+                                    ),
+                                    color = fullColor,
+                                )
+                            }
+                        }
+                    }
+                    if (upVotes != null && downVotes != null) {
+                        item {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                            ) {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m).padding(end = 3.5.dp),
+                                    imageVector = Icons.Default.ArrowCircleUp,
+                                    contentDescription = null,
+                                    tint = fullColor,
+                                )
+                                Text(
+                                    text = "$upVotes",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = fullColor,
+                                )
+
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m).padding(end = 3.5.dp),
+                                    imageVector = Icons.Default.ArrowCircleDown,
+                                    contentDescription = null,
+                                    tint = fullColor,
+                                )
+                                Text(
+                                    text = "$downVotes",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = fullColor,
+                                )
+
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                val totalVotes = upVotes + downVotes
+                                val percVote =
+                                    if (totalVotes == 0) 0.0 else upVotes.toDouble() / totalVotes
+                                val percentage = "${(percVote * 100).toInt()}"
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m).padding(end = 3.5.dp),
+                                    imageVector = Icons.Default.Percent,
+                                    contentDescription = null,
+                                    tint = fullColor,
+                                )
+                                Text(
+                                    text = percentage,
+                                    style = MaterialTheme.typography.labelLarge,
                                     color = fullColor,
                                 )
                             }
                         }
                     }
                 }
-                updateDate?.takeIf { it.trim().isNotEmpty() }?.also {
-                    item {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                        ) {
-                            Icon(
-                                modifier = Modifier.size(IconSize.m).padding(0.25.dp),
-                                imageVector = Icons.Default.Update,
-                                contentDescription = null,
-                                tint = fullColor,
-                            )
-                            Text(
-                                modifier = Modifier.weight(1f),
-                                text = it,
-                                style =
-                                    MaterialTheme.typography.bodyMedium.copy(
-                                        fontFamily = FontFamily.Monospace,
-                                    ),
-                                color = fullColor,
-                            )
-                        }
-                    }
+                Button(
+                    onClick = {
+                        onDismiss?.invoke()
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonClose)
                 }
-                if (upVotes != null && downVotes != null) {
-                    item {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
-                        ) {
-                            Icon(
-                                modifier = Modifier.size(IconSize.m).padding(end = 3.5.dp),
-                                imageVector = Icons.Default.ArrowCircleUp,
-                                contentDescription = null,
-                                tint = fullColor,
-                            )
-                            Text(
-                                text = "$upVotes",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = fullColor,
-                            )
-
-                            Spacer(modifier = Modifier.weight(1f))
-
-                            Icon(
-                                modifier = Modifier.size(IconSize.m).padding(end = 3.5.dp),
-                                imageVector = Icons.Default.ArrowCircleDown,
-                                contentDescription = null,
-                                tint = fullColor,
-                            )
-                            Text(
-                                text = "$downVotes",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = fullColor,
-                            )
-
-                            Spacer(modifier = Modifier.weight(1f))
-
-                            val totalVotes = upVotes + downVotes
-                            val percVote =
-                                if (totalVotes == 0) 0.0 else upVotes.toDouble() / totalVotes
-                            val percentage = "${(percVote * 100).toInt()}"
-                            Icon(
-                                modifier = Modifier.size(IconSize.m).padding(end = 3.5.dp),
-                                imageVector = Icons.Default.Percent,
-                                contentDescription = null,
-                                tint = fullColor,
-                            )
-                            Text(
-                                text = percentage,
-                                style = MaterialTheme.typography.labelLarge,
-                                color = fullColor,
-                            )
-                        }
-                    }
-                }
-            }
-            Button(
-                onClick = {
-                    onDismiss?.invoke()
-                },
-            ) {
-                Text(text = LocalStrings.current.buttonClose)
             }
         }
     }

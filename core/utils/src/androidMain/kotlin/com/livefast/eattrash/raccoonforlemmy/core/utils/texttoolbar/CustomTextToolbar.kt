@@ -8,10 +8,12 @@ import androidx.compose.ui.platform.TextToolbarStatus
 
 internal class CustomTextToolbar(
     private val view: View,
-    private val quoteActionLabel: String?,
     private val shareActionLabel: String,
+    private val quoteActionLabel: String?,
+    private val cancelActionLabel: String?,
     private val onShare: () -> Unit,
-    private val onQuote: (() -> Unit)?,
+    private val onQuote: (() -> Unit)? = null,
+    private val onCancel: (() -> Unit)? = null,
 ) : TextToolbar {
     private var actionMode: ActionMode? = null
 
@@ -37,8 +39,9 @@ internal class CustomTextToolbar(
                 view.startActionMode(
                     CustomTextActionModeCallback(
                         rect = rect,
-                        quoteActionLabel = quoteActionLabel,
                         shareActionLabel = shareActionLabel,
+                        quoteActionLabel = quoteActionLabel,
+                        cancelActionLabel = cancelActionLabel,
                         onCopy = {
                             onCopyRequested?.invoke()
                         },
@@ -50,6 +53,7 @@ internal class CustomTextToolbar(
                             onCopyRequested?.invoke()
                             onQuote?.invoke()
                         },
+                        onCancel = onCancel,
                     ),
                     ActionMode.TYPE_FLOATING,
                 )

@@ -6,8 +6,10 @@ import androidx.compose.ui.platform.TextToolbar
 
 @Composable
 actual fun getCustomTextToolbar(
-    quoteActionLabel: String?,
     shareActionLabel: String,
+    quoteActionLabel: String?,
+    cancelActionLabel: String?,
     onShare: () -> Unit,
     onQuote: (() -> Unit)?,
+    onCancel: (() -> Unit)?,
 ): TextToolbar = LocalTextToolbar.current

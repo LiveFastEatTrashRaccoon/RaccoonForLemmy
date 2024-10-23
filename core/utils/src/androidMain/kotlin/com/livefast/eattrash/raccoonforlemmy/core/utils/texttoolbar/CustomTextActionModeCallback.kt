@@ -9,15 +9,18 @@ import androidx.compose.ui.geometry.Rect
 private const val ACTION_ID_COPY = 0
 private const val ACTION_ID_SEARCH = 1
 private const val ACTION_ID_QUOTE = 2
+private const val ACTION_ID_CANCEL = 3
 private const val GROUP_ID = 0
 
 internal class CustomTextActionModeCallback(
     private val rect: Rect,
-    private val quoteActionLabel: String?,
     private val shareActionLabel: String,
+    private val quoteActionLabel: String?,
+    private val cancelActionLabel: String?,
     private val onCopy: () -> Unit,
     private val onShare: () -> Unit,
     private val onQuote: (() -> Unit)?,
+    private val onCancel: (() -> Unit)?,
 ) : ActionMode.Callback2() {
     override fun onCreateActionMode(
         mode: ActionMode?,
@@ -43,6 +46,12 @@ internal class CustomTextActionModeCallback(
                 ACTION_ID_SEARCH,
                 2, // position
                 shareActionLabel,
+            ).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            add(
+                GROUP_ID,
+                ACTION_ID_CANCEL,
+                3, // position
+                cancelActionLabel,
             ).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         }
         return true
@@ -71,6 +80,11 @@ internal class CustomTextActionModeCallback(
 
                 ACTION_ID_QUOTE -> {
                     onQuote?.invoke()
+                    true
+                }
+
+                ACTION_ID_CANCEL -> {
+                    onCancel?.invoke()
                     true
                 }
 
