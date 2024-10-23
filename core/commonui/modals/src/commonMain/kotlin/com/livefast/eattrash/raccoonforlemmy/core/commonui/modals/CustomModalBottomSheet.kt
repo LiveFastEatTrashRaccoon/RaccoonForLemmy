@@ -16,13 +16,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
@@ -71,18 +71,16 @@ fun CustomModalBottomSheet(
                 Spacer(modifier = Modifier.height(Spacing.xs))
                 LazyColumn {
                     itemsIndexed(items = items) { idx, item ->
-                        Surface(
-                            shape = RoundedCornerShape(CornerSize.xl),
-                        ) {
                             Row(
                                 modifier =
                                     Modifier
                                         .fillMaxWidth()
-                                        .combinedClickable(
-                                            onClick = {
-                                                sheetScope
-                                                    .launch {
-                                                        sheetState.hide()
+                                    .clip(shape = RoundedCornerShape(CornerSize.xl))
+                                    .combinedClickable(
+                                        onClick = {
+                                            sheetScope
+                                                .launch {
+                                                    sheetState.hide()
                                                     }.invokeOnCompletion {
                                                         onSelected?.invoke(idx)
                                                     }
@@ -132,7 +130,6 @@ fun CustomModalBottomSheet(
                         }
                     }
                 }
-            }
         },
     )
 }
