@@ -227,12 +227,17 @@ private fun CompactPost(
         shareHelper.share(query)
     }
     val shareActionLabel = LocalStrings.current.postActionShare
+    val cancelActionLabel = LocalStrings.current.buttonCancel
 
     CompositionLocalProvider(
         LocalTextToolbar provides
             getCustomTextToolbar(
                 shareActionLabel = shareActionLabel,
+                cancelActionLabel = cancelActionLabel,
                 onShare = onShareLambda,
+                onCancel = {
+                    focusManager.clearFocus(true)
+                },
             ),
     ) {
         Column(
@@ -455,12 +460,17 @@ private fun ExtendedPost(
         shareHelper.share(query)
     }
     val shareActionLabel = LocalStrings.current.postActionShare
+    val cancelActionLabel = LocalStrings.current.buttonCancel
 
     CompositionLocalProvider(
         LocalTextToolbar provides
             getCustomTextToolbar(
                 shareActionLabel = shareActionLabel,
+                cancelActionLabel = cancelActionLabel,
                 onShare = onShareLambda,
+                onCancel = {
+                    focusManager.clearFocus(true)
+                },
             ),
     ) {
         Column(
