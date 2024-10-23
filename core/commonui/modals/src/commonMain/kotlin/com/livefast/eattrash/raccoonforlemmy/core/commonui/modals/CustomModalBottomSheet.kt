@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -55,7 +54,6 @@ fun CustomModalBottomSheet(
 
     ModalBottomSheet(
         sheetState = sheetState,
-        windowInsets = WindowInsets(0, 0, 0, 0),
         onDismissRequest = {
             onSelected?.invoke(null)
         },
@@ -82,11 +80,12 @@ fun CustomModalBottomSheet(
                                         .fillMaxWidth()
                                         .combinedClickable(
                                             onClick = {
-                                                sheetScope.launch {
-                                                    sheetState.hide()
-                                                }.invokeOnCompletion {
-                                                    onSelected?.invoke(idx)
-                                                }
+                                                sheetScope
+                                                    .launch {
+                                                        sheetState.hide()
+                                                    }.invokeOnCompletion {
+                                                        onSelected?.invoke(idx)
+                                                    }
                                             },
                                             onLongClick =
                                                 if (onLongPress != null) {

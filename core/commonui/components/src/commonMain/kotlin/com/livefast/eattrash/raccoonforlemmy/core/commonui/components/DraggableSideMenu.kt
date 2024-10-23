@@ -1,5 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.components
 
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -58,7 +59,8 @@ fun DraggableSideMenu(
                     },
                 positionalThreshold = { distance: Float -> distance * 0.5f },
                 velocityThreshold = { with(density) { 100.dp.toPx() } },
-                animationSpec = tween(),
+                snapAnimationSpec = tween(),
+                decayAnimationSpec = exponentialDecay(),
             )
         }
 
