@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.ui.graphics.Color
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
+import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamicColorScheme
 
 internal class DefaultColorSchemeProvider(
@@ -38,6 +39,7 @@ internal class DefaultColorSchemeProvider(
                             seedColor = customSeed,
                             isDark = true,
                             isAmoled = false,
+                            style = PALETTE_STYLE,
                         )
                     }
 
@@ -58,6 +60,7 @@ internal class DefaultColorSchemeProvider(
                             seedColor = customSeed,
                             isDark = true,
                             isAmoled = true,
+                            style = PALETTE_STYLE,
                         )
                     }
 
@@ -78,6 +81,7 @@ internal class DefaultColorSchemeProvider(
                             seedColor = customSeed,
                             isDark = false,
                             isAmoled = false,
+                            style = PALETTE_STYLE,
                         )
                     }
 
@@ -88,3 +92,5 @@ internal class DefaultColorSchemeProvider(
             }
         }
 }
+
+private val PALETTE_STYLE = PaletteStyle.Rainbow
