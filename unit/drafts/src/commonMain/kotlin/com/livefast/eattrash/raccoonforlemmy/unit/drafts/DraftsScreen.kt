@@ -14,12 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -61,7 +58,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.drafts.components.DraftCard
 import com.livefast.eattrash.raccoonforlemmy.unit.drafts.components.DraftCardPlaceHolder
 
 class DraftsScreen : Screen {
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val model = getScreenModel<DraftsMviModel>()
@@ -71,13 +68,6 @@ class DraftsScreen : Screen {
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
         val lazyListState = rememberLazyListState()
-        val pullRefreshState =
-            rememberPullRefreshState(
-                refreshing = uiState.refreshing,
-                onRefresh = {
-                    model.reduce(DraftsMviModel.Intent.Refresh)
-                },
-            )
         val detailOpener = remember { getDetailOpener() }
         var itemToDelete by remember { mutableStateOf<DraftModel?>(null) }
 
@@ -147,7 +137,7 @@ class DraftsScreen : Screen {
                     },
                 )
 
-                Box(
+                PullToRefreshBox(
                     modifier =
                         Modifier
                             .then(
@@ -156,7 +146,11 @@ class DraftsScreen : Screen {
                                 } else {
                                     Modifier
                                 },
-                            ).pullRefresh(pullRefreshState),
+                            ),
+                    isRefreshing = uiState.refreshing,
+                    onRefresh = {
+                        model.reduce(DraftsMviModel.Intent.Refresh)
+                    },
                 ) {
                     LazyColumn(
                         modifier =
@@ -317,13 +311,6 @@ class DraftsScreen : Screen {
                             Spacer(modifier = Modifier.height(Spacing.xxxl))
                         }
                     }
-                    PullRefreshIndicator(
-                        refreshing = uiState.refreshing,
-                        state = pullRefreshState,
-                        modifier = Modifier.align(Alignment.TopCenter),
-                        backgroundColor = MaterialTheme.colorScheme.background,
-                        contentColor = MaterialTheme.colorScheme.onBackground,
-                    )
                 }
             }
         }

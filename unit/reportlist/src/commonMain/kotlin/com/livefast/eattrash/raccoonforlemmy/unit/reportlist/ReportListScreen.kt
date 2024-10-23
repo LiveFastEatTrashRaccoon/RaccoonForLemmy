@@ -14,14 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.material.icons.filled.ReportOff
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -32,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -76,7 +73,7 @@ import org.koin.core.parameter.parametersOf
 class ReportListScreen(
     private val communityId: Long? = null,
 ) : Screen {
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val model = getScreenModel<ReportListMviModel> { parametersOf(communityId) }
@@ -88,13 +85,6 @@ class ReportListScreen(
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
         val lazyListState = rememberLazyListState()
-        val pullRefreshState =
-            rememberPullRefreshState(
-                refreshing = uiState.refreshing,
-                onRefresh = {
-                    model.reduce(ReportListMviModel.Intent.Refresh)
-                },
-            )
         val detailOpener = remember { getDetailOpener() }
         val defaultResolveColor = MaterialTheme.colorScheme.secondary
 
@@ -195,7 +185,7 @@ class ReportListScreen(
                     },
                 )
 
-                Box(
+                PullToRefreshBox(
                     modifier =
                         Modifier
                             .then(
@@ -204,7 +194,11 @@ class ReportListScreen(
                                 } else {
                                     Modifier
                                 },
-                            ).pullRefresh(pullRefreshState),
+                            ),
+                    isRefreshing = uiState.refreshing,
+                    onRefresh = {
+                        model.reduce(ReportListMviModel.Intent.Refresh)
+                    },
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -464,13 +458,6 @@ class ReportListScreen(
                     if (uiState.asyncInProgress) {
                         ProgressHud()
                     }
-                    PullRefreshIndicator(
-                        refreshing = uiState.refreshing,
-                        state = pullRefreshState,
-                        modifier = Modifier.align(Alignment.TopCenter),
-                        backgroundColor = MaterialTheme.colorScheme.background,
-                        contentColor = MaterialTheme.colorScheme.onBackground,
-                    )
                 }
             }
         }
