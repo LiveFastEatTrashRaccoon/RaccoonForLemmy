@@ -5,8 +5,10 @@ import androidx.compose.ui.platform.TextToolbar
 
 @Composable
 expect fun getCustomTextToolbar(
-    quoteActionLabel: String? = null,
     shareActionLabel: String,
+    quoteActionLabel: String? = null,
+    cancelActionLabel: String? = null,
     onShare: () -> Unit,
     onQuote: (() -> Unit)? = null,
+    onCancel: (() -> Unit)? = null,
 ): TextToolbar
