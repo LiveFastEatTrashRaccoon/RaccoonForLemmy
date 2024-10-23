@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Reply
 import androidx.compose.material.icons.filled.ArrowCircleDown
@@ -33,9 +32,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.SyncDisabled
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -46,6 +42,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -107,7 +104,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class PostListScreen : Screen {
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val model = getScreenModel<PostListMviModel>()
@@ -319,14 +316,7 @@ class PostListScreen : Screen {
             },
         ) { padding ->
             if (uiState.currentUserId != null) {
-                val pullRefreshState =
-                    rememberPullRefreshState(
-                        refreshing = uiState.refreshing,
-                        onRefresh = {
-                            model.reduce(PostListMviModel.Intent.Refresh())
-                        },
-                    )
-                Box(
+                PullToRefreshBox(
                     modifier =
                         Modifier
                             .padding(
@@ -343,8 +333,11 @@ class PostListScreen : Screen {
                                 } else {
                                     Modifier
                                 },
-                            ).nestedScroll(fabNestedScrollConnection)
-                            .pullRefresh(pullRefreshState),
+                            ).nestedScroll(fabNestedScrollConnection),
+                    isRefreshing = uiState.refreshing,
+                    onRefresh = {
+                        model.reduce(PostListMviModel.Intent.Refresh())
+                    },
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -774,14 +767,6 @@ class PostListScreen : Screen {
                             Spacer(modifier = Modifier.height(Spacing.xxxl))
                         }
                     }
-
-                    PullRefreshIndicator(
-                        refreshing = uiState.refreshing,
-                        state = pullRefreshState,
-                        modifier = Modifier.align(Alignment.TopCenter),
-                        backgroundColor = MaterialTheme.colorScheme.background,
-                        contentColor = MaterialTheme.colorScheme.onBackground,
-                    )
                 }
             } else if (!uiState.initial) {
                 Column(

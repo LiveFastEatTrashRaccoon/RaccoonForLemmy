@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.NavigateBefore
@@ -42,9 +41,6 @@ import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -61,6 +57,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
@@ -154,11 +151,7 @@ class PostDetailScreen(
     override val key: ScreenKey
         get() = super.key + postId.toString()
 
-    @OptIn(
-        ExperimentalMaterial3Api::class,
-        ExperimentalMaterialApi::class,
-        ExperimentalLayoutApi::class,
-    )
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
     @Composable
     override fun Content() {
         val model =
@@ -784,15 +777,8 @@ class PostDetailScreen(
                             },
                         )
                     }
-                    val pullRefreshState =
-                        rememberPullRefreshState(
-                            refreshing = uiState.refreshing,
-                            onRefresh = {
-                                model.reduce(PostDetailMviModel.Intent.Refresh)
-                            },
-                        )
 
-                    Box(
+                    PullToRefreshBox(
                         modifier =
                             Modifier
                                 .then(
@@ -802,8 +788,11 @@ class PostDetailScreen(
                                         Modifier
                                     },
                                 ).nestedScroll(fabNestedScrollConnection)
-                                .nestedScroll(keyboardScrollConnection)
-                                .pullRefresh(pullRefreshState),
+                                .nestedScroll(keyboardScrollConnection),
+                        isRefreshing = uiState.refreshing,
+                        onRefresh = {
+                            model.reduce(PostDetailMviModel.Intent.Refresh)
+                        },
                     ) {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
@@ -1796,14 +1785,6 @@ class PostDetailScreen(
                                 Spacer(modifier = Modifier.height(Spacing.xxxl))
                             }
                         }
-
-                        PullRefreshIndicator(
-                            refreshing = uiState.refreshing,
-                            state = pullRefreshState,
-                            modifier = Modifier.align(Alignment.TopCenter),
-                            backgroundColor = MaterialTheme.colorScheme.background,
-                            contentColor = MaterialTheme.colorScheme.onBackground,
-                        )
                     }
                 }
 

@@ -16,17 +16,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -75,7 +73,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 private object AuthIssueAnnotations {
-    const val ANNOTATION_ACTION = "action"
     const val ACTION_REFRESH = "refresh"
     const val ACTION_LOGIN = "login"
 }
@@ -86,7 +83,7 @@ object ProfileLoggedScreen : Tab {
             return TabOptions(0u, "")
         }
 
-    @OptIn(ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val model = getScreenModel<ProfileLoggedMviModel>()
@@ -135,15 +132,11 @@ object ProfileLoggedScreen : Tab {
             verticalArrangement = Arrangement.spacedBy(Spacing.s),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            val pullRefreshState =
-                rememberPullRefreshState(
-                    refreshing = uiState.refreshing,
-                    onRefresh = {
-                        model.reduce(ProfileLoggedMviModel.Intent.Refresh)
-                    },
-                )
-            Box(
-                modifier = Modifier.pullRefresh(pullRefreshState),
+            PullToRefreshBox(
+                isRefreshing = uiState.refreshing,
+                onRefresh = {
+                    model.reduce(ProfileLoggedMviModel.Intent.Refresh)
+                },
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -169,18 +162,28 @@ object ProfileLoggedScreen : Tab {
                                     withStyle(SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
                                         append(LocalStrings.current.messageAuthIssueSegue0)
                                         append("\n• ")
-                                        pushStringAnnotation(
-                                            AuthIssueAnnotations.ANNOTATION_ACTION,
-                                            AuthIssueAnnotations.ACTION_REFRESH,
+                                        pushLink(
+                                            LinkAnnotation.Clickable(
+                                                tag = AuthIssueAnnotations.ACTION_REFRESH,
+                                                linkInteractionListener = {
+                                                    model.reduce(ProfileLoggedMviModel.Intent.Refresh)
+                                                },
+                                            ),
                                         )
                                         withStyle(linkStyle) {
                                             append(LocalStrings.current.messageAuthIssueSegue1)
                                         }
                                         pop()
                                         append("\n• ")
-                                        pushStringAnnotation(
-                                            AuthIssueAnnotations.ANNOTATION_ACTION,
-                                            AuthIssueAnnotations.ACTION_LOGIN,
+                                        pushLink(
+                                            LinkAnnotation.Clickable(
+                                                tag = AuthIssueAnnotations.ACTION_LOGIN,
+                                                linkInteractionListener = {
+                                                    notificationCenter.send(
+                                                        NotificationCenterEvent.ProfileSideMenuAction.Logout,
+                                                    )
+                                                },
+                                            ),
                                         )
                                         withStyle(linkStyle) {
                                             append(LocalStrings.current.messageAuthIssueSegue2)
@@ -205,31 +208,11 @@ object ProfileLoggedScreen : Tab {
                                             horizontal = Spacing.m,
                                         ),
                             ) {
-                                ClickableText(
+                                Text(
                                     modifier =
                                         Modifier.fillMaxWidth(),
                                     text = annotatedString,
                                     style = MaterialTheme.typography.bodyLarge,
-                                    onClick = { offset ->
-                                        val annotation =
-                                            annotatedString
-                                                .getStringAnnotations(
-                                                    tag = AuthIssueAnnotations.ANNOTATION_ACTION,
-                                                    start = offset,
-                                                    end = offset,
-                                                ).firstOrNull()
-                                        if (annotation != null) {
-                                            when (annotation.item) {
-                                                AuthIssueAnnotations.ACTION_REFRESH ->
-                                                    model.reduce(ProfileLoggedMviModel.Intent.Refresh)
-
-                                                AuthIssueAnnotations.ACTION_LOGIN ->
-                                                    notificationCenter.send(
-                                                        NotificationCenterEvent.ProfileSideMenuAction.Logout,
-                                                    )
-                                            }
-                                        }
-                                    },
                                 )
                             }
                         }
@@ -677,14 +660,6 @@ object ProfileLoggedScreen : Tab {
                         Spacer(modifier = Modifier.height(Spacing.xxxl))
                     }
                 }
-
-                PullRefreshIndicator(
-                    refreshing = uiState.refreshing,
-                    state = pullRefreshState,
-                    modifier = Modifier.align(Alignment.TopCenter),
-                    backgroundColor = MaterialTheme.colorScheme.background,
-                    contentColor = MaterialTheme.colorScheme.onBackground,
-                )
             }
         }
 

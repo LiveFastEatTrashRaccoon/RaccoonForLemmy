@@ -10,13 +10,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,7 +45,7 @@ class InboxMessagesScreen : Tab {
             return TabOptions(2u, "")
         }
 
-    @OptIn(ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val model = getScreenModel<InboxMessagesMviModel>()
@@ -83,15 +81,11 @@ class InboxMessagesScreen : Tab {
                 }.launchIn(this)
         }
 
-        val pullRefreshState =
-            rememberPullRefreshState(
-                refreshing = uiState.refreshing,
-                onRefresh = {
-                    model.reduce(InboxMessagesMviModel.Intent.Refresh)
-                },
-            )
-        Box(
-            modifier = Modifier.pullRefresh(pullRefreshState),
+        PullToRefreshBox(
+            isRefreshing = uiState.refreshing,
+            onRefresh = {
+                model.reduce(InboxMessagesMviModel.Intent.Refresh)
+            },
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -157,14 +151,6 @@ class InboxMessagesScreen : Tab {
                     Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
             }
-
-            PullRefreshIndicator(
-                refreshing = uiState.refreshing,
-                state = pullRefreshState,
-                modifier = Modifier.align(Alignment.TopCenter),
-                backgroundColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.onBackground,
-            )
         }
     }
 }

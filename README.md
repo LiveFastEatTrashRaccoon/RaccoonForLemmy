@@ -1,17 +1,17 @@
 <div align="center">
-  <img src="https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?logo=kotlin" />
-  <img src="https://img.shields.io/badge/Gradle-8.8-02303A?logo=gradle" />
-  <img src="https://img.shields.io/badge/Android-26+-34A853?logo=android" />
-  <img src="https://img.shields.io/badge/Compose-1.6.7-4285F4?logo=jetpackcompose" />
-  <img src="https://img.shields.io/github/license/LiveFastEatTrashRaccoon/RaccoonForLemmy" />
-  <img src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/build.yml/badge.svg" />
-  <img src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/unit_tests.yml/badge.svg" />
+  <img alt="badge for Kotlin" src="https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?logo=kotlin" />
+  <img alt="badge for Gradle" src="https://img.shields.io/badge/Gradle-8.8-02303A?logo=gradle" />
+  <img alt="badge for Android" src="https://img.shields.io/badge/Android-26+-34A853?logo=android" />
+  <img alt="badge for Compose Multiplatform" src="https://img.shields.io/badge/Compose-1.7.0-4285F4?logo=jetpackcompose" />
+  <img alt="badge for project license" src="https://img.shields.io/github/license/LiveFastEatTrashRaccoon/RaccoonForLemmy" />
+  <img alt="badge for build status" src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/build.yml/badge.svg" />
+  <img alt="badge for unit test status" src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/unit_tests.yml/badge.svg" />
 </div>
 
 <br />
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/47265cc3-2bb0-4c9b-8dfa-4923dea22571" width="250" height="auto" />
+  <img alt="application icon" src="https://github.com/user-attachments/assets/47265cc3-2bb0-4c9b-8dfa-4923dea22571" width="250" height="auto" />
 </div>
 
 # Raccoon for Lemmy
@@ -154,7 +154,7 @@ Here are some options to install the application on your device.
 
 <div align="center">
   <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;">
-    <a href="https://github.com/ImranR98/Obtainium/releases"><img width="200" src="https://github.com/user-attachments/assets/377575fe-a651-4420-afad-8dee21618c44" /></a>
+    <a href="https://github.com/ImranR98/Obtainium/releases"><img alt="Get it on Obtainium banner" width="200" src="https://github.com/user-attachments/assets/377575fe-a651-4420-afad-8dee21618c44" /></a>
   </div>
 </div>
 

@@ -16,14 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -38,6 +34,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -79,7 +76,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ManageSubscriptionsScreen : Screen {
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val model = getScreenModel<ManageSubscriptionsMviModel>()
@@ -219,21 +216,17 @@ class ManageSubscriptionsScreen : Screen {
                     },
                 )
 
-                val pullRefreshState =
-                    rememberPullRefreshState(
-                        refreshing = uiState.refreshing,
-                        onRefresh = {
-                            model.reduce(ManageSubscriptionsMviModel.Intent.Refresh)
-                        },
-                    )
-                Box(
+                PullToRefreshBox(
                     modifier =
                         Modifier
                             .fillMaxSize()
                             .nestedScroll(scrollBehavior.nestedScrollConnection)
                             .nestedScroll(fabNestedScrollConnection)
-                            .nestedScroll(keyboardScrollConnection)
-                            .pullRefresh(pullRefreshState),
+                            .nestedScroll(keyboardScrollConnection),
+                    isRefreshing = uiState.refreshing,
+                    onRefresh = {
+                        model.reduce(ManageSubscriptionsMviModel.Intent.Refresh)
+                    },
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -414,16 +407,6 @@ class ManageSubscriptionsScreen : Screen {
                                 }
                             }
                         }
-                    }
-
-                    if (!uiState.initial) {
-                        PullRefreshIndicator(
-                            refreshing = uiState.refreshing,
-                            state = pullRefreshState,
-                            modifier = Modifier.align(Alignment.TopCenter),
-                            backgroundColor = MaterialTheme.colorScheme.background,
-                            contentColor = MaterialTheme.colorScheme.onBackground,
-                        )
                     }
                 }
             }
