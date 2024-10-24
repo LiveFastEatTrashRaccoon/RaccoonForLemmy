@@ -6,59 +6,43 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.InboxCoordinator
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.R
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.inject
 import java.util.Collections.max
 import com.livefast.eattrash.raccoonforlemmy.core.resources.R as resourcesR
 
 internal class CheckNotificationWorker(
     private val context: Context,
     parameters: WorkerParameters,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO,
-) : Worker(context, parameters) {
-    private val inboxCoordinator by KoinJavaComponent.inject<InboxCoordinator>(InboxCoordinator::class.java)
-    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
+) : CoroutineWorker(context, parameters) {
+    private val inboxCoordinator by inject<InboxCoordinator>(InboxCoordinator::class.java)
 
-    override fun doWork(): Result {
-        scope.launch {
+    override suspend fun doWork() =
+        withContext(Dispatchers.IO) {
             inboxCoordinator.updateUnreadCount()
             val unread = inboxCoordinator.totalUnread.value
             if (unread > 0) {
                 sendNotification(unread)
             }
+            Result.success()
         }
-
-        return Result.success()
-    }
 
     @SuppressLint("StringFormatInvalid")
     private fun sendNotification(count: Int) {
-        val intent =
-            Intent(
-                context,
-                Class.forName("com.livefast.eattrash.raccoonforlemmy.android.MainActivity"),
-            ).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
         val title = context.getString(R.string.inbox_notification_title)
         val content = context.getString(R.string.inbox_notification_content, count)
         val notification =
-            Notification.Builder(context, NotificationConstants.CHANNEL_ID)
+            Notification
+                .Builder(context, NotificationConstants.CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(resourcesR.drawable.ic_monochrome)
-                .setContentIntent(pendingIntent)
+                .setContentIntent(getPendingIntent())
                 .setNumber(count)
                 .build()
         val notificationManager: NotificationManager =
@@ -71,6 +55,19 @@ internal class CheckNotificationWorker(
         )
     }
 
+    private fun getPendingIntent(): PendingIntent {
+        val intent =
+            Intent(
+                context,
+                Class.forName(MAIN_ACTIVITY_NAME),
+            ).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        return pendingIntent
+    }
+
     private fun getNextNotificationId(): Int {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -81,5 +78,10 @@ internal class CheckNotificationWorker(
         } else {
             max(activeNotifications.map { it.id }) + 1
         }
+    }
+
+    companion object {
+        private const val MAIN_ACTIVITY_NAME =
+            "com.livefast.eattrash.raccoonforlemmy.android.MainActivity"
     }
 }
