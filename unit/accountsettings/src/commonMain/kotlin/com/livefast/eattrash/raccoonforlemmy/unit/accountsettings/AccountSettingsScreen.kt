@@ -66,14 +66,19 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsTextualInfo
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditFormattedInfoDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditTextualInfoDialog
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import kotlinx.coroutines.flow.launchIn
@@ -102,9 +107,11 @@ class AccountSettingsScreen : Screen {
         val errorMessage = LocalStrings.current.messageGenericError
         val snackbarHostState = remember { SnackbarHostState() }
         val galleryHelper = remember { getGalleryHelper() }
+        val notificationCenter = remember { getNotificationCenter() }
         var openAvatarPicker by remember { mutableStateOf(false) }
         var openBannerPicker by remember { mutableStateOf(false) }
         var confirmBackWithUnsavedChangesDialog by remember { mutableStateOf(false) }
+        var defaultListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -314,12 +321,7 @@ class AccountSettingsScreen : Screen {
                         title = LocalStrings.current.settingsDefaultListingType,
                         value = uiState.defaultListingType.toReadableName(),
                         onTap = {
-                            val sheet =
-                                ListingTypeBottomSheet(
-                                    isLogged = true,
-                                    screenKey = "accountSettings",
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
+                            defaultListingTypeBottomSheetOpened = true
                         },
                     )
 
@@ -545,6 +547,43 @@ class AccountSettingsScreen : Screen {
                 },
                 text = {
                     Text(text = LocalStrings.current.messageUnsavedChanges)
+                },
+            )
+        }
+
+        if (defaultListingTypeBottomSheetOpened) {
+            val values =
+                buildList {
+                    this += ListingType.Subscribed
+                    this += ListingType.All
+                    this += ListingType.Local
+                }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label = value.toReadableName(),
+                            trailingContent = {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = value.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            },
+                        )
+                    },
+                onSelected = { index ->
+                    defaultListingTypeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeFeedType(
+                                value = values[index],
+                                screenKey = "accountSettings",
+                            ),
+                        )
+                    }
                 },
             )
         }

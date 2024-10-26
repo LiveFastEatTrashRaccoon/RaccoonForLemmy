@@ -54,7 +54,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ResultTypeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectLanguageDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheet
@@ -71,6 +70,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.getPrettyDuration
 import com.livefast.eattrash.raccoonforlemmy.core.utils.fs.getFileSystemManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.ConfigureNavBarScreen
 import kotlinx.coroutines.flow.launchIn
@@ -110,6 +111,7 @@ class AdvancedSettingsScreen : Screen {
         var zombieModeDurationBottomSheetOpened by remember { mutableStateOf(false) }
         var inboxCheckDurationBottomSheetOpened by remember { mutableStateOf(false) }
         var inboxTypeBottomSheetOpened by remember { mutableStateOf(false) }
+        var exploreListingTypeBottomSheet by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -279,12 +281,7 @@ class AdvancedSettingsScreen : Screen {
                         title = LocalStrings.current.settingsDefaultExploreType,
                         value = uiState.defaultExploreType.toReadableName(),
                         onTap = {
-                            val sheet =
-                                ListingTypeBottomSheet(
-                                    isLogged = uiState.isLogged,
-                                    screenKey = "advancedSettings",
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
+                            exploreListingTypeBottomSheet = true
                         },
                     )
                     if (uiState.isLogged) {
@@ -787,6 +784,45 @@ class AdvancedSettingsScreen : Screen {
                     if (index != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeInboxType(unreadOnly = index == 0),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (exploreListingTypeBottomSheet) {
+            val values =
+                buildList {
+                    if (uiState.isLogged) {
+                        this += ListingType.Subscribed
+                    }
+                    this += ListingType.All
+                    this += ListingType.Local
+                }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label = value.toReadableName(),
+                            trailingContent = {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = value.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            },
+                        )
+                    },
+                onSelected = { index ->
+                    exploreListingTypeBottomSheet = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeFeedType(
+                                value = values[index],
+                                screenKey = "advancedSettings",
+                            ),
                         )
                     }
                 },

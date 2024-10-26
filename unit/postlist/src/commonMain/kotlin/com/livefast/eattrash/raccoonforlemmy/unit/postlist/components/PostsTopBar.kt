@@ -110,15 +110,15 @@ internal fun PostsTopBar(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = Spacing.s)
-                        .onClick(
+                        .padding(horizontal = Spacing.s),
+            ) {
+                Text(
+                    modifier =
+                        Modifier.fillMaxWidth().onClick(
                             onClick = {
                                 onSelectListingType?.invoke()
                             },
                         ),
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
                     text = listingType?.toReadableName().orEmpty(),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -126,15 +126,15 @@ internal fun PostsTopBar(
                 Text(
                     modifier =
                         Modifier.fillMaxWidth().then(
-                            if (onSelectInstance != null) {
                                 Modifier.onClick(
                                     onClick = {
+                                    if (onSelectInstance != null) {
                                         onSelectInstance.invoke()
-                                    },
-                                )
-                            } else {
-                                Modifier
-                            },
+                                    } else {
+                                        onSelectListingType?.invoke()
+                                    }
+                                },
+                            ),
                         ),
                     text =
                         buildString {
