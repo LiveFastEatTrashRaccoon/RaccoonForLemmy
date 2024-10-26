@@ -54,7 +54,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ResultTypeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectLanguageDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
@@ -71,6 +70,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.getPrettyDurati
 import com.livefast.eattrash.raccoonforlemmy.core.utils.fs.getFileSystemManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.ConfigureNavBarScreen
@@ -111,7 +111,8 @@ class AdvancedSettingsScreen : Screen {
         var zombieModeDurationBottomSheetOpened by remember { mutableStateOf(false) }
         var inboxCheckDurationBottomSheetOpened by remember { mutableStateOf(false) }
         var inboxTypeBottomSheetOpened by remember { mutableStateOf(false) }
-        var exploreListingTypeBottomSheet by remember { mutableStateOf(false) }
+        var exploreListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
+        var exploreResultTypeBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -268,11 +269,7 @@ class AdvancedSettingsScreen : Screen {
                         title = LocalStrings.current.settingsDefaultExploreResultType,
                         value = uiState.defaultExploreResultType.toReadableName(),
                         onTap = {
-                            val sheet =
-                                ResultTypeBottomSheet(
-                                    screenKey = "advancedSettings",
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
+                            exploreResultTypeBottomSheetOpened = true
                         },
                     )
 
@@ -281,7 +278,7 @@ class AdvancedSettingsScreen : Screen {
                         title = LocalStrings.current.settingsDefaultExploreType,
                         value = uiState.defaultExploreType.toReadableName(),
                         onTap = {
-                            exploreListingTypeBottomSheet = true
+                            exploreListingTypeBottomSheetOpened = true
                         },
                     )
                     if (uiState.isLogged) {
@@ -790,7 +787,7 @@ class AdvancedSettingsScreen : Screen {
             )
         }
 
-        if (exploreListingTypeBottomSheet) {
+        if (exploreListingTypeBottomSheetOpened) {
             val values =
                 buildList {
                     if (uiState.isLogged) {
@@ -816,10 +813,49 @@ class AdvancedSettingsScreen : Screen {
                         )
                     },
                 onSelected = { index ->
-                    exploreListingTypeBottomSheet = false
+                    exploreListingTypeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeFeedType(
+                                value = values[index],
+                                screenKey = "advancedSettings",
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (exploreResultTypeBottomSheetOpened) {
+            val values =
+                listOf(
+                    SearchResultType.Posts,
+                    SearchResultType.Communities,
+                    SearchResultType.Comments,
+                    SearchResultType.Users,
+                    SearchResultType.Urls,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label = value.toReadableName(),
+                            trailingContent = {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = value.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            },
+                        )
+                    },
+                onSelected = { index ->
+                    exploreResultTypeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSearchResultType(
                                 value = values[index],
                                 screenKey = "advancedSettings",
                             ),

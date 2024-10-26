@@ -67,7 +67,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlace
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ResultTypeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
@@ -82,6 +81,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResult
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
@@ -153,6 +153,7 @@ class ExploreScreen(
             }
         val searchFocusRequester = remember { FocusRequester() }
         var listingTypeBottomSheetOpened by remember { mutableStateOf(false) }
+        var resultTypeBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection
@@ -214,8 +215,7 @@ class ExploreScreen(
                         navigationCoordinator.showBottomSheet(sheet)
                     },
                     onSelectResultTypeType = {
-                        val sheet = ResultTypeBottomSheet(screenKey = notificationEventKey)
-                        navigationCoordinator.showBottomSheet(sheet)
+                        resultTypeBottomSheetOpened = true
                     },
                     onHamburgerTapped = {
                         scope.launch {
@@ -794,6 +794,45 @@ class ExploreScreen(
                     if (index != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeFeedType(
+                                value = values[index],
+                                screenKey = notificationEventKey,
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (resultTypeBottomSheetOpened) {
+            val values =
+                listOf(
+                    SearchResultType.Posts,
+                    SearchResultType.Communities,
+                    SearchResultType.Comments,
+                    SearchResultType.Users,
+                    SearchResultType.Urls,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label = value.toReadableName(),
+                            trailingContent = {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = value.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            },
+                        )
+                    },
+                onSelected = { index ->
+                    resultTypeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSearchResultType(
                                 value = values[index],
                                 screenKey = notificationEventKey,
                             ),
