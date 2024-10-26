@@ -449,4 +449,7 @@ internal val LvStrings =
         override val messageAuthIssueSegue3 = "notīriet lietojumprogrammas datus"
         override val messageAuthIssueSegue1 = "piespiest atsvaidzināt"
         override val messageAuthIssueSegue2 = "piesakieties vēlreiz"
+        override val inboxNotificationTitle = "Nelasīti vienumi"
+
+        override fun inboxNotificationContent(count: Int): String = "Ir $count nelasīti vienumi"
     }

@@ -450,4 +450,7 @@ internal val RoStrings =
         override val settingsManageBanSectionDomains = "Domenii"
         override val settingsManageBanSectionStopWords = "Cuvinte"
         override val settingsManageBanStopWordPlaceholder = "Expresie interzisă"
+        override val inboxNotificationTitle = "Elemente necitite"
+
+        override fun inboxNotificationContent(count: Int): String = "Există $count elemente necitite"
     }

@@ -8,8 +8,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.L10nManager
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.InboxCoordinator
-import com.livefast.eattrash.raccoonforlemmy.domain.inbox.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
@@ -21,6 +21,7 @@ internal class CheckNotificationWorker(
     parameters: WorkerParameters,
 ) : CoroutineWorker(context, parameters) {
     private val inboxCoordinator by inject<InboxCoordinator>(InboxCoordinator::class.java)
+    private val l10nManager by inject<L10nManager>(L10nManager::class.java)
 
     override suspend fun doWork() =
         withContext(Dispatchers.IO) {
@@ -34,8 +35,8 @@ internal class CheckNotificationWorker(
 
     @SuppressLint("StringFormatInvalid")
     private fun sendNotification(count: Int) {
-        val title = context.getString(R.string.inbox_notification_title)
-        val content = context.getString(R.string.inbox_notification_content, count)
+        val title = l10nManager.currentValues.inboxNotificationTitle
+        val content = l10nManager.currentValues.inboxNotificationContent(count)
         val notification =
             Notification
                 .Builder(context, NotificationConstants.CHANNEL_ID)

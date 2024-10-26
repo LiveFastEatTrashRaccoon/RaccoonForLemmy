@@ -446,4 +446,7 @@ internal val FiStrings =
         override val messageAuthIssueSegue1 = "pakottaa päivittämään"
         override val messageAuthIssueSegue2 = "Kirjaudu uudelleen"
         override val messageAuthIssueSegue3 = "tyhjennä sovellustiedot"
+        override val inboxNotificationTitle = "Lukemattomat kohteet"
+
+        override fun inboxNotificationContent(count: Int): String = "$count lukematonta kohdetta"
     }

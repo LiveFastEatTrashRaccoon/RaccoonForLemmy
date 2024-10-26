@@ -454,4 +454,7 @@ internal val BgStrings =
         override val messageAuthIssueSegue3 = "изчистете данните на приложението"
         override val messageAuthIssueSegue1 = "принудително опресняване"
         override val messageAuthIssueSegue2 = "влезте отново"
+        override val inboxNotificationTitle = "Непрочетени елементи"
+
+        override fun inboxNotificationContent(count: Int): String = "Има $count непрочетени елемента"
     }

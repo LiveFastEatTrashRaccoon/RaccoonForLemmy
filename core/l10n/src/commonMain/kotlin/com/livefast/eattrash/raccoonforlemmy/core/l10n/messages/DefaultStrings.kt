@@ -439,4 +439,7 @@ internal open class DefaultStrings : Strings {
     override val settingsManageBanDomainPlaceholder = "Substring of URL to exclude"
     override val settingsManageBanStopWordPlaceholder = "Forbidden expression"
     override val settingsManageBanSectionStopWords = "Words"
+    override val inboxNotificationTitle = "Unread items"
+
+    override fun inboxNotificationContent(count: Int): String = "There are $count unread items"
 }

@@ -414,4 +414,7 @@ internal val ZhTwStrings =
         override val settingsEnableToggleFavoriteInNavDrawer = "加入/移除導航抽屜中的收藏"
         override val messageContentDeleted = "您已刪除此內容"
         override val actionRestore = "恢復"
+        override val inboxNotificationTitle = "未讀項目"
+
+        override fun inboxNotificationContent(count: Int): String = "有${count}未讀項目"
     }

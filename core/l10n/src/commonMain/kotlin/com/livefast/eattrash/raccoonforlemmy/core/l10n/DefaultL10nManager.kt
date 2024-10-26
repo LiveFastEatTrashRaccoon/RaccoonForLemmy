@@ -6,6 +6,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.Strings
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.localizableStrings
 
 internal class DefaultL10nManager : L10nManager {
+    override val currentValues: Strings get() = lyricist.strings
+
     override val lyricist: Lyricist<Strings> =
         Lyricist(
             defaultLanguageTag = Locales.EN,

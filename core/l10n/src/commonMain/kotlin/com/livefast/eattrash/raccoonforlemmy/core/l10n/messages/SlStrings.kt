@@ -451,4 +451,7 @@ internal val SlStrings =
         override val messageAuthIssueSegue1 = "prisilno osveži"
         override val messageAuthIssueSegue2 = "znova se prijavite"
         override val messageAuthIssueSegue3 = "počistite podatke aplikacije"
+        override val inboxNotificationTitle = "Neprebrani predmeti"
+
+        override fun inboxNotificationContent(count: Int): String = "$count neprebranih elementov"
     }

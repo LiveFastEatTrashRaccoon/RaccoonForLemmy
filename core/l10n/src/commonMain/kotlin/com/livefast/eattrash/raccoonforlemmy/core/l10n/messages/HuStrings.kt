@@ -455,4 +455,7 @@ internal val HuStrings =
         override val messageAuthIssueSegue3 = "törölje az alkalmazás adatait"
         override val messageAuthIssueSegue1 = "erőltesse a frissítést"
         override val messageAuthIssueSegue2 = "jelentkezz be újra"
+        override val inboxNotificationTitle = "Olvasatlan elemek"
+
+        override fun inboxNotificationContent(count: Int): String = "$count olvasatlan elem van"
     }

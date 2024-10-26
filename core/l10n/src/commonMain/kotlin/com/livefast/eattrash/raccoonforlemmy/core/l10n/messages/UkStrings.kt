@@ -452,4 +452,7 @@ internal val UkStrings =
         override val messageAuthIssueSegue3 = "очистити дані програми"
         override val messageAuthIssueSegue1 = "примусово оновити"
         override val messageAuthIssueSegue2 = "увійдіть знову"
+        override val inboxNotificationTitle = "Непрочитані елементи"
+
+        override fun inboxNotificationContent(count: Int): String = "Непрочитаних елементів:$count"
     }

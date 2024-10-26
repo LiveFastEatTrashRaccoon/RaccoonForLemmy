@@ -443,4 +443,7 @@ internal val TokStrings =
         override val settingsManageBanDomainPlaceholder = "o weka e sitelen pi nimi linluwi"
         override val settingsManageBanSectionStopWords = "nimi"
         override val settingsManageBanStopWordPlaceholder = "o weka e sitelen"
+        override val inboxNotificationTitle = "ijo pi wile lukin"
+
+        override fun inboxNotificationContent(count: Int): String = "ijo $count pi wile lukin li lon"
     }

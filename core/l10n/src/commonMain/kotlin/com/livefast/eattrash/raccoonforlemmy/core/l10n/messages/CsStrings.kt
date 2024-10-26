@@ -451,4 +451,7 @@ internal val CsStrings =
         override val messageAuthIssueSegue3 = "vymazat data aplikace"
         override val messageAuthIssueSegue1 = "vynutit obnovení"
         override val messageAuthIssueSegue2 = "přihlaste se znovu"
+        override val inboxNotificationTitle = "Nepřečtené položky"
+
+        override fun inboxNotificationContent(count: Int): String = "Počet nepřečtených položek: $count"
     }

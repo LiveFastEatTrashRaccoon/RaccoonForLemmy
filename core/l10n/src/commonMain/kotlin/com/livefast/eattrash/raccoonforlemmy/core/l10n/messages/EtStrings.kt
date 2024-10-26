@@ -449,4 +449,7 @@ internal val EtStrings =
         override val messageAuthIssueSegue3 = "tühjendage rakenduse andmed"
         override val messageAuthIssueSegue1 = "sundida värskendama"
         override val messageAuthIssueSegue2 = "logi uuesti sisse"
+        override val inboxNotificationTitle = "Lugemata üksused"
+
+        override fun inboxNotificationContent(count: Int): String = "Seal on $count lugemata üksust"
     }

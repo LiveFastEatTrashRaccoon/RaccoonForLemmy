@@ -447,4 +447,7 @@ internal val DaStrings =
         override val messageAuthIssueSegue3 = "ryd applikationsdataene"
         override val messageAuthIssueSegue1 = "fremtvinge opdatering"
         override val messageAuthIssueSegue2 = "logge ind igen"
+        override val inboxNotificationTitle = "Ulæste elementer"
+
+        override fun inboxNotificationContent(count: Int): String = "Der er $count ulæste elementer"
     }

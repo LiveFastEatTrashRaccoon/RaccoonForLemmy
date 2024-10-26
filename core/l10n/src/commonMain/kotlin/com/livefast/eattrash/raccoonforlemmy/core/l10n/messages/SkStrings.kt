@@ -454,4 +454,7 @@ internal val SkStrings =
         override val messageAuthIssueSegue1 = "vynútiť obnovenie"
         override val messageAuthIssueSegue2 = "prihláste sa znova"
         override val messageAuthIssueSegue3 = "vymazať údaje aplikácie"
+        override val inboxNotificationTitle = "Neprečítané položky"
+
+        override fun inboxNotificationContent(count: Int): String = "Počet neprečítaných položiek: $count"
     }

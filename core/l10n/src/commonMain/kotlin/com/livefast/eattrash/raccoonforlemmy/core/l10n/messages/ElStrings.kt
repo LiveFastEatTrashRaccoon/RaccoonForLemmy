@@ -458,4 +458,7 @@ internal val ElStrings =
         override val messageAuthIssueSegue3 = "διαγράψτε τα δεδομένα της εφαρμογής"
         override val messageAuthIssueSegue1 = "δύναμη ανανέωσης"
         override val messageAuthIssueSegue2 = "συνδεθείτε ξανά"
+        override val inboxNotificationTitle = "Μη αναγνωσμένα στοιχεία"
+
+        override fun inboxNotificationContent(count: Int): String = "Υπάρχουν $count μη αναγνωσμένα στοιχεία"
     }

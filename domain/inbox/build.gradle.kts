@@ -37,6 +37,7 @@ kotlin {
 
                 implementation(libs.koin.core)
 
+                implementation(projects.core.l10n)
                 implementation(projects.core.resources)
 
                 implementation(projects.domain.identity)
@@ -64,9 +65,15 @@ kotlin {
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.domain.inbox"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }
 

@@ -437,6 +437,9 @@ interface Strings {
     val settingsManageBanDomainPlaceholder: String
     val settingsManageBanSectionStopWords: String
     val settingsManageBanStopWordPlaceholder: String
+    val inboxNotificationTitle: String
+
+    fun inboxNotificationContent(count: Int): String
 }
 
 object Locales {

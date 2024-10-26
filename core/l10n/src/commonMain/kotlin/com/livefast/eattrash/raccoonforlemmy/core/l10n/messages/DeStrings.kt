@@ -454,4 +454,7 @@ internal val DeStrings =
         override val messageAuthIssueSegue3 = "Löschen Sie die Anwendungsdaten"
         override val messageAuthIssueSegue1 = "Aktualisierung erzwingen"
         override val messageAuthIssueSegue2 = "nochmal anmelden"
+        override val inboxNotificationTitle = "Ungelesene Beiträge"
+
+        override fun inboxNotificationContent(count: Int): String = "Es gibt $count ungelesene Beiträge"
     }

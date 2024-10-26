@@ -442,4 +442,7 @@ internal val EoStrings =
         override val settingsManageBanSectionDomains = "Domajnoj"
         override val settingsManageBanSectionStopWords = "Vortoj"
         override val settingsManageBanStopWordPlaceholder = "Malpermesita esprimo"
+        override val inboxNotificationTitle = "Nelegitaj eroj"
+
+        override fun inboxNotificationContent(count: Int): String = "Estas $count nelegitaj eroj"
     }
