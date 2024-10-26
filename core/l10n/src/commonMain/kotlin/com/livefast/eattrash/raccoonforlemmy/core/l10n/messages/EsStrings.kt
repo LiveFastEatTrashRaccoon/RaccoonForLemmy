@@ -454,4 +454,7 @@ internal val EsStrings =
         override val settingsManageBanDomainPlaceholder = "Substring de una url a excluir"
         override val settingsManageBanSectionStopWords = "Palabras"
         override val settingsManageBanStopWordPlaceholder = "Expresión prohibida"
+        override val inboxNotificationTitle = "Elementos para leer"
+
+        override fun inboxNotificationContent(count: Int): String = "Hay $count elementos para leer"
     }

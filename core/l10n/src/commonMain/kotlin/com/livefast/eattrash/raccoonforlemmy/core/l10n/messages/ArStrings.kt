@@ -444,4 +444,7 @@ internal val ArStrings =
         override val messageAuthIssueSegue1 = "تحديث القوة"
         override val messageAuthIssueSegue2 = "تسجيل الدخول مرة أخرى"
         override val messageAuthIssueSegue3 = "مسح بيانات التطبيق"
+        override val inboxNotificationTitle = "العناصر غير المقروءة"
+
+        override fun inboxNotificationContent(count: Int): String = " عنصر غير مقروء$count هناك "
     }

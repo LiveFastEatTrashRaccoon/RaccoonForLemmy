@@ -451,4 +451,7 @@ internal val NlStrings =
         override val messageAuthIssueSegue1 = "geforceerd vernieuwen"
         override val messageAuthIssueSegue2 = "Log opnieuw in"
         override val messageAuthIssueSegue3 = "Wis de toepassingsgegevens"
+        override val inboxNotificationTitle = "Ongelezen items"
+
+        override fun inboxNotificationContent(count: Int): String = "Er zijn $count ongelezen items"
     }

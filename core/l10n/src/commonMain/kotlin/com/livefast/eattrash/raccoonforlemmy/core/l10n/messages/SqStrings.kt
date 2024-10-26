@@ -453,4 +453,7 @@ internal val SqStrings =
         override val messageAuthIssueSegue1 = "forco refresh"
         override val messageAuthIssueSegue2 = "hyni përsëri"
         override val messageAuthIssueSegue3 = "pastroni të dhënat e aplikacionit"
+        override val inboxNotificationTitle = "Artikuj të palexuar"
+
+        override fun inboxNotificationContent(count: Int): String = "Ka $count artikuj të palexuar"
     }

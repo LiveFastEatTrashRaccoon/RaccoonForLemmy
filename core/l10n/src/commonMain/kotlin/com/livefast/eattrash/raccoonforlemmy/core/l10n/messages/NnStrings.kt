@@ -447,4 +447,7 @@ internal val NnStrings =
         override val messageAuthIssueSegue0 = "Du kan prøve en av følgende handlinger:"
         override val messageAuthIssueSegue2 = "logge på igjen"
         override val messageAuthIssueSegue3 = "slett applikasjonsdataene"
+        override val inboxNotificationTitle = "Uleste elementer"
+
+        override fun inboxNotificationContent(count: Int): String = "Det er $count uleste elementer"
     }

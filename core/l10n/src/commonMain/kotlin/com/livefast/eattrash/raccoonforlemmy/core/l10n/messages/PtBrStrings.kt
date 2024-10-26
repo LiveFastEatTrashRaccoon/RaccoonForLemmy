@@ -447,4 +447,7 @@ internal val PtBrStrings =
         override val settingsManageBanSectionDomains = "Domínios"
         override val settingsManageBanSectionStopWords = "Palavras"
         override val settingsManageBanStopWordPlaceholder = "Frases proibidas"
+        override val inboxNotificationTitle = "Itens não lidos"
+
+        override fun inboxNotificationContent(count: Int): String = "Você tem $count itens não lidos"
     }

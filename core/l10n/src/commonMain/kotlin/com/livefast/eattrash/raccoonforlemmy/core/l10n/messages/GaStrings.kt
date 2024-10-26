@@ -451,4 +451,7 @@ internal val GaStrings =
         override val settingsManageBanSectionDomains = "Fearainn"
         override val settingsManageBanSectionStopWords = "Focail"
         override val settingsManageBanStopWordPlaceholder = "Léiriú toirmiscthe"
+        override val inboxNotificationTitle = "Míreanna neamhléite"
+
+        override fun inboxNotificationContent(count: Int): String = "Tá $count mír neamhléite"
     }

@@ -451,4 +451,7 @@ internal val HrStrings =
         override val messageAuthIssueSegue3 = "očistite podatke aplikacije"
         override val messageAuthIssueSegue1 = "prisilno osvježiti"
         override val messageAuthIssueSegue2 = "ponovno se prijavite"
+        override val inboxNotificationTitle = "Nepročitane stavke"
+
+        override fun inboxNotificationContent(count: Int): String = "Ima $count nepročitanih stavki"
     }

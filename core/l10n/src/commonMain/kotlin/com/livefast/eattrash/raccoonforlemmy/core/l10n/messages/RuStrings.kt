@@ -452,4 +452,7 @@ internal val RuStrings =
         override val selectTabNavigationTitle = "Выберите раздел"
         override val messageAuthIssueSegue0 = "Вы можете попробовать одно из следующих действий:"
         override val messageAuthIssueSegue2 = "войдите снова"
+        override val inboxNotificationTitle = "Непрочитанные элементы"
+
+        override fun inboxNotificationContent(count: Int): String = "Непрочитанных элементов: $count"
     }

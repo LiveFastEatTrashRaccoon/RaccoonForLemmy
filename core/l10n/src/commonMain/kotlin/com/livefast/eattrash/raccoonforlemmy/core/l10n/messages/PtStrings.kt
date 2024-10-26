@@ -451,4 +451,7 @@ internal val PtStrings =
         override val selectTabNavigationTitle = "Selecione uma seção"
         override val messageAuthIssueSegue0 = "Você pode tentar uma das seguintes ações:"
         override val messageAuthIssueSegue2 = "fazer login novamente"
+        override val inboxNotificationTitle = "Itens não lidos"
+
+        override fun inboxNotificationContent(count: Int): String = "Existem $count itens não lidos"
     }

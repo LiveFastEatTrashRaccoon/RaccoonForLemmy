@@ -449,4 +449,7 @@ internal val TrStrings =
         override val messageAuthIssueSegue3 = "uygulama verilerini temizle"
         override val messageAuthIssueSegue1 = "yenilemeye zorla"
         override val messageAuthIssueSegue2 = "Tekrar giriş yap"
+        override val inboxNotificationTitle = "Okunmamış öğeler"
+
+        override fun inboxNotificationContent(count: Int): String = "$count okunmamış öğe var"
     }

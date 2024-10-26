@@ -451,4 +451,7 @@ internal val MtStrings =
         override val messageAuthIssueSegue3 = "ċara d-dejta tal-applikazzjoni"
         override val messageAuthIssueSegue1 = "iġiegħel l-aġġornament"
         override val messageAuthIssueSegue2 = "erġa\' illoggja"
+        override val inboxNotificationTitle = "Oġġetti mhux moqrija"
+
+        override fun inboxNotificationContent(count: Int): String = "Hemm $count oġġetti mhux moqrija"
     }

@@ -453,4 +453,7 @@ internal val PlStrings =
         override val messageAuthIssueSegue3 = "wyczyść dane aplikacji"
         override val messageAuthIssueSegue1 = "wymuś odświeżenie"
         override val messageAuthIssueSegue2 = "Zaloguj się jeszcze raz"
+        override val inboxNotificationTitle = "Nieprzeczytane elementy"
+
+        override fun inboxNotificationContent(count: Int): String = "Istnieje $count nieprzeczytanych elementów"
     }

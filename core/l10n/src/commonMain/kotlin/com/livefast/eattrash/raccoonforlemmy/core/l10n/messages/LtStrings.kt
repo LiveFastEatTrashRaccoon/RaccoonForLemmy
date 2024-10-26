@@ -450,4 +450,7 @@ internal val LtStrings =
         override val messageAuthIssueSegue3 = "išvalyti programos duomenis"
         override val messageAuthIssueSegue1 = "priverstinai atnaujinti"
         override val messageAuthIssueSegue2 = "prisijunkite dar kartą"
+        override val inboxNotificationTitle = "Neskaityti elementai"
+
+        override fun inboxNotificationContent(count: Int): String = "Yra $count neskaitytų elementų"
     }

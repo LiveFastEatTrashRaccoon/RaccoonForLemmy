@@ -457,4 +457,7 @@ internal val FrStrings =
         override val settingsManageBanSectionStopWords = "Mots"
         override val settingsManageBanStopWordPlaceholder = "Expression interdite"
         override val settingsManageBanSectionDomains = "Domaines"
+        override val inboxNotificationTitle = "Éléments non lus"
+
+        override fun inboxNotificationContent(count: Int): String = "Il y a $count éléments non lus"
     }

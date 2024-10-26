@@ -448,4 +448,7 @@ internal val SvStrings =
         override val messageAuthIssueSegue1 = "tvinga fram uppdatering"
         override val messageAuthIssueSegue2 = "logga in igen"
         override val messageAuthIssueSegue3 = "rensa applikationsdata"
+        override val inboxNotificationTitle = "Olästa objekt"
+
+        override fun inboxNotificationContent(count: Int): String = "Det finns $count olästa objekt"
     }
