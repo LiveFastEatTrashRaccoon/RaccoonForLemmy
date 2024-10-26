@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -41,12 +42,14 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.buildAnnotatedString
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.LanguageBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.UrlOpeningModeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
@@ -58,6 +61,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toLanguageFlag
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLanguageName
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.UrlOpeningMode
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toReadableName
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.advanced.AdvancedSettingsScreen
@@ -90,6 +95,7 @@ class SettingsScreen : Screen {
         var infoDialogOpened by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
         val uriHandler = LocalUriHandler.current
+        var defaultListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(notificationCenter) {
             notificationCenter
@@ -202,12 +208,7 @@ class SettingsScreen : Screen {
                         title = LocalStrings.current.settingsDefaultListingType,
                         value = uiState.defaultListingType.toReadableName(),
                         onTap = {
-                            val sheet =
-                                ListingTypeBottomSheet(
-                                    isLogged = uiState.isLogged,
-                                    screenKey = "settings",
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
+                            defaultListingTypeBottomSheetOpened = true
                         },
                     )
 
@@ -406,6 +407,45 @@ class SettingsScreen : Screen {
 
         if (infoDialogOpened) {
             AboutDialog().Content()
+        }
+
+        if (defaultListingTypeBottomSheetOpened) {
+            val values =
+                buildList {
+                    if (uiState.isLogged) {
+                        this += ListingType.Subscribed
+                    }
+                    this += ListingType.All
+                    this += ListingType.Local
+                }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label = value.toReadableName(),
+                            trailingContent = {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = value.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            },
+                        )
+                    },
+                onSelected = { index ->
+                    defaultListingTypeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeFeedType(
+                                value = values[index],
+                                screenKey = "settings",
+                            ),
+                        )
+                    }
+                },
+            )
         }
     }
 }

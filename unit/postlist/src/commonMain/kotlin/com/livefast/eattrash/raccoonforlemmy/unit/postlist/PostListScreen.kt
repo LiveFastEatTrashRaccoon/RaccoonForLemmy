@@ -65,6 +65,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
@@ -78,20 +79,26 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlace
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.BlockBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CopyPostBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ShareBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon.rememberKeepScreenOn
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
@@ -126,6 +133,7 @@ class PostListScreen : Screen {
         val lazyListState = rememberLazyListState()
         val drawerCoordinator = remember { getDrawerCoordinator() }
         val scope = rememberCoroutineScope()
+        val notificationCenter = remember { getNotificationCenter() }
         var rawContent by remember { mutableStateOf<Any?>(null) }
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
@@ -138,6 +146,7 @@ class PostListScreen : Screen {
             }
         val clipboardManager = LocalClipboardManager.current
         var itemIdToDelete by remember { mutableStateOf<Long?>(null) }
+        var listingTypeBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection
@@ -204,17 +213,12 @@ class PostListScreen : Screen {
                         }
                     },
                     onSelectListingType = {
-                        val sheet =
-                            ListingTypeBottomSheet(
-                                isLogged = uiState.isLogged,
-                                screenKey = "postList",
-                            )
-                        navigationCoordinator.showBottomSheet(sheet)
+                        listingTypeBottomSheetOpened = true
                     },
                     onSelectInstance =
                         {
                             navigationCoordinator.showBottomSheet(SelectInstanceBottomSheet())
-                        }.takeIf { uiState.isLogged },
+                        }.takeIf { !uiState.isLogged },
                     onSelectSortType = {
                         val sheet =
                             SortBottomSheet(
@@ -855,6 +859,45 @@ class PostListScreen : Screen {
                 },
                 text = {
                     Text(text = LocalStrings.current.messageAreYouSure)
+                },
+            )
+        }
+
+        if (listingTypeBottomSheetOpened) {
+            val values =
+                buildList {
+                    if (uiState.isLogged) {
+                        this += ListingType.Subscribed
+                    }
+                    this += ListingType.All
+                    this += ListingType.Local
+                }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label = value.toReadableName(),
+                            trailingContent = {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = value.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            },
+                        )
+                    },
+                onSelected = { index ->
+                    listingTypeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeFeedType(
+                                value = values[index],
+                                screenKey = "postList",
+                            ),
+                        )
+                    }
                 },
             )
         }

@@ -35,8 +35,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -52,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeAction
@@ -62,7 +65,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserItem
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ListingTypeBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ResultTypeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
@@ -70,13 +74,18 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSectio
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResult
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.uniqueIdentifier
 import com.livefast.eattrash.raccoonforlemmy.unit.explore.components.ExploreTopBar
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
@@ -129,6 +138,7 @@ class ExploreScreen(
         val detailOpener = remember { getDetailOpener() }
         val connection = navigationCoordinator.getBottomBarScrollConnection()
         val scope = rememberCoroutineScope()
+        val notificationCenter = remember { getNotificationCenter() }
         val isOnOtherInstance = remember { otherInstance.isNotEmpty() }
         val otherInstanceName = remember { otherInstance }
         val snackbarHostState = remember { SnackbarHostState() }
@@ -142,6 +152,7 @@ class ExploreScreen(
                 }
             }
         val searchFocusRequester = remember { FocusRequester() }
+        var listingTypeBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection
@@ -190,12 +201,7 @@ class ExploreScreen(
                     edgeToEdge = settings.edgeToEdge,
                     onSelectListingType = {
                         focusManager.clearFocus()
-                        val sheet =
-                            ListingTypeBottomSheet(
-                                isLogged = uiState.isLogged,
-                                screenKey = notificationEventKey,
-                            )
-                        navigationCoordinator.showBottomSheet(sheet)
+                        listingTypeBottomSheetOpened = true
                     },
                     onSelectSortType = {
                         focusManager.clearFocus()
@@ -756,6 +762,45 @@ class ExploreScreen(
                     }
                 }
             }
+        }
+
+        if (listingTypeBottomSheetOpened) {
+            val values =
+                buildList {
+                    if (uiState.isLogged) {
+                        this += ListingType.Subscribed
+                    }
+                    this += ListingType.All
+                    this += ListingType.Local
+                }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label = value.toReadableName(),
+                            trailingContent = {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = value.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            },
+                        )
+                    },
+                onSelected = { index ->
+                    listingTypeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeFeedType(
+                                value = values[index],
+                                screenKey = notificationEventKey,
+                            ),
+                        )
+                    }
+                },
+            )
         }
     }
 }
