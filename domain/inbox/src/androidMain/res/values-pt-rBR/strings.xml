@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="inbox_notification_title">Itens não lidos</string>
-    <string name="inbox_notification_content">Você tem %1$d itens não lidos</string>
-</resources>
