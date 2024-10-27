@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.inbox.notification
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -33,7 +32,6 @@ internal class CheckNotificationWorker(
             Result.success()
         }
 
-    @SuppressLint("StringFormatInvalid")
     private fun sendNotification(count: Int) {
         val title = l10nManager.currentValues.inboxNotificationTitle
         val content = l10nManager.currentValues.inboxNotificationContent(count)

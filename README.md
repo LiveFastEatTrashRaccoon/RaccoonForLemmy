@@ -162,12 +162,16 @@ Here are some options to install the application on your device.
 
 ## Want to leave your feedback or report a bug?
 
+- subscribe to our [Lemmy community](https://lemmy.world/c/raccoonforlemmyapp) to receive updates
+  about the new releases, participate into public discussions, share your feedback or suggestions;
+- join the [Matrix room](https://matrix.to/#/#raccoonforlemmyapp:matrix.orgg) of this project to
+  reach out to the developers and other users;
 - open an issue on this
   project's [issue tracker](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/issues) to report bugs
   or request new features
 - if you are a translator and want to help out with l10n or submit some corrections but you don't
   feel confident with repository forks, pull requests, managing resource files, etc. feel free to
-  drop an email or contact the maintainers in any way.
+  drop an email or contact the maintainers.
 
 Please remember: every contribution is welcome and everyone's opinion matters here. This is a
 community project, open source, ad-free and free of charge, and it belongs to us all so don't be
