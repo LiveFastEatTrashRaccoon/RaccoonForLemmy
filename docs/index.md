@@ -183,10 +183,11 @@ links:
 If, on the other hand, you just want to interact with the community, provide suggestions, report
 bugs, contribute with translations or tell your opinion, you can:
 
-- use the [Lemmy community](https://lemmy.world/c/raccoonforlemmyapp) to receive updates about the
-  new
-  releases, participate into public discussions in the Lemmy style and provide your feedback or even
-  share your memes about raccoons with any other interested people;
+- subscribe to our [Lemmy community](https://lemmy.world/c/raccoonforlemmyapp) to receive updates
+  about the new releases, participate into public discussions in the Lemmy style and provide your
+  feedback or suggestions;
+- join the [Matrix room](https://matrix.to/#/#raccoonforlemmyapp:matrix.orgg) of this project to
+  reach out to the developers and other users;
 - use the GitHub [issue tracker](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/issues)
   to report
   bugs or request features;
