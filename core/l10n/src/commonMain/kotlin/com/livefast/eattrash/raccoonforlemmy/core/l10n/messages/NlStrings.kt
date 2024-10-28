@@ -320,7 +320,6 @@ internal val NlStrings =
         override val barThemeTransparent = "Transparant"
         override val settingsBarTheme = "Thema van de status- en navigatiebalk"
         override val settingsColorsAndFonts = "Applicatie uiterlijk"
-        override val settingsAboutViewGooglePlay = "Bekijk op Google Play"
         override val settingsUserManual = "Handleiding"
         override val settingsShowScores = "Scores tonen"
         override val settingsVoteFormatHidden = "Verborgen"
@@ -454,4 +453,6 @@ internal val NlStrings =
         override val inboxNotificationTitle = "Ongelezen items"
 
         override fun inboxNotificationContent(count: Int): String = "Er zijn $count ongelezen items"
+
+        override val settingsAboutMatrix = "Sluit je aan bij de Matrix-kamer"
     }

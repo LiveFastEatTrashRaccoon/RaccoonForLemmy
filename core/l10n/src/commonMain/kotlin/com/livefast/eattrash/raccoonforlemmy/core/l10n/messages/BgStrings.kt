@@ -320,7 +320,6 @@ internal val BgStrings =
         override val barThemeTransparent = "Прозрачен"
         override val settingsBarTheme = "Тема на лентата за състояние и навигация"
         override val settingsColorsAndFonts = "Външен вид на приложението"
-        override val settingsAboutViewGooglePlay = "Вижте в Google Play"
         override val settingsUserManual = "Ръководство за употреба"
         override val settingsShowScores = "Показване на точките"
         override val settingsVoteFormatHidden = "Скрити"
@@ -457,4 +456,6 @@ internal val BgStrings =
         override val inboxNotificationTitle = "Непрочетени елементи"
 
         override fun inboxNotificationContent(count: Int): String = "Има $count непрочетени елемента"
+
+        override val settingsAboutMatrix = "Присъединете се към стая Matrix"
     }

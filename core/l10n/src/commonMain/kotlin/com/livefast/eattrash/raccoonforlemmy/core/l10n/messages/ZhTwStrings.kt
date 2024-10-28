@@ -370,7 +370,6 @@ internal val ZhTwStrings =
         override val buttonAdd = "添加新的"
         override val barThemeTransparent = "透明"
         override val settingsColorsAndFonts = "應用外觀"
-        override val settingsAboutViewGooglePlay = "在Google Play上查看"
         override val settingsTitleFontScale = "標題文字大小"
         override val banReasonPlaceholder = "原因（可選）"
         override val settingsCommentFontScale = "評論文字大小"

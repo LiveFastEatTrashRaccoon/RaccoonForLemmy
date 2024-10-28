@@ -319,7 +319,6 @@ internal val SkStrings =
         override val barThemeTransparent = "Transparentné"
         override val settingsBarTheme = "Téma stavovej a navigačnej lišty"
         override val settingsColorsAndFonts = "Vzhľad aplikácie"
-        override val settingsAboutViewGooglePlay = "Zobraziť v službe Google Play"
         override val settingsUserManual = "Používateľská príručka"
         override val settingsShowScores = "Zobraziť skóre"
         override val settingsVoteFormatHidden = "Skryté"
@@ -457,4 +456,6 @@ internal val SkStrings =
         override val inboxNotificationTitle = "Neprečítané položky"
 
         override fun inboxNotificationContent(count: Int): String = "Počet neprečítaných položiek: $count"
+
+        override val settingsAboutMatrix = "Vstúpte do miestnosti Matrix"
     }

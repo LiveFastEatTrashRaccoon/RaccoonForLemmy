@@ -320,7 +320,6 @@ interface Strings {
     val barThemeTransparent: String
     val settingsBarTheme: String
     val settingsColorsAndFonts: String
-    val settingsAboutViewGooglePlay: String
     val settingsUserManual: String
     val settingsShowScores: String
     val settingsVoteFormatHidden: String
@@ -440,6 +439,8 @@ interface Strings {
     val inboxNotificationTitle: String
 
     fun inboxNotificationContent(count: Int): String
+
+    val settingsAboutMatrix: String
 }
 
 object Locales {

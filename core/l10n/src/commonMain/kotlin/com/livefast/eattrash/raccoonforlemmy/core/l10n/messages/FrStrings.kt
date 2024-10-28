@@ -322,7 +322,6 @@ internal val FrStrings =
         override val barThemeTransparent = "Transparent"
         override val settingsBarTheme = "Thème barre d\'état et de navigation"
         override val settingsColorsAndFonts = "Apparence de l\'application"
-        override val settingsAboutViewGooglePlay = "Voir sur Google Play"
         override val settingsUserManual = "Manuel de l\'utilisateur"
         override val settingsShowScores = "Afficher les votes"
         override val settingsVoteFormatHidden = "Caché"
@@ -460,4 +459,6 @@ internal val FrStrings =
         override val inboxNotificationTitle = "Éléments non lus"
 
         override fun inboxNotificationContent(count: Int): String = "Il y a $count éléments non lus"
+
+        override val settingsAboutMatrix = "Rejoindre la salle Matrix"
     }

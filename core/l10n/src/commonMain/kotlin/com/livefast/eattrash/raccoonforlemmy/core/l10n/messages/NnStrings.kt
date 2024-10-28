@@ -319,7 +319,6 @@ internal val NnStrings =
         override val barThemeTransparent = "Gjennomsiktig"
         override val settingsBarTheme = "Tema for status- og navigasjonslinjen"
         override val settingsColorsAndFonts = "Søknadsutseende"
-        override val settingsAboutViewGooglePlay = "Se på Google Play"
         override val settingsUserManual = "Brukermanual"
         override val settingsShowScores = "Vis poeng"
         override val settingsVoteFormatHidden = "Skjult"
@@ -450,4 +449,6 @@ internal val NnStrings =
         override val inboxNotificationTitle = "Uleste elementer"
 
         override fun inboxNotificationContent(count: Int): String = "Det er $count uleste elementer"
+
+        override val settingsAboutMatrix = "Bli med i Matrix-rommet"
     }

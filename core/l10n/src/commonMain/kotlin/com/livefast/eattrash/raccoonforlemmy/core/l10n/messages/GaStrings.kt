@@ -319,7 +319,6 @@ internal val GaStrings =
         override val barThemeTransparent = "Trédhearcach"
         override val settingsBarTheme = "Téama an bharra stádais agus nascleanúna"
         override val settingsColorsAndFonts = "Cuma iarratais"
-        override val settingsAboutViewGooglePlay = "Amharc ar Google Play"
         override val settingsUserManual = "Lámhleabhar úsáideora"
         override val settingsShowScores = "Taispeáin scóir"
         override val settingsVoteFormatHidden = "I bhfolach"
@@ -454,4 +453,6 @@ internal val GaStrings =
         override val inboxNotificationTitle = "Míreanna neamhléite"
 
         override fun inboxNotificationContent(count: Int): String = "Tá $count mír neamhléite"
+
+        override val settingsAboutMatrix = "Bí ar an seomra Matrix"
     }

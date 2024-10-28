@@ -319,7 +319,6 @@ internal val DaStrings =
         override val barThemeTransparent = "Gennemsigtig"
         override val settingsBarTheme = "Tema for status- og navigationslinjen"
         override val settingsColorsAndFonts = "Ansøgningens udseende"
-        override val settingsAboutViewGooglePlay = "Se på Google Play"
         override val settingsUserManual = "Brugermanual"
         override val settingsShowScores = "Vis point"
         override val settingsVoteFormatHidden = "Skjult"
@@ -450,4 +449,6 @@ internal val DaStrings =
         override val inboxNotificationTitle = "Ulæste elementer"
 
         override fun inboxNotificationContent(count: Int): String = "Der er $count ulæste elementer"
+
+        override val settingsAboutMatrix = "Deltag i Matrix værelse"
     }

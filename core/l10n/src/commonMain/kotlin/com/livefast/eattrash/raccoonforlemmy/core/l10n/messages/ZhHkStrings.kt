@@ -328,7 +328,6 @@ internal val ZhHkStrings =
         override val barThemeTransparent = "透明"
         override val settingsBarTheme = "系統通知和導航欄主題"
         override val settingsColorsAndFonts = "應用外觀"
-        override val settingsAboutViewGooglePlay = "喺Google Play上查看"
         override val settingsUserManual = "用戶手冊"
         override val settingsShowScores = "顯示分數"
         override val settingsVoteFormatHidden = "隱藏"

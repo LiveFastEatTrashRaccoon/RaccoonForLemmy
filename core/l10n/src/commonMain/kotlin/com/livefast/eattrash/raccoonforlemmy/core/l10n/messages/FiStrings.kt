@@ -318,7 +318,6 @@ internal val FiStrings =
         override val barThemeTransparent = "Läpinäkyvä"
         override val settingsBarTheme = "Tila- ja navigointipalkin teema"
         override val settingsColorsAndFonts = "Sovelluksen ulkonäkö"
-        override val settingsAboutViewGooglePlay = "Katso Google Playssa"
         override val settingsUserManual = "Ohjekirja"
         override val settingsShowScores = "Näytä pisteet"
         override val settingsVoteFormatHidden = "Piilotettu"
@@ -449,4 +448,6 @@ internal val FiStrings =
         override val inboxNotificationTitle = "Lukemattomat kohteet"
 
         override fun inboxNotificationContent(count: Int): String = "$count lukematonta kohdetta"
+
+        override val settingsAboutMatrix = "Liity Matrix-huoneeseen"
     }

@@ -317,7 +317,6 @@ internal open class DefaultStrings : Strings {
     override val barThemeTransparent = "Transparent"
     override val settingsBarTheme = "System notification and navigation bar theme"
     override val settingsColorsAndFonts = "Application appearance"
-    override val settingsAboutViewGooglePlay = "View on Google Play"
     override val settingsUserManual = "User manual"
     override val settingsShowScores = "Show scores"
     override val settingsVoteFormatHidden = "Hidden"
@@ -442,4 +441,6 @@ internal open class DefaultStrings : Strings {
     override val inboxNotificationTitle = "Unread items"
 
     override fun inboxNotificationContent(count: Int): String = "There are $count unread items"
+
+    override val settingsAboutMatrix = "Join Matrix room"
 }

@@ -151,7 +151,7 @@ internal val ItStrings =
         override val profileYearShort = "a"
         override val settingsAbout = "Informazioni app"
         override val settingsAboutAppVersion = "Versione app"
-        override val settingsAboutChangelog = "Visualizza il registro modifiche"
+        override val settingsAboutChangelog = "Visualizza elenco modifiche"
         override val settingsAboutReportGithub = "Segnala un bug (GitHub)"
         override val settingsAboutReportEmail = "Segnala un bug (e-mail)"
         override val settingsAboutViewGithub = "Vedi su GitHub"
@@ -319,7 +319,6 @@ internal val ItStrings =
         override val barThemeTransparent = "Trasparente"
         override val settingsBarTheme = "Tema barra notifiche di sistema e navigazione"
         override val settingsColorsAndFonts = "Aspetto dell\'applicazione"
-        override val settingsAboutViewGooglePlay = "Vedi su Google Play"
         override val settingsUserManual = "Manuale utente"
         override val settingsShowScores = "Mostra voti"
         override val settingsVoteFormatHidden = "Nascosto"
@@ -457,4 +456,6 @@ internal val ItStrings =
         override val inboxNotificationTitle = "Elementi non letti"
 
         override fun inboxNotificationContent(count: Int): String = "Ci sono $count elementi non letti"
+
+        override val settingsAboutMatrix = "Entra nella room Matrix"
     }

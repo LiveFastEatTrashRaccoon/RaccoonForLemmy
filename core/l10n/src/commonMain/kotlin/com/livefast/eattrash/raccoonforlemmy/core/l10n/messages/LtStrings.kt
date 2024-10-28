@@ -318,7 +318,6 @@ internal val LtStrings =
         override val barThemeTransparent = "Skaidrus"
         override val settingsBarTheme = "Būsenos ir naršymo juostos tema"
         override val settingsColorsAndFonts = "Programos išvaizda"
-        override val settingsAboutViewGooglePlay = "Žiūrėti Google Play"
         override val settingsUserManual = "Vartotojo vadovas"
         override val settingsShowScores = "Rodyti įverčius"
         override val settingsVoteFormatHidden = "Paslėpta"
@@ -453,4 +452,6 @@ internal val LtStrings =
         override val inboxNotificationTitle = "Neskaityti elementai"
 
         override fun inboxNotificationContent(count: Int): String = "Yra $count neskaitytų elementų"
+
+        override val settingsAboutMatrix = "Prisijunkite prie Matrix kambario"
     }

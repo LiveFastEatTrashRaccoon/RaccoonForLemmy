@@ -318,7 +318,6 @@ internal val EtStrings =
         override val barThemeTransparent = "Läbipaistev"
         override val settingsBarTheme = "Oleku- ja navigeerimisriba teema"
         override val settingsColorsAndFonts = "Rakenduse välimus"
-        override val settingsAboutViewGooglePlay = "Vaata Google Plays"
         override val settingsUserManual = "Kasutusjuhend"
         override val settingsShowScores = "Kuva skoorid"
         override val settingsVoteFormatHidden = "Peidetud"
@@ -452,4 +451,6 @@ internal val EtStrings =
         override val inboxNotificationTitle = "Lugemata üksused"
 
         override fun inboxNotificationContent(count: Int): String = "Seal on $count lugemata üksust"
+
+        override val settingsAboutMatrix = "Liituge Matrixi ruumiga"
     }

@@ -319,7 +319,6 @@ internal val EsStrings =
         override val barThemeTransparent = "Transparente"
         override val settingsBarTheme = "Tema barra de estado y navegación"
         override val settingsColorsAndFonts = "Apariencia de la aplicación"
-        override val settingsAboutViewGooglePlay = "Ver en Google Play"
         override val settingsUserManual = "Manual de usuario"
         override val settingsShowScores = "Mostrar puntuaciones"
         override val settingsVoteFormatHidden = "Escondido"
@@ -457,4 +456,6 @@ internal val EsStrings =
         override val inboxNotificationTitle = "Elementos para leer"
 
         override fun inboxNotificationContent(count: Int): String = "Hay $count elementos para leer"
+
+        override val settingsAboutMatrix = "Unirse a la sala Matrix"
     }

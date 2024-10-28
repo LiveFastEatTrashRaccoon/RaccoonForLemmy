@@ -319,7 +319,6 @@ internal val CsStrings =
         override val barThemeTransparent = "Průhledný"
         override val settingsBarTheme = "Téma stavové a navigační lišty"
         override val settingsColorsAndFonts = "Vzhled aplikace"
-        override val settingsAboutViewGooglePlay = "Zobrazit na Google Play"
         override val settingsUserManual = "Uživatelský manuál"
         override val settingsShowScores = "Zobrazit skóre"
         override val settingsVoteFormatHidden = "Skrytý"
@@ -454,4 +453,6 @@ internal val CsStrings =
         override val inboxNotificationTitle = "Nepřečtené položky"
 
         override fun inboxNotificationContent(count: Int): String = "Počet nepřečtených položek: $count"
+
+        override val settingsAboutMatrix = "Připojte se k místnosti Matrix"
     }

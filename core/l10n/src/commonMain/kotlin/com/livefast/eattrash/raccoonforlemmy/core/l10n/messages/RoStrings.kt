@@ -318,7 +318,6 @@ internal val RoStrings =
         override val barThemeTransparent = "Transparent"
         override val settingsBarTheme = "Tema barei de stare și navigare"
         override val settingsColorsAndFonts = "Aspectul aplicației"
-        override val settingsAboutViewGooglePlay = "Vizualizează pe Google Play"
         override val settingsUserManual = "Manual de utilizare"
         override val settingsShowScores = "Arată scoruri"
         override val settingsVoteFormatHidden = "Ascuns"
@@ -453,4 +452,6 @@ internal val RoStrings =
         override val inboxNotificationTitle = "Elemente necitite"
 
         override fun inboxNotificationContent(count: Int): String = "Există $count elemente necitite"
+
+        override val settingsAboutMatrix = "Intră în camera Matrix"
     }

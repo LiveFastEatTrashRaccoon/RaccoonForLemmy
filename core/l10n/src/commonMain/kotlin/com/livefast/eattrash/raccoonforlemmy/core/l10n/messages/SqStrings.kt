@@ -319,7 +319,6 @@ internal val SqStrings =
         override val barThemeTransparent = "Transparente"
         override val settingsBarTheme = "Tema e shiritit të statusit dhe navigimit"
         override val settingsColorsAndFonts = "Pamja e aplikacionit"
-        override val settingsAboutViewGooglePlay = "Shikoni në Google Play"
         override val settingsUserManual = "Manuali i perdoruesit"
         override val settingsShowScores = "Trego rezultatet"
         override val settingsVoteFormatHidden = "I fshehur"
@@ -456,4 +455,6 @@ internal val SqStrings =
         override val inboxNotificationTitle = "Artikuj të palexuar"
 
         override fun inboxNotificationContent(count: Int): String = "Ka $count artikuj të palexuar"
+
+        override val settingsAboutMatrix = "Hyni në dhomën Matrix"
     }

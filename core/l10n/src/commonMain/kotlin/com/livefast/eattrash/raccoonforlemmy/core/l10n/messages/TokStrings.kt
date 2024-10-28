@@ -318,7 +318,6 @@ internal val TokStrings =
         override val barThemeTransparent = "lukin"
         override val settingsBarTheme = "nasin lukin pi linja sewi pi linja anpa"
         override val settingsColorsAndFonts = "nasin lukin ilo"
-        override val settingsAboutViewGooglePlay = "o lukin lon ma Kuko Pileji"
         override val settingsUserManual = "lipu sona pi ilo ni"
         override val settingsShowScores = "o lukin e pana wile"
         override val settingsVoteFormatHidden = "ala"
@@ -446,4 +445,6 @@ internal val TokStrings =
         override val inboxNotificationTitle = "ijo pi wile lukin"
 
         override fun inboxNotificationContent(count: Int): String = "ijo $count pi wile lukin li lon"
+
+        override val settingsAboutMatrix = "o toki lon ilo Masi"
     }

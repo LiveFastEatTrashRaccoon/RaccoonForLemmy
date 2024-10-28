@@ -320,7 +320,6 @@ internal val UkStrings =
         override val barThemeTransparent = "Прозорий"
         override val settingsBarTheme = "Тема панелі стану та навігації"
         override val settingsColorsAndFonts = "Зовнішній вигляд програми"
-        override val settingsAboutViewGooglePlay = "Переглянути в Google Play"
         override val settingsUserManual = "Посібник користувача"
         override val settingsShowScores = "Показати бали"
         override val settingsVoteFormatHidden = "Прихований"
@@ -455,4 +454,6 @@ internal val UkStrings =
         override val inboxNotificationTitle = "Непрочитані елементи"
 
         override fun inboxNotificationContent(count: Int): String = "Непрочитаних елементів:$count"
+
+        override val settingsAboutMatrix = "Увійдіть в кімнату Matrix"
     }
