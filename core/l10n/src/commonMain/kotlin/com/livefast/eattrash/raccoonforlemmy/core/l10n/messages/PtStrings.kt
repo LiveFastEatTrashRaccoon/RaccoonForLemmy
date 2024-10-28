@@ -452,7 +452,11 @@ internal val PtStrings =
         override val messageAuthIssueSegue2 = "fazer login novamente"
         override val inboxNotificationTitle = "Itens não lidos"
 
-        override fun inboxNotificationContent(count: Int): String = "Existem $count itens não lidos"
+        override fun inboxNotificationContent(count: Int): String =
+            when (count) {
+                1 -> "Existe $count item não lido"
+                else -> "Existem $count itens não lidos"
+            }
 
         override val settingsAboutMatrix = "Entre na sala Matrix"
     }

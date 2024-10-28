@@ -451,7 +451,11 @@ internal val RoStrings =
         override val settingsManageBanStopWordPlaceholder = "Expresie interzisă"
         override val inboxNotificationTitle = "Elemente necitite"
 
-        override fun inboxNotificationContent(count: Int): String = "Există $count elemente necitite"
+        override fun inboxNotificationContent(count: Int): String =
+            when (count) {
+                1 -> "Există $count element necitit"
+                else -> "Există $count elemente necitite"
+            }
 
         override val settingsAboutMatrix = "Intră în camera Matrix"
     }

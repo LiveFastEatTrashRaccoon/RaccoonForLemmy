@@ -458,7 +458,11 @@ internal val FrStrings =
         override val settingsManageBanSectionDomains = "Domaines"
         override val inboxNotificationTitle = "Éléments non lus"
 
-        override fun inboxNotificationContent(count: Int): String = "Il y a $count éléments non lus"
+        override fun inboxNotificationContent(count: Int): String =
+            when (count) {
+                1 -> "Il y a $count élément non lu"
+                else -> "Il y a $count éléments non lus"
+            }
 
         override val settingsAboutMatrix = "Rejoindre la salle Matrix"
     }

@@ -440,7 +440,11 @@ internal open class DefaultStrings : Strings {
     override val settingsManageBanSectionStopWords = "Words"
     override val inboxNotificationTitle = "Unread items"
 
-    override fun inboxNotificationContent(count: Int): String = "There are $count unread items"
+    override fun inboxNotificationContent(count: Int): String =
+        when (count) {
+            1 -> "There is $count unread item"
+            else -> "There are $count unread items"
+    }
 
     override val settingsAboutMatrix = "Join Matrix room"
 }
