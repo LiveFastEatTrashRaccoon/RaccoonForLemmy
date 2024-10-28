@@ -64,13 +64,18 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsTextualInfo
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CommunityVisibilityBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditFormattedInfoDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditTextualInfoDialog
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityVisibilityType
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -90,6 +95,7 @@ class EditCommunityScreen(
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val scrollState = rememberScrollState()
         val themeRepository = remember { getThemeRepository() }
+        val notificationCenter = remember { getNotificationCenter() }
         val contentFontFamily by themeRepository.contentFontFamily.collectAsState()
         val contentTypography = contentFontFamily.toTypography()
         val settingsRepository = remember { getSettingsRepository() }
@@ -103,7 +109,8 @@ class EditCommunityScreen(
         val galleryHelper = remember { getGalleryHelper() }
         var openIconPicker by remember { mutableStateOf(false) }
         var openBannerPicker by remember { mutableStateOf(false) }
-        var confirmBackWithUnsavedChangesDialog by remember { mutableStateOf(false) }
+        var confirmBackWithUnsavedChangesDialogOpened by remember { mutableStateOf(false) }
+        var visibilityBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.reduce(EditCommunityMviModel.Intent.Refresh)
@@ -125,7 +132,7 @@ class EditCommunityScreen(
         DisposableEffect(key) {
             navigationCoordinator.setCanGoBackCallback {
                 if (uiState.hasUnsavedChanges) {
-                    confirmBackWithUnsavedChangesDialog = true
+                    confirmBackWithUnsavedChangesDialogOpened = true
                     return@setCanGoBackCallback false
                 }
                 true
@@ -164,7 +171,7 @@ class EditCommunityScreen(
                             IconButton(
                                 onClick = {
                                     if (uiState.hasUnsavedChanges) {
-                                        confirmBackWithUnsavedChangesDialog = true
+                                        confirmBackWithUnsavedChangesDialogOpened = true
                                     } else {
                                         navigationCoordinator.popScreen()
                                     }
@@ -334,8 +341,7 @@ class EditCommunityScreen(
                         title = LocalStrings.current.editCommunityItemVisibility,
                         value = uiState.visibilityType.toReadableName(),
                         onTap = {
-                            val sheet = CommunityVisibilityBottomSheet()
-                            navigationCoordinator.showBottomSheet(sheet)
+                            visibilityBottomSheetOpened = true
                         },
                     )
 
@@ -416,15 +422,15 @@ class EditCommunityScreen(
             }
         }
 
-        if (confirmBackWithUnsavedChangesDialog) {
+        if (confirmBackWithUnsavedChangesDialogOpened) {
             AlertDialog(
                 onDismissRequest = {
-                    confirmBackWithUnsavedChangesDialog = false
+                    confirmBackWithUnsavedChangesDialogOpened = false
                 },
                 dismissButton = {
                     Button(
                         onClick = {
-                            confirmBackWithUnsavedChangesDialog = false
+                            confirmBackWithUnsavedChangesDialogOpened = false
                         },
                     ) {
                         Text(text = LocalStrings.current.buttonNoStay)
@@ -433,7 +439,7 @@ class EditCommunityScreen(
                 confirmButton = {
                     Button(
                         onClick = {
-                            confirmBackWithUnsavedChangesDialog = false
+                            confirmBackWithUnsavedChangesDialogOpened = false
                             navigationCoordinator.popScreen()
                         },
                     ) {
@@ -442,6 +448,42 @@ class EditCommunityScreen(
                 },
                 text = {
                     Text(text = LocalStrings.current.messageUnsavedChanges)
+                },
+            )
+        }
+
+        if (visibilityBottomSheetOpened) {
+            val values =
+                listOf(
+                    CommunityVisibilityType.LocalOnly,
+                    CommunityVisibilityType.Public,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.editCommunityItemVisibility,
+                items =
+                    values.map {
+                        CustomModalBottomSheetItem(
+                            label = it.toReadableName(),
+                            trailingContent = {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = it.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            },
+                        )
+                    },
+                onSelected = { index ->
+                    visibilityBottomSheetOpened = false
+                    if (index != null) {
+                        val value = values[index]
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeCommunityVisibility(
+                                value = value,
+                            ),
+                        )
+                    }
                 },
             )
         }
