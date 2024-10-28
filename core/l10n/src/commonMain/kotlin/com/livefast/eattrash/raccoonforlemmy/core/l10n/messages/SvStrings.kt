@@ -318,7 +318,6 @@ internal val SvStrings =
         override val barThemeTransparent = "Transparent"
         override val settingsBarTheme = "Tema för status- och navigeringsfältet"
         override val settingsColorsAndFonts = "Applikationens utseende"
-        override val settingsAboutViewGooglePlay = "Visa på Google Play"
         override val settingsUserManual = "Användarmanual"
         override val settingsShowScores = "Visa betyg"
         override val settingsVoteFormatHidden = "Dold"
@@ -451,4 +450,6 @@ internal val SvStrings =
         override val inboxNotificationTitle = "Olästa objekt"
 
         override fun inboxNotificationContent(count: Int): String = "Det finns $count olästa objekt"
+
+        override val settingsAboutMatrix = "Gå in i Matrix-rummet"
     }

@@ -318,7 +318,6 @@ internal val EoStrings =
         override val barThemeTransparent = "Travidebla"
         override val settingsBarTheme = "Temo de la statuso kaj navigadbreto"
         override val settingsColorsAndFonts = "Aplika aspekto"
-        override val settingsAboutViewGooglePlay = "Vidi sur Google Play"
         override val settingsUserManual = "Uzantmanlibro"
         override val settingsShowScores = "Montri votojn"
         override val settingsVoteFormatHidden = "Kaŝita"
@@ -445,4 +444,6 @@ internal val EoStrings =
         override val inboxNotificationTitle = "Nelegitaj eroj"
 
         override fun inboxNotificationContent(count: Int): String = "Estas $count nelegitaj eroj"
+
+        override val settingsAboutMatrix = "Aliĝi al Matrix ĉambro"
     }

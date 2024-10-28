@@ -321,7 +321,6 @@ internal val ElStrings =
         override val barThemeTransparent = "Διαφανής"
         override val settingsBarTheme = "Θέμα της γραμμής κατάστασης και πλοήγησης"
         override val settingsColorsAndFonts = "Εμφάνιση εφαρμογής"
-        override val settingsAboutViewGooglePlay = "Προβολή στο Google Play"
         override val settingsUserManual = "Εγχειρίδιο χρήστη"
         override val settingsShowScores = "Προβολή ψήφους"
         override val settingsVoteFormatHidden = "Κρυμμένο"
@@ -461,4 +460,6 @@ internal val ElStrings =
         override val inboxNotificationTitle = "Μη αναγνωσμένα στοιχεία"
 
         override fun inboxNotificationContent(count: Int): String = "Υπάρχουν $count μη αναγνωσμένα στοιχεία"
+
+        override val settingsAboutMatrix = "Εγγραφείτε στην αίθουσα Matrix"
     }

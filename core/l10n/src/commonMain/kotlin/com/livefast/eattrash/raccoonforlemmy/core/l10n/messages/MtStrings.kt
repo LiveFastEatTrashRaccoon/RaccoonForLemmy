@@ -320,7 +320,6 @@ internal val MtStrings =
         override val barThemeTransparent = "Trasparenti"
         override val settingsBarTheme = "Tema tal-istatus u l-bar tan-navigazzjoni"
         override val settingsColorsAndFonts = "Applikazzjoni dehra"
-        override val settingsAboutViewGooglePlay = "Ara fuq Google Play"
         override val settingsUserManual = "Manwal għall-utent"
         override val settingsShowScores = "Uri punteġġi"
         override val settingsVoteFormatHidden = "Moħbija"
@@ -454,4 +453,6 @@ internal val MtStrings =
         override val inboxNotificationTitle = "Oġġetti mhux moqrija"
 
         override fun inboxNotificationContent(count: Int): String = "Hemm $count oġġetti mhux moqrija"
+
+        override val settingsAboutMatrix = "Ingħaqad fil-kamra Matrix"
     }

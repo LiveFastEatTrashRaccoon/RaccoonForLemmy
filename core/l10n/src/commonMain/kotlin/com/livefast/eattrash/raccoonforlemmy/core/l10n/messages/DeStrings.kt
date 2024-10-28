@@ -337,7 +337,6 @@ internal val DeStrings =
         override val barThemeTransparent = "Durchsichtig"
         override val settingsBarTheme = "Theme der Status- und Navigationsleiste"
         override val settingsColorsAndFonts = "Erscheinungsbild der Anwendung"
-        override val settingsAboutViewGooglePlay = "Auf Google Play ansehen"
         override val settingsUserManual = "Benutzerhandbuch"
         override val settingsShowScores = "Aggregierte Votes anzeigen"
         override val settingsVoteFormatHidden = "Versteckt"
@@ -457,4 +456,6 @@ internal val DeStrings =
         override val inboxNotificationTitle = "Ungelesene Beiträge"
 
         override fun inboxNotificationContent(count: Int): String = "Es gibt $count ungelesene Beiträge"
+
+        override val settingsAboutMatrix = "Treten Sie dem Raum Matrix bei"
     }

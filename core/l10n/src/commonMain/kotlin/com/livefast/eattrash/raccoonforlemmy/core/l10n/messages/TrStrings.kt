@@ -319,7 +319,6 @@ internal val TrStrings =
         override val barThemeTransparent = "Şeffaf"
         override val settingsBarTheme = "Durum ve gezinme çubuğunun teması"
         override val settingsColorsAndFonts = "Uygulama görünümü"
-        override val settingsAboutViewGooglePlay = "Google Play\'de görüntüle"
         override val settingsUserManual = "Kullanım kılavuzu"
         override val settingsShowScores = "Puanları göster"
         override val settingsVoteFormatHidden = "Gizlenmiş"
@@ -452,4 +451,6 @@ internal val TrStrings =
         override val inboxNotificationTitle = "Okunmamış öğeler"
 
         override fun inboxNotificationContent(count: Int): String = "$count okunmamış öğe var"
+
+        override val settingsAboutMatrix = "Matrix odasına girin"
     }

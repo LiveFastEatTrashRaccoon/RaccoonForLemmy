@@ -318,7 +318,6 @@ internal val SlStrings =
         override val barThemeTransparent = "Pregleden"
         override val settingsBarTheme = "Tema statusne in navigacijske vrstice"
         override val settingsColorsAndFonts = "Videz aplikacije"
-        override val settingsAboutViewGooglePlay = "Ogled v Google Play"
         override val settingsUserManual = "Navodila za uporabo"
         override val settingsShowScores = "Pokaži rezultate"
         override val settingsVoteFormatHidden = "Skrito"
@@ -454,4 +453,6 @@ internal val SlStrings =
         override val inboxNotificationTitle = "Neprebrani predmeti"
 
         override fun inboxNotificationContent(count: Int): String = "$count neprebranih elementov"
+
+        override val settingsAboutMatrix = "Vstopite v sobo Matrix"
     }

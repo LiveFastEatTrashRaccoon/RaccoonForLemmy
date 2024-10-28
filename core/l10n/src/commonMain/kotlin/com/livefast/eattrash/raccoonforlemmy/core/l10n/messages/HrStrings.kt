@@ -319,7 +319,6 @@ internal val HrStrings =
         override val barThemeTransparent = "Transparentan"
         override val settingsBarTheme = "Tema statusne i navigacijske trake"
         override val settingsColorsAndFonts = "Izgled aplikacije"
-        override val settingsAboutViewGooglePlay = "Pogledajte na Google Playu"
         override val settingsUserManual = "Korisnički priručnik"
         override val settingsShowScores = "Prikaži rezultate"
         override val settingsVoteFormatHidden = "Skriven"
@@ -454,4 +453,6 @@ internal val HrStrings =
         override val inboxNotificationTitle = "Nepročitane stavke"
 
         override fun inboxNotificationContent(count: Int): String = "Ima $count nepročitanih stavki"
+
+        override val settingsAboutMatrix = "Pridružite se Matrix sobi"
     }

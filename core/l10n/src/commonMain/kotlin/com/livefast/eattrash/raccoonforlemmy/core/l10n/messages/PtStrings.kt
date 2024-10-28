@@ -319,7 +319,6 @@ internal val PtStrings =
         override val barThemeTransparent = "Transparente"
         override val settingsBarTheme = "Tema da barra de status e navegação"
         override val settingsColorsAndFonts = "Aparência do aplicativo"
-        override val settingsAboutViewGooglePlay = "Ver no Google Play"
         override val settingsUserManual = "Manual do utilizador"
         override val settingsShowScores = "Mostrar pontoações"
         override val settingsVoteFormatHidden = "Escondido"
@@ -454,4 +453,6 @@ internal val PtStrings =
         override val inboxNotificationTitle = "Itens não lidos"
 
         override fun inboxNotificationContent(count: Int): String = "Existem $count itens não lidos"
+
+        override val settingsAboutMatrix = "Entre na sala Matrix"
     }

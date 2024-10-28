@@ -319,7 +319,6 @@ internal val PlStrings =
         override val barThemeTransparent = "Przezroczysty"
         override val settingsBarTheme = "Motyw paska stanu i nawigacji"
         override val settingsColorsAndFonts = "Wygląd aplikacji"
-        override val settingsAboutViewGooglePlay = "Zobacz w Google Play"
         override val settingsUserManual = "Instrukcja obsługi"
         override val settingsShowScores = "Pokaż statystyki"
         override val settingsVoteFormatHidden = "Ukryty"
@@ -456,4 +455,6 @@ internal val PlStrings =
         override val inboxNotificationTitle = "Nieprzeczytane elementy"
 
         override fun inboxNotificationContent(count: Int): String = "Istnieje $count nieprzeczytanych elementów"
+
+        override val settingsAboutMatrix = "Dołącz do pokoju Matrix"
     }

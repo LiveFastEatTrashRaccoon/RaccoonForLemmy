@@ -320,7 +320,6 @@ internal val HuStrings =
         override val barThemeTransparent = "Átlátszó"
         override val settingsBarTheme = "Az állapot és a navigációs sáv témája"
         override val settingsColorsAndFonts = "Alkalmazás megjelenése"
-        override val settingsAboutViewGooglePlay = "Megtekintés a Google Playen"
         override val settingsUserManual = "Használati utasítás"
         override val settingsShowScores = "Pontok megjelenítése"
         override val settingsVoteFormatHidden = "Rejtett"
@@ -458,4 +457,6 @@ internal val HuStrings =
         override val inboxNotificationTitle = "Olvasatlan elemek"
 
         override fun inboxNotificationContent(count: Int): String = "$count olvasatlan elem van"
+
+        override val settingsAboutMatrix = "Csatlakozz a Matrix szobához"
     }

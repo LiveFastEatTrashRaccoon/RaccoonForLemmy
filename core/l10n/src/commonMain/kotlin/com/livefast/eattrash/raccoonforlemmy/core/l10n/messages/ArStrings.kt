@@ -319,7 +319,6 @@ internal val ArStrings =
         override val barThemeTransparent = "شفاف"
         override val settingsBarTheme = "موضوع الحالة وشريط التنقل"
         override val settingsColorsAndFonts = "مظهر التطبيق"
-        override val settingsAboutViewGooglePlay = "عرض على جوجل بلاي"
         override val settingsUserManual = "دليل الاستخدام"
         override val settingsShowScores = "أظهر التقييمات"
         override val settingsVoteFormatHidden = "مختفي"
@@ -447,4 +446,6 @@ internal val ArStrings =
         override val inboxNotificationTitle = "العناصر غير المقروءة"
 
         override fun inboxNotificationContent(count: Int): String = " عنصر غير مقروء$count هناك "
+
+        override val settingsAboutMatrix = "انضم إلى غرفة Matrix"
     }

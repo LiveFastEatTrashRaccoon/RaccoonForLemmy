@@ -319,7 +319,6 @@ internal val LvStrings =
         override val barThemeTransparent = "Caurspīdīgs"
         override val settingsBarTheme = "Statusa un navigācijas joslas motīvs"
         override val settingsColorsAndFonts = "Lietojumprogrammas izskats"
-        override val settingsAboutViewGooglePlay = "Skatīt pakalpojumā Google Play"
         override val settingsUserManual = "Lietotāja rokasgrāmata"
         override val settingsShowScores = "Rādīt rezultātus"
         override val settingsVoteFormatHidden = "Slēpts"
@@ -452,4 +451,6 @@ internal val LvStrings =
         override val inboxNotificationTitle = "Nelasīti vienumi"
 
         override fun inboxNotificationContent(count: Int): String = "Ir $count nelasīti vienumi"
+
+        override val settingsAboutMatrix = "Pievienojieties Matrix istabai"
     }

@@ -319,7 +319,6 @@ internal val SrStrings =
         override val barThemeTransparent = "Транспарент"
         override val settingsBarTheme = "Тема системских обавештења и траке за навигацију"
         override val settingsColorsAndFonts = "Изглед апликације"
-        override val settingsAboutViewGooglePlay = "Погледајте на Гоогле Плаи-у"
         override val settingsUserManual = "Упутство за коришћење"
         override val settingsShowScores = "Прикажи резултате"
         override val settingsVoteFormatHidden = "Сакривен"
@@ -456,4 +455,6 @@ internal val SrStrings =
         override val inboxNotificationTitle = "Непрочитане ставке"
 
         override fun inboxNotificationContent(count: Int): String = "Постоји $count непрочитаних ставки"
+
+        override val settingsAboutMatrix = "Уђите у собу Matrix"
     }

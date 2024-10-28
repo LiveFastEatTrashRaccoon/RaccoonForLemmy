@@ -319,7 +319,6 @@ internal val RuStrings =
         override val barThemeTransparent = "Прозрачный"
         override val settingsBarTheme = "Тема статусной и навигационной панели"
         override val settingsColorsAndFonts = "Внешний вид приложения"
-        override val settingsAboutViewGooglePlay = "Посмотреть в Google Play"
         override val settingsUserManual = "Руководство пользователя"
         override val settingsShowScores = "Показать оценки"
         override val settingsVoteFormatHidden = "Скрытый"
@@ -455,4 +454,6 @@ internal val RuStrings =
         override val inboxNotificationTitle = "Непрочитанные элементы"
 
         override fun inboxNotificationContent(count: Int): String = "Непрочитанных элементов: $count"
+
+        override val settingsAboutMatrix = "Войдите в комнату Matrix"
     }
