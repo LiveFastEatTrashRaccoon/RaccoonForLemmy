@@ -1,10 +1,14 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.profile.main
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuOpen
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -36,11 +40,16 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.ModeratorZoneAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toIcon
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toModeratorZoneAction
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ModeratorZoneBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toReadableName
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -87,7 +96,8 @@ internal object ProfileMainScreen : Tab {
         val scope = rememberCoroutineScope()
         val notificationCenter = remember { getNotificationCenter() }
         val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
-        var logoutConfirmDialogOpen by remember { mutableStateOf(false) }
+        var logoutConfirmDialogOpened by remember { mutableStateOf(false) }
+        var moderatorZoneBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(notificationCenter) {
             notificationCenter
@@ -139,11 +149,11 @@ internal object ProfileMainScreen : Tab {
                         }
 
                         NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone -> {
-                            navigationCoordinator.showBottomSheet(ModeratorZoneBottomSheet())
+                            moderatorZoneBottomSheetOpened = true
                         }
 
                         NotificationCenterEvent.ProfileSideMenuAction.Logout -> {
-                            logoutConfirmDialogOpen = true
+                            logoutConfirmDialogOpened = true
                         }
 
                         NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity -> {
@@ -260,10 +270,10 @@ internal object ProfileMainScreen : Tab {
             }
         }
 
-        if (logoutConfirmDialogOpen) {
+        if (logoutConfirmDialogOpened) {
             AlertDialog(
                 onDismissRequest = {
-                    logoutConfirmDialogOpen = false
+                    logoutConfirmDialogOpened = false
                 },
                 title = {
                     Text(
@@ -277,7 +287,7 @@ internal object ProfileMainScreen : Tab {
                 dismissButton = {
                     Button(
                         onClick = {
-                            logoutConfirmDialogOpen = false
+                            logoutConfirmDialogOpened = false
                         },
                     ) {
                         Text(text = LocalStrings.current.buttonCancel)
@@ -286,11 +296,54 @@ internal object ProfileMainScreen : Tab {
                 confirmButton = {
                     Button(
                         onClick = {
-                            logoutConfirmDialogOpen = false
+                            logoutConfirmDialogOpened = false
                             model.reduce(ProfileMainMviModel.Intent.Logout)
                         },
                     ) {
                         Text(text = LocalStrings.current.buttonConfirm)
+                    }
+                },
+            )
+        }
+
+        if (moderatorZoneBottomSheetOpened) {
+            val values =
+                listOf(
+                    ModeratorZoneAction.GlobalReports,
+                    ModeratorZoneAction.GlobalModLog,
+                    ModeratorZoneAction.ModeratedContents,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.moderatorZoneTitle,
+                items =
+                    values.map {
+                        CustomModalBottomSheetItem(
+                            label = it.toReadableName(),
+                            trailingContent = {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                                ) {
+                                    Icon(
+                                        modifier = Modifier.size(IconSize.m),
+                                        imageVector = it.toIcon(),
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onBackground,
+                                    )
+                                    Icon(
+                                        imageVector = Icons.Default.ChevronRight,
+                                        tint = MaterialTheme.colorScheme.onBackground,
+                                        contentDescription = null,
+                                    )
+                                }
+                            },
+                        )
+                    },
+                onSelected = { index ->
+                    moderatorZoneBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ModeratorZoneActionSelected(values[index].toInt()),
+                        )
                     }
                 },
             )
