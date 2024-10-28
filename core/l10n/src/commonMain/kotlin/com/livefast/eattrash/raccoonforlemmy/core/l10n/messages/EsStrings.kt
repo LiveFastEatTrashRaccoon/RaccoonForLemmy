@@ -455,7 +455,11 @@ internal val EsStrings =
         override val settingsManageBanStopWordPlaceholder = "Expresión prohibida"
         override val inboxNotificationTitle = "Elementos para leer"
 
-        override fun inboxNotificationContent(count: Int): String = "Hay $count elementos para leer"
+        override fun inboxNotificationContent(count: Int): String =
+            when (count) {
+                1 -> "Hay $count elemento para leer"
+                else -> "Hay $count elementos para leer"
+            }
 
         override val settingsAboutMatrix = "Unirse a la sala Matrix"
     }
