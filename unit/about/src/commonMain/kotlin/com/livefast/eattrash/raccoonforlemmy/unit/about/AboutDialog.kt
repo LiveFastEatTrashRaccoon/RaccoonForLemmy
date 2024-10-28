@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.Gavel
 import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material.icons.filled.Shop
 import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
@@ -78,7 +78,7 @@ class AboutDialog : Screen {
                         modifier =
                             Modifier
                                 .padding(vertical = Spacing.s, horizontal = Spacing.m)
-                                .heightIn(max = 400.dp),
+                                .heightIn(max = 500.dp),
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         item {
@@ -112,7 +112,7 @@ class AboutDialog : Screen {
                             Button(
                                 onClick = {
                                     runCatching {
-                                        uriHandler.openUri("mailto:${AboutConstants.REPORT_EMAIL_ADDRESS}")
+                                        uriHandler.openUri(AboutConstants.REPORT_EMAIL_ADDRESS)
                                     }
                                 },
                             ) {
@@ -135,16 +135,6 @@ class AboutDialog : Screen {
                         }
                         item {
                             AboutItem(
-                                vector = Icons.Default.Shop,
-                                text = LocalStrings.current.settingsAboutViewGooglePlay,
-                                textDecoration = TextDecoration.Underline,
-                                onClick = {
-                                    uriHandler.openUri(AboutConstants.GOOGLE_PLAY_URL)
-                                },
-                            )
-                        }
-                        item {
-                            AboutItem(
                                 painter = coreResources.lemmy,
                                 text = LocalStrings.current.settingsAboutViewLemmy,
                                 textDecoration = TextDecoration.Underline,
@@ -156,7 +146,16 @@ class AboutDialog : Screen {
                                 },
                             )
                         }
-
+                        item {
+                            AboutItem(
+                                vector = Icons.AutoMirrored.Default.Chat,
+                                text = LocalStrings.current.settingsAboutMatrix,
+                                textDecoration = TextDecoration.Underline,
+                                onClick = {
+                                    uriHandler.openUri(AboutConstants.MATRIX_URL)
+                                },
+                            )
+                        }
                         item {
                             AboutItem(
                                 text = LocalStrings.current.settingsAboutLicences,
