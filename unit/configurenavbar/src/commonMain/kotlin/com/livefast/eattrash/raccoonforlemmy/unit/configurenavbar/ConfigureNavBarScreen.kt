@@ -45,11 +45,14 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectTabNavigationSectionBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toReadableName
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.composable.ConfigureAddAction
 import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.composable.ConfigureNavBarItem
@@ -63,6 +66,7 @@ class ConfigureNavBarScreen : Screen {
         val model = getScreenModel<ConfigureNavBarMviModel>()
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
+        val notificationCenter = remember { getNotificationCenter() }
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val settingsRepository = remember { getSettingsRepository() }
@@ -77,12 +81,13 @@ class ConfigureNavBarScreen : Screen {
                     ),
                 )
             }
-        var confirmBackWithUnsavedChangesDialog by remember { mutableStateOf(false) }
+        var confirmBackWithUnsavedChangesDialogOpened by remember { mutableStateOf(false) }
+        var selectTabNavigationSectionBottomSheetOpened by remember { mutableStateOf(false) }
 
         DisposableEffect(key) {
             navigationCoordinator.setCanGoBackCallback {
                 if (uiState.hasUnsavedChanges) {
-                    confirmBackWithUnsavedChangesDialog = true
+                    confirmBackWithUnsavedChangesDialogOpened = true
                     return@setCanGoBackCallback false
                 }
                 true
@@ -112,7 +117,7 @@ class ConfigureNavBarScreen : Screen {
                             IconButton(
                                 onClick = {
                                     if (uiState.hasUnsavedChanges) {
-                                        confirmBackWithUnsavedChangesDialog = true
+                                        confirmBackWithUnsavedChangesDialogOpened = true
                                     } else {
                                         navigationCoordinator.popScreen()
                                     }
@@ -214,10 +219,7 @@ class ConfigureNavBarScreen : Screen {
                         item {
                             ConfigureAddAction(
                                 onAdd = {
-                                    val available = model.uiState.value.availableSections
-                                    val sheet =
-                                        SelectTabNavigationSectionBottomSheet(values = available)
-                                    navigationCoordinator.showBottomSheet(sheet)
+                                    selectTabNavigationSectionBottomSheetOpened = true
                                 },
                             )
                         }
@@ -240,15 +242,15 @@ class ConfigureNavBarScreen : Screen {
             }
         }
 
-        if (confirmBackWithUnsavedChangesDialog) {
+        if (confirmBackWithUnsavedChangesDialogOpened) {
             AlertDialog(
                 onDismissRequest = {
-                    confirmBackWithUnsavedChangesDialog = false
+                    confirmBackWithUnsavedChangesDialogOpened = false
                 },
                 dismissButton = {
                     Button(
                         onClick = {
-                            confirmBackWithUnsavedChangesDialog = false
+                            confirmBackWithUnsavedChangesDialogOpened = false
                         },
                     ) {
                         Text(text = LocalStrings.current.buttonNoStay)
@@ -257,7 +259,7 @@ class ConfigureNavBarScreen : Screen {
                 confirmButton = {
                     Button(
                         onClick = {
-                            confirmBackWithUnsavedChangesDialog = false
+                            confirmBackWithUnsavedChangesDialogOpened = false
                             navigationCoordinator.popScreen()
                         },
                     ) {
@@ -266,6 +268,27 @@ class ConfigureNavBarScreen : Screen {
                 },
                 text = {
                     Text(text = LocalStrings.current.messageUnsavedChanges)
+                },
+            )
+        }
+
+        if (selectTabNavigationSectionBottomSheetOpened) {
+            val values = model.uiState.value.availableSections
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value.toReadableName())
+                    },
+                onSelected = { index ->
+                    selectTabNavigationSectionBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.TabNavigationSectionSelected(
+                                sectionId = values[index].toInt(),
+                            ),
+                        )
+                    }
                 },
             )
         }

@@ -51,7 +51,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.LanguageBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.UrlOpeningModeBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -60,6 +59,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificati
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLanguageFlag
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLanguageName
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.UrlOpeningMode
+import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
@@ -96,6 +96,7 @@ class SettingsScreen : Screen {
         val scope = rememberCoroutineScope()
         val uriHandler = LocalUriHandler.current
         var defaultListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
+        var urlOpeningBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(notificationCenter) {
             notificationCenter
@@ -268,18 +269,7 @@ class SettingsScreen : Screen {
                         title = LocalStrings.current.settingsOpenUrlExternal,
                         value = uiState.urlOpeningMode.toReadableName(),
                         onTap = {
-                            val screen =
-                                UrlOpeningModeBottomSheet(
-                                    values =
-                                        buildList {
-                                            this += UrlOpeningMode.Internal
-                                            if (uiState.customTabsEnabled) {
-                                                this += UrlOpeningMode.CustomTabs
-                                            }
-                                            this += UrlOpeningMode.External
-                                        },
-                                )
-                            navigationCoordinator.showBottomSheet(screen)
+                            urlOpeningBottomSheetOpened = true
                         },
                     )
 
@@ -441,6 +431,34 @@ class SettingsScreen : Screen {
                             NotificationCenterEvent.ChangeFeedType(
                                 value = values[index],
                                 screenKey = "settings",
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (urlOpeningBottomSheetOpened) {
+            val values =
+                buildList {
+                    this += UrlOpeningMode.Internal
+                    if (uiState.customTabsEnabled) {
+                        this += UrlOpeningMode.CustomTabs
+                    }
+                    this += UrlOpeningMode.External
+                }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsOpenUrlExternal,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value.toReadableName())
+                    },
+                onSelected = { index ->
+                    urlOpeningBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeUrlOpeningMode(
+                                value = values[index].toInt(),
                             ),
                         )
                     }

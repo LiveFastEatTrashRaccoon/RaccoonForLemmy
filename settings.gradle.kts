@@ -16,7 +16,7 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "Raccoon_for_Lemmy"
+rootProject.name = "RaccoonForLemmy"
 include(":androidApp")
 include(":shared")
 

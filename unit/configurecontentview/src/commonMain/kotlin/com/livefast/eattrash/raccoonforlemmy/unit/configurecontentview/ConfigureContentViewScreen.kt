@@ -27,7 +27,9 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.screen.Screen
@@ -42,12 +44,15 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeade
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsIntValueRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.PostLayoutBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.VoteFormatBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.unit.choosefont.FontFamilyBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.unit.choosefont.FontScaleBottomSheet
 
@@ -58,9 +63,11 @@ class ConfigureContentViewScreen : Screen {
         val model = getScreenModel<ConfigureContentViewMviModel>()
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
+        val notificationCenter = remember { getNotificationCenter() }
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val scrollState = rememberScrollState()
+        var voteFormatBottomSheetOpened by remember { mutableStateOf(false) }
 
         Scaffold(
             modifier =
@@ -242,8 +249,7 @@ class ConfigureContentViewScreen : Screen {
                         title = LocalStrings.current.settingsVoteFormat,
                         value = uiState.voteFormat.toReadableName(),
                         onTap = {
-                            val sheet = VoteFormatBottomSheet()
-                            navigationCoordinator.showBottomSheet(sheet)
+                            voteFormatBottomSheetOpened = true
                         },
                     )
 
@@ -292,6 +298,31 @@ class ConfigureContentViewScreen : Screen {
                     Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
             }
+        }
+
+        if (voteFormatBottomSheetOpened) {
+            val values =
+                listOf(
+                    VoteFormat.Aggregated,
+                    VoteFormat.Separated,
+                    VoteFormat.Percentage,
+                    VoteFormat.Hidden,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value.toReadableName())
+                    },
+                onSelected = { index ->
+                    voteFormatBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeVoteFormat(value = values[index]),
+                        )
+                    }
+                },
+            )
         }
     }
 }

@@ -8,23 +8,23 @@ import androidx.compose.ui.text.font.FontWeight
 import com.livefast.eattrash.raccoonforlemmy.core.resources.CoreResources
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
-import raccoon_for_lemmy.shared.generated.resources.Res
-import raccoon_for_lemmy.shared.generated.resources.charissil_bold
-import raccoon_for_lemmy.shared.generated.resources.charissil_italic
-import raccoon_for_lemmy.shared.generated.resources.charissil_regular
-import raccoon_for_lemmy.shared.generated.resources.ic_alt_1
-import raccoon_for_lemmy.shared.generated.resources.ic_alt_2
-import raccoon_for_lemmy.shared.generated.resources.ic_default
-import raccoon_for_lemmy.shared.generated.resources.ic_github
-import raccoon_for_lemmy.shared.generated.resources.ic_lemmy
-import raccoon_for_lemmy.shared.generated.resources.notosans_bold
-import raccoon_for_lemmy.shared.generated.resources.notosans_italic
-import raccoon_for_lemmy.shared.generated.resources.notosans_medium
-import raccoon_for_lemmy.shared.generated.resources.notosans_regular
-import raccoon_for_lemmy.shared.generated.resources.poppins_bold
-import raccoon_for_lemmy.shared.generated.resources.poppins_italic
-import raccoon_for_lemmy.shared.generated.resources.poppins_medium
-import raccoon_for_lemmy.shared.generated.resources.poppins_regular
+import raccoonforlemmy.shared.generated.resources.Res
+import raccoonforlemmy.shared.generated.resources.charissil_bold
+import raccoonforlemmy.shared.generated.resources.charissil_italic
+import raccoonforlemmy.shared.generated.resources.charissil_regular
+import raccoonforlemmy.shared.generated.resources.ic_alt_1
+import raccoonforlemmy.shared.generated.resources.ic_alt_2
+import raccoonforlemmy.shared.generated.resources.ic_default
+import raccoonforlemmy.shared.generated.resources.ic_github
+import raccoonforlemmy.shared.generated.resources.ic_lemmy
+import raccoonforlemmy.shared.generated.resources.notosans_bold
+import raccoonforlemmy.shared.generated.resources.notosans_italic
+import raccoonforlemmy.shared.generated.resources.notosans_medium
+import raccoonforlemmy.shared.generated.resources.notosans_regular
+import raccoonforlemmy.shared.generated.resources.poppins_bold
+import raccoonforlemmy.shared.generated.resources.poppins_italic
+import raccoonforlemmy.shared.generated.resources.poppins_medium
+import raccoonforlemmy.shared.generated.resources.poppins_regular
 
 internal class SharedResources : CoreResources {
     override val github: Painter
