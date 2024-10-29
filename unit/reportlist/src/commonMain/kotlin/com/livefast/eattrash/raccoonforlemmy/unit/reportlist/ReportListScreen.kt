@@ -54,9 +54,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeActio
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ReportListTypeSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentReportModel
@@ -81,12 +84,14 @@ class ReportListScreen(
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val navigationCoordinator = remember { getNavigationCoordinator() }
+        val notificationCenter = remember { getNotificationCenter() }
         var rawContent by remember { mutableStateOf<Any?>(null) }
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
         val lazyListState = rememberLazyListState()
         val detailOpener = remember { getDetailOpener() }
         val defaultResolveColor = MaterialTheme.colorScheme.secondary
+        var reportTypeBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -137,8 +142,7 @@ class ReportListScreen(
                                 modifier =
                                     Modifier.onClick(
                                         onClick = {
-                                            val sheet = ReportListTypeSheet()
-                                            navigationCoordinator.showBottomSheet(sheet)
+                                            reportTypeBottomSheetOpened = true
                                         },
                                     ),
                                 text = text,
@@ -488,6 +492,29 @@ class ReportListScreen(
                     )
                 }
             }
+        }
+
+        if (reportTypeBottomSheetOpened) {
+            val values =
+                listOf(
+                    LocalStrings.current.reportListTypeUnresolved,
+                    LocalStrings.current.reportListTypeAll,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.reportListTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value)
+                    },
+                onSelected = { index ->
+                    reportTypeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeReportListType(unresolvedOnly = index == 0),
+                        )
+                    }
+                },
+            )
         }
     }
 }

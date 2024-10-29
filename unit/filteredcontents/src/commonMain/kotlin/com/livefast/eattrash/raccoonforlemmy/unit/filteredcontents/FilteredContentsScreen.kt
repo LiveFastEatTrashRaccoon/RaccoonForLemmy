@@ -74,10 +74,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.LikedTypeSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
@@ -118,6 +121,7 @@ class FilteredContentsScreen(
         val settings by settingsRepository.currentSettings.collectAsState()
         val lazyListState = rememberLazyListState()
         val detailOpener = remember { getDetailOpener() }
+        val notificationCenter = remember { getNotificationCenter() }
         var rawContent by remember { mutableStateOf<Any?>(null) }
         val themeRepository = remember { getThemeRepository() }
         val upVoteColor by themeRepository.upVoteColor.collectAsState()
@@ -142,6 +146,7 @@ class FilteredContentsScreen(
             with(LocalDensity.current) {
                 WindowInsets.navigationBars.getBottom(this).toDp()
             }
+        var likedTypeBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -232,7 +237,7 @@ class FilteredContentsScreen(
                                     modifier =
                                         Modifier.onClick(
                                             onClick = {
-                                                navigationCoordinator.showBottomSheet(LikedTypeSheet())
+                                                likedTypeBottomSheetOpened = true
                                             },
                                         ),
                                     text = text,
@@ -991,67 +996,90 @@ class FilteredContentsScreen(
                     }
                 }
             }
+        }
 
-            if (rawContent != null) {
-                when (val content = rawContent) {
-                    is PostModel -> {
-                        RawContentDialog(
-                            title = content.title,
-                            publishDate = content.publishDate,
-                            updateDate = content.updateDate,
-                            url = content.originalUrl,
-                            text = content.text,
-                            upVotes = content.upvotes,
-                            downVotes = content.downvotes,
-                            onDismiss = {
-                                rawContent = null
-                            },
-                            onQuote = { quotation ->
-                                rawContent = null
-                                if (quotation != null) {
-                                    detailOpener.openReply(
-                                        originalPost = content,
-                                        initialText =
-                                            buildString {
-                                                append("> ")
-                                                append(quotation)
-                                                append("\n\n")
-                                            },
-                                    )
-                                }
-                            },
-                        )
-                    }
+        if (rawContent != null) {
+            when (val content = rawContent) {
+                is PostModel -> {
+                    RawContentDialog(
+                        title = content.title,
+                        publishDate = content.publishDate,
+                        updateDate = content.updateDate,
+                        url = content.originalUrl,
+                        text = content.text,
+                        upVotes = content.upvotes,
+                        downVotes = content.downvotes,
+                        onDismiss = {
+                            rawContent = null
+                        },
+                        onQuote = { quotation ->
+                            rawContent = null
+                            if (quotation != null) {
+                                detailOpener.openReply(
+                                    originalPost = content,
+                                    initialText =
+                                        buildString {
+                                            append("> ")
+                                            append(quotation)
+                                            append("\n\n")
+                                        },
+                                )
+                            }
+                        },
+                    )
+                }
 
-                    is CommentModel -> {
-                        RawContentDialog(
-                            publishDate = content.publishDate,
-                            updateDate = content.updateDate,
-                            text = content.text,
-                            upVotes = content.upvotes,
-                            downVotes = content.downvotes,
-                            onDismiss = {
-                                rawContent = null
-                            },
-                            onQuote = { quotation ->
-                                rawContent = null
-                                if (quotation != null) {
-                                    detailOpener.openReply(
-                                        originalPost = PostModel(id = content.postId),
-                                        originalComment = content,
-                                        initialText =
-                                            buildString {
-                                                append("> ")
-                                                append(quotation)
-                                                append("\n\n")
-                                            },
-                                    )
-                                }
-                            },
-                        )
-                    }
+                is CommentModel -> {
+                    RawContentDialog(
+                        publishDate = content.publishDate,
+                        updateDate = content.updateDate,
+                        text = content.text,
+                        upVotes = content.upvotes,
+                        downVotes = content.downvotes,
+                        onDismiss = {
+                            rawContent = null
+                        },
+                        onQuote = { quotation ->
+                            rawContent = null
+                            if (quotation != null) {
+                                detailOpener.openReply(
+                                    originalPost = PostModel(id = content.postId),
+                                    originalComment = content,
+                                    initialText =
+                                        buildString {
+                                            append("> ")
+                                            append(quotation)
+                                            append("\n\n")
+                                        },
+                                )
+                            }
+                        },
+                    )
                 }
             }
+        }
+
+        if (likedTypeBottomSheetOpened) {
+            val values =
+                listOf(
+                    LocalStrings.current.actionUpvote,
+                    LocalStrings.current.actionDownvote,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.inboxListingTypeTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value)
+                    },
+                onSelected = { index ->
+                    likedTypeBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangedLikedType(value = index == 0),
+                        )
+                    }
+                },
+            )
         }
     }
 }

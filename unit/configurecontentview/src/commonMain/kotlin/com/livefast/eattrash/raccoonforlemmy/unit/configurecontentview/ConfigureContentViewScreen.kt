@@ -46,7 +46,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.PostLayoutBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
@@ -68,6 +67,7 @@ class ConfigureContentViewScreen : Screen {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val scrollState = rememberScrollState()
         var voteFormatBottomSheetOpened by remember { mutableStateOf(false) }
+        var postLayoutBottomSheetOpened by remember { mutableStateOf(false) }
 
         Scaffold(
             modifier =
@@ -185,8 +185,7 @@ class ConfigureContentViewScreen : Screen {
                         title = LocalStrings.current.settingsPostLayout,
                         value = uiState.postLayout.toReadableName(),
                         onTap = {
-                            val sheet = PostLayoutBottomSheet()
-                            navigationCoordinator.showBottomSheet(sheet)
+                            postLayoutBottomSheetOpened = true
                         },
                     )
 
@@ -309,7 +308,7 @@ class ConfigureContentViewScreen : Screen {
                     VoteFormat.Hidden,
                 )
             CustomModalBottomSheet(
-                title = LocalStrings.current.inboxListingTypeTitle,
+                title = LocalStrings.current.settingsVoteFormat,
                 items =
                     values.map { value ->
                         CustomModalBottomSheetItem(label = value.toReadableName())
@@ -319,6 +318,30 @@ class ConfigureContentViewScreen : Screen {
                     if (index != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeVoteFormat(value = values[index]),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (postLayoutBottomSheetOpened) {
+            val values =
+                listOf(
+                    PostLayout.Card,
+                    PostLayout.Compact,
+                    PostLayout.Full,
+                )
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsPostLayout,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value.toReadableName())
+                    },
+                onSelected = { index ->
+                    postLayoutBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangePostLayout(value = values[index]),
                         )
                     }
                 },
