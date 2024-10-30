@@ -482,6 +482,48 @@ object Locales {
     const val ZH_CN = "zh_CN"
     const val ZH_TW = "zh_TW"
     const val ZH_HK = "zh_HK"
+
+    val ALL =
+        listOf(
+            AR,
+            BG,
+            CS,
+            DA,
+            DE,
+            ET,
+            EL,
+            EN,
+            ES,
+            EO,
+            FR,
+            GA,
+            HR,
+            IT,
+            LV,
+            LT,
+            HU,
+            MT,
+            NL,
+            NB,
+            NN,
+            PL,
+            PT,
+            PT_BR,
+            RO,
+            RU,
+            SK,
+            SL,
+            SQ,
+            SR,
+            FI,
+            SV,
+            TOK,
+            TR,
+            UK,
+            ZH_CN,
+            ZH_TW,
+            ZH_HK,
+        )
 }
 
 internal val localizableStrings: Map<LanguageTag, Strings> =

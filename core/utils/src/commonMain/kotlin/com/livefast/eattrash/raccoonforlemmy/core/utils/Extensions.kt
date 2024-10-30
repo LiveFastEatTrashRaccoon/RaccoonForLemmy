@@ -2,9 +2,6 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.Locales
@@ -56,7 +53,7 @@ fun String.toLanguageName() =
     }
 
 @Composable
-fun String.toLanguageFlag(): AnnotatedString =
+fun String.toLanguageFlag(): String =
     when (this) {
         Locales.AR -> "🇸🇦"
         Locales.BG -> "🇧🇬"
@@ -82,14 +79,14 @@ fun String.toLanguageFlag(): AnnotatedString =
         Locales.NL -> "🇳🇱"
         Locales.PL -> "🇵🇱"
         Locales.PT -> "🇵🇹"
-        Locales.PT_BR -> "🇧🇷️"
+        Locales.PT_BR -> "🇧🇷"
         Locales.RO -> "🇷🇴"
         Locales.RU -> "🇷🇺"
         Locales.SV -> "🇸🇪"
         Locales.SK -> "🇸🇰"
         Locales.SL -> "🇸🇮"
         Locales.SQ -> "🇦🇱"
-        Locales.SR -> "🇷🇸️"
+        Locales.SR -> "🇷🇸"
         Locales.TOK -> "🦝️"
         Locales.TR -> "🇹🇷"
         Locales.UK -> "🇺🇦"
@@ -97,11 +94,6 @@ fun String.toLanguageFlag(): AnnotatedString =
         Locales.ZH_TW -> "🇹🇼"
         Locales.ZH_HK -> "🇭🇰"
         else -> ""
-    }.let {
-        AnnotatedString(
-            text = it,
-            spanStyle = SpanStyle(fontFamily = FontFamily.Default),
-        )
     }
 
 fun String.toLanguageDirection(): LayoutDirection =

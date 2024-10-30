@@ -197,6 +197,12 @@ Afterwards, edit the `Strings.kt` file in the same directory with the following 
 object Locales {
     // ...
     const val XX_YY = "xx_YY"
+
+  // ...
+  val ALL = listOf(
+    // ...
+    XX_YY
+  )
 }
 
 internal val localizableStrings: Map<LanguageTag, Strings> =
@@ -206,16 +212,10 @@ internal val localizableStrings: Map<LanguageTag, Strings> =
     )
 ```
 
-Finally, if you want you can change the rest of the code (e.g. the language dialog, etc) please do
-the following:
+Finally, in `Extensions.kt` add your flag and language name (mapping your language code to the
+values).
 
-- in
-  Extensions.kt
-  add your flag and language name (mapping your language code to the values)
-- add an option (using your language code) in the `values` array
-  in LanguageBottomSheet.kt
-
-That's it! You can test that everything works by launching the development app.
+That's it! 🎉 You can test that everything works by launching the development app.
 
 **A note for translators:** the strings that correspond to theme names (`settingsColorAquamarine`,
 `settingsColorBanana`, `settingsColorBlue`, `settingsColorGray`, `settingsColorGreen`,
