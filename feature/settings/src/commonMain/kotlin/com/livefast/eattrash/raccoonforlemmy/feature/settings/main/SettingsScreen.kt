@@ -27,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,9 +50,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.LanguageBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.Locales
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -97,6 +98,7 @@ class SettingsScreen : Screen {
         val uriHandler = LocalUriHandler.current
         var defaultListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
         var urlOpeningBottomSheetOpened by remember { mutableStateOf(false) }
+        var languageBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(notificationCenter) {
             notificationCenter
@@ -176,8 +178,7 @@ class SettingsScreen : Screen {
                                 }
                             },
                         onTap = {
-                            val sheet = LanguageBottomSheet()
-                            navigationCoordinator.showBottomSheet(sheet)
+                            languageBottomSheetOpened = true
                         },
                     )
 
@@ -459,6 +460,37 @@ class SettingsScreen : Screen {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeUrlOpeningMode(
                                 value = values[index].toInt(),
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (languageBottomSheetOpened) {
+            val values = Locales.ALL
+            CustomModalBottomSheet(
+                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+                title = LocalStrings.current.settingsLanguage,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label =
+                                buildString {
+                                    with(value) {
+                                        append(toLanguageFlag())
+                                        append("  ")
+                                        append(toLanguageName())
+                                    }
+                                },
+                        )
+                    },
+                onSelected = { index ->
+                    languageBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeLanguage(
+                                value = values[index],
                             ),
                         )
                     }
