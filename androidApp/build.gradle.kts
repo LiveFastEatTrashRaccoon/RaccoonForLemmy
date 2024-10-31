@@ -45,7 +45,7 @@ android {
     }
     buildTypes {
         getByName("debug") {
-            resValue("string", "app_name", "kijetesantakalu")
+            resValue("string", "app_name", "Raccoon (dev)")
             applicationIdSuffix = ".dev"
         }
         getByName("release") {
