@@ -81,7 +81,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.BlockBottomShe
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CopyPostBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ShareBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
@@ -147,6 +146,7 @@ class PostListScreen : Screen {
         val clipboardManager = LocalClipboardManager.current
         var itemIdToDelete by remember { mutableStateOf<Long?>(null) }
         var listingTypeBottomSheetOpened by remember { mutableStateOf(false) }
+        var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection
@@ -663,8 +663,7 @@ class PostListScreen : Screen {
                                                             PostListMviModel.Intent.Share(urls.first()),
                                                         )
                                                     } else {
-                                                        val screen = ShareBottomSheet(urls = urls)
-                                                        navigationCoordinator.showBottomSheet(screen)
+                                                        shareBottomSheetUrls = urls
                                                     }
                                                 }
 
@@ -896,6 +895,24 @@ class PostListScreen : Screen {
                                 value = values[index],
                                 screenKey = "postList",
                             ),
+                        )
+                    }
+                },
+            )
+        }
+
+        shareBottomSheetUrls?.also { values ->
+            CustomModalBottomSheet(
+                title = LocalStrings.current.postActionShare,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value)
+                    },
+                onSelected = { index ->
+                    shareBottomSheetUrls = null
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.Share(url = values[index]),
                         )
                     }
                 },

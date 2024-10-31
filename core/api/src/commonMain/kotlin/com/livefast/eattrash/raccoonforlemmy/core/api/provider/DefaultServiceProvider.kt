@@ -18,6 +18,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.service.createPrivateMessa
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.createSearchService
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.createSiteService
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.createUserService
+import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.AppInfoRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngineFactory
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
@@ -32,11 +33,11 @@ import kotlinx.serialization.json.Json
 
 internal class DefaultServiceProvider(
     private val factory: HttpClientEngineFactory<*> = provideHttpClientEngineFactory(),
+    private val appInfoRepository: AppInfoRepository,
 ) : ServiceProvider {
     companion object {
         private const val DEFAULT_INSTANCE = "lemmy.world"
         private const val VERSION = "v3"
-        private const val ENABLE_LOGGING = false
     }
 
     override var currentInstance: String = DEFAULT_INSTANCE
@@ -60,6 +61,8 @@ internal class DefaultServiceProvider(
     override lateinit var modLog: ModlogService
 
     private val baseUrl: String get() = "https://$currentInstance/api/$VERSION/"
+
+    private val loggingEnabled: Boolean get() = appInfoRepository.geInfo().isDebug
 
     init {
         reinitialize()
@@ -85,7 +88,7 @@ internal class DefaultServiceProvider(
                     connectTimeoutMillis = 30_000
                     socketTimeoutMillis = 30_000
                 }
-                if (ENABLE_LOGGING) {
+                if (loggingEnabled) {
                     install(Logging) {
                         logger = defaultLogger
                         level = LogLevel.ALL

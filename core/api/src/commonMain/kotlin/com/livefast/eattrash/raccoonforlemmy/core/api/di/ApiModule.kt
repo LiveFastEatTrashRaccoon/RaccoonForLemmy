@@ -8,9 +8,13 @@ import org.koin.dsl.module
 val coreApiModule =
     module {
         single<ServiceProvider>(named("default")) {
-            DefaultServiceProvider()
+            DefaultServiceProvider(
+                appInfoRepository = get(),
+            )
         }
         single<ServiceProvider>(named("custom")) {
-            DefaultServiceProvider()
+            DefaultServiceProvider(
+                appInfoRepository = get(),
+            )
         }
     }

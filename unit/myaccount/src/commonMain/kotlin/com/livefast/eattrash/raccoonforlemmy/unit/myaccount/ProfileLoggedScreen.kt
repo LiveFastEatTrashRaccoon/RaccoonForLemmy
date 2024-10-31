@@ -57,7 +57,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.ProfileLoggedSection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserHeader
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ShareBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -97,6 +98,7 @@ object ProfileLoggedScreen : Tab {
         val settings by settingsRepository.currentSettings.collectAsState()
         var postIdToDelete by remember { mutableStateOf<Long?>(null) }
         var commentIdToDelete by remember { mutableStateOf<Long?>(null) }
+        var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection
@@ -405,8 +407,7 @@ object ProfileLoggedScreen : Tab {
                                                         ),
                                                     )
                                                 } else {
-                                                    val screen = ShareBottomSheet(urls = urls)
-                                                    navigationCoordinator.showBottomSheet(screen)
+                                                    shareBottomSheetUrls = urls
                                                 }
                                             }
 
@@ -575,11 +576,7 @@ object ProfileLoggedScreen : Tab {
                                                         ),
                                                     )
                                                 } else {
-                                                    val screen =
-                                                        ShareBottomSheet(urls = urls)
-                                                    navigationCoordinator.showBottomSheet(
-                                                        screen,
-                                                    )
+                                                    shareBottomSheetUrls = urls
                                                 }
                                             }
 
@@ -779,6 +776,24 @@ object ProfileLoggedScreen : Tab {
                 },
                 text = {
                     Text(text = LocalStrings.current.messageAreYouSure)
+                },
+            )
+        }
+
+        shareBottomSheetUrls?.also { values ->
+            CustomModalBottomSheet(
+                title = LocalStrings.current.postActionShare,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value)
+                    },
+                onSelected = { index ->
+                    shareBottomSheetUrls = null
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.Share(url = values[index]),
+                        )
+                    }
                 },
             )
         }
