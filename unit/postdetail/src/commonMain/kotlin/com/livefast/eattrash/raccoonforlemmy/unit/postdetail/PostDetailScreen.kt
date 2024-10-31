@@ -113,11 +113,14 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CopyPostBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ShareBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
@@ -239,6 +242,8 @@ class PostDetailScreen(
                     }
                 }
             }
+        val notificationCenter = remember { getNotificationCenter() }
+        var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
 
         LaunchedEffect(model) {
             model.effects
@@ -543,8 +548,7 @@ class PostDetailScreen(
                                                             ),
                                                         )
                                                     } else {
-                                                        val screen = ShareBottomSheet(urls = urls)
-                                                        navigationCoordinator.showBottomSheet(screen)
+                                                        shareBottomSheetUrls = urls
                                                     }
                                                 }
 
@@ -1417,13 +1421,7 @@ class PostDetailScreen(
                                                                             ),
                                                                         )
                                                                     } else {
-                                                                        val screen =
-                                                                            ShareBottomSheet(
-                                                                                urls = urls,
-                                                                            )
-                                                                        navigationCoordinator.showBottomSheet(
-                                                                            screen,
-                                                                        )
+                                                                        shareBottomSheetUrls = urls
                                                                     }
                                                                 }
 
@@ -1995,6 +1993,24 @@ class PostDetailScreen(
                 },
                 text = {
                     Text(text = LocalStrings.current.messageAreYouSure)
+                },
+            )
+        }
+
+        shareBottomSheetUrls?.also { values ->
+            CustomModalBottomSheet(
+                title = LocalStrings.current.postActionShare,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value)
+                    },
+                onSelected = { index ->
+                    shareBottomSheetUrls = null
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.Share(url = values[index]),
+                        )
+                    }
                 },
             )
         }

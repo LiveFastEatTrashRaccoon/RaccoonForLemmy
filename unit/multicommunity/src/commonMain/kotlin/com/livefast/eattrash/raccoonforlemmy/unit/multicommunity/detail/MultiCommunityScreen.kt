@@ -73,10 +73,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CopyPostBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ShareBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
@@ -121,7 +124,9 @@ class MultiCommunityScreen(
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
         val detailOpener = remember { getDetailOpener() }
+        val notificationCenter = remember { getNotificationCenter() }
         val clipboardManager = LocalClipboardManager.current
+        var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
 
         LaunchedEffect(model) {
             model.effects
@@ -515,8 +520,7 @@ class MultiCommunityScreen(
                                                         ),
                                                     )
                                                 } else {
-                                                    val screen = ShareBottomSheet(urls = urls)
-                                                    navigationCoordinator.showBottomSheet(screen)
+                                                    shareBottomSheetUrls = urls
                                                 }
                                             }
 
@@ -600,6 +604,24 @@ class MultiCommunityScreen(
                     }
                 }
             }
+        }
+
+        shareBottomSheetUrls?.also { values ->
+            CustomModalBottomSheet(
+                title = LocalStrings.current.postActionShare,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value)
+                    },
+                onSelected = { index ->
+                    shareBottomSheetUrls = null
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.Share(url = values[index]),
+                        )
+                    }
+                },
+            )
         }
     }
 }

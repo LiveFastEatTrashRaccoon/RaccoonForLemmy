@@ -102,12 +102,15 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CopyPostBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectLanguageDialog
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.ShareBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon.rememberKeepScreenOn
@@ -180,6 +183,7 @@ class CommunityDetailScreen(
         val settings by settingsRepository.currentSettings.collectAsState()
         val keepScreenOn = rememberKeepScreenOn()
         val detailOpener = remember { getDetailOpener() }
+        val notificationCenter = remember { getNotificationCenter() }
         val clipboardManager = LocalClipboardManager.current
         val focusManager = LocalFocusManager.current
         val keyboardScrollConnection =
@@ -202,6 +206,7 @@ class CommunityDetailScreen(
         var selectLanguageDialogOpen by remember { mutableStateOf(false) }
         var unsubscribeConfirmDialogOpen by remember { mutableStateOf(false) }
         var deleteConfirmDialogOpen by remember { mutableStateOf(false) }
+        var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
 
         LaunchedEffect(model) {
             model.effects
@@ -550,8 +555,7 @@ class CommunityDetailScreen(
                                                             ),
                                                         )
                                                     } else {
-                                                        val screen = ShareBottomSheet(urls = urls)
-                                                        navigationCoordinator.showBottomSheet(screen)
+                                                        shareBottomSheetUrls = urls
                                                     }
                                                 }
 
@@ -1250,11 +1254,7 @@ class CommunityDetailScreen(
                                                                 ),
                                                             )
                                                         } else {
-                                                            val screen =
-                                                                ShareBottomSheet(urls = urls)
-                                                            navigationCoordinator.showBottomSheet(
-                                                                screen,
-                                                            )
+                                                            shareBottomSheetUrls = urls
                                                         }
                                                     }
 
@@ -1600,6 +1600,24 @@ class CommunityDetailScreen(
                         },
                     ) {
                         Text(text = LocalStrings.current.buttonConfirm)
+                    }
+                },
+            )
+        }
+
+        shareBottomSheetUrls?.also { values ->
+            CustomModalBottomSheet(
+                title = LocalStrings.current.postActionShare,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(label = value)
+                    },
+                onSelected = { index ->
+                    shareBottomSheetUrls = null
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.Share(url = values[index]),
+                        )
                     }
                 },
             )
