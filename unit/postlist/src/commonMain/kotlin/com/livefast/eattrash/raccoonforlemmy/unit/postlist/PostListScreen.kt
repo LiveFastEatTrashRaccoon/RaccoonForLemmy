@@ -72,12 +72,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingAc
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeActionCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.BlockActionType
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.BlockBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CopyPostBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
@@ -147,6 +148,9 @@ class PostListScreen : Screen {
         var itemIdToDelete by remember { mutableStateOf<Long?>(null) }
         var listingTypeBottomSheetOpened by remember { mutableStateOf(false) }
         var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
+        var blockBottomSheetItems by remember {
+            mutableStateOf<List<Triple<BlockActionType, Long?, String?>>?>(null)
+        }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection
@@ -668,24 +672,61 @@ class PostListScreen : Screen {
                                                 }
 
                                                 OptionId.Block -> {
-                                                    val screen =
-                                                        BlockBottomSheet(
-                                                            userName =
+                                                    blockBottomSheetItems =
+                                                        buildList {
+                                                            val userName =
                                                                 post.creator?.readableName(
                                                                     uiState.preferNicknames,
-                                                                ),
-                                                            userId = post.creator?.id,
-                                                            communityName =
+                                                                )
+                                                            val userId = post.creator?.id
+                                                            val communityName =
                                                                 post.community?.readableName(
                                                                     uiState.preferNicknames,
-                                                                ),
-                                                            communityId = post.community?.id,
-                                                            instanceName = post.community?.host,
-                                                            instanceId = post.community?.instanceId,
-                                                            userInstanceName = post.creator?.host,
-                                                            userInstanceId = post.creator?.instanceId,
-                                                        )
-                                                    navigationCoordinator.showBottomSheet(screen)
+                                                                )
+                                                            val communityId = post.community?.id
+                                                            val instanceName = post.community?.host
+                                                            val instanceId =
+                                                                post.community?.instanceId
+                                                            val userInstanceName =
+                                                                post.creator?.host
+                                                            val userInstanceId =
+                                                                post.creator?.instanceId
+                                                            if (userName != null && userId != null) {
+                                                                this +=
+                                                                    Triple(
+                                                                        first = BlockActionType.User,
+                                                                        second = userId,
+                                                                        third = userName,
+                                                                    )
+                                                            }
+                                                            if (communityName != null && communityId != null) {
+                                                                this +=
+                                                                    Triple(
+                                                                        first = BlockActionType.Community,
+                                                                        second = communityId,
+                                                                        third = communityName,
+                                                                    )
+                                                            }
+                                                            if (instanceName != null && instanceId != null) {
+                                                                this +=
+                                                                    Triple(
+                                                                        first = BlockActionType.Instance,
+                                                                        second = instanceId,
+                                                                        third = instanceName,
+                                                                    )
+                                                            }
+                                                            if (userInstanceName != null &&
+                                                                userInstanceId != null &&
+                                                                userInstanceName != instanceName
+                                                            ) {
+                                                                this +=
+                                                                    Triple(
+                                                                        first = BlockActionType.Instance,
+                                                                        second = userInstanceId,
+                                                                        third = userInstanceName,
+                                                                    )
+                                                            }
+                                                        }
                                                 }
 
                                                 OptionId.Copy -> {
@@ -914,6 +955,52 @@ class PostListScreen : Screen {
                         notificationCenter.send(
                             NotificationCenterEvent.Share(url = values[index]),
                         )
+                    }
+                },
+            )
+        }
+
+        blockBottomSheetItems?.also { values ->
+            CustomModalBottomSheet(
+                title = LocalStrings.current.communityDetailBlock,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label =
+                                buildString {
+                                    append(value.first.toReadableName())
+                                    val additionalText = value.third
+                                    if (!additionalText.isNullOrEmpty()) {
+                                        append("\n")
+                                        append("(")
+                                        append(additionalText)
+                                        append(")")
+                                    }
+                                },
+                        )
+                    },
+                onSelected = { index ->
+                    shareBottomSheetUrls = null
+                    if (index != null) {
+                        val value = values[index]
+                        val event =
+                            when (value.first) {
+                                BlockActionType.Community ->
+                                    NotificationCenterEvent.BlockActionSelected(
+                                        communityId = value.second,
+                                    )
+
+                                BlockActionType.Instance ->
+                                    NotificationCenterEvent.BlockActionSelected(
+                                        instanceId = value.second,
+                                    )
+
+                                BlockActionType.User ->
+                                    NotificationCenterEvent.BlockActionSelected(
+                                        userId = value.second,
+                                    )
+                            }
+                        notificationCenter.send(event)
                     }
                 },
             )
