@@ -122,7 +122,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.containsId
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.ban.BanUserScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.communityinfo.CommunityInfoScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.editcommunity.EditCommunityScreen
@@ -207,6 +206,8 @@ class CommunityDetailScreen(
         var unsubscribeConfirmDialogOpen by remember { mutableStateOf(false) }
         var deleteConfirmDialogOpen by remember { mutableStateOf(false) }
         var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
+        var sortBottomSheetOpened by remember { mutableStateOf(false) }
+        var defaultSortBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -329,13 +330,7 @@ class CommunityDetailScreen(
                         // sort button
                         IconButton(
                             onClick = {
-                                val sheet =
-                                    SortBottomSheet(
-                                        values = uiState.availableSortTypes.map { it.toInt() },
-                                        expandTop = true,
-                                        screenKey = uiState.community.readableHandle,
-                                    )
-                                navigationCoordinator.showBottomSheet(sheet)
+                                sortBottomSheetOpened = true
                             },
                         ) {
                             Icon(
@@ -560,14 +555,7 @@ class CommunityDetailScreen(
                                                 }
 
                                                 OptionId.SetCustomSort -> {
-                                                    val screen =
-                                                        SortBottomSheet(
-                                                            values = uiState.availableSortTypes.map { it.toInt() },
-                                                            defaultForCommunity = true,
-                                                            expandTop = true,
-                                                            screenKey = uiState.community.readableHandle,
-                                                        )
-                                                    navigationCoordinator.showBottomSheet(screen)
+                                                    defaultSortBottomSheetOpened = true
                                                 }
 
                                                 OptionId.Search -> {
@@ -1617,6 +1605,25 @@ class CommunityDetailScreen(
                     if (index != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.Share(url = values[index]),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (sortBottomSheetOpened || defaultSortBottomSheetOpened) {
+            SortBottomSheet(
+                values = uiState.availableSortTypes,
+                expandTop = true,
+                onSelected = { value ->
+                    sortBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSortType(
+                                value = value,
+                                defaultForCommunity = defaultSortBottomSheetOpened,
+                                screenKey = uiState.community.readableHandle,
+                            ),
                         )
                     }
                 },
