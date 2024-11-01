@@ -72,10 +72,16 @@ private fun String.spoilerFixUp(): String =
 private fun String.quoteFixUp(): String =
     run {
         val finalLines = mutableListOf<String>()
+        val quoteAndList = Regex("^>-")
+        val quoteEmpty = Regex("^>\\s*$")
         lines().forEach { line ->
-            // removes list inside quotes
-            val quoteAndList = Regex("^>-")
-            val cleanLine = line.replace(quoteAndList, "-")
+
+            val cleanLine =
+                line
+                    // removes list inside quotes
+                    .replace(quoteAndList, "-")
+                    // replace empty quotes
+                    .replace(quoteEmpty, " \n")
             val isLastEmpty = finalLines.isNotEmpty() && finalLines.last().isEmpty()
             if (!isLastEmpty || cleanLine.isNotEmpty()) {
                 finalLines += cleanLine
