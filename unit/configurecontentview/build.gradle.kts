@@ -55,8 +55,6 @@ kotlin {
                 implementation(projects.domain.identity)
                 implementation(projects.domain.lemmy.data)
                 implementation(projects.domain.lemmy.repository)
-
-                implementation(projects.unit.choosefont)
             }
         }
         val commonTest by getting {
@@ -69,8 +67,14 @@ kotlin {
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }
