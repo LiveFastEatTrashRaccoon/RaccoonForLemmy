@@ -25,7 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -40,11 +42,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomShee
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.getAdditionalLabel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.core.parameter.parametersOf
@@ -68,6 +71,8 @@ class InstanceInfoScreen(
         val settings by settingsRepository.currentSettings.collectAsState()
         val listState = rememberLazyListState()
         val detailOpener = remember { getDetailOpener() }
+        val notificationCenter = remember { getNotificationCenter() }
+        var sortBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -129,13 +134,7 @@ class InstanceInfoScreen(
                         }
                         IconButton(
                             onClick = {
-                                val sheet =
-                                    SortBottomSheet(
-                                        values = uiState.availableSortTypes.map { it.toInt() },
-                                        expandTop = true,
-                                        screenKey = "instanceInfo",
-                                    )
-                                navigationCoordinator.showBottomSheet(sheet)
+                                sortBottomSheetOpened = true
                             },
                         ) {
                             Icon(
@@ -231,6 +230,24 @@ class InstanceInfoScreen(
                     }
                 }
             }
+        }
+
+        if (sortBottomSheetOpened) {
+            SortBottomSheet(
+                values = uiState.availableSortTypes,
+                expandTop = true,
+                onSelected = { value ->
+                    sortBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSortType(
+                                value = value,
+                                screenKey = "instanceInfo",
+                            ),
+                        )
+                    }
+                },
+            )
         }
     }
 }
