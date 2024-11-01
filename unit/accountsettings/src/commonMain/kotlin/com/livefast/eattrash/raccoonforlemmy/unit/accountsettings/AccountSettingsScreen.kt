@@ -79,7 +79,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -112,6 +111,7 @@ class AccountSettingsScreen : Screen {
         var openBannerPicker by remember { mutableStateOf(false) }
         var confirmBackWithUnsavedChangesDialog by remember { mutableStateOf(false) }
         var defaultListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
+        var sortBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -330,13 +330,7 @@ class AccountSettingsScreen : Screen {
                         title = LocalStrings.current.settingsDefaultPostSortType,
                         value = uiState.defaultSortType.toReadableName(),
                         onTap = {
-                            val sheet =
-                                SortBottomSheet(
-                                    values = uiState.availableSortTypes.map { it.toInt() },
-                                    expandTop = true,
-                                    screenKey = "accountSettings",
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
+                            sortBottomSheetOpened = true
                         },
                     )
 
@@ -580,6 +574,24 @@ class AccountSettingsScreen : Screen {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeFeedType(
                                 value = values[index],
+                                screenKey = "accountSettings",
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (sortBottomSheetOpened) {
+            SortBottomSheet(
+                values = uiState.availableSortTypes,
+                expandTop = true,
+                onSelected = { value ->
+                    sortBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSortType(
+                                value = value,
                                 screenKey = "accountSettings",
                             ),
                         )
