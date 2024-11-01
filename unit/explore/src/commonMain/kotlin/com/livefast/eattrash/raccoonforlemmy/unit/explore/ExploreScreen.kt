@@ -84,7 +84,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResult
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.uniqueIdentifier
 import com.livefast.eattrash.raccoonforlemmy.unit.explore.components.ExploreTopBar
@@ -154,6 +153,7 @@ class ExploreScreen(
         val searchFocusRequester = remember { FocusRequester() }
         var listingTypeBottomSheetOpened by remember { mutableStateOf(false) }
         var resultTypeBottomSheetOpened by remember { mutableStateOf(false) }
+        var sortBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection
@@ -206,13 +206,7 @@ class ExploreScreen(
                     },
                     onSelectSortType = {
                         focusManager.clearFocus()
-                        val sheet =
-                            SortBottomSheet(
-                                values = uiState.availableSortTypes.map { it.toInt() },
-                                expandTop = true,
-                                screenKey = notificationEventKey,
-                            )
-                        navigationCoordinator.showBottomSheet(sheet)
+                        sortBottomSheetOpened = true
                     },
                     onSelectResultTypeType = {
                         resultTypeBottomSheetOpened = true
@@ -834,6 +828,24 @@ class ExploreScreen(
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeSearchResultType(
                                 value = values[index],
+                                screenKey = notificationEventKey,
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (sortBottomSheetOpened) {
+            SortBottomSheet(
+                values = uiState.availableSortTypes,
+                expandTop = true,
+                onSelected = { value ->
+                    sortBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSortType(
+                                value = value,
                                 screenKey = notificationEventKey,
                             ),
                         )
