@@ -57,79 +57,78 @@ fun CustomModalBottomSheet(
         onDismissRequest = {
             onSelected?.invoke(null)
         },
-        content = {
-            Column(
-                modifier = Modifier.padding(bottom = Spacing.xl),
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = fullColor,
-                )
-                Spacer(modifier = Modifier.height(Spacing.xs))
-                LazyColumn {
-                    itemsIndexed(items = items) { idx, item ->
-                            Row(
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                    .clip(shape = RoundedCornerShape(CornerSize.xl))
-                                    .combinedClickable(
-                                        onClick = {
-                                            sheetScope
-                                                .launch {
-                                                    sheetState.hide()
+    ) {
+        Column(
+            modifier = Modifier.padding(bottom = Spacing.xl),
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                color = fullColor,
+            )
+            Spacer(modifier = Modifier.height(Spacing.xs))
+            LazyColumn {
+                itemsIndexed(items = items) { idx, item ->
+                    Row(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .clip(shape = RoundedCornerShape(CornerSize.xl))
+                                .combinedClickable(
+                                    onClick = {
+                                        sheetScope
+                                            .launch {
+                                                sheetState.hide()
+                                            }.invokeOnCompletion {
+                                                onSelected?.invoke(idx)
+                                            }
+                                    },
+                                    onLongClick =
+                                        if (onLongPress != null) {
+                                            {
+                                                sheetScope
+                                                    .launch {
+                                                        sheetState.hide()
                                                     }.invokeOnCompletion {
-                                                        onSelected?.invoke(idx)
+                                                        onLongPress(idx)
                                                     }
-                                            },
-                                            onLongClick =
-                                                if (onLongPress != null) {
-                                                    {
-                                                        sheetScope
-                                                            .launch {
-                                                                sheetState.hide()
-                                                            }.invokeOnCompletion {
-                                                                onLongPress(idx)
-                                                            }
-                                                    }
-                                                } else {
-                                                    null
-                                                },
-                                        ).padding(
-                                            horizontal = Spacing.m,
-                                            vertical = Spacing.s,
-                                        ),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(Spacing.s),
-                            ) {
-                                item.leadingContent?.invoke()
-                                Column(
-                                    modifier = Modifier.weight(1f),
-                                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-                                ) {
-                                    Text(
-                                        text = item.label,
-                                        style =
-                                            item.customLabelStyle
-                                                ?: MaterialTheme.typography.bodyLarge,
-                                        color = fullColor,
-                                    )
-                                    if (!item.subtitle.isNullOrEmpty()) {
-                                        Text(
-                                            text = item.subtitle,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = ancillaryColor,
-                                        )
-                                    }
-                                }
-                                item.trailingContent?.invoke()
+                                            }
+                                        } else {
+                                            null
+                                        },
+                                ).padding(
+                                    horizontal = Spacing.m,
+                                    vertical = Spacing.s,
+                                ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                    ) {
+                        item.leadingContent?.invoke()
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                        ) {
+                            Text(
+                                text = item.label,
+                                style =
+                                    item.customLabelStyle
+                                        ?: MaterialTheme.typography.bodyLarge,
+                                color = fullColor,
+                            )
+                            if (!item.subtitle.isNullOrEmpty()) {
+                                Text(
+                                    text = item.subtitle,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = ancillaryColor,
+                                )
                             }
                         }
+                        item.trailingContent?.invoke()
                     }
                 }
-        },
-    )
+            }
+        }
+    }
 }
