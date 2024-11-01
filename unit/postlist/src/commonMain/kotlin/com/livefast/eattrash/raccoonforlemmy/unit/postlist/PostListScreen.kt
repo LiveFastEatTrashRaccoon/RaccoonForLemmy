@@ -97,7 +97,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
@@ -151,6 +150,7 @@ class PostListScreen : Screen {
         var blockBottomSheetItems by remember {
             mutableStateOf<List<Triple<BlockActionType, Long?, String?>>?>(null)
         }
+        var sortBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection
@@ -224,13 +224,7 @@ class PostListScreen : Screen {
                             navigationCoordinator.showBottomSheet(SelectInstanceBottomSheet())
                         }.takeIf { !uiState.isLogged },
                     onSelectSortType = {
-                        val sheet =
-                            SortBottomSheet(
-                                values = uiState.availableSortTypes.map { it.toInt() },
-                                expandTop = true,
-                                screenKey = "postList",
-                            )
-                        navigationCoordinator.showBottomSheet(sheet)
+                        sortBottomSheetOpened = true
                     },
                 )
             },
@@ -1001,6 +995,24 @@ class PostListScreen : Screen {
                                     )
                             }
                         notificationCenter.send(event)
+                    }
+                },
+            )
+        }
+
+        if (sortBottomSheetOpened) {
+            SortBottomSheet(
+                values = uiState.availableSortTypes,
+                expandTop = true,
+                onSelected = { value ->
+                    sortBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSortType(
+                                value = value,
+                                screenKey = "postList",
+                            ),
+                        )
                     }
                 },
             )
