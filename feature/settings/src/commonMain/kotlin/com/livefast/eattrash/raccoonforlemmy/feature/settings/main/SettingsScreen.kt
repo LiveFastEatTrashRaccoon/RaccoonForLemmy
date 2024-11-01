@@ -64,7 +64,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.advanced.AdvancedSettingsScreen
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsColorAndFontScreen
@@ -99,6 +98,8 @@ class SettingsScreen : Screen {
         var defaultListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
         var urlOpeningBottomSheetOpened by remember { mutableStateOf(false) }
         var languageBottomSheetOpened by remember { mutableStateOf(false) }
+        var sortPostBottomSheetOpened by remember { mutableStateOf(false) }
+        var sortCommentsBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(notificationCenter) {
             notificationCenter
@@ -219,13 +220,7 @@ class SettingsScreen : Screen {
                         title = LocalStrings.current.settingsDefaultPostSortType,
                         value = uiState.defaultPostSortType.toReadableName(),
                         onTap = {
-                            val sheet =
-                                SortBottomSheet(
-                                    values = uiState.availableSortTypesForPosts.map { it.toInt() },
-                                    expandTop = true,
-                                    screenKey = "settings",
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
+                            sortPostBottomSheetOpened = true
                         },
                     )
 
@@ -234,13 +229,7 @@ class SettingsScreen : Screen {
                         title = LocalStrings.current.settingsDefaultCommentSortType,
                         value = uiState.defaultCommentSortType.toReadableName(),
                         onTap = {
-                            val sheet =
-                                SortBottomSheet(
-                                    comments = true,
-                                    values = uiState.availableSortTypesForComments.map { it.toInt() },
-                                    screenKey = "settings",
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
+                            sortCommentsBottomSheetOpened = true
                         },
                     )
 
@@ -491,6 +480,42 @@ class SettingsScreen : Screen {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeLanguage(
                                 value = values[index],
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (sortPostBottomSheetOpened) {
+            SortBottomSheet(
+                values = uiState.availableSortTypesForPosts,
+                expandTop = true,
+                onSelected = { value ->
+                    sortPostBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSortType(
+                                value = value,
+                                screenKey = "settings",
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (sortCommentsBottomSheetOpened) {
+            SortBottomSheet(
+                values = uiState.availableSortTypesForComments,
+                expandTop = true,
+                onSelected = { value ->
+                    sortCommentsBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeCommentSortType(
+                                value = value,
+                                screenKey = "settings",
                             ),
                         )
                     }

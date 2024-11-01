@@ -107,7 +107,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.chat.InboxChatScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.explore.ExploreScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
@@ -166,6 +165,7 @@ class UserDetailScreen(
         val notificationCenter = remember { getNotificationCenter() }
         val clipboardManager = LocalClipboardManager.current
         var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
+        var sortBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -236,13 +236,7 @@ class UserDetailScreen(
                         // sort button
                         IconButton(
                             onClick = {
-                                val sheet =
-                                    SortBottomSheet(
-                                        values = uiState.availableSortTypes.map { it.toInt() },
-                                        expandTop = true,
-                                        screenKey = uiState.user.readableHandle,
-                                    )
-                                navigationCoordinator.showBottomSheet(sheet)
+                                sortBottomSheetOpened = true
                             },
                         ) {
                             Icon(
@@ -1219,6 +1213,24 @@ class UserDetailScreen(
                     if (index != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.Share(url = values[index]),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (sortBottomSheetOpened) {
+            SortBottomSheet(
+                values = uiState.availableSortTypes,
+                expandTop = true,
+                onSelected = { value ->
+                    sortBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSortType(
+                                value = value,
+                                screenKey = uiState.user.readableHandle,
+                            ),
                         )
                     }
                 },

@@ -132,7 +132,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.containsId
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.ban.BanUserScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
@@ -244,6 +243,7 @@ class PostDetailScreen(
             }
         val notificationCenter = remember { getNotificationCenter() }
         var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
+        var sortBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -319,12 +319,7 @@ class PostDetailScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                val sheet =
-                                    SortBottomSheet(
-                                        comments = true,
-                                        values = uiState.availableSortTypes.map { it.toInt() },
-                                    )
-                                navigationCoordinator.showBottomSheet(sheet)
+                                sortBottomSheetOpened = true
                             },
                         ) {
                             Icon(
@@ -2009,6 +2004,24 @@ class PostDetailScreen(
                     if (index != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.Share(url = values[index]),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (sortBottomSheetOpened) {
+            SortBottomSheet(
+                values = uiState.availableSortTypes,
+                expandTop = true,
+                onSelected = { value ->
+                    sortBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeCommentSortType(
+                                value = value,
+                                screenKey = null,
+                            ),
                         )
                     }
                 },

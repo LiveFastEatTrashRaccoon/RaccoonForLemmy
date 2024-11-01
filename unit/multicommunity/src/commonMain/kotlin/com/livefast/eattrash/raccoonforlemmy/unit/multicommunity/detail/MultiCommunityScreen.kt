@@ -127,6 +127,7 @@ class MultiCommunityScreen(
         val notificationCenter = remember { getNotificationCenter() }
         val clipboardManager = LocalClipboardManager.current
         var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
+        var sortBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -200,13 +201,7 @@ class MultiCommunityScreen(
                         if (sortType != null) {
                             IconButton(
                                 onClick = {
-                                    val sheet =
-                                        SortBottomSheet(
-                                            values = uiState.availableSortTypes.map { it.toInt() },
-                                            expandTop = true,
-                                            screenKey = "multiCommunity",
-                                        )
-                                    navigationCoordinator.showBottomSheet(sheet)
+                                    sortBottomSheetOpened = true
                                 },
                             ) {
                                 Icon(
@@ -618,6 +613,24 @@ class MultiCommunityScreen(
                     if (index != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.Share(url = values[index]),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (sortBottomSheetOpened) {
+            SortBottomSheet(
+                values = uiState.availableSortTypes,
+                expandTop = true,
+                onSelected = { value ->
+                    sortBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeSortType(
+                                value = value,
+                                screenKey = "multiCommunity",
+                            ),
                         )
                     }
                 },
