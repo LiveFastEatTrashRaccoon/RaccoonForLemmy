@@ -34,10 +34,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.FontScale
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.scaleFactor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toFontScale
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toReadableName
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
@@ -52,8 +57,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.unit.choosefont.FontFamilyBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.unit.choosefont.FontScaleBottomSheet
 
 class ConfigureContentViewScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -68,6 +71,8 @@ class ConfigureContentViewScreen : Screen {
         val scrollState = rememberScrollState()
         var voteFormatBottomSheetOpened by remember { mutableStateOf(false) }
         var postLayoutBottomSheetOpened by remember { mutableStateOf(false) }
+        var fontFamilyBottomSheetOpened by remember { mutableStateOf(false) }
+        var fontScaleClassBottomSheet by remember { mutableStateOf<ContentFontClass?>(null) }
 
         Scaffold(
             modifier =
@@ -122,8 +127,7 @@ class ConfigureContentViewScreen : Screen {
                         title = LocalStrings.current.settingsContentFontFamily,
                         value = uiState.contentFontFamily.toReadableName(),
                         onTap = {
-                            val sheet = FontFamilyBottomSheet(content = true)
-                            navigationCoordinator.showBottomSheet(sheet)
+                            fontFamilyBottomSheetOpened = true
                         },
                     )
 
@@ -135,8 +139,7 @@ class ConfigureContentViewScreen : Screen {
                                 .toFontScale()
                                 .toReadableName(),
                         onTap = {
-                            val sheet = FontScaleBottomSheet(contentClass = ContentFontClass.Title)
-                            navigationCoordinator.showBottomSheet(sheet)
+                            fontScaleClassBottomSheet = ContentFontClass.Title
                         },
                     )
                     SettingsRow(
@@ -146,8 +149,7 @@ class ConfigureContentViewScreen : Screen {
                                 .toFontScale()
                                 .toReadableName(),
                         onTap = {
-                            val sheet = FontScaleBottomSheet(contentClass = ContentFontClass.Body)
-                            navigationCoordinator.showBottomSheet(sheet)
+                            fontScaleClassBottomSheet = ContentFontClass.Body
                         },
                     )
                     SettingsRow(
@@ -157,9 +159,7 @@ class ConfigureContentViewScreen : Screen {
                                 .toFontScale()
                                 .toReadableName(),
                         onTap = {
-                            val sheet =
-                                FontScaleBottomSheet(contentClass = ContentFontClass.Comment)
-                            navigationCoordinator.showBottomSheet(sheet)
+                            fontScaleClassBottomSheet = ContentFontClass.Comment
                         },
                     )
                     SettingsRow(
@@ -169,9 +169,7 @@ class ConfigureContentViewScreen : Screen {
                                 .toFontScale()
                                 .toReadableName(),
                         onTap = {
-                            val sheet =
-                                FontScaleBottomSheet(contentClass = ContentFontClass.AncillaryText)
-                            navigationCoordinator.showBottomSheet(sheet)
+                            fontScaleClassBottomSheet = ContentFontClass.AncillaryText
                         },
                     )
 
@@ -342,6 +340,66 @@ class ConfigureContentViewScreen : Screen {
                     if (index != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangePostLayout(value = values[index]),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (fontFamilyBottomSheetOpened) {
+            val items =
+                listOf(
+                    UiFontFamily.Poppins,
+                    UiFontFamily.NotoSans,
+                    UiFontFamily.CharisSIL,
+                    UiFontFamily.Default,
+                ).map { it.toInt() }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsUiFontFamily,
+                items =
+                    items.map { fontFamily ->
+                        CustomModalBottomSheetItem(
+                            label = fontFamily.toUiFontFamily().toReadableName(),
+                        )
+                    },
+                onSelected = { index ->
+                    fontFamilyBottomSheetOpened = false
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeContentFontFamily(items[index].toUiFontFamily()),
+                        )
+                    }
+                },
+            )
+        }
+
+        fontScaleClassBottomSheet?.also { contentClass ->
+            val items =
+                listOf(
+                    FontScale.Largest,
+                    FontScale.Larger,
+                    FontScale.Large,
+                    FontScale.Normal,
+                    FontScale.Small,
+                    FontScale.Smaller,
+                    FontScale.Smallest,
+                ).map { it.scaleFactor }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.settingsUiFontScale,
+                items =
+                    items.map { font ->
+                        CustomModalBottomSheetItem(
+                            label = font.toFontScale().toReadableName(),
+                        )
+                    },
+                onSelected = { index ->
+                    fontScaleClassBottomSheet = null
+                    if (index != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeContentFontSize(
+                                value = items[index],
+                                contentClass = contentClass,
+                            ),
                         )
                     }
                 },
