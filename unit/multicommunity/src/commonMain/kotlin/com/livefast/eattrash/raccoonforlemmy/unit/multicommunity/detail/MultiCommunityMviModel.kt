@@ -19,21 +19,34 @@ interface MultiCommunityMviModel :
 
         data object HapticIndication : Intent
 
-        data class UpVotePost(val id: Long, val feedback: Boolean = false) : Intent
+        data class UpVotePost(
+            val id: Long,
+            val feedback: Boolean = false,
+        ) : Intent
 
-        data class DownVotePost(val id: Long, val feedback: Boolean = false) : Intent
+        data class DownVotePost(
+            val id: Long,
+            val feedback: Boolean = false,
+        ) : Intent
 
-        data class SavePost(val id: Long, val feedback: Boolean = false) : Intent
+        data class SavePost(
+            val id: Long,
+            val feedback: Boolean = false,
+        ) : Intent
 
-        data class MarkAsRead(val id: Long) : Intent
+        data class MarkAsRead(
+            val id: Long,
+        ) : Intent
 
-        data class Hide(val id: Long) : Intent
+        data class Hide(
+            val id: Long,
+        ) : Intent
 
         data object ClearRead : Intent
 
-        data class Share(val url: String) : Intent
-
-        data class Copy(val value: String) : Intent
+        data class Share(
+            val url: String,
+        ) : Intent
 
         data object WillOpenDetail : Intent
     }
@@ -68,7 +81,5 @@ interface MultiCommunityMviModel :
 
     sealed interface Effect {
         data object BackToTop : Effect
-
-        data class TriggerCopy(val text: String) : Effect
     }
 }

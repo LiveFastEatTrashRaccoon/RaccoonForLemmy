@@ -106,11 +106,6 @@ class MultiCommunityViewModel(
                 .onEach { evt ->
                     shareHelper.share(evt.url)
                 }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.CopyText::class)
-                .onEach {
-                    emitEffect(MultiCommunityMviModel.Effect.TriggerCopy(it.value))
-                }.launchIn(this)
             identityRepository.isLogged
                 .onEach { logged ->
                     updateState { it.copy(isLogged = logged ?: false) }
@@ -199,11 +194,6 @@ class MultiCommunityViewModel(
                 hide(
                     post = uiState.value.posts.first { it.id == intent.id },
                 )
-
-            is MultiCommunityMviModel.Intent.Copy ->
-                screenModelScope.launch {
-                    emitEffect(MultiCommunityMviModel.Effect.TriggerCopy(intent.value))
-                }
 
             MultiCommunityMviModel.Intent.WillOpenDetail -> {
                 val state = postPaginationManager.extractState()
