@@ -79,7 +79,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toReadableName
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CopyPostBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
@@ -151,6 +150,7 @@ class PostListScreen : Screen {
             mutableStateOf<List<Triple<BlockActionType, Long?, String?>>?>(null)
         }
         var sortBottomSheetOpened by remember { mutableStateOf(false) }
+        var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection
@@ -185,10 +185,6 @@ class PostListScreen : Screen {
                                     )
                                 }
                             }
-                        }
-
-                        is PostListMviModel.Effect.TriggerCopy -> {
-                            clipboardManager.setText(AnnotatedString(text = effect.text))
                         }
                     }
                 }.launchIn(this)
@@ -730,16 +726,9 @@ class PostListScreen : Screen {
                                                             post.text.takeIf { it.isNotBlank() },
                                                         ).distinct()
                                                     if (texts.size == 1) {
-                                                        model.reduce(
-                                                            PostListMviModel.Intent.Copy(texts.first()),
-                                                        )
+                                                        clipboardManager.setText(AnnotatedString(texts.first()))
                                                     } else {
-                                                        val screen =
-                                                            CopyPostBottomSheet(
-                                                                title = post.title,
-                                                                text = post.text,
-                                                            )
-                                                        navigationCoordinator.showBottomSheet(screen)
+                                                        copyPostBottomSheet = post
                                                     }
                                                 }
 
@@ -1013,6 +1002,41 @@ class PostListScreen : Screen {
                                 screenKey = "postList",
                             ),
                         )
+                    }
+                },
+            )
+        }
+
+        copyPostBottomSheet?.also { post ->
+            val titleCanBeCopied = post.title.isNotBlank()
+            val textCanBeCopied = post.text.isNotBlank()
+            val texts = mutableListOf<String>()
+            val values = mutableListOf<CustomModalBottomSheetItem>()
+            if (titleCanBeCopied) {
+                texts += post.title
+                values += CustomModalBottomSheetItem(label = LocalStrings.current.copyTitle)
+            }
+            if (textCanBeCopied) {
+                texts += post.text
+                values += CustomModalBottomSheetItem(label = LocalStrings.current.copyText)
+                if (titleCanBeCopied) {
+                    texts +=
+                        buildString {
+                            append(post.title)
+                            append("\n")
+                            append(post.text)
+                        }
+                    values += CustomModalBottomSheetItem(label = LocalStrings.current.copyBoth)
+                }
+            }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.communityDetailBlock,
+                items = values,
+                onSelected = { index ->
+                    copyPostBottomSheet = null
+                    if (index != null) {
+                        val text = texts[index]
+                        clipboardManager.setText(AnnotatedString(text))
                     }
                 },
             )

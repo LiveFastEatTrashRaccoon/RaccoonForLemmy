@@ -66,10 +66,6 @@ interface PostListMviModel :
 
         data object PauseZombieMode : Intent
 
-        data class Copy(
-            val value: String,
-        ) : Intent
-
         data object WillOpenDetail : Intent
     }
 
@@ -108,10 +104,6 @@ interface PostListMviModel :
 
         data class ZombieModeTick(
             val index: Int,
-        ) : Effect
-
-        data class TriggerCopy(
-            val text: String,
         ) : Effect
     }
 }
