@@ -183,11 +183,6 @@ class CommunityDetailViewModel(
                 .onEach { evt ->
                     shareHelper.share(evt.url)
                 }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.CopyText::class)
-                .onEach {
-                    emitEffect(CommunityDetailMviModel.Effect.TriggerCopy(it.value))
-                }.launchIn(this)
 
             uiState
                 .map { it.searchText }
@@ -364,10 +359,6 @@ class CommunityDetailViewModel(
             }
 
             is CommunityDetailMviModel.Intent.SetSearch -> updateSearchText(intent.value)
-            is CommunityDetailMviModel.Intent.Copy ->
-                screenModelScope.launch {
-                    emitEffect(CommunityDetailMviModel.Effect.TriggerCopy(intent.value))
-                }
 
             CommunityDetailMviModel.Intent.WillOpenDetail -> {
                 val state = postPaginationManager.extractState()

@@ -102,10 +102,6 @@ interface CommunityDetailMviModel :
             val value: Boolean,
         ) : Intent
 
-        data class Copy(
-            val value: String,
-        ) : Intent
-
         data object WillOpenDetail : Intent
 
         data object UnhideCommunity : Intent
@@ -174,10 +170,6 @@ interface CommunityDetailMviModel :
 
         data class ZombieModeTick(
             val index: Int,
-        ) : Effect
-
-        data class TriggerCopy(
-            val text: String,
         ) : Effect
 
         data object Back : Effect
