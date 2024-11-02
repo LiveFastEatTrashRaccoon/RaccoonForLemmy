@@ -184,10 +184,6 @@ sealed interface NotificationCenterEvent {
 
     data object ResetInbox : NotificationCenterEvent
 
-    data class CopyText(
-        val value: String,
-    ) : NotificationCenterEvent
-
     data class ChangedLikedType(
         val value: Boolean,
     ) : NotificationCenterEvent

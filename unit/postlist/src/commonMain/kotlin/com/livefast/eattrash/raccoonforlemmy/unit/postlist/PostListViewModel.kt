@@ -163,11 +163,6 @@ class PostListViewModel(
                 .onEach {
                     onFirstLoad()
                 }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.CopyText::class)
-                .onEach {
-                    emitEffect(PostListMviModel.Effect.TriggerCopy(it.value))
-                }.launchIn(this)
 
             zombieModeHelper.index
                 .onEach { index ->
@@ -297,11 +292,6 @@ class PostListViewModel(
                     )
                 }
             }
-
-            is PostListMviModel.Intent.Copy ->
-                screenModelScope.launch {
-                    emitEffect(PostListMviModel.Effect.TriggerCopy(intent.value))
-                }
 
             PostListMviModel.Intent.WillOpenDetail -> {
                 val state = postPaginationManager.extractState()

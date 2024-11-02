@@ -72,7 +72,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CopyPostBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
@@ -83,10 +82,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificati
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.getAdditionalLabel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
@@ -128,15 +127,12 @@ class MultiCommunityScreen(
         val clipboardManager = LocalClipboardManager.current
         var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
         var sortBottomSheetOpened by remember { mutableStateOf(false) }
+        var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
 
         LaunchedEffect(model) {
             model.effects
                 .onEach { effect ->
                     when (effect) {
-                        is MultiCommunityMviModel.Effect.TriggerCopy -> {
-                            clipboardManager.setText(AnnotatedString(text = effect.text))
-                        }
-
                         MultiCommunityMviModel.Effect.BackToTop -> {
                             runCatching {
                                 lazyListState.scrollToItem(0)
@@ -526,12 +522,9 @@ class MultiCommunityScreen(
                                                         post.text.takeIf { it.isNotBlank() },
                                                     ).distinct()
                                                 if (texts.size == 1) {
-                                                    model.reduce(
-                                                        MultiCommunityMviModel.Intent.Copy(texts.first()),
-                                                    )
+                                                    clipboardManager.setText(AnnotatedString(texts.first()))
                                                 } else {
-                                                    val screen = CopyPostBottomSheet(post.title, post.text)
-                                                    navigationCoordinator.showBottomSheet(screen)
+                                                    copyPostBottomSheet = post
                                                 }
                                             }
 
@@ -632,6 +625,41 @@ class MultiCommunityScreen(
                                 screenKey = "multiCommunity",
                             ),
                         )
+                    }
+                },
+            )
+        }
+
+        copyPostBottomSheet?.also { post ->
+            val titleCanBeCopied = post.title.isNotBlank()
+            val textCanBeCopied = post.text.isNotBlank()
+            val texts = mutableListOf<String>()
+            val values = mutableListOf<CustomModalBottomSheetItem>()
+            if (titleCanBeCopied) {
+                texts += post.title
+                values += CustomModalBottomSheetItem(label = LocalStrings.current.copyTitle)
+            }
+            if (textCanBeCopied) {
+                texts += post.text
+                values += CustomModalBottomSheetItem(label = LocalStrings.current.copyText)
+                if (titleCanBeCopied) {
+                    texts +=
+                        buildString {
+                            append(post.title)
+                            append("\n")
+                            append(post.text)
+                        }
+                    values += CustomModalBottomSheetItem(label = LocalStrings.current.copyBoth)
+                }
+            }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.communityDetailBlock,
+                items = values,
+                onSelected = { index ->
+                    copyPostBottomSheet = null
+                    if (index != null) {
+                        val text = texts[index]
+                        clipboardManager.setText(AnnotatedString(text))
                     }
                 },
             )

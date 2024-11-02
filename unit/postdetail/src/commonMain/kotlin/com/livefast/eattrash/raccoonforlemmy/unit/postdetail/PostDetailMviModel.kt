@@ -84,10 +84,6 @@ interface PostDetailMviModel :
             val url: String,
         ) : Intent
 
-        data class Copy(
-            val value: String,
-        ) : Intent
-
         data class SetSearch(
             val value: String,
         ) : Intent
@@ -159,9 +155,5 @@ interface PostDetailMviModel :
         ) : Effect
 
         data object BackToTop : Effect
-
-        data class TriggerCopy(
-            val text: String,
-        ) : Effect
     }
 }

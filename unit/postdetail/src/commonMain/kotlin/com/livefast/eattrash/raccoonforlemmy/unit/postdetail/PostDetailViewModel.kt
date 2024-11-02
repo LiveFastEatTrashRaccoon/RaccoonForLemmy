@@ -152,11 +152,6 @@ class PostDetailViewModel(
                     shareHelper.share(evt.url)
                 }.launchIn(this)
             notificationCenter
-                .subscribe(NotificationCenterEvent.CopyText::class)
-                .onEach {
-                    emitEffect(PostDetailMviModel.Effect.TriggerCopy(it.value))
-                }.launchIn(this)
-            notificationCenter
                 .subscribe(NotificationCenterEvent.UserBannedComment::class)
                 .onEach { evt ->
                     val commentId = evt.commentId
@@ -427,10 +422,6 @@ class PostDetailViewModel(
                     }
 
             is PostDetailMviModel.Intent.ModToggleModUser -> toggleModeratorStatus(intent.id)
-            is PostDetailMviModel.Intent.Copy ->
-                screenModelScope.launch {
-                    emitEffect(PostDetailMviModel.Effect.TriggerCopy(intent.value))
-                }
 
             is PostDetailMviModel.Intent.ChangeSearching -> {
                 screenModelScope.launch {

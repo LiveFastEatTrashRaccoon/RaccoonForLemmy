@@ -103,11 +103,6 @@ class UserDetailViewModel(
                 .onEach { evt ->
                     shareHelper.share(evt.url)
                 }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.CopyText::class)
-                .onEach {
-                    emitEffect(UserDetailMviModel.Effect.TriggerCopy(it.value))
-                }.launchIn(this)
 
             lemmyValueCache.isDownVoteEnabled
                 .onEach { value ->
@@ -258,10 +253,6 @@ class UserDetailViewModel(
 
             UserDetailMviModel.Intent.Block -> blockUser()
             UserDetailMviModel.Intent.BlockInstance -> blockInstance()
-            is UserDetailMviModel.Intent.Copy ->
-                screenModelScope.launch {
-                    emitEffect(UserDetailMviModel.Effect.TriggerCopy(intent.value))
-                }
 
             UserDetailMviModel.Intent.WillOpenDetail -> {
                 val state = postPaginationManager.extractState()
