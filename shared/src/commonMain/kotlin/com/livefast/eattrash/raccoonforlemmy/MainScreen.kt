@@ -3,6 +3,7 @@ package com.livefast.eattrash.raccoonforlemmy
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
@@ -47,7 +48,8 @@ import com.livefast.eattrash.raccoonforlemmy.feature.home.ui.HomeTab
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.main.SettingsScreen
 import com.livefast.eattrash.raccoonforlemmy.navigation.TabNavigationItem
 import com.livefast.eattrash.raccoonforlemmy.navigation.toTab
-import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsScreen
+import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsBottomSheet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -56,6 +58,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 internal object MainScreen : Screen {
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val themeRepository = remember { getThemeRepository() }
@@ -78,6 +81,7 @@ internal object MainScreen : Screen {
             }
         val scope = rememberCoroutineScope()
         val inboxReadAllSuccessMessage = LocalStrings.current.messageReadAllInboxSuccess
+        var manageAccountsBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -245,8 +249,7 @@ internal object MainScreen : Screen {
 
                                 TabNavigationSection.Profile -> {
                                     if (uiState.isLogged) {
-                                        val screen = ManageAccountsScreen()
-                                        navigationCoordinator.showBottomSheet(screen)
+                                        manageAccountsBottomSheetOpened = true
                                     }
                                 }
 
@@ -289,15 +292,15 @@ internal object MainScreen : Screen {
                                                 null
                                             },
                                         onClick = {
-                                            val section = uiState.bottomBarSections[idx]
-                                            val tab = section.toTab()
+                                            val sec = uiState.bottomBarSections[idx]
+                                            val tab = sec.toTab()
                                             tabNavigator.current = tab
-                                            navigationCoordinator.setCurrentSection(section)
+                                            navigationCoordinator.setCurrentSection(sec)
                                         },
                                         onLongPress = {
-                                            val section = uiState.bottomBarSections[idx]
-                                            val tab = section.toTab()
-                                            handleOnLongPress(tab, section)
+                                            val sec = uiState.bottomBarSections[idx]
+                                            val tab = sec.toTab()
+                                            handleOnLongPress(tab, sec)
                                         },
                                     )
                                 }
@@ -307,6 +310,18 @@ internal object MainScreen : Screen {
                 },
                 content = {
                     CurrentTab()
+                },
+            )
+        }
+
+        if (manageAccountsBottomSheetOpened) {
+            ManageAccountsBottomSheet(
+                parent = this,
+                onDismiss = { openLogin ->
+                    manageAccountsBottomSheetOpened = false
+                    if (openLogin) {
+                        navigationCoordinator.pushScreen(LoginBottomSheet())
+                    }
                 },
             )
         }

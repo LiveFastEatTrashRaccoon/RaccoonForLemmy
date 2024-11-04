@@ -58,6 +58,7 @@ kotlin {
                 implementation(projects.domain.lemmy.repository)
 
                 implementation(projects.unit.selectinstance)
+                implementation(projects.unit.login)
                 implementation(projects.unit.manageaccounts)
             }
         }
