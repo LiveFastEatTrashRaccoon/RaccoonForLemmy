@@ -57,6 +57,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toReadableName
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.MultiColorPreview
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
@@ -575,6 +576,11 @@ class SettingsColorAndFontScreen : Screen {
                     items.map { fontFamily ->
                         CustomModalBottomSheetItem(
                             label = fontFamily.toUiFontFamily().toReadableName(),
+                            customLabelStyle =
+                                fontFamily
+                                    .toUiFontFamily()
+                                    .toTypography()
+                                    .titleMedium,
                         )
                     },
                 onSelected = { index ->
@@ -605,6 +611,10 @@ class SettingsColorAndFontScreen : Screen {
                     items.map { font ->
                         CustomModalBottomSheetItem(
                             label = font.toFontScale().toReadableName(),
+                            customLabelStyle =
+                                MaterialTheme.typography.titleMedium.let {
+                                    it.copy(fontSize = it.fontSize * font)
+                                },
                         )
                     },
                 onSelected = { index ->

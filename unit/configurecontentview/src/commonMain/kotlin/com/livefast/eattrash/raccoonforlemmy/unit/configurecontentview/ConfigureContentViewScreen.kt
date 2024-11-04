@@ -45,6 +45,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsIntValueRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
@@ -360,6 +361,11 @@ class ConfigureContentViewScreen : Screen {
                     items.map { fontFamily ->
                         CustomModalBottomSheetItem(
                             label = fontFamily.toUiFontFamily().toReadableName(),
+                            customLabelStyle =
+                                fontFamily
+                                    .toUiFontFamily()
+                                    .toTypography()
+                                    .titleMedium,
                         )
                     },
                 onSelected = { index ->
@@ -390,6 +396,10 @@ class ConfigureContentViewScreen : Screen {
                     items.map { font ->
                         CustomModalBottomSheetItem(
                             label = font.toFontScale().toReadableName(),
+                            customLabelStyle =
+                                MaterialTheme.typography.titleMedium.let {
+                                    it.copy(fontSize = it.fontSize * font)
+                                },
                         )
                     },
                 onSelected = { index ->
