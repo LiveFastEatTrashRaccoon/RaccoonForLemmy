@@ -58,6 +58,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectLanguage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SliderBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -113,6 +114,7 @@ class AdvancedSettingsScreen : Screen {
         var inboxTypeBottomSheetOpened by remember { mutableStateOf(false) }
         var exploreListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
         var exploreResultTypeBottomSheetOpened by remember { mutableStateOf(false) }
+        var selectNumberBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -306,20 +308,7 @@ class AdvancedSettingsScreen : Screen {
                                     uiState.inboxPreviewMaxLines.toString()
                                 },
                             onTap = {
-                                val screen =
-                                    SelectNumberBottomSheet(
-                                        values =
-                                            listOf(
-                                                1,
-                                                10,
-                                                50,
-                                                -1, // custom number
-                                                null, // unlimited
-                                            ),
-                                        type = SelectNumberBottomSheetType.InboxPreviewMaxLines,
-                                        initialValue = uiState.inboxPreviewMaxLines,
-                                    )
-                                navigationCoordinator.showBottomSheet(screen)
+                                selectNumberBottomSheetOpened = true
                             },
                         )
                     }
@@ -882,6 +871,24 @@ class AdvancedSettingsScreen : Screen {
                 }
                 settingsContent = null
             }
+        }
+
+        if (selectNumberBottomSheetOpened) {
+            SelectNumberBottomSheet(
+                type = SelectNumberBottomSheetType.InboxPreviewMaxLines,
+                initialValue = uiState.inboxPreviewMaxLines,
+                onSelected = { value ->
+                    selectNumberBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.SelectNumberBottomSheetClosed(
+                                value = value.takeIf { it > 0 },
+                                type = SelectNumberBottomSheetType.InboxPreviewMaxLines.toInt(),
+                            ),
+                        )
+                    }
+                },
+            )
         }
     }
 }
