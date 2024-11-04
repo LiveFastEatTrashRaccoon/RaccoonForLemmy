@@ -75,7 +75,7 @@ class ConfigureContentViewScreen : Screen {
         var postLayoutBottomSheetOpened by remember { mutableStateOf(false) }
         var fontFamilyBottomSheetOpened by remember { mutableStateOf(false) }
         var fontScaleClassBottomSheet by remember { mutableStateOf<ContentFontClass?>(null) }
-        var selectNumberBottomSheetOpened by remember { mutableStateOf(false) }
+        var selectPostBodyMaxLinesBottomSheetOpened by remember { mutableStateOf(false) }
 
         Scaffold(
             modifier =
@@ -201,7 +201,7 @@ class ConfigureContentViewScreen : Screen {
                                     uiState.postBodyMaxLines.toString()
                                 },
                             onTap = {
-                                selectNumberBottomSheetOpened = true
+                                selectPostBodyMaxLinesBottomSheetOpened = true
                             },
                         )
                     }
@@ -413,12 +413,12 @@ class ConfigureContentViewScreen : Screen {
             )
         }
 
-        if (selectNumberBottomSheetOpened) {
+        if (selectPostBodyMaxLinesBottomSheetOpened) {
             SelectNumberBottomSheet(
                 type = SelectNumberBottomSheetType.PostBodyMaxLines,
                 initialValue = uiState.postBodyMaxLines,
                 onSelected = { value ->
-                    selectNumberBottomSheetOpened = false
+                    selectPostBodyMaxLinesBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.SelectNumberBottomSheetClosed(

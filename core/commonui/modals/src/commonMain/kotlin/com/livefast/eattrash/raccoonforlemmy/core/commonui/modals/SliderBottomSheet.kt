@@ -1,58 +1,65 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.modals
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.core.screen.Screen
+import androidx.compose.ui.text.style.TextAlign
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.BottomSheetHeader
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-class SliderBottomSheet(
-    private val min: Float,
-    private val max: Float,
-    private val initial: Float,
-) : Screen {
-    @Composable
-    override fun Content() {
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val notificationCenter = remember { getNotificationCenter() }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SliderBottomSheet(
+    sheetScope: CoroutineScope = rememberCoroutineScope(),
+    state: SheetState = rememberModalBottomSheetState(),
+    title: String,
+    min: Float,
+    max: Float,
+    initial: Float,
+    onSelected: ((Float?) -> Unit)? = null,
+) {
+    var value by remember {
+        mutableStateOf(initial)
+    }
+
+    ModalBottomSheet(
+        sheetState = state,
+        onDismissRequest = {
+            onSelected?.invoke(null)
+        },
+    ) {
         Column(
-            modifier =
-                Modifier
-                    .windowInsetsPadding(WindowInsets.navigationBars)
-                    .padding(
-                        top = Spacing.s,
-                        start = Spacing.s,
-                        end = Spacing.s,
-                        bottom = Spacing.m,
-                    ),
-            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(bottom = Spacing.xl),
         ) {
-            BottomSheetHeader(LocalStrings.current.settingsZombieModeScrollAmount)
-            var value by remember {
-                mutableStateOf(initial)
-            }
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+            Spacer(modifier = Modifier.height(Spacing.xs))
+
             Slider(
                 modifier = Modifier.fillMaxWidth(),
                 value = value,
@@ -64,11 +71,14 @@ class SliderBottomSheet(
 
             Spacer(modifier = Modifier.height(Spacing.s))
             Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeZombieScrollAmount(value),
-                    )
-                    navigationCoordinator.hideBottomSheet()
+                    sheetScope
+                        .launch {
+                            state.hide()
+                        }.invokeOnCompletion {
+                            onSelected?.invoke(value)
+                        }
                 },
             ) {
                 Text(text = LocalStrings.current.buttonConfirm)
