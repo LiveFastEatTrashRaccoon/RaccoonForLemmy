@@ -376,7 +376,7 @@ class SettingsScreen : Screen {
                         value = "",
                         disclosureIndicator = true,
                         onTap = {
-                            uriHandler.openUri("https://example.com")
+                            uriHandler.openUri(SettingsConstants.USER_MANUAL_URL)
                         },
                     )
 
