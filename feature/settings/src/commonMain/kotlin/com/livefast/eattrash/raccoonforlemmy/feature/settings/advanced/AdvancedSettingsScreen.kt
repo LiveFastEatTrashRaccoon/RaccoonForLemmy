@@ -114,7 +114,8 @@ class AdvancedSettingsScreen : Screen {
         var inboxTypeBottomSheetOpened by remember { mutableStateOf(false) }
         var exploreListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
         var exploreResultTypeBottomSheetOpened by remember { mutableStateOf(false) }
-        var selectNumberBottomSheetOpened by remember { mutableStateOf(false) }
+        var selectInboxPreviewMaxLinesBottomSheetOpened by remember { mutableStateOf(false) }
+        var selectZombieModeAmount by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -308,7 +309,7 @@ class AdvancedSettingsScreen : Screen {
                                     uiState.inboxPreviewMaxLines.toString()
                                 },
                             onTap = {
-                                selectNumberBottomSheetOpened = true
+                                selectInboxPreviewMaxLinesBottomSheetOpened = true
                             },
                         )
                     }
@@ -408,13 +409,7 @@ class AdvancedSettingsScreen : Screen {
                                 append(LocalStrings.current.settingsPointsShort)
                             },
                         onTap = {
-                            val sheet =
-                                SliderBottomSheet(
-                                    min = 0f,
-                                    max = screenWidth,
-                                    initial = uiState.zombieModeScrollAmount,
-                                )
-                            navigationCoordinator.showBottomSheet(sheet)
+                            selectZombieModeAmount = true
                         },
                     )
 
@@ -873,18 +868,35 @@ class AdvancedSettingsScreen : Screen {
             }
         }
 
-        if (selectNumberBottomSheetOpened) {
+        if (selectInboxPreviewMaxLinesBottomSheetOpened) {
             SelectNumberBottomSheet(
                 type = SelectNumberBottomSheetType.InboxPreviewMaxLines,
                 initialValue = uiState.inboxPreviewMaxLines,
                 onSelected = { value ->
-                    selectNumberBottomSheetOpened = false
+                    selectInboxPreviewMaxLinesBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.SelectNumberBottomSheetClosed(
                                 value = value.takeIf { it > 0 },
                                 type = SelectNumberBottomSheetType.InboxPreviewMaxLines.toInt(),
                             ),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (selectZombieModeAmount) {
+            SliderBottomSheet(
+                title = LocalStrings.current.settingsZombieModeScrollAmount,
+                min = 0f,
+                max = screenWidth,
+                initial = uiState.zombieModeScrollAmount,
+                onSelected = { value ->
+                    selectZombieModeAmount = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeZombieScrollAmount(value),
                         )
                     }
                 },
