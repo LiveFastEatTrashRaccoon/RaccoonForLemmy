@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -86,6 +87,7 @@ object ModalDrawerContent : Tab {
                     }
                 }
             }
+        var selectInstanceBottomSheetOpened by remember { mutableStateOf(false) }
 
         var uiFontSizeWorkaround by remember { mutableStateOf(true) }
         LaunchedEffect(themeRepository) {
@@ -100,6 +102,7 @@ object ModalDrawerContent : Tab {
         if (!uiFontSizeWorkaround) {
             return
         }
+
         LaunchedEffect(notificationCenter) {
             notificationCenter
                 .subscribe(NotificationCenterEvent.InstanceSelected::class)
@@ -115,7 +118,7 @@ object ModalDrawerContent : Tab {
                 instance = uiState.instance,
                 autoLoadImages = uiState.autoLoadImages,
                 onOpenChangeInstance = {
-                    navigationCoordinator.showBottomSheet(SelectInstanceBottomSheet())
+                    selectInstanceBottomSheetOpened = true
                 },
                 onOpenSwitchAccount = {
                     navigationCoordinator.showBottomSheet(ManageAccountsScreen())
@@ -347,6 +350,19 @@ object ModalDrawerContent : Tab {
                     }
                 }
             }
+        }
+
+        if (selectInstanceBottomSheetOpened) {
+            SelectInstanceBottomSheet(
+                parent = this,
+                state = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+                onSelected = { instance ->
+                    selectInstanceBottomSheetOpened = false
+                    if (instance != null) {
+                        notificationCenter.send(NotificationCenterEvent.InstanceSelected(instance))
+                    }
+                },
+            )
         }
     }
 }
