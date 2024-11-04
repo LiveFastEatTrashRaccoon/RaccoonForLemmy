@@ -54,6 +54,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -74,6 +75,7 @@ class ConfigureContentViewScreen : Screen {
         var postLayoutBottomSheetOpened by remember { mutableStateOf(false) }
         var fontFamilyBottomSheetOpened by remember { mutableStateOf(false) }
         var fontScaleClassBottomSheet by remember { mutableStateOf<ContentFontClass?>(null) }
+        var selectNumberBottomSheetOpened by remember { mutableStateOf(false) }
 
         Scaffold(
             modifier =
@@ -199,12 +201,7 @@ class ConfigureContentViewScreen : Screen {
                                     uiState.postBodyMaxLines.toString()
                                 },
                             onTap = {
-                                val screen =
-                                    SelectNumberBottomSheet(
-                                        type = SelectNumberBottomSheetType.PostBodyMaxLines,
-                                        initialValue = uiState.postBodyMaxLines,
-                                    )
-                                navigationCoordinator.showBottomSheet(screen)
+                                selectNumberBottomSheetOpened = true
                             },
                         )
                     }
@@ -409,6 +406,24 @@ class ConfigureContentViewScreen : Screen {
                             NotificationCenterEvent.ChangeContentFontSize(
                                 value = items[index],
                                 contentClass = contentClass,
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+
+        if (selectNumberBottomSheetOpened) {
+            SelectNumberBottomSheet(
+                type = SelectNumberBottomSheetType.PostBodyMaxLines,
+                initialValue = uiState.postBodyMaxLines,
+                onSelected = { value ->
+                    selectNumberBottomSheetOpened = false
+                    if (value != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.SelectNumberBottomSheetClosed(
+                                value = value.takeIf { it > 0 },
+                                type = SelectNumberBottomSheetType.PostBodyMaxLines.toInt(),
                             ),
                         )
                     }
