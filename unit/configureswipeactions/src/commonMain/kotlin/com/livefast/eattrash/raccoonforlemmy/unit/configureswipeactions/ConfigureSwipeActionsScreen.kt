@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
@@ -34,24 +35,37 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeDirection
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeTarget
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toIcon
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.components.ConfigureActionItem
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.components.ConfigureAddAction
-import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.modals.SelectActionOnSwipeBottomSheet
+
+private data class ActionConfig(
+    val target: ActionOnSwipeTarget,
+    val direction: ActionOnSwipeDirection,
+)
 
 class ConfigureSwipeActionsScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +78,8 @@ class ConfigureSwipeActionsScreen : Screen {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
+        val notificationCenter = remember { getNotificationCenter() }
+        var selectActionBottomSheet by remember { mutableStateOf<ActionConfig?>(null) }
 
         Scaffold(
             modifier =
@@ -189,16 +205,11 @@ class ConfigureSwipeActionsScreen : Screen {
                     if (uiState.availableOptionsPosts.isNotEmpty() && uiState.actionsOnSwipeToStartPosts.size < 2) {
                         item {
                             ConfigureAddAction {
-                                val sheet =
-                                    SelectActionOnSwipeBottomSheet(
-                                        values =
-                                            uiState.availableOptionsPosts.filterNot { a ->
-                                                uiState.actionsOnSwipeToStartPosts.contains(a)
-                                            },
+                                selectActionBottomSheet =
+                                    ActionConfig(
                                         direction = ActionOnSwipeDirection.ToStart,
                                         target = ActionOnSwipeTarget.Posts,
                                     )
-                                navigationCoordinator.showBottomSheet(sheet)
                             }
                         }
                     }
@@ -253,16 +264,11 @@ class ConfigureSwipeActionsScreen : Screen {
                     if (uiState.availableOptionsPosts.isNotEmpty() && uiState.actionsOnSwipeToEndPosts.size < 2) {
                         item {
                             ConfigureAddAction {
-                                val sheet =
-                                    SelectActionOnSwipeBottomSheet(
-                                        values =
-                                            uiState.availableOptionsPosts.filterNot { a ->
-                                                uiState.actionsOnSwipeToEndPosts.contains(a)
-                                            },
+                                selectActionBottomSheet =
+                                    ActionConfig(
                                         direction = ActionOnSwipeDirection.ToEnd,
                                         target = ActionOnSwipeTarget.Posts,
                                     )
-                                navigationCoordinator.showBottomSheet(sheet)
                             }
                         }
                     }
@@ -345,16 +351,11 @@ class ConfigureSwipeActionsScreen : Screen {
                     if (uiState.availableOptionsComments.isNotEmpty() && uiState.actionsOnSwipeToStartComments.size < 2) {
                         item {
                             ConfigureAddAction {
-                                val sheet =
-                                    SelectActionOnSwipeBottomSheet(
-                                        values =
-                                            uiState.availableOptionsComments.filterNot { a ->
-                                                uiState.actionsOnSwipeToStartComments.contains(a)
-                                            },
+                                selectActionBottomSheet =
+                                    ActionConfig(
                                         direction = ActionOnSwipeDirection.ToStart,
                                         target = ActionOnSwipeTarget.Comments,
                                     )
-                                navigationCoordinator.showBottomSheet(sheet)
                             }
                         }
                     }
@@ -409,16 +410,11 @@ class ConfigureSwipeActionsScreen : Screen {
                     if (uiState.availableOptionsComments.isNotEmpty() && uiState.actionsOnSwipeToEndComments.size < 2) {
                         item {
                             ConfigureAddAction {
-                                val sheet =
-                                    SelectActionOnSwipeBottomSheet(
-                                        values =
-                                            uiState.availableOptionsComments.filterNot { a ->
-                                                uiState.actionsOnSwipeToEndComments.contains(a)
-                                            },
+                                selectActionBottomSheet =
+                                    ActionConfig(
                                         direction = ActionOnSwipeDirection.ToEnd,
                                         target = ActionOnSwipeTarget.Comments,
                                     )
-                                navigationCoordinator.showBottomSheet(sheet)
                             }
                         }
                     }
@@ -501,16 +497,11 @@ class ConfigureSwipeActionsScreen : Screen {
                     if (uiState.availableOptionsInbox.isNotEmpty() && uiState.actionsOnSwipeToStartInbox.size < 2) {
                         item {
                             ConfigureAddAction {
-                                val sheet =
-                                    SelectActionOnSwipeBottomSheet(
-                                        values =
-                                            uiState.availableOptionsInbox.filterNot { a ->
-                                                uiState.actionsOnSwipeToStartInbox.contains(a)
-                                            },
+                                selectActionBottomSheet =
+                                    ActionConfig(
                                         direction = ActionOnSwipeDirection.ToStart,
                                         target = ActionOnSwipeTarget.Inbox,
                                     )
-                                navigationCoordinator.showBottomSheet(sheet)
                             }
                         }
                     }
@@ -565,16 +556,11 @@ class ConfigureSwipeActionsScreen : Screen {
                     if (uiState.availableOptionsInbox.isNotEmpty() && uiState.actionsOnSwipeToEndInbox.size < 2) {
                         item {
                             ConfigureAddAction {
-                                val sheet =
-                                    SelectActionOnSwipeBottomSheet(
-                                        values =
-                                            uiState.availableOptionsInbox.filterNot { a ->
-                                                uiState.actionsOnSwipeToEndInbox.contains(a)
-                                            },
+                                selectActionBottomSheet =
+                                    ActionConfig(
                                         direction = ActionOnSwipeDirection.ToEnd,
                                         target = ActionOnSwipeTarget.Inbox,
                                     )
-                                navigationCoordinator.showBottomSheet(sheet)
                             }
                         }
                     }
@@ -584,6 +570,48 @@ class ConfigureSwipeActionsScreen : Screen {
                     }
                 }
             }
+        }
+
+        selectActionBottomSheet?.also { config ->
+            val values =
+                when (config.target) {
+                    ActionOnSwipeTarget.Comments -> uiState.availableOptionsComments
+                    ActionOnSwipeTarget.Inbox -> uiState.availableOptionsInbox
+                    ActionOnSwipeTarget.Posts -> uiState.availableOptionsPosts
+                }
+            CustomModalBottomSheet(
+                title = LocalStrings.current.selectActionTitle,
+                items =
+                    values.map { value ->
+                        CustomModalBottomSheetItem(
+                            label = value.toReadableName(),
+                            trailingContent = {
+                                val icon = value.toIcon()
+                                if (icon != null) {
+                                    Icon(
+                                        modifier = Modifier.size(IconSize.m),
+                                        imageVector = icon,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onBackground,
+                                    )
+                                }
+                            },
+                        )
+                    },
+                onSelected = { index ->
+                    selectActionBottomSheet = null
+                    if (index != null) {
+                        val value = values[index]
+                        notificationCenter.send(
+                            NotificationCenterEvent.ActionsOnSwipeSelected(
+                                value = value,
+                                direction = config.direction,
+                                target = config.target,
+                            ),
+                        )
+                    }
+                },
+            )
         }
     }
 }

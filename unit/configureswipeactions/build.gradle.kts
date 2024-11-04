@@ -45,6 +45,7 @@ kotlin {
                 implementation(projects.core.architecture)
                 implementation(projects.core.commonui.components)
                 implementation(projects.core.commonui.lemmyui)
+                implementation(projects.core.commonui.modals)
                 implementation(projects.core.l10n)
                 implementation(projects.core.navigation)
                 implementation(projects.core.notifications)
@@ -65,8 +66,14 @@ kotlin {
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }
