@@ -2,7 +2,7 @@
 
 androidx-activity = "1.9.3"
 androidx-browser = "1.8.0"
-androidx-core = "1.13.1"
+androidx-core = "1.15.0"
 androidx-crypto = "1.0.0"
 androidx-media3 = "1.4.1"
 androidx-splashscreen = "1.0.1"
