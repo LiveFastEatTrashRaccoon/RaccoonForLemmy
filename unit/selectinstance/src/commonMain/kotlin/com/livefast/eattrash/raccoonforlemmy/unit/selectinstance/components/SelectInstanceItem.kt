@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -60,8 +61,9 @@ internal fun SelectInstanceItem(
                         onClick?.invoke()
                     },
                 ).padding(
-                    horizontal = Spacing.m,
-                    vertical = Spacing.s,
+                    top = Spacing.s,
+                    bottom = Spacing.s,
+                    start = Spacing.m,
                 ),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
         verticalAlignment = Alignment.CenterVertically,
@@ -75,6 +77,12 @@ internal fun SelectInstanceItem(
 
         if (isActive) {
             RadioButton(
+                modifier =
+                    Modifier.padding(
+                        top = Spacing.s,
+                        bottom = Spacing.s,
+                        end = Spacing.s,
+                    ),
                 selected = true,
                 onClick = null,
             )
@@ -82,11 +90,9 @@ internal fun SelectInstanceItem(
 
         if (options.isNotEmpty()) {
             Box {
-                Icon(
+                IconButton(
                     modifier =
                         Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
                             .then(
                                 with(reorderableScope) {
                                     Modifier.draggableHandle(
@@ -97,15 +103,21 @@ internal fun SelectInstanceItem(
                                 },
                             ).onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            }.onClick(
-                                onClick = {
-                                    optionsMenuOpen = true
-                                },
-                            ),
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = null,
-                    tint = ancillaryColor,
-                )
+                            },
+                    onClick = {
+                        optionsMenuOpen = true
+                    },
+                ) {
+                    Icon(
+                        modifier =
+                            Modifier
+                                .size(IconSize.m)
+                                .padding(Spacing.xs),
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = null,
+                        tint = ancillaryColor,
+                    )
+                }
 
                 CustomDropDown(
                     expanded = optionsMenuOpen,

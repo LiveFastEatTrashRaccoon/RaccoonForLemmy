@@ -297,6 +297,7 @@ internal object ProfileMainScreen : Tab {
                     Button(
                         onClick = {
                             logoutConfirmDialogOpened = false
+                            navigationCoordinator.closeSideMenu()
                             model.reduce(ProfileMainMviModel.Intent.Logout)
                         },
                     ) {

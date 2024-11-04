@@ -43,6 +43,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -151,6 +152,7 @@ class PostListScreen : Screen {
         }
         var sortBottomSheetOpened by remember { mutableStateOf(false) }
         var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
+        var selectInstanceBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(navigationCoordinator) {
             navigationCoordinator.onDoubleTabSelection
@@ -217,7 +219,7 @@ class PostListScreen : Screen {
                     },
                     onSelectInstance =
                         {
-                            navigationCoordinator.showBottomSheet(SelectInstanceBottomSheet())
+                            selectInstanceBottomSheetOpened = true
                         }.takeIf { !uiState.isLogged },
                     onSelectSortType = {
                         sortBottomSheetOpened = true
@@ -1037,6 +1039,19 @@ class PostListScreen : Screen {
                     if (index != null) {
                         val text = texts[index]
                         clipboardManager.setText(AnnotatedString(text))
+                    }
+                },
+            )
+        }
+
+        if (selectInstanceBottomSheetOpened) {
+            SelectInstanceBottomSheet(
+                parent = this,
+                state = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+                onSelected = { instance ->
+                    selectInstanceBottomSheetOpened = false
+                    if (instance != null) {
+                        notificationCenter.send(NotificationCenterEvent.InstanceSelected(instance))
                     }
                 },
             )
