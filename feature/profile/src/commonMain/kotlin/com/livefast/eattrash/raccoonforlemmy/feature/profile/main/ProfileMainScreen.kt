@@ -64,7 +64,8 @@ import com.livefast.eattrash.raccoonforlemmy.unit.editcommunity.EditCommunityScr
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredContentsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredContentsType
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.toInt
-import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsScreen
+import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.modlog.ModlogScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedScreen
@@ -98,6 +99,7 @@ internal object ProfileMainScreen : Tab {
         val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
         var logoutConfirmDialogOpened by remember { mutableStateOf(false) }
         var moderatorZoneBottomSheetOpened by remember { mutableStateOf(false) }
+        var manageAccountsBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(notificationCenter) {
             notificationCenter
@@ -125,7 +127,7 @@ internal object ProfileMainScreen : Tab {
                 .onEach { evt ->
                     when (evt) {
                         NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts -> {
-                            navigationCoordinator.showBottomSheet(ManageAccountsScreen())
+                            manageAccountsBottomSheetOpened = true
                         }
 
                         NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions -> {
@@ -345,6 +347,18 @@ internal object ProfileMainScreen : Tab {
                         notificationCenter.send(
                             NotificationCenterEvent.ModeratorZoneActionSelected(values[index].toInt()),
                         )
+                    }
+                },
+            )
+        }
+
+        if (manageAccountsBottomSheetOpened) {
+            ManageAccountsBottomSheet(
+                parent = this,
+                onDismiss = { openLogin ->
+                    manageAccountsBottomSheetOpened = false
+                    if (openLogin) {
+                        navigationCoordinator.pushScreen(LoginBottomSheet())
                     }
                 },
             )

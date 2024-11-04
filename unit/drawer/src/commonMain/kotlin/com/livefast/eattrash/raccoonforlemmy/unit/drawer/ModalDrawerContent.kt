@@ -50,7 +50,8 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.components.DrawerCommunityItem
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.components.DrawerHeader
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.components.DrawerShortcut
-import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsScreen
+import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.SelectInstanceBottomSheet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
@@ -88,6 +89,7 @@ object ModalDrawerContent : Tab {
                 }
             }
         var selectInstanceBottomSheetOpened by remember { mutableStateOf(false) }
+        var manageAccountsBottomSheetOpened by remember { mutableStateOf(false) }
 
         var uiFontSizeWorkaround by remember { mutableStateOf(true) }
         LaunchedEffect(themeRepository) {
@@ -121,7 +123,7 @@ object ModalDrawerContent : Tab {
                     selectInstanceBottomSheetOpened = true
                 },
                 onOpenSwitchAccount = {
-                    navigationCoordinator.showBottomSheet(ManageAccountsScreen())
+                    manageAccountsBottomSheetOpened = true
                 },
             )
 
@@ -360,6 +362,18 @@ object ModalDrawerContent : Tab {
                     selectInstanceBottomSheetOpened = false
                     if (instance != null) {
                         notificationCenter.send(NotificationCenterEvent.InstanceSelected(instance))
+                    }
+                },
+            )
+        }
+
+        if (manageAccountsBottomSheetOpened) {
+            ManageAccountsBottomSheet(
+                parent = this,
+                onDismiss = { openLogin ->
+                    manageAccountsBottomSheetOpened = false
+                    if (openLogin) {
+                        navigationCoordinator.pushScreen(LoginBottomSheet())
                     }
                 },
             )
