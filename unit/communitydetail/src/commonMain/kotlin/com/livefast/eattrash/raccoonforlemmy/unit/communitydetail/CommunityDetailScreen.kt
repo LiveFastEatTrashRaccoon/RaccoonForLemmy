@@ -1638,7 +1638,7 @@ class CommunityDetailScreen(
                 }
             }
             CustomModalBottomSheet(
-                title = LocalStrings.current.communityDetailBlock,
+                title = LocalStrings.current.actionCopyClipboard,
                 items = values,
                 onSelected = { index ->
                     copyPostBottomSheet = null

@@ -963,7 +963,7 @@ class PostListScreen : Screen {
                         )
                     },
                 onSelected = { index ->
-                    shareBottomSheetUrls = null
+                    blockBottomSheetItems = null
                     if (index != null) {
                         val value = values[index]
                         val event =
@@ -1030,7 +1030,7 @@ class PostListScreen : Screen {
                 }
             }
             CustomModalBottomSheet(
-                title = LocalStrings.current.communityDetailBlock,
+                title = LocalStrings.current.actionCopyClipboard,
                 items = values,
                 onSelected = { index ->
                     copyPostBottomSheet = null
