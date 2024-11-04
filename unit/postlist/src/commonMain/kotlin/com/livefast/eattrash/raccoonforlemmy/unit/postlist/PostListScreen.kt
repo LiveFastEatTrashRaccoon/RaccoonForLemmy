@@ -963,7 +963,7 @@ class PostListScreen : Screen {
                         )
                     },
                 onSelected = { index ->
-                    shareBottomSheetUrls = null
+                    blockBottomSheetItems = null
                     if (index != null) {
                         val value = values[index]
                         val event =
