@@ -128,6 +128,7 @@ fun InboxReplySubtitle(
                                             .size(iconSize)
                                             .clip(RoundedCornerShape(iconSize / 2)),
                                     url = creatorAvatar,
+                                    autoload = autoLoadImages,
                                     quality = FilterQuality.Low,
                                     contentScale = ContentScale.FillBounds,
                                 )
@@ -166,6 +167,7 @@ fun InboxReplySubtitle(
                                             .size(iconSize)
                                             .clip(RoundedCornerShape(iconSize / 2)),
                                     url = communityIcon,
+                                    autoload = autoLoadImages,
                                     quality = FilterQuality.Low,
                                     contentScale = ContentScale.FillBounds,
                                 )

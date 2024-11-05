@@ -45,6 +45,7 @@ internal fun DrawerCommunityItem(
                             .size(iconSize)
                             .clip(RoundedCornerShape(iconSize / 2)),
                     url = url,
+                    autoload = autoLoadImages,
                     contentScale = ContentScale.FillBounds,
                 )
             } else {

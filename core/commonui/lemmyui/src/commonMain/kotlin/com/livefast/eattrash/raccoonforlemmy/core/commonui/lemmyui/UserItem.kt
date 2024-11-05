@@ -38,7 +38,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDrop
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.buildAnnotatedStringWithHighlights
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -81,6 +80,7 @@ fun UserItem(
                         .size(iconSize)
                         .clip(RoundedCornerShape(iconSize / 2)),
                 url = avatar,
+                autoload = autoLoadImages,
                 quality = FilterQuality.Low,
                 contentScale = ContentScale.FillBounds,
             )

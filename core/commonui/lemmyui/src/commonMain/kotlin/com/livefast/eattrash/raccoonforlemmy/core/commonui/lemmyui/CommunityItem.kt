@@ -41,7 +41,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDrop
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.buildAnnotatedStringWithHighlights
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -93,6 +92,7 @@ fun CommunityItem(
                         .size(iconSize)
                         .clip(RoundedCornerShape(iconSize / 2)),
                 url = communityIcon,
+                autoload = autoLoadImages,
                 contentScale = ContentScale.FillBounds,
             )
         } else {

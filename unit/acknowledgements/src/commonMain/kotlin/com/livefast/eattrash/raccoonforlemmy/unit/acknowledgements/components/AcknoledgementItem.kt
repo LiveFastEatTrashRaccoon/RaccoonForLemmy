@@ -47,6 +47,7 @@ fun AcknoledgementItem(
                             .clip(RoundedCornerShape(iconSize / 2)),
                     contentDescription = null,
                     url = url,
+                    autoload = true,
                 )
             }
         } else {
