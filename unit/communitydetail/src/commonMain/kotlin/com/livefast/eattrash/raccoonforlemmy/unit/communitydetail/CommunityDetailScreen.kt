@@ -1601,12 +1601,14 @@ class CommunityDetailScreen(
                 values = uiState.availableSortTypes,
                 expandTop = true,
                 onSelected = { value ->
+                    val wasDefaultSortBottomSheetOpened = defaultSortBottomSheetOpened
                     sortBottomSheetOpened = false
+                    defaultSortBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeSortType(
                                 value = value,
-                                defaultForCommunity = defaultSortBottomSheetOpened,
+                                defaultForCommunity = wasDefaultSortBottomSheetOpened,
                                 screenKey = uiState.community.readableHandle,
                             ),
                         )
