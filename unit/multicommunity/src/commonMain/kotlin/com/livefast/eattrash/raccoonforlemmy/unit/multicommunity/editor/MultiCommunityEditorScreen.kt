@@ -160,8 +160,8 @@ class MultiCommunityEditorScreen(
                     value = uiState.name,
                     keyboardOptions =
                         KeyboardOptions(
+                            autoCorrectEnabled = false,
                             keyboardType = KeyboardType.Text,
-                            autoCorrect = false,
                             imeAction = ImeAction.Next,
                         ),
                     onValueChange = { value ->
@@ -227,6 +227,7 @@ class MultiCommunityEditorScreen(
                                                 },
                                             ),
                                     url = url,
+                                    autoload = uiState.autoLoadImages,
                                     contentScale = ContentScale.FillBounds,
                                 )
                             }

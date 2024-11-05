@@ -67,6 +67,7 @@ fun UserHeader(
                 CustomImage(
                     modifier = Modifier.fillMaxSize(),
                     url = banner,
+                    autoload = autoLoadImages,
                     quality = FilterQuality.Low,
                     contentScale = ContentScale.Crop,
                 )
@@ -107,6 +108,7 @@ fun UserHeader(
                                 },
                             ),
                     url = userAvatar,
+                    autoload = autoLoadImages,
                     quality = FilterQuality.Low,
                     contentScale = ContentScale.FillBounds,
                 )
@@ -209,7 +211,7 @@ fun UserHeader(
                         IconButton(
                             modifier = Modifier.padding(end = Spacing.s).size(iconSize),
                             onClick = {
-                                onInfo?.invoke()
+                                onInfo.invoke()
                             },
                         ) {
                             Icon(

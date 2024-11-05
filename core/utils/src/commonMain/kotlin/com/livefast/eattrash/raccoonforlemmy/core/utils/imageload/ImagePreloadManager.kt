@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.core.utils.imagepreload
+package com.livefast.eattrash.raccoonforlemmy.core.utils.imageload
 
 interface ImagePreloadManager {
     fun preload(url: String)

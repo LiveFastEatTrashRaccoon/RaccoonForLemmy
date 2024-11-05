@@ -101,6 +101,7 @@ fun CommunityAndCreatorInfo(
                                     onDoubleClick = onDoubleClick ?: {},
                                 ),
                         url = communityIcon,
+                        autoload = autoLoadImages,
                         quality = FilterQuality.Low,
                         contentScale = ContentScale.FillBounds,
                     )
@@ -133,6 +134,7 @@ fun CommunityAndCreatorInfo(
                                 ),
                         url = creatorAvatar,
                         quality = FilterQuality.Low,
+                        autoload = autoLoadImages,
                         contentScale = ContentScale.FillBounds,
                     )
                 } else {

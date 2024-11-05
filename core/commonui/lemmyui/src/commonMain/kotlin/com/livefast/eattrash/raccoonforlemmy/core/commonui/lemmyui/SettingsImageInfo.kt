@@ -60,6 +60,7 @@ fun SettingsImageInfo(
                 CustomImage(
                     modifier = imageModifier,
                     url = url,
+                    autoload = true,
                     quality = FilterQuality.Low,
                     contentScale = contentScale,
                 )

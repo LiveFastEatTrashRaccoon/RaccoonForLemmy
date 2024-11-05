@@ -1,6 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.fs
 
 import androidx.compose.runtime.Composable
+import okio.FileSystem
+import okio.Path
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -24,6 +26,8 @@ class DefaultFileSystemManager : FileSystemManager {
     ) {
         callback(false)
     }
+
+    override fun getTempDir(): Path = FileSystem.SYSTEM_TEMPORARY_DIRECTORY
 }
 
 object FileSystemManagerDiHelper : KoinComponent {

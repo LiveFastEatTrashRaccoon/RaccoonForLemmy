@@ -175,6 +175,7 @@ private fun ModlogHeader(
                     url = creatorAvatar,
                     quality = FilterQuality.Low,
                     contentScale = ContentScale.FillBounds,
+                    autoload = autoLoadImages,
                 )
             }
             Text(
@@ -197,7 +198,6 @@ private fun ModlogFooter(
     onOpen: (() -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
 ) {
-    val buttonModifier = Modifier.size(IconSize.l).padding(3.dp)
     var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)

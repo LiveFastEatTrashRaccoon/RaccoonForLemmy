@@ -81,12 +81,13 @@ internal fun RowScope.TabNavigationItem(
                     val iconSize = IconSize.m
 
                     CustomImage(
-                        url = customIconUrl,
                         modifier =
                             Modifier
                                 .size(iconSize)
                                 .clip(RoundedCornerShape(iconSize / 2))
                                 .then(pointerInputModifier),
+                        url = customIconUrl,
+                        autoload = true,
                     )
                 } else {
                     Icon(

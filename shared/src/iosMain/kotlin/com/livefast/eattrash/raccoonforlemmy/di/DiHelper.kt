@@ -17,7 +17,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.di.customTabsModule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.fileSystemModule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.galleryHelperModule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.hapticFeedbackModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.imagePreloadModule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.networkModule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.shareHelperModule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.utilsModule
@@ -79,7 +78,6 @@ fun initKoin() {
             repositoryModule,
             domainInboxModule,
             utilsModule,
-            imagePreloadModule,
             networkModule,
             coreNavigationModule,
             lemmyUiModule,

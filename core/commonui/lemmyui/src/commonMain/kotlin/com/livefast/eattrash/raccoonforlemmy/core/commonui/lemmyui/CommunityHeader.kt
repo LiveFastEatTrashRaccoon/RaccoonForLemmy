@@ -64,6 +64,7 @@ fun CommunityHeader(
                 CustomImage(
                     modifier = Modifier.fillMaxSize(),
                     url = banner,
+                    autoload = autoLoadImages,
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
                 )
@@ -107,6 +108,7 @@ fun CommunityHeader(
                                 },
                             ),
                     url = communityIcon,
+                    autoload = autoLoadImages,
                     quality = FilterQuality.Low,
                     contentScale = ContentScale.FillBounds,
                 )
@@ -181,7 +183,7 @@ fun CommunityHeader(
                         IconButton(
                             modifier = Modifier.padding(end = Spacing.s).size(iconSize),
                             onClick = {
-                                onInfo?.invoke()
+                                onInfo.invoke()
                             },
                         ) {
                             Icon(

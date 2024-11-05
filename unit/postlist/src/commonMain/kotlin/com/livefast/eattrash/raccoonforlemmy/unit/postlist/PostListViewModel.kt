@@ -9,7 +9,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.imagepreload.ImagePreloadManager
+import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode.ZombieModeHelper

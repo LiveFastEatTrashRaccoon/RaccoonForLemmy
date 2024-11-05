@@ -1,20 +1,16 @@
 package com.livefast.eattrash.raccoonforlemmy.android
 
 import android.app.Application
-import coil.ImageLoader
-import coil.ImageLoaderFactory
+
 import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.CrashReportConfiguration
 import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.CrashReportWriter
-import com.livefast.eattrash.raccoonforlemmy.core.utils.imagepreload.getCoilImageLoader
 import com.livefast.eattrash.raccoonforlemmy.di.sharedHelperModule
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class MainApplication :
-    Application(),
-    ImageLoaderFactory {
+class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
@@ -40,6 +36,4 @@ class MainApplication :
             }
         }
     }
-
-    override fun newImageLoader(): ImageLoader = getCoilImageLoader(this)
 }

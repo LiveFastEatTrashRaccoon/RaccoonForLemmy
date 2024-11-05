@@ -5,6 +5,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import okio.FileSystem
+import okio.Path
 import org.koin.java.KoinJavaComponent
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -55,6 +57,8 @@ class DefaultFileSystemManager(
             launcher.launch(name)
         }
     }
+
+    override fun getTempDir(): Path = FileSystem.SYSTEM_TEMPORARY_DIRECTORY
 }
 
 actual fun getFileSystemManager(): FileSystemManager {
