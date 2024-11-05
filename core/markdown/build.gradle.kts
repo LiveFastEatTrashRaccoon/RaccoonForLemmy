@@ -30,7 +30,7 @@ kotlin {
     sourceSets {
         val androidMain by getting {
             dependencies {
-                implementation(libs.multiplatform.markdown.renderer.coil2)
+                implementation(libs.multiplatform.markdown.renderer.coil3)
             }
         }
         val commonMain by getting {
@@ -41,6 +41,7 @@ kotlin {
 
                 api(libs.multiplatform.markdown.renderer)
                 api(libs.multiplatform.markdown.renderer.m3)
+                api(libs.multiplatform.markdown.renderer.coil3)
 
                 implementation(projects.core.l10n)
                 implementation(projects.core.commonui.components)
@@ -57,8 +58,14 @@ kotlin {
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.core.markdown"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }

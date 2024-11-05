@@ -30,7 +30,6 @@ kotlin {
     sourceSets {
         val androidMain by getting {
             dependencies {
-                implementation(libs.coil.compose)
                 implementation(libs.exoplayer)
                 implementation(libs.exoplayer.dash)
                 implementation(libs.exoplayer.ui)
@@ -44,9 +43,11 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
 
-                implementation(projects.core.utils)
+                implementation(libs.coil.compose)
+
                 implementation(projects.core.appearance)
                 implementation(projects.core.l10n)
+                implementation(projects.core.utils)
             }
         }
         val commonTest by getting {
@@ -54,18 +55,19 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val iosMain by getting {
-            dependencies {
-                implementation(libs.kamel)
-            }
-        }
     }
 }
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.core.commonui.components"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }

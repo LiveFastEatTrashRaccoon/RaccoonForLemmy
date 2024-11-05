@@ -36,6 +36,8 @@ kotlin {
 
                 implementation(libs.koin.core)
                 implementation(libs.ktor.cio)
+                implementation(libs.coil)
+                implementation(libs.coil.network.ktor)
                 implementation(project.dependencies.platform(libs.kotlincrypto.bom))
                 implementation(libs.kotlincrypto.md5)
 
@@ -48,7 +50,6 @@ kotlin {
                 implementation(libs.androidx.activity)
                 implementation(libs.androidx.browser)
                 implementation(libs.ktor.android)
-                implementation(libs.coil)
                 implementation(libs.coil.gif)
             }
         }
@@ -71,8 +72,14 @@ kotlin {
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.core.utils"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }
