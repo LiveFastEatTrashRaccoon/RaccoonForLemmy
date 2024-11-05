@@ -9,7 +9,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Setting
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.epochMillis
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.GalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.download
-import com.livefast.eattrash.raccoonforlemmy.core.utils.imagepreload.ImagePreloadManager
+import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

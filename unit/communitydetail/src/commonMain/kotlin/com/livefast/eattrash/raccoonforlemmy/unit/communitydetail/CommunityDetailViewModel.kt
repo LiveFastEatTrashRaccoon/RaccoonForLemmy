@@ -14,7 +14,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Communi
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.FavoriteCommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.imagepreload.ImagePreloadManager
+import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode.ZombieModeHelper

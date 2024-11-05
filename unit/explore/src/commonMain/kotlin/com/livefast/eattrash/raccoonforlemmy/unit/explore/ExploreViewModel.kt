@@ -8,7 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.imagepreload.ImagePreloadManager
+import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -390,7 +390,10 @@ class ExploreViewModel(
         val results = paginationManager.loadNextPage()
         if (uiState.value.autoLoadImages) {
             results.forEach { res ->
-                (res as? SearchResult.Post)?.model?.imageUrl?.takeIf { it.isNotEmpty() }
+                (res as? SearchResult.Post)
+                    ?.model
+                    ?.imageUrl
+                    ?.takeIf { it.isNotEmpty() }
                     ?.also { url ->
                         imagePreloadManager.preload(url)
                     }
