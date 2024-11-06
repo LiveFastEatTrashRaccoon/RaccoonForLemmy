@@ -26,6 +26,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
@@ -81,7 +82,7 @@ internal fun SelectInstanceItem(
                     Modifier.padding(
                         top = Spacing.s,
                         bottom = Spacing.s,
-                        end = Spacing.s,
+                        end = 10.dp,
                     ),
                 selected = true,
                 onClick = null,

@@ -8,19 +8,22 @@ import kotlinx.coroutines.withContext
 private const val CUSTOM_INSTANCES_KEY = "customInstances"
 private val DEFAULT_INSTANCES =
     listOf(
-        "lemmy.world",
-        "lemmy.ml",
-        "lemmy.dbzer0.com",
-        "sh.itjust.works",
-        "lemm.ee",
-        "feddit.de",
-        "programming.dev",
         "discuss.tchncs.de",
-        "sopuli.xyz",
+        "feddit.it",
+        "infosec.pub",
+        "lemm.ee",
         "lemmy.blahaj.zone",
-        "lemmy.zip",
-        "reddthat.com",
         "lemmy.cafe",
+        "lemmy.dbzer0.com",
+        "lemmy.ml",
+        "lemmy.sdf.org",
+        "lemmy.world",
+        "lemmy.zip",
+        "mander.xyz",
+        "programming.dev",
+        "reddthat.com",
+        "sh.itjust.works",
+        "sopuli.xyz",
     )
 
 internal class DefaultInstanceSelectionRepository(
@@ -28,7 +31,8 @@ internal class DefaultInstanceSelectionRepository(
 ) : InstanceSelectionRepository {
     override suspend fun getAll(): List<String> =
         withContext(Dispatchers.IO) {
-            if (!keyStore.containsKey(CUSTOM_INSTANCES_KEY)) {
+            val isVersion1 = keyStore.get(CUSTOM_INSTANCES_KEY, listOf()).contains("feddit.de")
+            if (!keyStore.containsKey(CUSTOM_INSTANCES_KEY) || isVersion1) {
                 keyStore.save(key = CUSTOM_INSTANCES_KEY, value = DEFAULT_INSTANCES)
             }
             keyStore.get(key = CUSTOM_INSTANCES_KEY, default = DEFAULT_INSTANCES)
