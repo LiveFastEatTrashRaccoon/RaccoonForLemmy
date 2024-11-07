@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
-import androidx.compose.material.icons.filled.ArrowCircleDown
-import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.DropdownMenuItem
@@ -48,9 +46,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDrop
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FeedbackButton
+import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
@@ -249,12 +250,13 @@ fun InboxReplySubtitle(
                         Spacer(modifier = Modifier.weight(1f))
                         FeedbackButton(
                             modifier =
-                                buttonModifier.padding(
-                                    top = 2.5.dp,
-                                    bottom = 2.5.dp,
-                                    end = 2.5.dp,
-                                ),
-                            imageVector = Icons.Default.ArrowCircleUp,
+                                buttonModifier
+                                    .padding(
+                                        top = 2.5.dp,
+                                        bottom = 2.5.dp,
+                                        end = 2.5.dp,
+                                    ).then(VoteAction.UpVote.toModifier()),
+                            imageVector = VoteAction.UpVote.toIcon(),
                             tintColor =
                                 if (upVoted) {
                                     upVoteColor ?: defaultUpvoteColor
@@ -285,12 +287,13 @@ fun InboxReplySubtitle(
                         if (downVoteEnabled) {
                             FeedbackButton(
                                 modifier =
-                                    buttonModifier.padding(
-                                        top = 2.5.dp,
-                                        bottom = 2.5.dp,
-                                        start = 2.5.dp,
-                                    ),
-                                imageVector = Icons.Default.ArrowCircleDown,
+                                    buttonModifier
+                                        .padding(
+                                            top = 2.5.dp,
+                                            bottom = 2.5.dp,
+                                            start = 2.5.dp,
+                                        ).then(VoteAction.DownVote.toModifier()),
+                                imageVector = VoteAction.DownVote.toIcon(),
                                 tintColor =
                                     if (downVoted) {
                                         downVoteColor ?: defaultDownVoteColor

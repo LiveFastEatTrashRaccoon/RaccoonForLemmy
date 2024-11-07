@@ -2,14 +2,16 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.data
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.ArrowCircleDown
-import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MarkChatUnread
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 
 sealed interface ActionOnSwipeDirection {
     data object ToStart : ActionOnSwipeDirection
@@ -115,11 +117,19 @@ fun ActionOnSwipe.toReadableName(): String =
 @Composable
 fun ActionOnSwipe.toIcon(): ImageVector? =
     when (this) {
-        ActionOnSwipe.DownVote -> Icons.Default.ArrowCircleDown
+        ActionOnSwipe.DownVote -> VoteAction.DownVote.toIcon()
         ActionOnSwipe.None -> null
         ActionOnSwipe.Reply -> Icons.AutoMirrored.Default.Reply
         ActionOnSwipe.Save -> Icons.Default.Bookmark
         ActionOnSwipe.ToggleRead -> Icons.Default.MarkChatUnread
-        ActionOnSwipe.UpVote -> Icons.Default.ArrowCircleUp
+        ActionOnSwipe.UpVote -> VoteAction.UpVote.toIcon()
         ActionOnSwipe.Edit -> Icons.Default.Edit
+    }
+
+@Composable
+fun ActionOnSwipe.toModifier(): Modifier =
+    when (this) {
+        ActionOnSwipe.DownVote -> VoteAction.DownVote.toModifier()
+        ActionOnSwipe.UpVote -> VoteAction.UpVote.toModifier()
+        else -> Modifier
     }

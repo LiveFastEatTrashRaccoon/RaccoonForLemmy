@@ -57,6 +57,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificati
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeDirection
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeTarget
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toIcon
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toModifier
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.components.ConfigureActionItem
@@ -589,7 +590,7 @@ class ConfigureSwipeActionsScreen : Screen {
                                 val icon = value.toIcon()
                                 if (icon != null) {
                                     Icon(
-                                        modifier = Modifier.size(IconSize.m),
+                                        modifier = Modifier.size(IconSize.m).then(value.toModifier()),
                                         imageVector = icon,
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.onBackground,

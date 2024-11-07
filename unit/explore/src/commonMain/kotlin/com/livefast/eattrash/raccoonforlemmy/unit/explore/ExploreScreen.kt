@@ -15,8 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.ArrowCircleDown
-import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -77,7 +75,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResult
@@ -330,7 +331,11 @@ class ExploreScreen(
                                                     SwipeAction(
                                                         swipeContent = {
                                                             Icon(
-                                                                imageVector = Icons.Default.ArrowCircleUp,
+                                                                modifier =
+                                                                    Modifier.then(
+                                                                        VoteAction.UpVote.toModifier(),
+                                                                    ),
+                                                                imageVector = VoteAction.UpVote.toIcon(),
                                                                 contentDescription = null,
                                                                 tint = Color.White,
                                                             )
@@ -351,7 +356,8 @@ class ExploreScreen(
                                                     SwipeAction(
                                                         swipeContent = {
                                                             Icon(
-                                                                imageVector = Icons.Default.ArrowCircleDown,
+                                                                modifier = VoteAction.DownVote.toModifier(),
+                                                                imageVector = VoteAction.DownVote.toIcon(),
                                                                 contentDescription = null,
                                                                 tint = Color.White,
                                                             )
@@ -523,7 +529,8 @@ class ExploreScreen(
                                                     SwipeAction(
                                                         swipeContent = {
                                                             Icon(
-                                                                imageVector = Icons.Default.ArrowCircleUp,
+                                                                modifier = VoteAction.UpVote.toModifier(),
+                                                                imageVector = VoteAction.UpVote.toIcon(),
                                                                 contentDescription = null,
                                                                 tint = Color.White,
                                                             )
@@ -544,7 +551,8 @@ class ExploreScreen(
                                                     SwipeAction(
                                                         swipeContent = {
                                                             Icon(
-                                                                imageVector = Icons.Default.ArrowCircleDown,
+                                                                modifier = VoteAction.DownVote.toModifier(),
+                                                                imageVector = VoteAction.DownVote.toIcon(),
                                                                 contentDescription = null,
                                                                 tint = Color.White,
                                                             )

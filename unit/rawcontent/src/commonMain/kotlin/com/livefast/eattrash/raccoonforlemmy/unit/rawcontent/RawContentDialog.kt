@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowCircleDown
-import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Percent
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Update
@@ -37,8 +35,11 @@ import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,7 +96,7 @@ fun RawContentDialog(
                 modifier =
                     Modifier
                         .background(color = MaterialTheme.colorScheme.surface)
-                    .padding(vertical = Spacing.s),
+                        .padding(vertical = Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
@@ -108,7 +109,7 @@ fun RawContentDialog(
                     modifier =
                         Modifier
                             .padding(vertical = Spacing.s, horizontal = Spacing.m)
-                        .heightIn(max = 400.dp),
+                            .heightIn(max = 400.dp),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     title?.takeIf { it.trim().isNotEmpty() }?.also {
@@ -125,7 +126,7 @@ fun RawContentDialog(
                                         modifier = Modifier.fillMaxWidth(),
                                         text = it,
                                         style =
-                                        MaterialTheme.typography.bodyLarge.copy(
+                                            MaterialTheme.typography.bodyLarge.copy(
                                                 fontFamily = FontFamily.Monospace,
                                             ),
                                         color = fullColor,
@@ -148,7 +149,7 @@ fun RawContentDialog(
                                         modifier = Modifier.fillMaxWidth(),
                                         text = it,
                                         style =
-                                        MaterialTheme.typography.bodyMedium.copy(
+                                            MaterialTheme.typography.bodyMedium.copy(
                                                 fontFamily = FontFamily.Monospace,
                                             ),
                                         color = fullColor,
@@ -171,7 +172,7 @@ fun RawContentDialog(
                                         modifier = Modifier.fillMaxWidth(),
                                         text = it,
                                         style =
-                                        MaterialTheme.typography.bodyMedium.copy(
+                                            MaterialTheme.typography.bodyMedium.copy(
                                                 fontFamily = FontFamily.Monospace,
                                             ),
                                         color = fullColor,
@@ -201,8 +202,8 @@ fun RawContentDialog(
                                         text = it,
                                         style =
                                             MaterialTheme.typography.bodyMedium.copy(
-                                            fontFamily = FontFamily.Monospace,
-                                        ),
+                                                fontFamily = FontFamily.Monospace,
+                                            ),
                                         color = fullColor,
                                     )
                                 }
@@ -226,8 +227,8 @@ fun RawContentDialog(
                                     text = it,
                                     style =
                                         MaterialTheme.typography.bodyMedium.copy(
-                                        fontFamily = FontFamily.Monospace,
-                                    ),
+                                            fontFamily = FontFamily.Monospace,
+                                        ),
                                     color = fullColor,
                                 )
                             }
@@ -240,8 +241,12 @@ fun RawContentDialog(
                                 horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                             ) {
                                 Icon(
-                                    modifier = Modifier.size(IconSize.m).padding(end = 3.5.dp),
-                                    imageVector = Icons.Default.ArrowCircleUp,
+                                    modifier =
+                                        Modifier
+                                            .size(IconSize.m)
+                                            .padding(end = 3.5.dp)
+                                            .then(VoteAction.UpVote.toModifier()),
+                                    imageVector = VoteAction.UpVote.toIcon(),
                                     contentDescription = null,
                                     tint = fullColor,
                                 )
@@ -254,8 +259,12 @@ fun RawContentDialog(
                                 Spacer(modifier = Modifier.weight(1f))
 
                                 Icon(
-                                    modifier = Modifier.size(IconSize.m).padding(end = 3.5.dp),
-                                    imageVector = Icons.Default.ArrowCircleDown,
+                                    modifier =
+                                        Modifier
+                                            .size(IconSize.m)
+                                            .padding(end = 3.5.dp)
+                                            .then(VoteAction.DownVote.toModifier()),
+                                    imageVector = VoteAction.DownVote.toIcon(),
                                     contentDescription = null,
                                     tint = fullColor,
                                 )
