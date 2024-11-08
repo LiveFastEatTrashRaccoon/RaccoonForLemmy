@@ -6,6 +6,8 @@
   <img alt="badge for project license" src="https://img.shields.io/github/license/LiveFastEatTrashRaccoon/RaccoonForLemmy" />
   <img alt="badge for build status" src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/build.yml/badge.svg" />
   <img alt="badge for unit test status" src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/unit_tests.yml/badge.svg" />
+  <a href="https://livefasteattrashraccoon.github.io/RaccoonForLemmy" target="_blank"><img alt="badge for website" src="https://img.shields.io/badge/website-9812db" /></a>
+  <a href="https://livefasteattrashraccoon.github.io/RaccoonForLemmy/user_manual/main" target="_blank"><img alt="badge for user manual" src="https://img.shields.io/badge/user%20manual-3c00c7" /></a>
 </div>
 
 <br />
