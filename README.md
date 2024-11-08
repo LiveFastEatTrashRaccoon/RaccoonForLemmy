@@ -8,6 +8,8 @@
   <img alt="badge for unit test status" src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/unit_tests.yml/badge.svg" />
   <a href="https://livefasteattrashraccoon.github.io/RaccoonForLemmy" target="_blank"><img alt="badge for website" src="https://img.shields.io/badge/website-9812db" /></a>
   <a href="https://livefasteattrashraccoon.github.io/RaccoonForLemmy/user_manual/main" target="_blank"><img alt="badge for user manual" src="https://img.shields.io/badge/user%20manual-3c00c7" /></a>
+  <a href="https://matrix.to/#/#raccoonforlemmyapp:matrix.org" target="_blank"><img alt="Matrix logo" src="https://img.shields.io/badge/matrix-009900?logo=Matrix" /></a>
+  <a href="https://lemmy.world/c/raccoonforlemmyapp" target="_blank"><img alt="Lemmy logo" src="https://img.shields.io/badge/lemmy-ff0066?logo=Lemmy" /></a>
 </div>
 
 <br />
@@ -166,7 +168,7 @@ Here are some options to install the application on your device.
 
 - subscribe to our [Lemmy community](https://lemmy.world/c/raccoonforlemmyapp) to receive updates
   about the new releases, participate into public discussions, share your feedback or suggestions;
-- join the [Matrix room](https://matrix.to/#/#raccoonforlemmyapp:matrix.orgg) of this project to
+- join the [Matrix room](https://matrix.to/#/#raccoonforlemmyapp:matrix.org) of this project to
   reach out to the developers and other users;
 - open an issue on this
   project's [issue tracker](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/issues) to report bugs
