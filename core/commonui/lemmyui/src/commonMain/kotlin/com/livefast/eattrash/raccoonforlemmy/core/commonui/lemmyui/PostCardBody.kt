@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.readContentAlpha
@@ -67,6 +69,11 @@ fun PostCardBody(
                         list = typography.bodyMedium,
                         ordered = typography.bodyMedium,
                         code = typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
+                        link =
+                            typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                textDecoration = TextDecoration.Underline,
+                            ),
                     ),
                 colors =
                     markdownColor(
