@@ -24,8 +24,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.ArrowCircleDown
-import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.Create
@@ -112,9 +110,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon.rememberKeepScreenOn
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.containsId
@@ -850,7 +851,8 @@ class CommunityDetailScreen(
                                                 SwipeAction(
                                                     swipeContent = {
                                                         Icon(
-                                                            imageVector = Icons.Default.ArrowCircleUp,
+                                                            modifier = VoteAction.UpVote.toModifier(),
+                                                            imageVector = VoteAction.UpVote.toIcon(),
                                                             contentDescription = null,
                                                             tint = Color.White,
                                                         )
@@ -871,7 +873,8 @@ class CommunityDetailScreen(
                                                 SwipeAction(
                                                     swipeContent = {
                                                         Icon(
-                                                            imageVector = Icons.Default.ArrowCircleDown,
+                                                            modifier = VoteAction.DownVote.toModifier(),
+                                                            imageVector = VoteAction.DownVote.toIcon(),
                                                             contentDescription = null,
                                                             tint = Color.White,
                                                         )

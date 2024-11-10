@@ -11,8 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowCircleDown
-import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.MarkChatRead
 import androidx.compose.material.icons.filled.MarkChatUnread
 import androidx.compose.material3.CircularProgressIndicator
@@ -48,6 +46,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
+import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
@@ -147,7 +148,8 @@ class InboxMentionsScreen : Tab {
                                     SwipeAction(
                                         swipeContent = {
                                             Icon(
-                                                imageVector = Icons.Default.ArrowCircleUp,
+                                                modifier = VoteAction.UpVote.toModifier(),
+                                                imageVector = VoteAction.UpVote.toIcon(),
                                                 contentDescription = null,
                                                 tint = Color.White,
                                             )
@@ -166,7 +168,8 @@ class InboxMentionsScreen : Tab {
                                     SwipeAction(
                                         swipeContent = {
                                             Icon(
-                                                imageVector = Icons.Default.ArrowCircleDown,
+                                                modifier = VoteAction.DownVote.toModifier(),
+                                                imageVector = VoteAction.DownVote.toIcon(),
                                                 contentDescription = null,
                                                 tint = Color.White,
                                             )

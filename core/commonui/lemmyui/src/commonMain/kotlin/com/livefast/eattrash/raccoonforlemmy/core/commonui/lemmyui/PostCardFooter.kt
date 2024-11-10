@@ -10,10 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
-import androidx.compose.material.icons.filled.ArrowCircleDown
-import androidx.compose.material.icons.filled.ArrowCircleUp
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.MoreHoriz
@@ -49,9 +45,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.readContentAl
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FeedbackButton
+import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 
 @Composable
 fun PostCardFooter(
@@ -240,13 +239,11 @@ fun PostCardFooter(
                     )
                 }
                 FeedbackButton(
-                    modifier = buttonModifier.padding(all = 2.5.dp),
-                    imageVector =
-                        if (actionButtonsActive) {
-                            Icons.Default.ArrowCircleUp
-                        } else {
-                            Icons.Default.ArrowUpward
-                        },
+                    modifier =
+                        buttonModifier
+                            .padding(all = 2.5.dp)
+                            .then(VoteAction.UpVote.toModifier()),
+                    imageVector = VoteAction.UpVote.toIcon(),
                     tintColor =
                         if (upVoted) {
                             upVoteColor ?: defaultUpvoteColor
@@ -278,17 +275,13 @@ fun PostCardFooter(
                 if (downVoteEnabled) {
                     FeedbackButton(
                         modifier =
-                            buttonModifier.padding(
-                                top = 2.5.dp,
-                                bottom = 2.5.dp,
-                                end = 2.5.dp,
-                            ),
-                        imageVector =
-                            if (actionButtonsActive) {
-                                Icons.Default.ArrowCircleDown
-                            } else {
-                                Icons.Default.ArrowDownward
-                            },
+                            buttonModifier
+                                .padding(
+                                    top = 2.5.dp,
+                                    bottom = 2.5.dp,
+                                    end = 2.5.dp,
+                                ).then(VoteAction.DownVote.toModifier()),
+                        imageVector = VoteAction.DownVote.toIcon(),
                         tintColor =
                             if (downVoted) {
                                 downVoteColor ?: defaultDownVoteColor
