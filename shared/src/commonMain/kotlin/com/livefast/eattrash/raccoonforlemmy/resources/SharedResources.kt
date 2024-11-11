@@ -2,9 +2,12 @@ package com.livefast.eattrash.raccoonforlemmy.resources
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import chaintech.videoplayer.model.PlayerConfig
+import chaintech.videoplayer.model.ScreenResize
 import com.livefast.eattrash.raccoonforlemmy.core.resources.CoreResources
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -75,4 +78,15 @@ internal class SharedResources : CoreResources {
                 Font(Res.font.charissil_bold, FontWeight.Bold, FontStyle.Normal),
                 Font(Res.font.charissil_italic, FontWeight.Normal, FontStyle.Italic),
             )
+
+    override fun getPlayerConfig(contentScale: ContentScale): PlayerConfig =
+        PlayerConfig(
+            isFullScreenEnabled = false,
+            videoFitMode =
+                if (contentScale == ContentScale.Fit) {
+                    ScreenResize.FIT
+                } else {
+                    ScreenResize.FILL
+                },
+        )
 }
