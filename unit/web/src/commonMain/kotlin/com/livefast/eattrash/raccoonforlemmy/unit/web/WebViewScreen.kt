@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.web
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -21,13 +20,13 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomWebView
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.rememberWebViewNavigator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.md5
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.getShareHelper
+import com.mohamedrejeb.calf.ui.web.WebView
+import com.mohamedrejeb.calf.ui.web.rememberWebViewState
 
 class WebViewScreen(
     private val url: String,
@@ -42,7 +41,15 @@ class WebViewScreen(
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val shareHelper = remember { getShareHelper() }
         val drawerCoordinator = remember { getDrawerCoordinator() }
+        val state =
+            rememberWebViewState(
+                url = url,
+            )
 
+        LaunchedEffect(Unit) {
+            state.settings.javaScriptEnabled = true
+            state.settings.androidSettings.supportZoom = true
+        }
         LaunchedEffect(key) {
             drawerCoordinator.setGesturesEnabled(false)
         }
@@ -87,35 +94,10 @@ class WebViewScreen(
                 )
             },
         ) { padding ->
-            Box(
-                modifier =
-                    Modifier.padding(
-                        top = padding.calculateTopPadding(),
-                    ),
-            ) {
-                val webNavigator = rememberWebViewNavigator()
-
-                DisposableEffect(key) {
-                    navigationCoordinator.setCanGoBackCallback {
-                        val result = webNavigator.canGoBack
-                        if (result) {
-                            webNavigator.goBack()
-                            return@setCanGoBackCallback false
-                        }
-                        true
-                    }
-                    onDispose {
-                        navigationCoordinator.setCanGoBackCallback(null)
-                    }
-                }
-
-                CustomWebView(
-                    modifier = Modifier.fillMaxSize(),
-                    navigator = webNavigator,
-                    scrollConnection = scrollBehavior.nestedScrollConnection,
-                    url = url,
-                )
-            }
+            WebView(
+                modifier = Modifier.padding(top = padding.calculateTopPadding()).fillMaxSize(),
+                state = state,
+            )
         }
     }
 }
