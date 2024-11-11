@@ -28,13 +28,6 @@ kotlin {
     }
 
     sourceSets {
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.exoplayer)
-                implementation(libs.exoplayer.dash)
-                implementation(libs.exoplayer.ui)
-            }
-        }
         val commonMain by getting {
             dependencies {
                 implementation(compose.runtime)
@@ -44,9 +37,11 @@ kotlin {
                 implementation(compose.materialIconsExtended)
 
                 implementation(libs.coil.compose)
+                implementation(libs.compose.multiplatform.media.player)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.l10n)
+                implementation(projects.core.resources)
                 implementation(projects.core.utils)
             }
         }
