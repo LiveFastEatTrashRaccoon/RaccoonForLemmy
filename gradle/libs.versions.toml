@@ -7,6 +7,7 @@ androidx-crypto = "1.0.0"
 androidx-splashscreen = "1.0.1"
 androidx-work = "2.9.1"
 android-gradle = "8.5.2"
+calf = "0.6.1"
 coil = "3.0.2"
 colorpicker = "1.1.2"
 compose = "1.7.0"
@@ -46,6 +47,8 @@ androidx-security-crypto = { module = "androidx.security:security-crypto", versi
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
 androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
 
+calf = { module = "com.mohamedrejeb.calf:calf-webview", version.ref = "calf" }
+
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil" }
@@ -55,13 +58,11 @@ compose-multiplatform-media-player = { module = "network.chaintech:compose-multi
 
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
 
-multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "multiplatform-markdown-renderer" }
-multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatform-markdown-renderer" }
-multiplatform-markdown-renderer-coil3= { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "multiplatform-markdown-renderer" }
-
-multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
+kotlincrypto-bom = { module = "org.kotlincrypto.hash:bom", version.ref = "kotlincrypto" }
+kotlincrypto-md5 = { module = "org.kotlincrypto.hash:md" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 
@@ -81,9 +82,23 @@ ktor-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = 
 ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit-ksp" }
 ktorfit-lib = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
 
+lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
+
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 
-lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
+multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "multiplatform-markdown-renderer" }
+multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatform-markdown-renderer" }
+multiplatform-markdown-renderer-coil3= { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "multiplatform-markdown-renderer" }
+
+multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
+
+reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
+
+stately-common = { module = "co.touchlab:stately-common", version.ref = "stately" }
+
+sqlcipher = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipher" }
+sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
@@ -92,17 +107,6 @@ voyager-tab = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.re
 voyager-transition = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 
-stately-common = { module = "co.touchlab:stately-common", version.ref = "stately" }
-
-sqlcipher = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipher" }
-sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
-sqldelight-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
-
-kotlincrypto-bom = { module = "org.kotlincrypto.hash:bom", version.ref = "kotlincrypto" }
-kotlincrypto-md5 = { module = "org.kotlincrypto.hash:md" }
-
-reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
-
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
@@ -110,12 +114,18 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
+
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
+
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

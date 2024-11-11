@@ -42,6 +42,7 @@ kotlin {
                 implementation(compose.materialIconsExtended)
 
                 implementation(libs.koin.core)
+                implementation(libs.calf)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.commonui.components)
@@ -65,8 +66,14 @@ kotlin {
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }
