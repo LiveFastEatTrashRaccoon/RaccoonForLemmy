@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,8 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomWebView
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.mohamedrejeb.calf.ui.web.WebView
+import com.mohamedrejeb.calf.ui.web.rememberWebViewState
 
 @Composable
 fun PostCardEmbeddedWebView(
@@ -31,6 +33,15 @@ fun PostCardEmbeddedWebView(
 ) {
     if (url.isEmpty()) {
         return
+    }
+    val state =
+        rememberWebViewState(
+            url = url,
+        )
+
+    LaunchedEffect(Unit) {
+        state.settings.javaScriptEnabled = true
+        state.settings.androidSettings.supportZoom = true
     }
 
     Box(
@@ -62,9 +73,9 @@ fun PostCardEmbeddedWebView(
         } else {
             var shouldBeRendered by remember(autoLoadImages) { mutableStateOf(autoLoadImages) }
             if (shouldBeRendered) {
-                CustomWebView(
-                    modifier = Modifier.aspectRatio(9f / 16f),
-                    url = url,
+                WebView(
+                    modifier = Modifier.fillMaxWidth().aspectRatio(9f / 16f),
+                    state = state,
                 )
             } else {
                 Button(
