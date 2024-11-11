@@ -35,6 +35,7 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
 
+                implementation(libs.compose.multiplatform.media.player)
                 implementation(libs.koin.core)
             }
         }
@@ -43,9 +44,15 @@ kotlin {
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.core.resources"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
     sourceSets {
         named("main") {

@@ -39,6 +39,7 @@ kotlin {
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
+                implementation(libs.compose.multiplatform.media.player)
                 implementation(libs.koin.core)
                 implementation(libs.lyricist)
                 implementation(libs.voyager.navigator)
