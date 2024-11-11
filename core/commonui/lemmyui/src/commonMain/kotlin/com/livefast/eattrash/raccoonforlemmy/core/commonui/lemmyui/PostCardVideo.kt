@@ -72,9 +72,6 @@ fun PostCardVideo(
                 VideoPlayer(
                     modifier = Modifier.fillMaxWidth(),
                     url = url,
-                    onPlaybackStarted = {
-                        loading = false
-                    },
                 )
                 if (loading) {
                     Box(
