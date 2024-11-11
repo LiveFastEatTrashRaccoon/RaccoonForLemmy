@@ -82,6 +82,7 @@ internal class SharedResources : CoreResources {
     override fun getPlayerConfig(contentScale: ContentScale): PlayerConfig =
         PlayerConfig(
             isFullScreenEnabled = false,
+            isMute = true,
             videoFitMode =
                 if (contentScale == ContentScale.Fit) {
                     ScreenResize.FIT
