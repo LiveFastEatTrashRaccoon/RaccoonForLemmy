@@ -87,8 +87,11 @@ pure Compose solution <em>had to</em> be preferred. Even if it implies to sacrif
 
 <dt>Video playback</dt>
 <dd>
-This had to be native, the Android implementation relies on <code>Exoplayer</code> whereas the iOS implementation
-on <code>AVPlayer</code> as usual.
+The initial choice was to write a custom native implementation based on <code>Exoplayer</code> on Android 
+and on <code>AVPlayer</code> on iOS. This solution kind of worked but had some issues and with later
+updates of Compose Multiplatform it was using deprecated functions on iOS. This is why the video player
+was eventually migrated to 
+<a href="https://github.com/Chaintech-Network/ComposeMultiplatformMediaPlayer">ComposeMultiplatformMediaPlayer</a>.
 </dd>
 
 <dt>Theme generation</dt>

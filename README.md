@@ -150,6 +150,8 @@ This project _is_ all about experimenting and learning, so please be patient.
   and [SQLCipher](https://github.com/sqlcipher/sqlcipher) for local persistence
 - [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) for
   Markdown rendering
+- [ComposeMultiplatformMediaPlayer](https://github.com/Chaintech-Network/ComposeMultiplatformMediaPlayer)
+  for video playback
 
 More info about the technologies used in the project can be found in
 the [CONTRIBUTING.md](https://github.com/livefasteattrashraccoon/RaccoonForLemmy/blob/master/CONTRIBUTING.md#51-tech-stack).
