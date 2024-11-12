@@ -14,7 +14,7 @@ interface CoreResources {
     val appIconAlt2: Painter @Composable get
     val notoSans: FontFamily @Composable get
     val poppins: FontFamily @Composable get
-    val charisSil: FontFamily @Composable get
+    val atkinsonHyperlegible: FontFamily @Composable get
 
     fun getPlayerConfig(contentScale: ContentScale): PlayerConfig
 }

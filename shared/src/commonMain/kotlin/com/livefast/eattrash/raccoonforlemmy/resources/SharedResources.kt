@@ -12,9 +12,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.resources.CoreResources
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import raccoonforlemmy.shared.generated.resources.Res
-import raccoonforlemmy.shared.generated.resources.charissil_bold
-import raccoonforlemmy.shared.generated.resources.charissil_italic
-import raccoonforlemmy.shared.generated.resources.charissil_regular
+import raccoonforlemmy.shared.generated.resources.atkinsonhyperlegible_bold
+import raccoonforlemmy.shared.generated.resources.atkinsonhyperlegible_italic
+import raccoonforlemmy.shared.generated.resources.atkinsonhyperlegible_regular
 import raccoonforlemmy.shared.generated.resources.ic_alt_1
 import raccoonforlemmy.shared.generated.resources.ic_alt_2
 import raccoonforlemmy.shared.generated.resources.ic_default
@@ -70,13 +70,13 @@ internal class SharedResources : CoreResources {
                 Font(Res.font.poppins_italic, FontWeight.Normal, FontStyle.Italic),
             )
 
-    override val charisSil: FontFamily
+    override val atkinsonHyperlegible: FontFamily
         @Composable
         get() =
             FontFamily(
-                Font(Res.font.charissil_regular, FontWeight.Normal, FontStyle.Normal),
-                Font(Res.font.charissil_bold, FontWeight.Bold, FontStyle.Normal),
-                Font(Res.font.charissil_italic, FontWeight.Normal, FontStyle.Italic),
+                Font(Res.font.atkinsonhyperlegible_regular, FontWeight.Normal, FontStyle.Normal),
+                Font(Res.font.atkinsonhyperlegible_bold, FontWeight.Bold, FontStyle.Normal),
+                Font(Res.font.atkinsonhyperlegible_italic, FontWeight.Normal, FontStyle.Italic),
             )
 
     override fun getPlayerConfig(contentScale: ContentScale): PlayerConfig =
