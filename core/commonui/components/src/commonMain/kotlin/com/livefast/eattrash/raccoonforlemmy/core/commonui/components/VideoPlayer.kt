@@ -12,11 +12,17 @@ fun VideoPlayer(
     url: String,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.FillWidth,
+    muted: Boolean = true,
 ) {
     val resources = remember { getCoreResources() }
+    val config =
+        resources.getPlayerConfig(
+            contentScale = contentScale,
+            muted = muted
+    )
     VideoPlayerView(
         modifier = modifier,
         url = url,
-        playerConfig = resources.getPlayerConfig(contentScale),
+        playerConfig = config,
     )
 }
