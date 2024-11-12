@@ -55,11 +55,11 @@ fun Float.toFontScale(): FontScale =
     }
 
 private object ReferenceValues {
-    const val LARGEST = 1.3f
-    const val LARGER = 1.25f
-    const val LARGE = 1.2f
-    const val NORMAL = 1.15f
-    const val SMALL = 1.1f
-    const val SMALLER = 1f
-    const val SMALLEST = 0.95f
+    const val LARGEST = 1.075f
+    const val LARGER = 1.05f
+    const val LARGE = 1.025f
+    const val NORMAL = 1f
+    const val SMALL = 0.985f
+    const val SMALLER = 0.95f
+    const val SMALLEST = 0.925f
 }
