@@ -6,10 +6,11 @@ import com.livefast.eattrash.raccoonforlemmy.unit.licences.models.LicenceItem
 import com.livefast.eattrash.raccoonforlemmy.unit.licences.models.LicenceItemType
 import kotlinx.coroutines.launch
 
-class LicencesViewModel : LicencesMviModel,
+class LicencesViewModel :
     DefaultMviModel<LicencesMviModel.Intent, LicencesMviModel.State, LicencesMviModel.Effect>(
         initialState = LicencesMviModel.State(),
-    ) {
+    ),
+    LicencesMviModel {
     init {
         screenModelScope.launch {
             populate()
@@ -21,10 +22,16 @@ class LicencesViewModel : LicencesMviModel,
             it.copy(
                 items =
                     buildList {
+                        LicenceItem(
+                            type = LicenceItemType.Library,
+                            title = "Android Jetpack",
+                            subtitle = "A suite of libraries, tools, and guidance to help developers write high-quality apps easier",
+                            url = LicenceUrls.ANDROIDX,
+                        )
                         this +=
                             LicenceItem(
                                 type = LicenceItemType.Resource,
-                                title = "Charis SIL, Noto Sans, Poppins",
+                                title = "Atkinson Hyperlegible, Noto Sans, Poppins",
                                 subtitle = "Fonts used in the app are released under the Open Font Library (OFL)",
                                 url = LicenceUrls.OFL,
                             )
@@ -34,6 +41,29 @@ class LicencesViewModel : LicencesMviModel,
                                 title = "Coil",
                                 subtitle = "An image loading library for Android",
                                 url = LicenceUrls.COIL,
+                            )
+                        this +=
+                            LicenceItem(
+                                type = LicenceItemType.Library,
+                                title = "Calf webview",
+                                subtitle =
+                                    "Calf is a library that allows you to easily create adaptive UIs and access platform specific APIs from your Compose Multiplatform apps",
+                                url = LicenceUrls.CALF,
+                            )
+                        this +=
+                            LicenceItem(
+                                type = LicenceItemType.Library,
+                                title = "Compose ColorPicker",
+                                subtitle = "Kotlin Multiplatform color picker library",
+                                url = LicenceUrls.COMPOSE_COLORPICKER,
+                            )
+                        this +=
+                            LicenceItem(
+                                type = LicenceItemType.Library,
+                                title = "Compose Multiplatform Media Player",
+                                subtitle =
+                                    "Compose Multiplatform Media Player is a powerful media player library designed for Compose Multiplatform projects",
+                                url = LicenceUrls.COMPOSE_MULTIPLATFORM_MEDIA_PLAYER,
                             )
                         this +=
                             LicenceItem(
