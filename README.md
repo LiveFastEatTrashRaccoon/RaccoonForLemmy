@@ -28,26 +28,34 @@ A Kotlin Multiplatform client for Lemmy.
 <table>
   <tr>
     <td>
-      <img src="https://github.com/user-attachments/assets/4f260197-3902-4f95-b2d1-c58c50bdd484" width="310" alt="home screen" />
+      <img src="https://livefasteattrashraccoon.github.io/RaccoonForLemmy/user_manual/images/home_fab.png" width="310" alt="home screen" />
     </td>
     <td>
-      <img src="https://github.com/user-attachments/assets/49425175-8949-4aec-bea0-185143fc7096" width="310" alt="post detail" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="https://github.com/user-attachments/assets/b3866545-8a32-4a3c-b32f-87ddcc8a7b65" width="310" alt="explore screen" />
-    </td>
-    <td>
-      <img src="https://github.com/user-attachments/assets/36249619-57d6-4710-9111-21fcbf624a0c" width="310" alt="community detail" />
+      <img src="https://livefasteattrashraccoon.github.io/RaccoonForLemmy/user_manual/images/post_detail.png" width="310" alt="post detail" />
     </td>
   </tr>
   <tr>
     <td>
-      <img src="https://github.com/user-attachments/assets/70a5996d-fbcb-4d71-9d46-27a20e6b0b94" width="310" alt="inbox screen" />
+      <img src="https://livefasteattrashraccoon.github.io/RaccoonForLemmy/user_manual/images/explore_communities.png" width="310" alt="explore screen" />
     </td>
     <td>
-      <img src="https://github.com/user-attachments/assets/f1f9097e-b935-4bcf-9956-714fadc41e85" width="310" alt="settings screen" />
+      <img src="https://livefasteattrashraccoon.github.io/RaccoonForLemmy/user_manual/images/community_detail.png" width="310" alt="community detail" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://livefasteattrashraccoon.github.io/RaccoonForLemmy/user_manual/images/community_info.png" width="310" alt="inbox screen" />
+    </td>
+    <td>
+      <img src="https://livefasteattrashraccoon.github.io/RaccoonForLemmy/user_manual/images/user_detail.png" width="310" alt="settings screen" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://livefasteattrashraccoon.github.io/RaccoonForLemmy/user_manual/images/inbox_replies.png" width="310" alt="inbox screen" />
+    </td>
+    <td>
+      <img src="https://livefasteattrashraccoon.github.io/RaccoonForLemmy/user_manual/images/settings_1.png" width="310" alt="settings screen" />
     </td>
   </tr>
 </table>
