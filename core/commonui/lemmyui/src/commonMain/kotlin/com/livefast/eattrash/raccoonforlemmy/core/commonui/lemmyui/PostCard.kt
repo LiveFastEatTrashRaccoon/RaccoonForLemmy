@@ -86,6 +86,7 @@ fun PostCard(
     onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
     onOpenImage: ((String) -> Unit)? = null,
+    onOpenVideo: ((String) -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
     onClick: (() -> Unit)? = null,
     onDoubleClick: (() -> Unit)? = null,
@@ -145,6 +146,7 @@ fun PostCard(
                 onSave = onSave,
                 onReply = onReply,
                 onOpenImage = onOpenImage,
+                onOpenVideo = onOpenVideo,
                 onOptionSelected = onOptionSelected,
                 onClick = onClick,
                 onDoubleClick = onDoubleClick,
@@ -173,6 +175,7 @@ fun PostCard(
                 onSave = onSave,
                 onReply = onReply,
                 onOpenImage = onOpenImage,
+                onOpenVideo = onOpenVideo,
                 onOptionSelected = onOptionSelected,
                 onClick = onClick,
                 onDoubleClick = onDoubleClick,
@@ -206,6 +209,7 @@ private fun CompactPost(
     onSave: (() -> Unit)?,
     onReply: (() -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
+    onOpenVideo: ((String) -> Unit)?,
     onOptionSelected: ((OptionId) -> Unit)?,
     onClick: (() -> Unit)?,
     onDoubleClick: (() -> Unit)?,
@@ -331,6 +335,9 @@ private fun CompactPost(
                                     onClick?.invoke()
                                 }
                             },
+                            onOpenFullScreen = {
+                                onOpenVideo?.invoke(post.videoUrl)
+                            },
                         )
                     } else {
                         PostCardImage(
@@ -435,6 +442,7 @@ private fun ExtendedPost(
     onSave: (() -> Unit)?,
     onReply: (() -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
+    onOpenVideo: ((String) -> Unit)?,
     onOptionSelected: ((OptionId) -> Unit)?,
     onClick: (() -> Unit)?,
     onDoubleClick: (() -> Unit)?,
@@ -562,13 +570,15 @@ private fun ExtendedPost(
                         url = post.videoUrl,
                         blurred = blurNsfw && post.nsfw,
                         autoLoadImages = autoLoadImages,
-                        backgroundColor = backgroundColor,
                         onOpen = {
                             if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
                                 uriHandler.openUri(postLinkUrl)
                             } else {
                                 onClick?.invoke()
                             }
+                        },
+                        onOpenFullScreen = {
+                            onOpenVideo?.invoke(post.videoUrl)
                         },
                     )
                 } else {
