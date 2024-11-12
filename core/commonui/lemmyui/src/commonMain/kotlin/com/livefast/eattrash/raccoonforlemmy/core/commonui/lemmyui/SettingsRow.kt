@@ -1,5 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,7 +24,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
 fun SettingsRow(
@@ -43,9 +43,13 @@ fun SettingsRow(
         modifier =
             modifier
                 .clip(RoundedCornerShape(CornerSize.xxl))
-                .onClick(
-                    onClick = {
-                        onTap?.invoke()
+                .then(
+                    if (onTap != null) {
+                        Modifier.clickable {
+                            onTap.invoke()
+                        }
+                    } else {
+                        Modifier
                     },
                 ).padding(
                     vertical = Spacing.s,
@@ -71,6 +75,7 @@ fun SettingsRow(
         }
         Column(
             modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
             Text(
                 text = title,
