@@ -2,7 +2,8 @@
 
 ### 2.1 Home
 
-When you are logged, as for anonymous users, the home screen contains the post list with the same information displayed.
+When you are logged, as for anonymous users, the home screen contains the post list with the same
+information displayed.
 The main difference is that, as a logged user, you can save posts and vote (either up or down)
 contents. You will also find more options in the "…" button.
 
@@ -15,7 +16,8 @@ enabled the "Mark read while scrolling" option in the Settings screen) just seen
 
 ### 2.2 Sidebar
 
-The side menu allows to see the list of subscriptions, with the ones that you marked as favorite to the top of the list.
+The side menu allows to see the list of subscriptions, with the ones that you marked as favorite to
+the top of the list.
 By clicking on each item, you will open the corresponding community or multi-community detail.
 
 You can use the search field to look for a specific community.
@@ -43,8 +45,8 @@ Above the post and comments, you can find the shortcuts to access the following 
 - Moderation tools: if you are a moderator you can easily access:
     - Report list: list of all the reports for posts and comments in your communities;
     - Moderation log: global moderation log;
-    - Moderated contents: review all the contents that have been posted (either in the form of posts or comments) to
-      your communities.
+    - Moderated contents: review all the contents that have been posted (either in the form of posts
+      or comments) to your communities.
 
 In the top right corner of the app bar, you'll find a button to log out and another one to change
 account (or access with a different one).
@@ -75,7 +77,8 @@ Please refer to [description of the page](#18-settings) for anonymous users for 
 a short description of the additional functions will follow.
 
 - General:
-    - Default feed type: you will find the "Subscribed" option which is not available for anonymous users;
+    - Default feed type: you will find the "Subscribed" option which is not available for anonymous
+      users;
     - Enable swipe actions:whether the swipe to left/right actions are enabled in post and comment
       list, inbox and reports;
     - Configure swipe actions: opens the configure swipe actions screen;
@@ -88,8 +91,8 @@ a short description of the additional functions will follow.
 
 #### 2.6.1 Application appearance
 
-This screen is similar to the one for anonymous users, but additionally it allows to configure custom colors for swipe
-actions:
+This screen is similar to the one for anonymous users, but additionally it allows to configure
+custom colors for swipe actions:
 
 - Upvote color: color of the upvote action (both used as a card background when swiping and to
   highlight the vote indicator when you have upvoted a content);
