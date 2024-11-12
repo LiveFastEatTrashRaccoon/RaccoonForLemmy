@@ -2,7 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.DpOffset
 import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.VideoPlayer
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ZoomableImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
@@ -58,6 +59,7 @@ import org.koin.core.parameter.parametersOf
 class ZoomableImageScreen(
     private val url: String,
     private val source: String = "",
+    private val isVideo: Boolean = false,
 ) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -153,50 +155,56 @@ class ZoomableImageScreen(
                                 }
                             var optionsExpanded by remember { mutableStateOf(false) }
                             var optionsOffset by remember { mutableStateOf(Offset.Zero) }
-                            IconButton(
-                                modifier =
-                                    Modifier
-                                        .padding(horizontal = Spacing.xs)
-                                        .onGloballyPositioned {
-                                            optionsOffset = it.positionInParent()
-                                        },
-                                onClick = {
-                                    optionsExpanded = true
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.AspectRatio,
-                                    contentDescription = null,
-                                )
-                            }
-
-                            CustomDropDown(
-                                expanded = optionsExpanded,
-                                onDismiss = {
-                                    optionsExpanded = false
-                                },
-                                offset =
-                                    DpOffset(
-                                        x = optionsOffset.x.toLocalDp(),
-                                        y = optionsOffset.y.toLocalDp(),
-                                    ),
-                            ) {
-                                options.forEach { option ->
-                                    DropdownMenuItem(
-                                        text = {
-                                            val text =
-                                                when (option) {
-                                                    ContentScale.FillHeight -> LocalStrings.current.contentScaleFillHeight
-                                                    ContentScale.FillWidth -> LocalStrings.current.contentScaleFillWidth
-                                                    else -> LocalStrings.current.contentScaleFit
-                                                }
-                                            Text(text)
-                                        },
-                                        onClick = {
-                                            optionsExpanded = false
-                                            model.reduce(ZoomableImageMviModel.Intent.ChangeContentScale(option))
-                                        },
+                            if (!isVideo) {
+                                IconButton(
+                                    modifier =
+                                        Modifier
+                                            .padding(horizontal = Spacing.xs)
+                                            .onGloballyPositioned {
+                                                optionsOffset = it.positionInParent()
+                                            },
+                                    onClick = {
+                                        optionsExpanded = true
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.AspectRatio,
+                                        contentDescription = null,
                                     )
+                                }
+
+                                CustomDropDown(
+                                    expanded = optionsExpanded,
+                                    onDismiss = {
+                                        optionsExpanded = false
+                                    },
+                                    offset =
+                                        DpOffset(
+                                            x = optionsOffset.x.toLocalDp(),
+                                            y = optionsOffset.y.toLocalDp(),
+                                        ),
+                                ) {
+                                    options.forEach { option ->
+                                        DropdownMenuItem(
+                                            text = {
+                                                val text =
+                                                    when (option) {
+                                                        ContentScale.FillHeight -> LocalStrings.current.contentScaleFillHeight
+                                                        ContentScale.FillWidth -> LocalStrings.current.contentScaleFillWidth
+                                                        else -> LocalStrings.current.contentScaleFit
+                                                    }
+                                                Text(text)
+                                            },
+                                            onClick = {
+                                                optionsExpanded = false
+                                                model.reduce(
+                                                    ZoomableImageMviModel.Intent.ChangeContentScale(
+                                                        option,
+                                                    ),
+                                                )
+                                            },
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -217,17 +225,23 @@ class ZoomableImageScreen(
                     Box(
                         modifier =
                             Modifier
-                                .padding(
-                                    top = padding.calculateTopPadding(),
-                                ).fillMaxWidth()
+                                .padding(top = padding.calculateTopPadding())
+                                .fillMaxSize()
                                 .background(Color.Black),
                         contentAlignment = Alignment.Center,
                     ) {
-                        ZoomableImage(
-                            url = url,
-                            autoLoadImages = uiState.autoLoadImages,
-                            contentScale = uiState.contentScale,
-                        )
+                        if (isVideo) {
+                            VideoPlayer(
+                                url = url,
+                                muted = false,
+                            )
+                        } else {
+                            ZoomableImage(
+                                url = url,
+                                autoLoadImages = uiState.autoLoadImages,
+                                contentScale = uiState.contentScale,
+                            )
+                        }
                     }
                 },
         )
