@@ -6,9 +6,30 @@ layout: default
 
 This page contains a short description of the main features of the app.
 
+## Table of contents
+
+- [Home screen](#home-screen)
+- [Side menu](#side-menu)
+- [Post detail](#post-detail)
+- [Community detail](#community-detail)
+- [Instance detail](#instance-detail)
+- [User detail](#user-detail)
+- [Explore](#explore)
+- [Profile](#profile)
+- [Inbox](#inbox)
+- [Settings](#settings)
+    - [Application appearance](#application-appearance)
+    - [Content appearance](#content-appearance)
+    - [Advanced settings](#advanced-settings)
+    - [Configure swipe actions](#configure-swipe-actions)
+    - [Web account settings](#web-account-settings)
+    - [Ban and filters](#ban-and-filters)
+- [Moderation log](#moderation-log)
+- [Moderation tools](#moderation-tools)
+
 ## Home screen
 
-The home screen is made up by three components:
+The home screen displays the timeline and it is made up by three components:
 
 - the top bar where you can see the feed type ("All" or "Local"), the instance name "via ..." and
   the sort type;
@@ -34,6 +55,8 @@ enabled the "Mark read while scrolling" option in the Settings screen) just seen
 <img width="310" alt="floating action button menu" src="images/home_fab.png" />
 </div>
 
+[Back to top](#table-of-contents)
+
 ## Side menu
 
 In anonymous mode, the side menu gives you the opportunity to change instance (the same menu can be
@@ -52,6 +75,8 @@ By clicking on each item, you will open the corresponding community or multi-com
 <img width="310" alt="side menu select instance" src="images/drawer.png" />
 <img width="310" alt="add instance" src="images/drawer_change_instance.png" />
 </div>
+
+[Back to top](#table-of-contents)
 
 ## Post detail
 
@@ -72,22 +97,27 @@ If you are logged, you can vote or save to bookmark both the main post and all i
 <img width="310" alt="post detail" src="images/post_detail.png" />
 </div>
 
+[Back to top](#table-of-contents)
+
 ## Community detail
 
 By tapping on the community info above each post title, you can open the community detail screen,
-which is very similar to the home (you can activate the zombie mode here too).
+which is very similar to the [home screen](#home-screen) (you can activate the zombie mode here
+too).
 
 If you tap on the "⋮" button in the top right corner you can also access some additional
 information and, if you are logged and are a moderator for this community, you will be able to edit
 its metadata.
 
 If you are logged, you can vote or save to bookmark each post in the list and access the same post
-actions which you can find in the [timeline](#home-screen).
+actions which you can find in the home screen timeline.
 
 <div align="center">
 <img width="310" alt="community detail" src="images/community_detail.png" />
 <img width="310" alt="user info" src="images/community_info.png" />
 </div>
+
+[Back to top](#table-of-contents)
 
 ## Instance detail
 
@@ -99,18 +129,23 @@ available). This is useful because you can sort communities and explore the inst
 <img width="310" alt="user info" src="images/instance_info.png" />
 </div>
 
+[Back to top](#table-of-contents)
+
 ## User detail
 
-If you tap on the user name above the title, you will access the user detail screen
-where it is possible to see the posts and comments created by that particular user.
+If you tap on the user name or avatar shown in the header of each post or comment, you will access
+the user detail screen where it is possible to see the posts and comments created by that particular
+user.
 
-If you tap on the "⋮" button in the top right corner you can also access some additional
+By using the "⋮" button in the top right corner you can also access some additional
 information.
 
 <div align="center">
 <img width="310" alt="user detail" src="images/user_detail.png" />
 <img width="310" alt="user info" src="images/user_info.png" />
 </div>
+
+[Back to top](#table-of-contents)
 
 ## Explore
 
@@ -120,10 +155,10 @@ a query string and result type (post, comment, communities, users or everything)
 You can change the result type with the second to last action in the top bar, the available options
 are:
 
-- posts
-- communities
-- comments
-- users
+- posts;
+- communities;
+- comments;
+- users;
 - URLs.
 
 As in the [home screen](#home-screen), you can change the sort type with the last action on the
@@ -134,12 +169,15 @@ right in the top bar and, if you are logged, you can vote posts or add them to b
 <img width="310" alt="explore" src="images/explore_users.png" />
 </div>
 
+[Back to top](#table-of-contents)
+
 ## Profile
 
 The Profile screen shows the list of post and comments that you created and some textual statistics
 about your post and comment count and your Lemmy-birthday.
 
-Above the post and comments, you can find the shortcuts to access the following sections:
+In top right corner an "open menu" button allows you to open a side menu which presents a series of
+shortcuts to access the following sections:
 
 - Manage subscriptions: a screen where you can review your subscriptions and create
   multi-communities
@@ -147,13 +185,15 @@ Above the post and comments, you can find the shortcuts to access the following 
 - Drafts: access the unfinished posts and comments that you have saved;
 - Upvotes &amp; downvotes: review the contents that you have liked or disliked;
 - Moderation tools: if you are a moderator you can easily access:
-    - Report list: list of all the reports for posts and comments in your communities;
-    - Moderation log: global moderation log;
+    - Report list: [list of all the reports](#moderation-tools) for posts and comments in your
+      communities;
+    - Moderation log: global [moderation log](#moderation-log);
     - Moderated contents: review all the contents that have been posted (either in the form of posts
-      or comments) to your communities.
-
-In the top right corner of the app bar, you'll find a button to log out and another one to change
-account (or access with a different one).
+      or comments) to your communities;
+- Create community: if the instance you are logged in allows to create new communities, this button
+  will open the community creation form;
+- Manage accounts: to change account or access with a different one;
+- Logout: terminate the current session and go back to anonymous mode.
 
 In anonymous mode the profile is just a placeholder that invite you to access with an account or
 retry the login if your token has expired.
@@ -162,6 +202,8 @@ retry the login if your token has expired.
 <img width="310" alt="anonymous profile" src="images/profile.png" />
 <img width="310" alt="anonymous profile" src="images/profile_menu.png" />
 </div>
+
+[Back to top](#table-of-contents)
 
 ## Inbox
 
@@ -182,6 +224,8 @@ In anonymous mode the profile is just a placeholder that invite you to access wi
 <img width="310" alt="anonymous profile" src="images/inbox_mentions.png" />
 </div>
 
+[Back to top](#table-of-contents)
+
 ## Settings
 
 The settings screen allows you to customize the look and behaviour of your app.
@@ -189,23 +233,27 @@ The settings screen allows you to customize the look and behaviour of your app.
 - Look and feel:
     - Language: choose UI language (app specific);
     - UI theme: choose between light, dark, totally dark or system theme;
-    - Application appearance: opens the configuration screen for colors and fonts of the user
-      interface;
-        - Content appearance: opens the configuration screen for fonts and style of posts and
-          comments;
+    - Application appearance: opens the [configuration screen](#application-appearance) for colors
+      and fonts of the user interface;
+    - Content appearance: opens the [configuration screen](#content-appearance) for fonts and style
+      of posts and comments;
 - General:
-    - Default feed type: listing type for the home screen applied by default
-    - Default post sort type: sort type for the home, community detail and user detail applied by
-      default;
-    - Default comment sort type: sort type for post detail applied by default to comments;
+    - Default feed type: listing type for the [home screen](#home-screen) applied by default
+    - Default post sort type: sort type for the [home](#home-screen),
+      [community detail](#community-detail) and [user detail](#user-detail) applied by default;
+    - Default comment sort type: sort type for post detail applied by default to comments in
+      [post detail](#post-detail);
     - Enable swipe actions: (only for logged users) whether the swipe to left/right actions are
-      enabled in post and comment list, inbox and reports;
-    - Configure swipe actions: (only for logged users) opens the configure swipe actions screen;
-        - Open URLs in external browser: rely on the external browser instead of in-app web view;
-        - Advanced settings: opens a detailed configuration screen for more advanced options;
+      enabled in post and comment list, inbox and report list;
+    - Configure swipe actions: (only for logged users) opens
+      the [configure swipe actions screen](#configure-swipe-actions);
+    - Open URLs in external browser: rely on the external browser, custom tabs or in-app web view;
+    - Advanced settings: opens a [detailed configuration screen](#advanced-settings) for more
+      advanced options;
 - Account settings (only for logged users):
-    - Web preferences: allows you to edit your Lemmy web preferences;
-    - Bans and filters: configure user/community/instance ban and filtering options.
+    - Web preferences: allows you to edit your Lemmy [account preferences](#web-account-settings);
+    - Bans and filters: configure user/community/instance/domain ban and filtering options in the
+      [dedicated screen](#ban-and-filters).
 - NSFW:
     - Include NSFW contents: determine whether NSFW contents are included in the feed by default;
     - Blur NSFW images: in home feed and community (unless the community is marked as NSFW as a
@@ -234,6 +282,8 @@ via adb or the "Device Explorer" if you are using Android Studio.
 <img width="310" alt="settings second part" src="images/settings_2.png" />
 </div>
 
+[Back to top](#table-of-contents)
+
 ### Application appearance
 
 This screen allows to configure colors and fonts of the UI:
@@ -257,6 +307,8 @@ This screen allows to configure colors and fonts of the UI:
 <img width="310" alt="colors and fonts" src="images/appearance.png" />
 </div>
 
+[Back to top](#table-of-contents)
+
 ### Content appearance
 
 This screen is useful to configure the aspect of Lemmy contents (usernames, community names, post
@@ -269,13 +321,13 @@ and comments).
     - Comment text size: scale factor applied to comment text;
     - Ancillary text size: scale factor applied to user names and other ancillary labels;
 - Customizations:
-- Post layout:  choose a layout (Card, Compact, Full) for posts;
-- Use display names for users and communities: if enabled, uses the user display name and the
-  community title whenever possible, otherwise fallbacks to Lemmy handles (
-  e.g. `!raccoonforlemmy@lemmy.world`);
-- Full height images: show images with scaled width and full height (instead of capping the
-  height) in the feed;
-- Full width images: enables horizontal edge-to-edge for images in timelines;
+    - Post layout:  choose a layout (Card, Compact, Full) for posts;
+    - Use display names for users and communities: if enabled, uses the user display name and the
+      community title whenever possible, otherwise fallbacks to Lemmy handles (
+      e.g. `!raccoonforlemmy@lemmy.world`);
+    - Full height images: show images with scaled width and full height (instead of capping the
+      height) in the feed;
+    - Full width images: enables horizontal edge-to-edge for images in timelines;
     - Vote format: see the score of posts and comments as aggregated (`upvotes - downvotes`), split
       or percentage (`upvotes / (upvotes + downvotes) * 100`);
     - Comment bar thickness: allows to customize a multiplier applied to the width of comment bar
@@ -287,6 +339,8 @@ You can see a preview of the result below the list of options.
 <div align="center">
 <img width="310" alt="settings first part" src="images/content_appearance.png" />
 </div>
+
+[Back to top](#table-of-contents)
 
 ### Advanced settings
 
@@ -302,33 +356,34 @@ This screen contains a series of less frequently used customization options:
     - Hide navigation bar while scrolling: makes the bottom navigation bar invisible while scrolling
       down to maximize the space dedicated to contents;
 - Reading and contents:
-    - Default feed type for explore: default listing type used in the Explore screen;
-    - Default inbox type: (logged only) whether the Inbox includes all contents by default of just
-      unread ones;
-        - Default language in editor: language for newly created posts and comments;
-        - Disable infinite scrolling: if this option is enabled, instead of automatically fetching
-          new
-          contents while scrolling (in home, community detail, post detail, user detail) an explicit
-          "Load more" button is shown, in order to prevent the "doom scrolling" effect;
-        - Automatically expand comments: expand all comment threads while opening the post detail;
+    - Default feed type for Explore: default listing type used in the [Explore](#explore) screen;
+    - Default inbox type: (logged only) whether the [Inbox](#inbox) includes all contents by default
+      of just unread ones;
+    - Default language in editor: language for newly created posts and comments;
+    - Disable infinite scrolling: if this option is enabled, instead of automatically fetching
+      new contents while scrolling (in home, community detail, post detail, user detail) an explicit
+      "Load more" button is shown, in order to prevent the "doom scrolling" effect;
+    - Automatically expand comments: expand all comment threads while opening
+      the [post detail](#post-detail);
     - Mark posts as read when scrolling: (logged only) instead of marking posts read with an
-      explicit
-      interaction, posts are marked as read on the fly as they become visible while scrolling;
-        - Zombie mode interval duration: amount of time between automatic scroll in "lazy mode";
-        - Zombie mode scroll amount: translation amount for the automatic scroll in "lazy mode";
-- Pictures
+      explicit interaction, posts are marked as read on the fly as they become visible while
+      scrolling;
+    - Zombie mode interval duration: amount of time between automatic scroll in "lazy mode";
+    - Zombie mode scroll amount: translation amount for the automatic scroll in "lazy mode";
+- Pictures:
     - Automatically load images: load images and videos automatically in post and comments;
     - Save images in specific subdirectories: use the community or user handle to save images when
-      downloading them
-      into your Gallery;
+      downloading them into your Gallery;
 - Experiments:
     - Configure bottom navigation bar: open a screen to reorder and add/remove items from the bottom
       navigation bar;
     - Add/remove favorites in navigation drawer: enable the "favorites" section in the side menu;
     - Enable double tap action: (logged only) instead of using swipe actions, this option activated
       the "double tap to like" mode some users may be familiar with from other social apps;
-    - Search posts only in title: enable exact match in the Explore section while searching posts;
-    - Check for unread items in background: refresh the Inbox in background to look for new items;
+  - Search posts only in title: enable exact match in the [Explore](#explore) section while
+    searching posts;
+  - Check for unread items in background: refresh the [Inbox](#inbox) in background to look for new
+    items;
     - Application icon: allow to choose a different app icon;
     - Export settings to file: save app settings to a JSON file on your device;
     - Import settings from file: load app settings from a JSON file on your device;
@@ -340,6 +395,8 @@ This screen contains a series of less frequently used customization options:
 <img width="310" alt="settings first part" src="images/advanced_settings_2.png" />
 </div>
 
+[Back to top](#table-of-contents)
+
 ### Configure swipe actions
 
 In this screen it is possible to assign an action to the 4 slots (two on the left side and two on
@@ -348,6 +405,8 @@ the right side) of the cards used to render post, comments and inbox items.
 <div align="center">
 <img width="310" alt="configure swipe actions" src="images/swipe_actions.png" />
 </div>
+
+[Back to top](#table-of-contents)
 
 ### Web account settings
 
@@ -358,6 +417,8 @@ you can do on the webapp).
 <img width="310" alt="web settings" src="images/account_settings.png" />
 </div>
 
+[Back to top](#table-of-contents)
+
 ### Ban and filters
 
 This screen allows you to see what users, communities and instances you have blocked and
@@ -366,6 +427,8 @@ remove the block (these settings are tied to your Lemmy account too).
 <div align="center">
 <img width="310" alt="bans and filters" src="images/ban_filters.png" />
 </div>
+
+[Back to top](#table-of-contents)
 
 ## Moderation log
 
@@ -382,6 +445,8 @@ list of all the actions that happened for that given community, e.g.:
 <div align="center">
 <img width="310" alt="moderation log" src="images/modlog.png" />
 </div>
+
+[Back to top](#table-of-contents)
 
 ## Moderation tools
 
@@ -401,3 +466,5 @@ content (e.g. to remove it) and you can mark the report as "resolved" once you a
 <div align="center">
 <img width="310" alt="report list" src="images/modtools.png" />
 </div>
+
+[Back to top](#table-of-contents)
