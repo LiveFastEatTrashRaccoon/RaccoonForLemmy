@@ -20,7 +20,7 @@ fun UiFontFamily.toTypography(): Typography {
     val fontFamily =
         when (this) {
             UiFontFamily.NotoSans -> coreResources.notoSans
-            UiFontFamily.CharisSIL -> coreResources.charisSil
+            UiFontFamily.AtkinsonHyperlegible -> coreResources.atkinsonHyperlegible
             UiFontFamily.Poppins -> coreResources.poppins
             else -> FontFamily.Default
         }

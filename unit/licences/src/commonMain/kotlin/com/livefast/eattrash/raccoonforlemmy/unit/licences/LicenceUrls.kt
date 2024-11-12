@@ -1,7 +1,13 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.licences
 
 internal object LicenceUrls {
+    const val ANDROIDX = "https://github.com/androidx/androidx/blob/androidx-main/LICENSE.txt"
+    const val CALF = "https://github.com/MohamedRejeb/Calf/blob/main/LICENSE"
     const val COIL = "https://github.com/coil-kt/coil/blob/main/LICENSE.txt"
+    const val COMPOSE_COLORPICKER =
+        "https://github.com/skydoves/colorpicker-compose/blob/main/LICENSE"
+    const val COMPOSE_MULTIPLATFORM_MEDIA_PLAYER =
+        "https://github.com/Chaintech-Network/ComposeMultiplatformMediaPlayer/blob/main/LICENSE.txt"
     const val GITHUB_LOGO = "https://github.com/logos"
     const val KOIN = "https://github.com/InsertKoinIO/koin/blob/main/LICENSE"
     const val KOTLIN_CRYPTO = "https://github.com/KotlinCrypto/hash/blob/master/LICENSE"

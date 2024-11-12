@@ -138,19 +138,13 @@ via adb or the "Device Explorer" if you are using Android Studio.
 
 This screen allows to configure colors and fonts of the UI:
 
-- Use dynamic colors: (on Android 12+) generate a palette based on your background dominant
-  color;
+- Use dynamic colors: (on Android 12+) generate a palette based on your background dominant color;
 - Custom theme color: (requires "Use dynamic color" option to be off) generate a palette by
   choosing a seed color from a predefined list or custom color;
 - Comment bar theme: palette of colors used to distinguish nested comments;
 - UI font: typeface used for the app UI elements (menus, labels, etc.);
 - UI text size: scale factor to apply to the app UI elements;
 
-By the way, if you like Android dynamic colors and you think that on Lemmy there are plenty of
-beautiful images you could set as your home screen background, have a look
-at this side project of mine. It is a simple app
-that allows you to configure remote image sources from the Lemmy-verse, preview how they look like
-and set them easily as wallpapers for your home and lock screens.
 
 <img width="310" alt="colors and fonts" src="images/anon_appearance.jpg" />
 
@@ -160,10 +154,10 @@ This screen is useful to configure the aspect of Lemmy contents (usernames, comm
 
 - Text
     - Content font family: typeface used for post and comments on Lemmy;
-    - Title text size:
-    - Post text size:
-    - Comment text size:
-    - Ancillary text size:
+    - Title text size: scale factor applied to post titles;
+    - Post text size: scale factor applied to post text;
+    - Comment text size: scale factor applied to comment text;
+    - Ancillary text size: scale factor applied to user names and other ancillary labels;
 - Customizations:
     - Post layout:  choose a layout (Card, Compact, Full) for posts;
     - Use display names for users and communities: if enabled, uses the user display name and the

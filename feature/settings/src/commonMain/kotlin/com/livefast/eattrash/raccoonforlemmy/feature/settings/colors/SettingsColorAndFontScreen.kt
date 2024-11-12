@@ -567,7 +567,7 @@ class SettingsColorAndFontScreen : Screen {
                 listOf(
                     UiFontFamily.Poppins,
                     UiFontFamily.NotoSans,
-                    UiFontFamily.CharisSIL,
+                    UiFontFamily.AtkinsonHyperlegible,
                     UiFontFamily.Default,
                 ).map { it.toInt() }
             CustomModalBottomSheet(
