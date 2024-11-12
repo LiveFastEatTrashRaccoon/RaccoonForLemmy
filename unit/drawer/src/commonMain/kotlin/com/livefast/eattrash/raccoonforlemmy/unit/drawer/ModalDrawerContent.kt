@@ -149,7 +149,6 @@ object ModalDrawerContent : Tab {
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.xxs),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
                         item {
                             SearchField(
