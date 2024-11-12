@@ -79,10 +79,13 @@ internal class SharedResources : CoreResources {
                 Font(Res.font.atkinsonhyperlegible_italic, FontWeight.Normal, FontStyle.Italic),
             )
 
-    override fun getPlayerConfig(contentScale: ContentScale): PlayerConfig =
+    override fun getPlayerConfig(
+        contentScale: ContentScale,
+        muted: Boolean,
+    ): PlayerConfig =
         PlayerConfig(
             isFullScreenEnabled = false,
-            isMute = true,
+            isMute = muted,
             videoFitMode =
                 if (contentScale == ContentScale.Fit) {
                     ScreenResize.FIT
