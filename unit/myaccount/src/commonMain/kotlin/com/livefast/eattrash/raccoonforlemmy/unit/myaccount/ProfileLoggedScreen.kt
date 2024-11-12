@@ -314,6 +314,15 @@ object ProfileLoggedScreen : Tab {
                                             ),
                                         )
                                     },
+                                    onOpenVideo = { url ->
+                                        navigationCoordinator.pushScreen(
+                                            ZoomableImageScreen(
+                                                url = url,
+                                                isVideo = true,
+                                                source = post.community?.readableHandle.orEmpty(),
+                                            ),
+                                        )
+                                    },
                                     onUpVote = {
                                         model.reduce(
                                             ProfileLoggedMviModel.Intent.UpVotePost(

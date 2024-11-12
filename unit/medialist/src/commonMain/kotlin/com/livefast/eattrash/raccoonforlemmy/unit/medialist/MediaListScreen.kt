@@ -51,6 +51,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.MediaModel
 import com.livefast.eattrash.raccoonforlemmy.unit.medialist.components.MediaItem
 import com.livefast.eattrash.raccoonforlemmy.unit.medialist.components.MediaItemPlaceholder
+import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -149,6 +150,14 @@ class MediaListScreen : Screen {
                             postLayout = uiState.postLayout,
                             fullWidthImage = uiState.fullWidthImages,
                             fullHeightImage = uiState.fullHeightImages,
+                            onOpenFullScreen = { url ->
+                                navigationCoordinator.pushScreen(
+                                    ZoomableImageScreen(
+                                        url = url,
+                                        isVideo = true,
+                                    ),
+                                )
+                            },
                             options =
                                 buildList {
                                     this +=

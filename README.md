@@ -147,19 +147,23 @@ This project _is_ all about experimenting and learning, so please be patient.
 
 ## Technical notes:
 
-- [Koin](https://github.com/InsertKoinIO/koin) for dependency injection
-- [Voyager](https://github.com/adrielcafe/voyager) for screen navigation
-- [Ktor](https://github.com/ktorio/ktor) and [Ktorfit](https://github.com/Foso/Ktorfit) for
-  networking
-- [Lyricist](https://github.com/adrielcafe/lyricist) for l10n
-- [Multiplatform settings](https://github.com/russhwolf/multiplatform-settings) for encrypted
-  preferences
-- [SQLDelight](https://github.com/cashapp/sqldelight)
-  and [SQLCipher](https://github.com/sqlcipher/sqlcipher) for local persistence
+- [Calf](https://github.com/MohamedRejeb/Calf) for a web view implementation;
+- [Coil](https://github.com/coil-kt/coil) for image loading;
+- [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform) for UI;
+- [Compose ColorPicker](https://github.com/skydoves/colorpicker-compose) for custom color selection;
+- [Compose Multiplatform Media Player](https://github.com/Chaintech-Network/ComposeMultiplatformMediaPlayer)
+  for video playback;
+- [Koin](https://insert-koin.io/) for dependency injection;
+- [Ktor](https://ktor.io/) and [Ktorfit](https://foso.github.io/Ktorfit) for networking;
+- [Lyricist](https://github.com/adrielcafe/lyricist) for localization;
 - [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) for
   Markdown rendering
-- [ComposeMultiplatformMediaPlayer](https://github.com/Chaintech-Network/ComposeMultiplatformMediaPlayer)
-  for video playback
+- [Multiplatform Settings](https://github.com/russhwolf/multiplatform-settings) for encrypted shared
+  preferences;
+- [MaterialKolor](https://github.com/jordond/MaterialKolor) for custom theme generation;
+- [SQLDelight](https://github.com/cashapp/sqldelight)
+  and [SQLCipher](https://github.com/sqlcipher/sqlcipher) for local persistence
+- [Voyager](https://voyager.adriel.cafe/) for navigation;
 
 More info about the technologies used in the project can be found in
 the [CONTRIBUTING.md](https://github.com/livefasteattrashraccoon/RaccoonForLemmy/blob/master/CONTRIBUTING.md#51-tech-stack).

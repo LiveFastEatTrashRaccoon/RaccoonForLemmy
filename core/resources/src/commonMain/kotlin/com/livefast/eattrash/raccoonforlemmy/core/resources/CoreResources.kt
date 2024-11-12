@@ -16,5 +16,8 @@ interface CoreResources {
     val poppins: FontFamily @Composable get
     val atkinsonHyperlegible: FontFamily @Composable get
 
-    fun getPlayerConfig(contentScale: ContentScale): PlayerConfig
+    fun getPlayerConfig(
+        contentScale: ContentScale,
+        muted: Boolean,
+    ): PlayerConfig
 }

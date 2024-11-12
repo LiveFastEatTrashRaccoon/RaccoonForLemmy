@@ -49,14 +49,14 @@ This is why I migrated drawable and font loading to Compose build-in system. And
 
 <dt>Image loading</dt>
 <dd>
-This was something that was expected to be simpler but unfortunately it wasn't. Popular kotlin libraries
-do not support multiplatform yet and the only library that advertised it was <a href="https://github.com/Kamel-Media/Kamel">Kamel</a>
-which had a major bug while rendering large images, which took a long time to be considered (and possibly
-has not been fixed yet). The project was already relying on Kamel for many things, from loading images on demand
-to Markdown rendering, so deciding to switch was not easy at all. In the end, the iOS part of the project 
-continues using it (Raccoon for iOS has by far bigger problems than image rendering, being a virtually
-inexistent platform) while the Android counterpart was migrated to <a href="https://github.com/coil-kt/coil">Coil</a>.
-Things will change when Coil 3.x will be release, because it will go multiplatform as well.
+This was something that was expected to be simpler but unfortunately it wasn't. In the beginning 
+the project used the <a href="https://github.com/Kamel-Media/Kamel">Kamel</a> library
+which had a major bug while rendering large images, which took a long time to be considered.
+The project was already relying on Kamel for many things, from loading images on demand
+to Markdown rendering, so deciding to switch was not easy at all. So as a first step,
+<a href="https://github.com/coil-kt/coil">Coil</a> 2.x was adopted on Android while keeping Kamel
+on iOS and, finally, when Coil 3.x became stable with multiplatform support all the project has
+been completely migrated.
 </dd>
 
 <dt>Preference storage</dt>
@@ -97,8 +97,9 @@ was eventually migrated to
 <dt>Theme generation</dt>
 <dd>
 The application allows to select a custom color and generate a Material 3 color scheme as a
-palette originate from that seed color. This is achieved by using the <a href="https://github.com/jordond/MaterialKolor">MaterialKolor</a>
-library which was designed to be multiplatform and works as a charm for the purpose. Thanks!
+palette originate from that seed color. This is achieved by using the 
+<a href="https://github.com/jordond/MaterialKolor">MaterialKolor</a> library which was designed to 
+be multiplatform and works as a charm for the purpose. Thanks!
 </dd>
 
 <dt>Reorderable lists</dt>
@@ -106,5 +107,12 @@ library which was designed to be multiplatform and works as a charm for the purp
 The ability to reorder lists is achieved thanks to the <a href="https://github.com/Calvin-LL/Reorderable">Reorderable</a>
 library which starting from version 1.3.1 has become multiplatform. This functionality is still 
 experimental and is used only in the instance selection bottom sheet for anonymous users.
+</dd>
+
+<dt>Web view</dt>
+<dd>
+Initially a custom web view was implemented, relying on native views (WebView on Android and WKWebView
+on iOS), but in the end the project was migrated to <a href="https://github.com/MohamedRejeb/Calf">Calf</a>
+component to display portions of the Web.
 </dd>
 </dl>

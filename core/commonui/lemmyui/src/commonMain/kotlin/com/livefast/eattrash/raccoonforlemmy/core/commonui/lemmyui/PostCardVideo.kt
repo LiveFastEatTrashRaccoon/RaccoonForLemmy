@@ -1,15 +1,15 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,9 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.VideoPlayer
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
@@ -32,8 +30,8 @@ fun PostCardVideo(
     url: String,
     blurred: Boolean = false,
     autoLoadImages: Boolean = true,
-    backgroundColor: Color = MaterialTheme.colorScheme.background,
     onOpen: (() -> Unit)? = null,
+    onOpenFullScreen: (() -> Unit)? = null,
 ) {
     if (url.isEmpty()) {
         return
@@ -67,26 +65,27 @@ fun PostCardVideo(
             }
         } else {
             var shouldBeRendered by remember(autoLoadImages) { mutableStateOf(autoLoadImages) }
-            var loading by remember { mutableStateOf(true) }
             if (shouldBeRendered) {
                 VideoPlayer(
                     modifier = Modifier.fillMaxWidth(),
                     url = url,
                 )
-                if (loading) {
-                    Box(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(16 / 9.0f)
-                                .background(backgroundColor),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(25.dp),
-                            color = MaterialTheme.colorScheme.primary,
-                        )
-                    }
+
+                IconButton(
+                    modifier =
+                        Modifier
+                            .align(Alignment.TopStart)
+                            .padding(
+                                start = Spacing.xs,
+                            ),
+                    onClick = {
+                        onOpenFullScreen?.invoke()
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Fullscreen,
+                        contentDescription = null,
+                    )
                 }
             } else {
                 Button(
