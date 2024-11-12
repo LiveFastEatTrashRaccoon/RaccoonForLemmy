@@ -46,7 +46,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardVideo
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAVideo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
@@ -63,6 +62,7 @@ internal fun MediaItem(
     fullWidthImage: Boolean = false,
     options: List<Option> = emptyList(),
     onOptionSelected: ((OptionId) -> Unit)? = null,
+    onOpenFullScreen: ((String) -> Unit)? = null,
 ) {
     val url = media.getUrl(instance)
     val backgroundColor =
@@ -104,7 +104,9 @@ internal fun MediaItem(
                                 horizontal = if (fullWidthImage) 0.dp else Spacing.s,
                             ),
                     url = url,
-                    backgroundColor = backgroundColor,
+                    onOpenFullScreen = {
+                        onOpenFullScreen?.invoke(url)
+                    },
                 )
             } else {
                 PostCardImage(
@@ -157,7 +159,6 @@ private fun MediaFooter(
     onOpen: (() -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
 ) {
-    val buttonModifier = Modifier.size(IconSize.l).padding(3.dp)
     var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
