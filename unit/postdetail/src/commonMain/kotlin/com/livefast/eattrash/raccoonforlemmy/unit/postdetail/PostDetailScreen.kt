@@ -860,6 +860,18 @@ class PostDetailScreen(
                                                 ),
                                             )
                                         },
+                                        onOpenVideo = { url ->
+                                            navigationCoordinator.pushScreen(
+                                                ZoomableImageScreen(
+                                                    url = url,
+                                                    isVideo = true,
+                                                    source =
+                                                        uiState.post.community
+                                                            ?.readableHandle
+                                                            .orEmpty(),
+                                                ),
+                                            )
+                                        },
                                     )
                                     if (uiState.postLayout != PostLayout.Card) {
                                         HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))

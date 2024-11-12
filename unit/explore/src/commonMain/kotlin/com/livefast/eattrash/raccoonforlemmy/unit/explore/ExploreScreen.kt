@@ -510,6 +510,18 @@ class ExploreScreen(
                                                         ),
                                                     )
                                                 },
+                                                onOpenVideo = { url ->
+                                                    navigationCoordinator.pushScreen(
+                                                        ZoomableImageScreen(
+                                                            url = url,
+                                                            isVideo = true,
+                                                            source =
+                                                                result.model.community
+                                                                    ?.readableHandle
+                                                                    .orEmpty(),
+                                                        ),
+                                                    )
+                                                },
                                             )
                                         },
                                     )

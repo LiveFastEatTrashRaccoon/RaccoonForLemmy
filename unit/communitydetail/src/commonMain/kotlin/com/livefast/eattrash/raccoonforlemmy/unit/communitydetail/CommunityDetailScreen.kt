@@ -1055,6 +1055,15 @@ class CommunityDetailScreen(
                                                     ),
                                                 )
                                             },
+                                            onOpenVideo = { url ->
+                                                navigationCoordinator.pushScreen(
+                                                    ZoomableImageScreen(
+                                                        url = url,
+                                                        isVideo = true,
+                                                        source = uiState.community.readableHandle,
+                                                    ),
+                                                )
+                                            },
                                             options =
                                                 buildList {
                                                     this +=

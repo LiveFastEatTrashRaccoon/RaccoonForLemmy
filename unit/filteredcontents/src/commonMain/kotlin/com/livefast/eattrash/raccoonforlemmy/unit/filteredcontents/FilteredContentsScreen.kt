@@ -536,6 +536,15 @@ class FilteredContentsScreen(
                                                 ),
                                             )
                                         },
+                                        onOpenVideo = { url ->
+                                            navigationCoordinator.pushScreen(
+                                                ZoomableImageScreen(
+                                                    url = url,
+                                                    isVideo = true,
+                                                    source = post.community?.readableHandle.orEmpty(),
+                                                ),
+                                            )
+                                        },
                                         options =
                                             buildList {
                                                 this +=
