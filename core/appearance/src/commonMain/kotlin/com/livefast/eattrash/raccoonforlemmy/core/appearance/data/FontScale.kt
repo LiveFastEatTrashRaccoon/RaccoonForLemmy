@@ -22,13 +22,13 @@ sealed interface FontScale {
 val FontScale.scaleFactor: Float
     get() =
         when (this) {
-            FontScale.Largest -> ReferenceValues.largest
-            FontScale.Larger -> ReferenceValues.larger
-            FontScale.Large -> ReferenceValues.large
-            FontScale.Normal -> ReferenceValues.normal
-            FontScale.Small -> ReferenceValues.small
-            FontScale.Smaller -> ReferenceValues.smaller
-            FontScale.Smallest -> ReferenceValues.smallest
+            FontScale.Largest -> ReferenceValues.LARGEST
+            FontScale.Larger -> ReferenceValues.LARGER
+            FontScale.Large -> ReferenceValues.LARGE
+            FontScale.Normal -> ReferenceValues.NORMAL
+            FontScale.Small -> ReferenceValues.SMALL
+            FontScale.Smaller -> ReferenceValues.SMALLER
+            FontScale.Smallest -> ReferenceValues.SMALLEST
         }
 
 @Composable
@@ -45,22 +45,21 @@ fun FontScale.toReadableName(): String =
 
 fun Float.toFontScale(): FontScale =
     when (this) {
-        ReferenceValues.largest -> FontScale.Largest
-        ReferenceValues.larger -> FontScale.Larger
-        ReferenceValues.large -> FontScale.Large
-        ReferenceValues.small -> FontScale.Small
-        ReferenceValues.smaller -> FontScale.Smaller
-        ReferenceValues.smallest -> FontScale.Smallest
+        ReferenceValues.LARGEST -> FontScale.Largest
+        ReferenceValues.LARGER -> FontScale.Larger
+        ReferenceValues.LARGE -> FontScale.Large
+        ReferenceValues.SMALL -> FontScale.Small
+        ReferenceValues.SMALLER -> FontScale.Smaller
+        ReferenceValues.SMALLEST -> FontScale.Smallest
         else -> FontScale.Normal
     }
 
-// log(2 + 0.1 * n) / log(2)
 private object ReferenceValues {
-    const val largest = 1.2f
-    const val larger = 1.14f
-    const val large = 1.07f
-    const val normal = 1f
-    const val small = 0.93f
-    const val smaller = 0.85f
-    const val smallest = 0.77f
+    const val LARGEST = 1.3f
+    const val LARGER = 1.25f
+    const val LARGE = 1.2f
+    const val NORMAL = 1.15f
+    const val SMALL = 1.1f
+    const val SMALLER = 1f
+    const val SMALLEST = 0.95f
 }
