@@ -26,8 +26,10 @@ fun SettingsHeader(
     Row(
         modifier =
             modifier.padding(
-                vertical = Spacing.xxs,
-                horizontal = Spacing.s,
+                top = Spacing.s,
+                bottom = Spacing.xxs,
+                start = Spacing.s,
+                end = Spacing.s,
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),

@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.main
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -160,7 +159,6 @@ class SettingsScreen : Screen {
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     SettingsHeader(
                         icon = Icons.Default.Style,

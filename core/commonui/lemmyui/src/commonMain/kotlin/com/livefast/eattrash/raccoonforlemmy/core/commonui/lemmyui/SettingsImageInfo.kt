@@ -1,5 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +22,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
 fun SettingsImageInfo(
@@ -38,9 +38,13 @@ fun SettingsImageInfo(
             modifier
                 .clip(RoundedCornerShape(CornerSize.xxl))
                 .fillMaxWidth()
-                .onClick(
-                    onClick = {
-                        onEdit?.invoke()
+                .then(
+                    if (onEdit != null) {
+                        Modifier.clickable {
+                            onEdit.invoke()
+                        }
+                    } else {
+                        Modifier
                     },
                 ).padding(
                     vertical = Spacing.xs,

@@ -32,7 +32,7 @@ internal fun ProfileMenuContent(
 
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(Spacing.m),
+        verticalArrangement = Arrangement.spacedBy(Spacing.s),
     ) {
         SettingsRow(
             title = LocalStrings.current.navigationDrawerTitleSubscriptions,
