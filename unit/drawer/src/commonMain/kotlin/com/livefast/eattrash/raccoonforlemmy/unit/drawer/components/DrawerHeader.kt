@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +26,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 @Composable
@@ -101,16 +101,17 @@ internal fun DrawerHeader(
                     )
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    modifier =
-                        Modifier.onClick(
-                            onClick = {
-                                onOpenSwitchAccount?.invoke()
-                            },
-                        ),
-                    imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = null,
-                )
+                IconButton(
+                    onClick = {
+                        onOpenSwitchAccount?.invoke()
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onBackground,
+                    )
+                }
             }
         } else {
             val anonymousTitle = LocalStrings.current.navigationDrawerAnonymous
@@ -133,16 +134,17 @@ internal fun DrawerHeader(
                         color = ancillaryColor,
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Icon(
-                        modifier =
-                            Modifier.onClick(
-                                onClick = {
-                                    onOpenChangeInstance?.invoke()
-                                },
-                            ),
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = null,
-                    )
+                    IconButton(
+                        onClick = {
+                            onOpenChangeInstance?.invoke()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
                 }
             }
         }
