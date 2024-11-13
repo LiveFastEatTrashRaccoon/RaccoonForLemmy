@@ -40,7 +40,7 @@ The home screen displays the timeline and it is made up by three components:
 The format of each post item (card, compact or full) and the vote format (aggregated, separated,
 percentage) as well as the font size/face can be configured in the Settings screen.
 
-If you are logged, you can save posts to bookmarks and vote then (with either a positive or a
+If you are logged, you can save posts and vote then (with either a positive or a
 negative vote). You will also find more options in the "…" button.
 
 If you open the menu of the floating action button in the bottom right corner, you can go back to
@@ -91,7 +91,7 @@ and vote.
 By using the "…" button you can access an additional menu about the post, e.g. you can see the raw
 Markdown and inspect/copy its contents.
 
-If you are logged, you can vote or save to bookmark both the main post and all its comments.
+If you are logged, you can vote or save both the main post and all its comments.
 
 <div align="center">
 <img width="310" alt="post detail" src="images/post_detail.png" />
@@ -109,7 +109,7 @@ If you tap on the "⋮" button in the top right corner you can also access some 
 information and, if you are logged and are a moderator for this community, you will be able to edit
 its metadata.
 
-If you are logged, you can vote or save to bookmark each post in the list and access the same post
+If you are logged, you can vote or save each post in the list and access the same post
 actions which you can find in the home screen timeline.
 
 <div align="center">
@@ -162,7 +162,7 @@ are:
 - URLs.
 
 As in the [home screen](#home-screen), you can change the sort type with the last action on the
-right in the top bar and, if you are logged, you can vote posts or add them to bookmarks.
+right in the top bar and, if you are logged, you can vote posts or save them.
 
 <div align="center">
 <img width="310" alt="explore" src="images/explore_communities.png" />
