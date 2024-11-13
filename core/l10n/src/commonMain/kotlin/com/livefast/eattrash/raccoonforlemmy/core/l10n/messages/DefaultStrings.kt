@@ -119,7 +119,7 @@ internal open class DefaultStrings : Strings {
     override val multiCommunityEditorName = "Name"
     override val multiCommunityEditorTitle = "Multi-community editor"
     override val navigationDrawerAnonymous = "Anonymous"
-    override val navigationDrawerTitleBookmarks = "Bookmarks"
+    override val navigationDrawerTitleBookmarks = "Saved"
     override val navigationDrawerTitleSubscriptions = "Manage subscriptions"
     override val navigationHome = "Posts"
     override val navigationInbox = "Inbox"
