@@ -2,12 +2,15 @@
 
 ## Supported Versions
 
-RaccoonForLemmy is in rapid development and receives regular updates every four (4) weeks.
+Raccoon for Lemmy is under active development and receives updates approximately every month. Third-party libraries
+are monitored weekly for security updates and the app is kept in sync with upstream changed to address as timely as
+possible any vulnerabilities.
 
-Should you discover a security-related issue soon after the release of a new version, the last supported version will receive a patch release.
+Should you discover a security-related issue after the release of a new version, it will receive a patch release as
+soon as possible.
 
 ## Reporting a Vulnerability
 
-If you discover any security-related issues, please report them via email at [raccoonforlemmy@gmail.com](raccoonforlemmy@gmail.com).
+If you discover any security-related issues, please report them via email at livefast.eattrash.raccoon@gmail.com.
 
 Please refrain from posting security-related issues publicly until we have had a chance to address them.
