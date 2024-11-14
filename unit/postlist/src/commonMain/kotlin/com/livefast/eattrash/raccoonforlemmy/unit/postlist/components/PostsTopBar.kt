@@ -1,5 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.postlist.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,11 +29,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
@@ -106,36 +109,31 @@ internal fun PostsTopBar(
             }
         },
         title = {
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Spacing.s),
-            ) {
+            Column {
                 Text(
                     modifier =
-                        Modifier.fillMaxWidth().onClick(
-                            onClick = {
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(CornerSize.xl))
+                            .clickable {
                                 onSelectListingType?.invoke()
-                            },
-                        ),
+                            }.padding(horizontal = Spacing.s),
                     text = listingType?.toReadableName().orEmpty(),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
                     modifier =
-                        Modifier.fillMaxWidth().then(
-                                Modifier.onClick(
-                                    onClick = {
-                                    if (onSelectInstance != null) {
-                                        onSelectInstance.invoke()
-                                    } else {
-                                        onSelectListingType?.invoke()
-                                    }
-                                },
-                            ),
-                        ),
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(CornerSize.xl))
+                            .clickable {
+                                if (onSelectInstance != null) {
+                                    onSelectInstance.invoke()
+                                } else {
+                                    onSelectListingType?.invoke()
+                                }
+                            }.padding(horizontal = Spacing.s),
                     text =
                         buildString {
                             append(LocalStrings.current.homeInstanceVia)

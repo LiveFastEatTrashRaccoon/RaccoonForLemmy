@@ -1,10 +1,12 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.inbox.main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.filled.Menu
@@ -25,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.CurrentScreen
@@ -32,6 +35,7 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
@@ -42,7 +46,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.unit.mentions.InboxMentionsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.messages.InboxMessagesScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.replies.InboxRepliesScreen
@@ -112,12 +115,10 @@ object InboxScreen : Tab {
                             modifier =
                                 Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = Spacing.s)
-                                    .onClick(
-                                        onClick = {
-                                            inboxTypeBottomSheetOpened = true
-                                        },
-                                    ),
+                                    .clip(RoundedCornerShape(CornerSize.xl))
+                                    .clickable {
+                                        inboxTypeBottomSheetOpened = true
+                                    }.padding(horizontal = Spacing.s),
                         ) {
                             Text(
                                 text = LocalStrings.current.navigationInbox,
