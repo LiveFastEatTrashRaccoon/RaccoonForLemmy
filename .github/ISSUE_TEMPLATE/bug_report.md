@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[post list, user detail, inbox]"
+title: "[AREA e.g. Post list]"
 labels: bug
 assignees: ''
 
