@@ -2,7 +2,7 @@
   <img alt="badge for Kotlin" src="https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?logo=kotlin" />
   <img alt="badge for Gradle" src="https://img.shields.io/badge/Gradle-8.8-02303A?logo=gradle" />
   <img alt="badge for Android" src="https://img.shields.io/badge/Android-26+-34A853?logo=android" />
-  <img alt="badge for Compose Multiplatform" src="https://img.shields.io/badge/Compose-1.7.0-4285F4?logo=jetpackcompose" />
+  <img alt="badge for Compose Multiplatform" src="https://img.shields.io/badge/Compose-1.7.1-4285F4?logo=jetpackcompose" />
   <img alt="badge for project license" src="https://img.shields.io/github/license/LiveFastEatTrashRaccoon/RaccoonForLemmy" />
   <img alt="badge for build status" src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/build.yml/badge.svg" />
   <img alt="badge for unit test status" src="https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/actions/workflows/unit_tests.yml/badge.svg" />

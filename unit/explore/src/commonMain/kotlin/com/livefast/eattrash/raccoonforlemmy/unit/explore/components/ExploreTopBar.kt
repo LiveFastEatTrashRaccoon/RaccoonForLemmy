@@ -1,11 +1,13 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.explore.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -26,10 +28,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
@@ -120,14 +123,16 @@ internal fun ExploreTopBar(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = Spacing.s)
-                        .onClick(
-                            onClick = {
-                                if (otherInstance.isEmpty()) {
+                        .clip(RoundedCornerShape(CornerSize.xl))
+                        .then(
+                            if (otherInstance.isEmpty()) {
+                                Modifier.clickable {
                                     onSelectListingType?.invoke()
                                 }
+                            } else {
+                                Modifier
                             },
-                        ),
+                        ).padding(horizontal = Spacing.s),
             ) {
                 Text(
                     text =
