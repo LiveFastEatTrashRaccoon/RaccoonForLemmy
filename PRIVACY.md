@@ -57,7 +57,7 @@ the app or by other means. We encourage you to review this Privacy Policy period
 ### 6 Contact Us
 
 If you have any questions, concerns, or suggestions regarding this Privacy Policy or our privacy
-practices, please contact us at raccoonforlemmy@gmail.com.
+practices, please contact us at livefast.eattrash.raccoon@gmail.com.
 
 --- 
 
