@@ -234,6 +234,7 @@ class ZoomableImageScreen(
                             VideoPlayer(
                                 url = url,
                                 muted = false,
+                                contentScale = ContentScale.Fit,
                             )
                         } else {
                             ZoomableImage(
