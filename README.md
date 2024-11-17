@@ -64,16 +64,29 @@ A Kotlin Multiplatform client for Lemmy.
 Raccoon for Lemmy is a client for the federated aggregation and discussion platform Lemmy.
 
 The project started as an exercise to play around with Kotlin Multiplatform (KMP) and Compose
-multiplatform and gradually grew as a fully functional client with many features.
+multiplatform (CMP) and gradually grew as a fully functional client.
 
-## Disclaimer
+## Want to try it out?
 
-This is an experimental project and some technologies it is build upon are still in pre-production
-stage, moreover this is a side-project developed by volunteers in their spare time, so use _at your
-own risk_, please don't expect a full-fledged and fully functional app and be prepared to occasional
-failures and yet-to-implement features.
+Here are some options to install the application on your device, apart from downloading the APKs
+from the[Releases](https://github.com/LiveFastEatTrashRaccoon/RaccoonForFriendica/releases) page.
 
-Please be willing to contribute if you can, instead of being ready to demand. Thank you.
+<div align="center">
+  <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;">
+    <a href="https://github.com/ImranR98/Obtainium/releases"><img alt="Get it on Obtainium banner" width="200" src="https://github.com/user-attachments/assets/377575fe-a651-4420-afad-8dee21618c44" /></a>
+  </div>
+</div>
+
+> [!TIP]
+> On Obtainium, please make sure to check the "Include pre-releases" option: by doing so you will be
+> able to receive all alpha and beta builds automatically.
+
+> [!WARNING]
+> Starting from version 1.13.0-beta01 (118) the application ID has changed so if you are running
+> Raccoon 1.13.0-20240730-pre or earlier version you are not receiving updates any more and you are
+> encouraged to upgrade. You can save a backup of your settings using the "Export settings
+> to file" option in the "Advanced Setting" screen and reimporting the JSON using "Import settings
+> from file" in the new app.
 
 ## Main features
 
@@ -168,18 +181,6 @@ This project _is_ all about experimenting and learning, so please be patient.
 More info about the technologies used in the project can be found in
 the [CONTRIBUTING.md](https://github.com/livefasteattrashraccoon/RaccoonForLemmy/blob/master/CONTRIBUTING.md#51-tech-stack).
 
-## Want to try it out?
-
-Here are some options to install the application on your device.
-
-<div align="center">
-  <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;">
-    <a href="https://github.com/ImranR98/Obtainium/releases"><img alt="Get it on Obtainium banner" width="200" src="https://github.com/user-attachments/assets/377575fe-a651-4420-afad-8dee21618c44" /></a>
-  </div>
-</div>
-
-<br />
-
 ## Want to leave your feedback or report a bug?
 
 - subscribe to our [Lemmy community](https://lemmy.world/c/raccoonforlemmyapp) to receive updates
@@ -197,4 +198,17 @@ Please remember: every contribution is welcome and everyone's opinion matters he
 community project, open source, ad-free and free of charge, and it belongs to us all so don't be
 afraid to get involved.
 
-And don't forget every 🦝's motto: «Live Fast, Eat Trash» (for shortness L. F. E. T.).
+And don't forget every 🦝's motto: `#livefasteattrash`.
+
+## Disclaimer
+
+> [!WARNING]
+> This is an experimental project and some technologies it is build upon are still in pre-production
+> stage, moreover this is a side-project developed by volunteers in their spare time, so use
+> _at your own risk_.
+
+This means you should be prepared to occasional failures, yet-to-implement features and areas
+where some polish is needed.
+
+Contributions are welcome and new feature requests will be evaluated depending on the available
+time, considering the project is maintained by volunteers.
