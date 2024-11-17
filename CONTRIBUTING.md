@@ -505,7 +505,7 @@ Symbols used in version numbers:
 - [ ] increment `versionCode` (ε) and `versionName` (α.β.γ) in `androidApp/build.gradle.kts`
 - [ ] create a file called `ε.txt` under `fastlane/metadata/android/en-US/changelogs/` with the
   change list
-- [ ] _copy_ the changelog content to `res/changelog.txt` (after the headline)
+- [ ] copy the content of the changelog to `res/changelog.txt` (after the headline)
 - [ ] add everything to stage and create a commit with the message "version α.β.γ"
 - [ ] tag the commit with the label "α.β.γ"
 - [ ] push both the commit and tag to `origin`
