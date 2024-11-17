@@ -3,6 +3,8 @@ package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -19,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextOverflow
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.VideoPlayer
@@ -38,8 +41,11 @@ fun PostCardVideo(
     }
 
     Box(
-        modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center,
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .aspectRatio(16 / 9f).clipToBounds(),
+            contentAlignment = Alignment.Center,
     ) {
         if (blurred) {
             Column(
@@ -67,7 +73,7 @@ fun PostCardVideo(
             var shouldBeRendered by remember(autoLoadImages) { mutableStateOf(autoLoadImages) }
             if (shouldBeRendered) {
                 VideoPlayer(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxSize(),
                     url = url,
                 )
 
