@@ -1,5 +1,0 @@
-- fix: modifica post
-- fix: modifica commento dopo precedente modifica
-- fix: apertura comunità da link interno ai post
-- enhancement: peso font titolo post
-- enhancement: nascondi punteggi da opzione "formato voti"

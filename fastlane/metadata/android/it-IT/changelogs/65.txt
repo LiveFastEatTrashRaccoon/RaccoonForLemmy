@@ -1,5 +1,0 @@
-- feat: nuova selezione istanza
-- enhancement: caricamento e formato voti in commenti
-- enhancement: miglioramenti alla localizzazione pt-BR
-- fix: apertura link post
-- fix: chiusura e gestione tastiera bottom sheet

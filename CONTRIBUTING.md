@@ -493,7 +493,7 @@ Symbols used in version numbers:
 #### 7.1 Beta releases
 
 - [ ] checkout the `master` branch
-- [ ] increment `versionCode` (ε) and `versionName` (α.β.γ-betaδ) in `composeApp/build.gradle.kts`
+- [ ] increment `versionCode` (ε) and `versionName` (α.β.γ-betaδ) in `androidApp/build.gradle.kts`
 - [ ] add everything to stage and create a commit with the message "version α.β.γ-betaδ"
 - [ ] tag the commit with the label "α.β.γ-betaδ"
 - [ ] push both the commit and tag to `origin`
@@ -502,10 +502,10 @@ Symbols used in version numbers:
 #### 7.2 Stable releases
 
 - [ ] checkout the `master` branch
-- [ ] increment `versionCode` (ε) and `versionName` (α.β.γ) in `composeApp/build.gradle.kts`
+- [ ] increment `versionCode` (ε) and `versionName` (α.β.γ) in `androidApp/build.gradle.kts`
 - [ ] create a file called `ε.txt` under `fastlane/metadata/android/en-US/changelogs/` with the
   change list
-- [ ] _copy_ the changelog file to `res/changelog.txt`
+- [ ] _copy_ the changelog content to `res/changelog.txt` (after the headline)
 - [ ] add everything to stage and create a commit with the message "version α.β.γ"
 - [ ] tag the commit with the label "α.β.γ"
 - [ ] push both the commit and tag to `origin`

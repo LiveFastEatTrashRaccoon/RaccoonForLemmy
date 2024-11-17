@@ -1,6 +1,0 @@
-- feat: preferenze account web
-- feat: gestione ban per account
-- fix: azione di scorrimento per risposta
-- enhancement: sensibilità pulsanti azione
-- enhancement: tempi di caricamento post
-- enhancement: pulizia del codice e miglioramenti di stabilità

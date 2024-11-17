@@ -1,2 +1,0 @@
-- enhancement: mostra solo ultima data di aggiornamento in poste commenti
-- fix: inset barra di navigazione in modalità da margine a margine

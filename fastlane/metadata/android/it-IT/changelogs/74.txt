@@ -1,4 +1,0 @@
-- feat: indicatore post fissati su istanza locale
-- enhancement: impedisce azioni di swipe accidentali durante lo scorrimento
-- fix: gestione scadenza token di autenticazione
-- chore: aggiornamenti dipendenze

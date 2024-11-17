@@ -1,2 +1,0 @@
-- fix: rimosse impostazioni non necessarie per utenti anonimi
-- fix: workaround temporaneo per condivisione immagini

@@ -1,9 +1,0 @@
-- feat: selezione lingua per post e commenti
-- feat: informazioni e statistiche utente
-- feat: collegamento a spazio Matrix
-- fix: apertura cross-post in modalità ospite
-- feat: selezione URL condivisione da modale
-- fix: navigazione da barra laterale
-- feat: supporto a risposte da azione di scorrimento
-- fix: paginazione su Lemmy 0.19.x
-- enhancement: miglioramenti di layout e stabilità

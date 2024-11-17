@@ -1,4 +1,0 @@
-- feat: trascina per riordinare in bottom sheet selezione intanza per utenti anonimi
-- fix: cancellazione post e commenti
-- fix: larghezza barra commenti di default
-- fix: correzioni di minore entità e miglioramenti di stabilità

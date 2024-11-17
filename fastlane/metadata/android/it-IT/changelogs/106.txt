@@ -1,1 +1,0 @@
-- fix: apertura post per utenti anonimi

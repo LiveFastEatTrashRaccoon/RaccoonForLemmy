@@ -1,4 +1,0 @@
-- feat: indicatore OP in elenco commenti
-- feat: indicazione contenuti rimossi
-- feat: paginazione manuale opzionale
-- enhancement: pulizia del codice e miglioramenti di stabilità

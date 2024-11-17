@@ -1,4 +1,3 @@
-<h2>What's Changed</h2>
 - fix: ripple effects (e.g. top bar titles, drawer drop-down button)
 - fix: video rendering in timelines and attachment detail
 - feat: button to reveal sensitive images in timelines

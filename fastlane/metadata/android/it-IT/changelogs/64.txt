@@ -1,6 +1,0 @@
-- fix: limite altezza corpo post
-- fix: visibilità allo scroll barra di navigazione
-- fix: ordinamento dopo navigazione
-- fix: espansione commenti e visibilità spoiler
-- fix: distinzione tra risposte a post e commenti
-- fix: chiusura modal bottom sheet
