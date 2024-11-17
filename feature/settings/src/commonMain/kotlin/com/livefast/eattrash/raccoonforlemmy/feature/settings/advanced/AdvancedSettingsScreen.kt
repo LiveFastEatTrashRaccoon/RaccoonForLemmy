@@ -83,7 +83,7 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 private const val SETTINGS_MIME_TYPE = "application/json"
-private const val SETTINGS_FILE_NAME = "raccoon_settings.json"
+private const val SETTINGS_FILE_NAME = "raccoon4lemmy_settings.json"
 
 class AdvancedSettingsScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
