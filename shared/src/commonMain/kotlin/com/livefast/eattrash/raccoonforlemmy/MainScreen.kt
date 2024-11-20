@@ -62,7 +62,6 @@ internal object MainScreen : Screen {
     @Composable
     override fun Content() {
         val themeRepository = remember { getThemeRepository() }
-        var bottomBarHeightPx by remember { mutableStateOf(0f) }
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val model = getScreenModel<MainMviModel>()
         val uiState by model.uiState.collectAsState()
@@ -71,14 +70,8 @@ internal object MainScreen : Screen {
         val exitMessage = LocalStrings.current.messageConfirmExit
         val drawerCoordinator = remember { getDrawerCoordinator() }
         val notificationCenter = remember { getNotificationCenter() }
-        val bottomNavigationInsetPx =
-            with(LocalDensity.current) {
-                WindowInsets.navigationBars.getBottom(this)
-            }
-        val bottomNavigationInset =
-            with(LocalDensity.current) {
-                bottomNavigationInsetPx.toDp()
-            }
+        var bottomBarHeightPx by remember { mutableStateOf(0f) }
+        val bottomNavigationInsetPx = WindowInsets.navigationBars.getBottom(LocalDensity.current)
         val scope = rememberCoroutineScope()
         val inboxReadAllSuccessMessage = LocalStrings.current.messageReadAllInboxSuccess
         var manageAccountsBottomSheetOpened by remember { mutableStateOf(false) }
@@ -108,7 +101,10 @@ internal object MainScreen : Screen {
                         val delta = available.y
                         val newOffset =
                             (uiState.bottomBarOffsetHeightPx + delta).coerceIn(
-                                -(bottomBarHeightPx + bottomNavigationInsetPx),
+                                // 2 times:
+                                // - once for the actual offset due to the translation amount
+                                // - once for the bottom inset artificially applied to NavigationBar
+                                -(bottomBarHeightPx + bottomNavigationInsetPx) * 2,
                                 0f,
                             )
                         model.reduce(MainMviModel.Intent.SetBottomBarOffsetHeightPx(newOffset))
@@ -192,6 +188,7 @@ internal object MainScreen : Screen {
             }
 
             Scaffold(
+                contentWindowInsets = WindowInsets(0, 0, 0, 0),
                 snackbarHost = {
                     SnackbarHost(snackbarHostState) { data ->
                         Snackbar(
@@ -273,10 +270,10 @@ internal object MainScreen : Screen {
                                         },
                                 windowInsets =
                                     WindowInsets(
-                                        left = 0.dp,
-                                        top = 0.dp,
-                                        right = 0.dp,
-                                        bottom = bottomNavigationInset,
+                                        left = 0,
+                                        top = 0,
+                                        right = 0,
+                                        bottom = bottomNavigationInsetPx,
                                     ),
                                 tonalElevation = 0.dp,
                             ) {
