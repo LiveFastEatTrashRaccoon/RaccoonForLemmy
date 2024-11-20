@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.VideoPlayer
@@ -44,8 +45,9 @@ fun PostCardVideo(
         modifier =
             modifier
                 .fillMaxWidth()
-                .aspectRatio(16 / 9f).clipToBounds(),
-            contentAlignment = Alignment.Center,
+                .aspectRatio(16 / 9f)
+                .clipToBounds(),
+        contentAlignment = Alignment.Center,
     ) {
         if (blurred) {
             Column(
@@ -75,6 +77,7 @@ fun PostCardVideo(
                 VideoPlayer(
                     modifier = Modifier.fillMaxSize(),
                     url = url,
+                    contentScale = ContentScale.Fit,
                 )
 
                 IconButton(
