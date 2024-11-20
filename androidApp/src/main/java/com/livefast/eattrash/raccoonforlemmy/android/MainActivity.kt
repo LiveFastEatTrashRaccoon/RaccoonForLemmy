@@ -6,6 +6,7 @@ import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.livefast.eattrash.raccoonforlemmy.MainView
@@ -22,6 +23,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen().setKeepOnScreenCondition {
             !loadingFinished
         }
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         // manage exit confirmation
@@ -53,10 +55,11 @@ class MainActivity : ComponentActivity() {
                     finish()
                 }
             }
-        navigationCoordinator.exitMessageVisible.onEach { exitMessageVisible ->
-            backPressedCallback.isEnabled = !exitMessageVisible
-            finishBackPressedCallback.isEnabled = exitMessageVisible
-        }.launchIn(lifecycleScope)
+        navigationCoordinator.exitMessageVisible
+            .onEach { exitMessageVisible ->
+                backPressedCallback.isEnabled = !exitMessageVisible
+                finishBackPressedCallback.isEnabled = exitMessageVisible
+            }.launchIn(lifecycleScope)
         onBackPressedDispatcher.addCallback(backPressedCallback)
         onBackPressedDispatcher.addCallback(finishBackPressedCallback)
 

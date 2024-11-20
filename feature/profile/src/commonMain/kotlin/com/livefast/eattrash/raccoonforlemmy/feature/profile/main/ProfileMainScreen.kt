@@ -94,6 +94,7 @@ internal object ProfileMainScreen : Tab {
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
+        val connection = navigationCoordinator.getBottomBarScrollConnection()
         val scope = rememberCoroutineScope()
         val notificationCenter = remember { getNotificationCenter() }
         val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
@@ -232,6 +233,12 @@ internal object ProfileMainScreen : Tab {
                             top = padding.calculateTopPadding(),
                         ).nestedScroll(fabNestedScrollConnection)
                         .then(
+                            if (connection != null && settings.hideNavigationBarWhileScrolling) {
+                                Modifier.nestedScroll(connection)
+                            } else {
+                                Modifier
+                            },
+                        ).then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                             } else {
