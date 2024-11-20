@@ -71,6 +71,7 @@ object InboxScreen : Tab {
         val settingsRepository = remember { getSettingsRepository() }
         val settings by settingsRepository.currentSettings.collectAsState()
         val scope = rememberCoroutineScope()
+        val connection = navigationCoordinator.getBottomBarScrollConnection()
         val notificationCenter = remember { getNotificationCenter() }
         var inboxTypeBottomSheetOpened by remember { mutableStateOf(false) }
         val inboxReadAllSuccessMessage = LocalStrings.current.messageReadAllInboxSuccess
@@ -173,6 +174,12 @@ object InboxScreen : Tab {
                             Modifier
                                 .padding(
                                     top = padding.calculateTopPadding(),
+                                ).then(
+                                    if (connection != null && settings.hideNavigationBarWhileScrolling) {
+                                        Modifier.nestedScroll(connection)
+                                    } else {
+                                        Modifier
+                                    },
                                 ).then(
                                     if (settings.hideNavigationBarWhileScrolling) {
                                         Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
