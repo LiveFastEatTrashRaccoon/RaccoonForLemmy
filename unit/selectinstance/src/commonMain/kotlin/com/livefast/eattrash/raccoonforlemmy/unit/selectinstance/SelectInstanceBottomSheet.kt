@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -100,14 +102,13 @@ fun SelectInstanceBottomSheet(
     }
 
     ModalBottomSheet(
+        contentWindowInsets = { WindowInsets.navigationBars },
         sheetState = state,
         onDismissRequest = {
             onSelected?.invoke(null)
         },
     ) {
-        Column(
-            modifier = Modifier.padding(bottom = Spacing.xl),
-        ) {
+        Column {
             Box(
                 modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
             ) {
