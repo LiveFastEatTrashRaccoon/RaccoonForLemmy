@@ -1,0 +1,4 @@
+- fix: change video scale mode in timelines
+- fix: settings screen state default values
+- refactor: navigation bar insets
+- chore: update dependencies

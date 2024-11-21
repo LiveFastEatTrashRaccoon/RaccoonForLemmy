@@ -1,10 +1,8 @@
 ## What's Changed
 
-- fix: ripple effects (e.g. top bar titles, drawer drop-down button)
-- fix: video rendering in timelines and attachment detail
-- feat: button to reveal sensitive images in timelines
-- enhancement: update "Saved" label for bookmarks
-- enhancement: update font scale factors
-- enhancement: change default name of settings JSON when exporting
-- chore: dependency updates (most notably, Compose Multiplatform 1.7.1)
-- chore: update CODE_OF_CONDUCT.md, SECURITY.md and PRIVACY.md
+- fix: change video scale mode in timelines by @AkesiSeli in #118
+- fix: settings screen state default values by @AkesiSeli in #117
+- refactor: navigation bar insets  by @AkesiSeli in #113
+- chore: update dependencies by @AkesiSeli and @dependabot in #110, #111, #119
+
+**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.0...1.13.1
