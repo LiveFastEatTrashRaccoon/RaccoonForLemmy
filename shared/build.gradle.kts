@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlinx.kover)
 }
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -141,5 +141,5 @@ android {
     }
 }
 dependencies {
-    implementation(project(":core:utils"))
+    implementation(projects.core.utils)
 }

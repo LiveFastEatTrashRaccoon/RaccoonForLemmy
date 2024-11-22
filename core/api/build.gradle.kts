@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.ktorfit)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.serialization)
-    alias(libs.plugins.detekt)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)

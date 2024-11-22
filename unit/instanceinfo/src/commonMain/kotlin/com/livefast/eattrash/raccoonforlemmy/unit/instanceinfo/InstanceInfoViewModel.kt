@@ -1,13 +1,13 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.instanceinfo
 
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.flow.launchIn

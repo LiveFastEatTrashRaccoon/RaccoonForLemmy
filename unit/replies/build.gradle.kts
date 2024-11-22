@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.detekt)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -71,8 +70,14 @@ kotlin {
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.unit.replies"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }

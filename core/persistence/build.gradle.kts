@@ -1,4 +1,3 @@
-import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -7,8 +6,8 @@ plugins {
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.detekt)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.kotlinx.kover)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -72,9 +71,15 @@ kotlin {
 
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.core.persistence"
-    compileSdk = libs.versions.android.targetSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.targetSdk
+            .get()
+            .toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
 }
 
@@ -86,11 +91,4 @@ sqldelight {
         }
     }
     linkSqlite = true
-}
-
-allprojects {
-    tasks.withType<Detekt> {
-        setSource(files(project.projectDir))
-        exclude("*")
-    }
 }
