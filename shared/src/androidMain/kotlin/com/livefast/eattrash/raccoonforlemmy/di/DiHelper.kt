@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.di
 
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.di.paginationModule
 import com.livefast.eattrash.raccoonforlemmy.core.api.di.coreApiModule
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.coreAppearanceModule
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.lemmyUiModule
@@ -22,6 +21,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.di.shareHelperModule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.utilsModule
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.coreIdentityModule
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.di.domainInboxModule
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.di.paginationModule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.di.repositoryModule
 import com.livefast.eattrash.raccoonforlemmy.feature.home.di.homeTabModule
 import com.livefast.eattrash.raccoonforlemmy.feature.inbox.di.inboxTabModule

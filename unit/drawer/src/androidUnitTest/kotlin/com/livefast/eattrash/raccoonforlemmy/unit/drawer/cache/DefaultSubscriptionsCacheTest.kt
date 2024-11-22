@@ -1,11 +1,11 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.drawer.cache
 
 import app.cash.turbine.test
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

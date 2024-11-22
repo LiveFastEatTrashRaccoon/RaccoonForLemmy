@@ -1,9 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.communitydetail
 
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostNavigationManager
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostPaginationManager
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
@@ -29,6 +26,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.imageUrl
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toSortType
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostNavigationManager
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostPaginationManager
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyItemCache

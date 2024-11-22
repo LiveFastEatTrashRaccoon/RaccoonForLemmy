@@ -1,8 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.drawer
 
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toTabNavigationSections
@@ -15,6 +13,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.MultiCo
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.cache.SubscriptionsCache

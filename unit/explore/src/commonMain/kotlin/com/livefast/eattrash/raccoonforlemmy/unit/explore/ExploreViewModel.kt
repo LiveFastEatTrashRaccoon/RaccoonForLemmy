@@ -1,8 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.explore
 
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.ExplorePaginationManager
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.ExplorePaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
@@ -23,6 +21,8 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.imageUrl
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toSearchResultType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toSortType
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.ExplorePaginationManager
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.ExplorePaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase

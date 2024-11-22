@@ -1,8 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions
 
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
-import com.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -15,6 +13,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Setting
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
