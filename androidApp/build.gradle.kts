@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlinx.kover)
 }
 
 android {
@@ -98,4 +98,47 @@ dependencies {
     implementation(projects.core.utils)
     implementation(projects.core.navigation)
     implementation(projects.core.resources)
+
+    kover(projects.shared)
+    kover(projects.core.appearance)
+    kover(projects.core.commonui.detailopenerImpl)
+    kover(projects.core.navigation)
+    kover(projects.core.notifications)
+    kover(projects.core.persistence)
+    kover(projects.core.preferences)
+    kover(projects.core.utils)
+    kover(projects.domain.identity)
+    kover(projects.domain.inbox)
+    kover(projects.domain.lemmy.repository)
+    kover(projects.domain.lemmy.pagination)
+    kover(projects.feature.inbox)
+    kover(projects.feature.profile)
+}
+
+kover {
+    reports {
+        filters {
+            excludes {
+                androidGeneratedClasses()
+                packages(
+                    "*.resources",
+                    "*.di",
+                    "*.entities.*",
+                    "*.utils.appicon",
+                    "*.utils.compose",
+                    "*.utils.datetime",
+                    "*.utils.debug",
+                    "*.utils.fs",
+                    "*.utils.gallery",
+                    "*.utils.imageupload",
+                    "*.utils.keepscreenon",
+                    "*.utils.network",
+                    "*.utils.share",
+                    "*.utils.texttoolbar",
+                    "*.utils.url",
+                    "*.utils.vibrate",
+                )
+            }
+        }
+    }
 }
