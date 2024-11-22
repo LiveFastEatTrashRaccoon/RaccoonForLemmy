@@ -12,12 +12,12 @@ coil = "3.0.3"
 colorpicker = "1.1.2"
 compose = "1.7.1"
 compose-multiplatform-media-player = "1.0.26"
-detekt = "1.23.7"
 koin = "4.0.0"
 kotlin = "2.0.21"
 kotlincrypto = "0.5.3"
 kotlinx-coroutines = "1.9.0"
 kotlinx-serialization-json = "1.7.3"
+kover = "0.9.0-RC"
 ksp = "2.0.21-1.0.28"
 ktor = "3.0.1"
 ktorfit = "2.2.0"
@@ -117,11 +117,10 @@ android-library = { id = "com.android.library", version.ref = "android-gradle" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
