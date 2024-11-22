@@ -31,9 +31,20 @@ jobs:
           echo $ENCODED_STRING > keystore-b64.txt
           base64 -d keystore-b64.txt > androidApp/keystore.jks
 
-      - name: Build
+      - name: Run unit tests
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: ./gradlew testDebugUnitTest
+
+      - name: Generate code coverage
+        run: ./gradlew androidApp:koverXmlReportDebug
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./androidApp/build/reports/kover/reportDebug.xml
+          flags: unittests
+          name: raccoon4lemmy
+          token: ${{ secrets.CODECOV_TOKEN }}
