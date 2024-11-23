@@ -120,23 +120,29 @@ kover {
         filters {
             excludes {
                 androidGeneratedClasses()
+                classes(
+                    "*Entity",
+                    "*Queries",
+                )
                 packages(
                     "*.resources",
                     "*.di",
                     "*.entities.*",
-                    "*.utils.appicon",
-                    "*.utils.compose",
-                    "*.utils.datetime",
-                    "*.utils.debug",
-                    "*.utils.fs",
-                    "*.utils.gallery",
-                    "*.utils.imageupload",
-                    "*.utils.keepscreenon",
-                    "*.utils.network",
-                    "*.utils.share",
-                    "*.utils.texttoolbar",
-                    "*.utils.url",
-                    "*.utils.vibrate",
+                    "*.core.persistence.entities",
+                    "*.core.utils.appicon",
+                    "*.core.utils.compose",
+                    "*.core.utils.datetime",
+                    "*.core.utils.debug",
+                    "*.core.utils.fs",
+                    "*.core.utils.gallery",
+                    "*.core.utils.imageload",
+                    "*.core.utils.keepscreenon",
+                    "*.core.utils.network",
+                    "*.core.utils.share",
+                    "*.core.utils.texttoolbar",
+                    "*.core.utils.url",
+                    "*.core.utils.vibrate",
+                    "*.domain.inbox.notification",
                 )
             }
         }
