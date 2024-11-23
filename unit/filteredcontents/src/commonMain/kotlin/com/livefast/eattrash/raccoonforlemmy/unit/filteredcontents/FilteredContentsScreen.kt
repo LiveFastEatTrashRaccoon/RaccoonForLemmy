@@ -333,6 +333,7 @@ class FilteredContentsScreen(
                     item {
                         if (!uiState.isPostOnly) {
                             SectionSelector(
+                                modifier = Modifier.padding(vertical = Spacing.s),
                                 titles =
                                     listOf(
                                         LocalStrings.current.profileSectionPosts,
