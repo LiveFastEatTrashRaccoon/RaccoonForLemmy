@@ -80,7 +80,9 @@ fun ManageAccountsBottomSheet(
             onDismiss?.invoke(false)
         },
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(bottom = Spacing.xs),
+        ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,

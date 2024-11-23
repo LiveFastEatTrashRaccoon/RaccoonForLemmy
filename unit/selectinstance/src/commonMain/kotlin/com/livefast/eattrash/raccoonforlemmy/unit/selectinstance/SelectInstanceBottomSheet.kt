@@ -108,7 +108,9 @@ fun SelectInstanceBottomSheet(
             onSelected?.invoke(null)
         },
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(bottom = Spacing.xs),
+        ) {
             Box(
                 modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
             ) {

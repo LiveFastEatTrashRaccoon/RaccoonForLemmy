@@ -67,7 +67,9 @@ fun SortBottomSheet(
             onSelected?.invoke(null)
         },
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(bottom = Spacing.xs),
+        ) {
             var level by remember { mutableStateOf<SortBottomSheetLevel>(SortBottomSheetLevel.Main) }
             Crossfade(
                 targetState = level,
