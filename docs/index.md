@@ -155,10 +155,13 @@ A special thanks goes to all those who contributed so far (in nearly chronologic
 - [Tmpod](https://github.com/Tmpod)
 - [u/cloudless](https://lemmy.cafe/u/cloudless)
 - [u/squirrel](https://discuss.tchncs.de/u/squirrel)
+- [N7-X](https://github.com/N7-X)
 - [gallegonovato](https://hosted.weblate.org/user/gallegonovato)
 - [Edanas](https://hosted.weblate.org/user/Edanas)
 - [u/sag](https://lemm.ee/u/sag)
 - [u/am41](https://sh.itjust.works/u/am41)
+- [aindriu80](https://github.com/aindriu80)
+- [monstorix](https://hosted.weblate.org/user/monstorix)
 - all those who reported feedback and ideas through the Lemmy community, GitHub issues, emails,
   private messages, homing pigeons and every other imaginable media.
 
