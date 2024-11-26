@@ -35,6 +35,7 @@ class MediaListViewModel(
                 .onEach { settings ->
                     updateState {
                         it.copy(
+                            autoloadImages = settings.autoLoadImages,
                             fullHeightImages = settings.fullHeightImages,
                             fullWidthImages = settings.fullWidthImages,
                         )
