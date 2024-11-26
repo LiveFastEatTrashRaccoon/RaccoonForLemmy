@@ -148,6 +148,7 @@ class MediaListScreen : Screen {
                             media = media,
                             instance = uiState.currentInstance,
                             postLayout = uiState.postLayout,
+                            autoloadImages = uiState.autoloadImages,
                             fullWidthImage = uiState.fullWidthImages,
                             fullHeightImage = uiState.fullHeightImages,
                             onOpenFullScreen = { url ->

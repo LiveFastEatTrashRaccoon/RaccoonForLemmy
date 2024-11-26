@@ -44,9 +44,9 @@ fun PostCardImage(
     modifier: Modifier = Modifier,
     imageUrl: String,
     autoLoadImages: Boolean = true,
+    contentScale: ContentScale = ContentScale.FillWidth,
     loadButtonContent: @Composable (() -> Unit)? = null,
     minHeight: Dp = 200.dp,
-    maxHeight: Dp = Dp.Unspecified,
     blurred: Boolean = false,
     onImageClick: ((String) -> Unit)? = null,
     onDoubleClick: (() -> Unit)? = null,
@@ -60,7 +60,7 @@ fun PostCardImage(
         modifier =
             modifier
                 .fillMaxWidth()
-                .heightIn(min = minHeight, max = maxHeight)
+                .heightIn(min = minHeight)
                 .onClick(
                     onDoubleClick = onDoubleClick ?: {},
                 ),
@@ -83,7 +83,7 @@ fun PostCardImage(
             autoload = autoLoadImages,
             blurred = !revealing,
             loadButtonContent = loadButtonContent,
-            contentScale = ContentScale.FillWidth,
+            contentScale = contentScale,
             onFailure = {
                 Text(
                     modifier = Modifier.fillMaxWidth(),

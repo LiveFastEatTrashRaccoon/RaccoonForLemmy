@@ -33,7 +33,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
@@ -58,6 +57,7 @@ internal fun MediaItem(
     instance: String,
     modifier: Modifier = Modifier,
     postLayout: PostLayout = PostLayout.Card,
+    autoloadImages: Boolean = true,
     fullHeightImage: Boolean = true,
     fullWidthImage: Boolean = false,
     options: List<Option> = emptyList(),
@@ -128,9 +128,8 @@ internal fun MediaItem(
                                     Modifier.heightIn(max = 200.dp)
                                 },
                             ),
-                    minHeight = Dp.Unspecified,
-                    maxHeight = Dp.Unspecified,
                     imageUrl = url,
+                    autoLoadImages = autoloadImages,
                     loadButtonContent = @Composable {
                         Icon(imageVector = Icons.Default.Download, contentDescription = null)
                     },

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -30,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
@@ -296,34 +296,39 @@ private fun CompactPost(
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
                     )
                 } else {
-                    CustomizedContent(ContentFontClass.Title) {
-                        PostCardTitle(
-                            modifier = Modifier.weight(0.75f),
-                            text = post.title,
-                            autoLoadImages = autoLoadImages,
-                            markRead = markRead,
-                            highlightText = highlightText,
-                            onClick = {
-                                if (textSelection) {
-                                    focusManager.clearFocus(true)
-                                    textSelection = false
-                                } else {
-                                    onClick?.invoke()
-                                }
-                            },
-                            onOpenImage = onOpenImage,
-                            onDoubleClick = onDoubleClick,
-                            onLongClick = {
-                                textSelection = true
-                            },
-                        )
+                    val titleWeight = 0.6f
+                    Box(
+                        modifier = Modifier.weight(titleWeight),
+                    ) {
+                        CustomizedContent(ContentFontClass.Title) {
+                            PostCardTitle(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = post.title,
+                                autoLoadImages = autoLoadImages,
+                                markRead = markRead,
+                                highlightText = highlightText,
+                                onClick = {
+                                    if (textSelection) {
+                                        focusManager.clearFocus(true)
+                                        textSelection = false
+                                    } else {
+                                        onClick?.invoke()
+                                    }
+                                },
+                                onOpenImage = onOpenImage,
+                                onDoubleClick = onDoubleClick,
+                                onLongClick = {
+                                    textSelection = true
+                                },
+                            )
+                        }
                     }
 
                     if (post.videoUrl.isNotEmpty()) {
                         PostCardVideo(
                             modifier =
                                 Modifier
-                                    .weight(0.25f)
+                                    .weight(1 - titleWeight)
                                     .padding(vertical = Spacing.xxs),
                             url = post.videoUrl,
                             blurred = blurNsfw && post.nsfw,
@@ -343,19 +348,20 @@ private fun CompactPost(
                         PostCardImage(
                             modifier =
                                 Modifier
-                                    .weight(0.25f)
+                                    .weight(1 - titleWeight)
+                                    .padding(vertical = Spacing.xs)
+                                    .clip(RoundedCornerShape(CornerSize.l))
                                     .then(
                                         if (fullHeightImage) {
                                             Modifier
                                         } else {
-                                            Modifier.aspectRatio(1f)
+                                            Modifier.heightIn(max = 200.dp)
                                         },
-                                    ).padding(vertical = Spacing.xs)
-                                    .clip(RoundedCornerShape(CornerSize.s)),
-                            minHeight = Dp.Unspecified,
-                            maxHeight = Dp.Unspecified,
+                                    ),
                             imageUrl = post.imageUrl,
+                            contentScale = ContentScale.Crop,
                             autoLoadImages = autoLoadImages,
+                            minHeight = Dp.Unspecified,
                             loadButtonContent = @Composable {
                                 Icon(
                                     imageVector = Icons.Default.Download,
@@ -602,6 +608,7 @@ private fun ExtendedPost(
                                     },
                                 ),
                         imageUrl = post.imageUrl,
+                        autoLoadImages = autoLoadImages,
                         blurred = blurNsfw && post.nsfw,
                         onImageClick = { url ->
                             if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
@@ -611,7 +618,6 @@ private fun ExtendedPost(
                             }
                         },
                         onDoubleClick = onDoubleClick,
-                        autoLoadImages = autoLoadImages,
                     )
                 }
 

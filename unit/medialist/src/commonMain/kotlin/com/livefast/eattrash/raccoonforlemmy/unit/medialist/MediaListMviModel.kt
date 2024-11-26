@@ -13,7 +13,9 @@ interface MediaListMviModel :
 
         data object LoadNextPage : Intent
 
-        data class Delete(val media: MediaModel) : Intent
+        data class Delete(
+            val media: MediaModel,
+        ) : Intent
     }
 
     data class State(
@@ -24,6 +26,7 @@ interface MediaListMviModel :
         val media: List<MediaModel> = emptyList(),
         val currentInstance: String = "",
         val postLayout: PostLayout = PostLayout.Card,
+        val autoloadImages: Boolean = true,
         val fullHeightImages: Boolean = true,
         val fullWidthImages: Boolean = false,
     )
@@ -31,6 +34,8 @@ interface MediaListMviModel :
     sealed interface Effect {
         data object Success : Effect
 
-        data class Failure(val message: String?) : Effect
+        data class Failure(
+            val message: String?,
+        ) : Effect
     }
 }
