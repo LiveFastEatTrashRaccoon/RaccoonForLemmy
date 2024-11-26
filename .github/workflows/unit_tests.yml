@@ -44,7 +44,7 @@ jobs:
       - name: Upload coverage
         uses: codecov/codecov-action@v5
         with:
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           files: ./androidApp/build/reports/kover/reportDebug.xml
           flags: unittests
           name: raccoon4lemmy
