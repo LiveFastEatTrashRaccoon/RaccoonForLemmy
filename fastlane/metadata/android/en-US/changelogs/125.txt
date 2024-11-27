@@ -1,0 +1,4 @@
+- fix: images in timelines with post cards with "Compact" layout
+- fix: Markdown rendering of list in quotes
+- fix: add missing insets in modals and below section selectors
+- chore: update dependencies

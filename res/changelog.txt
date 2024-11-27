@@ -1,8 +1,8 @@
 ## What's Changed
 
-- fix: change video scale mode in timelines by @AkesiSeli in #118
-- fix: settings screen state default values by @AkesiSeli in #117
-- refactor: navigation bar insets  by @AkesiSeli in #113
-- chore: update dependencies by @AkesiSeli and @dependabot in #110, #111, #119
+- fix: images in timelines with post cards with "Compact" layout by @AkesiSeli in #124
+- fix: Markdown rendering of list in quotes by @AkesiSeli in #122
+- fix: add missing insets in modals and below section selectors by @AkesiSeli in #121
+- chore: update dependencies by @dependabot in #123
 
-**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.0...1.13.1
+**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.1...1.13.2
