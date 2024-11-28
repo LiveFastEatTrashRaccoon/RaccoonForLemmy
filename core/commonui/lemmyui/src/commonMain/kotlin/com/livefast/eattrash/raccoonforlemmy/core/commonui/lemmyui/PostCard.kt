@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -161,7 +161,6 @@ fun PostCard(
                 highlightText = highlightText,
                 voteFormat = voteFormat,
                 autoLoadImages = autoLoadImages,
-                fullHeightImage = fullHeightImage,
                 preferNicknames = preferNicknames,
                 showScores = showScores,
                 actionButtonsActive = actionButtonsActive,
@@ -190,7 +189,6 @@ private fun CompactPost(
     post: PostModel,
     isFromModerator: Boolean,
     autoLoadImages: Boolean,
-    fullHeightImage: Boolean,
     preferNicknames: Boolean,
     showScores: Boolean,
     hideAuthor: Boolean,
@@ -271,6 +269,7 @@ private fun CompactPost(
                 featuredLocal = post.featuredLocal,
                 locked = post.locked,
                 markRead = markRead,
+                compact = true,
                 isFromModerator = isFromModerator,
                 onOpenCommunity = { community ->
                     onOpenCommunity?.invoke(community, "")
@@ -296,9 +295,8 @@ private fun CompactPost(
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
                     )
                 } else {
-                    val titleWeight = 0.6f
                     Box(
-                        modifier = Modifier.weight(titleWeight),
+                        modifier = Modifier.weight(COMPACT_POST_TITLE_WEIGHT),
                     ) {
                         CustomizedContent(ContentFontClass.Title) {
                             PostCardTitle(
@@ -328,8 +326,9 @@ private fun CompactPost(
                         PostCardVideo(
                             modifier =
                                 Modifier
-                                    .weight(1 - titleWeight)
-                                    .padding(vertical = Spacing.xxs),
+                                    .weight(1 - COMPACT_POST_TITLE_WEIGHT)
+                                    .padding(vertical = Spacing.xxs)
+                                    .aspectRatio(1f),
                             url = post.videoUrl,
                             blurred = blurNsfw && post.nsfw,
                             autoLoadImages = autoLoadImages,
@@ -348,16 +347,10 @@ private fun CompactPost(
                         PostCardImage(
                             modifier =
                                 Modifier
-                                    .weight(1 - titleWeight)
+                                    .weight(1 - COMPACT_POST_TITLE_WEIGHT)
                                     .padding(vertical = Spacing.xs)
                                     .clip(RoundedCornerShape(CornerSize.l))
-                                    .then(
-                                        if (fullHeightImage) {
-                                            Modifier
-                                        } else {
-                                            Modifier.heightIn(max = 200.dp)
-                                        },
-                                    ),
+                                    .aspectRatio(1f),
                             imageUrl = post.imageUrl,
                             contentScale = ContentScale.Crop,
                             autoLoadImages = autoLoadImages,
@@ -600,16 +593,12 @@ private fun ExtendedPost(
                                     } else {
                                         Modifier
                                     },
-                                ).then(
-                                    if (fullHeightImage) {
-                                        Modifier
-                                    } else {
-                                        Modifier.heightIn(max = 200.dp)
-                                    },
                                 ),
                         imageUrl = post.imageUrl,
                         autoLoadImages = autoLoadImages,
                         blurred = blurNsfw && post.nsfw,
+                        contentScale = if (fullHeightImage) ContentScale.FillWidth else ContentScale.Crop,
+                        maxHeight = if (fullHeightImage) Dp.Unspecified else EXTENDED_POST_MAX_HEIGHT,
                         onImageClick = { url ->
                             if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
                                 uriHandler.openUri(postLinkUrl)
@@ -716,3 +705,6 @@ private fun ExtendedPost(
         }
     }
 }
+
+private const val COMPACT_POST_TITLE_WEIGHT = 0.85f
+private val EXTENDED_POST_MAX_HEIGHT = 200.dp
