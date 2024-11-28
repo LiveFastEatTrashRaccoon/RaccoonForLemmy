@@ -58,13 +58,6 @@ fun PostCardPlaceholder(
                                     .clip(RoundedCornerShape(CornerSize.m))
                                     .shimmerEffect(),
                         )
-                        Box(
-                            modifier =
-                                Modifier.height(IconSize.s)
-                                    .fillMaxWidth(0.5f)
-                                    .clip(RoundedCornerShape(CornerSize.m))
-                                    .shimmerEffect(),
-                        )
                     }
                 }
                 Row(
@@ -152,7 +145,7 @@ fun PostCardPlaceholder(
                 Box(
                     modifier =
                         Modifier
-                            .height(200.dp)
+                            .height(EXTENDED_POST_MAX_HEIGHT)
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(CornerSize.s))
                             .shimmerEffect(),
@@ -215,7 +208,7 @@ fun PostCardPlaceholder(
                 Box(
                     modifier =
                         Modifier
-                            .height(200.dp)
+                            .height(EXTENDED_POST_MAX_HEIGHT)
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(CornerSize.s))
                             .shimmerEffect(),
@@ -234,3 +227,5 @@ fun PostCardPlaceholder(
         else -> Unit
     }
 }
+
+private val EXTENDED_POST_MAX_HEIGHT = 200.dp
