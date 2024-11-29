@@ -25,6 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
@@ -64,6 +67,7 @@ fun CommunityAndCreatorInfo(
     isMod: Boolean = false,
     isAdmin: Boolean = false,
     markRead: Boolean = false,
+    compact: Boolean = false,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
     onOpenCreator: ((UserModel) -> Unit)? = null,
     onToggleExpanded: (() -> Unit)? = null,
@@ -158,18 +162,36 @@ fun CommunityAndCreatorInfo(
                             Modifier
                                 .onClick(
                                     indication = null,
-                                    onClick = {
-                                        onOpenCommunity?.invoke(community)
-                                    },
                                     onDoubleClick = onDoubleClick ?: {},
                                     onLongClick = onLongClick ?: {},
                                 ),
-                        text = communityName,
+                        text = buildAnnotatedString {
+                            pushLink(
+                                LinkAnnotation.Clickable("click-community") {
+                                    onOpenCommunity?.invoke(community)
+                                },
+                            )
+                            append(communityName)
+                            pop()
+                            if (compact && creator != null) {
+                                append(" • ")
+                                pushLink(
+                                    LinkAnnotation.Clickable("click-user") {
+                                        onOpenCreator?.invoke(creator)
+                                    },
+                                )
+                                pushStyle(SpanStyle(color = ancillaryColor))
+                                append(creatorName)
+                                pop()
+                                pop()
+                            }
+                        },
                         style = MaterialTheme.typography.bodySmall,
                         color = if (creator == null) ancillaryColor else fullColor,
+                        maxLines = 1,
                     )
                 }
-                if (creator != null) {
+                if (creator != null && !compact) {
                     Text(
                         modifier =
                             Modifier
@@ -184,6 +206,7 @@ fun CommunityAndCreatorInfo(
                         text = creatorName,
                         style = MaterialTheme.typography.bodySmall,
                         color = ancillaryColor,
+                        maxLines = 1,
                     )
                 }
             }
