@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="badge for Kotlin" src="https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?logo=kotlin" />
+  <img alt="badge for Kotlin" src="https://img.shields.io/badge/Kotlin-2.1.0-7F52FF?logo=kotlin" />
   <img alt="badge for Gradle" src="https://img.shields.io/badge/Gradle-8.8-02303A?logo=gradle" />
   <img alt="badge for Android" src="https://img.shields.io/badge/Android-26+-34A853?logo=android" />
   <img alt="badge for Compose Multiplatform" src="https://img.shields.io/badge/Compose-1.7.1-4285F4?logo=jetpackcompose" />
