@@ -1,10 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.android
 
 import android.app.Application
-
 import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.CrashReportConfiguration
 import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.CrashReportWriter
-import com.livefast.eattrash.raccoonforlemmy.di.sharedHelperModule
+import com.livefast.eattrash.raccoonforlemmy.di.rootModule
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -17,9 +16,7 @@ class MainApplication : Application() {
         startKoin {
             androidContext(this@MainApplication)
             androidLogger()
-            modules(
-                sharedHelperModule,
-            )
+            modules(rootModule)
         }.apply {
             val crashReportWriter: CrashReportWriter by inject()
             val crashReportConfig: CrashReportConfiguration by inject()

@@ -9,15 +9,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.coreNotificat
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.corePersistenceModule
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.di.coreAppConfigModule
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.di.corePreferencesModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.appIconModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.appInfoModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.crashReportModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.customTabsModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.fileSystemModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.galleryHelperModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.hapticFeedbackModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.networkModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.shareHelperModule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.utilsModule
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.coreIdentityModule
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.di.domainInboxModule
@@ -59,7 +50,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.di.userInfoModule
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.di.zoomableImageModule
 import org.koin.dsl.module
 
-val sharedHelperModule =
+val rootModule =
     module {
         includes(
             internalSharedModule,
@@ -71,14 +62,9 @@ val sharedHelperModule =
             coreL10nModule,
             coreNotificationModule,
             corePersistenceModule,
-            hapticFeedbackModule,
-            shareHelperModule,
-            galleryHelperModule,
-            crashReportModule,
             repositoryModule,
             utilsModule,
             domainInboxModule,
-            networkModule,
             coreNavigationModule,
             lemmyUiModule,
             homeTabModule,
@@ -111,15 +97,11 @@ val sharedHelperModule =
             filteredContentsModule,
             editCommunityModule,
             licenceModule,
-            appIconModule,
-            fileSystemModule,
             coreResourceModule,
             paginationModule,
-            customTabsModule,
             moderateWithReasonModule,
             acknowledgementsModule,
             mediaListModule,
             configureNavBarModule,
-            appInfoModule,
         )
     }

@@ -8,22 +8,41 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode.DefaultZombie
 import com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode.ZombieModeHelper
 import org.koin.dsl.module
 
+private val imageLoadModule = module {
+    single<ImageLoaderProvider> {
+        DefaultImageLoaderProvider(
+            context = get(),
+            fileSystemManager = get(),
+        )
+    }
+
+    single<ImagePreloadManager> {
+        DefaultImagePreloadManager(
+            context = get(),
+            imageLoaderProvider = get(),
+        )
+    }
+}
+
+private val zombieModeModule = module {
+    factory<ZombieModeHelper> {
+        DefaultZombieModeHelper()
+    }
+}
+
 val utilsModule =
     module {
-        factory<ZombieModeHelper> {
-            DefaultZombieModeHelper()
-        }
-        single<ImageLoaderProvider> {
-            DefaultImageLoaderProvider(
-                context = get(),
-                fileSystemManager = get(),
-            )
-        }
-
-        single<ImagePreloadManager> {
-            DefaultImagePreloadManager(
-                context = get(),
-                imageLoaderProvider = get(),
-            )
-        }
+        includes(
+            appIconModule,
+            appInfoModule,
+            crashReportModule,
+            customTabsModule,
+            fileSystemModule,
+            galleryHelperModule,
+            hapticFeedbackModule,
+            imageLoadModule,
+            networkModule,
+            shareHelperModule,
+            zombieModeModule,
+        )
     }
