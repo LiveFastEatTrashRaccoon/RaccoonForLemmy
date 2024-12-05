@@ -80,7 +80,7 @@ kotlin {
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.unit.userdetail"
     compileSdk =
-        libs.versions.android.targetSdk
+        libs.versions.android.compileSdk
             .get()
             .toInt()
     defaultConfig {
