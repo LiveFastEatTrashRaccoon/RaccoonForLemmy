@@ -59,7 +59,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.di.userInfoModule
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.di.zoomableImageModule
 import org.koin.dsl.module
 
-val sharedHelperModule =
+val rootModule =
     module {
         includes(
             internalSharedModule,
