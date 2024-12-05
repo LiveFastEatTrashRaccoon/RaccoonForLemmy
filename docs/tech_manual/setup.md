@@ -1,20 +1,25 @@
 ## Setting up the development environment
 
 This is a Kotlin Multiplatform (KMP) project that uses the Gradle build tool. The recommended
-development environment is Android Studio with the Kotlin Multiplatform Mobile plugin installed.
-Since the project is using Gradle 8.8 with the Android Gradle Plugin (AGP) version 8.5.0 you
-should use Android Studio Koala or later (have a
+development environment is Android Studio with the Kotlin Multiplatform plugin installed.
+
+Since the project is using Gradle 8.10.2 with the Android Gradle Plugin (AGP) version 8.7.2 you
+should use Android Studio Ladybug or later (have a
 look [here](https://developer.android.com/build/releases/gradle-plugin?hl=en#android_gradle_plugin_and_android_studio_compatibility)
-for a compatibility matrix between versions of Gradle, AGP and Android Studio).
+for a compatibility matrix between versions of Gradle, AGP and Android Studio)
+and [here](https://kotlinlang.org/docs/multiplatform-compatibility-guide.html) for the
+compatibility between the Kotlin Multiplatform plugin, Kotlin, Gradle and AGP.
 Alternatively, you can try and use IntelliJ IDEA or Fleet but some extra steps may be needed to
 ensure everything fits and runs together.
 
 In order for Gradle to build, you will need to have a JDK installed on your local development
-machine, if you are using stock Android Studio it ships with the JetBrains runtime, you could have a
-look in the Settings dialog under the section "Build, Execution, Deployment > Build Tools > Gradle"
-in the "Gradle JDK" location drop-down menu. If you want to use your custom JDK (e.g. under Linux
-you want to try OpenJDK instead), please make sure that it has a suitable version, according
-to [this page](https://docs.gradle.org/current/userguide/compatibility.html), so between 8 and 21.
+machine, if you are using stock Android Studio it ships with the default JetBrains runtime, you
+could have a look in the Settings dialog under the section "Build, Execution, Deployment > Build
+Tools > Gradle"in the "Gradle JDK" location drop-down menu.
+
+If you want to use your custom JDK (e.g. under Linux you want to try OpenJDK instead), please make
+sure that it has a suitable version, according
+to [this page](https://docs.gradle.org/current/userguide/compatibility.html).
 
 Finally, since building this project requires a quite lot of RAM due to its multi-module structure
 and to the fact that it is quite a complex project, please make sure that the `gradle.properties`
@@ -26,6 +31,7 @@ org.gradle.jvmargs=-Xmx4096M -Dfile.encoding=UTF-8 -Dkotlin.daemon.jvm.options\=
 
 The first thing that Android Studio does upon first opening the project is a Gradle sync, this may
 take some time since at the beginning it has to download all the dependencies and build the cache.
+
 A Gradle sync is required every time:
 
 - the Gradle wrapper is updated or some Gradle plugins are updated to a newer version;

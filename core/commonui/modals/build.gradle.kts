@@ -63,7 +63,7 @@ kotlin {
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.core.commonui.modals"
     compileSdk =
-        libs.versions.android.targetSdk
+        libs.versions.android.compileSdk
             .get()
             .toInt()
     defaultConfig {

@@ -66,7 +66,7 @@ kotlin {
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions"
     compileSdk =
-        libs.versions.android.targetSdk
+        libs.versions.android.compileSdk
             .get()
             .toInt()
     defaultConfig {

@@ -44,7 +44,7 @@ kotlin {
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy.core.resources"
     compileSdk =
-        libs.versions.android.targetSdk
+        libs.versions.android.compileSdk
             .get()
             .toInt()
     defaultConfig {
