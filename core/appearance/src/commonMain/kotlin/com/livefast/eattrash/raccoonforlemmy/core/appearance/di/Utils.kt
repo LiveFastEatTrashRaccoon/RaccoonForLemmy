@@ -1,12 +1,13 @@
 package com.livefast.eattrash.raccoonforlemmy.core.appearance.di
 
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.AppColorRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppColorRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.BarColorProvider
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ColorSchemeProvider
-import org.koin.core.module.Module
+import org.koin.core.annotation.Module
 
-expect val nativeAppearanceModule: Module
+@Module
+internal expect class AppearanceThemeModule()
 
 expect fun getThemeRepository(): ThemeRepository
 

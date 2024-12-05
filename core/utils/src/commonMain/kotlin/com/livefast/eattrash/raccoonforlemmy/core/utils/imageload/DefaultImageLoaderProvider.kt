@@ -6,7 +6,9 @@ import coil3.disk.DiskCache
 import coil3.memory.MemoryCache
 import coil3.request.crossfade
 import com.livefast.eattrash.raccoonforlemmy.core.utils.fs.FileSystemManager
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultImageLoaderProvider(
     private val context: PlatformContext,
     private val fileSystemManager: FileSystemManager,

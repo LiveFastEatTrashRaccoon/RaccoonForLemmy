@@ -16,5 +16,3 @@ interface ShareHelper {
         mimeType: String = "image/*",
     )
 }
-
-expect fun getShareHelper(): ShareHelper

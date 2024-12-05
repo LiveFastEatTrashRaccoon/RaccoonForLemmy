@@ -5,11 +5,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Setting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 
 interface ImportSettingsUseCase {
     suspend operator fun invoke(content: String)
 }
 
+@Single
 internal class DefaultImportSettingsUseCase(
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,

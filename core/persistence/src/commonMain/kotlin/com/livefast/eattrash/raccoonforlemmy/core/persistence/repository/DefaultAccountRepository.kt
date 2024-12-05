@@ -1,12 +1,14 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.AccountEntity
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultAccountRepository(
     provider: DatabaseProvider,
 ) : AccountRepository {

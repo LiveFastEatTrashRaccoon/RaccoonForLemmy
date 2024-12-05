@@ -1,16 +1,15 @@
 package com.livefast.eattrash.raccoonforlemmy.di
 
-import com.livefast.eattrash.raccoonforlemmy.core.api.di.coreApiModule
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.coreAppearanceModule
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.lemmyUiModule
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.coreL10nModule
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.coreNavigationModule
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.coreNotificationModule
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.corePersistenceModule
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.di.coreAppConfigModule
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.di.corePreferencesModule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.utilsModule
-import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.coreIdentityModule
+import com.livefast.eattrash.raccoonforlemmy.core.api.di.ApiModule
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.AppearanceModule
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.LemmyUiModule
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.L10nModule
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.NavigationModule
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.NotificationsModule
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.PersistenceModule
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.di.PreferencesModule
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.UtilsModule
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.identityModule
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.di.domainInboxModule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.di.paginationModule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.di.repositoryModule
@@ -48,30 +47,43 @@ import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.di.selectInstan
 import com.livefast.eattrash.raccoonforlemmy.unit.userdetail.di.userDetailModule
 import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.di.userInfoModule
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.di.zoomableImageModule
+import org.koin.core.annotation.Module
 import org.koin.dsl.module
+import org.koin.ksp.generated.module
+
+@Module(
+    includes = [
+        ApiModule::class,
+        AppearanceModule::class,
+        LemmyUiModule::class,
+        L10nModule::class,
+        NotificationsModule::class,
+        NavigationModule::class,
+        PersistenceModule::class,
+        PreferencesModule::class,
+        UtilsModule::class,
+    ],
+)
+internal class CoreModules
 
 val rootModule =
     module {
         includes(
-            internalSharedModule,
-            coreAppearanceModule,
-            corePreferencesModule,
-            coreAppConfigModule,
-            coreApiModule,
-            coreIdentityModule,
-            coreL10nModule,
-            coreNotificationModule,
-            corePersistenceModule,
-            repositoryModule,
-            utilsModule,
+            SharedModule().module,
+            // core
+            CoreModules().module,
+            // domain
+            identityModule,
             domainInboxModule,
-            coreNavigationModule,
-            lemmyUiModule,
+            repositoryModule,
+            paginationModule,
+            // feature
             homeTabModule,
             inboxTabModule,
             profileTabModule,
             searchTabModule,
             settingsTabModule,
+            // unit
             banModule,
             zoomableImageModule,
             chatModule,
@@ -97,8 +109,6 @@ val rootModule =
             filteredContentsModule,
             editCommunityModule,
             licenceModule,
-            coreResourceModule,
-            paginationModule,
             moderateWithReasonModule,
             acknowledgementsModule,
             mediaListModule,

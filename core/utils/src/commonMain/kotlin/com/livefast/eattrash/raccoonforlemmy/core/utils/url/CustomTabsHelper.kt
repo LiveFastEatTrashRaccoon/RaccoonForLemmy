@@ -5,5 +5,3 @@ interface CustomTabsHelper {
 
     fun handle(url: String)
 }
-
-expect fun getCustomTabsHelper(): CustomTabsHelper

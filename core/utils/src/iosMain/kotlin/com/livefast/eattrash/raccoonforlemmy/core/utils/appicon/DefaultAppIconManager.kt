@@ -1,9 +1,12 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.appicon
 
-class DefaultAppIconManager : AppIconManager {
-    override val supportsMultipleIcons = false
+import org.koin.core.annotation.Single
 
-    override fun changeIcon(variant: AppIconVariant) {
+@Single
+internal actual class DefaultAppIconManager : AppIconManager {
+    actual override val supportsMultipleIcons = false
+
+    actual override fun changeIcon(variant: AppIconVariant) {
         // no-op
     }
 }

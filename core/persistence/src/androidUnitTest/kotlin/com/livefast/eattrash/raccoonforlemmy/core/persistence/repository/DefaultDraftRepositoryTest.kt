@@ -1,12 +1,12 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import app.cash.sqldelight.Query
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.DraftEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.DraftsQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftType
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk

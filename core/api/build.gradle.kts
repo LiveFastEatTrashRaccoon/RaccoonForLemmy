@@ -1,6 +1,5 @@
-import com.google.devtools.ksp.gradle.KspTaskMetadata
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -33,12 +32,14 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.koin.core)
+                api(libs.koin.annotations)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktorfit.lib)
                 implementation(libs.ktor.serialization)
                 implementation(libs.ktor.contentnegotiation)
                 implementation(libs.ktor.json)
                 implementation(libs.ktor.logging)
+
                 implementation(projects.core.utils)
             }
         }
@@ -70,12 +71,23 @@ dependencies {
     add("kspIosX64", libs.ktorfit.ksp)
     add("kspIosArm64", libs.ktorfit.ksp)
     add("kspIosSimulatorArm64", libs.ktorfit.ksp)
+    add("kspCommonMainMetadata", libs.koin.ksp)
+    add("kspAndroid", libs.koin.ksp)
+    add("kspIosX64", libs.koin.ksp)
+    add("kspIosArm64", libs.koin.ksp)
+    add("kspIosSimulatorArm64", libs.koin.ksp)
+}
+
+ksp {
+    arg("KOIN_DEFAULT_MODULE", "false")
 }
 
 kotlin.sourceSets.commonMain {
     kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
 }
 
-tasks.withType<KotlinCompile> {
-    dependsOn(tasks.withType<KspTaskMetadata>())
+tasks.withType(KotlinCompilationTask::class.java).configureEach {
+    if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
 }

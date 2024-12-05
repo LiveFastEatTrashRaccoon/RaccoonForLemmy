@@ -1,6 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.debug
 
 import kotlinx.cinterop.BetaInteropApi
+import org.koin.core.annotation.Single
 import platform.Foundation.NSCachesDirectory
 import platform.Foundation.NSFileHandle
 import platform.Foundation.NSFileManager
@@ -15,17 +16,19 @@ import platform.Foundation.fileHandleForReadingAtPath
 import platform.Foundation.stringByAppendingPathComponent
 import platform.Foundation.writeData
 
+@Single
 @OptIn(BetaInteropApi::class)
-class DefaultCrashReportWriter : CrashReportWriter {
+internal actual class DefaultCrashReportWriter : CrashReportWriter {
     companion object {
         const val FILE_NAME = "crash_report.txt"
     }
 
-    override fun write(reportText: String) {
+    actual override fun write(reportText: String) {
         val paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, true)
         val path = (paths.first() as NSString).stringByAppendingPathComponent(FILE_NAME)
         val data =
-            NSString.create(string = reportText + "\n")
+            NSString
+                .create(string = reportText + "\n")
                 .dataUsingEncoding(NSUTF8StringEncoding) ?: return
         val existing = NSFileManager.defaultManager.fileExistsAtPath(path)
         if (!existing) {

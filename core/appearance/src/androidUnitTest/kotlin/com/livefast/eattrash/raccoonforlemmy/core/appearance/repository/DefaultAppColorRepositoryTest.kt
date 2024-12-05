@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.appearance.repository
 
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppColor
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.DefaultAppColorRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.AppColor
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import org.junit.Rule
 import org.junit.Test

@@ -2,19 +2,20 @@ package com.livefast.eattrash.raccoonforlemmy.core.api.di
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.DefaultServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.AppInfoRepository
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
-val coreApiModule =
-    module {
-        single<ServiceProvider>(named("default")) {
-            DefaultServiceProvider(
-                appInfoRepository = get(),
-            )
-        }
-        single<ServiceProvider>(named("custom")) {
-            DefaultServiceProvider(
-                appInfoRepository = get(),
-            )
-        }
-    }
+@Module
+class ApiModule {
+    @Single
+    @Named("default")
+    fun provideServiceProvider(appInfoRepository: AppInfoRepository): ServiceProvider =
+        DefaultServiceProvider(appInfoRepository = appInfoRepository)
+
+    @Single
+    @Named("custom")
+    fun provideCustomProvider(appInfoRepository: AppInfoRepository): ServiceProvider =
+        DefaultServiceProvider(appInfoRepository = appInfoRepository)
+}

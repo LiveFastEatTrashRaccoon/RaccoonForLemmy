@@ -1,48 +1,29 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.di
 
-import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.DefaultImageLoaderProvider
-import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.DefaultImagePreloadManager
-import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImageLoaderProvider
-import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
-import com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode.DefaultZombieModeHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode.ZombieModeHelper
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-private val imageLoadModule = module {
-    single<ImageLoaderProvider> {
-        DefaultImageLoaderProvider(
-            context = get(),
-            fileSystemManager = get(),
-        )
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.imageload")
+internal class ImageLoadModule
 
-    single<ImagePreloadManager> {
-        DefaultImagePreloadManager(
-            context = get(),
-            imageLoaderProvider = get(),
-        )
-    }
-}
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode")
+internal class ZombieModeModule
 
-private val zombieModeModule = module {
-    factory<ZombieModeHelper> {
-        DefaultZombieModeHelper()
-    }
-}
-
-val utilsModule =
-    module {
-        includes(
-            appIconModule,
-            appInfoModule,
-            crashReportModule,
-            customTabsModule,
-            fileSystemModule,
-            galleryHelperModule,
-            hapticFeedbackModule,
-            imageLoadModule,
-            networkModule,
-            shareHelperModule,
-            zombieModeModule,
-        )
-    }
+@Module(
+    includes = [
+        ImageLoadModule::class,
+        ZombieModeModule::class,
+        NetworkModule::class,
+        AppIconModule::class,
+        CrashReportModule::class,
+        FileSystemModule::class,
+        GalleryHelperModule::class,
+        ShareHelperModule::class,
+        CustomTabsModule::class,
+        HapticFeedbackModule::class,
+        KeepScreenOnModule::class,
+    ],
+)
+class UtilsModule

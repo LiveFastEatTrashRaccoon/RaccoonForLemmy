@@ -10,10 +10,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
+import org.koin.core.annotation.Single
 
-class DefaultBarColorProvider : BarColorProvider {
+@Single
+internal actual class DefaultBarColorProvider : BarColorProvider {
     @Composable
-    override fun setBarColorAccordingToTheme(
+    actual override fun setBarColorAccordingToTheme(
         theme: UiTheme,
         barTheme: UiBarTheme,
     ) {

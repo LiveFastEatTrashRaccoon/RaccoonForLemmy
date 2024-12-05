@@ -2,21 +2,22 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import org.koin.core.annotation.Single
 import platform.UIKit.UIApplication
 
-class DefaultKeepScreenOn : KeepScreenOn {
-    override fun activate() {
+@Single
+internal actual class DefaultKeepScreenOn : KeepScreenOn {
+    actual override fun activate() {
         UIApplication.sharedApplication().idleTimerDisabled = true
     }
 
-    override fun deactivate() {
+    actual override fun deactivate() {
         UIApplication.sharedApplication().idleTimerDisabled = false
     }
 }
 
 @Composable
-actual fun rememberKeepScreenOn(): KeepScreenOn {
-    return remember {
+actual fun rememberKeepScreenOn(): KeepScreenOn =
+    remember {
         DefaultKeepScreenOn()
     }
-}

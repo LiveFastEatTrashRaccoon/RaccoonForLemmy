@@ -1,9 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.TemporaryKeyStore
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 
 private const val CUSTOM_INSTANCES_KEY = "customInstances"
 private val DEFAULT_INSTANCES =
@@ -26,6 +27,7 @@ private val DEFAULT_INSTANCES =
         "sopuli.xyz",
     )
 
+@Single
 internal class DefaultInstanceSelectionRepository(
     private val keyStore: TemporaryKeyStore,
 ) : InstanceSelectionRepository {

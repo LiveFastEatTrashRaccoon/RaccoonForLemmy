@@ -3,9 +3,9 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.AccountEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.AccountsQueries
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk

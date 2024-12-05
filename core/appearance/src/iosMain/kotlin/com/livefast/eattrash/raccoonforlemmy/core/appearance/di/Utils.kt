@@ -1,26 +1,19 @@
 package com.livefast.eattrash.raccoonforlemmy.core.appearance.di
 
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.AppColorRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppColorRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.BarColorProvider
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ColorSchemeProvider
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.DefaultBarColorProvider
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.DefaultColorSchemeProvider
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.dsl.module
+
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.appearance.theme")
+internal actual class AppearanceThemeModule
 
 actual fun getThemeRepository(): ThemeRepository = CoreAppearanceHelper.repository
-
-actual val nativeAppearanceModule =
-    module {
-        single<ColorSchemeProvider> {
-            DefaultColorSchemeProvider()
-        }
-        single<BarColorProvider> {
-            DefaultBarColorProvider()
-        }
-    }
 
 actual fun getColorSchemeProvider(): ColorSchemeProvider = CoreAppearanceHelper.colorSchemeProvider
 

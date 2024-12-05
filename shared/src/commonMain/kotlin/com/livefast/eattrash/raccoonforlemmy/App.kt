@@ -38,6 +38,7 @@ import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toCommentBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toPostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiFontFamily
@@ -46,7 +47,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getAppColorRepos
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toColor
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.DraggableSideMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.ProvideCustomUriHandler
@@ -69,6 +69,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLanguageDirection
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
+import com.livefast.eattrash.raccoonforlemmy.main.MainScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.ModalDrawerContent
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.di.getSubscriptionsCache
 import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail.MultiCommunityScreen

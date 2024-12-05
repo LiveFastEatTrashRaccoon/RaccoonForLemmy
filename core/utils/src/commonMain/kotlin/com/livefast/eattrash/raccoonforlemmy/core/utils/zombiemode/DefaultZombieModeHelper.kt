@@ -10,9 +10,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Single
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
+@Single
 internal class DefaultZombieModeHelper(
     dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ZombieModeHelper {

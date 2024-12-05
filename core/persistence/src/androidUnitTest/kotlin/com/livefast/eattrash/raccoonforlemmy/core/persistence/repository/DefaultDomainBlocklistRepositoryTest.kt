@@ -1,6 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.TemporaryKeyStore
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.coVerify
 import io.mockk.every

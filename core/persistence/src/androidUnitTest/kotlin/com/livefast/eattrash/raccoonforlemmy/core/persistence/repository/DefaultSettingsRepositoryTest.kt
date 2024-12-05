@@ -2,14 +2,14 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.GetBy
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.SettingsQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.TemporaryKeyStore
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.Called
 import io.mockk.every

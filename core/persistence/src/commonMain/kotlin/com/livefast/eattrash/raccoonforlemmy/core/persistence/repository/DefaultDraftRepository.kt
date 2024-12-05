@@ -1,13 +1,15 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.DraftEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftType
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 
+@Single
 class DefaultDraftRepository(
     provider: DatabaseProvider,
 ) : DraftRepository {
@@ -18,14 +20,18 @@ class DefaultDraftRepository(
         accountId: Long,
     ): List<DraftModel> =
         withContext(Dispatchers.IO) {
-            db.draftsQueries.getAllBy(type = type.toLong(), account_id = accountId)
+            db.draftsQueries
+                .getAllBy(type = type.toLong(), account_id = accountId)
                 .executeAsList()
                 .map { it.toModel() }
         }
 
     override suspend fun getBy(id: Long): DraftModel? =
         withContext(Dispatchers.IO) {
-            db.draftsQueries.getBy(id).executeAsOneOrNull()?.toModel()
+            db.draftsQueries
+                .getBy(id)
+                .executeAsOneOrNull()
+                ?.toModel()
         }
 
     override suspend fun create(
@@ -37,10 +43,10 @@ class DefaultDraftRepository(
             body = model.body,
             title = model.title,
             url = model.url,
-            communityId = model.communityId?.toLong(),
-            postId = model.postId?.toLong(),
-            parentId = model.parentId?.toLong(),
-            languageId = model.languageId?.toLong(),
+            communityId = model.communityId,
+            postId = model.postId,
+            parentId = model.parentId,
+            languageId = model.languageId,
             nsfw = model.nsfw?.let { if (it) 0L else 1L },
             date = model.date,
             info = model.reference,
@@ -55,8 +61,8 @@ class DefaultDraftRepository(
                 body = model.body,
                 title = model.title,
                 url = model.url,
-                communityId = model.communityId?.toLong(),
-                languageId = model.languageId?.toLong(),
+                communityId = model.communityId,
+                languageId = model.languageId,
                 date = model.date,
                 info = model.reference,
                 nsfw = model.nsfw?.let { if (it) 0L else 1L },

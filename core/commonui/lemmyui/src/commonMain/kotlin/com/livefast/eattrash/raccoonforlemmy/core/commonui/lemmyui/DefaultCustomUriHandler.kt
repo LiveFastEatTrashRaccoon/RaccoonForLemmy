@@ -8,9 +8,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAnImage
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.CustomTabsHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.UrlOpeningMode
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toUrlOpeningMode
+import org.koin.core.annotation.InjectedParam
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultCustomUriHandler(
-    private val fallbackHandler: UriHandler,
+    @InjectedParam private val fallbackHandler: UriHandler,
     private val settingsRepository: SettingsRepository,
     private val detailOpener: DetailOpener,
     private val customTabsHelper: CustomTabsHelper,

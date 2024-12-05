@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.identity.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.TemporaryKeyStore
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk
