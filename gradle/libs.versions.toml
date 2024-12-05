@@ -2,11 +2,11 @@
 
 androidx-activity = "1.9.3"
 androidx-browser = "1.8.0"
-androidx-core = "1.13.1"
+androidx-core = "1.15.0"
 androidx-crypto = "1.0.0"
 androidx-splashscreen = "1.0.1"
-androidx-work = "2.9.1"
-android-gradle = "8.5.2"
+androidx-work = "2.10.0"
+android-gradle = "8.7.2"
 calf = "0.6.1"
 coil = "3.0.4"
 colorpicker = "1.1.2"
@@ -34,7 +34,8 @@ sqldelight = "2.0.2"
 turbine = "1.2.0"
 voyager = "1.0.0"
 
-android-targetSdk = "34"
+android-targetSdk = "35"
+android-compileSdk = "35"
 android-minSdk = "26"
 
 [libraries]
