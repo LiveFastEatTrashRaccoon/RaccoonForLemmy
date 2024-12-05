@@ -22,7 +22,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.DefaultHapticFee
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import org.koin.dsl.module
 
-actual val networkModule =
+internal actual val networkModule =
     module {
         single<NetworkManager> {
             DefaultNetworkManager(
@@ -31,14 +31,14 @@ actual val networkModule =
         }
     }
 
-actual val appIconModule =
+internal actual val appIconModule =
     module {
         single<AppIconManager> {
             DefaultAppIconManager(context = get())
         }
     }
 
-actual val crashReportModule =
+internal actual val crashReportModule =
     module {
         single<CrashReportConfiguration> {
             DefaultCrashReportConfiguration(
@@ -52,7 +52,7 @@ actual val crashReportModule =
         }
     }
 
-actual val hapticFeedbackModule =
+internal actual val hapticFeedbackModule =
     module {
         single<HapticFeedback> {
             DefaultHapticFeedback(
@@ -61,7 +61,7 @@ actual val hapticFeedbackModule =
         }
     }
 
-actual val shareHelperModule =
+internal actual val shareHelperModule =
     module {
         single<ShareHelper> {
             DefaultShareHelper(
@@ -70,7 +70,7 @@ actual val shareHelperModule =
         }
     }
 
-actual val fileSystemModule =
+internal actual val fileSystemModule =
     module {
         single<FileSystemManager> {
             DefaultFileSystemManager(
@@ -79,7 +79,7 @@ actual val fileSystemModule =
         }
     }
 
-actual val galleryHelperModule =
+internal actual val galleryHelperModule =
     module {
         single<GalleryHelper> {
             DefaultGalleryHelper(
@@ -88,7 +88,7 @@ actual val galleryHelperModule =
         }
     }
 
-actual val customTabsModule =
+internal actual val customTabsModule =
     module {
         single<CustomTabsHelper> {
             DefaultCustomTabsHelper(
@@ -97,7 +97,7 @@ actual val customTabsModule =
         }
     }
 
-actual val appInfoModule =
+internal actual val appInfoModule =
     module {
         single<AppInfoRepository> {
             DefaultAppInfoRepository(
