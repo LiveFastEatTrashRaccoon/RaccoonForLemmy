@@ -20,10 +20,13 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toMod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultUserRepository(
-    private val services: ServiceProvider,
-    private val customServices: ServiceProvider,
+    @Named("default") private val services: ServiceProvider,
+    @Named("custom") private val customServices: ServiceProvider,
 ) : UserRepository {
     override suspend fun getResolved(
         query: String,

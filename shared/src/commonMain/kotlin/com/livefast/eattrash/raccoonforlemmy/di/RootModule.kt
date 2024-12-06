@@ -9,10 +9,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.Notifications
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.PersistenceModule
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.di.PreferencesModule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.UtilsModule
-import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.identityModule
-import com.livefast.eattrash.raccoonforlemmy.domain.inbox.di.domainInboxModule
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.di.paginationModule
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.di.repositoryModule
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.IdentityModule
+import com.livefast.eattrash.raccoonforlemmy.domain.inbox.di.InboxModule
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.di.LemmyPaginationModule
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.di.LemmyRepositoryModule
 import com.livefast.eattrash.raccoonforlemmy.feature.home.di.homeTabModule
 import com.livefast.eattrash.raccoonforlemmy.feature.inbox.di.inboxTabModule
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.di.profileTabModule
@@ -55,10 +55,10 @@ import org.koin.ksp.generated.module
     includes = [
         ApiModule::class,
         AppearanceModule::class,
-        LemmyUiModule::class,
         L10nModule::class,
-        NotificationsModule::class,
+        LemmyUiModule::class,
         NavigationModule::class,
+        NotificationsModule::class,
         PersistenceModule::class,
         PreferencesModule::class,
         UtilsModule::class,
@@ -66,24 +66,29 @@ import org.koin.ksp.generated.module
 )
 internal class CoreModules
 
+@Module(
+    includes = [
+        IdentityModule::class,
+        InboxModule::class,
+        LemmyPaginationModule::class,
+        LemmyRepositoryModule::class,
+    ],
+)
+internal class DomainModules
+
 val rootModule =
     module {
         includes(
             SharedModule().module,
-            // core
             CoreModules().module,
-            // domain
-            identityModule,
-            domainInboxModule,
-            repositoryModule,
-            paginationModule,
-            // feature
+            DomainModules().module,
+            // feature modules
             homeTabModule,
             inboxTabModule,
             profileTabModule,
             searchTabModule,
             settingsTabModule,
-            // unit
+            // unit modules
             banModule,
             zoomableImageModule,
             chatModule,

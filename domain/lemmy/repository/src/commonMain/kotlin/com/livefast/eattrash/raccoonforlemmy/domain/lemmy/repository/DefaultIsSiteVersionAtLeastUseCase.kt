@@ -1,5 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
+import org.koin.core.annotation.Single
+
+@Single
 internal class DefaultIsSiteVersionAtLeastUseCase(
     private val siteRepository: SiteRepository,
 ) : IsSiteVersionAtLeastUseCase {
@@ -15,9 +18,24 @@ internal class DefaultIsSiteVersionAtLeastUseCase(
     ): Boolean {
         val version = siteRepository.getSiteVersion(otherInstance = otherInstance).orEmpty()
         val matchResult = LEMMY_VERSION_REGEX.find(version)
-        val actualMajor = matchResult?.groups?.get("major")?.value?.toIntOrNull() ?: 0
-        val actualMinor = matchResult?.groups?.get("minor")?.value?.toIntOrNull() ?: 0
-        val actualPatch = matchResult?.groups?.get("patch")?.value?.toIntOrNull() ?: 0
+        val actualMajor =
+            matchResult
+                ?.groups
+                ?.get("major")
+                ?.value
+                ?.toIntOrNull() ?: 0
+        val actualMinor =
+            matchResult
+                ?.groups
+                ?.get("minor")
+                ?.value
+                ?.toIntOrNull() ?: 0
+        val actualPatch =
+            matchResult
+                ?.groups
+                ?.get("patch")
+                ?.value
+                ?.toIntOrNull() ?: 0
         return when {
             actualMajor < major -> false
             actualMajor > major -> true

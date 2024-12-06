@@ -8,7 +8,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultLemmyItemCache(
     private val postCache: LruCache<PostModel>,
     private val communityCache: LruCache<CommunityModel>,

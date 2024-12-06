@@ -9,19 +9,21 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import org.koin.core.annotation.Single
 import java.util.concurrent.TimeUnit
 
-class DefaultInboxNotificationChecker(
+@Single
+internal actual class DefaultInboxNotificationChecker(
     private val context: Context,
 ) : InboxNotificationChecker {
-    override val isBackgroundCheckSupported = true
+    actual override val isBackgroundCheckSupported = true
     private var intervalMinutes = 15L
 
-    override fun setPeriod(minutes: Long) {
+    actual override fun setPeriod(minutes: Long) {
         intervalMinutes = minutes
     }
 
-    override fun start() {
+    actual override fun start() {
         WorkManager.getInstance(context).cancelAllWorkByTag(TAG)
 
         createNotificationChannel()
@@ -56,7 +58,7 @@ class DefaultInboxNotificationChecker(
             }
     }
 
-    override fun stop() {
+    actual override fun stop() {
         WorkManager.getInstance(context).cancelAllWorkByTag(TAG)
     }
 

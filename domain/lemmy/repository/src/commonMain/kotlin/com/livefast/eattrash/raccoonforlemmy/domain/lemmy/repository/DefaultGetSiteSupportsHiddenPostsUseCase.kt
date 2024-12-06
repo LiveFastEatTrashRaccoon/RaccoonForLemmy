@@ -1,5 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
+import org.koin.core.annotation.Single
+
+@Single
 internal class DefaultGetSiteSupportsHiddenPostsUseCase(
     private val isSiteVersionAtLeastUseCase: IsSiteVersionAtLeastUseCase,
 ) : GetSiteSupportsHiddenPostsUseCase {

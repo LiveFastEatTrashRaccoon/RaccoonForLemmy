@@ -9,7 +9,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Communi
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultLogoutUseCase(
     private val identityRepository: IdentityRepository,
     private val accountRepository: AccountRepository,

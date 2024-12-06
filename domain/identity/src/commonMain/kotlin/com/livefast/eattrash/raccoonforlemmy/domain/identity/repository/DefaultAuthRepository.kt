@@ -6,9 +6,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultAuthRepository(
-    private val services: ServiceProvider,
+    @Named("default") private val services: ServiceProvider,
 ) : AuthRepository {
     override suspend fun login(
         username: String,

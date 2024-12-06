@@ -1,17 +1,20 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.inbox.notification
 
-class DefaultInboxNotificationChecker : InboxNotificationChecker {
-    override val isBackgroundCheckSupported = false
+import org.koin.core.annotation.Single
 
-    override fun setPeriod(minutes: Long) {
+@Single
+internal actual class DefaultInboxNotificationChecker : InboxNotificationChecker {
+    actual override val isBackgroundCheckSupported = false
+
+    actual override fun setPeriod(minutes: Long) {
         // NO-OP
     }
 
-    override fun start() {
+    actual override fun start() {
         // NO-OP
     }
 
-    override fun stop() {
+    actual override fun stop() {
         // NO-OP
     }
 }

@@ -2,7 +2,9 @@ package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination
 
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultPostNavigationManager(
     private val postPaginationManager: PostPaginationManager,
 ) : PostNavigationManager {

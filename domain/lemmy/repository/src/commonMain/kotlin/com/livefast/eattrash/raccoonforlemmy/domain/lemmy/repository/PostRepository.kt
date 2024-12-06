@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
-import com.livefast.eattrash.raccoonforlemmy.core.api.dto.PostResponse
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostReportModel
@@ -38,7 +37,7 @@ interface PostRepository {
         post: PostModel,
         auth: String,
         voted: Boolean,
-    ): Result<PostResponse>
+    ): Result<Unit>
 
     fun asDownVoted(
         post: PostModel,
@@ -49,7 +48,7 @@ interface PostRepository {
         post: PostModel,
         auth: String,
         downVoted: Boolean,
-    ): Result<PostResponse>
+    ): Result<Unit>
 
     fun asSaved(
         post: PostModel,
@@ -60,7 +59,7 @@ interface PostRepository {
         post: PostModel,
         auth: String,
         saved: Boolean,
-    ): Result<PostResponse>
+    ): Result<Unit>
 
     suspend fun create(
         communityId: Long,
@@ -86,13 +85,13 @@ interface PostRepository {
         read: Boolean,
         postId: Long,
         auth: String? = null,
-    ): Result<PostResponse>
+    ): Result<Unit>
 
     suspend fun hide(
         hidden: Boolean,
         postId: Long,
         auth: String? = null,
-    ): Result<PostResponse>
+    ): Result<Unit>
 
     suspend fun delete(
         id: Long,

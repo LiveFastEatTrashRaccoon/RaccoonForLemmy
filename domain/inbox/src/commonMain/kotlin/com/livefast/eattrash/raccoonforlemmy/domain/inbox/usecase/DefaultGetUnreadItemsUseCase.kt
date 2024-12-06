@@ -3,7 +3,9 @@ package com.livefast.eattrash.raccoonforlemmy.domain.inbox.usecase
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultGetUnreadItemsUseCase(
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,
@@ -21,9 +23,13 @@ internal class DefaultGetUnreadItemsUseCase(
 
     override suspend fun getUnreadMessages(): Int {
         val auth = identityRepository.authToken.value
-        return messageRepository.getAll(auth, page = 1, limit = 50).orEmpty().groupBy {
-            listOf(it.creator?.id ?: 0, it.recipient?.id ?: 0).sorted()
-                .joinToString()
-        }.count()
+        return messageRepository
+            .getAll(auth, page = 1, limit = 50)
+            .orEmpty()
+            .groupBy {
+                listOf(it.creator?.id ?: 0, it.recipient?.id ?: 0)
+                    .sorted()
+                    .joinToString()
+            }.count()
     }
 }

@@ -8,7 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.inbox.InboxCoordinator
+import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository

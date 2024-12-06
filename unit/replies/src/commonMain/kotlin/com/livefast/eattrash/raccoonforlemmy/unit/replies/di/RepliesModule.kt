@@ -10,7 +10,6 @@ val inboxRepliesModule =
             InboxRepliesViewModel(
                 userRepository = get(),
                 identityRepository = get(),
-                siteRepository = get(),
                 commentRepository = get(),
                 themeRepository = get(),
                 settingsRepository = get(),
