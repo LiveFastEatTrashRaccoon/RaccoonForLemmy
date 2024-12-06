@@ -2,17 +2,19 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils.debug
 
 import android.content.Context
 import android.os.Environment
+import org.koin.core.annotation.Single
 import java.io.File
 import java.io.FileWriter
 
-class DefaultCrashReportWriter(
+@Single
+internal actual class DefaultCrashReportWriter(
     private val context: Context,
 ) : CrashReportWriter {
     companion object {
         const val FILE_NAME = "crash_report.txt"
     }
 
-    override fun write(reportText: String) {
+    actual override fun write(reportText: String) {
         val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
         val state = Environment.getExternalStorageState()
         val logFile =

@@ -1,87 +1,40 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.di
 
-import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.AppIconManager
-import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.DefaultAppIconManager
-import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.AppInfoRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.CrashReportConfiguration
-import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.CrashReportWriter
-import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.DefaultAppInfoRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.DefaultCrashReportConfiguration
-import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.DefaultCrashReportWriter
-import com.livefast.eattrash.raccoonforlemmy.core.utils.fs.DefaultFileSystemManager
-import com.livefast.eattrash.raccoonforlemmy.core.utils.fs.FileSystemManager
-import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.DefaultGalleryHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.GalleryHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.network.DefaultNetworkManager
-import com.livefast.eattrash.raccoonforlemmy.core.utils.network.NetworkManager
-import com.livefast.eattrash.raccoonforlemmy.core.utils.share.DefaultShareHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.CustomTabsHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.DefaultCustomTabsHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.DefaultHapticFeedback
-import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-internal actual val networkModule =
-    module {
-        single<NetworkManager> { DefaultNetworkManager() }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.network")
+internal actual class NetworkModule
 
-internal actual val appIconModule =
-    module {
-        single<AppIconManager> {
-            DefaultAppIconManager()
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.appicon")
+internal actual class AppIconModule
 
-internal actual val crashReportModule =
-    module {
-        single<CrashReportConfiguration> {
-            DefaultCrashReportConfiguration()
-        }
-        single<CrashReportWriter> {
-            DefaultCrashReportWriter()
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.debug")
+internal actual class CrashReportModule
 
-internal actual val fileSystemModule =
-    module {
-        single<FileSystemManager> {
-            DefaultFileSystemManager()
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate")
+internal actual class HapticFeedbackModule
 
-internal actual val galleryHelperModule =
-    module {
-        single<GalleryHelper> {
-            DefaultGalleryHelper()
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.share")
+internal actual class ShareHelperModule
 
-internal actual val shareHelperModule =
-    module {
-        single<ShareHelper> {
-            DefaultShareHelper()
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.fs")
+internal actual class FileSystemModule
 
-internal actual val customTabsModule =
-    module {
-        single<CustomTabsHelper> {
-            DefaultCustomTabsHelper()
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.gallery")
+internal actual class GalleryHelperModule
 
-internal actual val hapticFeedbackModule =
-    module {
-        single<HapticFeedback> {
-            DefaultHapticFeedback()
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.url")
+internal actual class CustomTabsModule
 
-internal actual val appInfoModule =
-    module {
-        single<AppInfoRepository> {
-            DefaultAppInfoRepository()
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon")
+internal actual class KeepScreenOnModule

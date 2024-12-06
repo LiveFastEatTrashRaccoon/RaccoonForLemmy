@@ -3,11 +3,13 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils.debug
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.os.Build
+import org.koin.core.annotation.Single
 
-class DefaultAppInfoRepository(
+@Single
+internal actual class DefaultAppInfoRepository(
     private val context: Context,
 ) : AppInfoRepository {
-    override fun geInfo(): AppInfo =
+    actual override fun geInfo(): AppInfo =
         runCatching {
             with(context) {
                 val packageInfo = packageManager.getPackageInfo(packageName, 0)

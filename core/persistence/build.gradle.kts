@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -8,6 +9,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.kotlinx.kover)
+    alias(libs.plugins.ksp)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -27,6 +29,10 @@ kotlin {
             baseName = "core.persistence"
             isStatic = true
         }
+    }
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
     sourceSets {
@@ -51,6 +57,7 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
 
                 implementation(libs.koin.core)
+                api(libs.koin.annotations)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.l10n)
@@ -67,6 +74,14 @@ kotlin {
             }
         }
     }
+}
+
+dependencies {
+    add("kspCommonMainMetadata", libs.koin.ksp)
+    add("kspAndroid", libs.koin.ksp)
+    add("kspIosX64", libs.koin.ksp)
+    add("kspIosArm64", libs.koin.ksp)
+    add("kspIosSimulatorArm64", libs.koin.ksp)
 }
 
 android {
@@ -91,4 +106,18 @@ sqldelight {
         }
     }
     linkSqlite = true
+}
+
+ksp {
+    arg("KOIN_DEFAULT_MODULE", "false")
+}
+
+kotlin.sourceSets.commonMain {
+    kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+}
+
+tasks.withType(KotlinCompilationTask::class.java).configureEach {
+    if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
 }

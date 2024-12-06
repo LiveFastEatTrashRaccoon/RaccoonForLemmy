@@ -7,17 +7,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import okio.FileSystem
 import okio.Path
+import org.koin.core.annotation.Single
 import org.koin.java.KoinJavaComponent
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 
-class DefaultFileSystemManager(
+actual fun getFileSystemManager(): FileSystemManager {
+    val res by KoinJavaComponent.inject<FileSystemManager>(FileSystemManager::class.java)
+    return res
+}
+
+@Single
+internal actual class DefaultFileSystemManager(
     private val context: Context,
 ) : FileSystemManager {
-    override val isSupported = true
+    actual override val isSupported = true
 
     @Composable
-    override fun readFromFile(
+    actual override fun readFromFile(
         mimeTypes: Array<String>,
         callback: (String?) -> Unit,
     ) {
@@ -37,7 +44,7 @@ class DefaultFileSystemManager(
     }
 
     @Composable
-    override fun writeToFile(
+    actual override fun writeToFile(
         mimeType: String,
         name: String,
         data: String,
@@ -58,10 +65,5 @@ class DefaultFileSystemManager(
         }
     }
 
-    override fun getTempDir(): Path = FileSystem.SYSTEM_TEMPORARY_DIRECTORY
-}
-
-actual fun getFileSystemManager(): FileSystemManager {
-    val res by KoinJavaComponent.inject<FileSystemManager>(FileSystemManager::class.java)
-    return res
+    actual override fun getTempDir(): Path = FileSystem.SYSTEM_TEMPORARY_DIRECTORY
 }

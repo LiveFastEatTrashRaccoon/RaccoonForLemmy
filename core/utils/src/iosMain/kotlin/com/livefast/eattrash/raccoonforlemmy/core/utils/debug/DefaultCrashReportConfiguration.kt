@@ -1,17 +1,17 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.debug
 
+import org.koin.core.annotation.Single
 import platform.Foundation.NSUserDefaults
 
-class DefaultCrashReportConfiguration() : CrashReportConfiguration {
+@Single
+internal actual class DefaultCrashReportConfiguration : CrashReportConfiguration {
     companion object {
         const val KEY = "crashReportEnabled"
     }
 
-    override fun isEnabled(): Boolean {
-        return NSUserDefaults.standardUserDefaults.boolForKey(KEY)
-    }
+    actual override fun isEnabled(): Boolean = NSUserDefaults.standardUserDefaults.boolForKey(KEY)
 
-    override fun setEnabled(value: Boolean) {
+    actual override fun setEnabled(value: Boolean) {
         NSUserDefaults.standardUserDefaults.setBool(value, KEY)
     }
 }

@@ -3,7 +3,9 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils.cache
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-internal class DefaultLruCache<T>(val size: Int) : LruCache<T> {
+internal class DefaultLruCache<T>(
+    val size: Int,
+) : LruCache<T> {
     private val values: MutableMap<Long, T> = mutableMapOf()
     private var lastUsedIds: List<Long> = listOf()
     private val mutex = Mutex()

@@ -1,18 +1,12 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.url
 
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import org.koin.core.annotation.Single
 
-class DefaultCustomTabsHelper : CustomTabsHelper {
-    override val isSupported = false
+@Single
+internal actual class DefaultCustomTabsHelper : CustomTabsHelper {
+    actual override val isSupported = false
 
-    override fun handle(url: String) {
+    actual override fun handle(url: String) {
         // no-op
     }
-}
-
-actual fun getCustomTabsHelper(): CustomTabsHelper = CustomTabsDiHelper.helper
-
-object CustomTabsDiHelper : KoinComponent {
-    val helper: CustomTabsHelper by inject()
 }

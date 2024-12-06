@@ -6,7 +6,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultThemeRepository : ThemeRepository {
     override val uiTheme = MutableStateFlow<UiTheme?>(null)
     override val uiFontFamily = MutableStateFlow(UiFontFamily.Poppins)

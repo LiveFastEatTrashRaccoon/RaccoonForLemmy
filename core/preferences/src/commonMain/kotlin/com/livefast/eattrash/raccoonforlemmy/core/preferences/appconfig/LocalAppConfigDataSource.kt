@@ -1,6 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig
 
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.TemporaryKeyStore
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 
 internal class LocalAppConfigDataSource(
     private val keyStore: TemporaryKeyStore,

@@ -13,6 +13,7 @@ colorpicker = "1.1.2"
 compose = "1.7.1"
 compose-multiplatform-media-player = "1.0.26"
 koin = "4.0.0"
+koin-annotations = "2.0.0-Beta2"
 kotlin = "2.1.0"
 kotlincrypto = "0.5.3"
 kotlinx-coroutines = "1.9.0"
@@ -69,6 +70,8 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
+koin-ksp = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
 
 ktor-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
 ktor-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }

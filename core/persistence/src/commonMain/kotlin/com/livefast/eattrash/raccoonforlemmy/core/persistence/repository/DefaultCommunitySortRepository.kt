@@ -1,12 +1,14 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.TemporaryKeyStore
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 
 private const val SETTINGS_KEY = "communitySort"
 
+@Single
 internal class DefaultCommunitySortRepository(
     private val keyStore: TemporaryKeyStore,
 ) : CommunitySortRepository {
@@ -27,15 +29,17 @@ internal class DefaultCommunitySortRepository(
     }
 
     private fun deserializeMap(): MutableMap<String, Int> =
-        keyStore.get(SETTINGS_KEY, listOf()).mapNotNull {
-            it.split(":").takeIf { e -> e.size == 2 }?.let { e -> e[0] to e[1] }
-        }.let { pairs ->
-            val res = mutableMapOf<String, Int>()
-            for (pair in pairs) {
-                res[pair.first] = pair.second.toInt()
+        keyStore
+            .get(SETTINGS_KEY, listOf())
+            .mapNotNull {
+                it.split(":").takeIf { e -> e.size == 2 }?.let { e -> e[0] to e[1] }
+            }.let { pairs ->
+                val res = mutableMapOf<String, Int>()
+                for (pair in pairs) {
+                    res[pair.first] = pair.second.toInt()
+                }
+                res
             }
-            res
-        }
 
     private fun serializeMap(map: Map<String, Int>): List<String> =
         map.map { e ->

@@ -7,15 +7,17 @@ import android.view.WindowManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import org.koin.core.annotation.Single
 
-class DefaultKeepScreenOn(
+@Single
+internal actual class DefaultKeepScreenOn(
     private val window: Window?,
 ) : KeepScreenOn {
-    override fun activate() {
+    actual override fun activate() {
         window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    override fun deactivate() {
+    actual override fun deactivate() {
         window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

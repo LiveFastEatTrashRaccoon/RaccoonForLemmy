@@ -3,7 +3,9 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils.imageload
 import coil3.PlatformContext
 import coil3.memory.MemoryCache
 import coil3.request.ImageRequest
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultImagePreloadManager(
     private val context: PlatformContext,
     private val imageLoaderProvider: ImageLoaderProvider,

@@ -17,7 +17,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.usecase.SwitchAccou
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val coreIdentityModule =
+val identityModule =
     module {
         single<ApiConfigurationRepository> {
             DefaultApiConfigurationRepository(

@@ -1,21 +1,30 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.di
 
-import org.koin.core.module.Module
+import org.koin.core.annotation.Module
 
-internal expect val networkModule: Module
+@Module
+internal expect class NetworkModule()
 
-internal expect val appIconModule: Module
+@Module
+internal expect class AppIconModule()
 
-internal expect val crashReportModule: Module
+@Module
+internal expect class CrashReportModule()
 
-internal expect val fileSystemModule: Module
+@Module
+internal expect class FileSystemModule()
 
-internal expect val galleryHelperModule: Module
+@Module
+internal expect class GalleryHelperModule()
 
-internal expect val shareHelperModule: Module
+@Module
+internal expect class ShareHelperModule()
 
-internal expect val customTabsModule: Module
+@Module
+internal expect class CustomTabsModule()
 
-internal expect val hapticFeedbackModule: Module
+@Module
+internal expect class HapticFeedbackModule()
 
-internal expect val appInfoModule: Module
+@Module
+internal expect class KeepScreenOnModule()

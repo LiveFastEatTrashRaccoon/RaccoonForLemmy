@@ -1,12 +1,14 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.MultiCommunityEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.MultiCommunityModel
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultMultiCommunityRepository(
     provider: DatabaseProvider,
 ) : MultiCommunityRepository {
@@ -14,13 +16,18 @@ internal class DefaultMultiCommunityRepository(
 
     override suspend fun getAll(accountId: Long): List<MultiCommunityModel> =
         withContext(Dispatchers.IO) {
-            db.multicommunitiesQueries.getAll(accountId)
-                .executeAsList().map { it.toModel() }
+            db.multicommunitiesQueries
+                .getAll(accountId)
+                .executeAsList()
+                .map { it.toModel() }
         }
 
     override suspend fun getById(id: Long): MultiCommunityModel? =
         withContext(Dispatchers.IO) {
-            db.multicommunitiesQueries.getById(id).executeAsOneOrNull()?.toModel()
+            db.multicommunitiesQueries
+                .getById(id)
+                .executeAsOneOrNull()
+                ?.toModel()
         }
 
     override suspend fun create(
@@ -35,8 +42,10 @@ internal class DefaultMultiCommunityRepository(
                 account_id = accountId,
             )
             val id =
-                db.multicommunitiesQueries.getBy(name = model.name, account_id = accountId)
-                    .executeAsOneOrNull()?.id
+                db.multicommunitiesQueries
+                    .getBy(name = model.name, account_id = accountId)
+                    .executeAsOneOrNull()
+                    ?.id
             id ?: 0L
         }
 

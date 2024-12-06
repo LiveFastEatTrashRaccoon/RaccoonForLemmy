@@ -1,12 +1,14 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.TemporaryKeyStore
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 
 private const val SETTINGS_KEY = "communityPreferredLanguage"
 
+@Single
 internal class DefaultCommunityPreferredLanguageRepository(
     private val keyStore: TemporaryKeyStore,
 ) : CommunityPreferredLanguageRepository {
@@ -31,15 +33,17 @@ internal class DefaultCommunityPreferredLanguageRepository(
     }
 
     private fun deserializeMap(): MutableMap<String, Long> =
-        keyStore.get(SETTINGS_KEY, listOf()).mapNotNull {
-            it.split(":").takeIf { e -> e.size == 2 }?.let { e -> e[0] to e[1] }
-        }.let { pairs ->
-            val res = mutableMapOf<String, Long>()
-            for (pair in pairs) {
-                res[pair.first] = pair.second.toLong()
+        keyStore
+            .get(SETTINGS_KEY, listOf())
+            .mapNotNull {
+                it.split(":").takeIf { e -> e.size == 2 }?.let { e -> e[0] to e[1] }
+            }.let { pairs ->
+                val res = mutableMapOf<String, Long>()
+                for (pair in pairs) {
+                    res[pair.first] = pair.second.toLong()
+                }
+                res
             }
-            res
-        }
 
     private fun serializeMap(map: Map<String, Long>): List<String> =
         map.map { e ->

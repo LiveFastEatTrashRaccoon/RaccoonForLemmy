@@ -1,11 +1,13 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.network
 
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.prepareGet
+import io.ktor.http.HttpStatusCode
+import org.koin.core.annotation.Single
 
-class DefaultNetworkManager : NetworkManager {
-    override suspend fun isNetworkAvailable(): Boolean {
+@Single
+internal actual class DefaultNetworkManager : NetworkManager {
+    actual override suspend fun isNetworkAvailable(): Boolean {
         val factory = provideHttpClientEngineFactory()
         val client = HttpClient(factory)
         return client.prepareGet("https://www.google.com").execute { httpResponse ->

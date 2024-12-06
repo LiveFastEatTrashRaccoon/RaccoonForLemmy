@@ -3,18 +3,19 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toLong
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toVoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontScales
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.GetBy
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toInt
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.TemporaryKeyStore
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
@@ -71,6 +72,7 @@ private object KeyStoreKeys {
     const val ENABLE_ALTERNATE_MARKDOWN_RENDERING = "enableAlternateMarkdownRendering"
 }
 
+@Single
 internal class DefaultSettingsRepository(
     provider: DatabaseProvider,
     private val keyStore: TemporaryKeyStore,

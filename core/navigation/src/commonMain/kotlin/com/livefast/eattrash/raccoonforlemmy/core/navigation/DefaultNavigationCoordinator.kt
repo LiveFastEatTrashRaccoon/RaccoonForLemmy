@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Single
 import kotlin.time.Duration
 
 private sealed interface NavigationEvent {
@@ -28,6 +29,7 @@ private sealed interface NavigationEvent {
     ) : NavigationEvent
 }
 
+@Single
 internal class DefaultNavigationCoordinator(
     dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : NavigationCoordinator {

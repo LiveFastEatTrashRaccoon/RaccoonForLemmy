@@ -1,19 +1,16 @@
 package com.livefast.eattrash.raccoonforlemmy.core.appearance.di
 
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.DefaultThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppColorRepository
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.DefaultAppColorRepository
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val coreAppearanceModule =
-    module {
-        includes(nativeAppearanceModule)
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.appearance.repository")
+internal class AppearanceRepositoryModule
 
-        single<ThemeRepository> {
-            DefaultThemeRepository()
-        }
-        single<AppColorRepository> {
-            DefaultAppColorRepository()
-        }
-    }
+@Module(
+    includes = [
+        AppearanceRepositoryModule::class,
+        AppearanceThemeModule::class,
+    ],
+)
+class AppearanceModule
