@@ -1,14 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.about.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.about.AboutDialogMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.about.AboutDialogViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val aboutModule =
-    module {
-        factory<AboutDialogMviModel> {
-            AboutDialogViewModel(
-                appInfoRepository = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.about")
+class AboutModule

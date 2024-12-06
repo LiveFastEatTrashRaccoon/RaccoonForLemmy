@@ -1,15 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity.SelectCommunityMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity.SelectCommunityViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val selectCommunityModule =
-    module {
-        factory<SelectCommunityMviModel> {
-            SelectCommunityViewModel(
-                settingsRepository = get(),
-                communityPaginationManager = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity")
+class SelectCommunityModule

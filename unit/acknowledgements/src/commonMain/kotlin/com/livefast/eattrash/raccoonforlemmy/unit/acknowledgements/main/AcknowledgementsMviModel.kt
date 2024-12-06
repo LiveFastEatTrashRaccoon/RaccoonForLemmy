@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements
+package com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.main
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel

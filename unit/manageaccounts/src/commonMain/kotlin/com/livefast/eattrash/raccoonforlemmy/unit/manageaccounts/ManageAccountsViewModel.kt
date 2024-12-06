@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Factory
 
+@Factory(binds = [ManageAccountsMviModel::class])
 class ManageAccountsViewModel(
     private val accountRepository: AccountRepository,
     private val settingsRepository: SettingsRepository,
@@ -23,21 +25,22 @@ class ManageAccountsViewModel(
     private val logout: LogoutUseCase,
     private val deleteAccount: DeleteAccountUseCase,
     private val notificationCenter: NotificationCenter,
-) : ManageAccountsMviModel,
-    DefaultMviModel<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect>(
+) : DefaultMviModel<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect>(
         initialState = ManageAccountsMviModel.UiState(),
-    ) {
+    ),
+    ManageAccountsMviModel {
     init {
         if (uiState.value.accounts.isEmpty()) {
             screenModelScope.launch {
-                settingsRepository.currentSettings.onEach { settings ->
-                    updateState {
-                        it.copy(
-                            autoLoadImages = settings.autoLoadImages,
-                            preferNicknames = settings.preferUserNicknames,
-                        )
-                    }
-                }.launchIn(this)
+                settingsRepository.currentSettings
+                    .onEach { settings ->
+                        updateState {
+                            it.copy(
+                                autoLoadImages = settings.autoLoadImages,
+                                preferNicknames = settings.preferUserNicknames,
+                            )
+                        }
+                    }.launchIn(this)
 
                 val accounts = accountRepository.getAll()
                 updateState { it.copy(accounts = accounts) }

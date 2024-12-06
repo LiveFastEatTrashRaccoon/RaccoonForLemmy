@@ -38,13 +38,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 
+@Factory(binds = [PostDetailMviModel::class])
 @OptIn(FlowPreview::class)
 class PostDetailViewModel(
-    postId: Long,
-    private val otherInstance: String,
-    private val highlightCommentId: Long?,
-    private val isModerator: Boolean,
+    @InjectedParam postId: Long,
+    @InjectedParam private val otherInstance: String,
+    @InjectedParam private val highlightCommentId: Long?,
+    @InjectedParam private val isModerator: Boolean,
     private val identityRepository: IdentityRepository,
     private val apiConfigurationRepository: ApiConfigurationRepository,
     private val postRepository: PostRepository,

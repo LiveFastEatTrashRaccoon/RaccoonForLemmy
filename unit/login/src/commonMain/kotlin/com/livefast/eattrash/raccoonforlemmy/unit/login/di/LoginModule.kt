@@ -1,20 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.login.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val loginModule =
-    module {
-        factory<LoginMviModel> {
-            LoginViewModel(
-                login = get(),
-                accountRepository = get(),
-                identityRepository = get(),
-                siteRepository = get(),
-                communityRepository = get(),
-                apiConfigurationRepository = get(),
-                notificationCenter = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.login")
+class LoginModule

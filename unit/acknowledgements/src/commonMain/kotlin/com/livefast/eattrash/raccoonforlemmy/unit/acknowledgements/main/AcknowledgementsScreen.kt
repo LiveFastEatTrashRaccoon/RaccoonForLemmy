@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements
+package com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

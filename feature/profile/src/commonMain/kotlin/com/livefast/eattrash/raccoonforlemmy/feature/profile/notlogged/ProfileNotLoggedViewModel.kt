@@ -6,19 +6,22 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.Identity
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 
+@Factory(binds = [ProfileNotLoggedMviModel::class])
 class ProfileNotLoggedViewModel(
     private val identityRepository: IdentityRepository,
-) : ProfileNotLoggedMviModel,
-    DefaultMviModel<ProfileNotLoggedMviModel.Intent, ProfileNotLoggedMviModel.State, ProfileNotLoggedMviModel.Effect>(
+) : DefaultMviModel<ProfileNotLoggedMviModel.Intent, ProfileNotLoggedMviModel.State, ProfileNotLoggedMviModel.Effect>(
         initialState = ProfileNotLoggedMviModel.State(),
-    ) {
+    ),
+    ProfileNotLoggedMviModel {
     init {
         screenModelScope.launch {
-            identityRepository.isLogged.onEach { logged ->
-                val auth = identityRepository.authToken.value
-                updateState { it.copy(authError = !auth.isNullOrEmpty() && logged == false) }
-            }.launchIn(this)
+            identityRepository.isLogged
+                .onEach { logged ->
+                    val auth = identityRepository.authToken.value
+                    updateState { it.copy(authError = !auth.isNullOrEmpty() && logged == false) }
+                }.launchIn(this)
         }
     }
 

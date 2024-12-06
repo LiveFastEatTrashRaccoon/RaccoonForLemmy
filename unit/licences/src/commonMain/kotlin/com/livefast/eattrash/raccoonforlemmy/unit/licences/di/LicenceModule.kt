@@ -1,10 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.licences.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.licences.LicencesMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.licences.LicencesViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val licenceModule =
-    module {
-        factory<LicencesMviModel> { LicencesViewModel() }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.licences")
+class LicenceModule

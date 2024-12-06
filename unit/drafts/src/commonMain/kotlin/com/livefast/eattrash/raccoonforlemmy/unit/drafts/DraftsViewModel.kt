@@ -14,23 +14,27 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 
+@Factory(binds = [DraftsMviModel::class])
 class DraftsViewModel(
     private val themeRepository: ThemeRepository,
     private val accountRepository: AccountRepository,
     private val draftRepository: DraftRepository,
     private val notificationCenter: NotificationCenter,
-) : DraftsMviModel,
-    DefaultMviModel<DraftsMviModel.Intent, DraftsMviModel.State, DraftsMviModel.Effect>(
+) : DefaultMviModel<DraftsMviModel.Intent, DraftsMviModel.State, DraftsMviModel.Effect>(
         initialState = DraftsMviModel.State(),
-    ) {
+    ),
+    DraftsMviModel {
     init {
         screenModelScope.launch {
-            themeRepository.postLayout.onEach { layout ->
-                updateState { it.copy(postLayout = layout) }
-            }.launchIn(this)
+            themeRepository.postLayout
+                .onEach { layout ->
+                    updateState { it.copy(postLayout = layout) }
+                }.launchIn(this)
 
-            notificationCenter.subscribe(NotificationCenterEvent.DraftDeleted::class)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.DraftDeleted::class)
                 .onEach {
                     refresh()
                 }.launchIn(this)

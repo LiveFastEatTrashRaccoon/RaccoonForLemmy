@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.unit.drawer
+package com.livefast.eattrash.raccoonforlemmy.unit.drawer.content
 
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
@@ -37,7 +37,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
+import org.koin.core.annotation.Factory
 
+@Factory(binds = [ModalDrawerMviModel::class])
 @OptIn(FlowPreview::class)
 class ModalDrawerViewModel(
     private val identityRepository: IdentityRepository,

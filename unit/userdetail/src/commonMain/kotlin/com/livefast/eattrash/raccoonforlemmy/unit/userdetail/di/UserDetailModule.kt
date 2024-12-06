@@ -1,33 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.userdetail.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.userdetail.UserDetailMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.userdetail.UserDetailViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val userDetailModule =
-    module {
-        factory<UserDetailMviModel> { params ->
-            UserDetailViewModel(
-                userId = params[0],
-                otherInstance = params[1],
-                identityRepository = get(),
-                apiConfigurationRepository = get(),
-                userRepository = get(),
-                postRepository = get(),
-                commentRepository = get(),
-                siteRepository = get(),
-                themeRepository = get(),
-                settingsRepository = get(),
-                shareHelper = get(),
-                hapticFeedback = get(),
-                notificationCenter = get(),
-                imagePreloadManager = get(),
-                getSortTypesUseCase = get(),
-                itemCache = get(),
-                postPaginationManager = get(),
-                commentPaginationManager = get(),
-                postNavigationManager = get(),
-                lemmyValueCache = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.userdetail")
+class UserDetailModule

@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.unit.drawer
+package com.livefast.eattrash.raccoonforlemmy.unit.drawer.content
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize

@@ -71,10 +71,12 @@ kotlin {
                 implementation(projects.domain.lemmy.pagination)
                 implementation(projects.domain.lemmy.repository)
 
+                implementation(projects.unit.about)
                 implementation(projects.unit.accountsettings)
                 implementation(projects.unit.acknowledgements)
                 implementation(projects.unit.ban)
                 implementation(projects.unit.chat)
+                implementation(projects.unit.choosecolor)
                 implementation(projects.unit.communitydetail)
                 implementation(projects.unit.communityinfo)
                 implementation(projects.unit.configurecontentview)
@@ -85,23 +87,31 @@ kotlin {
                 implementation(projects.unit.drafts)
                 implementation(projects.unit.drawer)
                 implementation(projects.unit.editcommunity)
+                implementation(projects.unit.explore)
+                implementation(projects.unit.filteredcontents)
                 implementation(projects.unit.instanceinfo)
+                implementation(projects.unit.licences)
                 implementation(projects.unit.login)
                 implementation(projects.unit.manageaccounts)
                 implementation(projects.unit.manageban)
-                implementation(projects.unit.medialist)
                 implementation(projects.unit.managesubscriptions)
+                implementation(projects.unit.medialist)
+                implementation(projects.unit.mentions)
+                implementation(projects.unit.messages)
                 implementation(projects.unit.moderatewithreason)
-                implementation(projects.unit.filteredcontents)
-                implementation(projects.unit.licences)
                 implementation(projects.unit.modlog)
                 implementation(projects.unit.multicommunity)
+                implementation(projects.unit.myaccount)
                 implementation(projects.unit.postdetail)
+                implementation(projects.unit.postlist)
+                implementation(projects.unit.rawcontent)
+                implementation(projects.unit.replies)
                 implementation(projects.unit.reportlist)
                 implementation(projects.unit.selectcommunity)
                 implementation(projects.unit.selectinstance)
                 implementation(projects.unit.userdetail)
                 implementation(projects.unit.userinfo)
+                implementation(projects.unit.web)
                 implementation(projects.unit.zoomableimage)
 
                 api(projects.feature.home)
@@ -128,6 +138,14 @@ kotlin {
     }
 }
 
+dependencies {
+    add("kspCommonMainMetadata", libs.koin.ksp)
+    add("kspAndroid", libs.koin.ksp)
+    add("kspIosX64", libs.koin.ksp)
+    add("kspIosArm64", libs.koin.ksp)
+    add("kspIosSimulatorArm64", libs.koin.ksp)
+}
+
 android {
     namespace = "com.livefast.eattrash.raccoonforlemmy"
     compileSdk =
@@ -140,14 +158,6 @@ android {
                 .get()
                 .toInt()
     }
-}
-
-dependencies {
-    add("kspCommonMainMetadata", libs.koin.ksp)
-    add("kspAndroid", libs.koin.ksp)
-    add("kspIosX64", libs.koin.ksp)
-    add("kspIosArm64", libs.koin.ksp)
-    add("kspIosSimulatorArm64", libs.koin.ksp)
 }
 
 ksp {

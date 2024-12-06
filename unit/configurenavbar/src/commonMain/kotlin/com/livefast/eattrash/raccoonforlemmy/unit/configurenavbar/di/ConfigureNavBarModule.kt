@@ -1,19 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.ConfigureNavBarMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.ConfigureNavBarViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val configureNavBarModule =
-    module {
-        single<ConfigureNavBarMviModel> {
-            ConfigureNavBarViewModel(
-                accountRepository = get(),
-                identityRepository = get(),
-                bottomNavItemsRepository = get(),
-                settingsRepository = get(),
-                hapticFeedback = get(),
-                notificationCenter = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar")
+class ConfigureNavBarModule

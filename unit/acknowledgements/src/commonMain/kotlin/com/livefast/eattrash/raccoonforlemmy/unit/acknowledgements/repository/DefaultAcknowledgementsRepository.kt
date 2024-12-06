@@ -6,7 +6,9 @@ import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.models.Acknow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultAcknowledgementsRepository(
     private val dataSource: AcknowledgementsRemoteDataSource,
 ) : AcknowledgementsRepository {

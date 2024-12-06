@@ -1,17 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.drafts.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.drafts.DraftsMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.drafts.DraftsViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val draftsModule =
-    module {
-        factory<DraftsMviModel> {
-            DraftsViewModel(
-                themeRepository = get(),
-                accountRepository = get(),
-                draftRepository = get(),
-                notificationCenter = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.drafts")
+class DraftsModule

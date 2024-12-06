@@ -1,26 +1,19 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.AcknowledgementsMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.AcknowledgementsViewModel
-import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.datasource.AcknowledgementsRemoteDataSource
-import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.datasource.DefaultAcknowledgementsRemoteDataSource
-import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.repository.AcknowledgementsRepository
-import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.repository.DefaultAcknowledgementsRepository
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val acknowledgementsModule =
-    module {
-        single<AcknowledgementsRemoteDataSource> {
-            DefaultAcknowledgementsRemoteDataSource()
-        }
-        single<AcknowledgementsRepository> {
-            DefaultAcknowledgementsRepository(
-                dataSource = get(),
-            )
-        }
-        factory<AcknowledgementsMviModel> {
-            AcknowledgementsViewModel(
-                acknowledgementsRepository = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.main")
+internal class MainModule
+
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.datasource")
+internal class DataSourceModule
+
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.repository")
+internal class RepositoryModule
+
+@Module(includes = [MainModule::class, DataSourceModule::class, RepositoryModule::class])
+class AcknowledgementsModule

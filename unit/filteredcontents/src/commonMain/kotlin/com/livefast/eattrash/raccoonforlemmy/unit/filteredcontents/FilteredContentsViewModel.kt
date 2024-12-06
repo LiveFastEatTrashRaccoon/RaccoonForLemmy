@@ -27,9 +27,12 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 
+@Factory(binds = [FilteredContentsMviModel::class])
 class FilteredContentsViewModel(
-    private val contentsType: Int,
+    @InjectedParam private val contentsType: Int,
     private val postPaginationManager: PostPaginationManager,
     private val commentPaginationManager: CommentPaginationManager,
     private val themeRepository: ThemeRepository,

@@ -40,7 +40,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificati
 import com.livefast.eattrash.raccoonforlemmy.core.resources.di.getCoreResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.unit.about.components.AboutItem
-import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.AcknowledgementsScreen
+import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.main.AcknowledgementsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.licences.LicencesScreen
 
 class AboutDialog : Screen {

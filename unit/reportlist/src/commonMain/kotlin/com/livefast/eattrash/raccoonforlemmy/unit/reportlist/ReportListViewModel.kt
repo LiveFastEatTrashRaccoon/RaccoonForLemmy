@@ -18,9 +18,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 
+@Factory(binds = [ReportListMviModel::class])
 class ReportListViewModel(
-    private val communityId: Long?,
+    @InjectedParam private val communityId: Long?,
     private val identityRepository: IdentityRepository,
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
@@ -28,27 +31,30 @@ class ReportListViewModel(
     private val settingsRepository: SettingsRepository,
     private val hapticFeedback: HapticFeedback,
     private val notificationCenter: NotificationCenter,
-) : ReportListMviModel,
-    DefaultMviModel<ReportListMviModel.Intent, ReportListMviModel.UiState, ReportListMviModel.Effect>(
+) : DefaultMviModel<ReportListMviModel.Intent, ReportListMviModel.UiState, ReportListMviModel.Effect>(
         initialState = ReportListMviModel.UiState(),
-    ) {
+    ),
+    ReportListMviModel {
     private val currentPage = mutableMapOf<ReportListSection, Int>()
 
     init {
         screenModelScope.launch {
-            themeRepository.postLayout.onEach { layout ->
-                updateState { it.copy(postLayout = layout) }
-            }.launchIn(this)
-            settingsRepository.currentSettings.onEach { settings ->
-                updateState {
-                    it.copy(
-                        autoLoadImages = settings.autoLoadImages,
-                        preferNicknames = settings.preferUserNicknames,
-                        swipeActionsEnabled = settings.enableSwipeActions,
-                    )
-                }
-            }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.ChangeReportListType::class)
+            themeRepository.postLayout
+                .onEach { layout ->
+                    updateState { it.copy(postLayout = layout) }
+                }.launchIn(this)
+            settingsRepository.currentSettings
+                .onEach { settings ->
+                    updateState {
+                        it.copy(
+                            autoLoadImages = settings.autoLoadImages,
+                            preferNicknames = settings.preferUserNicknames,
+                            swipeActionsEnabled = settings.enableSwipeActions,
+                        )
+                    }
+                }.launchIn(this)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeReportListType::class)
                 .onEach { evt ->
                     changeUnresolvedOnly(evt.unresolvedOnly)
                 }.launchIn(this)
@@ -75,13 +81,15 @@ class ReportListViewModel(
 
             is ReportListMviModel.Intent.ResolveComment ->
                 uiState.value.commentReports
-                    .firstOrNull { it.id == intent.id }?.also {
+                    .firstOrNull { it.id == intent.id }
+                    ?.also {
                         resolve(it)
                     }
 
             is ReportListMviModel.Intent.ResolvePost ->
                 uiState.value.postReports
-                    .firstOrNull { it.id == intent.id }?.also {
+                    .firstOrNull { it.id == intent.id }
+                    ?.also {
                         resolve(it)
                     }
 
@@ -153,12 +161,13 @@ class ReportListViewModel(
                         if (page == 1 && (currentState.commentReports.isEmpty() || refreshing)) {
                             // this is needed because otherwise on first selector change
                             // the lazy column scrolls back to top (it must have an empty data set)
-                            commentRepository.getReports(
-                                auth = auth,
-                                communityId = communityId,
-                                page = 1,
-                                unresolvedOnly = unresolvedOnly,
-                            ).orEmpty()
+                            commentRepository
+                                .getReports(
+                                    auth = auth,
+                                    communityId = communityId,
+                                    page = 1,
+                                    unresolvedOnly = unresolvedOnly,
+                                ).orEmpty()
                         } else {
                             currentState.commentReports
                         }

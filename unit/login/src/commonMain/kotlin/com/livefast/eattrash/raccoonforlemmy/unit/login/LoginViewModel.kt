@@ -14,7 +14,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteReposit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Factory
 
+@Factory(binds = [LoginMviModel::class])
 class LoginViewModel(
     private val login: LoginUseCase,
     apiConfigurationRepository: ApiConfigurationRepository,
@@ -23,10 +25,10 @@ class LoginViewModel(
     private val siteRepository: SiteRepository,
     private val communityRepository: CommunityRepository,
     private val notificationCenter: NotificationCenter,
-) : LoginMviModel,
-    DefaultMviModel<LoginMviModel.Intent, LoginMviModel.UiState, LoginMviModel.Effect>(
+) : DefaultMviModel<LoginMviModel.Intent, LoginMviModel.UiState, LoginMviModel.Effect>(
         initialState = LoginMviModel.UiState(),
-    ) {
+    ),
+    LoginMviModel {
     init {
         val instance = apiConfigurationRepository.instance.value
         screenModelScope.launch {

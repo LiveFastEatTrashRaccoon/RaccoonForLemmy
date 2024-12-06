@@ -1,30 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.postlist.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.postlist.PostListMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.postlist.PostListViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val postListModule =
-    module {
-        factory<PostListMviModel> {
-            PostListViewModel(
-                postRepository = get(),
-                apiConfigurationRepository = get(),
-                identityRepository = get(),
-                siteRepository = get(),
-                themeRepository = get(),
-                settingsRepository = get(),
-                userRepository = get(),
-                communityRepository = get(),
-                shareHelper = get(),
-                notificationCenter = get(),
-                hapticFeedback = get(),
-                zombieModeHelper = get(),
-                imagePreloadManager = get(),
-                getSortTypesUseCase = get(),
-                postPaginationManager = get(),
-                postNavigationManager = get(),
-                lemmyValueCache = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.postlist")
+class PostListModule

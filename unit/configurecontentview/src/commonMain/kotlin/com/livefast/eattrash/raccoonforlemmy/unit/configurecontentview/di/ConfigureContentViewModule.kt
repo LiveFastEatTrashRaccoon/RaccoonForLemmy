@@ -1,20 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview.ConfigureContentViewMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview.ConfigureContentViewViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val configureContentViewModule =
-    module {
-        factory<ConfigureContentViewMviModel> {
-            ConfigureContentViewViewModel(
-                themeRepository = get(),
-                settingsRepository = get(),
-                accountRepository = get(),
-                notificationCenter = get(),
-                identityRepository = get(),
-                siteRepository = get(),
-                lemmyValueCache = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview")
+class ConfigureContentViewModule

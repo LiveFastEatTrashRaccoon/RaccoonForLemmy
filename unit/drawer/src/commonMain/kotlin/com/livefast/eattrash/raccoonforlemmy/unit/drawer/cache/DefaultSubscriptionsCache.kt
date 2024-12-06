@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultSubscriptionsCache(
     private val identityRepository: IdentityRepository,
     private val communityPaginationManager: CommunityPaginationManager,

@@ -9,18 +9,16 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeTarget
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 
+@Factory(binds = [ConfigureSwipeActionsMviModel::class])
 class ConfigureSwipeActionsViewModel(
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
-    private val identityRepository: IdentityRepository,
-    private val siteRepository: SiteRepository,
     private val notificationCenter: NotificationCenter,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<ConfigureSwipeActionsMviModel.Intent, ConfigureSwipeActionsMviModel.UiState, ConfigureSwipeActionsMviModel.Effect>(
