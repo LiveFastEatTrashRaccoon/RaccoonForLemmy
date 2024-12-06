@@ -1,18 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.editcommunity.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.editcommunity.EditCommunityMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.editcommunity.EditCommunityViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val editCommunityModule =
-    module {
-        factory<EditCommunityMviModel> { params ->
-            EditCommunityViewModel(
-                communityId = params[0],
-                identityRepository = get(),
-                communityRepository = get(),
-                mediaRepository = get(),
-                notificationCenter = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.editcommunity")
+class EditCommunityModule

@@ -1,19 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val manageAccountsModule =
-    module {
-        factory<ManageAccountsMviModel> {
-            ManageAccountsViewModel(
-                accountRepository = get(),
-                settingsRepository = get(),
-                switchAccount = get(),
-                logout = get(),
-                deleteAccount = get(),
-                notificationCenter = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts")
+class ManageAccountsModule

@@ -13,9 +13,12 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteReposit
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 
+@Factory(binds = [InstanceInfoMviModel::class])
 class InstanceInfoViewModel(
-    private val url: String,
+    @InjectedParam private val url: String,
     private val siteRepository: SiteRepository,
     private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,

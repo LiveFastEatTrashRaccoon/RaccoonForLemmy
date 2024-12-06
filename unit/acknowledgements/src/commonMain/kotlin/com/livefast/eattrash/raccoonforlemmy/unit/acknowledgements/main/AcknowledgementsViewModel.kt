@@ -1,16 +1,18 @@
-package com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements
+package com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.main
 
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.repository.AcknowledgementsRepository
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 
+@Factory(binds = [AcknowledgementsMviModel::class])
 internal class AcknowledgementsViewModel(
     private val acknowledgementsRepository: AcknowledgementsRepository,
-) : AcknowledgementsMviModel,
-    DefaultMviModel<AcknowledgementsMviModel.Intent, AcknowledgementsMviModel.State, AcknowledgementsMviModel.Effect>(
+) : DefaultMviModel<AcknowledgementsMviModel.Intent, AcknowledgementsMviModel.State, AcknowledgementsMviModel.Effect>(
         initialState = AcknowledgementsMviModel.State(),
-    ) {
+    ),
+    AcknowledgementsMviModel {
     init {
         screenModelScope.launch {
             refresh(initial = true)

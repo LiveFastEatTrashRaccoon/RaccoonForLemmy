@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.unit.drawer
+package com.livefast.eattrash.raccoonforlemmy.unit.drawer.content
 
 import androidx.compose.runtime.Stable
 import cafe.adriel.voyager.core.model.ScreenModel

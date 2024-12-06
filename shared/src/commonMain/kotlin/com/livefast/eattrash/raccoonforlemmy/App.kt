@@ -70,7 +70,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toLanguageDirection
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.main.MainScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.drawer.ModalDrawerContent
+import com.livefast.eattrash.raccoonforlemmy.unit.drawer.content.ModalDrawerContent
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.di.getSubscriptionsCache
 import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail.MultiCommunityScreen
 import kotlinx.coroutines.FlowPreview

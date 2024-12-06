@@ -1,22 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.mentions.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.mentions.InboxMentionsMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.mentions.InboxMentionsViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val inboxMentionsModule =
-    module {
-        factory<InboxMentionsMviModel> {
-            InboxMentionsViewModel(
-                userRepository = get(),
-                identityRepository = get(),
-                commentRepository = get(),
-                themeRepository = get(),
-                settingsRepository = get(),
-                hapticFeedback = get(),
-                coordinator = get(),
-                notificationCenter = get(),
-                lemmyValueCache = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.mentions")
+class MentionsModule

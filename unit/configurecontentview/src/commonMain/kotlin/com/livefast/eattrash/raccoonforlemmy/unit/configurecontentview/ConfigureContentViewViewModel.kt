@@ -15,22 +15,20 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 
 private val COMMENT_BAR_THICKNESS_RANGE = 1..5
 private val COMMENT_INDENT_AMOUNT_RANGE = 1..20
 
+@Factory(binds = [ConfigureContentViewMviModel::class])
 class ConfigureContentViewViewModel(
     private val themeRepository: ThemeRepository,
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
-    private val identityRepository: IdentityRepository,
-    private val siteRepository: SiteRepository,
     private val notificationCenter: NotificationCenter,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<ConfigureContentViewMviModel.Intent, ConfigureContentViewMviModel.State, ConfigureContentViewMviModel.Effect>(

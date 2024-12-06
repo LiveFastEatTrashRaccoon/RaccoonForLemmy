@@ -1,21 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.manageban.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.manageban.ManageBanMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.manageban.ManageBanViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val manageBanModule =
-    module {
-        factory<ManageBanMviModel> {
-            ManageBanViewModel(
-                identityRepository = get(),
-                accountRepository = get(),
-                siteRepository = get(),
-                settingsRepository = get(),
-                userRepository = get(),
-                communityRepository = get(),
-                blocklistRepository = get(),
-                stopWordRepository = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.manageban")
+class ManageBanModule

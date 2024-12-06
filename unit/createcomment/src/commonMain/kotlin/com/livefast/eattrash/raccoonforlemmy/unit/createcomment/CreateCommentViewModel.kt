@@ -24,12 +24,15 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteReposit
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 
+@Factory(binds = [CreateCommentMviModel::class])
 class CreateCommentViewModel(
-    private val postId: Long?,
-    private val parentId: Long?,
-    private val editedCommentId: Long?,
-    private val draftId: Long?,
+    @InjectedParam private val postId: Long?,
+    @InjectedParam private val parentId: Long?,
+    @InjectedParam private val editedCommentId: Long?,
+    @InjectedParam private val draftId: Long?,
     private val identityRepository: IdentityRepository,
     private val commentRepository: CommentRepository,
     private val postRepository: PostRepository,

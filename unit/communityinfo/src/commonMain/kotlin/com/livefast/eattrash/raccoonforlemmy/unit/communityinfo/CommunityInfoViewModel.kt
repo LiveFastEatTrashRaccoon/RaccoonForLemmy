@@ -9,27 +9,31 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyItemCa
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 
+@Factory(binds = [CommunityInfoMviModel::class])
 class CommunityInfoViewModel(
-    private val communityId: Long,
-    private val communityName: String,
-    private val otherInstance: String,
+    @InjectedParam private val communityId: Long,
+    @InjectedParam private val communityName: String,
+    @InjectedParam private val otherInstance: String,
     private val communityRepository: CommunityRepository,
     private val settingsRepository: SettingsRepository,
     private val itemCache: LemmyItemCache,
-) : CommunityInfoMviModel,
-    DefaultMviModel<CommunityInfoMviModel.Intent, CommunityInfoMviModel.UiState, CommunityInfoMviModel.Effect>(
+) : DefaultMviModel<CommunityInfoMviModel.Intent, CommunityInfoMviModel.UiState, CommunityInfoMviModel.Effect>(
         initialState = CommunityInfoMviModel.UiState(),
-    ) {
+    ),
+    CommunityInfoMviModel {
     init {
         screenModelScope.launch {
             if (uiState.value.community.id == 0L) {
                 val community = itemCache.getCommunity(communityId) ?: CommunityModel()
                 updateState { it.copy(community = community) }
             }
-            settingsRepository.currentSettings.onEach {
-                updateState { it.copy(autoLoadImages = it.autoLoadImages) }
-            }.launchIn(this)
+            settingsRepository.currentSettings
+                .onEach {
+                    updateState { it.copy(autoLoadImages = it.autoLoadImages) }
+                }.launchIn(this)
 
             if (uiState.value.moderators.isEmpty()) {
                 val community =

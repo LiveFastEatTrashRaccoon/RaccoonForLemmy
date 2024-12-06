@@ -36,7 +36,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
+import org.koin.core.annotation.Factory
 
+@Factory(binds = [ProfileLoggedMviModel::class])
 class ProfileLoggedViewModel(
     private val identityRepository: IdentityRepository,
     private val apiConfigurationRepository: ApiConfigurationRepository,

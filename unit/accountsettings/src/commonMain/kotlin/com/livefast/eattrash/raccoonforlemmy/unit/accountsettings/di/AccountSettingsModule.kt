@@ -1,18 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.accountsettings.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.accountsettings.AccountSettingsMviModel
-import com.livefast.eattrash.raccoonforlemmy.unit.accountsettings.AccountSettingsViewModel
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val accountSettingsModule =
-    module {
-        factory<AccountSettingsMviModel> {
-            AccountSettingsViewModel(
-                siteRepository = get(),
-                identityRepository = get(),
-                mediaRepository = get(),
-                getSortTypesUseCase = get(),
-                notificationCenter = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.accountsettings")
+class AccountSettingsModule

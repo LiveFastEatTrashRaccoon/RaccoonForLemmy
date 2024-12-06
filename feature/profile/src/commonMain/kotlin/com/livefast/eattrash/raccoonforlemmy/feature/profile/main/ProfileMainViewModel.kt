@@ -7,25 +7,28 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.usecase.LogoutUseCa
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 
+@Factory(binds = [ProfileMainMviModel::class])
 class ProfileMainViewModel(
     private val identityRepository: IdentityRepository,
     private val logout: LogoutUseCase,
-) : ProfileMainMviModel,
-    DefaultMviModel<ProfileMainMviModel.Intent, ProfileMainMviModel.UiState, ProfileMainMviModel.Effect>(
+) : DefaultMviModel<ProfileMainMviModel.Intent, ProfileMainMviModel.UiState, ProfileMainMviModel.Effect>(
         initialState = ProfileMainMviModel.UiState(),
-    ) {
+    ),
+    ProfileMainMviModel {
     init {
         screenModelScope.launch {
-            identityRepository.isLogged.onEach { logged ->
-                updateState { it.copy(logged = logged) }
-                if (logged == true) {
-                    val userFromCache = identityRepository.cachedUser
-                    updateState {
-                        it.copy(user = userFromCache)
+            identityRepository.isLogged
+                .onEach { logged ->
+                    updateState { it.copy(logged = logged) }
+                    if (logged == true) {
+                        val userFromCache = identityRepository.cachedUser
+                        updateState {
+                            it.copy(user = userFromCache)
+                        }
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
     }
 

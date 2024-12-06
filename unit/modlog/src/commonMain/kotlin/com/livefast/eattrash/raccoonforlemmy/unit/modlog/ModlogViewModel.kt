@@ -9,24 +9,28 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.ModlogRepos
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 
+@Factory(binds = [ModlogMviModel::class])
 class ModlogViewModel(
-    private val communityId: Long?,
+    @InjectedParam private val communityId: Long?,
     private val themeRepository: ThemeRepository,
     private val identityRepository: IdentityRepository,
     private val modlogRepository: ModlogRepository,
     private val settingsRepository: SettingsRepository,
-) : ModlogMviModel,
-    DefaultMviModel<ModlogMviModel.Intent, ModlogMviModel.UiState, ModlogMviModel.Effect>(
+) : DefaultMviModel<ModlogMviModel.Intent, ModlogMviModel.UiState, ModlogMviModel.Effect>(
         initialState = ModlogMviModel.UiState(),
-    ) {
+    ),
+    ModlogMviModel {
     private var currentPage: Int = 1
 
     init {
         screenModelScope.launch {
-            themeRepository.postLayout.onEach { layout ->
-                updateState { it.copy(postLayout = layout) }
-            }.launchIn(this)
+            themeRepository.postLayout
+                .onEach { layout ->
+                    updateState { it.copy(postLayout = layout) }
+                }.launchIn(this)
             settingsRepository.currentSettings.onEach { settings ->
                 updateState {
                     it.copy(

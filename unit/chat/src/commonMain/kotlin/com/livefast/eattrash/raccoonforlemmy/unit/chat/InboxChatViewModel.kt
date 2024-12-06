@@ -14,9 +14,12 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserReposit
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 
+@Factory(binds = [InboxChatMviModel::class])
 class InboxChatViewModel(
-    private val otherUserId: Long,
+    @InjectedParam private val otherUserId: Long,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
     private val messageRepository: PrivateMessageRepository,

@@ -10,11 +10,14 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserReposit
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 
+@Factory(binds = [UserInfoMviModel::class])
 class UserInfoViewModel(
-    private val userId: Long,
-    private val username: String,
-    private val otherInstance: String,
+    @InjectedParam private val userId: Long,
+    @InjectedParam private val username: String,
+    @InjectedParam private val otherInstance: String,
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository,
     private val itemCache: LemmyItemCache,

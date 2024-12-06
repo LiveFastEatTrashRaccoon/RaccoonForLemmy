@@ -7,7 +7,9 @@ import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.request.request
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.json.Json
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultAcknowledgementsRemoteDataSource(
     factory: HttpClientEngineFactory<*> = provideHttpClientEngineFactory(),
 ) : AcknowledgementsRemoteDataSource {
