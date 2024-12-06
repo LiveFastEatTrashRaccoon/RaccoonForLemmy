@@ -8,7 +8,7 @@ import android.content.Intent
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.L10nManager
-import com.livefast.eattrash.raccoonforlemmy.domain.inbox.InboxCoordinator
+import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject

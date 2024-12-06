@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
-import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommentResponse
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentReportModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -54,7 +53,7 @@ interface CommentRepository {
         comment: CommentModel,
         auth: String,
         voted: Boolean,
-    ): Result<CommentResponse>
+    ): Result<Unit>
 
     fun asDownVoted(
         comment: CommentModel,
@@ -70,7 +69,7 @@ interface CommentRepository {
         comment: CommentModel,
         auth: String,
         downVoted: Boolean,
-    ): Result<CommentResponse>
+    ): Result<Unit>
 
     fun asSaved(
         comment: CommentModel,
@@ -81,7 +80,7 @@ interface CommentRepository {
         comment: CommentModel,
         auth: String,
         saved: Boolean,
-    ): Result<CommentResponse>
+    ): Result<Unit>
 
     suspend fun create(
         postId: Long,

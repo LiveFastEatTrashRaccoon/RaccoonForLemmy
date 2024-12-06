@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.domain.inbox
+package com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator
 
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.usecase.GetUnreadItemsUseCase
@@ -14,7 +14,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultInboxCoordinator(
     private val identityRepository: IdentityRepository,
     private val getUnreadItemsUseCase: GetUnreadItemsUseCase,
@@ -41,9 +43,10 @@ internal class DefaultInboxCoordinator(
 
     init {
         scope.launch {
-            identityRepository.isLogged.onEach {
-                updateCounters()
-            }.launchIn(this)
+            identityRepository.isLogged
+                .onEach {
+                    updateCounters()
+                }.launchIn(this)
         }
     }
 

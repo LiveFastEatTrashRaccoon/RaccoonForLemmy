@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultGetSortTypesUseCase(
     private val isSiteVersionAtLeastUseCase: IsSiteVersionAtLeastUseCase,
 ) : GetSortTypesUseCase {

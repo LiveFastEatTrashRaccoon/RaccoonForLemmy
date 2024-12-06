@@ -6,7 +6,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.inbox.InboxCoordinator
+import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.otherUser
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
@@ -21,38 +21,43 @@ class InboxMessagesViewModel(
     private val settingsRepository: SettingsRepository,
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
-) : InboxMessagesMviModel,
-    DefaultMviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect>(
+) : DefaultMviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect>(
         initialState = InboxMessagesMviModel.UiState(),
-    ) {
+    ),
+    InboxMessagesMviModel {
     private var currentPage: Int = 1
 
     init {
         screenModelScope.launch {
-            coordinator.events.onEach {
-                when (it) {
-                    InboxCoordinator.Event.Refresh -> {
-                        refresh()
-                        emitEffect(InboxMessagesMviModel.Effect.BackToTop)
+            coordinator.events
+                .onEach {
+                    when (it) {
+                        InboxCoordinator.Event.Refresh -> {
+                            refresh()
+                            emitEffect(InboxMessagesMviModel.Effect.BackToTop)
+                        }
                     }
-                }
-            }.launchIn(this)
-            coordinator.unreadOnly.onEach {
-                if (it != uiState.value.unreadOnly) {
-                    changeUnreadOnly(it)
-                }
-            }.launchIn(this)
-            settingsRepository.currentSettings.onEach { settings ->
-                updateState {
-                    it.copy(
-                        autoLoadImages = settings.autoLoadImages,
-                        preferNicknames = settings.preferUserNicknames,
-                    )
-                }
-            }.launchIn(this)
-            notificationCenter.subscribe(NotificationCenterEvent.Logout::class).onEach {
-                handleLogout()
-            }.launchIn(this)
+                }.launchIn(this)
+            coordinator.unreadOnly
+                .onEach {
+                    if (it != uiState.value.unreadOnly) {
+                        changeUnreadOnly(it)
+                    }
+                }.launchIn(this)
+            settingsRepository.currentSettings
+                .onEach { settings ->
+                    updateState {
+                        it.copy(
+                            autoLoadImages = settings.autoLoadImages,
+                            preferNicknames = settings.preferUserNicknames,
+                        )
+                    }
+                }.launchIn(this)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.Logout::class)
+                .onEach {
+                    handleLogout()
+                }.launchIn(this)
 
             val auth = identityRepository.authToken.value.orEmpty()
             val currentUserId = siteRepository.getCurrentUser(auth)?.id ?: 0
@@ -119,16 +124,17 @@ class InboxMessagesViewModel(
         val refreshing = currentState.refreshing
         val unreadOnly = currentState.unreadOnly
         val itemList =
-            messageRepository.getAll(
-                auth = auth,
-                page = currentPage,
-                unreadOnly = unreadOnly,
-            )?.groupBy {
-                it.otherUser(currentState.currentUserId)?.id ?: 0
-            }?.mapNotNull { entry ->
-                val messages = entry.value.sortedBy { m -> m.publishDate }
-                messages.lastOrNull()
-            }
+            messageRepository
+                .getAll(
+                    auth = auth,
+                    page = currentPage,
+                    unreadOnly = unreadOnly,
+                )?.groupBy {
+                    it.otherUser(currentState.currentUserId)?.id ?: 0
+                }?.mapNotNull { entry ->
+                    val messages = entry.value.sortedBy { m -> m.publishDate }
+                    messages.lastOrNull()
+                }
         if (!itemList.isNullOrEmpty()) {
             currentPage++
         }

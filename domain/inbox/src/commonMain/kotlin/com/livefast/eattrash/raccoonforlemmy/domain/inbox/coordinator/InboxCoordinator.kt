@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.domain.inbox
+package com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator
 
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow

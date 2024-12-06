@@ -3,6 +3,8 @@ package com.livefast.eattrash.raccoonforlemmy.domain.inbox
 import app.cash.turbine.test
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.DefaultInboxCoordinator
+import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.usecase.GetUnreadItemsUseCase
 import io.mockk.coEvery
 import io.mockk.every

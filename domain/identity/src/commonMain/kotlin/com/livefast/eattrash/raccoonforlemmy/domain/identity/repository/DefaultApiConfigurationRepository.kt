@@ -12,11 +12,12 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
-private const val KEY_LAST_INSTANCE = "lastInstance"
-
+@Single
 internal class DefaultApiConfigurationRepository(
-    private val serviceProvider: ServiceProvider,
+    @Named("default") private val serviceProvider: ServiceProvider,
     private val keyStore: TemporaryKeyStore,
     dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ApiConfigurationRepository {
@@ -45,5 +46,9 @@ internal class DefaultApiConfigurationRepository(
     override fun changeInstance(value: String) {
         serviceProvider.changeInstance(value)
         keyStore.save(KEY_LAST_INSTANCE, value)
+    }
+
+    companion object {
+        private const val KEY_LAST_INSTANCE = "lastInstance"
     }
 }

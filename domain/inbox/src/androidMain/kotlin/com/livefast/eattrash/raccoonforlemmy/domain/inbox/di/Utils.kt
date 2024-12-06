@@ -1,14 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.inbox.di
 
-import com.livefast.eattrash.raccoonforlemmy.domain.inbox.notification.DefaultInboxNotificationChecker
-import com.livefast.eattrash.raccoonforlemmy.domain.inbox.notification.InboxNotificationChecker
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-actual val inboxNativeModule =
-    module {
-        single<InboxNotificationChecker> {
-            DefaultInboxNotificationChecker(
-                context = get(),
-            )
-        }
-    }
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.domain.inbox.notification")
+internal actual class NotificationModule

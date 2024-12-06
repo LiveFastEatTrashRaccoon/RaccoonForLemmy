@@ -23,10 +23,13 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toMod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
+@Single
 internal class DefaultCommentRepository(
-    private val services: ServiceProvider,
-    private val customServices: ServiceProvider,
+    @Named("default") private val services: ServiceProvider,
+    @Named("custom") private val customServices: ServiceProvider,
 ) : CommentRepository {
     override suspend fun getAll(
         postId: Long?,
@@ -184,6 +187,7 @@ internal class DefaultCommentRepository(
                     auth = auth,
                 )
             services.comment.like(authHeader = auth.toAuthHeader(), form = data)
+            Unit
         }
     }
 
@@ -248,6 +252,7 @@ internal class DefaultCommentRepository(
                     auth = auth,
                 )
             services.comment.like(authHeader = auth.toAuthHeader(), form = data)
+            Unit
         }
     }
 
@@ -268,6 +273,7 @@ internal class DefaultCommentRepository(
                 auth = auth,
             )
         services.comment.save(authHeader = auth.toAuthHeader(), form = data)
+        Unit
     }
 
     override suspend fun create(
@@ -321,7 +327,7 @@ internal class DefaultCommentRepository(
                     deleted = true,
                 )
             val res = services.comment.delete(authHeader = auth.toAuthHeader(), form = data)
-            res.commentView?.toModel()
+            res.commentView.toModel()
         }.getOrNull()
     }
 
