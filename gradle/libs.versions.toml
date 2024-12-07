@@ -12,6 +12,7 @@ coil = "3.0.4"
 colorpicker = "1.1.2"
 compose = "1.7.1"
 compose-multiplatform-media-player = "1.0.26"
+gradle = "8.1.4"
 koin = "4.0.0"
 koin-annotations = "2.0.0-Beta2"
 kotlin = "2.1.0"
@@ -57,8 +58,11 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "c
 coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 
 compose-multiplatform-media-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "compose-multiplatform-media-player" }
-
+compose-gradlePlugin = { module = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin", version.ref = "compose" }
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
+
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 kotlincrypto-bom = { module = "org.kotlincrypto.hash:bom", version.ref = "kotlincrypto" }
 kotlincrypto-md5 = { module = "org.kotlincrypto.hash:md" }
@@ -72,6 +76,8 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
 koin-ksp = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
+
+ksp-gradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 ktor-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
 ktor-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
