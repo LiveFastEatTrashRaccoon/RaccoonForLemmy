@@ -182,7 +182,7 @@ class ModerateWithReasonScreen(
                     keyboardOptions =
                         KeyboardOptions(
                             keyboardType = KeyboardType.Text,
-                            autoCorrect = true,
+                            autoCorrectEnabled = true,
                         ),
                     onValueChange = { value ->
                         model.reduce(ModerateWithReasonMviModel.Intent.SetText(value))
