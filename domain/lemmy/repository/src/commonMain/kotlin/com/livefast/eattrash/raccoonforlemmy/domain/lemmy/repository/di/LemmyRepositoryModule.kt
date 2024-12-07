@@ -1,29 +1,33 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.di
 
-import com.livefast.eattrash.raccoonforlemmy.core.utils.cache.LruCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultLocalItemCache
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LocalItemCache
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
-
-private const val CACHE_SIZE = 5
 
 @Module
 internal class CacheModule {
     @Single
-    fun providePostCache(): LruCache<PostModel> = LruCache.factory(CACHE_SIZE)
+    @Named("postCache")
+    fun providePostCache(): LocalItemCache<PostModel> = DefaultLocalItemCache()
 
     @Single
-    fun provideCommentCache(): LruCache<CommentModel> = LruCache.factory(CACHE_SIZE)
+    @Named("commentCache")
+    fun provideCommentCache(): LocalItemCache<CommentModel> = DefaultLocalItemCache()
 
     @Single
-    fun provideCommunityCache(): LruCache<CommunityModel> = LruCache.factory(CACHE_SIZE)
+    @Named("communityCache")
+    fun provideCommunityCache(): LocalItemCache<CommunityModel> = DefaultLocalItemCache()
 
     @Single
-    fun provideUserCache(): LruCache<UserModel> = LruCache.factory(CACHE_SIZE)
+    @Named("userCache")
+    fun provideUserCache(): LocalItemCache<UserModel> = DefaultLocalItemCache()
 }
 
 @Module
