@@ -3,7 +3,6 @@ package com.livefast.eattrash.raccoonforlemmy.core.navigation
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import kotlinx.coroutines.CoroutineDispatcher
@@ -46,10 +45,8 @@ internal class DefaultNavigationCoordinator(
 
     private var connection: NestedScrollConnection? = null
     private var navigator: Navigator? = null
-    private var bottomNavigator: BottomSheetNavigator? = null
     private var tabNavigator: TabNavigator? = null
     private var canGoBackCallback: (() -> Boolean)? = null
-    private val bottomSheetChannel = Channel<NavigationEvent>()
     private val screenChannel = Channel<NavigationEvent>()
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
 
@@ -59,15 +56,6 @@ internal class DefaultNavigationCoordinator(
 
     init {
         scope.launch {
-            bottomSheetChannel
-                .receiveAsFlow()
-                .onEach { evt ->
-                    when (evt) {
-                        is NavigationEvent.Show -> {
-                            bottomNavigator?.show(evt.screen)
-                        }
-                    }
-                }.launchIn(this)
             screenChannel
                 .receiveAsFlow()
                 .onEach { evt ->
@@ -136,26 +124,11 @@ internal class DefaultNavigationCoordinator(
         inboxUnread.value = count
     }
 
-    override fun setBottomNavigator(value: BottomSheetNavigator?) {
-        bottomNavigator = value
-    }
-
-    override fun showBottomSheet(screen: Screen) {
-        closeSideMenu()
-        scope.launch {
-            bottomSheetChannel.send(NavigationEvent.Show(screen))
-        }
-    }
-
     override fun pushScreen(screen: Screen) {
         closeSideMenu()
         scope.launch {
             screenChannel.send(NavigationEvent.Show(screen))
         }
-    }
-
-    override fun hideBottomSheet() {
-        bottomNavigator?.hide()
     }
 
     override fun popScreen() {

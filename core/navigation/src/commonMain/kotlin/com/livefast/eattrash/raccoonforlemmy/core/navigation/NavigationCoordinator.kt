@@ -4,7 +4,6 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import kotlinx.coroutines.flow.Flow
@@ -59,12 +58,6 @@ interface NavigationCoordinator {
     fun getBottomBarScrollConnection(): NestedScrollConnection?
 
     fun setInboxUnread(count: Int)
-
-    fun setBottomNavigator(value: BottomSheetNavigator?)
-
-    fun showBottomSheet(screen: Screen)
-
-    fun hideBottomSheet()
 
     fun pushScreen(screen: Screen)
 

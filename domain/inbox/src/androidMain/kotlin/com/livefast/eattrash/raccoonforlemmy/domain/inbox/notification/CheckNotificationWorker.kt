@@ -7,13 +7,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.livefaast.eattrash.raccoonforlemmy.domain.inbox.R
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.L10nManager
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
 import java.util.Collections.max
-import com.livefast.eattrash.raccoonforlemmy.core.resources.R as resourcesR
 
 internal class CheckNotificationWorker(
     private val context: Context,
@@ -40,7 +40,7 @@ internal class CheckNotificationWorker(
                 .Builder(context, NotificationConstants.CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSmallIcon(resourcesR.drawable.ic_monochrome)
+                .setSmallIcon(R.drawable.ic_monochrome)
                 .setContentIntent(getPendingIntent())
                 .setNumber(count)
                 .build()

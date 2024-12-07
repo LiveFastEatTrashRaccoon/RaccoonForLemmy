@@ -5,14 +5,11 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.DrawerDefaults
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
+import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -34,7 +31,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
@@ -46,7 +42,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getAppColorRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppTheme
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.DraggableSideMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.ProvideCustomUriHandler
@@ -80,7 +75,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, FlowPreview::class)
+@OptIn(FlowPreview::class)
 @Composable
 fun App(onLoadingFinished: () -> Unit = {}) {
     val accountRepository = remember { getAccountRepository() }
@@ -293,99 +288,88 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                         ),
                     LocalLayoutDirection provides l10nState.languageTag.toLanguageDirection(),
                 ) {
-                    BottomSheetNavigator(
-                        sheetShape =
-                            RoundedCornerShape(
-                                topStart = CornerSize.xl,
-                                topEnd = CornerSize.xl,
-                            ),
-                        sheetBackgroundColor = MaterialTheme.colorScheme.background,
-                    ) { bottomNavigator ->
-                        navigationCoordinator.setBottomNavigator(bottomNavigator)
-
-                        Navigator(
-                            screen = MainScreen,
-                            onBackPressed = {
-                                // if the drawer is open, closes it
-                                if (drawerCoordinator.drawerOpened.value) {
-                                    scope.launch {
-                                        drawerCoordinator.toggleDrawer()
-                                    }
-                                    return@Navigator false
+                    Navigator(
+                        screen = MainScreen,
+                        onBackPressed = {
+                            // if the drawer is open, closes it
+                            if (drawerCoordinator.drawerOpened.value) {
+                                scope.launch {
+                                    drawerCoordinator.toggleDrawer()
                                 }
-                                // if the side menu is open, closes it
-                                if (navigationCoordinator.sideMenuOpened.value) {
-                                    navigationCoordinator.closeSideMenu()
-                                    return@Navigator false
-                                }
-
-                                // otherwise use the screen-provided callback
-                                val callback = navigationCoordinator.getCanGoBackCallback()
-                                callback?.let { it() } ?: true
-                            },
-                        ) { navigator ->
-                            LaunchedEffect(Unit) {
-                                navigationCoordinator.setRootNavigator(navigator)
+                                return@Navigator false
+                            }
+                            // if the side menu is open, closes it
+                            if (navigationCoordinator.sideMenuOpened.value) {
+                                navigationCoordinator.closeSideMenu()
+                                return@Navigator false
                             }
 
-                            ModalNavigationDrawer(
+                            // otherwise use the screen-provided callback
+                            val callback = navigationCoordinator.getCanGoBackCallback()
+                            callback?.let { it() } ?: true
+                        },
+                    ) { navigator ->
+                        LaunchedEffect(Unit) {
+                            navigationCoordinator.setRootNavigator(navigator)
+                        }
+
+                        ModalNavigationDrawer(
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .onGloballyPositioned {
+                                        screenWidth = it.size.toSize().width
+                                    },
+                            drawerState = drawerState,
+                            gesturesEnabled = drawerGesturesEnabled,
+                            drawerContent = {
+                                ModalDrawerSheet {
+                                    TabNavigator(ModalDrawerContent)
+                                }
+                            },
+                        ) {
+                            if (hasBeenInitialized) {
+                                SlideTransition(
+                                    animationSpec =
+                                        tween(
+                                            durationMillis = 250,
+                                            easing = FastOutSlowInEasing,
+                                        ),
+                                    navigator = navigator,
+                                )
+                            }
+                        }
+
+                        // scrim for draggable side menu
+                        AnimatedVisibility(
+                            modifier = Modifier.fillMaxSize(),
+                            visible = sideMenuOpened,
+                        ) {
+                            Surface(
                                 modifier =
                                     Modifier
-                                        .fillMaxSize()
-                                        .onGloballyPositioned {
-                                            screenWidth = it.size.toSize().width
-                                        },
-                                drawerState = drawerState,
-                                gesturesEnabled = drawerGesturesEnabled,
-                                drawerContent = {
-                                    ModalDrawerSheet {
-                                        TabNavigator(ModalDrawerContent)
-                                    }
-                                },
+                                        .onClick(
+                                            onClick = {
+                                                navigationCoordinator.closeSideMenu()
+                                            },
+                                        ),
+                                color = DrawerDefaults.scrimColor,
                             ) {
-                                if (hasBeenInitialized) {
-                                    SlideTransition(
-                                        animationSpec =
-                                            tween(
-                                                durationMillis = 250,
-                                                easing = FastOutSlowInEasing,
-                                            ),
-                                        navigator = navigator,
-                                    )
-                                }
+                                Box(modifier = Modifier.fillMaxSize())
                             }
-
-                            // scrim for draggable side menu
-                            AnimatedVisibility(
-                                modifier = Modifier.fillMaxSize(),
-                                visible = sideMenuOpened,
-                            ) {
-                                Surface(
-                                    modifier =
-                                        Modifier
-                                            .onClick(
-                                                onClick = {
-                                                    navigationCoordinator.closeSideMenu()
-                                                },
-                                            ),
-                                    color = DrawerDefaults.scrimColor,
-                                ) {
-                                    Box(modifier = Modifier.fillMaxSize())
-                                }
-                            }
-
-                            // draggable side menu
-                            DraggableSideMenu(
-                                availableWidth = screenWidth.toLocalDp(),
-                                opened = sideMenuOpened,
-                                onDismiss = {
-                                    navigationCoordinator.closeSideMenu()
-                                },
-                                content = {
-                                    sideMenuContent?.invoke()
-                                },
-                            )
                         }
+
+                        // draggable side menu
+                        DraggableSideMenu(
+                            availableWidth = screenWidth.toLocalDp(),
+                            opened = sideMenuOpened,
+                            onDismiss = {
+                                navigationCoordinator.closeSideMenu()
+                            },
+                            content = {
+                                sideMenuContent?.invoke()
+                            },
+                        )
                     }
                 }
             }

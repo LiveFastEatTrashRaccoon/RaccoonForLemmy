@@ -4,8 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.compose)
-    alias(libs.plugins.compose.compiler)
+    id("com.livefast.eattrash.composeMultiplatform")
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.ksp)
 }
@@ -31,11 +30,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material)
-                implementation(compose.material3)
-                implementation(compose.materialIconsExtended)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
@@ -54,8 +48,8 @@ kotlin {
                 implementation(projects.core.appearance)
                 implementation(projects.core.architecture)
                 implementation(projects.core.commonui.components)
-                implementation(projects.core.commonui.detailopenerApi)
-                implementation(projects.core.commonui.detailopenerImpl)
+                implementation(projects.core.commonui.detailopener.api)
+                implementation(projects.core.commonui.detailopener.impl)
                 implementation(projects.core.commonui.lemmyui)
                 implementation(projects.core.l10n)
                 implementation(projects.core.navigation)
