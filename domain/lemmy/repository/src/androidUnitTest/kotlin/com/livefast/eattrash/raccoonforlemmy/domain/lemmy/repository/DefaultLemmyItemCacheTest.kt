@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
-import com.livefast.eattrash.raccoonforlemmy.core.utils.cache.LruCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -20,10 +19,10 @@ class DefaultLemmyItemCacheTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val postCache = mockk<LruCache<PostModel>>(relaxUnitFun = true)
-    private val communityCache = mockk<LruCache<CommunityModel>>(relaxUnitFun = true)
-    private val commentCache = mockk<LruCache<CommentModel>>(relaxUnitFun = true)
-    private val userCache = mockk<LruCache<UserModel>>(relaxUnitFun = true)
+    private val postCache = mockk<LocalItemCache<PostModel>>(relaxUnitFun = true)
+    private val communityCache = mockk<LocalItemCache<CommunityModel>>(relaxUnitFun = true)
+    private val commentCache = mockk<LocalItemCache<CommentModel>>(relaxUnitFun = true)
+    private val userCache = mockk<LocalItemCache<UserModel>>(relaxUnitFun = true)
 
     private val sut =
         DefaultLemmyItemCache(
@@ -47,7 +46,7 @@ class DefaultLemmyItemCacheTest {
 
             assertEquals(res, model)
             coVerify {
-                postCache.put(model, id)
+                postCache.put(value = model, key = id)
                 postCache.get(id)
                 commentCache wasNot Called
                 communityCache wasNot Called
@@ -88,7 +87,7 @@ class DefaultLemmyItemCacheTest {
 
             assertEquals(res, model)
             coVerify {
-                commentCache.put(model, id)
+                commentCache.put(value = model, key = id)
                 commentCache.get(id)
                 postCache wasNot Called
                 communityCache wasNot Called
@@ -129,7 +128,7 @@ class DefaultLemmyItemCacheTest {
 
             assertEquals(res, model)
             coVerify {
-                communityCache.put(model, id)
+                communityCache.put(value = model, key = id)
                 communityCache.get(id)
                 postCache wasNot Called
                 commentCache wasNot Called
@@ -170,7 +169,7 @@ class DefaultLemmyItemCacheTest {
 
             assertEquals(res, model)
             coVerify {
-                userCache.put(model, id)
+                userCache.put(value = model, key = id)
                 userCache.get(id)
                 postCache wasNot Called
                 commentCache wasNot Called

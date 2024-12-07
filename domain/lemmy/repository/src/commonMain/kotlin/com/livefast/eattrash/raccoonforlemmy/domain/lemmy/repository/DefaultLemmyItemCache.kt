@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
-import com.livefast.eattrash.raccoonforlemmy.core.utils.cache.LruCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -8,14 +7,15 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 
 @Single
 internal class DefaultLemmyItemCache(
-    private val postCache: LruCache<PostModel>,
-    private val communityCache: LruCache<CommunityModel>,
-    private val commentCache: LruCache<CommentModel>,
-    private val userCache: LruCache<UserModel>,
+    @Named("postCache") private val postCache: LocalItemCache<PostModel>,
+    @Named("communityCache") private val communityCache: LocalItemCache<CommunityModel>,
+    @Named("commentCache") private val commentCache: LocalItemCache<CommentModel>,
+    @Named("userCache") private val userCache: LocalItemCache<UserModel>,
 ) : LemmyItemCache {
     override suspend fun putPost(value: PostModel) =
         withContext(Dispatchers.IO) {
