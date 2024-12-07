@@ -422,7 +422,7 @@ class CreateCommentScreen(
                             keyboardOptions =
                                 KeyboardOptions(
                                     keyboardType = KeyboardType.Text,
-                                    autoCorrect = true,
+                                    autoCorrectEnabled = true,
                                     capitalization = KeyboardCapitalization.Sentences,
                                 ),
                             onValueChange = { value ->

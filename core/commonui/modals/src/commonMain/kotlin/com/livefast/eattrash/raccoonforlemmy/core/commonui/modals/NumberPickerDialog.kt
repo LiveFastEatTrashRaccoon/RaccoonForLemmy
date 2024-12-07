@@ -72,7 +72,6 @@ fun NumberPickerDialog(
                 keyboardOptions =
                     KeyboardOptions(
                         keyboardType = KeyboardType.NumberPassword,
-                        autoCorrect = true,
                     ),
                 onValueChange = { value ->
                     currentValue = value

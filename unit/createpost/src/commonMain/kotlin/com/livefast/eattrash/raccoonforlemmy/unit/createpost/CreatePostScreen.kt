@@ -459,7 +459,7 @@ class CreatePostScreen(
                     keyboardOptions =
                         KeyboardOptions(
                             keyboardType = KeyboardType.Text,
-                            autoCorrect = true,
+                            autoCorrectEnabled = true,
                             imeAction = ImeAction.Next,
                             capitalization = KeyboardCapitalization.Sentences,
                         ),
@@ -518,7 +518,7 @@ class CreatePostScreen(
                     keyboardOptions =
                         KeyboardOptions(
                             keyboardType = KeyboardType.Text,
-                            autoCorrect = false,
+                            autoCorrectEnabled = false,
                             imeAction = ImeAction.Next,
                         ),
                     keyboardActions =
@@ -608,7 +608,7 @@ class CreatePostScreen(
                         keyboardOptions =
                             KeyboardOptions(
                                 keyboardType = KeyboardType.Text,
-                                autoCorrect = true,
+                                autoCorrectEnabled = true,
                                 capitalization = KeyboardCapitalization.Sentences,
                             ),
                         onValueChange = { value ->

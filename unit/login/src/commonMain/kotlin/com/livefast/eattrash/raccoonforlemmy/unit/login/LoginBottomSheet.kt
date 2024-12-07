@@ -187,7 +187,6 @@ class LoginBottomSheet : Screen {
                         keyboardOptions =
                             KeyboardOptions(
                                 keyboardType = KeyboardType.Email,
-                                autoCorrect = false,
                                 imeAction = ImeAction.Next,
                             ),
                         onValueChange = { value ->
@@ -250,7 +249,6 @@ class LoginBottomSheet : Screen {
                         keyboardOptions =
                             KeyboardOptions(
                                 keyboardType = KeyboardType.Email,
-                                autoCorrect = false,
                                 imeAction = ImeAction.Next,
                             ),
                         onValueChange = { value ->

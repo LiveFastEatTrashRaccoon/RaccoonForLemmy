@@ -75,7 +75,6 @@ internal fun ChangeInstanceDialog(
                 keyboardOptions =
                     KeyboardOptions(
                         keyboardType = KeyboardType.Email,
-                        autoCorrect = false,
                         imeAction = ImeAction.Next,
                     ),
                 onValueChange = { value ->

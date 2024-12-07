@@ -85,7 +85,7 @@ fun EditTextualInfoDialog(
                 keyboardOptions =
                     KeyboardOptions(
                         keyboardType = KeyboardType.Text,
-                        autoCorrect = true,
+                        autoCorrectEnabled = true,
                     ),
                 onValueChange = { value ->
                     textFieldValue = value
