@@ -101,7 +101,11 @@ class CreatePostScreen(
     override fun Content() {
         val model =
             getScreenModel<CreatePostMviModel> {
-                parametersOf(editedPostId, crossPostId, draftId)
+                parametersOf(
+                    editedPostId ?: 0L,
+                    crossPostId ?: 0L,
+                    draftId ?: 0L,
+                )
             }
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }

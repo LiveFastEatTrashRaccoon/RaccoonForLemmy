@@ -29,10 +29,10 @@ import org.koin.core.annotation.InjectedParam
 
 @Factory(binds = [CreateCommentMviModel::class])
 class CreateCommentViewModel(
-    @InjectedParam private val postId: Long?,
-    @InjectedParam private val parentId: Long?,
-    @InjectedParam private val editedCommentId: Long?,
-    @InjectedParam private val draftId: Long?,
+    @InjectedParam private val postId: Long,
+    @InjectedParam private val parentId: Long,
+    @InjectedParam private val editedCommentId: Long,
+    @InjectedParam private val draftId: Long,
     private val identityRepository: IdentityRepository,
     private val commentRepository: CommentRepository,
     private val postRepository: PostRepository,
@@ -188,7 +188,7 @@ class CreateCommentViewModel(
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 when {
-                    editedCommentId != null -> {
+                    editedCommentId != 0L -> {
                         commentRepository.edit(
                             commentId = editedCommentId,
                             text = text,
@@ -197,7 +197,7 @@ class CreateCommentViewModel(
                         )
                     }
 
-                    postId != null -> {
+                    postId != 0L -> {
                         commentRepository.create(
                             postId = postId,
                             parentId = parentId,
@@ -209,10 +209,10 @@ class CreateCommentViewModel(
                 }
                 // the comment count has changed, emits update
                 emitPostUpdateNotification()
-                if (draftId != null) {
+                if (draftId != 0L) {
                     deleteDraft()
                 }
-                emitEffect(CreateCommentMviModel.Effect.Success(new = editedCommentId == null))
+                emitEffect(CreateCommentMviModel.Effect.Success(new = editedCommentId == 0L))
             } catch (e: Throwable) {
                 val message = e.message
                 emitEffect(CreateCommentMviModel.Effect.Failure(message))
@@ -223,7 +223,7 @@ class CreateCommentViewModel(
     }
 
     private suspend fun emitPostUpdateNotification() {
-        val postId = postId ?: return
+        val postId = postId.takeIf { it != 0L } ?: return
         val auth = identityRepository.authToken.value
         val newPost = postRepository.get(postId, auth)
         if (newPost != null) {
@@ -287,7 +287,7 @@ class CreateCommentViewModel(
                             currentState.originalPost?.title
                         },
                 )
-            if (draftId == null) {
+            if (draftId == 0L) {
                 draftRepository.create(
                     model = draft,
                     accountId = accountId,
@@ -301,9 +301,9 @@ class CreateCommentViewModel(
     }
 
     private suspend fun deleteDraft() {
-        draftId?.also { id ->
-            draftRepository.delete(id)
-            notificationCenter.send(NotificationCenterEvent.DraftDeleted)
+        if (draftId != 0L) {
+            draftRepository.delete(draftId)
         }
+        notificationCenter.send(NotificationCenterEvent.DraftDeleted)
     }
 }

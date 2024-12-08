@@ -67,7 +67,7 @@ class ModlogScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model = getScreenModel<ModlogMviModel> { parametersOf(communityId) }
+        val model = getScreenModel<ModlogMviModel> { parametersOf(communityId ?: 0L) }
         val uiState by model.uiState.collectAsState()
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)

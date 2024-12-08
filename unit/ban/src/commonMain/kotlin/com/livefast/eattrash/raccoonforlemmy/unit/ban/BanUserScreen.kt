@@ -71,8 +71,8 @@ class BanUserScreen(
                     userId,
                     communityId,
                     newValue,
-                    postId,
-                    commentId,
+                    postId ?: 0L,
+                    commentId ?: 0L,
                 )
             }
         val uiState by model.uiState.collectAsState()

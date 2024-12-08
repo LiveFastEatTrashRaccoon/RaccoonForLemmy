@@ -46,7 +46,7 @@ import org.koin.core.annotation.InjectedParam
 class PostDetailViewModel(
     @InjectedParam postId: Long,
     @InjectedParam private val otherInstance: String,
-    @InjectedParam private val highlightCommentId: Long?,
+    @InjectedParam private val highlightCommentId: Long,
     @InjectedParam private val isModerator: Boolean,
     private val identityRepository: IdentityRepository,
     private val apiConfigurationRepository: ApiConfigurationRepository,
@@ -241,7 +241,7 @@ class PostDetailViewModel(
                 )
             }
 
-            if (highlightCommentId != null) {
+            if (highlightCommentId != 0L) {
                 val comment =
                     commentRepository.getBy(
                         id = highlightCommentId,

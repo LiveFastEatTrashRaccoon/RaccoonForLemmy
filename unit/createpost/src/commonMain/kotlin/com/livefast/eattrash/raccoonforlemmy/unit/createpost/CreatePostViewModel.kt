@@ -32,9 +32,9 @@ import org.koin.core.annotation.InjectedParam
 
 @Factory(binds = [CreatePostMviModel::class])
 class CreatePostViewModel(
-    @InjectedParam private val editedPostId: Long?,
-    @InjectedParam private val crossPostId: Long?,
-    @InjectedParam private val draftId: Long?,
+    @InjectedParam private val editedPostId: Long,
+    @InjectedParam private val crossPostId: Long,
+    @InjectedParam private val draftId: Long,
     private val identityRepository: IdentityRepository,
     private val postRepository: PostRepository,
     private val mediaRepository: MediaRepository,
@@ -55,11 +55,11 @@ class CreatePostViewModel(
     init {
         screenModelScope.launch {
             val editedPost =
-                editedPostId?.let {
+                editedPostId.takeIf { it != 0L }?.let {
                     itemCache.getPost(it)
                 }
             val crossPost =
-                crossPostId?.let {
+                crossPostId.takeIf { it != 0L }?.let {
                     itemCache.getPost(it)
                 }
             updateState { it.copy(editedPost = editedPost, crossPost = crossPost) }
@@ -304,7 +304,7 @@ class CreatePostViewModel(
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 when {
-                    editedPostId != null -> {
+                    editedPostId != 0L -> {
                         postRepository.edit(
                             postId = editedPostId,
                             title = title,
@@ -328,7 +328,7 @@ class CreatePostViewModel(
                         )
                     }
                 }
-                if (draftId != null) {
+                if (draftId != 0L) {
                     deleteDraft()
                 }
                 emitEffect(CreatePostMviModel.Effect.Success)
@@ -374,7 +374,7 @@ class CreatePostViewModel(
                     date = epochMillis(),
                     reference = community?.name,
                 )
-            if (draftId == null) {
+            if (draftId == 0L) {
                 draftRepository.create(
                     model = draft,
                     accountId = accountId,
@@ -388,8 +388,8 @@ class CreatePostViewModel(
     }
 
     private suspend fun deleteDraft() {
-        draftId?.also { id ->
-            draftRepository.delete(id)
+        if (draftId != 0L) {
+            draftRepository.delete(draftId)
             notificationCenter.send(NotificationCenterEvent.DraftDeleted)
         }
     }

@@ -23,7 +23,7 @@ import org.koin.core.annotation.InjectedParam
 
 @Factory(binds = [ReportListMviModel::class])
 class ReportListViewModel(
-    @InjectedParam private val communityId: Long?,
+    @InjectedParam private val communityId: Long,
     private val identityRepository: IdentityRepository,
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
@@ -151,7 +151,7 @@ class ReportListViewModel(
                     async {
                         postRepository.getReports(
                             auth = auth,
-                            communityId = communityId,
+                            communityId = communityId.takeIf { it != 0L },
                             page = page,
                             unresolvedOnly = unresolvedOnly,
                         )
@@ -164,7 +164,7 @@ class ReportListViewModel(
                             commentRepository
                                 .getReports(
                                     auth = auth,
-                                    communityId = communityId,
+                                    communityId = communityId.takeIf { it != 0L },
                                     page = 1,
                                     unresolvedOnly = unresolvedOnly,
                                 ).orEmpty()
@@ -197,7 +197,7 @@ class ReportListViewModel(
             val itemList =
                 commentRepository.getReports(
                     auth = auth,
-                    communityId = communityId,
+                    communityId = communityId.takeIf { it != 0L },
                     page = page,
                     unresolvedOnly = unresolvedOnly,
                 )

@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.createcomment
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -84,16 +83,16 @@ class CreateCommentScreen(
     private val editedCommentId: Long? = null,
     private val initialText: String? = null,
 ) : Screen {
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val model =
             getScreenModel<CreateCommentMviModel> {
                 parametersOf(
-                    originalPostId,
-                    originalCommentId,
-                    editedCommentId,
-                    draftId,
+                    originalPostId ?: 0L,
+                    originalCommentId ?: 0L,
+                    editedCommentId ?: 0L,
+                    draftId ?: 0L,
                 )
             }
         val uiState by model.uiState.collectAsState()
