@@ -3,7 +3,7 @@ plugins {
     id("com.livefast.eattrash.koinWithKsp")
     id("com.livefast.eattrash.composeMultiplatform")
     id("com.livefast.eattrash.androidTest")
-    alias(libs.plugins.kotlinx.serialization)
+    id("com.livefast.eattrash.serialization")
     alias(libs.plugins.kotlinx.kover)
 }
 
@@ -18,7 +18,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.kotlinx.coroutines)
-                implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktor.client.core)
                 implementation(libs.multiplatform.settings)
 
