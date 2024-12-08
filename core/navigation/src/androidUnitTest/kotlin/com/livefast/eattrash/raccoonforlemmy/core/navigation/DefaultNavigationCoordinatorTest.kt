@@ -252,6 +252,29 @@ class DefaultNavigationCoordinatorTest {
         }
 
     @Test
+    fun given_already_open_whenShowSideMenu_thenInteractionsAreAsExpected() =
+        runTest {
+            val screen =
+                object : Screen {
+                    @Composable
+                    override fun Content() {
+                        Box(modifier = Modifier.fillMaxSize())
+                    }
+                }
+            launch {
+                delay(DELAY)
+                sut.openSideMenu(screen)
+                sut.openSideMenu(screen)
+            }
+
+            sut.sideMenuEvents.test {
+                val item = awaitItem()
+                assertEquals(SideMenuEvents.Open(screen), item)
+                expectNoEvents()
+            }
+        }
+
+    @Test
     fun whenCloseSideMenu_thenInteractionsAreAsExpected() =
         runTest {
             val screen =
@@ -270,6 +293,20 @@ class DefaultNavigationCoordinatorTest {
             sut.sideMenuEvents.test {
                 val item = awaitItem()
                 assertEquals(SideMenuEvents.Close, item)
+            }
+        }
+
+    @Test
+    fun whenSubmitComposeEvent_thenInteractionsAreAsExpected() =
+        runTest {
+            launch {
+                delay(DELAY)
+                sut.submitComposeEvent(ComposeEvent.WithText("text"))
+            }
+
+            sut.composeEvents.test {
+                val item = awaitItem()
+                assertEquals(ComposeEvent.WithText("text"), item)
             }
         }
 

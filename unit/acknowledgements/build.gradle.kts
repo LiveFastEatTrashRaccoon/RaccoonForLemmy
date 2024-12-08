@@ -3,14 +3,13 @@ plugins {
     id("com.livefast.eattrash.koinWithKsp")
     id("com.livefast.eattrash.composeMultiplatform")
     id("com.livefast.eattrash.androidTest")
-    alias(libs.plugins.kotlinx.serialization)
+    id("com.livefast.eattrash.serialization")
 }
 
 kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktor.client.core)
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.screenmodel)

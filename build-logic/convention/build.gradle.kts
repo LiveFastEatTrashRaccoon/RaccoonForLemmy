@@ -19,18 +19,26 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("kotlinMultiplatform") {
-            id = "com.livefast.eattrash.kotlinMultiplatform"
-            implementationClass = "plugins.KotlinMultiplatformPlugin"
-        }
-        register("koinWithKsp") {
-            id = "com.livefast.eattrash.koinWithKsp"
-            implementationClass = "plugins.KoinWithKspPlugin"
-        }
         register("composeMultiplatform") {
             id = "com.livefast.eattrash.composeMultiplatform"
             implementationClass = "plugins.ComposeMultiplatformPlugin"
         }
+
+        register("koinWithKsp") {
+            id = "com.livefast.eattrash.koinWithKsp"
+            implementationClass = "plugins.KoinWithKspPlugin"
+        }
+
+        register("kotlinMultiplatform") {
+            id = "com.livefast.eattrash.kotlinMultiplatform"
+            implementationClass = "plugins.KotlinMultiplatformPlugin"
+        }
+
+        register("serializationPlugin") {
+            id = "com.livefast.eattrash.serialization"
+            implementationClass = "plugins.SerializationPlugin"
+        }
+
         register("androidTestPlugin") {
             id = "com.livefast.eattrash.androidTest"
             implementationClass = "plugins.AndroidTestPlugin"
