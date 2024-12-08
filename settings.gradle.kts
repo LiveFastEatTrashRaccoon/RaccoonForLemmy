@@ -5,6 +5,7 @@ pluginManagement {
         mavenCentral()
         maven("https://plugins.gradle.org/m2/")
     }
+    includeBuild("build-logic")
 }
 
 dependencyResolutionManagement {
@@ -25,8 +26,8 @@ include(":core:appearance")
 include(":core:architecture")
 include(":core:architecture:testutils")
 include(":core:commonui:components")
-include(":core:commonui:detailopener-api")
-include(":core:commonui:detailopener-impl")
+include(":core:commonui:detailopener:api")
+include(":core:commonui:detailopener:impl")
 include(":core:commonui:lemmyui")
 include(":core:commonui:modals")
 include(":core:l10n")

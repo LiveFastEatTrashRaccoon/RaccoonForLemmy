@@ -8,7 +8,6 @@ import app.cash.turbine.test
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
@@ -228,48 +227,6 @@ class DefaultNavigationCoordinatorTest {
             assertFalse(canPop)
             verify {
                 navigator.pop()
-            }
-        }
-
-    @Test
-    fun whenShowBottomSheet_thenInteractionsAreAsExpected() =
-        runTest {
-            val screen =
-                object : Screen {
-                    @Composable
-                    override fun Content() {
-                        Box(modifier = Modifier.fillMaxSize())
-                    }
-                }
-            val navigator = mockk<BottomSheetNavigator>(relaxUnitFun = true)
-            sut.setBottomNavigator(navigator)
-
-            launch {
-                sut.showBottomSheet(screen)
-            }
-            advanceTimeBy(DELAY)
-
-            verify {
-                navigator.show(screen)
-            }
-        }
-
-    @Test
-    fun whenHideBottomSheet_thenInteractionsAreAsExpected() =
-        runTest {
-            val navigator =
-                mockk<BottomSheetNavigator>(relaxUnitFun = true) {
-                    every { isVisible } returns true
-                }
-            sut.setBottomNavigator(navigator)
-
-            launch {
-                sut.hideBottomSheet()
-            }
-            advanceTimeBy(DELAY)
-
-            verify {
-                navigator.hide()
             }
         }
 

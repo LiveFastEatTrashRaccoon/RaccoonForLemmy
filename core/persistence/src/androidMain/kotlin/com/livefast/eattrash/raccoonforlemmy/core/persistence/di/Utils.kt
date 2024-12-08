@@ -3,13 +3,14 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.di
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 import org.koin.java.KoinJavaComponent
 
-@org.koin.core.annotation.Module
+@Module
 @ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.persistence.driver")
 internal actual class DriverModule
 
-@org.koin.core.annotation.Module
+@Module
 @ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.persistence.key")
 internal actual class KeyModule
 
