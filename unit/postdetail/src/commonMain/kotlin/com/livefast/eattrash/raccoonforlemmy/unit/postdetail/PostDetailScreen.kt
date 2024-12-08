@@ -163,7 +163,7 @@ class PostDetailScreen(
                     parametersOf(
                         postId,
                         otherInstance,
-                        highlightCommentId,
+                        highlightCommentId ?: 0L,
                         isMod,
                     )
                 },

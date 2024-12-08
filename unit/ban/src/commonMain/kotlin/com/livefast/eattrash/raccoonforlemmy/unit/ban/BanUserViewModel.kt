@@ -15,15 +15,15 @@ class BanUserViewModel(
     @InjectedParam private val userId: Long,
     @InjectedParam private val communityId: Long,
     @InjectedParam private val newValue: Boolean,
-    @InjectedParam private val postId: Long?,
-    @InjectedParam private val commentId: Long?,
+    @InjectedParam private val postId: Long,
+    @InjectedParam private val commentId: Long,
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
     private val notificationCenter: NotificationCenter,
-) : BanUserMviModel,
-    DefaultMviModel<BanUserMviModel.Intent, BanUserMviModel.UiState, BanUserMviModel.Effect>(
+) : DefaultMviModel<BanUserMviModel.Intent, BanUserMviModel.UiState, BanUserMviModel.Effect>(
         initialState = BanUserMviModel.UiState(),
-    ) {
+    ),
+    BanUserMviModel {
     init {
         screenModelScope.launch {
             updateState {
@@ -92,7 +92,7 @@ class BanUserViewModel(
                         removeData = removeData,
                     )
                 if (newUser != null) {
-                    postId?.also {
+                    postId.takeIf { it != 0L }?.also {
                         val evt =
                             NotificationCenterEvent.UserBannedPost(
                                 postId = it,
@@ -100,7 +100,7 @@ class BanUserViewModel(
                             )
                         notificationCenter.send(evt)
                     }
-                    commentId?.also {
+                    commentId.takeIf { it != 0L }?.also {
                         val evt =
                             NotificationCenterEvent.UserBannedComment(
                                 commentId = it,

@@ -134,7 +134,12 @@ class UserDetailScreen(
         val model =
             getScreenModel<UserDetailMviModel>(
                 tag = userId.toString(),
-                parameters = { parametersOf(userId, otherInstance) },
+                parameters = {
+                    parametersOf(
+                        userId,
+                        otherInstance,
+                    )
+                },
             )
         val uiState by model.uiState.collectAsState()
         val lazyListState = rememberLazyListState()

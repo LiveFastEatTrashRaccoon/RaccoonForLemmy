@@ -82,7 +82,7 @@ class ReportListScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model = getScreenModel<ReportListMviModel> { parametersOf(communityId) }
+        val model = getScreenModel<ReportListMviModel> { parametersOf(communityId ?: 0L) }
         val uiState by model.uiState.collectAsState()
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)

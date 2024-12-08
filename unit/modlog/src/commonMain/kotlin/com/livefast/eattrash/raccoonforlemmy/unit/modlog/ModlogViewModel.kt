@@ -14,7 +14,7 @@ import org.koin.core.annotation.InjectedParam
 
 @Factory(binds = [ModlogMviModel::class])
 class ModlogViewModel(
-    @InjectedParam private val communityId: Long?,
+    @InjectedParam private val communityId: Long,
     private val themeRepository: ThemeRepository,
     private val identityRepository: IdentityRepository,
     private val modlogRepository: ModlogRepository,
@@ -87,7 +87,7 @@ class ModlogViewModel(
             val itemList =
                 modlogRepository.getItems(
                     auth = auth,
-                    communityId = communityId,
+                    communityId = communityId.takeIf { it != 0L },
                     page = currentPage,
                 )
             val itemsToAdd = itemList.orEmpty()
