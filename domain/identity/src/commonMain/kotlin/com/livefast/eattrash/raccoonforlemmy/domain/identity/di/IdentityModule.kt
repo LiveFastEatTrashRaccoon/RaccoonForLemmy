@@ -11,5 +11,15 @@ internal class RepositoryModule
 @ComponentScan("com.livefast.eattrash.raccoonforlemmy.domain.identity.usecase")
 internal class UseCaseModule
 
-@Module(includes = [RepositoryModule::class, UseCaseModule::class])
+@Module
+@ComponentScan("com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler")
+internal class UrlHandlerModule
+
+@Module(
+    includes = [
+        RepositoryModule::class,
+        UseCaseModule::class,
+        UrlHandlerModule::class,
+    ],
+)
 class IdentityModule
