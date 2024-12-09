@@ -4,9 +4,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetPostResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetPostsResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.ListPostReportsResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.PostFeatureType
+import com.livefast.eattrash.raccoonforlemmy.core.api.dto.ResolveObjectResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SuccessResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.PostService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.SearchService
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -31,9 +33,11 @@ class DefaultPostRepositoryTest {
     val dispatcherTestRule = DispatcherTestRule()
 
     private val postService = mockk<PostService>()
+    private val searchService = mockk<SearchService>()
     private val serviceProvider =
         mockk<ServiceProvider> {
             every { post } returns postService
+            every { search } returns searchService
         }
     private val customServiceProvider =
         mockk<ServiceProvider> {
@@ -890,6 +894,34 @@ class DefaultPostRepositoryTest {
                             assertEquals(postId, it.postId)
                             assertEquals(reason, it.reason)
                         },
+                )
+            }
+        }
+
+    @Test
+    fun whenGetResolved_thenInteractionsAreAsExpected() =
+        runTest {
+            val postId = 1L
+            coEvery {
+                searchService.resolveObject(any(), any())
+            } returns
+                ResolveObjectResponse(
+                    post =
+                        mockk(relaxed = true) {
+                            every { post } returns mockk(relaxed = true) { every { id } returns postId }
+                        },
+                )
+            val res =
+                sut.getResolved(
+                    query = "text",
+                    auth = AUTH_TOKEN,
+                )
+
+            assertEquals(postId, res?.id)
+            coVerify {
+                searchService.resolveObject(
+                    authHeader = AUTH_TOKEN.toAuthHeader(),
+                    q = "text",
                 )
             }
         }

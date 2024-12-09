@@ -514,4 +514,19 @@ internal class DefaultPostRepository(
             )
         require(response.success)
     }
+
+    override suspend fun getResolved(
+        query: String,
+        auth: String?,
+    ): PostModel? =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                val response =
+                    services.search.resolveObject(
+                        authHeader = auth.toAuthHeader(),
+                        q = query,
+                    )
+                response.post?.toModel()
+            }.getOrNull()
+        }
 }
