@@ -153,4 +153,9 @@ interface PostRepository {
         postId: Long,
         reason: String? = null,
     )
+
+    suspend fun getResolved(
+        query: String,
+        auth: String?,
+    ): PostModel?
 }

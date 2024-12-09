@@ -475,4 +475,19 @@ internal class DefaultCommentRepository(
             )
         require(res.success)
     }
+
+    override suspend fun getResolved(
+        query: String,
+        auth: String?,
+    ): CommentModel? =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                val response =
+                    services.search.resolveObject(
+                        authHeader = auth.toAuthHeader(),
+                        q = query,
+                    )
+                response.comment?.toModel()
+            }.getOrNull()
+        }
 }

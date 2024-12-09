@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.navigator.Navigator
@@ -44,10 +45,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeReposito
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.DraggableSideMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.ProvideCustomUriHandler
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.getCommunityFromUrl
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.getPostFromUrl
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.getUserFromUrl
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.getL10nManager
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.ProvideStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.ComposeEvent
@@ -64,6 +61,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLanguageDirection
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getCustomUriHandler
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler.ProvideCustomUriHandler
 import com.livefast.eattrash.raccoonforlemmy.main.MainScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.content.ModalDrawerContent
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.di.getSubscriptionsCache
@@ -71,6 +70,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail.MultiCom
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -108,6 +108,8 @@ fun App(onLoadingFinished: () -> Unit = {}) {
     val subscriptionsCache = remember { getSubscriptionsCache() }
     val appConfigStore = remember { getAppConfigStore() }
     val bottomNavItemsRepository = remember { getBottomNavItemsRepository() }
+    val fallbackUriHandler = LocalUriHandler.current
+    val customUriHandler = remember { getCustomUriHandler(fallbackUriHandler) }
 
     LaunchedEffect(Unit) {
         val lastActiveAccount = accountRepository.getActive()
@@ -167,26 +169,9 @@ fun App(onLoadingFinished: () -> Unit = {}) {
     LaunchedEffect(navigationCoordinator) {
         navigationCoordinator.deepLinkUrl
             .debounce(750)
-            .onEach { url ->
-                val community = getCommunityFromUrl(url)
-                val user = getUserFromUrl(url)
-                val postAndInstance = getPostFromUrl(url)
-                when {
-                    community != null -> {
-                        detailOpener.openCommunityDetail(community, community.host)
-                    }
-
-                    user != null -> {
-                        detailOpener.openUserDetail(user, user.host)
-                    }
-
-                    postAndInstance != null -> {
-                        val (post, otherInstance) = postAndInstance
-                        detailOpener.openPostDetail(post, otherInstance)
-                    }
-
-                    else -> Unit
-                }
+            .filterNotNull()
+            .onEach { uri ->
+                customUriHandler.openUri(uri = uri, allowOpenExternal = false)
             }.launchIn(this)
         navigationCoordinator.composeEvents
             .debounce(750)

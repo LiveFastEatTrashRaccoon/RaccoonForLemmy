@@ -4,8 +4,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommentResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CreateCommentLikeForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetCommentResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetCommentsResponse
+import com.livefast.eattrash.raccoonforlemmy.core.api.dto.ResolveObjectResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.CommentService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.SearchService
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -31,10 +33,12 @@ class DefaultCommentRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
+    private val searchService = mockk<SearchService>()
     private val commentService = mockk<CommentService>()
     private val serviceProvider =
         mockk<ServiceProvider> {
             every { comment } returns commentService
+            every { search } returns searchService
         }
     private val customServiceProvider =
         mockk<ServiceProvider>(relaxUnitFun = true) {
@@ -67,7 +71,7 @@ class DefaultCommentRepositoryTest {
                     dislikedOnly = any(),
                 )
             } returns GetCommentsResponse(comments = listOf(mockk(relaxed = true)))
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             val res =
                 sut.getAll(
                     postId = 1,
@@ -100,7 +104,7 @@ class DefaultCommentRepositoryTest {
     @Test
     fun givenSuccess_whenGetBy_thenResultIsAsExpected() =
         runTest {
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             val commentId = 1L
             coEvery { commentService.getBy(any(), any(), any()) } returns
                 GetCommentResponse(
@@ -145,7 +149,7 @@ class DefaultCommentRepositoryTest {
                     dislikedOnly = any(),
                 )
             } returns GetCommentsResponse(comments = listOf(mockk(relaxed = true)))
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             val res =
                 sut.getChildren(
                     parentId = 2,
@@ -218,7 +222,7 @@ class DefaultCommentRepositoryTest {
     fun givenSuccess_whenUpVote_thenResultIsAsExpected() =
         runTest {
             val comment = CommentModel(id = 1, text = "text")
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             coEvery {
                 commentService.like(
                     any(),
@@ -291,7 +295,7 @@ class DefaultCommentRepositoryTest {
     fun givenSuccess_whenUDownVote_thenResultIsAsExpected() =
         runTest {
             val comment = CommentModel(id = 1, text = "text")
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             coEvery {
                 commentService.like(
                     any(),
@@ -337,7 +341,7 @@ class DefaultCommentRepositoryTest {
             val postId = 1L
             val parentId = 0L
             val text = "test"
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             sut.create(
                 postId = postId,
                 parentId = parentId,
@@ -364,7 +368,7 @@ class DefaultCommentRepositoryTest {
         runTest {
             val itemId = 1L
             val text = "test"
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             sut.edit(
                 commentId = itemId,
                 text = text,
@@ -388,7 +392,7 @@ class DefaultCommentRepositoryTest {
     fun whenDelete_thenInteractionsAreAsExpected() =
         runTest {
             val itemId = 1L
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             sut.delete(
                 commentId = itemId,
                 auth = token,
@@ -410,7 +414,7 @@ class DefaultCommentRepositoryTest {
     fun whenRestore_thenInteractionsAreAsExpected() =
         runTest {
             val itemId = 1L
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             sut.restore(
                 commentId = itemId,
                 auth = token,
@@ -432,7 +436,7 @@ class DefaultCommentRepositoryTest {
     fun whenReport_thenInteractionsAreAsExpected() =
         runTest {
             val itemId = 1L
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             val reason = "reason"
             sut.report(
                 commentId = itemId,
@@ -457,7 +461,7 @@ class DefaultCommentRepositoryTest {
     fun whenRemove_thenInteractionsAreAsExpected() =
         runTest {
             val itemId = 1L
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             val reason = "reason"
             sut.remove(
                 commentId = itemId,
@@ -484,7 +488,7 @@ class DefaultCommentRepositoryTest {
     fun whenDistinguish_thenInteractionsAreAsExpected() =
         runTest {
             val itemId = 1L
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             sut.distinguish(
                 commentId = itemId,
                 auth = token,
@@ -508,7 +512,7 @@ class DefaultCommentRepositoryTest {
     fun whenGetReports_thenInteractionsAreAsExpected() =
         runTest {
             val itemId = 1L
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             sut.getReports(
                 communityId = itemId,
                 auth = token,
@@ -532,7 +536,7 @@ class DefaultCommentRepositoryTest {
     fun whenResolveReport_thenInteractionsAreAsExpected() =
         runTest {
             val itemId = 1L
-            val token = "fake-token"
+            val token = FAKE_TOKEN
             sut.resolveReport(
                 reportId = itemId,
                 auth = token,
@@ -551,4 +555,37 @@ class DefaultCommentRepositoryTest {
                 )
             }
         }
+
+    @Test
+    fun whenGetResolved_thenInteractionsAreAsExpected() =
+        runTest {
+            val commentId = 1L
+            coEvery {
+                searchService.resolveObject(any(), any())
+            } returns
+                ResolveObjectResponse(
+                    comment =
+                        mockk(relaxed = true) {
+                            every { comment } returns mockk(relaxed = true) { every { id } returns commentId }
+                        },
+                )
+            val token = FAKE_TOKEN
+            val res =
+                sut.getResolved(
+                    query = "text",
+                    auth = token,
+                )
+
+            assertEquals(commentId, res?.id)
+            coVerify {
+                searchService.resolveObject(
+                    authHeader = token.toAuthHeader(),
+                    q = "text",
+                )
+            }
+        }
+
+    companion object {
+        private const val FAKE_TOKEN = "fake-token"
+    }
 }
