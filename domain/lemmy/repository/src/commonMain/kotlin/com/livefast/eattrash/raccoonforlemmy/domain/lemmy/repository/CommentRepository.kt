@@ -145,4 +145,9 @@ interface CommentRepository {
         commentId: Long,
         reason: String? = null,
     )
+
+    suspend fun getResolved(
+        query: String,
+        auth: String?,
+    ): CommentModel?
 }
