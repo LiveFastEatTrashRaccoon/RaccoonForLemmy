@@ -37,7 +37,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.DpOffset
 import cafe.adriel.voyager.core.screen.Screen
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.VideoPlayer
@@ -50,7 +49,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import kotlinx.coroutines.flow.launchIn
@@ -111,40 +109,32 @@ class ZoomableImageScreen(
                         }
                     },
                     actions = {
-                        Icon(
-                            modifier =
-                                Modifier
-                                    .padding(horizontal = Spacing.xs)
-                                    .onClick(
-                                        onClick = {
-                                            model.reduce(
-                                                ZoomableImageMviModel.Intent.SaveToGallery(source),
-                                            )
-                                        },
-                                    ),
-                            imageVector = Icons.Default.Download,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
-                        Icon(
-                            modifier =
-                                Modifier
-                                    .padding(horizontal = Spacing.xs)
-                                    .onClick(
-                                        onClick = {
-                                            if (shareHelper.supportsShareImage) {
-                                                imageShareBottomSheetOpened = true
-                                            } else {
-                                                notificationCenter.send(
-                                                    NotificationCenterEvent.ShareImageModeSelected.ModeUrl(url),
-                                                )
-                                            }
-                                        },
-                                    ),
-                            imageVector = Icons.Default.Share,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
+                        IconButton(
+                            onClick = {
+                                model.reduce(ZoomableImageMviModel.Intent.SaveToGallery(source))
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Download,
+                                contentDescription = null,
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                if (shareHelper.supportsShareImage) {
+                                    imageShareBottomSheetOpened = true
+                                } else {
+                                    notificationCenter.send(
+                                        NotificationCenterEvent.ShareImageModeSelected.ModeUrl(url),
+                                    )
+                                }
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = null,
+                            )
+                        }
 
                         // content scale option menu
                         Box {
@@ -160,7 +150,6 @@ class ZoomableImageScreen(
                                 IconButton(
                                     modifier =
                                         Modifier
-                                            .padding(horizontal = Spacing.xs)
                                             .onGloballyPositioned {
                                                 optionsOffset = it.positionInParent()
                                             },
