@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.DpOffset
 import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.VideoPlayer
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ZoomableImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
@@ -246,6 +247,10 @@ class ZoomableImageScreen(
                     }
                 },
         )
+
+        if (uiState.loading) {
+            ProgressHud()
+        }
 
         if (imageShareBottomSheetOpened) {
             val items =
