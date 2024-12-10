@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toLong
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.GetBy
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.SettingsQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
@@ -12,6 +13,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseP
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.Called
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -100,7 +102,7 @@ class DefaultSettingsRepositoryTest {
         }
 
     @Test
-    fun whenCreateSettings_thenResultIsAsExpected() =
+    fun whenCreate_thenResultIsAsExpected() =
         runTest {
             val model = SettingsModel()
             sut.createSettings(model, 1)
@@ -177,7 +179,7 @@ class DefaultSettingsRepositoryTest {
         }
 
     @Test
-    fun whenUpdate_thenResultIsAsExpected() =
+    fun givenLoggedUser_whenUpdate_thenResultIsAsExpected() =
         runTest {
             val model = SettingsModel(defaultListingType = 1)
             sut.updateSettings(model, 1)
@@ -249,6 +251,75 @@ class DefaultSettingsRepositoryTest {
                     useAvatarAsProfileNavigationIcon = if (model.useAvatarAsProfileNavigationIcon) 1 else 0,
                     randomThemeColor = if (model.randomThemeColor) 1 else 0,
                     openPostWebPageOnImageClick = if (model.openPostWebPageOnImageClick) 1 else 0,
+                )
+            }
+        }
+
+    @Test
+    fun givenAnonymousUser_whenUpdate_thenResultIsAsExpected() =
+        runTest {
+            val model =
+                SettingsModel(
+                    theme = 1,
+                    defaultListingType = 1,
+                )
+            sut.updateSettings(model, null)
+
+            coVerify {
+                keyStore.save("uiTheme", model.theme ?: 0)
+                keyStore.save("uiFontFamily", model.uiFontFamily)
+                keyStore.save("uiFontSize", model.uiFontScale)
+                keyStore.save("titleFontSize", model.contentFontScale.title)
+                keyStore.save("contentFontSize", model.contentFontScale.body)
+                keyStore.save("commentFontSize", model.contentFontScale.comment)
+                keyStore.save("ancillaryFontSize", model.contentFontScale.ancillary)
+                keyStore.save("defaultListingType", model.defaultListingType)
+                keyStore.save("defaultPostSortType", model.defaultPostSortType)
+                keyStore.save("defaultInboxType", model.defaultInboxType)
+                keyStore.save("defaultCommentSortType", model.defaultCommentSortType)
+                keyStore.save("defaultExploreType", model.defaultExploreType)
+                keyStore.save("includeNsfw", model.includeNsfw)
+                keyStore.save("blurNsfw", model.blurNsfw)
+                keyStore.save("navItemTitlesVisible", model.navigationTitlesVisible)
+                keyStore.save("dynamicColors", model.dynamicColors)
+                keyStore.save("openUrlsInExternalBrowser", model.urlOpeningMode)
+                keyStore.save("enableSwipeActions", model.enableSwipeActions)
+                keyStore.save("enableDoubleTapAction", model.enableDoubleTapAction)
+                keyStore.save("postLayout", model.postLayout)
+                keyStore.save("separateUpAndDownVotes", model.voteFormat.toLong())
+                keyStore.save("autoLoadImages", model.autoLoadImages)
+                keyStore.save("autoExpandComments", model.autoExpandComments)
+                keyStore.save("fullHeightImages", model.fullHeightImages)
+                keyStore.save(
+                    "hideNavigationBarWhileScrolling",
+                    model.hideNavigationBarWhileScrolling,
+                )
+                keyStore.save("zombieModeInterval", model.zombieModeInterval.inWholeMilliseconds)
+                keyStore.save("zombieModeScrollAmount", model.zombieModeScrollAmount)
+                keyStore.save("markAsReadWhileScrolling", model.markAsReadWhileScrolling)
+                keyStore.save("commentBarTheme", model.commentBarTheme)
+                keyStore.save("searchPostTitleOnly", model.searchPostTitleOnly)
+                keyStore.save("contentFontFamily", model.contentFontFamily)
+                keyStore.save("edgeToEdge", model.edgeToEdge)
+                keyStore.save("infiniteScrollEnabled", model.infiniteScrollEnabled)
+                keyStore.save("opaqueSystemBars", model.opaqueSystemBars)
+                keyStore.save("showScores", model.showScores)
+                keyStore.save("preferUserNicknames", model.preferUserNicknames)
+                keyStore.save("commentBarThickness", model.commentBarThickness)
+                keyStore.save("imageSourcePath", model.imageSourcePath)
+                keyStore.save("fadeReadPosts", model.fadeReadPosts)
+                keyStore.save(
+                    "enableButtonsToScrollBetweenComments",
+                    model.enableButtonsToScrollBetweenComments,
+                )
+                keyStore.save("fullWidthImages", model.fullWidthImages)
+                keyStore.save("commentIndentAmount", model.commentIndentAmount)
+                keyStore.save("defaultExploreResultType", model.defaultExploreResultType)
+                keyStore.save("randomThemeColor", model.randomThemeColor)
+                keyStore.save("openPostWebPageOnImageClick", model.openPostWebPageOnImageClick)
+                keyStore.save(
+                    "enableAlternateMarkdownRendering",
+                    model.enableAlternateMarkdownRendering,
                 )
             }
         }
