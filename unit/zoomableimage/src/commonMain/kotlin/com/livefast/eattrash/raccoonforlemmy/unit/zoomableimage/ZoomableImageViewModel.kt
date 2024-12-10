@@ -59,9 +59,9 @@ class ZoomableImageViewModel(
     }
 
     private fun downloadAndSave(folder: String) {
-        val imageSourcePath = settingsRepository.currentSettings.value.imageSourcePath
         screenModelScope.launch {
             updateState { it.copy(loading = true) }
+            val imageSourcePath = settingsRepository.currentSettings.value.imageSourcePath
             try {
                 val bytes = galleryHelper.download(url)
                 val extension =
@@ -96,9 +96,9 @@ class ZoomableImageViewModel(
         url: String,
         folder: String,
     ) {
-        val imageSourcePath = settingsRepository.currentSettings.value.imageSourcePath
         screenModelScope.launch {
             updateState { it.copy(loading = true) }
+            val imageSourcePath = settingsRepository.currentSettings.value.imageSourcePath
             try {
                 val bytes = galleryHelper.download(url)
                 val extension =
