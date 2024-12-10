@@ -599,11 +599,13 @@ private fun ExtendedPost(
                         blurred = blurNsfw && post.nsfw,
                         contentScale = if (fullHeightImage) ContentScale.FillWidth else ContentScale.Crop,
                         maxHeight = if (fullHeightImage) Dp.Unspecified else EXTENDED_POST_MAX_HEIGHT,
-                        onImageClick = { url ->
+                        onImageClick = {
                             if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
                                 uriHandler.openUri(postLinkUrl)
                             } else {
-                                onOpenImage?.invoke(url)
+                                val urlToOpen =
+                                    post.url?.takeIf { it.looksLikeAnImage } ?: post.imageUrl
+                                onOpenImage?.invoke(urlToOpen)
                             }
                         },
                         onDoubleClick = onDoubleClick,
