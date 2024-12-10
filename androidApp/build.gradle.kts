@@ -129,6 +129,7 @@ kover {
                     "*.di",
                     "*.entities.*",
                     "*.core.persistence.entities",
+                    "*.core.persistence.provider",
                     "*.core.utils.appicon",
                     "*.core.utils.compose",
                     "*.core.utils.datetime",
