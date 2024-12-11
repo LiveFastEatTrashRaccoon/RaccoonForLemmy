@@ -462,4 +462,5 @@ internal val ItStrings =
             }
 
         override val settingsAboutMatrix = "Entra nella room Matrix"
+        override val messageNoResult = "Ops… nessun risultato trovato!"
     }

@@ -441,6 +441,7 @@ interface Strings {
     fun inboxNotificationContent(count: Int): String
 
     val settingsAboutMatrix: String
+    val messageNoResult: String
 }
 
 object Locales {
