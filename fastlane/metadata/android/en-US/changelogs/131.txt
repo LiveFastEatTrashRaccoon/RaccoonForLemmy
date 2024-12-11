@@ -1,0 +1,8 @@
+- feat: support for opening posts and comments
+- fix: image height in timelines
+- fix: high res image, loading state and action buttons in image detail
+- fix: autofill empty message in post creation
+- refactor: improve dependency injection
+- refactor: define and apply Gradle convention plugins
+- chore: update dependencies
+- chore): add more unit tests
