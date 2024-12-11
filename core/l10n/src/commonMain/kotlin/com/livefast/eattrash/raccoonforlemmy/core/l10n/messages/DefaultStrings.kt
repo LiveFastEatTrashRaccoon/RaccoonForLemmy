@@ -447,4 +447,5 @@ internal open class DefaultStrings : Strings {
     }
 
     override val settingsAboutMatrix = "Join Matrix room"
+    override val messageNoResult = "Oops… no result found!"
 }

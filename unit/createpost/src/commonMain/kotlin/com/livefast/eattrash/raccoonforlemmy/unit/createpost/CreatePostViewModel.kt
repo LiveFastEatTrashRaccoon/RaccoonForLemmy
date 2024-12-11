@@ -399,12 +399,12 @@ class CreatePostViewModel(
         screenModelScope.launch {
             updateState { it.copy(loading = true) }
             val metadata = siteRepository.getMetadata(url)
-            val suggestedTitle = metadata?.title.takeUnless { it.isNullOrBlank() }
             updateState { it.copy(loading = false) }
-            if (suggestedTitle == null) {
-                emitEffect(CreatePostMviModel.Effect.AutoFillFailed)
-            } else {
-                updateState { it.copy(title = suggestedTitle) }
+
+            when {
+                metadata == null -> emitEffect(CreatePostMviModel.Effect.AutoFillError)
+                metadata.title.isEmpty() -> emitEffect(CreatePostMviModel.Effect.AutoFillEmpty)
+                else -> updateState { it.copy(title = metadata.title) }
             }
         }
     }

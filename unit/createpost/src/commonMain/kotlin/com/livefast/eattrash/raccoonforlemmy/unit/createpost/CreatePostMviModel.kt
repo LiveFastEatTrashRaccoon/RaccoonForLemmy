@@ -17,15 +17,25 @@ interface CreatePostMviModel :
     MviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect>,
     ScreenModel {
     sealed interface Intent {
-        data class SetCommunity(val value: CommunityModel) : Intent
+        data class SetCommunity(
+            val value: CommunityModel,
+        ) : Intent
 
-        data class SetTitle(val value: String) : Intent
+        data class SetTitle(
+            val value: String,
+        ) : Intent
 
-        data class SetUrl(val value: String) : Intent
+        data class SetUrl(
+            val value: String,
+        ) : Intent
 
-        data class ChangeNsfw(val value: Boolean) : Intent
+        data class ChangeNsfw(
+            val value: Boolean,
+        ) : Intent
 
-        data class ImageSelected(val value: ByteArray) : Intent {
+        data class ImageSelected(
+            val value: ByteArray,
+        ) : Intent {
             override fun equals(other: Any?): Boolean {
                 if (this === other) return true
                 if (other == null || this::class != other::class) return false
@@ -35,12 +45,12 @@ interface CreatePostMviModel :
                 return value.contentEquals(other.value)
             }
 
-            override fun hashCode(): Int {
-                return value.contentHashCode()
-            }
+            override fun hashCode(): Int = value.contentHashCode()
         }
 
-        data class InsertImageInBody(val value: ByteArray) : Intent {
+        data class InsertImageInBody(
+            val value: ByteArray,
+        ) : Intent {
             override fun equals(other: Any?): Boolean {
                 if (this === other) return true
                 if (other == null || this::class != other::class) return false
@@ -50,16 +60,20 @@ interface CreatePostMviModel :
                 return value.contentEquals(other.value)
             }
 
-            override fun hashCode(): Int {
-                return value.contentHashCode()
-            }
+            override fun hashCode(): Int = value.contentHashCode()
         }
 
-        data class ChangeSection(val value: CreatePostSection) : Intent
+        data class ChangeSection(
+            val value: CreatePostSection,
+        ) : Intent
 
-        data class ChangeLanguage(val value: Long?) : Intent
+        data class ChangeLanguage(
+            val value: Long?,
+        ) : Intent
 
-        data class ChangeBodyValue(val value: TextFieldValue) : Intent
+        data class ChangeBodyValue(
+            val value: TextFieldValue,
+        ) : Intent
 
         data object Send : Intent
 
@@ -100,10 +114,14 @@ interface CreatePostMviModel :
     sealed interface Effect {
         data object Success : Effect
 
-        data class Failure(val message: String?) : Effect
+        data class Failure(
+            val message: String?,
+        ) : Effect
 
         data object DraftSaved : Effect
 
-        data object AutoFillFailed : Effect
+        data object AutoFillError : Effect
+
+        data object AutoFillEmpty : Effect
     }
 }
