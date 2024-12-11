@@ -110,6 +110,7 @@ class CreatePostScreen(
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = LocalStrings.current.messageGenericError
+        val autofillEmpty = LocalStrings.current.messageNoResult
         val notificationCenter = remember { getNotificationCenter() }
         val galleryHelper = remember { getGalleryHelper() }
         val crossPostText = LocalStrings.current.createPostCrossPostText
@@ -204,9 +205,8 @@ class CreatePostScreen(
             model.effects
                 .onEach { effect ->
                     when (effect) {
-                        is CreatePostMviModel.Effect.Failure -> {
+                        is CreatePostMviModel.Effect.Failure ->
                             snackbarHostState.showSnackbar(effect.message ?: genericError)
-                        }
 
                         CreatePostMviModel.Effect.Success -> {
                             notificationCenter.send(
@@ -217,9 +217,11 @@ class CreatePostScreen(
 
                         CreatePostMviModel.Effect.DraftSaved -> navigationCoordinator.popScreen()
 
-                        CreatePostMviModel.Effect.AutoFillFailed -> {
+                        CreatePostMviModel.Effect.AutoFillError ->
                             snackbarHostState.showSnackbar(genericError)
-                        }
+
+                        CreatePostMviModel.Effect.AutoFillEmpty ->
+                            snackbarHostState.showSnackbar(autofillEmpty)
                     }
                 }.launchIn(this)
         }
