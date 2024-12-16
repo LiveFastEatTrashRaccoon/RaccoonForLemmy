@@ -489,8 +489,8 @@ Symbols used in version numbers:
 - [ ] checkout the `master` branch
 - [ ] increment `versionCode` (ε) and `versionName` (α.β.γ) in `androidApp/build.gradle.kts`
 - [ ] update `res/changelog.txt` with a detailed change list, remembering:
-  - to include PR (with author) and issue references (if possible);
-  - to update the version comparison for GitHub diff view;
+  - to include PR (with author) and issue references (if possible)
+  - to update the version comparison for GitHub diff view
 - [ ] create a file called `ε.txt` under `fastlane/metadata/android/en-US/changelogs/` with the
   change list copying the content of `res/changelog.txt` (remember: 500 character limit)
 - [ ] add everything to stage and create a commit with the message "version α.β.γ"
