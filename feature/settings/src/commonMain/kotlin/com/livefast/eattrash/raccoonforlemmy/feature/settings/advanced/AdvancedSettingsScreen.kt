@@ -208,21 +208,13 @@ class AdvancedSettingsScreen : Screen {
                     )
 
                     // system bar theme
-                    if (uiState.edgeToEdge) {
-                        val barThemeName =
-                            if (uiState.opaqueSystemBars) {
-                                UiBarTheme.Opaque.toReadableName()
-                            } else {
-                                UiBarTheme.Transparent.toReadableName()
-                            }
-                        SettingsRow(
-                            title = LocalStrings.current.settingsBarTheme,
-                            value = barThemeName,
-                            onTap = {
-                                barThemeBottomSheetOpened = true
-                            },
-                        )
-                    }
+                    SettingsRow(
+                        title = LocalStrings.current.settingsBarTheme,
+                        value = uiState.systemBarTheme.toReadableName(),
+                        onTap = {
+                            barThemeBottomSheetOpened = true
+                        },
+                    )
 
                     // bottom navigation hiding
                     SettingsSwitchRow(
@@ -658,6 +650,7 @@ class AdvancedSettingsScreen : Screen {
                 listOf(
                     UiBarTheme.Transparent,
                     UiBarTheme.Opaque,
+                    UiBarTheme.Solid,
                 )
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsBarTheme,

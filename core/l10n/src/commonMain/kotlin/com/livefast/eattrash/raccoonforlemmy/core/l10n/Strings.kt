@@ -312,6 +312,7 @@ interface Strings {
     val selectActionTitle: String @Composable get
     val buttonAdd: String @Composable get
     val barThemeOpaque: String @Composable get
+    val barThemeSolid: String @Composable get
     val barThemeTransparent: String @Composable get
     val settingsBarTheme: String @Composable get
     val settingsColorsAndFonts: String @Composable get

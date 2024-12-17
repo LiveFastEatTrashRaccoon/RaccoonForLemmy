@@ -31,6 +31,7 @@
     <string name="ban_item_remove_data">Remove data</string>
     <string name="ban_reason_placeholder">Reason (optional)</string>
     <string name="bar_theme_opaque">Opaque</string>
+    <string name="bar_theme_solid">Solid</string>
     <string name="bar_theme_transparent">Transparent</string>
     <string name="beta">Beta</string>
     <string name="block_action_community">Block community</string>

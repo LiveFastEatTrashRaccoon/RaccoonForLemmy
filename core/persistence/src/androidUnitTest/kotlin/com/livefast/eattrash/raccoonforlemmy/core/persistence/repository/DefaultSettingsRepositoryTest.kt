@@ -154,7 +154,7 @@ class DefaultSettingsRepositoryTest {
                     actionsOnSwipeToEndComments = model.actionsOnSwipeToEndComments.serialized(),
                     actionsOnSwipeToStartInbox = model.actionsOnSwipeToStartInbox.serialized(),
                     actionsOnSwipeToEndInbox = model.actionsOnSwipeToEndInbox.serialized(),
-                    opaqueSystemBars = if (model.opaqueSystemBars) 1 else 0,
+                    opaqueSystemBars = model.systemBarTheme.toLong(),
                     showScores = if (model.showScores) 1 else 0,
                     preferUserNicknames = if (model.preferUserNicknames) 1 else 0,
                     commentBarThickness = model.commentBarThickness.toLong(),
@@ -231,7 +231,7 @@ class DefaultSettingsRepositoryTest {
                     actionsOnSwipeToEndComments = model.actionsOnSwipeToEndComments.serialized(),
                     actionsOnSwipeToStartInbox = model.actionsOnSwipeToStartInbox.serialized(),
                     actionsOnSwipeToEndInbox = model.actionsOnSwipeToEndInbox.serialized(),
-                    opaqueSystemBars = if (model.opaqueSystemBars) 1 else 0,
+                    opaqueSystemBars = model.systemBarTheme.toLong(),
                     showScores = if (model.showScores) 1 else 0,
                     preferUserNicknames = if (model.preferUserNicknames) 1 else 0,
                     commentBarThickness = model.commentBarThickness.toLong(),
@@ -302,7 +302,7 @@ class DefaultSettingsRepositoryTest {
                 keyStore.save("contentFontFamily", model.contentFontFamily)
                 keyStore.save("edgeToEdge", model.edgeToEdge)
                 keyStore.save("infiniteScrollEnabled", model.infiniteScrollEnabled)
-                keyStore.save("opaqueSystemBars", model.opaqueSystemBars)
+                keyStore.save("opaqueSystemBars", model.systemBarTheme)
                 keyStore.save("showScores", model.showScores)
                 keyStore.save("preferUserNicknames", model.preferUserNicknames)
                 keyStore.save("commentBarThickness", model.commentBarThickness)

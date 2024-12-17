@@ -1,6 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.advanced
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.LanguageModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -106,7 +107,7 @@ interface AdvancedSettingsMviModel :
         val searchPostTitleOnly: Boolean = false,
         val edgeToEdge: Boolean = true,
         val infiniteScrollDisabled: Boolean = false,
-        val opaqueSystemBars: Boolean = false,
+        val systemBarTheme: UiBarTheme = UiBarTheme.Transparent,
         val imageSourceSupported: Boolean = true,
         val imageSourcePath: Boolean = false,
         val defaultLanguageId: Long? = null,
