@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,7 +84,6 @@ fun App(onLoadingFinished: () -> Unit = {}) {
     var hasBeenInitialized by remember { mutableStateOf(false) }
     val apiConfigurationRepository = remember { getApiConfigurationRepository() }
     val themeRepository = remember { getThemeRepository() }
-    val locale by derivedStateOf { settings.locale }
     val useDynamicColors by themeRepository.dynamicColors.collectAsState()
     val uiFontScale by themeRepository.uiFontScale.collectAsState()
     val navigationCoordinator = remember { getNavigationCoordinator() }
@@ -94,7 +92,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
     val drawerGesturesEnabled by drawerCoordinator.gesturesEnabled.collectAsState()
     val detailOpener = remember { getDetailOpener() }
     val l10nManager = remember { getL10nManager() }
-    val l10nState by l10nManager.lyricist.state.collectAsState()
+    val langState by l10nManager.lang.collectAsState()
     val barTheme: UiBarTheme =
         when {
             settings.edgeToEdge && settings.opaqueSystemBars -> UiBarTheme.Opaque
@@ -143,11 +141,8 @@ fun App(onLoadingFinished: () -> Unit = {}) {
         }
     }
 
-    LaunchedEffect(locale) {
-        l10nManager.changeLanguage(locale ?: "en")
-    }
-
     LaunchedEffect(settings) {
+        l10nManager.changeLanguage(settings.locale ?: "en")
         with(themeRepository) {
             changeUiTheme(settings.theme?.toUiTheme())
             changeNavItemTitles(settings.navigationTitlesVisible)
@@ -262,7 +257,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
         barTheme = barTheme,
     ) {
         ProvideStrings(
-            lyricist = l10nManager.lyricist,
+            lang = langState,
         ) {
             ProvideCustomUriHandler {
                 CompositionLocalProvider(
@@ -271,7 +266,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                             density = LocalDensity.current.density,
                             fontScale = uiFontScale,
                         ),
-                    LocalLayoutDirection provides l10nState.languageTag.toLanguageDirection(),
+                    LocalLayoutDirection provides langState.toLanguageDirection(),
                 ) {
                     Navigator(
                         screen = MainScreen,
