@@ -43,8 +43,11 @@ Initially the project used the <a href="https://github.com/icerockdev/moko-resou
 library to load fonts, icons and all the localized messages used in the UI. It worked great, since in those areas
 Compose multiplatform missed the needed functionalities. But as long as the project grew in size and 
 more complex KSP configurations were needed, having all modules depend on resources became unmaintainable.
-This is why I migrated drawable and font loading to Compose build-in system. And, for localization, the choice was the
-<a href="https://github.com/adrielcafe/lyricist">Lyricist</a> library, which better handles dynamic language changes.
+This is why I migrated drawable and font loading to Compose build-in system. For localization, the choice was the
+<a href="https://github.com/adrielcafe/lyricist">Lyricist</a> library, which better handles dynamic language changes
+but it had a couple of issues: its XML processor made builds non-reproducible which was a huge issue in order
+to publish on F-Droid and it did not manage plurals correctly; if using pure Kotlin files its format is non-standard
+and therefore incompatible with tools like Weblate.
 </dd>
 
 <dt>Image loading</dt>

@@ -160,38 +160,18 @@ In this case, you should:
 > understand the global mechanism. However, translators are encouraged to review the messages on
 > Weblate and leave all the heavy-lifting work to project maintainers.
 
-The project uses
-the [Lyricist](https://github.com/adrielcafe/lyricist) library for internationalization, which
-relies on Composition Locals to access strings in Composables.
-
-In order to add a new language, you will have to create a new implementation of the `Strings`
-interface inside the `:core:l10n` module, namely under the `messages` package in the `commonMain`
-source set.
-
 First of all, determine the locale code, suppose it is `xx_YY`, based on the IANA conventions: it
 can consist a set of letters for the language `xx`, optionally followed by an underscore and
 another letter set for the region `YY` (e.g. `pt_BR` for Brazilian Portuguese or `pt` for 
 Portuguese). If you only have to use the `xx` part, please ignore the `yy` indication in the rest
 of the explanation contained in this paragraph.
 
-Inside the `messages` package, create a file named `XxYyStrings.kt` which will contain an
-anonymous subclass of `DefaultStrings` stored in a variable called `XxYyStrings` like this
+Create a directory called `values-xx-rYY` in `shared/commonMain/composeResources` with a file named
+`strings.xml` in it. Use `shared/commonMain/composeResources/values/strings.xml` as a reference in
+case of doubts. This file will be taken care of by the compose Gradle plugin to generate resources.
 
-```kotlin
-
-internal val XxYyStrings =
-    object : DefaultStrings() {
-        override val actionBackToTop = "..."
-        // ... continue overriding all the remaining properties
-    }
-```
-
-Since you are extending `DefaultStrings` you are automatically using the base localization
-for all the properties for which you do not provide an override. Just re-declare the property
-using the key as its name and insert the translation inside double quotes.
-
-While editing messages, please escape all apostrophes (`'`) with a backslash (`\'`): while not
-strictly needed any more, it's for compatibility with the old XML format used for localization.
+This is an XML file, it must be valid and well-formed so please remember to use entities for illegal
+characters (e.g. `&` should be represented as `&amp;`).
 
 Afterwards, edit the `Strings.kt` file in the same directory with the following modifications:
 
@@ -203,19 +183,13 @@ object Locales {
   // ...
   val ALL = listOf(
     // ...
-    XX_YY
+    XX_YY,
   )
 }
-
-internal val localizableStrings: Map<LanguageTag, Strings> =
-    mapOf(
-        // ...
-        Locales.XX_YY to XxYyStrings,
-    )
 ```
 
 Finally, in `Extensions.kt` add your flag and language name (mapping your language code to the
-values).
+values) in `toLanguageFlag()` and `toLanguageName()` respectively.
 
 That's it! 🎉 You can test that everything works by launching the development app.
 
