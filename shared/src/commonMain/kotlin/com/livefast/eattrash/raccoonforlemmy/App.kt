@@ -32,10 +32,10 @@ import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.transitions.SlideTransition
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toCommentBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toPostLayout
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getAppColorRepository
@@ -91,12 +91,6 @@ fun App(onLoadingFinished: () -> Unit = {}) {
     val detailOpener = remember { getDetailOpener() }
     val l10nManager = remember { getL10nManager() }
     val langState by l10nManager.lang.collectAsState()
-    val barTheme: UiBarTheme =
-        when {
-            settings.edgeToEdge && settings.opaqueSystemBars -> UiBarTheme.Opaque
-            settings.edgeToEdge && !settings.opaqueSystemBars -> UiBarTheme.Transparent
-            else -> UiBarTheme.Solid
-        }
     var screenWidth by remember { mutableStateOf(0f) }
     var sideMenuContent by remember { mutableStateOf<@Composable (() -> Unit)?>(null) }
     val sideMenuOpened by navigationCoordinator.sideMenuOpened.collectAsState()
@@ -252,7 +246,7 @@ fun App(onLoadingFinished: () -> Unit = {}) {
 
     AppTheme(
         useDynamicColors = useDynamicColors,
-        barTheme = barTheme,
+        barTheme = settings.systemBarTheme.toUiBarTheme(),
     ) {
         ProvideStrings(
             lang = langState,
