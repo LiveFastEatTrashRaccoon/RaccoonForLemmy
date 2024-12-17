@@ -9,6 +9,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.livefaast.eattrash.raccoonforlemmy.domain.inbox.R
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.L10nManager
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.getStrings
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -32,9 +33,11 @@ internal class CheckNotificationWorker(
             Result.success()
         }
 
-    private fun sendNotification(count: Int) {
-        val title = l10nManager.currentValues.inboxNotificationTitle
-        val content = l10nManager.currentValues.inboxNotificationContent(count)
+    private suspend fun sendNotification(count: Int) {
+        val lang = l10nManager.lang.value
+        val messages = getStrings(lang)
+        val title = messages.inboxNotificationTitle()
+        val content = messages.inboxNotificationContent(count)
         val notification =
             Notification
                 .Builder(context, NotificationConstants.CHANNEL_ID)
