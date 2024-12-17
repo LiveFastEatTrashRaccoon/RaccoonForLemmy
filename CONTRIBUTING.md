@@ -173,7 +173,9 @@ case of doubts. This file will be taken care of by the compose Gradle plugin to 
 This is an XML file, it must be valid and well-formed so please remember to use entities for illegal
 characters (e.g. `&` should be represented as `&amp;`).
 
-Afterwards, edit the `Strings.kt` file in the same directory with the following modifications:
+Afterwards, edit [
+`Locales.kt`](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/blob/master/core/l10n/src/commonMain/kotlin/com/livefast/eattrash/raccoonforlemmy/core/l10n/Locales.kt)
+with the following modifications:
 
 ```kotlin
 object Locales {
@@ -188,21 +190,12 @@ object Locales {
 }
 ```
 
-Finally, in `Extensions.kt` add your flag and language name (mapping your language code to the
-values) in `toLanguageFlag()` and `toLanguageName()` respectively.
+Finally, in [
+`Extensions.kt`](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/blob/master/core/l10n/src/commonMain/kotlin/com/livefast/eattrash/raccoonforlemmy/core/l10n/Extensions.kt)
+add your flag and language name in `toLanguageFlag()` and `toLanguageName()` respectively in order
+to map the language code to the desired values.
 
-That's it! 🎉 You can test that everything works by launching the development app.
-
-**A note for translators:** the strings that correspond to theme names (`settingsColorAquamarine`,
-`settingsColorBanana`, `settingsColorBlue`, `settingsColorGray`, `settingsColorGreen`,
-`settingsColorOrange`, `settingsColorPink`, `settingsColorPurple`, `settingsColorRed` and
-`settingsColorWhite`) contain the name of an animal accompanied by an adjective. It would be nice
-if the adjective and the noun would start in every language with the same sound in order to create
-humorous pairs like in English ("hilarious hedgehog", "frolicsome frog", etc.).
-
-If you have proposals, want to submit l10n fixes/improvements to existing ones, you can
-use this discussion and post an
-answer, we will reach out to you and solve the issue.
+That's it! 🎉
 
 ### 3.5 Submit a pull request
 

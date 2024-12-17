@@ -20,8 +20,8 @@
 Raccoon for Lemmy is a client for the federated aggregation and discussion platform Lemmy.
 The project is powered by Kotlin Multiplatform (KMP) and Compose Multiplatform (CMP).
 
-It started in 2023 as an exercise to play around with Kotlin and Compose multiplatform
-and gradually grew as a fully functional client.
+It started in 2023 as an exercise to play around with Kotlin and Compose multiplatform and gradually
+grew as a fully functional client.
 
 Main features:
 - view post feed and comments with different listing and sort types;
@@ -86,8 +86,9 @@ And don't forget every 🦝's motto: `#livefasteattrash`.
   </a>
 </div>
 
-Translators and localizators, your work is of paramount importance to make sure user experience is of high quality on the app! If you want to help with the localization,
-please have a look at the project on Weblate and submit your changes.
+Translators and localizators, your work is of paramount importance to make sure user experience is
+of high quality on the app! If you want to help with the localization, please have a look at the
+project on Weblate and submit your changes.
 
 ## Screenshots
 
@@ -154,9 +155,9 @@ with a platform like Lemmy.
 
 This project _is_ all about experimenting and learning, so please be patient.
 
-The app is intended both to regular users and moderators. To the formers, it offers the ability to change
-a lot of aspects like font face or size and app colors, vote format, bar transparency and so on in order
-to create a tailor-made solution for their needs.
+The app is intended both to regular users and moderators. To the formers, it offers the ability to
+change a lot of aspects like font face or size and app colors, vote format, bar transparency and so
+on in order to create a tailor-made solution for their needs.
 
 For moderators and admins who want to use their mobile device, the app provides a set of moderation
 tools (feature post, lock post, distinguish comment, remove post/comment, ban users) and the ability
