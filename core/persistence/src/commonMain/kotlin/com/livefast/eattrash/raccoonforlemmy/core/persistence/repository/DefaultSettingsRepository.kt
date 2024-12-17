@@ -151,7 +151,7 @@ internal class DefaultSettingsRepository(
                 settings.actionsOnSwipeToEndInbox
                     .map { it.toInt() }
                     .joinToString(","),
-            opaqueSystemBars = if (settings.opaqueSystemBars) 1L else 0L,
+            opaqueSystemBars = settings.systemBarTheme.toLong(),
             showScores = if (settings.showScores) 1L else 0L,
             preferUserNicknames = if (settings.preferUserNicknames) 1L else 0L,
             commentBarThickness = settings.commentBarThickness.toLong(),
@@ -233,7 +233,7 @@ internal class DefaultSettingsRepository(
                             null
                         },
                     infiniteScrollEnabled = keyStore[KeyStoreKeys.INFINITE_SCROLL_ENABLED, true],
-                    opaqueSystemBars = keyStore[KeyStoreKeys.OPAQUE_SYSTEM_BARS, false],
+                    systemBarTheme = keyStore[KeyStoreKeys.OPAQUE_SYSTEM_BARS, 0],
                     showScores = keyStore[KeyStoreKeys.SHOW_SCORES, true],
                     preferUserNicknames = keyStore[KeyStoreKeys.PREFER_USER_NICKNAMES, true],
                     commentBarThickness = keyStore[KeyStoreKeys.COMMENT_BAR_THICKNESS, 1],
@@ -357,7 +357,7 @@ internal class DefaultSettingsRepository(
                 keyStore.remove(KeyStoreKeys.POST_BODY_MAX_LINES)
             }
             keyStore.save(KeyStoreKeys.INFINITE_SCROLL_ENABLED, settings.infiniteScrollEnabled)
-            keyStore.save(KeyStoreKeys.OPAQUE_SYSTEM_BARS, settings.opaqueSystemBars)
+            keyStore.save(KeyStoreKeys.OPAQUE_SYSTEM_BARS, settings.systemBarTheme)
             keyStore.save(KeyStoreKeys.SHOW_SCORES, settings.showScores)
             keyStore.save(KeyStoreKeys.PREFER_USER_NICKNAMES, settings.preferUserNicknames)
             keyStore.save(KeyStoreKeys.COMMENT_BAR_THICKNESS, settings.commentBarThickness)
@@ -449,7 +449,7 @@ internal class DefaultSettingsRepository(
                     settings.actionsOnSwipeToEndInbox
                         .map { it.toInt() }
                         .joinToString(","),
-                opaqueSystemBars = if (settings.opaqueSystemBars) 1L else 0L,
+                opaqueSystemBars = settings.systemBarTheme.toLong(),
                 showScores = if (settings.showScores) 1L else 0L,
                 preferUserNicknames = if (settings.preferUserNicknames) 1L else 0L,
                 commentBarThickness = settings.commentBarThickness.toLong(),
@@ -556,7 +556,7 @@ private fun GetBy.toModel() =
                 ?.split(",")
                 ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
                 ?: ActionOnSwipe.DEFAULT_SWIPE_TO_END_INBOX,
-        opaqueSystemBars = opaqueSystemBars == 1L,
+        systemBarTheme = opaqueSystemBars?.toInt() ?: 0,
         showScores = showScores == 1L,
         preferUserNicknames = preferUserNicknames == 1L,
         commentBarThickness = commentBarThickness.toInt(),
