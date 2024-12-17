@@ -1,8 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.core.l10n.di
 
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.L10nManager
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.Locales
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.Strings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.Locales
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.Strings
 import org.koin.java.KoinJavaComponent
 import java.util.Locale
 
