@@ -109,13 +109,6 @@ class LicencesViewModel :
                             )
                         this +=
                             LicenceItem(
-                                type = LicenceItemType.Library,
-                                title = "Lyricist",
-                                subtitle = "The missing I18N and L10N multiplatform library for Jetpack Compose",
-                                url = LicenceUrls.LYRICIST,
-                            )
-                        this +=
-                            LicenceItem(
                                 type = LicenceItemType.Resource,
                                 title = "Material Design Icons",
                                 subtitle = "A set of icons by Google",
