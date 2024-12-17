@@ -41,7 +41,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.Customized
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.DetailInfoItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate

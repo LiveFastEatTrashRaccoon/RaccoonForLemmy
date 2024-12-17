@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import kotlinx.coroutines.delay
 
@@ -77,8 +77,7 @@ fun ZoomableImage(
                                     scale *= 2.5f
                                 }
                             },
-                        )
-                        .pointerInput(Unit) {
+                        ).pointerInput(Unit) {
                             detectTransformGestures(
                                 onGesture = { _, pan, gestureZoom, _ ->
                                     val extraWidth = (scale - 1) * constraints.maxWidth
@@ -99,8 +98,7 @@ fun ZoomableImage(
                                         }
                                 },
                             )
-                        }
-                        .graphicsLayer(
+                        }.graphicsLayer(
                             scaleX = scale,
                             scaleY = scale,
                             translationX = offset.x,

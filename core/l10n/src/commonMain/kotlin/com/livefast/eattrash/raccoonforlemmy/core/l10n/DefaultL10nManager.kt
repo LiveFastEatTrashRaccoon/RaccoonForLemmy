@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.l10n
 
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.replaceLang
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.Locales
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.koin.core.annotation.Single

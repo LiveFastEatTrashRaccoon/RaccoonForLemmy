@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils
 
 import androidx.compose.runtime.Composable
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 
 sealed interface ValidationError {
     data object InvalidField : ValidationError

@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.l10n.di
 
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.L10nManager
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.Strings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.Strings
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import platform.Foundation.NSUserDefaults

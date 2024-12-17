@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.toSize
@@ -44,8 +43,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeReposito
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.DraggableSideMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.ProvideStrings
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.getL10nManager
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.ProvideStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.ComposeEvent
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.DrawerEvent
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.SideMenuEvents
@@ -57,7 +56,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getAccountRepos
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.di.getAppConfigStore
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.toLanguageDirection
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getCustomUriHandler
@@ -266,7 +264,6 @@ fun App(onLoadingFinished: () -> Unit = {}) {
                             density = LocalDensity.current.density,
                             fontScale = uiFontScale,
                         ),
-                    LocalLayoutDirection provides langState.toLanguageDirection(),
                 ) {
                     Navigator(
                         screen = MainScreen,
