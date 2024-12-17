@@ -38,6 +38,7 @@ import raccoonforlemmy.shared.generated.resources.ban_item_permanent
 import raccoonforlemmy.shared.generated.resources.ban_item_remove_data
 import raccoonforlemmy.shared.generated.resources.ban_reason_placeholder
 import raccoonforlemmy.shared.generated.resources.bar_theme_opaque
+import raccoonforlemmy.shared.generated.resources.bar_theme_solid
 import raccoonforlemmy.shared.generated.resources.bar_theme_transparent
 import raccoonforlemmy.shared.generated.resources.beta
 import raccoonforlemmy.shared.generated.resources.block_action_community
@@ -1060,6 +1061,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.button_add)
     override val barThemeOpaque: String
         @Composable get() = stringResource(Res.string.bar_theme_opaque)
+    override val barThemeSolid: String
+        @Composable get() = stringResource(Res.string.bar_theme_solid)
     override val barThemeTransparent: String
         @Composable get() = stringResource(Res.string.bar_theme_transparent)
     override val settingsBarTheme: String
