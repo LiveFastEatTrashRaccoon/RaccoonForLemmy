@@ -43,6 +43,8 @@ sealed interface SortType {
         data object Month : Top
 
         data object Year : Top
+
+        data object All : Top
     }
 
     data object Controversial : SortType
@@ -111,6 +113,7 @@ fun SortType.toReadableName(): String =
         SortType.MostComments -> LocalStrings.current.homeSortTypeMostComments
         SortType.New -> LocalStrings.current.homeSortTypeNew
         SortType.NewComments -> LocalStrings.current.homeSortTypeNewComments
+        SortType.Top.All -> LocalStrings.current.homeListingTypeAll
         SortType.Top.Day -> LocalStrings.current.homeSortTypeTopDay
         SortType.Top.Month -> LocalStrings.current.homeSortTypeTopMonth
         SortType.Top.Past12Hours -> LocalStrings.current.homeSortTypeTop12Hours
