@@ -127,6 +127,7 @@ internal fun SortType.toDto() =
         SortType.MostComments -> MostComments
         SortType.New -> New
         SortType.NewComments -> NewComments
+        SortType.Top.All -> TopAll
         SortType.Top.Day -> TopDay
         SortType.Top.Month -> TopMonth
         SortType.Top.Past12Hours -> TopTwelveHour

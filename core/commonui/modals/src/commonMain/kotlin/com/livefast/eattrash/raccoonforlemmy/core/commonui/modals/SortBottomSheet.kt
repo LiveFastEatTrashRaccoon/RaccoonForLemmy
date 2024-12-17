@@ -82,7 +82,7 @@ fun SortBottomSheet(
                             values = values,
                             expandTop = expandTop,
                             onSelected = onSelected,
-                            onNavigateUp = {
+                            onNavigateDown = {
                                 level = SortBottomSheetLevel.Top
                             },
                         )
@@ -93,7 +93,7 @@ fun SortBottomSheet(
                             sheetScope = sheetScope,
                             sheetState = sheetState,
                             onSelected = onSelected,
-                            onNavigateDown = {
+                            onNavigateUp = {
                                 level = SortBottomSheetLevel.Main
                             },
                         )
@@ -111,7 +111,7 @@ private fun SortBottomSheetMain(
     sheetState: SheetState = rememberModalBottomSheetState(),
     values: List<SortType>,
     expandTop: Boolean = false,
-    onNavigateUp: () -> Unit,
+    onNavigateDown: () -> Unit,
     onSelected: ((SortType?) -> Unit)? = null,
 ) {
     Column {
@@ -130,7 +130,7 @@ private fun SortBottomSheetMain(
                     expandTop = expandTop,
                     onSelected = {
                         if (value == SortType.Top.Generic && expandTop) {
-                            onNavigateUp()
+                            onNavigateDown()
                         } else {
                             sheetScope
                                 .launch {
@@ -160,8 +160,9 @@ private fun SortBottomSheetTop(
             SortType.Top.Week,
             SortType.Top.Month,
             SortType.Top.Year,
+            SortType.Top.All,
         ),
-    onNavigateDown: () -> Unit,
+    onNavigateUp: () -> Unit,
     onSelected: ((SortType?) -> Unit)? = null,
 ) {
     Column {
@@ -180,7 +181,7 @@ private fun SortBottomSheetTop(
             ) {
                 IconButton(
                     onClick = {
-                        onNavigateDown()
+                        onNavigateUp()
                     },
                 ) {
                     Icon(
