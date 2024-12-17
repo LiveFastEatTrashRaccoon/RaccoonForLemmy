@@ -8,7 +8,7 @@ import androidx.compose.material.icons.filled.MarkChatUnread
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier

@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.resources
 
 import androidx.compose.runtime.Composable
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.Strings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.Strings
 import org.jetbrains.compose.resources.getPluralString
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource

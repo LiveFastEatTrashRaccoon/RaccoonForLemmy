@@ -6,7 +6,7 @@ import androidx.compose.material.icons.filled.Report
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 
 sealed interface ModeratorZoneAction {
     data object GlobalModLog : ModeratorZoneAction

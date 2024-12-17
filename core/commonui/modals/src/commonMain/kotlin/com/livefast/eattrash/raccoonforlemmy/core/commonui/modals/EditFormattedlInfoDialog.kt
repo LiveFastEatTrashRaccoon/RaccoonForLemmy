@@ -38,7 +38,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CreatePostSection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.TextFormattingBar
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

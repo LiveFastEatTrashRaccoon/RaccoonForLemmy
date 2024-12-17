@@ -25,7 +25,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 @Composable
@@ -57,7 +57,9 @@ internal fun DrawerHeader(
             if (userAvatar.isNotEmpty()) {
                 CustomImage(
                     modifier =
-                        Modifier.padding(Spacing.xxxs).size(avatarSize)
+                        Modifier
+                            .padding(Spacing.xxxs)
+                            .size(avatarSize)
                             .clip(RoundedCornerShape(avatarSize / 2)),
                     url = userAvatar,
                     autoload = autoLoadImages,

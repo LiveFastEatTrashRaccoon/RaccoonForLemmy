@@ -58,7 +58,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBo
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SliderBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.toInt
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter

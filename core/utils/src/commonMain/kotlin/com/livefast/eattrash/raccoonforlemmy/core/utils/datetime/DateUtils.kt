@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.datetime
 
 import androidx.compose.runtime.Composable
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import kotlin.math.round
 import kotlin.time.Duration
 

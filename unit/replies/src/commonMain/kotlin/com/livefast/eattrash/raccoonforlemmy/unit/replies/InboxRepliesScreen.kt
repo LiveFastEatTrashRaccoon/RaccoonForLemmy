@@ -42,7 +42,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getD
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.InboxCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.InboxCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.InboxCardType
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe

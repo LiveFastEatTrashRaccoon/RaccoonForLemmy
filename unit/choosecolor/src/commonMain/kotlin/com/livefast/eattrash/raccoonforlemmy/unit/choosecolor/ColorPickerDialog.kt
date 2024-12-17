@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toHexDigit
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,8 +64,7 @@ fun ColorPickerDialog(
                         .background(
                             color = currentColor,
                             shape = RoundedCornerShape(CornerSize.m),
-                        )
-                        .fillMaxWidth()
+                        ).fillMaxWidth()
                         .height(100.dp),
             )
             val alpha = (currentColor.alpha * 255).toInt().toHexDigit()

@@ -5,7 +5,7 @@ import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Cottage
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.runtime.Composable
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.messages.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 
 sealed interface ListingType {
     data object All : ListingType
