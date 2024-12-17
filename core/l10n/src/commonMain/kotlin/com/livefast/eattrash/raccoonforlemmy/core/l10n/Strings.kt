@@ -1,10 +1,6 @@
-package com.livefast.eattrash.raccoonforlemmy.core.l10n.messages
+package com.livefast.eattrash.raccoonforlemmy.core.l10n
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.ProvidableCompositionLocal
-import androidx.compose.runtime.staticCompositionLocalOf
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.getStrings
 
 interface Strings {
     val actionBackToTop: String @Composable get
@@ -441,53 +437,4 @@ interface Strings {
     suspend fun inboxNotificationTitle(): String
 
     suspend fun inboxNotificationContent(count: Int): String
-}
-
-object Locales {
-    const val FR = "fr"
-    const val GA = "ga"
-    const val EN = "en"
-    const val FI = "fi"
-    const val PT_BR = "pt_BR"
-    const val DE = "de"
-    const val PL = "pl"
-    const val IT = "it"
-    const val UA = "ua"
-    const val ES = "es"
-    const val PT = "pt"
-    const val ZH_CN = "zh_CN"
-    const val ZH_TW = "zh_TW"
-    const val ZH_HK = "zh_HK"
-
-    val ALL =
-        listOf(
-            DE,
-            EN,
-            ES,
-            FR,
-            GA,
-            IT,
-            PL,
-            PT,
-            PT_BR,
-            FI,
-            UA,
-            ZH_CN,
-            ZH_TW,
-            ZH_HK,
-        )
-}
-
-val LocalStrings: ProvidableCompositionLocal<Strings> =
-    staticCompositionLocalOf { getStrings(Locales.EN) }
-
-@Composable
-fun ProvideStrings(
-    lang: String,
-    content: @Composable () -> Unit,
-) {
-    CompositionLocalProvider(
-        value = LocalStrings provides getStrings(lang),
-        content = content,
-    )
 }
