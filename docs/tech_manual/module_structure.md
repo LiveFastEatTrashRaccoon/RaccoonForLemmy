@@ -139,8 +139,8 @@ the whole project. Here is a short description of them:
       historically much bigger and over time components were migrated to separate units
       modules;
 - `:core:markdown` contains Markdown rendering logic;
-- `core:l10n` contains all the localization messages and the `L10nManager` interface which acts as a wrapper around
-  Lyricist to load the internationalized messages;
+- `core:l10n` contains the `L10nManager` interface which acts as a wrapper around loading the
+  internationalized messages and/or making them available to the rest of the app;
 - `:core:navigation` contains the navigation manager used for stack navigation, bottom sheet navigation and a
   coordinator for the events originated by the navigation drawer;
 - `:core:notifications` contains the `NotificationCenter` contract and implementation as well as the event definition,

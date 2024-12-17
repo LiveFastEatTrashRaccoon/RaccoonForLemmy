@@ -173,7 +173,6 @@ This project _is_ all about experimenting and learning, so please be patient.
   for video playback;
 - [Koin](https://insert-koin.io/) for dependency injection;
 - [Ktor](https://ktor.io/) and [Ktorfit](https://foso.github.io/Ktorfit) for networking;
-- [Lyricist](https://github.com/adrielcafe/lyricist) for localization;
 - [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) for
   Markdown rendering
 - [Multiplatform Settings](https://github.com/russhwolf/multiplatform-settings) for encrypted shared

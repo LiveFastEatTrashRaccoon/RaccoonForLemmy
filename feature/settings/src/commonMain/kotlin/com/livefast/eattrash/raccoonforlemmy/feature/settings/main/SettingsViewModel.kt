@@ -52,9 +52,9 @@ class SettingsViewModel(
                     updateState { it.copy(uiTheme = value) }
                 }.launchIn(this)
 
-            l10nManager.lyricist.state
+            l10nManager.lang
                 .onEach { lang ->
-                    updateState { it.copy(lang = lang.languageTag) }
+                    updateState { it.copy(lang = lang) }
                 }.launchIn(this)
 
             identityRepository.isLogged

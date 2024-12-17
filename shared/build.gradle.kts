@@ -36,7 +36,6 @@ kotlin {
                 implementation(libs.compose.multiplatform.media.player)
                 implementation(libs.koin.core)
                 api(libs.koin.annotations)
-                implementation(libs.lyricist)
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.screenmodel)
                 implementation(libs.voyager.koin)
