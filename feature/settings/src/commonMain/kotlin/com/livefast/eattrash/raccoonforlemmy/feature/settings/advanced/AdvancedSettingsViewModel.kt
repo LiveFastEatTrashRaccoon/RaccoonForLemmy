@@ -2,6 +2,8 @@ package com.livefast.eattrash.raccoonforlemmy.feature.settings.advanced
 
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toInt
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
@@ -148,7 +150,7 @@ class AdvancedSettingsViewModel(
                     searchPostTitleOnly = settings.searchPostTitleOnly,
                     edgeToEdge = settings.edgeToEdge,
                     infiniteScrollDisabled = !settings.infiniteScrollEnabled,
-                    opaqueSystemBars = settings.opaqueSystemBars,
+                    systemBarTheme = settings.systemBarTheme.toUiBarTheme(),
                     imageSourceSupported = galleryHelper.supportsCustomPath,
                     imageSourcePath = settings.imageSourcePath,
                     defaultLanguageId = settings.defaultLanguageId,
@@ -347,14 +349,10 @@ class AdvancedSettingsViewModel(
     }
 
     private fun changeSystemBarTheme(value: UiBarTheme) {
-        val opaque =
-            when (value) {
-                UiBarTheme.Opaque -> true
-                else -> false
-            }
         screenModelScope.launch {
-            updateState { it.copy(opaqueSystemBars = opaque) }
-            val settings = settingsRepository.currentSettings.value.copy(opaqueSystemBars = opaque)
+            updateState { it.copy(systemBarTheme = value) }
+            val settings =
+                settingsRepository.currentSettings.value.copy(systemBarTheme = value.toInt())
             saveSettings(settings)
         }
     }
