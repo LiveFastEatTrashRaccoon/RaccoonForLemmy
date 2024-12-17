@@ -24,7 +24,6 @@ ksp = "2.1.0-1.0.29"
 ktor = "3.0.2"
 ktorfit = "2.2.0"
 ktorfit-ksp = "2.2.0-1.0.29"
-lyricist = "1.7.0"
 materialKolor = "2.0.0"
 mockk = "1.13.13"
 multiplatform-markdown-renderer = "0.27.0"
@@ -90,8 +89,6 @@ ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit-ksp" }
 ktorfit-lib = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
-
-lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
 
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 
