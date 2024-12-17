@@ -1,589 +1,493 @@
 package com.livefast.eattrash.raccoonforlemmy.core.l10n.messages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
-import cafe.adriel.lyricist.LanguageTag
-import cafe.adriel.lyricist.Lyricist
-import cafe.adriel.lyricist.ProvideStrings
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.getStrings
 
 interface Strings {
-    val actionBackToTop: String
-    val actionChat: String
-    val actionClearRead: String
-    val actionCreatePost: String
-    val actionReply: String
-    val actionActivateZombieMode: String
-    val actionDeactivateZombieMode: String
-    val buttonClose: String
-    val buttonConfirm: String
-    val buttonLoad: String
-    val buttonReset: String
-    val buttonRetry: String
-    val commentActionDelete: String
-    val communityDetailBlock: String
-    val communityDetailBlockInstance: String
-    val communityDetailInfo: String
-    val communityDetailInstanceInfo: String
-    val communityInfoComments: String
-    val communityInfoDailyActiveUsers: String
-    val communityInfoMonthlyActiveUsers: String
-    val communityInfoPosts: String
-    val communityInfoSubscribers: String
-    val communityInfoWeeklyActiveUsers: String
-    val createCommentBody: String
-    val createCommentTitle: String
-    val createPostBody: String
-    val createPostCommunity: String
-    val createPostCrossPostText: String
-    val createPostName: String
-    val createPostNsfw: String
-    val createPostTabEditor: String
-    val createPostTabPreview: String
-    val createPostTitle: String
-    val createPostUrl: String
-    val createReportPlaceholder: String
-    val createReportTitleComment: String
-    val createReportTitlePost: String
-    val dialogRawContentText: String
-    val dialogRawContentTitle: String
-    val dialogRawContentUrl: String
-    val dialogTitleChangeInstance: String
-    val dialogTitleRawContent: String
-    val dialogTitleSelectCommunity: String
-    val editCommentTitle: String
-    val editPostTitle: String
-    val exploreResultTypeAll: String
-    val exploreResultTypeComments: String
-    val exploreResultTypeCommunities: String
-    val exploreResultTypePosts: String
-    val exploreResultTypeUsers: String
-    val exploreSearchPlaceholder: String
-    val homeInstanceVia: String
-    val homeListingTitle: String
-    val homeListingTypeAll: String
-    val homeListingTypeLocal: String
-    val homeListingTypeSubscribed: String
-    val homeSortTitle: String
-    val homeSortTypeActive: String
-    val homeSortTypeControversial: String
-    val homeSortTypeHot: String
-    val homeSortTypeMostComments: String
-    val homeSortTypeNew: String
-    val homeSortTypeNewComments: String
-    val homeSortTypeOld: String
-    val homeSortTypeScaled: String
-    val homeSortTypeTop: String
-    val homeSortTypeTop12Hours: String
-    val homeSortTypeTop12HoursShort: String
-    val homeSortTypeTop6Hours: String
-    val homeSortTypeTop6HoursShort: String
-    val homeSortTypeTopDay: String
-    val homeSortTypeTopDayShort: String
-    val homeSortTypeTopHour: String
-    val homeSortTypeTopHourShort: String
-    val homeSortTypeTopMonth: String
-    val homeSortTypeTopMonthShort: String
-    val homeSortTypeTopWeek: String
-    val homeSortTypeTopWeekShort: String
-    val homeSortTypeTopYear: String
-    val homeSortTypeTopYearShort: String
-    val inboxChatMessage: String
-    val inboxItemMention: String
-    val inboxItemReplyComment: String
-    val inboxItemReplyPost: String
-    val inboxListingTypeAll: String
-    val inboxListingTypeTitle: String
-    val inboxListingTypeUnread: String
-    val inboxNotLoggedMessage: String
-    val inboxSectionMentions: String
-    val inboxSectionMessages: String
-    val inboxSectionReplies: String
-    val instanceDetailCommunities: String
-    val instanceDetailTitle: String
-    val lang: String
-    val loginFieldInstanceName: String
-    val loginFieldLabelOptional: String
-    val loginFieldPassword: String
-    val loginFieldToken: String
-    val loginFieldUserName: String
-    val manageAccountsButtonAdd: String
-    val manageAccountsTitle: String
-    val manageSubscriptionsHeaderMulticommunities: String
-    val manageSubscriptionsHeaderSubscriptions: String
-    val messageEmptyComments: String
-    val messageEmptyList: String
-    val messageErrorLoadingComments: String
-    val messageGenericError: String
-    val messageImageLoadingError: String
-    val messageInvalidField: String
-    val messageMissingField: String
-    val messageOperationSuccessful: String
-    val multiCommunityEditorCommunities: String
-    val multiCommunityEditorIcon: String
-    val multiCommunityEditorName: String
-    val multiCommunityEditorTitle: String
-    val navigationDrawerAnonymous: String
-    val navigationDrawerTitleBookmarks: String
-    val navigationDrawerTitleSubscriptions: String
-    val navigationHome: String
-    val navigationInbox: String
-    val navigationProfile: String
-    val navigationSearch: String
-    val navigationSettings: String
-    val postActionCrossPost: String
-    val postActionEdit: String
-    val postActionHide: String
-    val postActionReport: String
-    val postActionSeeRaw: String
-    val postActionShare: String
-    val postDetailCrossPosts: String
-    val postDetailLoadMoreComments: String
-    val postHourShort: String
-    val postMinuteShort: String
-    val postSecondShort: String
-    val profileButtonLogin: String
-    val profileDayShort: String
-    val profileMillionShort: String
-    val profileMonthShort: String
-    val profileNotLoggedMessage: String
-    val profileSectionComments: String
-    val profileSectionPosts: String
-    val profileThousandShort: String
-    val profileYearShort: String
-    val settingsAbout: String
-    val settingsAboutAppVersion: String
-    val settingsAboutChangelog: String
-    val settingsAboutReportGithub: String
-    val settingsAboutReportEmail: String
-    val settingsAboutViewGithub: String
-    val settingsAboutViewLemmy: String
-    val settingsAutoExpandComments: String
-    val settingsAutoLoadImages: String
-    val settingsBlurNsfw: String
-    val settingsColorAquamarine: String
-    val settingsColorBanana: String
-    val settingsColorBlue: String
-    val settingsColorCustom: String
-    val settingsColorDialogAlpha: String
-    val settingsColorDialogBlue: String
-    val settingsColorDialogGreen: String
-    val settingsColorDialogRed: String
-    val settingsColorDialogTitle: String
-    val settingsColorGray: String
-    val settingsColorGreen: String
-    val settingsColorOrange: String
-    val settingsColorPink: String
-    val settingsColorPurple: String
-    val settingsColorRed: String
-    val settingsColorWhite: String
-    val settingsContentFontLarge: String
-    val settingsContentFontLarger: String
-    val settingsContentFontLargest: String
-    val settingsContentFontNormal: String
-    val settingsContentFontScale: String
-    val settingsContentFontSmall: String
-    val settingsContentFontSmaller: String
-    val settingsContentFontSmallest: String
-    val settingsCustomSeedColor: String
-    val settingsDefaultCommentSortType: String
-    val settingsDefaultListingType: String
-    val settingsDefaultPostSortType: String
-    val settingsDownvoteColor: String
-    val settingsDynamicColors: String
-    val settingsEnableCrashReport: String
-    val settingsEnableDoubleTap: String
-    val settingsEnableSwipeActions: String
-    val settingsFullHeightImages: String
-    val settingsIncludeNsfw: String
-    val settingsLanguage: String
-    val settingsNavigationBarTitlesVisible: String
-    val settingsOpenUrlExternal: String
-    val settingsPointsShort: String
-    val settingsPostLayout: String
-    val settingsPostLayoutCard: String
-    val settingsPostLayoutCompact: String
-    val settingsPostLayoutFull: String
-    val settingsSectionAppearance: String
-    val settingsAdvanced: String
-    val settingsSectionDebug: String
-    val settingsSectionGeneral: String
-    val settingsSectionNsfw: String
-    val settingsThemeBlack: String
-    val settingsThemeDark: String
-    val settingsThemeLight: String
-    val settingsUiFontFamily: String
-    val settingsUiFontScale: String
-    val settingsUiTheme: String
-    val settingsUpvoteColor: String
-    val settingsHideNavigationBar: String
-    val settingsZombieModeInterval: String
-    val settingsZombieModeScrollAmount: String
-    val settingsMarkAsReadWhileScrolling: String
-    val actionQuote: String
-    val modActionAllow: String
-    val modActionBan: String
-    val modActionOpenReports: String
-    val modActionMarkAsFeatured: String
-    val modActionUnmarkAsFeatured: String
-    val modActionLock: String
-    val modActionUnlock: String
-    val modActionRemove: String
-    val modActionMarkAsDistinguished: String
-    val modActionUnmarkAsDistinguished: String
-    val reportListTitle: String
-    val reportListTypeTitle: String
-    val reportListTypeAll: String
-    val reportListTypeUnresolved: String
-    val reportActionResolve: String
-    val reportActionUnresolve: String
-    val sidebarNotLoggedMessage: String
-    val settingsDefaultInboxType: String
-    val modActionAddMod: String
-    val modActionRemoveMod: String
-    val settingsVoteFormat: String
-    val settingsVoteFormatAggregated: String
-    val settingsVoteFormatSeparated: String
-    val settingsVoteFormatPercentage: String
-    val settingsFontFamilyDefault: String
-    val postReplySourceAccount: String
-    val settingsCommentBarTheme: String
-    val settingsCommentBarThemeBlue: String
-    val settingsCommentBarThemeGreen: String
-    val settingsCommentBarThemeRed: String
-    val settingsCommentBarThemeMulti: String
-    val messageConfirmExit: String
-    val communityActionUnsubscribe: String
-    val settingsSearchPostsTitleOnly: String
-    val settingsContentFontFamily: String
-    val communityInfoModerators: String
-    val communityActionAddFavorite: String
-    val communityActionRemoveFavorite: String
-    val communityActionViewModlog: String
-    val modlogTitle: String
-    val modlogItemModAdded: String
-    val modlogItemModRemoved: String
-    val modlogItemUserBanned: String
-    val modlogItemUserUnbanned: String
-    val modlogItemPostFeatured: String
-    val modlogItemPostUnfeatured: String
-    val modlogItemPostLocked: String
-    val modlogItemPostUnlocked: String
-    val modlogItemPostRemoved: String
-    val modlogItemPostRestored: String
-    val modlogItemCommentRemoved: String
-    val modlogItemCommentRestored: String
-    val modlogItemCommunityTransfer: String
-    val blockActionUser: String
-    val blockActionCommunity: String
-    val userDetailInfo: String
-    val userInfoModerates: String
-    val userInfoAdmin: String
-    val settingsReplyColor: String
-    val settingsSectionAccount: String
-    val settingsWebPreferences: String
-    val settingsWebHeaderPersonal: String
-    val settingsWebHeaderContents: String
-    val settingsWebHeaderNotifications: String
-    val settingsWebAvatar: String
-    val settingsWebBanner: String
-    val settingsWebBio: String
-    val settingsWebBot: String
-    val settingsWebDisplayName: String
-    val settingsWebMatrix: String
-    val settingsWebEmail: String
-    val settingsWebShowBot: String
-    val settingsWebShowNsfw: String
-    val settingsWebShowRead: String
-    val settingsWebEmailNotifications: String
-    val settingsManageBan: String
-    val settingsManageBanActionUnban: String
-    val settingsManageBanSectionInstances: String
-    val settingsEdgeToEdge: String
-    val settingsPostBodyMaxLines: String
-    val settingsPostBodyMaxLinesUnlimited: String
-    val messageContentRemoved: String
-    val postListLoadMorePosts: String
-    val settingsInfiniteScrollDisabled: String
-    val dialogTitleAddInstance: String
-    val settingsSaveColor: String
-    val settingsConfigureSwipeActions: String
-    val actionUpvote: String
-    val actionDownvote: String
-    val actionSave: String
-    val actionToggleRead: String
-    val configureActionsSideStart: String
-    val configureActionsSideEnd: String
-    val selectActionTitle: String
-    val buttonAdd: String
-    val barThemeOpaque: String
-    val barThemeTransparent: String
-    val settingsBarTheme: String
-    val settingsColorsAndFonts: String
-    val settingsUserManual: String
-    val settingsShowScores: String
-    val settingsVoteFormatHidden: String
-    val settingsCommentBarThickness: String
-    val settingsPreferUserNicknames: String
-    val messageVideoNsfw: String
-    val settingsTitleFontScale: String
-    val settingsCommentFontScale: String
-    val settingsAncillaryFontScale: String
-    val settingsConfigureContent: String
-    val settingsConfigureText: String
-    val settingsConfigureCustomizations: String
-    val navigationDrawerTitleDrafts: String
-    val moderatorZoneTitle: String
-    val moderatorZoneActionContents: String
-    val messageAuthIssue: String
-    val banReasonPlaceholder: String
-    val banItemPermanent: String
-    val banItemRemoveData: String
-    val banItemDurationDays: String
-    val messageUnsavedChanges: String
-    val buttonNoStay: String
-    val buttonYesQuit: String
-    val settingsItemImageSourcePath: String
-    val settingsSubtitleImageSourcePath: String
-    val settingsTitleDisplay: String
-    val settingsTitleReading: String
-    val settingsTitlePictures: String
-    val settingsTitleExperimental: String
-    val communitySetCustomSort: String
-    val settingsDefaultExploreType: String
-    val actionSearchInCommunity: String
-    val actionExitSearch: String
-    val beta: String
-    val actionCopyClipboard: String
-    val copyTitle: String
-    val copyText: String
-    val copyBoth: String
-    val profileUpvotesDownvotes: String
-    val filteredContentsType: String
-    val actionSearchInComments: String
-    val advancedSettingsDefaultLanguage: String
-    val undetermined: String
-    val exploreResultTypeTitle: String
-    val communityActionEdit: String
-    val editCommunityHeaderTextual: String
-    val editCommunityItemSidebar: String
-    val editCommunityItemPostingRestrictedToMods: String
-    val messageAreYouSure: String
-    val buttonCancel: String
-    val shareModeUrl: String
-    val shareModeFile: String
-    val modlogItemCommunityPurged: String
-    val modlogItemCommentPurged: String
-    val modlogItemPersonPurged: String
-    val modlogItemPostPurged: String
-    val modlogItemHidden: String
-    val modlogItemUnhidden: String
-    val settingsAboutLicences: String
-    val settingsInboxBackgroundCheckPeriod: String
-    val never: String
-    val settingsAppIcon: String
-    val requiresRestart: String
-    val appIconDefault: String
-    val appIconAlt1: String
-    val settingsFadeReadPosts: String
-    val settingsShowUnreadComments: String
-    val actionLogout: String
-    val settingsImport: String
-    val settingsExport: String
-    val settingsEnableButtonsToScrollBetweenComments: String
-    val settingsUrlOpeningModeInternal: String
-    val settingsUrlOpeningModeExternal: String
-    val settingsUrlOpeningModeCustomTabs: String
-    val settingsFullWidthImages: String
-    val contentScaleFit: String
-    val contentScaleFillWidth: String
-    val contentScaleFillHeight: String
-    val settingsCommentIndentAmount: String
-    val postActionUnhide: String
-    val adminActionPurge: String
-    val adminActionMarkAsFeatured: String
-    val adminActionUnmarkAsFeatured: String
-    val communitySetPreferredLanguage: String
-    val appIconClassical: String
-    val settingsAboutAcknowledgements: String
-    val actionCreateCommunity: String
-    val editCommunityItemVisibility: String
-    val communityVisibilityLocalOnly: String
-    val communityVisibilityPublic: String
-    val noticeCommunityLocalOnly: String
-    val noticeBannedUser: String
-    val settingsHiddenPosts: String
-    val settingsMediaList: String
-    val settingsEnableToggleFavoriteInNavDrawer: String
-    val messageContentDeleted: String
-    val actionRestore: String
-    val settingsInboxPreviewMaxLines: String
-    val settingsDefaultExploreResultType: String
-    val settingsUseAvatarAsProfileNavigationIcon: String
-    val messageReadAllInboxSuccess: String
-    val settingsItemRandomThemeColor: String
-    val settingsSubtitleRandomThemeColor: String
-    val settingsItemOpenPostWebPageOnImageClick: String
-    val settingsSubtitleOpenPostWebPageOnImageClick: String
-    val settingsItemAlternateMarkdownRendering: String
-    val settingsItemConfigureBottomNavigationBar: String
-    val selectTabNavigationTitle: String
-    val messageAuthIssueSegue0: String
-    val messageAuthIssueSegue1: String
-    val messageAuthIssueSegue2: String
-    val messageAuthIssueSegue3: String
-    val settingsManageBanSectionDomains: String
-    val settingsManageBanDomainPlaceholder: String
-    val settingsManageBanSectionStopWords: String
-    val settingsManageBanStopWordPlaceholder: String
-    val inboxNotificationTitle: String
+    val actionBackToTop: String @Composable get
+    val actionChat: String @Composable get
+    val actionClearRead: String @Composable get
+    val actionCreatePost: String @Composable get
+    val actionReply: String @Composable get
+    val actionActivateZombieMode: String @Composable get
+    val actionDeactivateZombieMode: String @Composable get
+    val buttonClose: String @Composable get
+    val buttonConfirm: String @Composable get
+    val buttonLoad: String @Composable get
+    val buttonReset: String @Composable get
+    val buttonRetry: String @Composable get
+    val commentActionDelete: String @Composable get
+    val communityDetailBlock: String @Composable get
+    val communityDetailBlockInstance: String @Composable get
+    val communityDetailInfo: String @Composable get
+    val communityDetailInstanceInfo: String @Composable get
+    val communityInfoComments: String @Composable get
+    val communityInfoDailyActiveUsers: String @Composable get
+    val communityInfoMonthlyActiveUsers: String @Composable get
+    val communityInfoPosts: String @Composable get
+    val communityInfoSubscribers: String @Composable get
+    val communityInfoWeeklyActiveUsers: String @Composable get
+    val createCommentBody: String @Composable get
+    val createCommentTitle: String @Composable get
+    val createPostBody: String @Composable get
+    val createPostCommunity: String @Composable get
+    val createPostCrossPostText: String @Composable get
+    val createPostName: String @Composable get
+    val createPostNsfw: String @Composable get
+    val createPostTabEditor: String @Composable get
+    val createPostTabPreview: String @Composable get
+    val createPostTitle: String @Composable get
+    val createPostUrl: String @Composable get
+    val createReportPlaceholder: String @Composable get
+    val createReportTitleComment: String @Composable get
+    val createReportTitlePost: String @Composable get
+    val dialogRawContentText: String @Composable get
+    val dialogRawContentTitle: String @Composable get
+    val dialogRawContentUrl: String @Composable get
+    val dialogTitleChangeInstance: String @Composable get
+    val dialogTitleRawContent: String @Composable get
+    val dialogTitleSelectCommunity: String @Composable get
+    val editCommentTitle: String @Composable get
+    val editPostTitle: String @Composable get
+    val exploreResultTypeAll: String @Composable get
+    val exploreResultTypeComments: String @Composable get
+    val exploreResultTypeCommunities: String @Composable get
+    val exploreResultTypePosts: String @Composable get
+    val exploreResultTypeUsers: String @Composable get
+    val exploreSearchPlaceholder: String @Composable get
+    val homeInstanceVia: String @Composable get
+    val homeListingTitle: String @Composable get
+    val homeListingTypeAll: String @Composable get
+    val homeListingTypeLocal: String @Composable get
+    val homeListingTypeSubscribed: String @Composable get
+    val homeSortTitle: String @Composable get
+    val homeSortTypeActive: String @Composable get
+    val homeSortTypeControversial: String @Composable get
+    val homeSortTypeHot: String @Composable get
+    val homeSortTypeMostComments: String @Composable get
+    val homeSortTypeNew: String @Composable get
+    val homeSortTypeNewComments: String @Composable get
+    val homeSortTypeOld: String @Composable get
+    val homeSortTypeScaled: String @Composable get
+    val homeSortTypeTop: String @Composable get
+    val homeSortTypeTop12Hours: String @Composable get
+    val homeSortTypeTop12HoursShort: String @Composable get
+    val homeSortTypeTop6Hours: String @Composable get
+    val homeSortTypeTop6HoursShort: String @Composable get
+    val homeSortTypeTopDay: String @Composable get
+    val homeSortTypeTopDayShort: String @Composable get
+    val homeSortTypeTopHour: String @Composable get
+    val homeSortTypeTopHourShort: String @Composable get
+    val homeSortTypeTopMonth: String @Composable get
+    val homeSortTypeTopMonthShort: String @Composable get
+    val homeSortTypeTopWeek: String @Composable get
+    val homeSortTypeTopWeekShort: String @Composable get
+    val homeSortTypeTopYear: String @Composable get
+    val homeSortTypeTopYearShort: String @Composable get
+    val inboxChatMessage: String @Composable get
+    val inboxItemMention: String @Composable get
+    val inboxItemReplyComment: String @Composable get
+    val inboxItemReplyPost: String @Composable get
+    val inboxListingTypeAll: String @Composable get
+    val inboxListingTypeTitle: String @Composable get
+    val inboxListingTypeUnread: String @Composable get
+    val inboxNotLoggedMessage: String @Composable get
+    val inboxSectionMentions: String @Composable get
+    val inboxSectionMessages: String @Composable get
+    val inboxSectionReplies: String @Composable get
+    val instanceDetailCommunities: String @Composable get
+    val instanceDetailTitle: String @Composable get
+    val lang: String @Composable get
+    val loginFieldInstanceName: String @Composable get
+    val loginFieldLabelOptional: String @Composable get
+    val loginFieldPassword: String @Composable get
+    val loginFieldToken: String @Composable get
+    val loginFieldUserName: String @Composable get
+    val manageAccountsButtonAdd: String @Composable get
+    val manageAccountsTitle: String @Composable get
+    val manageSubscriptionsHeaderMulticommunities: String @Composable get
+    val manageSubscriptionsHeaderSubscriptions: String @Composable get
+    val messageEmptyComments: String @Composable get
+    val messageEmptyList: String @Composable get
+    val messageErrorLoadingComments: String @Composable get
+    val messageGenericError: String @Composable get
+    val messageImageLoadingError: String @Composable get
+    val messageInvalidField: String @Composable get
+    val messageMissingField: String @Composable get
+    val messageOperationSuccessful: String @Composable get
+    val multiCommunityEditorCommunities: String @Composable get
+    val multiCommunityEditorIcon: String @Composable get
+    val multiCommunityEditorName: String @Composable get
+    val multiCommunityEditorTitle: String @Composable get
+    val navigationDrawerAnonymous: String @Composable get
+    val navigationDrawerTitleBookmarks: String @Composable get
+    val navigationDrawerTitleSubscriptions: String @Composable get
+    val navigationHome: String @Composable get
+    val navigationInbox: String @Composable get
+    val navigationProfile: String @Composable get
+    val navigationSearch: String @Composable get
+    val navigationSettings: String @Composable get
+    val postActionCrossPost: String @Composable get
+    val postActionEdit: String @Composable get
+    val postActionHide: String @Composable get
+    val postActionReport: String @Composable get
+    val postActionSeeRaw: String @Composable get
+    val postActionShare: String @Composable get
+    val postDetailCrossPosts: String @Composable get
+    val postDetailLoadMoreComments: String @Composable get
+    val postHourShort: String @Composable get
+    val postMinuteShort: String @Composable get
+    val postSecondShort: String @Composable get
+    val profileButtonLogin: String @Composable get
+    val profileDayShort: String @Composable get
+    val profileMillionShort: String @Composable get
+    val profileMonthShort: String @Composable get
+    val profileNotLoggedMessage: String @Composable get
+    val profileSectionComments: String @Composable get
+    val profileSectionPosts: String @Composable get
+    val profileThousandShort: String @Composable get
+    val profileYearShort: String @Composable get
+    val settingsAbout: String @Composable get
+    val settingsAboutAppVersion: String @Composable get
+    val settingsAboutChangelog: String @Composable get
+    val settingsAboutReportGithub: String @Composable get
+    val settingsAboutReportEmail: String @Composable get
+    val settingsAboutViewGithub: String @Composable get
+    val settingsAboutViewLemmy: String @Composable get
+    val settingsAutoExpandComments: String @Composable get
+    val settingsAutoLoadImages: String @Composable get
+    val settingsBlurNsfw: String @Composable get
+    val settingsColorAquamarine: String @Composable get
+    val settingsColorBanana: String @Composable get
+    val settingsColorBlue: String @Composable get
+    val settingsColorCustom: String @Composable get
+    val settingsColorDialogAlpha: String @Composable get
+    val settingsColorDialogBlue: String @Composable get
+    val settingsColorDialogGreen: String @Composable get
+    val settingsColorDialogRed: String @Composable get
+    val settingsColorDialogTitle: String @Composable get
+    val settingsColorGray: String @Composable get
+    val settingsColorGreen: String @Composable get
+    val settingsColorOrange: String @Composable get
+    val settingsColorPink: String @Composable get
+    val settingsColorPurple: String @Composable get
+    val settingsColorRed: String @Composable get
+    val settingsColorWhite: String @Composable get
+    val settingsContentFontLarge: String @Composable get
+    val settingsContentFontLarger: String @Composable get
+    val settingsContentFontLargest: String @Composable get
+    val settingsContentFontNormal: String @Composable get
+    val settingsContentFontScale: String @Composable get
+    val settingsContentFontSmall: String @Composable get
+    val settingsContentFontSmaller: String @Composable get
+    val settingsContentFontSmallest: String @Composable get
+    val settingsCustomSeedColor: String @Composable get
+    val settingsDefaultCommentSortType: String @Composable get
+    val settingsDefaultListingType: String @Composable get
+    val settingsDefaultPostSortType: String @Composable get
+    val settingsDownvoteColor: String @Composable get
+    val settingsDynamicColors: String @Composable get
+    val settingsEnableCrashReport: String @Composable get
+    val settingsEnableDoubleTap: String @Composable get
+    val settingsEnableSwipeActions: String @Composable get
+    val settingsFullHeightImages: String @Composable get
+    val settingsIncludeNsfw: String @Composable get
+    val settingsLanguage: String @Composable get
+    val settingsNavigationBarTitlesVisible: String @Composable get
+    val settingsOpenUrlExternal: String @Composable get
+    val settingsPointsShort: String @Composable get
+    val settingsPostLayout: String @Composable get
+    val settingsPostLayoutCard: String @Composable get
+    val settingsPostLayoutCompact: String @Composable get
+    val settingsPostLayoutFull: String @Composable get
+    val settingsSectionAppearance: String @Composable get
+    val settingsAdvanced: String @Composable get
+    val settingsSectionDebug: String @Composable get
+    val settingsSectionGeneral: String @Composable get
+    val settingsSectionNsfw: String @Composable get
+    val settingsThemeBlack: String @Composable get
+    val settingsThemeDark: String @Composable get
+    val settingsThemeLight: String @Composable get
+    val settingsUiFontFamily: String @Composable get
+    val settingsUiFontScale: String @Composable get
+    val settingsUiTheme: String @Composable get
+    val settingsUpvoteColor: String @Composable get
+    val settingsHideNavigationBar: String @Composable get
+    val settingsZombieModeInterval: String @Composable get
+    val settingsZombieModeScrollAmount: String @Composable get
+    val settingsMarkAsReadWhileScrolling: String @Composable get
+    val actionQuote: String @Composable get
+    val modActionAllow: String @Composable get
+    val modActionBan: String @Composable get
+    val modActionOpenReports: String @Composable get
+    val modActionMarkAsFeatured: String @Composable get
+    val modActionUnmarkAsFeatured: String @Composable get
+    val modActionLock: String @Composable get
+    val modActionUnlock: String @Composable get
+    val modActionRemove: String @Composable get
+    val modActionMarkAsDistinguished: String @Composable get
+    val modActionUnmarkAsDistinguished: String @Composable get
+    val reportListTitle: String @Composable get
+    val reportListTypeTitle: String @Composable get
+    val reportListTypeAll: String @Composable get
+    val reportListTypeUnresolved: String @Composable get
+    val reportActionResolve: String @Composable get
+    val reportActionUnresolve: String @Composable get
+    val sidebarNotLoggedMessage: String @Composable get
+    val settingsDefaultInboxType: String @Composable get
+    val modActionAddMod: String @Composable get
+    val modActionRemoveMod: String @Composable get
+    val settingsVoteFormat: String @Composable get
+    val settingsVoteFormatAggregated: String @Composable get
+    val settingsVoteFormatSeparated: String @Composable get
+    val settingsVoteFormatPercentage: String @Composable get
+    val settingsFontFamilyDefault: String @Composable get
+    val postReplySourceAccount: String @Composable get
+    val settingsCommentBarTheme: String @Composable get
+    val settingsCommentBarThemeBlue: String @Composable get
+    val settingsCommentBarThemeGreen: String @Composable get
+    val settingsCommentBarThemeRed: String @Composable get
+    val settingsCommentBarThemeMulti: String @Composable get
+    val messageConfirmExit: String @Composable get
+    val communityActionUnsubscribe: String @Composable get
+    val settingsSearchPostsTitleOnly: String @Composable get
+    val settingsContentFontFamily: String @Composable get
+    val communityInfoModerators: String @Composable get
+    val communityActionAddFavorite: String @Composable get
+    val communityActionRemoveFavorite: String @Composable get
+    val communityActionViewModlog: String @Composable get
+    val modlogTitle: String @Composable get
+    val modlogItemModAdded: String @Composable get
+    val modlogItemModRemoved: String @Composable get
+    val modlogItemUserBanned: String @Composable get
+    val modlogItemUserUnbanned: String @Composable get
+    val modlogItemPostFeatured: String @Composable get
+    val modlogItemPostUnfeatured: String @Composable get
+    val modlogItemPostLocked: String @Composable get
+    val modlogItemPostUnlocked: String @Composable get
+    val modlogItemPostRemoved: String @Composable get
+    val modlogItemPostRestored: String @Composable get
+    val modlogItemCommentRemoved: String @Composable get
+    val modlogItemCommentRestored: String @Composable get
+    val modlogItemCommunityTransfer: String @Composable get
+    val blockActionUser: String @Composable get
+    val blockActionCommunity: String @Composable get
+    val userDetailInfo: String @Composable get
+    val userInfoModerates: String @Composable get
+    val userInfoAdmin: String @Composable get
+    val settingsReplyColor: String @Composable get
+    val settingsSectionAccount: String @Composable get
+    val settingsWebPreferences: String @Composable get
+    val settingsWebHeaderPersonal: String @Composable get
+    val settingsWebHeaderContents: String @Composable get
+    val settingsWebHeaderNotifications: String @Composable get
+    val settingsWebAvatar: String @Composable get
+    val settingsWebBanner: String @Composable get
+    val settingsWebBio: String @Composable get
+    val settingsWebBot: String @Composable get
+    val settingsWebDisplayName: String @Composable get
+    val settingsWebMatrix: String @Composable get
+    val settingsWebEmail: String @Composable get
+    val settingsWebShowBot: String @Composable get
+    val settingsWebShowNsfw: String @Composable get
+    val settingsWebShowRead: String @Composable get
+    val settingsWebEmailNotifications: String @Composable get
+    val settingsManageBan: String @Composable get
+    val settingsManageBanActionUnban: String @Composable get
+    val settingsManageBanSectionInstances: String @Composable get
+    val settingsEdgeToEdge: String @Composable get
+    val settingsPostBodyMaxLines: String @Composable get
+    val settingsPostBodyMaxLinesUnlimited: String @Composable get
+    val messageContentRemoved: String @Composable get
+    val postListLoadMorePosts: String @Composable get
+    val settingsInfiniteScrollDisabled: String @Composable get
+    val dialogTitleAddInstance: String @Composable get
+    val settingsSaveColor: String @Composable get
+    val settingsConfigureSwipeActions: String @Composable get
+    val actionUpvote: String @Composable get
+    val actionDownvote: String @Composable get
+    val actionSave: String @Composable get
+    val actionToggleRead: String @Composable get
+    val configureActionsSideStart: String @Composable get
+    val configureActionsSideEnd: String @Composable get
+    val selectActionTitle: String @Composable get
+    val buttonAdd: String @Composable get
+    val barThemeOpaque: String @Composable get
+    val barThemeTransparent: String @Composable get
+    val settingsBarTheme: String @Composable get
+    val settingsColorsAndFonts: String @Composable get
+    val settingsUserManual: String @Composable get
+    val settingsShowScores: String @Composable get
+    val settingsVoteFormatHidden: String @Composable get
+    val settingsCommentBarThickness: String @Composable get
+    val settingsPreferUserNicknames: String @Composable get
+    val messageVideoNsfw: String @Composable get
+    val settingsTitleFontScale: String @Composable get
+    val settingsCommentFontScale: String @Composable get
+    val settingsAncillaryFontScale: String @Composable get
+    val settingsConfigureContent: String @Composable get
+    val settingsConfigureText: String @Composable get
+    val settingsConfigureCustomizations: String @Composable get
+    val navigationDrawerTitleDrafts: String @Composable get
+    val moderatorZoneTitle: String @Composable get
+    val moderatorZoneActionContents: String @Composable get
+    val messageAuthIssue: String @Composable get
+    val banReasonPlaceholder: String @Composable get
+    val banItemPermanent: String @Composable get
+    val banItemRemoveData: String @Composable get
+    val banItemDurationDays: String @Composable get
+    val messageUnsavedChanges: String @Composable get
+    val buttonNoStay: String @Composable get
+    val buttonYesQuit: String @Composable get
+    val settingsItemImageSourcePath: String @Composable get
+    val settingsSubtitleImageSourcePath: String @Composable get
+    val settingsTitleDisplay: String @Composable get
+    val settingsTitleReading: String @Composable get
+    val settingsTitlePictures: String @Composable get
+    val settingsTitleExperimental: String @Composable get
+    val communitySetCustomSort: String @Composable get
+    val settingsDefaultExploreType: String @Composable get
+    val actionSearchInCommunity: String @Composable get
+    val actionExitSearch: String @Composable get
+    val beta: String @Composable get
+    val actionCopyClipboard: String @Composable get
+    val copyTitle: String @Composable get
+    val copyText: String @Composable get
+    val copyBoth: String @Composable get
+    val profileUpvotesDownvotes: String @Composable get
+    val filteredContentsType: String @Composable get
+    val actionSearchInComments: String @Composable get
+    val advancedSettingsDefaultLanguage: String @Composable get
+    val undetermined: String @Composable get
+    val exploreResultTypeTitle: String @Composable get
+    val communityActionEdit: String @Composable get
+    val editCommunityHeaderTextual: String @Composable get
+    val editCommunityItemSidebar: String @Composable get
+    val editCommunityItemPostingRestrictedToMods: String @Composable get
+    val messageAreYouSure: String @Composable get
+    val buttonCancel: String @Composable get
+    val shareModeUrl: String @Composable get
+    val shareModeFile: String @Composable get
+    val modlogItemCommunityPurged: String @Composable get
+    val modlogItemCommentPurged: String @Composable get
+    val modlogItemPersonPurged: String @Composable get
+    val modlogItemPostPurged: String @Composable get
+    val modlogItemHidden: String @Composable get
+    val modlogItemUnhidden: String @Composable get
+    val settingsAboutLicences: String @Composable get
+    val settingsInboxBackgroundCheckPeriod: String @Composable get
+    val never: String @Composable get
+    val settingsAppIcon: String @Composable get
+    val requiresRestart: String @Composable get
+    val appIconDefault: String @Composable get
+    val appIconAlt1: String @Composable get
+    val settingsFadeReadPosts: String @Composable get
+    val settingsShowUnreadComments: String @Composable get
+    val actionLogout: String @Composable get
+    val settingsImport: String @Composable get
+    val settingsExport: String @Composable get
+    val settingsEnableButtonsToScrollBetweenComments: String @Composable get
+    val settingsUrlOpeningModeInternal: String @Composable get
+    val settingsUrlOpeningModeExternal: String @Composable get
+    val settingsUrlOpeningModeCustomTabs: String @Composable get
+    val settingsFullWidthImages: String @Composable get
+    val contentScaleFit: String @Composable get
+    val contentScaleFillWidth: String @Composable get
+    val contentScaleFillHeight: String @Composable get
+    val settingsCommentIndentAmount: String @Composable get
+    val postActionUnhide: String @Composable get
+    val adminActionPurge: String @Composable get
+    val adminActionMarkAsFeatured: String @Composable get
+    val adminActionUnmarkAsFeatured: String @Composable get
+    val communitySetPreferredLanguage: String @Composable get
+    val appIconClassical: String @Composable get
+    val settingsAboutAcknowledgements: String @Composable get
+    val actionCreateCommunity: String @Composable get
+    val editCommunityItemVisibility: String @Composable get
+    val communityVisibilityLocalOnly: String @Composable get
+    val communityVisibilityPublic: String @Composable get
+    val noticeCommunityLocalOnly: String @Composable get
+    val noticeBannedUser: String @Composable get
+    val settingsHiddenPosts: String @Composable get
+    val settingsMediaList: String @Composable get
+    val settingsEnableToggleFavoriteInNavDrawer: String @Composable get
+    val messageContentDeleted: String @Composable get
+    val actionRestore: String @Composable get
+    val settingsInboxPreviewMaxLines: String @Composable get
+    val settingsDefaultExploreResultType: String @Composable get
+    val settingsUseAvatarAsProfileNavigationIcon: String @Composable get
+    val messageReadAllInboxSuccess: String @Composable get
+    val settingsItemRandomThemeColor: String @Composable get
+    val settingsSubtitleRandomThemeColor: String @Composable get
+    val settingsItemOpenPostWebPageOnImageClick: String @Composable get
+    val settingsSubtitleOpenPostWebPageOnImageClick: String @Composable get
+    val settingsItemAlternateMarkdownRendering: String @Composable get
+    val settingsItemConfigureBottomNavigationBar: String @Composable get
+    val selectTabNavigationTitle: String @Composable get
+    val messageAuthIssueSegue0: String @Composable get
+    val messageAuthIssueSegue1: String @Composable get
+    val messageAuthIssueSegue2: String @Composable get
+    val messageAuthIssueSegue3: String @Composable get
+    val settingsManageBanSectionDomains: String @Composable get
+    val settingsManageBanDomainPlaceholder: String @Composable get
+    val settingsManageBanSectionStopWords: String @Composable get
+    val settingsManageBanStopWordPlaceholder: String @Composable get
+    val settingsAboutMatrix: String @Composable get
+    val messageNoResult: String @Composable get
 
-    fun inboxNotificationContent(count: Int): String
+    suspend fun inboxNotificationTitle(): String
 
-    val settingsAboutMatrix: String
-    val messageNoResult: String
+    suspend fun inboxNotificationContent(count: Int): String
 }
 
 object Locales {
     const val FR = "fr"
-    const val SQ = "sq"
-    const val RO = "ro"
     const val GA = "ga"
     const val EN = "en"
     const val FI = "fi"
-    const val ET = "et"
-    const val LT = "lt"
-    const val LV = "lv"
     const val PT_BR = "pt_BR"
-    const val SR = "sr"
-    const val HR = "hr"
-    const val TR = "tr"
-    const val NL = "nl"
-    const val CS = "cs"
-    const val BG = "bg"
-    const val EO = "eo"
     const val DE = "de"
-    const val HU = "hu"
-    const val SK = "sk"
-    const val SL = "sl"
     const val PL = "pl"
     const val IT = "it"
-    const val UK = "uk"
-    const val SV = "sv"
-    const val EL = "el"
-    const val RU = "ru"
+    const val UA = "ua"
     const val ES = "es"
-    const val TOK = "tok"
     const val PT = "pt"
-    const val AR = "ar"
-    const val DA = "da"
-    const val NB = "nb"
-    const val NN = "nn"
-    const val MT = "mt"
     const val ZH_CN = "zh_CN"
     const val ZH_TW = "zh_TW"
     const val ZH_HK = "zh_HK"
 
     val ALL =
         listOf(
-            AR,
-            BG,
-            CS,
-            DA,
             DE,
-            ET,
-            EL,
             EN,
             ES,
-            EO,
             FR,
             GA,
-            HR,
             IT,
-            LV,
-            LT,
-            HU,
-            MT,
-            NL,
-            NB,
-            NN,
             PL,
             PT,
             PT_BR,
-            RO,
-            RU,
-            SK,
-            SL,
-            SQ,
-            SR,
             FI,
-            SV,
-            TOK,
-            TR,
-            UK,
+            UA,
             ZH_CN,
             ZH_TW,
             ZH_HK,
         )
 }
 
-internal val localizableStrings: Map<LanguageTag, Strings> =
-    mapOf(
-        Locales.AR to ArStrings,
-        Locales.BG to BgStrings,
-        Locales.CS to CsStrings,
-        Locales.DA to DaStrings,
-        Locales.DE to DeStrings,
-        Locales.EL to ElStrings,
-        Locales.EN to EnStrings,
-        Locales.EO to EoStrings,
-        Locales.ES to EsStrings,
-        Locales.ET to EtStrings,
-        Locales.FI to FiStrings,
-        Locales.FR to FrStrings,
-        Locales.GA to GaStrings,
-        Locales.HR to HrStrings,
-        Locales.HU to HuStrings,
-        Locales.IT to ItStrings,
-        Locales.LT to LtStrings,
-        Locales.LV to LvStrings,
-        Locales.MT to MtStrings,
-        Locales.NB to NbStrings,
-        Locales.NL to NlStrings,
-        Locales.NN to NnStrings,
-        Locales.PL to PlStrings,
-        Locales.PT to PtStrings,
-        Locales.PT_BR to PtBrStrings,
-        Locales.RO to RoStrings,
-        Locales.RU to RuStrings,
-        Locales.SK to SkStrings,
-        Locales.SL to SlStrings,
-        Locales.SQ to SqStrings,
-        Locales.SR to SrStrings,
-        Locales.SV to SvStrings,
-        Locales.TOK to TokStrings,
-        Locales.TR to TrStrings,
-        Locales.UK to UkStrings,
-        Locales.ZH_CN to ZhCnStrings,
-        Locales.ZH_HK to ZhHkStrings,
-        Locales.ZH_TW to ZhTwStrings,
-    )
-
 val LocalStrings: ProvidableCompositionLocal<Strings> =
-    staticCompositionLocalOf { EnStrings }
-
-/*
-@Composable
-fun rememberXmlStrings(
-    defaultLanguageTag: LanguageTag = Locales.En,
-    currentLanguageTag: LanguageTag = Locale.current.toLanguageTag(),
-): Lyricist<XmlStrings> = rememberStrings(xmlStrings, defaultLanguageTag, currentLanguageTag)
-*/
+    staticCompositionLocalOf { getStrings(Locales.EN) }
 
 @Composable
 fun ProvideStrings(
-    lyricist: Lyricist<Strings>,
+    lang: String,
     content: @Composable () -> Unit,
 ) {
-    ProvideStrings(lyricist, LocalStrings, content)
+    CompositionLocalProvider(
+        value = LocalStrings provides getStrings(lang),
+        content = content,
+    )
 }
