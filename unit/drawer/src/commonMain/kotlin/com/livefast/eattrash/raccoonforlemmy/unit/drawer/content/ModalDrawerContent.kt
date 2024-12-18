@@ -50,7 +50,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.components.DrawerCommunityItem
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.components.DrawerHeader
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.components.DrawerShortcut
-import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.SelectInstanceBottomSheet
 import kotlinx.coroutines.delay
@@ -372,7 +372,7 @@ object ModalDrawerContent : Tab {
                 onDismiss = { openLogin ->
                     manageAccountsBottomSheetOpened = false
                     if (openLogin) {
-                        navigationCoordinator.pushScreen(LoginBottomSheet())
+                        navigationCoordinator.pushScreen(LoginScreen())
                     }
                 },
             )

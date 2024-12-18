@@ -20,7 +20,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginScreen
 
 internal object ProfileNotLoggedScreen : Tab {
     override val options: TabOptions
@@ -61,7 +61,7 @@ internal object ProfileNotLoggedScreen : Tab {
                 Button(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
-                        navigationCoordinator.pushScreen(LoginBottomSheet())
+                        navigationCoordinator.pushScreen(LoginScreen())
                     },
                 ) {
                     Text(LocalStrings.current.profileButtonLogin)

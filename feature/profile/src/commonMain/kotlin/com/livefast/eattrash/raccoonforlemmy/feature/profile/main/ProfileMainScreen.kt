@@ -64,7 +64,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.editcommunity.EditCommunityScr
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredContentsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredContentsType
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.toInt
-import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.modlog.ModlogScreen
@@ -365,7 +365,7 @@ internal object ProfileMainScreen : Tab {
                 onDismiss = { openLogin ->
                     manageAccountsBottomSheetOpened = false
                     if (openLogin) {
-                        navigationCoordinator.pushScreen(LoginBottomSheet())
+                        navigationCoordinator.pushScreen(LoginScreen())
                     }
                 },
             )
