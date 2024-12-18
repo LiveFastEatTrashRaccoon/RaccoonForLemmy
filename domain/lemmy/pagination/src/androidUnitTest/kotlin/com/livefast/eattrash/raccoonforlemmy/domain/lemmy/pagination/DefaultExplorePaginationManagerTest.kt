@@ -7,8 +7,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResult
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -33,8 +36,22 @@ class DefaultExplorePaginationManagerTest {
             every { authToken } returns MutableStateFlow(AUTH_TOKEN)
             every { cachedUser } returns UserModel(id = 1)
         }
-    private val communityRepository: CommunityRepository = mockk(relaxUnitFun = true)
-    private val userRepository: UserRepository = mockk(relaxUnitFun = true)
+    private val commentRepository: CommentRepository =
+        mockk(relaxUnitFun = true) {
+            coEvery { getResolved(any(), any()) } returns null
+        }
+    private val communityRepository: CommunityRepository =
+        mockk(relaxUnitFun = true) {
+            coEvery { getResolved(any(), any()) } returns null
+        }
+    private val postRepository: PostRepository =
+        mockk(relaxUnitFun = true) {
+            coEvery { getResolved(any(), any()) } returns null
+        }
+    private val userRepository: UserRepository =
+        mockk(relaxUnitFun = true) {
+            coEvery { getResolved(any(), any()) } returns null
+        }
     private val accountRepository =
         mockk<AccountRepository>(relaxUnitFun = true) {
             coEvery { getActive() } returns null
@@ -52,7 +69,9 @@ class DefaultExplorePaginationManagerTest {
         DefaultExplorePaginationManager(
             identityRepository = identityRepository,
             accountRepository = accountRepository,
+            commentRepository = commentRepository,
             communityRepository = communityRepository,
+            postRepository = postRepository,
             userRepository = userRepository,
             domainBlocklistRepository = domainBlocklistRepository,
             stopWordRepository = stopWordRepository,
@@ -212,6 +231,174 @@ class DefaultExplorePaginationManagerTest {
                     resultType = specification.resultType,
                     query = "",
                 )
+            }
+        }
+
+    @Test
+    fun givenResultsAndSearchQuery_whenLoadNextPage_thenResultIsAsExpected() =
+        runTest {
+            val query = "text"
+            val page = slot<Int>()
+            coEvery {
+                communityRepository.search(
+                    query = any(),
+                    auth = any(),
+                    page = capture(page),
+                    limit = any(),
+                    sortType = any(),
+                    listingType = any(),
+                    resultType = any(),
+                    instance = any(),
+                    communityId = any(),
+                )
+            } answers {
+                val pageNumber = page.captured
+                if (pageNumber == 1) {
+                    (0..<20).map { idx ->
+                        SearchResult.Post(PostModel(id = idx.toLong()))
+                    }
+                } else {
+                    emptyList()
+                }
+            }
+            val specification =
+                ExplorePaginationSpecification(
+                    query = query,
+                )
+            sut.reset(specification)
+
+            val items = sut.loadNextPage()
+
+            assertEquals(20, items.size)
+            assertTrue(sut.canFetchMore)
+
+            coVerify {
+                communityRepository.search(
+                    auth = AUTH_TOKEN,
+                    page = 1,
+                    limit = 20,
+                    listingType = specification.listingType,
+                    sortType = specification.sortType,
+                    communityId = null,
+                    instance = null,
+                    resultType = specification.resultType,
+                    query = query,
+                )
+                communityRepository.getResolved(query = query, auth = AUTH_TOKEN)
+            }
+        }
+
+    @Test
+    fun givenResultsAndSearchQueryAndAllResultType_whenLoadNextPage_thenResultIsAsExpected() =
+        runTest {
+            val query = "text"
+            val page = slot<Int>()
+            coEvery {
+                communityRepository.search(
+                    query = any(),
+                    auth = any(),
+                    page = capture(page),
+                    limit = any(),
+                    sortType = any(),
+                    listingType = any(),
+                    resultType = any(),
+                    instance = any(),
+                    communityId = any(),
+                )
+            } answers {
+                val pageNumber = page.captured
+                if (pageNumber == 1) {
+                    (0..<20).map { idx ->
+                        SearchResult.Post(PostModel(id = idx.toLong()))
+                    }
+                } else {
+                    emptyList()
+                }
+            }
+            val specification =
+                ExplorePaginationSpecification(
+                    resultType = SearchResultType.All,
+                    query = query,
+                )
+            sut.reset(specification)
+
+            val items = sut.loadNextPage()
+
+            assertEquals(20, items.size)
+            assertTrue(sut.canFetchMore)
+
+            coVerify {
+                communityRepository.search(
+                    auth = AUTH_TOKEN,
+                    page = 1,
+                    limit = 20,
+                    listingType = specification.listingType,
+                    sortType = specification.sortType,
+                    communityId = null,
+                    instance = null,
+                    resultType = specification.resultType,
+                    query = query,
+                )
+                commentRepository.getResolved(query = query, auth = AUTH_TOKEN)
+                commentRepository.getResolved(query = query, auth = AUTH_TOKEN)
+                postRepository.getResolved(query = query, auth = AUTH_TOKEN)
+                userRepository.getResolved(query = query, auth = AUTH_TOKEN)
+            }
+        }
+
+    @Test
+    fun givenResultsAndSearchQueryAndSearchPostTitleOnly_whenLoadNextPage_thenResultIsAsExpected() =
+        runTest {
+            val query = "text 10"
+            val page = slot<Int>()
+            coEvery {
+                communityRepository.search(
+                    query = any(),
+                    auth = any(),
+                    page = capture(page),
+                    limit = any(),
+                    sortType = any(),
+                    listingType = any(),
+                    resultType = any(),
+                    instance = any(),
+                    communityId = any(),
+                )
+            } answers {
+                val pageNumber = page.captured
+                if (pageNumber == 1) {
+                    (0..<20).map { idx ->
+                        SearchResult.Post(PostModel(id = idx.toLong(), title = "text $idx"))
+                    }
+                } else {
+                    emptyList()
+                }
+            }
+            val specification =
+                ExplorePaginationSpecification(
+                    resultType = SearchResultType.Posts,
+                    searchPostTitleOnly = true,
+                    query = query,
+                )
+            sut.reset(specification)
+
+            val items = sut.loadNextPage()
+
+            assertEquals(1, items.size)
+            assertTrue(sut.canFetchMore)
+
+            coVerify {
+                communityRepository.search(
+                    auth = AUTH_TOKEN,
+                    page = 1,
+                    limit = 20,
+                    listingType = specification.listingType,
+                    sortType = specification.sortType,
+                    communityId = null,
+                    instance = null,
+                    resultType = specification.resultType,
+                    query = query,
+                )
+                postRepository.getResolved(query = query, auth = AUTH_TOKEN)
             }
         }
 

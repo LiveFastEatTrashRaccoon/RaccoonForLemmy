@@ -7,7 +7,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.Identity
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResult
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.uniqueIdentifier
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -18,7 +20,9 @@ import org.koin.core.annotation.Factory
 class DefaultExplorePaginationManager(
     private val identityRepository: IdentityRepository,
     private val accountRepository: AccountRepository,
+    private val commentRepository: CommentRepository,
     private val communityRepository: CommunityRepository,
+    private val postRepository: PostRepository,
     private val userRepository: UserRepository,
     private val domainBlocklistRepository: DomainBlocklistRepository,
     private val stopWordRepository: StopWordRepository,
@@ -53,42 +57,60 @@ class DefaultExplorePaginationManager(
             }
 
             val searchText = specification.query.orEmpty()
-            val resultType = specification.resultType
+            val type = specification.resultType
             val itemList: List<SearchResult> =
                 communityRepository.search(
                     query = searchText,
                     auth = auth,
-                    resultType = resultType,
+                    resultType = type,
                     page = currentPage,
                     listingType = specification.listingType,
                     sortType = specification.sortType,
                     instance = specification.otherInstance,
                 )
-            val additionalResolvedCommunity =
-                if (resultType == SearchResultType.All ||
-                    resultType == SearchResultType.Communities &&
-                    currentPage == 1 &&
-                    searchText.isNotEmpty()
-                ) {
-                    communityRepository.getResolved(
-                        query = searchText,
-                        auth = auth,
-                    )
-                } else {
-                    null
-                }
-            val additionalResolvedUser =
-                if (resultType == SearchResultType.All ||
-                    resultType == SearchResultType.Users &&
-                    currentPage == 1 &&
-                    searchText.isNotEmpty()
-                ) {
-                    userRepository.getResolved(
-                        query = searchText,
-                        auth = auth,
-                    )
-                } else {
-                    null
+            val resolveResults =
+                buildList {
+                    if (currentPage == 1 && searchText.isNotEmpty()) {
+                        if (type in listOf(SearchResultType.All, SearchResultType.Communities)) {
+                            communityRepository
+                                .getResolved(
+                                    query = searchText,
+                                    auth = auth,
+                                )?.also {
+                                    add(SearchResult.Community(it))
+                                }
+                        }
+
+                        if (type in listOf(SearchResultType.All, SearchResultType.Users)) {
+                            userRepository
+                                .getResolved(
+                                    query = searchText,
+                                    auth = auth,
+                                )?.also {
+                                    add(SearchResult.User(it))
+                                }
+                        }
+
+                        if (type in listOf(SearchResultType.All, SearchResultType.Posts)) {
+                            postRepository
+                                .getResolved(
+                                    query = searchText,
+                                    auth = auth,
+                                )?.also {
+                                    add(SearchResult.Post(it))
+                                }
+                        }
+
+                        if (type in listOf(SearchResultType.All, SearchResultType.Comments)) {
+                            commentRepository
+                                .getResolved(
+                                    query = searchText,
+                                    auth = auth,
+                                )?.also {
+                                    add(SearchResult.Comment(it))
+                                }
+                        }
+                    }
                 }
 
             if (itemList.isNotEmpty()) {
@@ -97,49 +119,18 @@ class DefaultExplorePaginationManager(
             canFetchMore = itemList.isNotEmpty()
 
             val result =
-                itemList
-                    .deduplicate()
-                    .filterNsfw(specification.includeNsfw)
-                    .filterDeleted()
-                    .filterByUrlDomain()
-                    .filterByStopWords()
+                (resolveResults + itemList)
                     .let {
-                        when (resultType) {
-                            SearchResultType.Communities -> {
-                                if (additionalResolvedCommunity != null &&
-                                    it.none { r ->
-                                        r is SearchResult.Community && r.model.id == additionalResolvedCommunity.id
-                                    }
-                                ) {
-                                    it + SearchResult.Community(additionalResolvedCommunity)
-                                } else {
-                                    it
-                                }
-                            }
-
-                            SearchResultType.Users -> {
-                                if (additionalResolvedUser != null &&
-                                    it.none { r ->
-                                        r is SearchResult.User && r.model.id == additionalResolvedUser.id
-                                    }
-                                ) {
-                                    it + SearchResult.User(additionalResolvedUser)
-                                } else {
-                                    it
-                                }
-                            }
-
+                        when (type) {
                             SearchResultType.Posts -> {
                                 if (specification.searchPostTitleOnly && searchText.isNotEmpty()) {
                                     // apply the more restrictive title-only search
-                                    it
-                                        .filterIsInstance<SearchResult.Post>()
-                                        .filter { r ->
-                                            r.model.title.contains(
-                                                other = searchText,
-                                                ignoreCase = true,
-                                            )
-                                        }
+                                    it.filterIsInstance<SearchResult.Post>().filter { res ->
+                                        res.model.title.contains(
+                                            other = searchText,
+                                            ignoreCase = true,
+                                        )
+                                    }
                                 } else {
                                     it
                                 }
@@ -147,7 +138,11 @@ class DefaultExplorePaginationManager(
 
                             else -> it
                         }
-                    }
+                    }.deduplicate()
+                    .filterNsfw(specification.includeNsfw)
+                    .filterDeleted()
+                    .filterByUrlDomain()
+                    .filterByStopWords()
 
             history.addAll(result)
             // returns a copy of the whole history
