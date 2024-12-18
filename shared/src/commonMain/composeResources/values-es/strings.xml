@@ -430,9 +430,9 @@
     <string name="user_detail_info">Información sobre el usuario</string>
     <string name="user_info_admin">Administrador</string>
     <string name="user_info_moderates">Moderador de</string>
-
     <plurals name="inbox_notification_content">
         <item quantity="one">Hay %1$d elemento para leer</item>
         <item quantity="other">Hay %1$d elementos para leer</item>
     </plurals>
+    <string name="message_no_result">Ups… ¡no se han encontrado resultados!</string>
 </resources>
