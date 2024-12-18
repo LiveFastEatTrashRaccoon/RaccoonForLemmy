@@ -21,7 +21,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.shimmerEffect
 
 @Composable
-fun AcknoledgementItemPlaceholder(modifier: Modifier = Modifier) {
+fun AcknowledgementItemPlaceholder(modifier: Modifier = Modifier) {
     Row(
         modifier =
             modifier.padding(

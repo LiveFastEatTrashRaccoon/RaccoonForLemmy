@@ -35,8 +35,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.components.AcknoledgementItem
-import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.components.AcknoledgementItemPlaceholder
+import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.components.AcknowledgementItem
+import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.components.AcknowledgementItemPlaceholder
 
 class AcknowledgementsScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -100,11 +100,11 @@ class AcknowledgementsScreen : Screen {
                 ) {
                     if (uiState.initial) {
                         items(5) {
-                            AcknoledgementItemPlaceholder()
+                            AcknowledgementItemPlaceholder()
                         }
                     }
                     items(uiState.items) { item ->
-                        AcknoledgementItem(
+                        AcknowledgementItem(
                             modifier =
                                 Modifier
                                     .fillMaxWidth()

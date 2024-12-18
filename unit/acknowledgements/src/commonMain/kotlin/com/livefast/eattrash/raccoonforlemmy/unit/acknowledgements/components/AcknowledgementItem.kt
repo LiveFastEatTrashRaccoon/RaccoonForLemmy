@@ -20,7 +20,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.Placeholde
 import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.models.AcknowledgementModel
 
 @Composable
-fun AcknoledgementItem(
+fun AcknowledgementItem(
     item: AcknowledgementModel,
     modifier: Modifier = Modifier,
 ) {
