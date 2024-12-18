@@ -42,8 +42,11 @@ class ManageAccountsViewModel(
                         }
                     }.launchIn(this)
 
-                val accounts = accountRepository.getAll()
-                updateState { it.copy(accounts = accounts) }
+                accountRepository
+                    .observeAll()
+                    .onEach { accounts ->
+                        updateState { it.copy(accounts = accounts) }
+                    }.launchIn(this)
             }
         }
     }
