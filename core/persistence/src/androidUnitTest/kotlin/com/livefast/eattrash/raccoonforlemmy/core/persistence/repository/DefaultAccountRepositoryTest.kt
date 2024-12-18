@@ -1,6 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import app.cash.sqldelight.Query
+import app.cash.turbine.test
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.AccountEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.AccountsQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
@@ -65,6 +66,21 @@ class DefaultAccountRepositoryTest {
             val res = sut.getAll()
 
             assertTrue(res.size == 1)
+            verify {
+                queries.getAll()
+            }
+        }
+
+    @Test
+    fun givenExitingAccounts_whenObserveAll_thenResultIsAsExpected() =
+        runTest {
+            val accounts = listOf(createFakeEntity())
+            every { query.executeAsList() } returns accounts
+
+            sut.observeAll().test {
+                val res = awaitItem()
+                assertTrue(res.size == 1)
+            }
             verify {
                 queries.getAll()
             }
