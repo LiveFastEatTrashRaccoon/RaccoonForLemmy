@@ -2,10 +2,13 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import androidx.compose.runtime.Stable
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
+import kotlinx.coroutines.flow.Flow
 
 @Stable
 interface AccountRepository {
     suspend fun getAll(): List<AccountModel>
+
+    fun observeAll(): Flow<List<AccountModel>>
 
     suspend fun getBy(
         username: String,

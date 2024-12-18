@@ -65,7 +65,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class LoginBottomSheet : Screen {
+class LoginScreen : Screen {
     companion object {
         private const val HELP_URL = "https://join-lemmy.org/docs/users/01-getting-started.html"
     }

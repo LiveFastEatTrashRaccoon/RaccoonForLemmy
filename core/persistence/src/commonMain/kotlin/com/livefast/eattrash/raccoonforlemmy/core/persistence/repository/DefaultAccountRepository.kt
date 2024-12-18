@@ -5,6 +5,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
 
@@ -21,6 +26,14 @@ internal class DefaultAccountRepository(
                 .executeAsList()
                 .map { it.toModel() }
         }
+
+    override fun observeAll(): Flow<List<AccountModel>> =
+        channelFlow {
+            while (isActive) {
+                send(getAll())
+                delay(1000)
+            }
+        }.distinctUntilChanged()
 
     override suspend fun getBy(
         username: String,

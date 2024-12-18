@@ -48,7 +48,7 @@ import com.livefast.eattrash.raccoonforlemmy.feature.home.ui.HomeTab
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.main.SettingsScreen
 import com.livefast.eattrash.raccoonforlemmy.navigation.TabNavigationItem
 import com.livefast.eattrash.raccoonforlemmy.navigation.toTab
-import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginBottomSheet
+import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsBottomSheet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
@@ -317,7 +317,7 @@ internal object MainScreen : Screen {
                 onDismiss = { openLogin ->
                     manageAccountsBottomSheetOpened = false
                     if (openLogin) {
-                        navigationCoordinator.pushScreen(LoginBottomSheet())
+                        navigationCoordinator.pushScreen(LoginScreen())
                     }
                 },
             )
