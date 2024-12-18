@@ -18,12 +18,12 @@ import org.koin.core.annotation.Factory
 
 @Factory(binds = [LoginMviModel::class])
 class LoginViewModel(
-    private val login: LoginUseCase,
     apiConfigurationRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,
     private val accountRepository: AccountRepository,
     private val siteRepository: SiteRepository,
     private val communityRepository: CommunityRepository,
+    private val login: LoginUseCase,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<LoginMviModel.Intent, LoginMviModel.UiState, LoginMviModel.Effect>(
         initialState = LoginMviModel.UiState(),

@@ -65,7 +65,7 @@ internal class DefaultLoginUseCase(
                     instance = instance,
                     jwt = auth,
                 )
-            val existing = accountRepository.getBy(username, instance)
+            val existing = accountRepository.getBy(username = username, instance = instance)
             val accountId =
                 if (existing == null) {
                     // new account with a copy of the anonymous settings
