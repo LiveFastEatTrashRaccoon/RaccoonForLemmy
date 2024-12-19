@@ -6,20 +6,21 @@ import androidx.compose.ui.unit.LayoutDirection
 @Composable
 fun String.toLanguageName() =
     when (this) {
-        Locales.DE -> "Deutsch"
-        Locales.GA -> "Gaeilge"
-        Locales.ES -> "Español"
-        Locales.FI -> "Suomi"
-        Locales.FR -> "Français"
-        Locales.IT -> "Italiano"
-        Locales.PL -> "Polski"
-        Locales.PT -> "Português"
-        Locales.PT_BR -> "Português (Brazil)"
-        Locales.UA -> "Українська"
-        Locales.ZH_CN -> "中文"
-        Locales.ZH_TW -> "正體中文"
-        Locales.ZH_HK -> "廣東話"
-        else -> "English"
+        Locales.DE -> LocalStrings.current.languageDe
+        Locales.GA -> LocalStrings.current.languageGa
+        Locales.ES -> LocalStrings.current.languageEs
+        Locales.FI -> LocalStrings.current.languageFi
+        Locales.FR -> LocalStrings.current.languageFr
+        Locales.IT -> LocalStrings.current.languageIt
+        Locales.PL -> LocalStrings.current.languagePl
+        Locales.PT -> LocalStrings.current.languagePt
+        Locales.PT_BR -> LocalStrings.current.languagePtBr
+        Locales.UA -> LocalStrings.current.languageUa
+        Locales.ZH_CN -> LocalStrings.current.languageZhCn
+        Locales.ZH_HK -> LocalStrings.current.languageZhHk
+        Locales.ZH_TW -> LocalStrings.current.languageZhTw
+        Locales.EN -> LocalStrings.current.languageEn
+        else -> ""
     }
 
 @Composable

@@ -99,7 +99,6 @@
     <string name="inbox_section_replies">回复</string>
     <string name="instance_detail_communities">社区</string>
     <string name="instance_detail_title">实例:</string>
-    <string name="lang">zh_CN</string>
     <string name="login_field_instance_name">实例名称</string>
     <string name="login_field_label_optional">(可选)</string>
     <string name="login_field_password">密码</string>

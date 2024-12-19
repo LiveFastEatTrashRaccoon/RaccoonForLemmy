@@ -166,14 +166,46 @@ another letter set for the region `YY` (e.g. `pt_BR` for Brazilian Portuguese or
 Portuguese). If you only have to use the `xx` part, please ignore the `yy` indication in the rest
 of the explanation contained in this paragraph.
 
-Create a directory called `values-xx-rYY` in `shared/commonMain/composeResources` with a file named
+(1) Create a new string element in the `shared/commonMain/composeResources/values/strings.xml`:
+
+```
+    <string name="language_xx_yy" translatable="false">XXXXXX</string>
+```
+
+where `XXXXXX` is the name of the language in the language itself (endonym).
+
+(2) Create a directory called `values-xx-rYY` in `shared/commonMain/composeResources` with a file
+named
 `strings.xml` in it. Use `shared/commonMain/composeResources/values/strings.xml` as a reference in
 case of doubts. This file will be taken care of by the compose Gradle plugin to generate resources.
 
 This is an XML file, it must be valid and well-formed so please remember to use entities for illegal
 characters (e.g. `&` should be represented as `&amp;`).
 
-Afterwards, edit [
+(3) When you are done modifying the XML files, please recompile the project to allow code generation
+to create the corresponding Compose resources.
+
+(4) Edit [
+`Strings.kt`](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/blob/master/core/l10n/src/commonMain/kotlin/com/livefast/eattrash/raccoonforlemmy/core/l10n/Strings.kt)
+and add a new property
+
+```
+     val languageXxYy: String @Composable get
+```
+
+(5) )n [
+`SharedStrings.kt`](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/blob/master/shared/src/commonMain/kotlin/com/livefast/eattrash/raccoonforlemmy/resources/SharedStrings.kt)
+add the following lines
+
+```
+    override val languageXxYy: String
+        @Composable get() = stringResource(Res.string.language_xx_yy)
+```
+
+Be careful: the extension on `Res.string` will only be generated after you have recompiled as per
+step (3) above.
+
+(6) Edit [
 `Locales.kt`](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/blob/master/core/l10n/src/commonMain/kotlin/com/livefast/eattrash/raccoonforlemmy/core/l10n/Locales.kt)
 with the following modifications:
 
@@ -190,12 +222,10 @@ object Locales {
 }
 ```
 
-Finally, in [
+(7) In [
 `Extensions.kt`](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/blob/master/core/l10n/src/commonMain/kotlin/com/livefast/eattrash/raccoonforlemmy/core/l10n/Extensions.kt)
 add your flag and language name in `toLanguageFlag()` and `toLanguageName()` respectively in order
 to map the language code to the desired values.
-
-That's it! 🎉
 
 ### 3.5 Submit a pull request
 

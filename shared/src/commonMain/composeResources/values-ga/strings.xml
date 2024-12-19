@@ -151,7 +151,6 @@
     <string name="inbox_section_replies">Freagraí</string>
     <string name="instance_detail_communities">An Coimisiún Eorpach</string>
     <string name="instance_detail_title">Ásc:</string>
-    <string name="lang">ga</string>
     <string name="login_field_instance_name">Ainm cás</string>
     <string name="login_field_label_optional">(roghnach)</string>
     <string name="login_field_password">Pasfhocal</string>

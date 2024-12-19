@@ -151,7 +151,6 @@
     <string name="inbox_section_replies">Vastausta</string>
     <string name="instance_detail_communities">Yhteisöt</string>
     <string name="instance_detail_title">Instanssi:</string>
-    <string name="lang">fi</string>
     <string name="login_field_instance_name">Esiintymän nimi</string>
     <string name="login_field_label_optional">(lisävaruste)</string>
     <string name="login_field_password">Salasana</string>
