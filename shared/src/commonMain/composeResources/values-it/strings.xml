@@ -430,9 +430,9 @@
     <string name="user_detail_info">Info utente</string>
     <string name="user_info_admin">amministratore</string>
     <string name="user_info_moderates">Moderatore di</string>
-
     <plurals name="inbox_notification_content">
         <item quantity="one">C'è %1$d elemento non letto</item>
         <item quantity="other">Ci sono %1$d elementi non letti</item>
     </plurals>
+    <string name="bar_theme_solid">Solido</string>
 </resources>
