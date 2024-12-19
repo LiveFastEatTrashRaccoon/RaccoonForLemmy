@@ -96,7 +96,20 @@ interface Strings {
     val inboxSectionReplies: String @Composable get
     val instanceDetailCommunities: String @Composable get
     val instanceDetailTitle: String @Composable get
-    val lang: String @Composable get
+    val languageDe: String @Composable get
+    val languageEn: String @Composable get
+    val languageEs: String @Composable get
+    val languageFi: String @Composable get
+    val languageFr: String @Composable get
+    val languageGa: String @Composable get
+    val languageIt: String @Composable get
+    val languagePl: String @Composable get
+    val languagePt: String @Composable get
+    val languagePtBr: String @Composable get
+    val languageUa: String @Composable get
+    val languageZhCn: String @Composable get
+    val languageZhHk: String @Composable get
+    val languageZhTw: String @Composable get
     val loginFieldInstanceName: String @Composable get
     val loginFieldLabelOptional: String @Composable get
     val loginFieldPassword: String @Composable get

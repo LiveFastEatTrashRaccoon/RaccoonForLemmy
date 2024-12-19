@@ -160,7 +160,20 @@ import raccoonforlemmy.shared.generated.resources.inbox_section_messages
 import raccoonforlemmy.shared.generated.resources.inbox_section_replies
 import raccoonforlemmy.shared.generated.resources.instance_detail_communities
 import raccoonforlemmy.shared.generated.resources.instance_detail_title
-import raccoonforlemmy.shared.generated.resources.lang
+import raccoonforlemmy.shared.generated.resources.language_de
+import raccoonforlemmy.shared.generated.resources.language_en
+import raccoonforlemmy.shared.generated.resources.language_es
+import raccoonforlemmy.shared.generated.resources.language_fi
+import raccoonforlemmy.shared.generated.resources.language_fr
+import raccoonforlemmy.shared.generated.resources.language_ga
+import raccoonforlemmy.shared.generated.resources.language_it
+import raccoonforlemmy.shared.generated.resources.language_pl
+import raccoonforlemmy.shared.generated.resources.language_pt
+import raccoonforlemmy.shared.generated.resources.language_pt_br
+import raccoonforlemmy.shared.generated.resources.language_ua
+import raccoonforlemmy.shared.generated.resources.language_zh_cn
+import raccoonforlemmy.shared.generated.resources.language_zh_hk
+import raccoonforlemmy.shared.generated.resources.language_zh_tw
 import raccoonforlemmy.shared.generated.resources.login_field_instance_name
 import raccoonforlemmy.shared.generated.resources.login_field_label_optional
 import raccoonforlemmy.shared.generated.resources.login_field_password
@@ -629,8 +642,34 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.instance_detail_communities)
     override val instanceDetailTitle: String
         @Composable get() = stringResource(Res.string.instance_detail_title)
-    override val lang: String
-        @Composable get() = stringResource(Res.string.lang)
+    override val languageDe: String
+        @Composable get() = stringResource(Res.string.language_de)
+    override val languageEn: String
+        @Composable get() = stringResource(Res.string.language_en)
+    override val languageEs: String
+        @Composable get() = stringResource(Res.string.language_es)
+    override val languageFi: String
+        @Composable get() = stringResource(Res.string.language_fi)
+    override val languageFr: String
+        @Composable get() = stringResource(Res.string.language_fr)
+    override val languageGa: String
+        @Composable get() = stringResource(Res.string.language_ga)
+    override val languageIt: String
+        @Composable get() = stringResource(Res.string.language_it)
+    override val languagePl: String
+        @Composable get() = stringResource(Res.string.language_pl)
+    override val languagePt: String
+        @Composable get() = stringResource(Res.string.language_pt)
+    override val languagePtBr: String
+        @Composable get() = stringResource(Res.string.language_pt_br)
+    override val languageUa: String
+        @Composable get() = stringResource(Res.string.language_ua)
+    override val languageZhCn: String
+        @Composable get() = stringResource(Res.string.language_zh_cn)
+    override val languageZhHk: String
+        @Composable get() = stringResource(Res.string.language_zh_hk)
+    override val languageZhTw: String
+        @Composable get() = stringResource(Res.string.language_zh_tw)
     override val loginFieldInstanceName: String
         @Composable get() = stringResource(Res.string.login_field_instance_name)
     override val loginFieldLabelOptional: String
