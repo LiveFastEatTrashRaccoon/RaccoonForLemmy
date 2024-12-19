@@ -151,7 +151,6 @@
     <string name="inbox_section_replies">Відповіді</string>
     <string name="instance_detail_communities">Спільноти</string>
     <string name="instance_detail_title">примірник:</string>
-    <string name="lang">uk</string>
     <string name="login_field_instance_name">Назва екземпляра</string>
     <string name="login_field_label_optional">(необов\'язковий)</string>
     <string name="login_field_password">Пароль</string>

@@ -151,7 +151,6 @@
     <string name="inbox_section_replies">Antworten</string>
     <string name="instance_detail_communities">Communitys</string>
     <string name="instance_detail_title">Instanz:</string>
-    <string name="lang">en</string>
     <string name="login_field_instance_name">Instanzname</string>
     <string name="login_field_label_optional">(optional)</string>
     <string name="login_field_password">Passwort</string>

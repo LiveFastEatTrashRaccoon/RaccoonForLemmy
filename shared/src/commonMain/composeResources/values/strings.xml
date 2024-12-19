@@ -152,7 +152,20 @@
     <string name="inbox_section_replies">Replies</string>
     <string name="instance_detail_communities">Communities</string>
     <string name="instance_detail_title">Instance:</string>
-    <string name="lang">en</string>
+    <string name="language_de" translatable="false">Deutsch</string>
+    <string name="language_en" translatable="false">English</string>
+    <string name="language_es" translatable="false">Español</string>
+    <string name="language_fi" translatable="false">Suomi</string>
+    <string name="language_fr" translatable="false">Français</string>
+    <string name="language_ga" translatable="false">Gaeilge</string>
+    <string name="language_it" translatable="false">Italiano</string>
+    <string name="language_pl" translatable="false">Polski</string>
+    <string name="language_pt" translatable="false">Português</string>
+    <string name="language_pt_br" translatable="false">Português (Brazil)</string>
+    <string name="language_ua" translatable="false">Українська</string>
+    <string name="language_zh_cn" translatable="false">中文</string>
+    <string name="language_zh_hk" translatable="false">廣東話</string>
+    <string name="language_zh_tw" translatable="false">正體中文</string>
     <string name="login_field_instance_name">Instance name</string>
     <string name="login_field_label_optional">(optional)</string>
     <string name="login_field_password">Password</string>

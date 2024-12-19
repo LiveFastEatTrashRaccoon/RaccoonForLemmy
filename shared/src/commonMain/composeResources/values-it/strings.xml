@@ -151,7 +151,6 @@
     <string name="inbox_section_replies">Risposte</string>
     <string name="instance_detail_communities">Comunità</string>
     <string name="instance_detail_title">Istanza:</string>
-    <string name="lang">it</string>
     <string name="login_field_instance_name">Nome istanza</string>
     <string name="login_field_label_optional">(opzionale)</string>
     <string name="login_field_password">Password</string>
