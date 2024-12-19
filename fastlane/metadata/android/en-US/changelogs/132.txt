@@ -1,0 +1,7 @@
+- feat: possibility to select solid system bars
+- feat: search post/comments/users/communities by URL
+- fix: account switch
+- fix: implement sort by top "all time"
+- fix: update acknowledgement list
+- refactor: migrate l10n to Compose resources
+- l10n: translation updates

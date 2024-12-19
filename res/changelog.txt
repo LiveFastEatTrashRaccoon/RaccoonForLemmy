@@ -1,12 +1,12 @@
 ## What's Changed
 
-- feat(app): support for opening posts and comments by @AkesiSeli in #152
-- fix(postlist): image height by @AkesiSeli in #128
-- fix(zoomableimage): high resolution image, loading state and action buttons by @AkesiSeli in #154, #155
-- fix(createpost): autofill empty message by @AkesiSeli in #158
-- refactor(di): improve dependency injection by @AkesiSeli in #136, #137, #138, #139, #141, #147
-- refactor(build): define and apply Gradle convention plugins by @AkesiSeli in #140, #143, #144, #150
-- chore(deps): update dependencies by @dependabot and @AkesiSeli in #130, #131, #134, #135, #148, #153
-- chore(qa): add more unit tests by @AkesiSeli in #156
+- feat: possibility to select solid system bars by @AkesiSeli in #168
+- feat: search post/comments/users/communities by URL by @AkesiSeli in #171
+- fix: account switch by @AkesiSeli in #172
+- fix: implement sort by top "all time" by @AkesiSeli in #166
+- fix: update acknowledgement list by @AkesiSeli in #170
+- refactor: migrate l10n to Compose resources by @AkesiSeli in #164, #167, #174
+- l10n: translation updates by @Weblate in #169
+- chore: update dependencies by @dependabot in #162, #163, #173
 
-**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.2...1.13.3
+**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.3...1.13.4
