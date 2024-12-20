@@ -33,7 +33,7 @@ stately = "2.1.0"
 sqlcipher = "4.6.1"
 sqldelight = "2.0.2"
 turbine = "1.2.0"
-voyager = "1.0.0"
+voyager = "1.0.1"
 
 android-targetSdk = "35"
 android-compileSdk = "35"
