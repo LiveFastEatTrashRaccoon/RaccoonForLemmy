@@ -11,7 +11,6 @@ import chaintech.videoplayer.model.ScreenResize
 import com.livefast.eattrash.raccoonforlemmy.core.resources.CoreResources
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
-import org.koin.core.annotation.Single
 import raccoonforlemmy.shared.generated.resources.Res
 import raccoonforlemmy.shared.generated.resources.atkinsonhyperlegible_bold
 import raccoonforlemmy.shared.generated.resources.atkinsonhyperlegible_italic
@@ -30,7 +29,6 @@ import raccoonforlemmy.shared.generated.resources.poppins_italic
 import raccoonforlemmy.shared.generated.resources.poppins_medium
 import raccoonforlemmy.shared.generated.resources.poppins_regular
 
-@Single
 internal class SharedResources : CoreResources {
     override val github: Painter
         @Composable
