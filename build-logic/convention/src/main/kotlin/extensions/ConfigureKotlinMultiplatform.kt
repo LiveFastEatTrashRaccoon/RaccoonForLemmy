@@ -9,7 +9,7 @@ internal fun Project.configureKotlinMultiplatform(extension: KotlinMultiplatform
         applyDefaultHierarchyTemplate()
         androidTarget {
             compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_1_8)
+                jvmTarget.set(JvmTarget.JVM_11)
             }
         }
 
