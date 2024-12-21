@@ -36,7 +36,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
-import com.livefast.eattrash.raccoonforlemmy.core.utils.share.getShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier

@@ -75,7 +75,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName

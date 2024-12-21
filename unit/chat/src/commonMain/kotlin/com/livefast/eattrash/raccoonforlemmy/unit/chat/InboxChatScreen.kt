@@ -67,7 +67,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.TextFormattingBar
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
