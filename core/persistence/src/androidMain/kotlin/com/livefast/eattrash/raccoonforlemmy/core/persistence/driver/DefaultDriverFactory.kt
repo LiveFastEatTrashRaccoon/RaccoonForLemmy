@@ -6,10 +6,8 @@ import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.key.DatabaseKeyProvider
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
-import org.koin.core.annotation.Single
 
-@Single
-internal actual class DefaultDriverFactory(
+internal class DefaultDriverFactory(
     private val context: Context,
     private val keyProvider: DatabaseKeyProvider,
 ) : DriverFactory {
@@ -17,7 +15,7 @@ internal actual class DefaultDriverFactory(
         private const val DATABASE_NAME = "raccoonforlemmy.db"
     }
 
-    actual override fun createDriver(): SqlDriver {
+    override fun createDriver(): SqlDriver {
         System.loadLibrary("sqlcipher")
         val key = keyProvider.getKey()
         val supportFactory = SupportOpenHelperFactory(key)

@@ -4,11 +4,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 
 private const val SETTINGS_KEY = "communityPreferredLanguage"
 
-@Single
 internal class DefaultCommunityPreferredLanguageRepository(
     private val keyStore: TemporaryKeyStore,
 ) : CommunityPreferredLanguageRepository {

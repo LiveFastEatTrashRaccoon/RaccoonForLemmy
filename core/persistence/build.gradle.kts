@@ -2,7 +2,6 @@ plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
     alias(libs.plugins.sqldelight)
     id("com.livefast.eattrash.composeMultiplatform")
-    id("com.livefast.eattrash.koinWithKsp")
     id("com.livefast.eattrash.serialization")
     id("com.livefast.eattrash.androidTest")
     alias(libs.plugins.kotlinx.kover)
@@ -26,10 +25,10 @@ kotlin {
                 implementation(libs.kotlinx.coroutines)
                 implementation(libs.kotlinx.serialization.json)
 
-                implementation(libs.koin.core)
-                api(libs.koin.annotations)
+                implementation(libs.kodein)
 
                 implementation(projects.core.appearance)
+                implementation(projects.core.di)
                 implementation(projects.core.l10n)
                 implementation(projects.core.preferences)
                 implementation(projects.core.utils)

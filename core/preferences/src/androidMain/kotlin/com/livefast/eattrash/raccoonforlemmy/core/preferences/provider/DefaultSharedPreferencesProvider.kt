@@ -4,9 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultSharedPreferencesProvider(
     private val context: Context,
 ) : SharedPreferencesProvider {

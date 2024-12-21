@@ -4,11 +4,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 
 private const val SETTINGS_KEY = "communitySort"
 
-@Single
 internal class DefaultCommunitySortRepository(
     private val keyStore: TemporaryKeyStore,
 ) : CommunitySortRepository {

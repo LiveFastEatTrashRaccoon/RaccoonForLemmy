@@ -5,20 +5,18 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
-import org.koin.core.annotation.Single
 
-@Single
-internal actual class DefaultCustomTabsHelper(
+internal class DefaultCustomTabsHelper(
     private val context: Context,
 ) : CustomTabsHelper {
     private val packageName: String?
         get() = CustomTabsClient.getPackageName(context, emptyList())
 
-    actual override val isSupported: Boolean by lazy {
+    override val isSupported: Boolean by lazy {
         !packageName.isNullOrEmpty()
     }
 
-    actual override fun handle(url: String) {
+    override fun handle(url: String) {
         val uri = Uri.parse(url)
         CustomTabsIntent
             .Builder()

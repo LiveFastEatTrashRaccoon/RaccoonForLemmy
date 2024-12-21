@@ -7,9 +7,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseP
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 
-@Single
 class DefaultDraftRepository(
     provider: DatabaseProvider,
 ) : DraftRepository {

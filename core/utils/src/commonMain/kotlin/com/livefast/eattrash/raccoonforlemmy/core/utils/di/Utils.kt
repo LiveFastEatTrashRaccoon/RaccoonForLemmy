@@ -1,30 +1,28 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.di
 
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
+import com.livefast.eattrash.raccoonforlemmy.core.utils.fs.FileSystemManager
+import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.GalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImageLoaderProvider
+import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
+import org.kodein.di.instance
 
-@Module
-internal expect class NetworkModule()
+fun getFileSystemManager(): FileSystemManager {
+    val res by RootDI.di.instance<FileSystemManager>()
+    return res
+}
 
-@Module
-internal expect class AppIconModule()
+fun getGalleryHelper(): GalleryHelper {
+    val res by RootDI.di.instance<GalleryHelper>()
+    return res
+}
 
-@Module
-internal expect class CrashReportModule()
+fun getImageLoaderProvider(): ImageLoaderProvider {
+    val res by RootDI.di.instance<ImageLoaderProvider>()
+    return res
+}
 
-@Module
-internal expect class FileSystemModule()
-
-@Module
-internal expect class GalleryHelperModule()
-
-@Module
-internal expect class ShareHelperModule()
-
-@Module
-internal expect class CustomTabsModule()
-
-@Module
-internal expect class HapticFeedbackModule()
-
-@Module
-internal expect class KeepScreenOnModule()
+fun getShareHelper(): ShareHelper {
+    val res by RootDI.di.instance<ShareHelper>()
+    return res
+}

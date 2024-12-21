@@ -1,8 +1,16 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.DefaultFabNestedScrollConnection
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.FabNestedScrollConnection
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.singleton
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui")
-class LemmyUiModule
+val lemmyUiModule =
+    DI.Module("LemmyUiModule") {
+        bind<FabNestedScrollConnection> {
+            singleton {
+                DefaultFabNestedScrollConnection()
+            }
+    }
+}

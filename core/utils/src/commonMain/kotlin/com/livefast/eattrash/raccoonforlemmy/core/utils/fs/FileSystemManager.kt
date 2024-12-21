@@ -22,5 +22,3 @@ interface FileSystemManager {
 
     fun getTempDir(): Path
 }
-
-expect fun getFileSystemManager(): FileSystemManager

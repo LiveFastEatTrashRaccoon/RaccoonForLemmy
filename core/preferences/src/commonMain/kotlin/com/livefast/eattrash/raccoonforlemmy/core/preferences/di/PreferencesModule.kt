@@ -1,27 +1,26 @@
 package com.livefast.eattrash.raccoonforlemmy.core.preferences.di
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.provider.SettingsProvider
-import com.russhwolf.settings.Settings
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
-import org.koin.core.annotation.Single
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.DefaultTemporaryKeyStore
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.singleton
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.preferences.store")
-internal class KeyStoreModule
+val preferencesModule =
+    DI.Module("PreferencesModule") {
+        importAll(
+            nativePreferencesModule,
+            appConfigModule,
+        )
 
-@Module
-internal class SettingsModule {
-    @Single
-    fun provideSettings(provider: SettingsProvider): Settings = provider.provide()
-}
-
-@Module(
-    includes = [
-        AppConfigModule::class,
-        KeyStoreModule::class,
-        ProviderModule::class,
-        SettingsModule::class,
-    ],
-)
-class PreferencesModule
+        bind<TemporaryKeyStore> {
+            singleton {
+                val settingsProvider: SettingsProvider = instance()
+                DefaultTemporaryKeyStore(
+                    settings = settingsProvider.provide(),
+                )
+            }
+        }
+    }

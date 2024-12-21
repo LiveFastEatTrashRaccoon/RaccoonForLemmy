@@ -4,13 +4,11 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 import com.materialkolor.dynamicColorScheme
-import org.koin.core.annotation.Single
 
-@Single
-internal actual class DefaultColorSchemeProvider : ColorSchemeProvider {
-    actual override val supportsDynamicColors = false
+internal class DefaultColorSchemeProvider : ColorSchemeProvider {
+    override val supportsDynamicColors = false
 
-    actual override fun getColorScheme(
+    override fun getColorScheme(
         theme: UiTheme,
         dynamic: Boolean,
         customSeed: Color?,

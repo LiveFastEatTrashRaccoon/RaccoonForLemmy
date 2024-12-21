@@ -4,9 +4,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultDomainBlocklistRepository(
     private val keyStore: TemporaryKeyStore,
 ) : DomainBlocklistRepository {
