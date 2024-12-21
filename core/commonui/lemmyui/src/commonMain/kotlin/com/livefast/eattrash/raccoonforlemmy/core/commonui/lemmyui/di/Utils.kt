@@ -1,5 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di
 
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.FabNestedScrollConnection
+import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
+import org.kodein.di.instance
 
-expect fun getFabNestedScrollConnection(): FabNestedScrollConnection
+fun getFabNestedScrollConnection(): FabNestedScrollConnection {
+    val res by RootDI.di.instance<FabNestedScrollConnection>()
+    return res
+}

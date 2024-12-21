@@ -1,22 +1,35 @@
 package com.livefast.eattrash.raccoonforlemmy.core.preferences.di
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig.AppConfigDataSource
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig.AppConfigStore
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig.DefaultAppConfigStore
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig.LocalAppConfigDataSource
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig.RemoteAppConfigDataSource
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.singleton
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig")
-internal class AppConfigModule {
-    @Single
-    @Named("local")
-    fun provideLocalDatastore(keyStore: TemporaryKeyStore): AppConfigDataSource = LocalAppConfigDataSource(keyStore = keyStore)
-
-    @Single
-    @Named("remote")
-    fun provideRemoteDatastore(): AppConfigDataSource = RemoteAppConfigDataSource()
-}
+internal val appConfigModule =
+    DI.Module("AppConfigModule") {
+        bind<AppConfigStore> {
+            singleton {
+                DefaultAppConfigStore(
+                    localDataSource = instance(tag = "local"),
+                    remoteDataSource = instance(tag = "remote"),
+                )
+            }
+        }
+        bind<AppConfigDataSource>(tag = "local") {
+            singleton {
+                LocalAppConfigDataSource(
+                    keyStore = instance(),
+                )
+            }
+        }
+        bind<AppConfigDataSource>(tag = "remote") {
+            singleton {
+                RemoteAppConfigDataSource()
+            }
+        }
+    }

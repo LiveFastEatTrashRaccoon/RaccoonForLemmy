@@ -1,10 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.core.appearance.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.AppColor
-import org.koin.core.annotation.Single
 import kotlin.random.Random
 
-@Single
 internal class DefaultAppColorRepository : AppColorRepository {
     override fun getColors(): List<AppColor> =
         listOf(

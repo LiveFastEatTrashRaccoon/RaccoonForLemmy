@@ -3,15 +3,13 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils.share
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import org.koin.core.annotation.Single
 
-@Single
-internal actual class DefaultShareHelper(
+internal class DefaultShareHelper(
     private val context: Context,
 ) : ShareHelper {
-    actual override val supportsShareImage = true
+    override val supportsShareImage = true
 
-    actual override fun share(
+    override fun share(
         url: String,
         mimeType: String,
     ) {
@@ -29,7 +27,7 @@ internal actual class DefaultShareHelper(
         context.startActivity(shareIntent)
     }
 
-    actual override fun shareImage(
+    override fun shareImage(
         path: Any?,
         mimeType: String,
     ) {

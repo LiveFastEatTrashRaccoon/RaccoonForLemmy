@@ -3,9 +3,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.preferences.store
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
 import com.russhwolf.settings.set
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultTemporaryKeyStore(
     private val settings: Settings,
 ) : TemporaryKeyStore {

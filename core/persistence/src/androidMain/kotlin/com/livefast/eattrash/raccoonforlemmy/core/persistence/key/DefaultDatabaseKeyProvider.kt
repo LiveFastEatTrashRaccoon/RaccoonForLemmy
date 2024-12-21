@@ -2,14 +2,12 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.key
 
 import android.util.Base64
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
-import org.koin.core.annotation.Single
 import java.security.SecureRandom
 
-@Single
-internal actual class DefaultDatabaseKeyProvider(
+internal class DefaultDatabaseKeyProvider(
     private val keyStore: TemporaryKeyStore,
 ) : DatabaseKeyProvider {
-    actual override fun getKey(): ByteArray {
+    override fun getKey(): ByteArray {
         val savedKey = retrieveStoreKey()
         return if (savedKey.isEmpty()) {
             val key = generateKey()
@@ -30,7 +28,7 @@ internal actual class DefaultDatabaseKeyProvider(
         }
     }
 
-    actual override fun removeKey() {
+    override fun removeKey() {
         keyStore.remove(DATABASE_KEY)
     }
 

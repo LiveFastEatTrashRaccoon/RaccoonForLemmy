@@ -3,10 +3,8 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils.appicon
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
-import org.koin.core.annotation.Single
 
-@Single
-internal actual class DefaultAppIconManager(
+internal class DefaultAppIconManager(
     private val context: Context,
 ) : AppIconManager {
     private val allComponentNames =
@@ -16,9 +14,9 @@ internal actual class DefaultAppIconManager(
             "com.livefast.eattrash.raccoonforlemmy.android.MainActivityAlias2",
         )
 
-    actual override val supportsMultipleIcons = allComponentNames.isNotEmpty()
+    override val supportsMultipleIcons = allComponentNames.isNotEmpty()
 
-    actual override fun changeIcon(variant: AppIconVariant) {
+    override fun changeIcon(variant: AppIconVariant) {
         val indexToEnable = variant.toInt()
         with(context.packageManager) {
             allComponentNames.forEachIndexed { i, name ->

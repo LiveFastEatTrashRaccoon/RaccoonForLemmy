@@ -1,11 +1,22 @@
 package com.livefast.eattrash.raccoonforlemmy.core.navigation.di
 
+import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.BottomNavItemsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.DrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.NavigationCoordinator
+import org.kodein.di.instance
 
-expect fun getNavigationCoordinator(): NavigationCoordinator
+fun getNavigationCoordinator(): NavigationCoordinator {
+    val res by RootDI.di.instance<NavigationCoordinator>()
+    return res
+}
 
-expect fun getDrawerCoordinator(): DrawerCoordinator
+fun getDrawerCoordinator(): DrawerCoordinator {
+    val res by RootDI.di.instance<DrawerCoordinator>()
+    return res
+}
 
-expect fun getBottomNavItemsRepository(): BottomNavItemsRepository
+fun getBottomNavItemsRepository(): BottomNavItemsRepository {
+    val res by RootDI.di.instance<BottomNavItemsRepository>()
+    return res
+}

@@ -1,15 +1,16 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.di
 
+import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
-import org.koin.core.annotation.Module
+import org.kodein.di.instance
 
-@Module
-internal expect class DriverModule()
+fun getAccountRepository(): AccountRepository {
+    val res by RootDI.di.instance<AccountRepository>()
+    return res
+}
 
-@Module
-internal expect class KeyModule()
-
-expect fun getAccountRepository(): AccountRepository
-
-expect fun getSettingsRepository(): SettingsRepository
+fun getSettingsRepository(): SettingsRepository {
+    val res by RootDI.di.instance<SettingsRepository>()
+    return res
+}

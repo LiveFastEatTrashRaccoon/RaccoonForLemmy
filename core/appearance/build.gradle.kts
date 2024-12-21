@@ -1,6 +1,5 @@
 plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
-    id("com.livefast.eattrash.koinWithKsp")
     id("com.livefast.eattrash.composeMultiplatform")
     id("com.livefast.eattrash.androidTest")
     alias(libs.plugins.kotlinx.kover)
@@ -15,8 +14,10 @@ kotlin {
         }
         val commonMain by getting {
             dependencies {
+                implementation(libs.kodein)
                 implementation(libs.materialKolor)
 
+                implementation(projects.core.di)
                 implementation(projects.core.l10n)
                 implementation(projects.core.resources)
             }

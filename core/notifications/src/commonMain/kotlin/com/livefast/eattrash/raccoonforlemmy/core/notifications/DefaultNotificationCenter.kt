@@ -8,11 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Single
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
-@Single
 internal class DefaultNotificationCenter(
     dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : NotificationCenter {

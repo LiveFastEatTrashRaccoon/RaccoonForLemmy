@@ -11,9 +11,7 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultAccountRepository(
     provider: DatabaseProvider,
 ) : AccountRepository {
