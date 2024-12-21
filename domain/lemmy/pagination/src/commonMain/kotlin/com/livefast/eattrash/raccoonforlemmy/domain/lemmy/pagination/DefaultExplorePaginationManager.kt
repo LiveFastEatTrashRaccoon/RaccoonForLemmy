@@ -14,9 +14,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserReposit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Factory
 
-@Factory
 class DefaultExplorePaginationManager(
     private val identityRepository: IdentityRepository,
     private val accountRepository: AccountRepository,

@@ -5,9 +5,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.Identity
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import kotlinx.coroutines.withTimeoutOrNull
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultCommentProcessor(
     private val identityRepository: IdentityRepository,
     private val postRepository: PostRepository,

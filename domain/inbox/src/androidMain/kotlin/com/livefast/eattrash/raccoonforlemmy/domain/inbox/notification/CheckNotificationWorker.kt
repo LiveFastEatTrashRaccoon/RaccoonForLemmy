@@ -8,20 +8,21 @@ import android.content.Intent
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.livefaast.eattrash.raccoonforlemmy.domain.inbox.R
+import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.L10nManager
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.getStrings
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.java.KoinJavaComponent.inject
+import org.kodein.di.instance
 import java.util.Collections.max
 
 internal class CheckNotificationWorker(
     private val context: Context,
     parameters: WorkerParameters,
 ) : CoroutineWorker(context, parameters) {
-    private val inboxCoordinator by inject<InboxCoordinator>(InboxCoordinator::class.java)
-    private val l10nManager by inject<L10nManager>(L10nManager::class.java)
+    private val inboxCoordinator by RootDI.di.instance<InboxCoordinator>()
+    private val l10nManager by RootDI.di.instance<L10nManager>()
 
     override suspend fun doWork() =
         withContext(Dispatchers.IO) {
