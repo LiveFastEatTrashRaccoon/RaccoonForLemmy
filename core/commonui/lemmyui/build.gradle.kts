@@ -1,6 +1,5 @@
 plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
-    id("com.livefast.eattrash.koinWithKsp")
     id("com.livefast.eattrash.composeMultiplatform")
     id("com.livefast.eattrash.androidTest")
 }
@@ -15,8 +14,10 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.calf)
+                implementation(libs.kodein)
 
                 implementation(projects.core.appearance)
+                implementation(projects.core.di)
                 implementation(projects.core.commonui.components)
                 implementation(projects.core.markdown)
                 implementation(projects.core.l10n)

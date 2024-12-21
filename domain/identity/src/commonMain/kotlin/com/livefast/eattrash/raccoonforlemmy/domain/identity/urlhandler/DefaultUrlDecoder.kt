@@ -3,9 +3,7 @@ package com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultUrlDecoder : UrlDecoder {
     override fun getCommunity(url: String?): CommunityModel? {
         val (normalizedUrl, instance) = normalizeUrl(url)

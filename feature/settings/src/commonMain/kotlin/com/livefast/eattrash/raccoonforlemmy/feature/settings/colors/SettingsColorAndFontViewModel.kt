@@ -19,9 +19,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.Identity
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [SettingsColorAndFontMviModel::class])
 class SettingsColorAndFontViewModel(
     private val themeRepository: ThemeRepository,
     private val colorSchemeProvider: ColorSchemeProvider,

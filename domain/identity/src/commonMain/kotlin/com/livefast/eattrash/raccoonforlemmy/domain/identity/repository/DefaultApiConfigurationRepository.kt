@@ -12,12 +12,9 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultApiConfigurationRepository(
-    @Named("default") private val serviceProvider: ServiceProvider,
+    private val serviceProvider: ServiceProvider,
     private val keyStore: TemporaryKeyStore,
     dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ApiConfigurationRepository {

@@ -15,7 +15,6 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
@@ -72,7 +71,6 @@ private object KeyStoreKeys {
     const val ENABLE_ALTERNATE_MARKDOWN_RENDERING = "enableAlternateMarkdownRendering"
 }
 
-@Single
 internal class DefaultSettingsRepository(
     provider: DatabaseProvider,
     private val keyStore: TemporaryKeyStore,

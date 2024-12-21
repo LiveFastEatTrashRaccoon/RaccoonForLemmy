@@ -11,5 +11,3 @@ expect fun IntArray.toComposeImageBitmap(
 ): ImageBitmap
 
 expect fun getNativeDecoders(): List<Decoder.Factory>
-
-expect fun getImageLoaderProvider(): ImageLoaderProvider

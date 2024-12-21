@@ -13,7 +13,7 @@ kotlin {
     applyDefaultHierarchyTemplate()
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_1_8)
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
     listOf(
@@ -34,11 +34,10 @@ kotlin {
                 implementation(compose.components.resources)
 
                 implementation(libs.compose.multiplatform.media.player)
-                implementation(libs.koin.core)
-                api(libs.koin.annotations)
+                implementation(libs.kodein)
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.screenmodel)
-                implementation(libs.voyager.koin)
+                implementation(libs.voyager.kodein)
                 implementation(libs.voyager.transition)
                 implementation(libs.voyager.tab)
                 implementation(libs.voyager.bottomsheet)
@@ -46,6 +45,7 @@ kotlin {
                 implementation(projects.core.api)
                 implementation(projects.core.appearance)
                 implementation(projects.core.architecture)
+                implementation(projects.core.di)
                 implementation(projects.core.commonui.components)
                 implementation(projects.core.commonui.detailopener.api)
                 implementation(projects.core.commonui.detailopener.impl)
@@ -129,14 +129,6 @@ kotlin {
         val iosSimulatorArm64Test by getting
         val iosTest by getting
     }
-}
-
-dependencies {
-    add("kspCommonMainMetadata", libs.koin.ksp)
-    add("kspAndroid", libs.koin.ksp)
-    add("kspIosX64", libs.koin.ksp)
-    add("kspIosArm64", libs.koin.ksp)
-    add("kspIosSimulatorArm64", libs.koin.ksp)
 }
 
 android {

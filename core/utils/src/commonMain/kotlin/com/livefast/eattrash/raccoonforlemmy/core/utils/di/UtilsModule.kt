@@ -1,29 +1,48 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.DefaultImageLoaderProvider
+import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.DefaultImagePreloadManager
+import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImageLoaderProvider
+import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
+import com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode.DefaultZombieModeHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode.ZombieModeHelper
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.singleton
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.imageload")
-internal class ImageLoadModule
+val utilsModule =
+    DI.Module("UtilsModule") {
+        importAll(
+            nativeAppIconModule,
+            nativeCrashReportModule,
+            nativeCustomTabsModule,
+            nativeFileSystemModule,
+            nativeGalleryHelperModule,
+            nativeHapticFeedbackModule,
+            nativeNetworkModule,
+            nativeShareHelperModule,
+        )
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode")
-internal class ZombieModeModule
-
-@Module(
-    includes = [
-        ImageLoadModule::class,
-        ZombieModeModule::class,
-        NetworkModule::class,
-        AppIconModule::class,
-        CrashReportModule::class,
-        FileSystemModule::class,
-        GalleryHelperModule::class,
-        ShareHelperModule::class,
-        CustomTabsModule::class,
-        HapticFeedbackModule::class,
-        KeepScreenOnModule::class,
-    ],
-)
-class UtilsModule
+        bind<ImageLoaderProvider> {
+            singleton {
+                DefaultImageLoaderProvider(
+                    context = instance(),
+                    fileSystemManager = instance(),
+                )
+            }
+        }
+        bind<ImagePreloadManager> {
+            singleton {
+                DefaultImagePreloadManager(
+                    context = instance(),
+                    imageLoaderProvider = instance(),
+                )
+            }
+        }
+        bind<ZombieModeHelper> {
+            singleton {
+                DefaultZombieModeHelper()
+            }
+        }
+    }

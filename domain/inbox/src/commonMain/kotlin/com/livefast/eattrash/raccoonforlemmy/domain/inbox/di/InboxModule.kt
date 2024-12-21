@@ -1,15 +1,33 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.inbox.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.DefaultInboxCoordinator
+import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
+import com.livefast.eattrash.raccoonforlemmy.domain.inbox.usecase.DefaultGetUnreadItemsUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.inbox.usecase.GetUnreadItemsUseCase
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.singleton
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator")
-internal class CoordinatorModule
+val inboxModule =
+    DI.Module("DomainInboxModule") {
+        import(nativeInboxModule)
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.domain.inbox.usecase")
-internal class UseCaseModule
-
-@Module(includes = [CoordinatorModule::class, UseCaseModule::class, NotificationModule::class])
-class InboxModule
+        bind<InboxCoordinator> {
+            singleton {
+                DefaultInboxCoordinator(
+                    identityRepository = instance(),
+                    getUnreadItemsUseCase = instance(),
+                )
+            }
+        }
+        bind<GetUnreadItemsUseCase> {
+            singleton {
+                DefaultGetUnreadItemsUseCase(
+                    identityRepository = instance(),
+                    userRepository = instance(),
+                    messageRepository = instance(),
+                )
+            }
+        }
+    }

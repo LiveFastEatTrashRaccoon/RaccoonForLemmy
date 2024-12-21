@@ -8,12 +8,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultModlogRepository(
-    @Named("default") private val services: ServiceProvider,
+    private val services: ServiceProvider,
 ) : ModlogRepository {
     override suspend fun getItems(
         auth: String?,

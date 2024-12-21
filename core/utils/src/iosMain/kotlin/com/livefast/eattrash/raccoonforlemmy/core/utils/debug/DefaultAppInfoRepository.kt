@@ -1,13 +1,11 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.debug
 
-import org.koin.core.annotation.Single
 import platform.Foundation.NSBundle
 import kotlin.experimental.ExperimentalNativeApi
 
-@Single
-internal actual class DefaultAppInfoRepository : AppInfoRepository {
+internal class DefaultAppInfoRepository : AppInfoRepository {
     @OptIn(ExperimentalNativeApi::class)
-    actual override fun geInfo(): AppInfo {
+    override fun geInfo(): AppInfo {
         val versionCode =
             buildString {
                 val dict = NSBundle.mainBundle.infoDictionary

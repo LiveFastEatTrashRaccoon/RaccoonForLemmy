@@ -3,16 +3,12 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils.fs
 import androidx.compose.runtime.Composable
 import okio.FileSystem
 import okio.Path
-import org.koin.core.annotation.Single
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-@Single
-internal actual class DefaultFileSystemManager : FileSystemManager {
-    actual override val isSupported = false
+internal class DefaultFileSystemManager : FileSystemManager {
+    override val isSupported = false
 
     @Composable
-    actual override fun readFromFile(
+    override fun readFromFile(
         mimeTypes: Array<String>,
         callback: (String?) -> Unit,
     ) {
@@ -20,7 +16,7 @@ internal actual class DefaultFileSystemManager : FileSystemManager {
     }
 
     @Composable
-    actual override fun writeToFile(
+    override fun writeToFile(
         mimeType: String,
         name: String,
         data: String,
@@ -29,11 +25,5 @@ internal actual class DefaultFileSystemManager : FileSystemManager {
         callback(false)
     }
 
-    actual override fun getTempDir(): Path = FileSystem.SYSTEM_TEMPORARY_DIRECTORY
+    override fun getTempDir(): Path = FileSystem.SYSTEM_TEMPORARY_DIRECTORY
 }
-
-object FileSystemManagerDiHelper : KoinComponent {
-    val helper: FileSystemManager by inject()
-}
-
-actual fun getFileSystemManager(): FileSystemManager = FileSystemManagerDiHelper.helper

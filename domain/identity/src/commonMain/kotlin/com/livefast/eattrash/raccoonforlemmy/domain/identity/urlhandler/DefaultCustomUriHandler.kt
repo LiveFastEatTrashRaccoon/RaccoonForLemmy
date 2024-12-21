@@ -12,12 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.InjectedParam
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultCustomUriHandler(
-    @InjectedParam private val fallbackHandler: UriHandler,
+    private val fallbackHandler: UriHandler,
     private val settingsRepository: SettingsRepository,
     private val communityProcessor: CommunityProcessor,
     private val userProcessor: UserProcessor,

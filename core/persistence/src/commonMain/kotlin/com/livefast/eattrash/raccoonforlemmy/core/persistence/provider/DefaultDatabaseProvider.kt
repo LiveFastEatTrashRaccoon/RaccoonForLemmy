@@ -2,9 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.provider
 
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.driver.DriverFactory
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
-import org.koin.core.annotation.Single
 
-@Single
 class DefaultDatabaseProvider(
     private val driverFactory: DriverFactory,
 ) : DatabaseProvider {

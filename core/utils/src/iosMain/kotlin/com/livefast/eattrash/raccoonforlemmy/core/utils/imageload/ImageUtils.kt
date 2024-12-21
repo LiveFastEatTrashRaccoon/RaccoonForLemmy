@@ -9,8 +9,6 @@ import org.jetbrains.skia.ColorAlphaType
 import org.jetbrains.skia.ColorType
 import org.jetbrains.skia.Image
 import org.jetbrains.skia.ImageInfo
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 actual fun ByteArray.toComposeImageBitmap(): ImageBitmap = Image.makeFromEncoded(this).toComposeImageBitmap()
 
@@ -25,9 +23,3 @@ actual fun IntArray.toComposeImageBitmap(
 }
 
 actual fun getNativeDecoders(): List<Decoder.Factory> = emptyList()
-
-actual fun getImageLoaderProvider(): ImageLoaderProvider = ImageUtilsDiHelper.imageLoaderProvider
-
-internal object ImageUtilsDiHelper : KoinComponent {
-    val imageLoaderProvider: ImageLoaderProvider by inject()
-}

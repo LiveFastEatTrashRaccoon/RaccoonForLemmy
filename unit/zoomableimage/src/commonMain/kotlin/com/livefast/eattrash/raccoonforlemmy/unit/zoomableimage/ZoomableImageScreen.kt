@@ -49,7 +49,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.utils.share.getShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

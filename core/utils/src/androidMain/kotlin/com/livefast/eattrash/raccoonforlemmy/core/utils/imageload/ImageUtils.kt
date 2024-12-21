@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import coil3.decode.Decoder
 import coil3.gif.AnimatedImageDecoder
 import coil3.gif.GifDecoder
-import org.koin.java.KoinJavaComponent
 
 actual fun ByteArray.toComposeImageBitmap(): ImageBitmap = BitmapFactory.decodeByteArray(this, 0, size).asImageBitmap()
 
@@ -25,9 +24,3 @@ actual fun getNativeDecoders(): List<Decoder.Factory> =
             GifDecoder.Factory()
         }
     }
-
-actual fun getImageLoaderProvider(): ImageLoaderProvider {
-    val inject = KoinJavaComponent.inject<ImageLoaderProvider>(ImageLoaderProvider::class.java)
-    val res by inject
-    return res
-}

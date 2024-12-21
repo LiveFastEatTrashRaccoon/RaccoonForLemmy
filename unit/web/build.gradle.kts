@@ -9,10 +9,10 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.calf)
-                implementation(libs.koin.core)
+                implementation(libs.kodein)
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.screenmodel)
-                implementation(libs.voyager.koin)
+                implementation(libs.voyager.kodein)
 
                 implementation(projects.core.utils)
                 implementation(projects.core.appearance)

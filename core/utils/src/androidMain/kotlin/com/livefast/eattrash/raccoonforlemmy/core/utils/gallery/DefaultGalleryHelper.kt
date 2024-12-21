@@ -13,18 +13,15 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Single
-import org.koin.java.KoinJavaComponent.inject
 
 private const val DEFAULT_BASE_PATH = "RaccoonForLemmy"
 
-@Single
-internal actual class DefaultGalleryHelper(
+internal class DefaultGalleryHelper(
     private val context: Context,
 ) : GalleryHelper {
-    actual override val supportsCustomPath: Boolean = true
+    override val supportsCustomPath: Boolean = true
 
-    actual override fun saveToGallery(
+    override fun saveToGallery(
         bytes: ByteArray,
         name: String,
         additionalPathSegment: String?,
@@ -63,7 +60,7 @@ internal actual class DefaultGalleryHelper(
     }
 
     @Composable
-    actual override fun getImageFromGallery(result: (ByteArray) -> Unit) {
+    override fun getImageFromGallery(result: (ByteArray) -> Unit) {
         val scope = rememberCoroutineScope()
         val resolver = context.contentResolver
         val pickMedia =
@@ -90,9 +87,4 @@ internal actual class DefaultGalleryHelper(
             )
         }
     }
-}
-
-actual fun getGalleryHelper(): GalleryHelper {
-    val res: GalleryHelper by inject(GalleryHelper::class.java)
-    return res
 }

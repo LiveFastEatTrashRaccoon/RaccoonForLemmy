@@ -38,7 +38,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.share.getShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
