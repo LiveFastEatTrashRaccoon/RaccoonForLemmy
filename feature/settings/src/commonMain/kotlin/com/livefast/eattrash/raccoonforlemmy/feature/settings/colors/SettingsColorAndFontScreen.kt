@@ -34,7 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.CommentBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.FontScale
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
@@ -86,7 +86,7 @@ class SettingsColorAndFontScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model = getScreenModel<SettingsColorAndFontMviModel>()
+        val model: SettingsColorAndFontMviModel = rememberScreenModel()
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val notificationCenter = remember { getNotificationCenter() }
