@@ -61,11 +61,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     splits {
         abi {
@@ -87,14 +87,14 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.splashscreen)
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
+    implementation(libs.kodein)
     implementation(libs.coil)
     implementation(libs.coil.gif)
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.tab)
 
     implementation(projects.shared)
+    implementation(projects.core.di)
     implementation(projects.core.utils)
     implementation(projects.core.navigation)
     implementation(projects.core.resources)
