@@ -14,7 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -30,7 +30,7 @@ internal object ProfileNotLoggedScreen : Tab {
 
     @Composable
     override fun Content() {
-        val model = getScreenModel<ProfileNotLoggedMviModel>()
+        val model: ProfileNotLoggedMviModel = rememberScreenModel()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val uiState by model.uiState.collectAsState()
 
