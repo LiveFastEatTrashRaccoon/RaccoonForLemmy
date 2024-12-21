@@ -11,12 +11,9 @@ import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
 
-@Single
 class DefaultMediaRepository(
-    @Named("default") private val services: ServiceProvider,
+    private val services: ServiceProvider,
 ) : MediaRepository {
     override suspend fun uploadImage(
         auth: String,

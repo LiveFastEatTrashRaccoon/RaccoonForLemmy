@@ -4,9 +4,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.Deta
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import kotlinx.coroutines.withTimeoutOrNull
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultCommunityProcessor(
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,

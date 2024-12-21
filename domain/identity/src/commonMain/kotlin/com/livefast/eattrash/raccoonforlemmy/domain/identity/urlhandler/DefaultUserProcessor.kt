@@ -4,9 +4,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.Deta
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.withTimeoutOrNull
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultUserProcessor(
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,

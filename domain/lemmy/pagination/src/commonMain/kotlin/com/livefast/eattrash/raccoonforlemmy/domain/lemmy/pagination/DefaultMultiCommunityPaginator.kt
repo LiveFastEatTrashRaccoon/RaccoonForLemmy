@@ -4,9 +4,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
-import org.koin.core.annotation.Factory
 
-@Factory
 internal class DefaultMultiCommunityPaginator(
     private val postRepository: PostRepository,
 ) : MultiCommunityPaginator {

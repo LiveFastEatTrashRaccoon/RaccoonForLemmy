@@ -1,8 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
-import org.koin.core.annotation.Single
-
-@Single
 internal class DefaultGetSiteSupportsMediaListUseCase(
     private val isSiteVersionAtLeastUseCase: IsSiteVersionAtLeastUseCase,
 ) : GetSiteSupportsMediaListUseCase {

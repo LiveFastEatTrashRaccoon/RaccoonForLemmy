@@ -13,9 +13,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.AuthRepo
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultLoginUseCase(
     private val authRepository: AuthRepository,
     private val apiConfigurationRepository: ApiConfigurationRepository,

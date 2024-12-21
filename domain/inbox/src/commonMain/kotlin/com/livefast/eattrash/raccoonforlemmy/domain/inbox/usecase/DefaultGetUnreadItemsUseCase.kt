@@ -3,9 +3,7 @@ package com.livefast.eattrash.raccoonforlemmy.domain.inbox.usecase
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultGetUnreadItemsUseCase(
     private val identityRepository: IdentityRepository,
     private val userRepository: UserRepository,

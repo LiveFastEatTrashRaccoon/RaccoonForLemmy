@@ -4,35 +4,165 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultCommentRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultCommunityRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultGetSiteSupportsHiddenPostsUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultGetSiteSupportsMediaListUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultGetSortTypesUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultIsSiteVersionAtLeastUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultLemmyItemCache
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultLemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultLocalItemCache
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultMediaRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultModlogRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultPostRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultPrivateMessageRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultSiteRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultUserRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSiteSupportsHiddenPostsUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSiteSupportsMediaListUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.IsSiteVersionAtLeastUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyItemCache
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LocalItemCache
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.MediaRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.ModlogRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.singleton
 
-@Module
-internal class CacheModule {
-    @Single
-    @Named("postCache")
-    fun providePostCache(): LocalItemCache<PostModel> = DefaultLocalItemCache()
+private val cacheModule =
+    DI.Module("CacheModule") {
+        bind<LocalItemCache<PostModel>>(tag = "postCache") {
+            singleton { DefaultLocalItemCache() }
+        }
+        bind<LocalItemCache<CommentModel>>(tag = "commentCache") {
+            singleton { DefaultLocalItemCache() }
+        }
+        bind<LocalItemCache<CommunityModel>>(tag = "communityCache") {
+            singleton { DefaultLocalItemCache() }
+        }
+        bind<LocalItemCache<UserModel>>(tag = "userCache") {
+            singleton { DefaultLocalItemCache() }
+        }
+    }
 
-    @Single
-    @Named("commentCache")
-    fun provideCommentCache(): LocalItemCache<CommentModel> = DefaultLocalItemCache()
+val lemmyRepositoryModule =
+    DI.Module("LemmyRepositoryModule") {
+        import(cacheModule)
 
-    @Single
-    @Named("communityCache")
-    fun provideCommunityCache(): LocalItemCache<CommunityModel> = DefaultLocalItemCache()
-
-    @Single
-    @Named("userCache")
-    fun provideUserCache(): LocalItemCache<UserModel> = DefaultLocalItemCache()
-}
-
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository")
-internal class RepositoryModule
-
-@Module(includes = [CacheModule::class, RepositoryModule::class])
-class LemmyRepositoryModule
+        bind<CommentRepository> {
+            singleton {
+                DefaultCommentRepository(
+                    services = instance(tag = "default"),
+                    customServices = instance(tag = "custom"),
+                )
+            }
+        }
+        bind<CommunityRepository> {
+            singleton {
+                DefaultCommunityRepository(
+                    services = instance(tag = "default"),
+                    customServices = instance(tag = "custom"),
+                )
+            }
+        }
+        bind<GetSiteSupportsHiddenPostsUseCase> {
+            singleton {
+                DefaultGetSiteSupportsHiddenPostsUseCase(
+                    isSiteVersionAtLeastUseCase = instance(),
+                )
+            }
+        }
+        bind<GetSiteSupportsMediaListUseCase> {
+            singleton {
+                DefaultGetSiteSupportsMediaListUseCase(
+                    isSiteVersionAtLeastUseCase = instance(),
+                )
+            }
+        }
+        bind<GetSortTypesUseCase> {
+            singleton {
+                DefaultGetSortTypesUseCase(
+                    isSiteVersionAtLeastUseCase = instance(),
+                )
+            }
+        }
+        bind<IsSiteVersionAtLeastUseCase> {
+            singleton {
+                DefaultIsSiteVersionAtLeastUseCase(
+                    siteRepository = instance(),
+                )
+            }
+        }
+        bind<LemmyItemCache> {
+            singleton {
+                DefaultLemmyItemCache(
+                    postCache = instance(tag = "postCache"),
+                    communityCache = instance(tag = "communityCache"),
+                    commentCache = instance(tag = "commentCache"),
+                    userCache = instance(tag = "userCache"),
+                )
+            }
+        }
+        bind<LemmyValueCache> {
+            singleton {
+                DefaultLemmyValueCache(
+                    services = instance(tag = "default"),
+                )
+            }
+        }
+        bind<MediaRepository> {
+            singleton {
+                DefaultMediaRepository(
+                    services = instance(tag = "default"),
+                )
+            }
+        }
+        bind<ModlogRepository> {
+            singleton {
+                DefaultModlogRepository(
+                    services = instance(tag = "default"),
+                )
+            }
+        }
+        bind<PostRepository> {
+            singleton {
+                DefaultPostRepository(
+                    services = instance(tag = "default"),
+                    customServices = instance(tag = "custom"),
+                )
+            }
+        }
+        bind<PrivateMessageRepository> {
+            singleton {
+                DefaultPrivateMessageRepository(
+                    services = instance(tag = "default"),
+                )
+            }
+        }
+        bind<SiteRepository> {
+            singleton {
+                DefaultSiteRepository(
+                    services = instance(tag = "default"),
+                    customServices = instance(tag = "custom"),
+                )
+            }
+        }
+        bind<UserRepository> {
+            singleton {
+                DefaultUserRepository(
+                    services = instance(tag = "default"),
+                    customServices = instance(tag = "custom"),
+                )
+            }
+        }
+    }
