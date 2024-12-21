@@ -41,29 +41,37 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
+import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.di.ModerateWithReasonMviModelParams
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.core.parameter.parametersOf
 import kotlin.time.Duration.Companion.seconds
 
 class ModerateWithReasonScreen(
     private val actionId: Int,
     private val contentId: Long,
 ) : Screen {
+    override val key: ScreenKey
+        get() = super.key + "$actionId-$contentId"
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model =
-            getScreenModel<ModerateWithReasonMviModel>(tag = "$actionId-$contentId") {
-                parametersOf(actionId, contentId)
-            }
+        val model: ModerateWithReasonMviModel =
+            rememberScreenModel(
+                arg =
+                    ModerateWithReasonMviModelParams(
+                        actionId = actionId,
+                        contentId = contentId,
+                    ),
+            )
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = LocalStrings.current.messageGenericError

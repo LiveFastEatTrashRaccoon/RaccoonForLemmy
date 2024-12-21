@@ -1,8 +1,27 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.mentions.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.unit.mentions.InboxMentionsMviModel
+import com.livefast.eattrash.raccoonforlemmy.unit.mentions.InboxMentionsViewModel
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.provider
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.mentions")
-class MentionsModule
+val mentionsModule =
+    DI.Module("MentionsModule") {
+        bind<InboxMentionsMviModel> {
+            provider {
+                InboxMentionsViewModel(
+                    identityRepository = instance(),
+                    userRepository = instance(),
+                    commentRepository = instance(),
+                    themeRepository = instance(),
+                    settingsRepository = instance(),
+                    hapticFeedback = instance(),
+                    coordinator = instance(),
+                    notificationCenter = instance(),
+                    lemmyValueCache = instance(),
+            )
+        }
+    }
+}

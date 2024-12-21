@@ -11,9 +11,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.MediaReposi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [MediaListMviModel::class])
 class MediaListViewModel(
     private val apiConfigurationRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,

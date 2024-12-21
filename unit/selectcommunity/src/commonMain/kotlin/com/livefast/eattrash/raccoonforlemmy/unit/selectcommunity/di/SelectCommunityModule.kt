@@ -1,8 +1,20 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity.SelectCommunityMviModel
+import com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity.SelectCommunityViewModel
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.provider
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity")
-class SelectCommunityModule
+val selectCommunityModule =
+    DI.Module("SelectCommunityModule") {
+        bind<SelectCommunityMviModel> {
+            provider {
+                SelectCommunityViewModel(
+                    settingsRepository = instance(),
+                    communityPaginationManager = instance(),
+                )
+        }
+    }
+}

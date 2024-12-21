@@ -19,12 +19,10 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueC
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
 private val COMMENT_BAR_THICKNESS_RANGE = 1..5
 private val COMMENT_INDENT_AMOUNT_RANGE = 1..20
 
-@Factory(binds = [ConfigureContentViewMviModel::class])
 class ConfigureContentViewViewModel(
     private val themeRepository: ThemeRepository,
     private val settingsRepository: SettingsRepository,

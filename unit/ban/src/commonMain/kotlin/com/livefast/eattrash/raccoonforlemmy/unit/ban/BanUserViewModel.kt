@@ -7,16 +7,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
-import org.koin.core.annotation.InjectedParam
 
-@Factory(binds = [BanUserMviModel::class])
 class BanUserViewModel(
-    @InjectedParam private val userId: Long,
-    @InjectedParam private val communityId: Long,
-    @InjectedParam private val newValue: Boolean,
-    @InjectedParam private val postId: Long,
-    @InjectedParam private val commentId: Long,
+    private val userId: Long,
+    private val communityId: Long,
+    private val newValue: Boolean,
+    private val postId: Long,
+    private val commentId: Long,
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
     private val notificationCenter: NotificationCenter,

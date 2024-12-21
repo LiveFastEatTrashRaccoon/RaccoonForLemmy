@@ -16,9 +16,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [AccountSettingsMviModel::class])
 class AccountSettingsViewModel(
     private val siteRepository: SiteRepository,
     private val identityRepository: IdentityRepository,

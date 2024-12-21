@@ -30,7 +30,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
@@ -68,7 +68,7 @@ object ModalDrawerContent : Tab {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model = getScreenModel<ModalDrawerMviModel>()
+        val model: ModalDrawerMviModel = rememberScreenModel()
         val uiState by model.uiState.collectAsState()
         val coordinator = remember { getDrawerCoordinator() }
         val themeRepository = remember { getThemeRepository() }

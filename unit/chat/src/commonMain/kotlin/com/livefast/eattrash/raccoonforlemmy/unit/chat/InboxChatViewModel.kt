@@ -14,12 +14,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserReposit
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
-import org.koin.core.annotation.InjectedParam
 
-@Factory(binds = [InboxChatMviModel::class])
 class InboxChatViewModel(
-    @InjectedParam private val otherUserId: Long,
+    private val otherUserId: Long,
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,
     private val messageRepository: PrivateMessageRepository,
@@ -27,10 +24,10 @@ class InboxChatViewModel(
     private val settingsRepository: SettingsRepository,
     private val mediaRepository: MediaRepository,
     private val notificationCenter: NotificationCenter,
-) : InboxChatMviModel,
-    DefaultMviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.Effect>(
+) : DefaultMviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.Effect>(
         initialState = InboxChatMviModel.UiState(),
-    ) {
+    ),
+    InboxChatMviModel {
     private var currentPage: Int = 1
 
     init {
@@ -38,17 +35,20 @@ class InboxChatViewModel(
             launch {
                 val auth = identityRepository.authToken.value.orEmpty()
 
-                settingsRepository.currentSettings.onEach { settings ->
-                    updateState {
-                        it.copy(
-                            autoLoadImages = settings.autoLoadImages,
-                            preferNicknames = settings.preferUserNicknames,
-                        )
-                    }
-                }.launchIn(this)
-                notificationCenter.subscribe(NotificationCenterEvent.Logout::class).onEach {
-                    handleLogout()
-                }.launchIn(this)
+                settingsRepository.currentSettings
+                    .onEach { settings ->
+                        updateState {
+                            it.copy(
+                                autoLoadImages = settings.autoLoadImages,
+                                preferNicknames = settings.preferUserNicknames,
+                            )
+                        }
+                    }.launchIn(this)
+                notificationCenter
+                    .subscribe(NotificationCenterEvent.Logout::class)
+                    .onEach {
+                        handleLogout()
+                    }.launchIn(this)
 
                 val currentUserId = siteRepository.getCurrentUser(auth)?.id ?: 0
                 updateState { it.copy(currentUserId = currentUserId) }
@@ -126,16 +126,17 @@ class InboxChatViewModel(
         val auth = identityRepository.authToken.value
         val refreshing = currentState.refreshing
         val itemList =
-            messageRepository.getAll(
-                creatorId = otherUserId,
-                auth = auth,
-                page = currentPage,
-                unreadOnly = false,
-            )?.onEach {
-                if (!it.read) {
-                    markAsRead(true, it.id)
+            messageRepository
+                .getAll(
+                    creatorId = otherUserId,
+                    auth = auth,
+                    page = currentPage,
+                    unreadOnly = false,
+                )?.onEach {
+                    if (!it.read) {
+                        markAsRead(true, it.id)
+                    }
                 }
-            }
         if (!itemList.isNullOrEmpty()) {
             currentPage++
         }

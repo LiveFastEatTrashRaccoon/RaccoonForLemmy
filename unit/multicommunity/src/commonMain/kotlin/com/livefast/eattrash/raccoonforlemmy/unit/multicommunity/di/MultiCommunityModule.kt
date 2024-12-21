@@ -4,37 +4,44 @@ import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail.MultiCom
 import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail.MultiCommunityViewModel
 import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorMviModel
 import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorViewModel
-import org.koin.dsl.module
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.factory
+import org.kodein.di.instance
 
 val multiCommunityModule =
-    module {
-        factory<MultiCommunityMviModel> { params ->
-            MultiCommunityViewModel(
-                communityId = params[0],
-                postRepository = get(),
-                identityRepository = get(),
-                siteRepository = get(),
-                themeRepository = get(),
-                shareHelper = get(),
-                settingsRepository = get(),
-                notificationCenter = get(),
-                hapticFeedback = get(),
-                postPaginationManager = get(),
-                imagePreloadManager = get(),
-                getSortTypesUseCase = get(),
-                multiCommunityRepository = get(),
-                postNavigationManager = get(),
-                lemmyValueCache = get(),
-            )
+    DI.Module("MultiCommunityModule") {
+        bind<MultiCommunityMviModel> {
+            factory { communityId: Long ->
+                MultiCommunityViewModel(
+                    communityId = communityId,
+                    postRepository = instance(),
+                    identityRepository = instance(),
+                    siteRepository = instance(),
+                    themeRepository = instance(),
+                    shareHelper = instance(),
+                    settingsRepository = instance(),
+                    notificationCenter = instance(),
+                    hapticFeedback = instance(),
+                    postPaginationManager = instance(),
+                    imagePreloadManager = instance(),
+                    getSortTypesUseCase = instance(),
+                    multiCommunityRepository = instance(),
+                    postNavigationManager = instance(),
+                    lemmyValueCache = instance(),
+                )
+            }
         }
-        factory<MultiCommunityEditorMviModel> { params ->
-            MultiCommunityEditorViewModel(
-                communityId = params[0],
-                accountRepository = get(),
-                multiCommunityRepository = get(),
-                communityPaginationManager = get(),
-                notificationCenter = get(),
-                settingsRepository = get(),
-            )
+        bind<MultiCommunityEditorMviModel> {
+            factory { communityId: Long ->
+                MultiCommunityEditorViewModel(
+                    communityId = communityId,
+                    accountRepository = instance(),
+                    multiCommunityRepository = instance(),
+                    communityPaginationManager = instance(),
+                    notificationCenter = instance(),
+                    settingsRepository = instance(),
+                )
+            }
         }
     }

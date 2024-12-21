@@ -41,11 +41,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.components.SelectInstanceItem
 import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.dialog.ChangeInstanceDialog
 import kotlinx.coroutines.CoroutineScope
@@ -63,7 +63,7 @@ fun SelectInstanceBottomSheet(
     parent: Screen,
     onSelected: ((String?) -> Unit)? = null,
 ) {
-    val model = parent.getScreenModel<SelectInstanceMviModel>(parent.key)
+    val model: SelectInstanceMviModel = parent.rememberScreenModel()
     val uiState by model.uiState.collectAsState()
     var changeInstanceDialogOpen by remember {
         mutableStateOf(false)

@@ -45,14 +45,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
-import org.koin.core.annotation.InjectedParam
 
-@Factory(binds = [CommunityDetailMviModel::class])
 @OptIn(FlowPreview::class)
 class CommunityDetailViewModel(
-    @InjectedParam private val communityId: Long,
-    @InjectedParam private val otherInstance: String,
+    private val communityId: Long,
+    private val otherInstance: String,
     private val identityRepository: IdentityRepository,
     private val apiConfigurationRepository: ApiConfigurationRepository,
     private val postPaginationManager: PostPaginationManager,

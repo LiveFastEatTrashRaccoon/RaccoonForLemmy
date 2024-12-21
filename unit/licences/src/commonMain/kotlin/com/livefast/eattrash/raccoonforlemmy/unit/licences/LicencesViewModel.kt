@@ -5,9 +5,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.unit.licences.models.LicenceItem
 import com.livefast.eattrash.raccoonforlemmy.unit.licences.models.LicenceItemType
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [LicencesMviModel::class])
 class LicencesViewModel :
     DefaultMviModel<LicencesMviModel.Intent, LicencesMviModel.State, LicencesMviModel.Effect>(
         initialState = LicencesMviModel.State(),

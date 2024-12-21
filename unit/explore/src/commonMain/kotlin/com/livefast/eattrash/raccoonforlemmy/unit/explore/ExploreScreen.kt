@@ -50,6 +50,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
@@ -70,7 +72,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
@@ -92,19 +93,17 @@ import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScr
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.parameter.parametersOf
 
 class ExploreScreen(
     private val otherInstance: String = "",
 ) : Screen {
+    override val key: ScreenKey
+        get() = super.key + otherInstance
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model =
-            getScreenModel<ExploreMviModel>(
-                tag = otherInstance,
-                parameters = { parametersOf(otherInstance) },
-            )
+        val model: ExploreMviModel = rememberScreenModel(arg = otherInstance)
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val topAppBarState = rememberTopAppBarState()

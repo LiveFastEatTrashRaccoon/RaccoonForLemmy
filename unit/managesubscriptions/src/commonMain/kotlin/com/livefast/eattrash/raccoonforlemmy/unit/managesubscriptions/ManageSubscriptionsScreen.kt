@@ -54,7 +54,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
@@ -79,7 +79,7 @@ class ManageSubscriptionsScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model = getScreenModel<ManageSubscriptionsMviModel>()
+        val model: ManageSubscriptionsMviModel = rememberScreenModel()
         val uiState by model.uiState.collectAsState()
         val navigatorCoordinator = remember { getNavigationCoordinator() }
         val topAppBarState = rememberTopAppBarState()

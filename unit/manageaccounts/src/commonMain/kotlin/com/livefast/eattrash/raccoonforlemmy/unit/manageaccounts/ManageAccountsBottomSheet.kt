@@ -35,7 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
@@ -53,7 +53,7 @@ fun ManageAccountsBottomSheet(
     parent: Screen,
     onDismiss: ((Boolean) -> Unit)? = null,
 ) {
-    val model = parent.getScreenModel<ManageAccountsMviModel>()
+    val model: ManageAccountsMviModel = parent.rememberScreenModel()
     val uiState by model.uiState.collectAsState()
     var indexToDelete by remember { mutableStateOf<Int?>(null) }
 

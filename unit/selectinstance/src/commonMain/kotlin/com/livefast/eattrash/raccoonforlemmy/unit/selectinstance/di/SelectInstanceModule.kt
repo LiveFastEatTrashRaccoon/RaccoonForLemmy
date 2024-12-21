@@ -1,8 +1,22 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.SelectInstanceMviModel
+import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.SelectInstanceViewModel
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.provider
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.selectinstance")
-class SelectInstanceModule
+val selectInstanceModule =
+    DI.Module("SelectInstanceModule") {
+        bind<SelectInstanceMviModel> {
+            provider {
+                SelectInstanceViewModel(
+                    instanceRepository = instance(),
+                    communityRepository = instance(),
+                    apiConfigurationRepository = instance(),
+                    hapticFeedback = instance(),
+            )
+        }
+    }
+}

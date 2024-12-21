@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
@@ -43,14 +44,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.DetailInfoIte
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.getPrettyNumber
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.unit.communityinfo.components.ModeratorCell
+import com.livefast.eattrash.raccoonforlemmy.unit.communityinfo.di.CommunityInfoMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
-import org.koin.core.parameter.parametersOf
 
 class CommunityInfoScreen(
     private val communityId: Long,
@@ -60,10 +60,14 @@ class CommunityInfoScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model =
-            getScreenModel<CommunityInfoMviModel>(
-                tag = communityId.toString(),
-                parameters = { parametersOf(communityId, communityName, otherInstance) },
+        val model: CommunityInfoMviModel =
+            rememberScreenModel(
+                arg =
+                    CommunityInfoMviModelParams(
+                        communityId = communityId,
+                        communityName = communityName,
+                        otherInstance = otherInstance,
+                    ),
             )
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }

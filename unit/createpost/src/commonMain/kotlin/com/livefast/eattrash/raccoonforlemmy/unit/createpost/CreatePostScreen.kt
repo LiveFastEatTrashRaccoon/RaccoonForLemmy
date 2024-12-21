@@ -59,7 +59,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -75,15 +75,15 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
+import com.livefast.eattrash.raccoonforlemmy.unit.createpost.di.CreatePostMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity.SelectCommunityDialog
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.core.parameter.parametersOf
 
 class CreatePostScreen(
     private val draftId: Long? = null,
@@ -99,14 +99,15 @@ class CreatePostScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model =
-            getScreenModel<CreatePostMviModel> {
-                parametersOf(
-                    editedPostId ?: 0L,
-                    crossPostId ?: 0L,
-                    draftId ?: 0L,
-                )
-            }
+        val model: CreatePostMviModel =
+            rememberScreenModel(
+                arg =
+                    CreatePostMviModelParams(
+                        editedPostId = editedPostId ?: 0L,
+                        crossPostId = crossPostId ?: 0L,
+                        draftId = draftId ?: 0L,
+                    ),
+            )
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = LocalStrings.current.messageGenericError

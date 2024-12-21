@@ -1,8 +1,35 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.postlist.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.unit.postlist.PostListMviModel
+import com.livefast.eattrash.raccoonforlemmy.unit.postlist.PostListViewModel
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.provider
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.postlist")
-class PostListModule
+val postListModule =
+    DI.Module("PostListModule") {
+        bind<PostListMviModel> {
+            provider {
+                PostListViewModel(
+                    postPaginationManager = instance(),
+                    postRepository = instance(),
+                    apiConfigurationRepository = instance(),
+                    identityRepository = instance(),
+                    siteRepository = instance(),
+                    themeRepository = instance(),
+                    shareHelper = instance(),
+                    settingsRepository = instance(),
+                    userRepository = instance(),
+                    communityRepository = instance(),
+                    notificationCenter = instance(),
+                    hapticFeedback = instance(),
+                    zombieModeHelper = instance(),
+                    imagePreloadManager = instance(),
+                    getSortTypesUseCase = instance(),
+                    postNavigationManager = instance(),
+                    lemmyValueCache = instance(),
+                )
+            }
+        }
+    }

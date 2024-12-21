@@ -1,8 +1,32 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.explore.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.unit.explore.ExploreMviModel
+import com.livefast.eattrash.raccoonforlemmy.unit.explore.ExploreViewModel
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.factory
+import org.kodein.di.instance
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.explore")
-class ExploreModule
+val exploreModule =
+    DI.Module("ExploreModule") {
+        bind<ExploreMviModel> {
+            factory { otherInstance: String ->
+                ExploreViewModel(
+                    otherInstance = otherInstance,
+                    apiConfigRepository = instance(),
+                    identityRepository = instance(),
+                    communityRepository = instance(),
+                    paginationManager = instance(),
+                    postRepository = instance(),
+                    commentRepository = instance(),
+                    themeRepository = instance(),
+                    settingsRepository = instance(),
+                    notificationCenter = instance(),
+                    hapticFeedback = instance(),
+                    getSortTypesUseCase = instance(),
+                    imagePreloadManager = instance(),
+                    lemmyValueCache = instance(),
+            )
+        }
+    }
+}

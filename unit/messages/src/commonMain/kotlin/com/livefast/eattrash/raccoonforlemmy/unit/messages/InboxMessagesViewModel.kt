@@ -13,9 +13,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteReposit
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [InboxMessagesMviModel::class])
 class InboxMessagesViewModel(
     private val identityRepository: IdentityRepository,
     private val siteRepository: SiteRepository,

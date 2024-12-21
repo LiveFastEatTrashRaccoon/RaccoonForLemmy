@@ -9,14 +9,11 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyItemCa
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
-import org.koin.core.annotation.InjectedParam
 
-@Factory(binds = [CommunityInfoMviModel::class])
 class CommunityInfoViewModel(
-    @InjectedParam private val communityId: Long,
-    @InjectedParam private val communityName: String,
-    @InjectedParam private val otherInstance: String,
+    private val communityId: Long,
+    private val communityName: String,
+    private val otherInstance: String,
     private val communityRepository: CommunityRepository,
     private val settingsRepository: SettingsRepository,
     private val itemCache: LemmyItemCache,

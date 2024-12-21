@@ -14,9 +14,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [DraftsMviModel::class])
 class DraftsViewModel(
     private val themeRepository: ThemeRepository,
     private val accountRepository: AccountRepository,

@@ -14,9 +14,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [EditCommunityMviModel::class])
 class EditCommunityViewModel(
     private val communityId: Long?,
     private val identityRepository: IdentityRepository,
