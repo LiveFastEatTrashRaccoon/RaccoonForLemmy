@@ -5,7 +5,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.Strings
 import org.jetbrains.compose.resources.getPluralString
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import org.koin.core.annotation.Factory
 import raccoonforlemmy.shared.generated.resources.Res
 import raccoonforlemmy.shared.generated.resources.action_activate_zombie_mode
 import raccoonforlemmy.shared.generated.resources.action_back_to_top
@@ -454,7 +453,6 @@ import raccoonforlemmy.shared.generated.resources.user_detail_info
 import raccoonforlemmy.shared.generated.resources.user_info_admin
 import raccoonforlemmy.shared.generated.resources.user_info_moderates
 
-@Factory
 internal class SharedStrings : Strings {
     override val actionBackToTop: String
         @Composable get() = stringResource(Res.string.action_back_to_top)
