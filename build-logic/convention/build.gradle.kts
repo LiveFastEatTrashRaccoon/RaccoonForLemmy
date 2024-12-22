@@ -24,11 +24,6 @@ gradlePlugin {
             implementationClass = "plugins.ComposeMultiplatformPlugin"
         }
 
-        register("koinWithKsp") {
-            id = "com.livefast.eattrash.koinWithKsp"
-            implementationClass = "plugins.KoinWithKspPlugin"
-        }
-
         register("kotlinMultiplatform") {
             id = "com.livefast.eattrash.kotlinMultiplatform"
             implementationClass = "plugins.KotlinMultiplatformPlugin"

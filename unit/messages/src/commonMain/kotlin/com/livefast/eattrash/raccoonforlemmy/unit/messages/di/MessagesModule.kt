@@ -1,8 +1,24 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.messages.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.unit.messages.InboxMessagesMviModel
+import com.livefast.eattrash.raccoonforlemmy.unit.messages.InboxMessagesViewModel
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.provider
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.messages")
-class MessagesModule
+val messagesModule =
+    DI.Module("MessagesModule") {
+        bind<InboxMessagesMviModel> {
+            provider {
+                InboxMessagesViewModel(
+                    identityRepository = instance(),
+                    siteRepository = instance(),
+                    messageRepository = instance(),
+                    settingsRepository = instance(),
+                    coordinator = instance(),
+                    notificationCenter = instance(),
+            )
+        }
+    }
+}

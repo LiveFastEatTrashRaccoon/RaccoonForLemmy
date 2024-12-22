@@ -19,7 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 
@@ -27,7 +27,7 @@ class ProfileSideMenuScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model = getScreenModel<ProfileSideMenuMviModel>()
+        val model: ProfileSideMenuMviModel = rememberScreenModel()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val uiState by model.uiState.collectAsState()
 

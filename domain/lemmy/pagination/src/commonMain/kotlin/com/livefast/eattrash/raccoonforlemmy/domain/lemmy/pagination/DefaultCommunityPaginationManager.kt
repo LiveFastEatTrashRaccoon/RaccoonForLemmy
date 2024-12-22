@@ -9,11 +9,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Factory
 
 private const val DEFAULT_PAGE_SIZE = 50
 
-@Factory
 internal class DefaultCommunityPaginationManager(
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,

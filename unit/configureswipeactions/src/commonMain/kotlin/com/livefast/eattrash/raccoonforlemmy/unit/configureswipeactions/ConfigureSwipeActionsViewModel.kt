@@ -13,9 +13,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueC
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [ConfigureSwipeActionsMviModel::class])
 class ConfigureSwipeActionsViewModel(
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,

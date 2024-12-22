@@ -1,9 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.core.preferences.di
 
+import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig.AppConfigStore
-import org.koin.core.annotation.Module
+import org.kodein.di.instance
 
-@Module
-internal expect class ProviderModule()
-
-expect fun getAppConfigStore(): AppConfigStore
+fun getAppConfigStore(): AppConfigStore {
+    val res by RootDI.di.instance<AppConfigStore>()
+    return res
+}

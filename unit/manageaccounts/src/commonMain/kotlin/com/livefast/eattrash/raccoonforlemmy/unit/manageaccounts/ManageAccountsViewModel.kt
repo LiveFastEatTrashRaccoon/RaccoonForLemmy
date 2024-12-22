@@ -15,9 +15,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [ManageAccountsMviModel::class])
 class ManageAccountsViewModel(
     private val accountRepository: AccountRepository,
     private val settingsRepository: SettingsRepository,

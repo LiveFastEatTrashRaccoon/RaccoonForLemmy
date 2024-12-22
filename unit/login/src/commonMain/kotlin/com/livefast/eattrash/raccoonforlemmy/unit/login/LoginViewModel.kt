@@ -14,9 +14,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteReposit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [LoginMviModel::class])
 class LoginViewModel(
     apiConfigurationRepository: ApiConfigurationRepository,
     private val identityRepository: IdentityRepository,

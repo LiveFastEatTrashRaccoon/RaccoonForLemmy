@@ -18,12 +18,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Factory
-import org.koin.core.annotation.InjectedParam
 
-@Factory(binds = [ZoomableImageMviModel::class])
 class ZoomableImageViewModel(
-    @InjectedParam private val url: String,
+    private val url: String,
     private val settingsRepository: SettingsRepository,
     private val shareHelper: ShareHelper,
     private val galleryHelper: GalleryHelper,

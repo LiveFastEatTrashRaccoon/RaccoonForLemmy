@@ -1,8 +1,24 @@
 package com.livefast.eattrash.raccoonforlemmy.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.Strings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.CoreResources
+import com.livefast.eattrash.raccoonforlemmy.resources.SharedResources
+import com.livefast.eattrash.raccoonforlemmy.resources.SharedStrings
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.factory
+import org.kodein.di.singleton
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.resources")
-internal class ResourcesModule
+internal val sharedResourcesModule =
+    DI.Module("SharedResourcesModule") {
+        bind<CoreResources> {
+            singleton {
+                SharedResources()
+            }
+        }
+        bind<Strings> {
+            factory { _: String ->
+                SharedStrings()
+            }
+        }
+    }

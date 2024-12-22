@@ -1,8 +1,24 @@
 package com.livefast.eattrash.raccoonforlemmy.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.main.MainMviModel
+import com.livefast.eattrash.raccoonforlemmy.main.MainViewModel
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.provider
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.main")
-internal class MainModule
+internal val mainModule =
+    DI.Module("MainModule") {
+        bind<MainMviModel> {
+            provider {
+                MainViewModel(
+                    inboxCoordinator = instance(),
+                    identityRepository = instance(),
+                    settingRepository = instance(),
+                    userRepository = instance(),
+                    notificationChecker = instance(),
+                    lemmyValueCache = instance(),
+            )
+        }
+    }
+}

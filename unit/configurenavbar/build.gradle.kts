@@ -1,6 +1,5 @@
 plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
-    id("com.livefast.eattrash.koinWithKsp")
     id("com.livefast.eattrash.composeMultiplatform")
     id("com.livefast.eattrash.androidTest")
 }
@@ -9,10 +8,11 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(libs.kodein)
                 implementation(libs.reorderable)
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.screenmodel)
-                implementation(libs.voyager.koin)
+                implementation(libs.voyager.kodein)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.architecture)

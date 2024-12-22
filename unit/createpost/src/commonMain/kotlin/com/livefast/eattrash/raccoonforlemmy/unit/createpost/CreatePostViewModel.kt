@@ -27,14 +27,11 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteReposit
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
-import org.koin.core.annotation.InjectedParam
 
-@Factory(binds = [CreatePostMviModel::class])
 class CreatePostViewModel(
-    @InjectedParam private val editedPostId: Long,
-    @InjectedParam private val crossPostId: Long,
-    @InjectedParam private val draftId: Long,
+    private val editedPostId: Long,
+    private val crossPostId: Long,
+    private val draftId: Long,
     private val identityRepository: IdentityRepository,
     private val postRepository: PostRepository,
     private val mediaRepository: MediaRepository,

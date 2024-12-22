@@ -2,20 +2,21 @@ package com.livefast.eattrash.raccoonforlemmy.core.api.di
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.DefaultServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.AppInfoRepository
-import org.koin.core.annotation.Module
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.singleton
 
-@Module
-class ApiModule {
-    @Single
-    @Named("default")
-    fun provideServiceProvider(appInfoRepository: AppInfoRepository): ServiceProvider =
-        DefaultServiceProvider(appInfoRepository = appInfoRepository)
-
-    @Single
-    @Named("custom")
-    fun provideCustomProvider(appInfoRepository: AppInfoRepository): ServiceProvider =
-        DefaultServiceProvider(appInfoRepository = appInfoRepository)
-}
+val apiModule =
+    DI.Module("ApiModule") {
+        bind<ServiceProvider>(tag = "default") {
+            singleton {
+                DefaultServiceProvider(appInfoRepository = instance())
+            }
+        }
+        bind<ServiceProvider>(tag = "custom") {
+            singleton {
+                DefaultServiceProvider(appInfoRepository = instance())
+            }
+        }
+    }

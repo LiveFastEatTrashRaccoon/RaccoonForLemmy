@@ -8,13 +8,10 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultAppConfigStore(
-    @Named("local") private val localDataSource: AppConfigDataSource,
-    @Named("remote") private val remoteDataSource: AppConfigDataSource,
+    private val localDataSource: AppConfigDataSource,
+    private val remoteDataSource: AppConfigDataSource,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : AppConfigStore {
     override val appConfig = MutableStateFlow(AppConfig())

@@ -32,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
@@ -41,7 +43,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
@@ -50,20 +51,19 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.getAdditionalLabe
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.core.parameter.parametersOf
 
 class InstanceInfoScreen(
     private val url: String,
 ) : Screen {
+    override val key: ScreenKey
+        get() = super.key + instanceName
+
+    private val instanceName: String = url.replace("https://", "")
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val instanceName = url.replace("https://", "")
-        val model =
-            getScreenModel<InstanceInfoMviModel>(
-                tag = instanceName,
-                parameters = { parametersOf(url) },
-            )
+        val model: InstanceInfoMviModel = rememberScreenModel(arg = url)
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

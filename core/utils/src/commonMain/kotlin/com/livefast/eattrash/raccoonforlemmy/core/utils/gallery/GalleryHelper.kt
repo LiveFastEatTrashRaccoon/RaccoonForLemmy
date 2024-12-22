@@ -16,5 +16,3 @@ interface GalleryHelper {
     @Composable
     fun getImageFromGallery(result: (ByteArray) -> Unit)
 }
-
-expect fun getGalleryHelper(): GalleryHelper

@@ -15,9 +15,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Factory
 
-@Factory
 internal class DefaultCommentPaginationManager(
     private val identityRepository: IdentityRepository,
     private val commentRepository: CommentRepository,

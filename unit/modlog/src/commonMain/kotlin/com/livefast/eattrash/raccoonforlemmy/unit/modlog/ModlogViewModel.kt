@@ -9,12 +9,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.ModlogRepos
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
-import org.koin.core.annotation.InjectedParam
 
-@Factory(binds = [ModlogMviModel::class])
 class ModlogViewModel(
-    @InjectedParam private val communityId: Long,
+    private val communityId: Long,
     private val themeRepository: ThemeRepository,
     private val identityRepository: IdentityRepository,
     private val modlogRepository: ModlogRepository,

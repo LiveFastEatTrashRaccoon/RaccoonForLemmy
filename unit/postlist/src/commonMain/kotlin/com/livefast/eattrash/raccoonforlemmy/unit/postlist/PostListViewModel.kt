@@ -33,9 +33,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [PostListMviModel::class])
 class PostListViewModel(
     private val postPaginationManager: PostPaginationManager,
     private val postRepository: PostRepository,

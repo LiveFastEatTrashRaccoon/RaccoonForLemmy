@@ -8,22 +8,19 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRe
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
-import org.koin.core.annotation.InjectedParam
 
-@Factory(binds = [ModerateWithReasonMviModel::class])
 class ModerateWithReasonViewModel(
-    @InjectedParam private val actionId: Int,
-    @InjectedParam private val contentId: Long,
+    private val actionId: Int,
+    private val contentId: Long,
     private val identityRepository: IdentityRepository,
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
     private val communityRepository: CommunityRepository,
-) : ModerateWithReasonMviModel,
-    DefaultMviModel<ModerateWithReasonMviModel.Intent, ModerateWithReasonMviModel.UiState, ModerateWithReasonMviModel.Effect>(
+) : DefaultMviModel<ModerateWithReasonMviModel.Intent, ModerateWithReasonMviModel.UiState, ModerateWithReasonMviModel.Effect>(
         initialState = ModerateWithReasonMviModel.UiState(),
-    ) {
+    ),
+    ModerateWithReasonMviModel {
     init {
         screenModelScope.launch {
             updateState { it.copy(action = actionId.toModerateWithReasonAction()) }

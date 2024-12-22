@@ -80,6 +80,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
@@ -105,7 +106,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectLanguage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
@@ -123,6 +123,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.unit.ban.BanUserScreen
+import com.livefast.eattrash.raccoonforlemmy.unit.communitydetail.di.CommunityDetailMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.communityinfo.CommunityInfoScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.editcommunity.EditCommunityScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.explore.ExploreScreen
@@ -137,7 +138,6 @@ import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScr
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.parameter.parametersOf
 import kotlin.math.roundToInt
 
 class CommunityDetailScreen(
@@ -150,10 +150,13 @@ class CommunityDetailScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model =
-            getScreenModel<CommunityDetailMviModel>(
-                tag = communityId.toString(),
-                parameters = { parametersOf(communityId, otherInstance) },
+        val model: CommunityDetailMviModel =
+            rememberScreenModel(
+                arg =
+                    CommunityDetailMviModelParams(
+                        communityId = communityId,
+                        otherInstance = otherInstance,
+                    ),
             )
         val uiState by model.uiState.collectAsState()
         val lazyListState = rememberLazyListState()

@@ -1,35 +1,44 @@
 package com.livefast.eattrash.raccoonforlemmy.android
 
 import android.app.Application
+import android.content.Context
+import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.CrashReportConfiguration
 import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.CrashReportWriter
-import com.livefast.eattrash.raccoonforlemmy.di.rootModule
-import org.koin.android.ext.android.inject
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
+import com.livefast.eattrash.raccoonforlemmy.di.initDi
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.provider
 
-class MainApplication : Application() {
+class MainApplication :
+    Application(),
+    DIAware {
+    override val di: DI
+        get() = RootDI.di
+
     override fun onCreate() {
         super.onCreate()
 
-        startKoin {
-            androidContext(this@MainApplication)
-            androidLogger()
-            modules(rootModule)
-        }.apply {
-            val crashReportWriter: CrashReportWriter by inject()
-            val crashReportConfig: CrashReportConfiguration by inject()
+        initDi {
+            bind<Context> { provider { applicationContext } }
+        }
+        configureCrashReport()
+    }
 
-            Thread.currentThread().apply {
-                val original = uncaughtExceptionHandler
-                setUncaughtExceptionHandler { t, exception ->
-                    if (crashReportConfig.isEnabled()) {
-                        val stackTrace = exception.stackTraceToString()
-                        crashReportWriter.write(stackTrace)
-                    }
-                    original?.uncaughtException(t, exception)
+    private fun configureCrashReport() {
+        val crashReportWriter: CrashReportWriter by di.instance()
+        val crashReportConfig: CrashReportConfiguration by di.instance()
+
+        Thread.currentThread().apply {
+            val original = uncaughtExceptionHandler
+            setUncaughtExceptionHandler { t, exception ->
+                if (crashReportConfig.isEnabled()) {
+                    val stackTrace = exception.stackTraceToString()
+                    crashReportWriter.write(stackTrace)
                 }
+                original?.uncaughtException(t, exception)
             }
         }
     }

@@ -2,9 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.navigation
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultDrawerCoordinator : DrawerCoordinator {
     override val events = MutableSharedFlow<DrawerEvent>()
     override val gesturesEnabled = MutableStateFlow(true)

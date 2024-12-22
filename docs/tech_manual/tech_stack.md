@@ -6,13 +6,18 @@ cases where the initial choice changed over time and the reasons why the change 
 <dl>
 <dt>Dependency Injection</dt>
 <dd>
-The choice here is the <a href="https://github.com/InsertKoinIO/koin">Koin</a> library. The main 
+The choice here is the <a href="https://github.com/kosi-libs/Kodein">Kodein</a> library. The main 
 reason it was selected because of its great multiplatform support and the integration with the 
 navigation library (which at the beginning of the project was not there yet, but was added later and
-proved to work great). You can find module definitions (beware, Gradle modules and Koin modules are
+proved to work great). You can find module definitions (beware, Gradle modules and DI modules are
 two different concepts and should not be confused) in a `di` package inside each subproject, modules
 can include each other and all top-level modules are included in the shared module, more on it in
 "Module overview and dependencies".
+Initially the project started using another very popular DI library, 
+<a href="https://github.com/InsertKoinIO/koin">Koin</a>, but after discovering that, if you use their
+annotation processor to generate modules by reading annotations, builds are not reproducible any
+more (which is written nowhere in the documentation), I decided to make a U-turn and move to a more
+reliable library and I don't want to hear about Koin ever (ever!) again in my life as a developer.
 </dd>
 
 <dt>Navigation</dt>
@@ -26,7 +31,7 @@ library started to show its limits. Part of them were addressed by encapsulating
 logic (to push/pop screens into the navigation stack and open/close modal bottom sheets) into a 
 centralized component NavigationCoordinator.kt.
 Something similar was done for the navigation drawer in DrawerCoordinator.kt.
-Even the DI integration with Koin was not pain-free, the <code>:core:navigation</code> module contains
+Even the DI integration was not totally pain-free, the <code>:core:navigation</code> module contains
 some glue code that is used to work around some of the issues that were encountered.
 </dd>
 

@@ -5,13 +5,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
-import org.koin.core.annotation.Single
 
 interface ExportSettingsUseCase {
     suspend operator fun invoke(): String
 }
 
-@Single
 internal class DefaultExportSettingsUseCase(
     private val settingsRepository: SettingsRepository,
 ) : ExportSettingsUseCase {

@@ -14,9 +14,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultInboxCoordinator(
     private val identityRepository: IdentityRepository,
     private val getUnreadItemsUseCase: GetUnreadItemsUseCase,

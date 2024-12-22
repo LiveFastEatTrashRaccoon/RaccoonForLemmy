@@ -9,7 +9,7 @@ internal object LicenceUrls {
     const val COMPOSE_MULTIPLATFORM_MEDIA_PLAYER =
         "https://github.com/Chaintech-Network/ComposeMultiplatformMediaPlayer/blob/main/LICENSE.txt"
     const val GITHUB_LOGO = "https://github.com/logos"
-    const val KOIN = "https://github.com/InsertKoinIO/koin/blob/main/LICENSE"
+    const val KODEIN = "https://github.com/kosi-libs/Kodein/blob/main/LICENSE.txt"
     const val KOTLIN_CRYPTO = "https://github.com/KotlinCrypto/hash/blob/master/LICENSE"
     const val KTOR = "https://github.com/ktorio/ktor/blob/main/LICENSE"
     const val KTORFIT = "https://github.com/Foso/Ktorfit/blob/master/LICENSE"

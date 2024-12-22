@@ -1,10 +1,16 @@
 package com.livefast.eattrash.raccoonforlemmy.core.l10n.di
 
+import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.L10nManager
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.Strings
+import org.kodein.di.instance
 
-expect fun getL10nManager(): L10nManager
+fun getL10nManager(): L10nManager {
+    val res by RootDI.di.instance<L10nManager>()
+    return res
+}
 
-internal expect fun replaceLang(lang: String)
-
-expect fun getStrings(lang: String): Strings
+fun getStrings(lang: String): Strings {
+    val res by RootDI.di.instance<String, Strings>(arg = lang)
+    return res
+}

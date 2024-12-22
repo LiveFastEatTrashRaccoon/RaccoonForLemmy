@@ -41,7 +41,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsIntValueRow
@@ -50,9 +50,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
+import com.livefast.eattrash.raccoonforlemmy.unit.ban.di.BanUserMviModelParams
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.core.parameter.parametersOf
 import kotlin.time.Duration.Companion.seconds
 
 class BanUserScreen(
@@ -65,16 +65,17 @@ class BanUserScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model =
-            getScreenModel<BanUserMviModel> {
-                parametersOf(
-                    userId,
-                    communityId,
-                    newValue,
-                    postId ?: 0L,
-                    commentId ?: 0L,
-                )
-            }
+        val model: BanUserMviModel =
+            rememberScreenModel(
+                arg =
+                    BanUserMviModelParams(
+                        userId = userId,
+                        communityId = communityId,
+                        newValue = newValue,
+                        postId = postId ?: 0L,
+                        commentId = commentId ?: 0L,
+                    ),
+            )
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = LocalStrings.current.messageGenericError

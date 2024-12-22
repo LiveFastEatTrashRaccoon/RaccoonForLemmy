@@ -47,7 +47,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -66,15 +66,15 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.getGalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
+import com.livefast.eattrash.raccoonforlemmy.unit.createcomment.di.CreateCommentMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.core.parameter.parametersOf
 
 class CreateCommentScreen(
     private val draftId: Long? = null,
@@ -86,15 +86,16 @@ class CreateCommentScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model =
-            getScreenModel<CreateCommentMviModel> {
-                parametersOf(
-                    originalPostId ?: 0L,
-                    originalCommentId ?: 0L,
-                    editedCommentId ?: 0L,
-                    draftId ?: 0L,
-                )
-            }
+        val model: CreateCommentMviModel =
+            rememberScreenModel(
+                arg =
+                    CreateCommentMviModelParams(
+                        postId = originalPostId ?: 0L,
+                        parentId = originalCommentId ?: 0L,
+                        editedCommentId = editedCommentId ?: 0L,
+                        draftId = draftId ?: 0L,
+                    ),
+            )
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = LocalStrings.current.messageGenericError

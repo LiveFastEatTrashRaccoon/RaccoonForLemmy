@@ -1,8 +1,23 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.accountsettings.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.unit.accountsettings.AccountSettingsMviModel
+import com.livefast.eattrash.raccoonforlemmy.unit.accountsettings.AccountSettingsViewModel
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.provider
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.accountsettings")
-class AccountSettingsModule
+val accountSettingsModule =
+    DI.Module("AccountSettingsModule") {
+        bind<AccountSettingsMviModel> {
+            provider {
+                AccountSettingsViewModel(
+                    siteRepository = instance(),
+                    identityRepository = instance(),
+                    mediaRepository = instance(),
+                    getSortTypesUseCase = instance(),
+                    notificationCenter = instance(),
+                )
+            }
+        }
+    }

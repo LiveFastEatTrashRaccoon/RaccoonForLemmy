@@ -7,9 +7,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.usecase.LogoutUseCa
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [ProfileMainMviModel::class])
 class ProfileMainViewModel(
     private val identityRepository: IdentityRepository,
     private val logout: LogoutUseCase,

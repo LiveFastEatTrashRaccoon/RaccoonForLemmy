@@ -1,19 +1,30 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.datasource.AcknowledgementsRemoteDataSource
+import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.datasource.DefaultAcknowledgementsRemoteDataSource
+import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.main.AcknowledgementsMviModel
+import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.main.AcknowledgementsViewModel
+import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.repository.AcknowledgementsRepository
+import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.repository.DefaultAcknowledgementsRepository
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.provider
+import org.kodein.di.singleton
 
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.main")
-internal class MainModule
-
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.datasource")
-internal class DataSourceModule
-
-@Module
-@ComponentScan("com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.repository")
-internal class RepositoryModule
-
-@Module(includes = [MainModule::class, DataSourceModule::class, RepositoryModule::class])
-class AcknowledgementsModule
+val acknowledgementsModule =
+    DI.Module("AcknowledgementsModule") {
+        bind<AcknowledgementsRemoteDataSource> {
+            singleton { DefaultAcknowledgementsRemoteDataSource() }
+        }
+        bind<AcknowledgementsRepository> {
+            singleton {
+                DefaultAcknowledgementsRepository(dataSource = instance())
+            }
+        }
+        bind<AcknowledgementsMviModel> {
+            provider {
+                AcknowledgementsViewModel(acknowledgementsRepository = instance())
+            }
+        }
+    }

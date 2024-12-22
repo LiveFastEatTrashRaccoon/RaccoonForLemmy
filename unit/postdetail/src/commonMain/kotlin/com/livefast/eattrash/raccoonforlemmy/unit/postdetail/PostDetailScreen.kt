@@ -92,6 +92,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
@@ -115,7 +116,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
@@ -136,12 +136,12 @@ import com.livefast.eattrash.raccoonforlemmy.unit.ban.BanUserScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
+import com.livefast.eattrash.raccoonforlemmy.unit.postdetail.di.PostDetailMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.parameter.parametersOf
 import kotlin.math.roundToInt
 
 class PostDetailScreen(
@@ -151,22 +151,20 @@ class PostDetailScreen(
     private val isMod: Boolean = false,
 ) : Screen {
     override val key: ScreenKey
-        get() = super.key + postId.toString()
+        get() = super.key + postId.toString() + highlightCommentId.toString()
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
     @Composable
     override fun Content() {
-        val model =
-            getScreenModel<PostDetailMviModel>(
-                tag = postId.toString() + highlightCommentId.toString(),
-                parameters = {
-                    parametersOf(
-                        postId,
-                        otherInstance,
-                        highlightCommentId ?: 0L,
-                        isMod,
-                    )
-                },
+        val model: PostDetailMviModel =
+            rememberScreenModel(
+                arg =
+                    PostDetailMviModelParams(
+                        postId = postId,
+                        otherInstance = otherInstance,
+                        highlightCommentId = highlightCommentId ?: 0L,
+                        isModerator = isMod,
+                    ),
             )
         val uiState by model.uiState.collectAsState()
         val isOnOtherInstance = remember { otherInstance.isNotEmpty() }

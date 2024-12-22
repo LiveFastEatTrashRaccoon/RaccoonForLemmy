@@ -8,9 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 
-@Single
 internal class DefaultIdentityRepository(
     private val accountRepository: AccountRepository,
     private val siteRepository: SiteRepository,

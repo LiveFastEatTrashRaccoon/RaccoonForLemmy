@@ -26,9 +26,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortType
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Factory
 
-@Factory(binds = [SettingsMviModel::class])
 class SettingsViewModel(
     private val themeRepository: ThemeRepository,
     private val identityRepository: IdentityRepository,

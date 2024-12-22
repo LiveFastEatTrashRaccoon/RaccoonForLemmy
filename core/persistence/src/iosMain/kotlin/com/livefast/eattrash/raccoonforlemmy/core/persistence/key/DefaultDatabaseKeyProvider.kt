@@ -1,10 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.key
 
-import org.koin.core.annotation.Single
+internal class DefaultDatabaseKeyProvider : DatabaseKeyProvider {
+    override fun getKey(): ByteArray = byteArrayOf()
 
-@Single
-internal actual class DefaultDatabaseKeyProvider : DatabaseKeyProvider {
-    actual override fun getKey(): ByteArray = byteArrayOf()
-
-    actual override fun removeKey() = Unit
+    override fun removeKey() = Unit
 }

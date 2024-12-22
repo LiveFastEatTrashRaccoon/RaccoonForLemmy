@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -44,16 +45,15 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.DetailInfoIte
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.getPrettyNumber
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.components.ModeratedCommunityCell
+import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.di.UserInfoMMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.launch
-import org.koin.core.parameter.parametersOf
 
 class UserInfoScreen(
     private val userId: Long,
@@ -63,11 +63,15 @@ class UserInfoScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model =
-            getScreenModel<UserInfoMviModel>(
-                tag = userId.toString(),
-                parameters = { parametersOf(userId, username, otherInstance) },
-            )
+        val model: UserInfoMviModel =
+            rememberScreenModel(
+                arg =
+                    UserInfoMMviModelParams(
+                        userId = userId,
+                        username = username,
+                        otherInstance = otherInstance,
+                ),
+                    )
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val scope = rememberCoroutineScope()

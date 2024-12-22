@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.getImageLoaderProvider
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getImageLoaderProvider
 
 @Composable
 fun CustomImage(

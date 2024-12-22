@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
@@ -92,7 +93,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.getScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
@@ -113,12 +113,12 @@ import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWit
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
+import com.livefast.eattrash.raccoonforlemmy.unit.userdetail.di.UserDetailMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.UserInfoScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.parameter.parametersOf
 import kotlin.math.roundToInt
 
 class UserDetailScreen(
@@ -131,16 +131,14 @@ class UserDetailScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model =
-            getScreenModel<UserDetailMviModel>(
-                tag = userId.toString(),
-                parameters = {
-                    parametersOf(
-                        userId,
-                        otherInstance,
-                    )
-                },
+        val model: UserDetailMviModel =
+            rememberScreenModel(
+                arg =
+                    UserDetailMviModelParams(
+                        userId = userId,
+                        otherInstance = otherInstance,
             )
+        )
         val uiState by model.uiState.collectAsState()
         val lazyListState = rememberLazyListState()
         val scope = rememberCoroutineScope()

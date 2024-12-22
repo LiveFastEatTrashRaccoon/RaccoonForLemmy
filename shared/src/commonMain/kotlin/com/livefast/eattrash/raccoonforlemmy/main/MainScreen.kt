@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
@@ -63,7 +63,7 @@ internal object MainScreen : Screen {
     override fun Content() {
         val themeRepository = remember { getThemeRepository() }
         val navigationCoordinator = remember { getNavigationCoordinator() }
-        val model = getScreenModel<MainMviModel>()
+        val model: MainMviModel = rememberScreenModel()
         val uiState by model.uiState.collectAsState()
         val uiFontScale by themeRepository.uiFontScale.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }

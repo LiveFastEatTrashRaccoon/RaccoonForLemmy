@@ -1,32 +1,10 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
-
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
+    id("com.livefast.eattrash.kotlinMultiplatform")
     id("com.livefast.eattrash.composeMultiplatform")
     alias(libs.plugins.kotlinx.kover)
-    alias(libs.plugins.ksp)
 }
 
 kotlin {
-    applyDefaultHierarchyTemplate()
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_1_8)
-        }
-    }
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64(),
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
-            isStatic = true
-        }
-    }
-
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -34,11 +12,10 @@ kotlin {
                 implementation(compose.components.resources)
 
                 implementation(libs.compose.multiplatform.media.player)
-                implementation(libs.koin.core)
-                api(libs.koin.annotations)
+                implementation(libs.kodein)
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.screenmodel)
-                implementation(libs.voyager.koin)
+                implementation(libs.voyager.kodein)
                 implementation(libs.voyager.transition)
                 implementation(libs.voyager.tab)
                 implementation(libs.voyager.bottomsheet)
@@ -46,6 +23,7 @@ kotlin {
                 implementation(projects.core.api)
                 implementation(projects.core.appearance)
                 implementation(projects.core.architecture)
+                implementation(projects.core.di)
                 implementation(projects.core.commonui.components)
                 implementation(projects.core.commonui.detailopener.api)
                 implementation(projects.core.commonui.detailopener.impl)
@@ -131,38 +109,6 @@ kotlin {
     }
 }
 
-dependencies {
-    add("kspCommonMainMetadata", libs.koin.ksp)
-    add("kspAndroid", libs.koin.ksp)
-    add("kspIosX64", libs.koin.ksp)
-    add("kspIosArm64", libs.koin.ksp)
-    add("kspIosSimulatorArm64", libs.koin.ksp)
-}
-
-android {
-    namespace = "com.livefast.eattrash.raccoonforlemmy"
-    compileSdk =
-        libs.versions.android.compileSdk
-            .get()
-            .toInt()
-    defaultConfig {
-        minSdk =
-            libs.versions.android.minSdk
-                .get()
-                .toInt()
-    }
-}
-
-ksp {
-    arg("KOIN_DEFAULT_MODULE", "false")
-}
-
-kotlin.sourceSets.commonMain {
-    kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-}
-
-tasks.withType(KotlinCompilationTask::class.java).configureEach {
-    if (name != "kspCommonMainKotlinMetadata") {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
+customKotlinMultiplatformExtension {
+    baseName = "shared"
 }
