@@ -8,7 +8,8 @@ Here is a description of the dependency flow:
 - `:androidApp` which is the KMP equivalent of `:app` module in Android-only projects) include `:shared` and can
   include `:core` modules (e.g. for navigation);
 - `:shared` is the heart of the KMP application and it virtually includes every other Gradle module as a dependency (it
-  contains in the `DiHelper.kt` files the setup of the DI, so it basically needs to see all Koin modules);
+  contains in the `DiHelper.kt` files the setup of the DI, so it basically needs to see all the
+  modules);
 - `:feature` modules are included by :shared and include :domain, :core and :unit modules, but they DO not include other
   each other nor any top level module; some unit modules are used just by one feature (e.g. `:unit:postlist` is used
   only by `:feature:home`) in some other cases multiple features use the same unit (e.g. `:unit:zoomableimage` is used
@@ -34,10 +35,9 @@ in turns calls `App`, the main entry point of the multiplatform application whic
 `:shared` is the top module of the multiplatform application, which includes all the other modules and is not included
 by anything (except `:androidApp`). In its `commonMain` source set, this module contains `App`, the application entry
 point, the definition on the `MainScreen` (and its ViewModel) hosting the main navigation with the bottom tab bar.
-Another important part of this module resides in the platform specific source sets (`androidMain` and `iosMain`
-respectively) where two `DiHelper.kt` files (one for each platform) can be found, which contain the setup of the root of
-the project's dependency injection in a platform specific way, an initialization function on iOS and a Koin module for
-Android (which is included in `MainApplication`).
+
+It also contains the dependency injection setup as well as some DI modules specific to access
+resources or other application-level components.
 
 ### Feature modules
 

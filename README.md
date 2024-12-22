@@ -173,7 +173,7 @@ switch to the web UI.
 - [Compose ColorPicker](https://github.com/skydoves/colorpicker-compose) for custom color selection;
 - [Compose Multiplatform Media Player](https://github.com/Chaintech-Network/ComposeMultiplatformMediaPlayer)
   for video playback;
-- [Koin](https://insert-koin.io/) for dependency injection;
+- [Kodein](https://github.com/kosi-libs/Kodein) for dependency injection;
 - [Ktor](https://ktor.io/) and [Ktorfit](https://foso.github.io/Ktorfit) for networking;
 - [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) for
   Markdown rendering
