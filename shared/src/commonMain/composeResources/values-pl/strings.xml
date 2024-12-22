@@ -429,9 +429,10 @@
     <string name="user_detail_info">Informacje o użytkowniku</string>
     <string name="user_info_admin">administrator</string>
     <string name="user_info_moderates">Moderator</string>
-
     <plurals name="inbox_notification_content">
         <item quantity="one">Istnieje %1$d nieprzeczytanych elementów</item>
         <item quantity="other">Istnieje %1$d nieprzeczytanych elementów</item>
     </plurals>
+    <string name="bar_theme_solid">Ciągły</string>
+    <string name="message_no_result">Ups… nie znaleziono żadnych wyników!</string>
 </resources>
