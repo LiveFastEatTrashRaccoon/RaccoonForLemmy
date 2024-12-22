@@ -1,0 +1,4 @@
+- refactor: migrate to Kodein
+- chore: translation updates
+- chore): update dependencies
+- chore: add more unit tests

@@ -22,8 +22,8 @@ android {
             libs.versions.android.targetSdk
                 .get()
                 .toInt()
-        versionCode = 132
-        versionName = "1.13.4"
+        versionCode = 133
+        versionName = "1.13.5"
     }
     base.archivesName = "RaccoonForLemmy"
     buildFeatures {

@@ -1,12 +1,8 @@
 ## What's Changed
 
-- feat: possibility to select solid system bars by @AkesiSeli in #168
-- feat: search post/comments/users/communities by URL by @AkesiSeli in #171
-- fix: account switch by @AkesiSeli in #172
-- fix: implement sort by top "all time" by @AkesiSeli in #166
-- fix: update acknowledgement list by @AkesiSeli in #170
-- refactor: migrate l10n to Compose resources by @AkesiSeli in #164, #167, #174
-- l10n: translation updates by @Weblate in #169
-- chore: update dependencies by @dependabot in #162, #163, #173
+- refactor(di): migrate to Kodein by @AkesiSeli in #181
+- chore(l10n): translation updates by @Weblate in #175
+- chore(deps): update dependencies by @dependabot in #176, #177, #178, #179
+- chore(qa): add more unit tests by @AkesiSeli in #182
 
-**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.3...1.13.4
+**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.4...1.13.5

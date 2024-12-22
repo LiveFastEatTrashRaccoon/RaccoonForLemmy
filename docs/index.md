@@ -147,6 +147,7 @@ A special thanks goes to all those who contributed so far (in nearly chronologic
 - [outerair](https://hosted.weblate.org/user/outer_air)
 - [u/Wild_Mastic](https://lemmy.world/u/Wild_Mastic)
 - [reusityback](https://github.com/reusityback)
+- [starry-shivam](https://github.com/starry-shivam)
 - [u/fisco](https://lemmy.ml/u/fisco)
 - [u/Suoko](https://feddit.it/u/Suoko)
 - [u/Mannivu](https://feddit.it/u/Mannivu)
@@ -162,6 +163,7 @@ A special thanks goes to all those who contributed so far (in nearly chronologic
 - [u/am41](https://sh.itjust.works/u/am41)
 - [aindriu80](https://github.com/aindriu80)
 - [monstorix](https://hosted.weblate.org/user/monstorix)
+- [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm)
 - all those who reported feedback and ideas through the Lemmy community, GitHub issues, emails,
   private messages, homing pigeons and every other imaginable media.
 
