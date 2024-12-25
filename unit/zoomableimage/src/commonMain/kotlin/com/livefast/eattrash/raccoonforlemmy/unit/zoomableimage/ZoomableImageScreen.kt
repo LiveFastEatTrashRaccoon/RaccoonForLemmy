@@ -62,7 +62,7 @@ class ZoomableImageScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: ZoomableImageMviModel = rememberScreenModel(url)
+        val model: ZoomableImageMviModel = rememberScreenModel(arg = url)
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
         val successMessage = LocalStrings.current.messageOperationSuccessful

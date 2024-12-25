@@ -69,7 +69,7 @@ class MultiCommunityEditorScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: MultiCommunityEditorMviModel = rememberScreenModel(communityId)
+        val model: MultiCommunityEditorMviModel = rememberScreenModel(arg = communityId ?: 0)
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
 
