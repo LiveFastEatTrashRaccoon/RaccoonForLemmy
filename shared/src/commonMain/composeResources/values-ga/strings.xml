@@ -139,8 +139,8 @@
     <string name="home_sort_type_top_year_short">bliain</string>
     <string name="inbox_chat_message">Teachtaireacht</string>
     <string name="inbox_item_mention">a luadh tú i</string>
-    <string name="inbox_item_reply_comment">d\'fhreagair sé do bharúil i</string>
-    <string name="inbox_item_reply_post">d\'fhreagair sé do phostáil i</string>
+    <string name="inbox_item_reply_comment">d'fhreagair sé do bharúil i</string>
+    <string name="inbox_item_reply_post">d'fhreagair sé do phostáil i</string>
     <string name="inbox_listing_type_all">Gach</string>
     <string name="inbox_listing_type_title">Cineál an bhosca isteach</string>
     <string name="inbox_listing_type_unread">Gan Léamh</string>

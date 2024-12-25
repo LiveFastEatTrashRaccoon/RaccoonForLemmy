@@ -424,7 +424,7 @@
     <string name="settings_zombie_mode_scroll_amount">Desplazamiento del modo zombie</string>
     <string name="share_mode_file">Compartir como archivo</string>
     <string name="share_mode_url">Compartir como URL</string>
-    <string name="sidebar_not_logged_message">¡Bienvenido a Raccoon!\n\nEn modo anónimo, usa el botón desplegable (▼) de arriba para cambiar de instancia.\n\nPuedes iniciar sesión en tu instancia en cualquier momento desde la pestaña \'Perfil\'.\n\n¡Disfruta de Lemmy!</string>
+    <string name="sidebar_not_logged_message">¡Bienvenido a Raccoon!\n\nEn modo anónimo, usa el botón desplegable (▼) de arriba para cambiar de instancia.\n\nPuedes iniciar sesión en tu instancia en cualquier momento desde la pestaña Perfil.\n\n¡Disfruta de Lemmy!</string>
     <string name="undetermined">Indefinido</string>
     <string name="user_detail_info">Información sobre el usuario</string>
     <string name="user_info_admin">Administrador</string>

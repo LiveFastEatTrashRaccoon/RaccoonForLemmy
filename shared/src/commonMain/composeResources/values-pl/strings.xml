@@ -424,7 +424,7 @@
     <string name="settings_zombie_mode_scroll_amount">Ilość przewijania trybu zombie</string>
     <string name="share_mode_file">Udostępnij jako plik</string>
     <string name="share_mode_url">Udostępnij jako adres URL</string>
-    <string name="sidebar_not_logged_message">Witamy w Raccoon dla Lemmy\'ego!\n\nW trybie anonimowym użyj przycisku rozwijanego (▼) powyżej, aby zmienić instancję.\n\nMożesz zalogować się do swojej instancji pod adresem w dowolnym momencie na ekranie profilu.\n\nCiesz się Lemmym!</string>
+    <string name="sidebar_not_logged_message">Witamy w Raccoon dla Lemmy'ego!\n\nW trybie anonimowym użyj przycisku rozwijanego (▼) powyżej, aby zmienić instancję.\n\nMożesz zalogować się do swojej instancji pod adresem w dowolnym momencie na ekranie profilu.\n\nCiesz się Lemmym!</string>
     <string name="undetermined">Nieokreślony</string>
     <string name="user_detail_info">Informacje o użytkowniku</string>
     <string name="user_info_admin">administrator</string>

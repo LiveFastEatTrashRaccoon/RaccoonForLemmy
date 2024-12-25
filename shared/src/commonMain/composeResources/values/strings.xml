@@ -184,7 +184,7 @@
     <string name="message_confirm_exit">Tap 🔙 again to exit</string>
     <string name="message_content_deleted">You have deleted this content</string>
     <string name="message_content_removed">(this content has been removed)</string>
-    <string name="message_empty_comments">It\'s too silent here.\nWould you like to be the one who writes the first comment?</string>
+    <string name="message_empty_comments">It's too silent here.\nWould you like to be the one who writes the first comment?</string>
     <string name="message_empty_list">No items to display</string>
     <string name="message_error_loading_comments">An error has occurred loading comments.</string>
     <string name="message_generic_error">Generic error</string>

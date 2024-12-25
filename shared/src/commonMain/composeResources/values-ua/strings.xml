@@ -29,7 +29,7 @@
     <string name="ban_item_duration_days">Тривалість (дні)</string>
     <string name="ban_item_permanent">Постійний бан</string>
     <string name="ban_item_remove_data">Видалити дані</string>
-    <string name="ban_reason_placeholder">Причина (необов\'язково)</string>
+    <string name="ban_reason_placeholder">Причина (необов'язково)</string>
     <string name="bar_theme_opaque">Непрозорий</string>
     <string name="bar_theme_transparent">Прозорий</string>
     <string name="beta">Бета</string>
@@ -84,7 +84,7 @@
     <string name="create_post_tab_preview">Перегляд</string>
     <string name="create_post_title">Нова посада</string>
     <string name="create_post_url">URL</string>
-    <string name="create_report_placeholder">Текст звіту (необов\'язково)</string>
+    <string name="create_report_placeholder">Текст звіту (необов'язково)</string>
     <string name="create_report_title_comment">Скарга</string>
     <string name="create_report_title_post">Поскаржитися на повідомлення</string>
     <string name="dialog_raw_content_text">Текст</string>
@@ -152,10 +152,10 @@
     <string name="instance_detail_communities">Спільноти</string>
     <string name="instance_detail_title">примірник:</string>
     <string name="login_field_instance_name">Назва екземпляра</string>
-    <string name="login_field_label_optional">(необов\'язковий)</string>
+    <string name="login_field_label_optional">(необов'язковий)</string>
     <string name="login_field_password">Пароль</string>
     <string name="login_field_token">Токен TOTP 2FA</string>
-    <string name="login_field_user_name">Ім\'я користувача або адреса електронної пошти</string>
+    <string name="login_field_user_name">Ім'я користувача або адреса електронної пошти</string>
     <string name="manage_accounts_button_add">Додати рахунок</string>
     <string name="manage_accounts_title">Керування обліковими записами</string>
     <string name="manage_subscriptions_header_multicommunities">Мультиспільноти</string>
@@ -216,7 +216,7 @@
     <string name="modlog_title">Журнал модерації</string>
     <string name="multi_community_editor_communities">Спільноти</string>
     <string name="multi_community_editor_icon">Значок</string>
-    <string name="multi_community_editor_name">Ім\'я</string>
+    <string name="multi_community_editor_name">Ім'я</string>
     <string name="multi_community_editor_title">Редактор для кількох спільнот</string>
     <string name="navigation_drawer_anonymous">Анонімний</string>
     <string name="navigation_drawer_title_bookmarks">Збережено</string>
@@ -409,7 +409,7 @@
     <string name="settings_web_banner">банер</string>
     <string name="settings_web_bio">біографія</string>
     <string name="settings_web_bot">Бот</string>
-    <string name="settings_web_display_name">Відображуване ім\'я</string>
+    <string name="settings_web_display_name">Відображуване ім'я</string>
     <string name="settings_web_email">Електронна пошта</string>
     <string name="settings_web_email_notifications">Надсилати сповіщення електронною поштою</string>
     <string name="settings_web_header_contents">Зміст</string>
