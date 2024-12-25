@@ -1,8 +1,6 @@
 ## What's Changed
 
-- refactor(di): migrate to Kodein by @AkesiSeli in #181
-- chore(l10n): translation updates by @Weblate in #175
-- chore(deps): update dependencies by @dependabot in #176, #177, #178, #179
-- chore(qa): add more unit tests by @AkesiSeli in #182
+- fix(di): instantiation with injected constructor arguments by @AkesiSeli in #189
+- chore(deps): update dependencies by @dependabot in #184, #185, #186, #187
 
-**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.4...1.13.5
+**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.5...1.13.6
