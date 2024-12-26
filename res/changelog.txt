@@ -1,6 +1,6 @@
 ## What's Changed
 
-- fix(di): instantiation with injected constructor arguments by @AkesiSeli in #189
-- chore(deps): update dependencies by @dependabot in #184, #185, #186, #187
+- fix(di): add missing binding for settings import/export by @AkesiSeli in #193
+- fix(l10n): remove unnecessary escapes for apostrophes by @AkesiSeli in #191
 
-**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.5...1.13.6
+**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.6...1.13.7
