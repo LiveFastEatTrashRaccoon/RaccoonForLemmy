@@ -22,6 +22,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Instanc
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.MultiCommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.StopWordRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.DefaultExportSettingsUseCase
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.DefaultImportSettingsUseCase
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.ExportSettingsUseCase
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.ImportSettingsUseCase
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.instance
@@ -105,6 +109,21 @@ val persistenceModule =
             singleton {
                 DefaultStopWordRepository(
                     keyStore = instance(),
+                )
+            }
+        }
+        bind<ImportSettingsUseCase> {
+            singleton {
+                DefaultImportSettingsUseCase(
+                    settingsRepository = instance(),
+                    accountRepository = instance(),
+                )
+            }
+        }
+        bind<ExportSettingsUseCase> {
+            singleton {
+                DefaultExportSettingsUseCase(
+                    settingsRepository = instance(),
                 )
             }
         }
