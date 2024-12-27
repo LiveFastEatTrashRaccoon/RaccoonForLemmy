@@ -434,4 +434,5 @@
         <item quantity="other">Hay %1$d elementos para leer</item>
     </plurals>
     <string name="message_no_result">Ups… ¡no se han encontrado resultados!</string>
+    <string name="bar_theme_solid">Sólido</string>
 </resources>
