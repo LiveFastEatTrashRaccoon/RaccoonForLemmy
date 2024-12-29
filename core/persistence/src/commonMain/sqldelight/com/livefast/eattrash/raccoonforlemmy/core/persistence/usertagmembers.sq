@@ -1,0 +1,36 @@
+CREATE TABLE UserTagMemberEntity(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    user_tag_id INTEGER,
+    FOREIGN KEY (user_tag_id) REFERENCES UserTagEntity(id) ON DELETE CASCADE,
+    UNIQUE(username, user_tag_id)
+);
+
+create:
+INSERT OR IGNORE INTO UserTagMemberEntity (
+    username,
+    user_tag_id
+) VALUES (
+    ?,
+    ?
+);
+
+delete:
+DELETE
+FROM UserTagMemberEntity
+WHERE username = ? AND user_tag_id = ?;
+
+getBy:
+SELECT *
+FROM UserTagMemberEntity m JOIN UserTagEntity t ON m.user_tag_id = t.id
+WHERE m.username = ? AND t.account_id = ?;
+
+getAllBy:
+SELECT *
+FROM UserTagMemberEntity m JOIN UserTagEntity t ON m.user_tag_id = t.id
+WHERE m.username = ? AND t.account_id = ?;
+
+getMembers:
+SELECT *
+FROM UserTagMemberEntity
+WHERE user_tag_id = ?;
