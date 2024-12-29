@@ -175,6 +175,7 @@
     <string name="manage_accounts_title">Manage accounts</string>
     <string name="manage_subscriptions_header_multicommunities">Multi-communities</string>
     <string name="manage_subscriptions_header_subscriptions">Subscriptions</string>
+    <string name="manage_user_tag_title">Manage user tags</string>
     <string name="message_are_you_sure">Are you sure you want to proceed?</string>
     <string name="message_auth_issue">An error occurred while fetching data, possibly your token has expired.</string>
     <string name="message_auth_issue_segue_0">You could try one of the following actions:</string>
@@ -445,6 +446,8 @@
     <string name="user_detail_info">User info</string>
     <string name="user_info_admin">administrator</string>
     <string name="user_info_moderates">Moderator of</string>
+    <string name="user_tag_color">Tag color</string>
+    <string name="user_tags_title">User tags</string>
 
     <plurals name="inbox_notification_content">
         <item quantity="one">There is %1$d unread item</item>
