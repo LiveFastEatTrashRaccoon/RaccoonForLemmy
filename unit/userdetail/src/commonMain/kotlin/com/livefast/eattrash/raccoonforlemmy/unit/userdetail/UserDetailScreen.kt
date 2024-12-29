@@ -88,6 +88,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlace
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserDetailSection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserHeader
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.AssignUserTagBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
@@ -170,6 +171,7 @@ class UserDetailScreen(
         var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
         var sortBottomSheetOpened by remember { mutableStateOf(false) }
         var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
+        var manageTagsBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -285,6 +287,13 @@ class UserDetailScreen(
                                                 LocalStrings.current.adminActionPurge,
                                             )
                                     }
+                                    if (uiState.isLogged) {
+                                        this +=
+                                            Option(
+                                                OptionId.ManageTags,
+                                                LocalStrings.current.userTagsTitle,
+                                            )
+                                    }
                                 }
                             var optionsExpanded by remember { mutableStateOf(false) }
                             var optionsOffset by remember { mutableStateOf(Offset.Zero) }
@@ -361,6 +370,10 @@ class UserDetailScreen(
                                                             contentId = uiState.user.id,
                                                         )
                                                     navigationCoordinator.pushScreen(screen)
+                                                }
+
+                                                OptionId.ManageTags -> {
+                                                    manageTagsBottomSheetOpened = true
                                                 }
 
                                                 else -> Unit
@@ -1274,6 +1287,20 @@ class UserDetailScreen(
                         val text = texts[index]
                         clipboardManager.setText(AnnotatedString(text))
                     }
+                },
+            )
+        }
+
+        if (manageTagsBottomSheetOpened) {
+            AssignUserTagBottomSheet(
+                tags = uiState.availableUserTags,
+                initiallyCheckedIds = uiState.currentUserTagIds,
+                onDismiss = {
+                    manageTagsBottomSheetOpened = false
+                },
+                onSelect = { ids ->
+                    manageTagsBottomSheetOpened = false
+                    model.reduce(UserDetailMviModel.Intent.UpdateTags(ids))
                 },
             )
         }

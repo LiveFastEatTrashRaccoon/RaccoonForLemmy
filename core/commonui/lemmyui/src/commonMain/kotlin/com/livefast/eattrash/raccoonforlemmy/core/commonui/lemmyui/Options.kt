@@ -69,4 +69,6 @@ sealed class OptionId(
     data object PurgeCreator : OptionId(29)
 
     data object Restore : OptionId(30)
+
+    data object ManageTags : OptionId(31)
 }
