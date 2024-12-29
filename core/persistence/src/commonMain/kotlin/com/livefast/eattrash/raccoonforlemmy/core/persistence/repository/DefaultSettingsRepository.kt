@@ -3,12 +3,12 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toLong
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toVoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontScales
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.GetBy
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.settings.GetBy
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
