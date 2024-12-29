@@ -47,7 +47,6 @@ kotlin {
                 implementation(projects.unit.acknowledgements)
                 implementation(projects.unit.ban)
                 implementation(projects.unit.chat)
-                implementation(projects.unit.choosecolor)
                 implementation(projects.unit.communitydetail)
                 implementation(projects.unit.communityinfo)
                 implementation(projects.unit.configurecontentview)
@@ -82,6 +81,7 @@ kotlin {
                 implementation(projects.unit.selectinstance)
                 implementation(projects.unit.userdetail)
                 implementation(projects.unit.userinfo)
+                implementation(projects.unit.usertags)
                 implementation(projects.unit.web)
                 implementation(projects.unit.zoomableimage)
 

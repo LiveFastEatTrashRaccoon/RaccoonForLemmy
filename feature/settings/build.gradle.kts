@@ -37,7 +37,6 @@ kotlin {
                 implementation(projects.unit.about)
                 implementation(projects.unit.accountsettings)
                 implementation(projects.unit.manageban)
-                implementation(projects.unit.choosecolor)
                 implementation(projects.unit.configureswipeactions)
                 implementation(projects.unit.configurenavbar)
                 implementation(projects.unit.configurecontentview)
