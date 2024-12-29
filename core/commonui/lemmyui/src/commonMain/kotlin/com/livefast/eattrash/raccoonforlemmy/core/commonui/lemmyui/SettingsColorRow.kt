@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.feature.settings.ui.components
+package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -21,7 +21,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
-internal fun SettingsColorRow(
+fun SettingsColorRow(
     title: String,
     value: Color,
     modifier: Modifier = Modifier,
