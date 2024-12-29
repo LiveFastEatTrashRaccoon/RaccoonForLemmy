@@ -3,11 +3,13 @@ package com.livefast.eattrash.raccoonforlemmy.feature.profile.menu
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Drafts
 import androidx.compose.material.icons.filled.GroupAdd
+import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.ThumbsUpDown
@@ -83,6 +85,14 @@ internal fun ProfileMenuContent(
                 },
             )
         }
+
+        SettingsRow(
+            title = LocalStrings.current.userTagsTitle,
+            icon = Icons.AutoMirrored.Default.Label,
+            onTap = {
+                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.UserTags)
+            },
+        )
 
         SettingsRow(
             title = LocalStrings.current.manageAccountsTitle,
