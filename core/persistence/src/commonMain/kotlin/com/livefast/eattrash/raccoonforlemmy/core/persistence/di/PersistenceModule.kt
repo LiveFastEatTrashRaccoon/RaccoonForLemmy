@@ -15,6 +15,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Default
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultMultiCommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultStopWordRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultUserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DraftRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.FavoriteCommunityRepository
@@ -22,6 +23,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Instanc
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.MultiCommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.StopWordRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.DefaultExportSettingsUseCase
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.DefaultImportSettingsUseCase
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.ExportSettingsUseCase
@@ -109,6 +111,13 @@ val persistenceModule =
             singleton {
                 DefaultStopWordRepository(
                     keyStore = instance(),
+                )
+            }
+        }
+        bind<UserTagRepository> {
+            singleton {
+                DefaultUserTagRepository(
+                    provider = instance(),
                 )
             }
         }
