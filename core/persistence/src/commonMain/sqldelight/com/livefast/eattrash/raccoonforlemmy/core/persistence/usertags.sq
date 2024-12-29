@@ -1,0 +1,36 @@
+CREATE TABLE UserTagEntity(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    account_id INTEGER,
+    FOREIGN KEY (account_id) REFERENCES AccountEntity(id) ON DELETE CASCADE,
+    UNIQUE (account_id, name)
+);
+
+create:
+INSERT OR IGNORE INTO UserTagEntity (
+    name,
+    account_id
+) VALUES (
+    ?,
+    ?
+);
+
+getAllBy:
+SELECT *
+FROM UserTagEntity
+WHERE account_id = ?;
+
+getBy:
+SELECT *
+FROM UserTagEntity
+WHERE id = ?;
+
+update:
+UPDATE UserTagEntity
+SET name = ?
+WHERE id = ?;
+
+delete:
+DELETE
+FROM UserTagEntity
+WHERE id = ?;
