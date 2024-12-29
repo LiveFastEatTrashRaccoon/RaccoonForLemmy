@@ -6,6 +6,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 interface UserTagRepository {
     suspend fun getAll(accountId: Long): List<UserTagModel>
 
+    suspend fun getById(tagId: Long): UserTagModel?
+
     suspend fun getMembers(tagId: Long): List<UserTagMemberModel>
 
     suspend fun getTags(
@@ -21,6 +23,7 @@ interface UserTagRepository {
     suspend fun update(
         id: Long,
         name: String,
+        color: Int? = null,
     )
 
     suspend fun delete(id: Long)

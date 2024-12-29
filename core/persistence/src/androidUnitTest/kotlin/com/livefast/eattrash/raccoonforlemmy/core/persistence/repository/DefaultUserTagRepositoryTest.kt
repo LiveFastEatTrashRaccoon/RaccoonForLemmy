@@ -1,7 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import app.cash.sqldelight.Query
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.GetAllBy
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagMemberEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UsertagmembersQueries
@@ -19,6 +20,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class DefaultUserTagRepositoryTest {
     @get:Rule
@@ -29,20 +31,19 @@ class DefaultUserTagRepositoryTest {
         mockk<UsertagsQueries>(relaxUnitFun = true) {
             every { getBy(any()) } returns tagQuery
             every { getAllBy(any()) } returns tagQuery
-            every { create(any(), any()) } returns mockk(relaxUnitFun = true)
-            every { update(any(), any()) } returns mockk(relaxUnitFun = true)
+            every { create(any(), any(), any()) } returns mockk(relaxUnitFun = true)
+            every { update(any(), any(), any()) } returns mockk(relaxUnitFun = true)
             every { delete(any()) } returns mockk(relaxUnitFun = true)
         }
     private val memberQuery = mockk<Query<UserTagMemberEntity>>()
     private val memberGetByQuery = mockk<Query<GetBy>>()
-    private val memberGetAllByQuery = mockk<Query<GetAllBy>>()
     private val memberQueries =
         mockk<UsertagmembersQueries>(relaxUnitFun = true) {
             every { create(any(), any()) } returns mockk(relaxUnitFun = true)
             every { delete(any(), any()) } returns mockk(relaxUnitFun = true)
             every { getMembers(any()) } returns memberQuery
             every { getBy(any(), any()) } returns memberGetByQuery
-            every { getAllBy(any(), any()) } returns memberGetAllByQuery
+            every { getBy(any(), any()) } returns memberGetByQuery
         }
     private val provider =
         mockk<DatabaseProvider> {
@@ -66,6 +67,7 @@ class DefaultUserTagRepositoryTest {
                         id = tagId,
                         name = model.name,
                         account_id = accountId,
+                        color = model.color?.toLong(),
                     ),
                 )
 
@@ -75,6 +77,28 @@ class DefaultUserTagRepositoryTest {
             assertEquals(model, res.first())
             verify {
                 tagQueries.getAllBy(accountId)
+            }
+        }
+
+    @Test
+    fun whenGetById_thenResultAndInteractionsAreAsExpected() =
+        runTest {
+            val tagId = 1L
+            val model = UserTagModel(id = tagId, name = "tag")
+            every { tagQuery.executeAsOneOrNull() } returns
+                UserTagEntity(
+                    id = tagId,
+                    name = model.name,
+                    account_id = 0L,
+                    color = model.color?.toLong(),
+                )
+
+            val res = sut.getById(tagId)
+
+            assertNotNull(res)
+            assertEquals(model, res)
+            verify {
+                tagQueries.getBy(tagId)
             }
         }
 
@@ -108,14 +132,15 @@ class DefaultUserTagRepositoryTest {
             val tagId = 2L
             val model = UserTagModel(id = tagId, name = "tag")
             val username = "user-name"
-            every { memberGetAllByQuery.executeAsList() } returns
+            every { memberGetByQuery.executeAsList() } returns
                 listOf(
-                    GetAllBy(
+                    GetBy(
                         id = 0L,
                         name = model.name,
                         username = username,
                         user_tag_id = tagId,
                         account_id = accountId,
+                        color = model.color?.toLong(),
                         id_ = tagId,
                     ),
                 )
@@ -129,7 +154,7 @@ class DefaultUserTagRepositoryTest {
             assertEquals(1, res.size)
             assertEquals(model, res.first())
             verify {
-                memberQueries.getAllBy(
+                memberQueries.getBy(
                     username = username,
                     account_id = accountId,
                 )
@@ -145,7 +170,11 @@ class DefaultUserTagRepositoryTest {
             sut.create(model = model, accountId = accountId)
 
             verify {
-                tagQueries.create(name = model.name, account_id = accountId)
+                tagQueries.create(
+                    name = model.name,
+                    account_id = accountId,
+                    color = model.color?.toLong(),
+                )
             }
         }
 
@@ -154,11 +183,16 @@ class DefaultUserTagRepositoryTest {
         runTest {
             val tagId = 1L
             val newName = "new-tag"
+            val color = Color.Red.toArgb()
 
-            sut.update(id = tagId, name = newName)
+            sut.update(id = tagId, name = newName, color = color)
 
             verify {
-                tagQueries.update(id = tagId, name = newName)
+                tagQueries.update(
+                    id = tagId,
+                    name = newName,
+                    color = color.toLong(),
+                )
             }
         }
 
@@ -207,14 +241,15 @@ class DefaultUserTagRepositoryTest {
             val tagId = 2L
             val username = "user-name"
             val model = UserTagModel(name = "tag", id = tagId)
-            every { memberGetAllByQuery.executeAsList() } returns
+            every { memberGetByQuery.executeAsList() } returns
                 listOf(
-                    GetAllBy(
+                    GetBy(
                         id = 0L,
                         name = model.name,
                         username = username,
                         user_tag_id = tagId,
                         account_id = accountId,
+                        color = model.color?.toLong(),
                         id_ = tagId,
                     ),
                 )
@@ -224,7 +259,7 @@ class DefaultUserTagRepositoryTest {
             assertEquals(1, res.size)
             assertEquals(model, res.first())
             verify {
-                memberQueries.getAllBy(username = username, account_id = accountId)
+                memberQueries.getBy(username = username, account_id = accountId)
             }
         }
 }

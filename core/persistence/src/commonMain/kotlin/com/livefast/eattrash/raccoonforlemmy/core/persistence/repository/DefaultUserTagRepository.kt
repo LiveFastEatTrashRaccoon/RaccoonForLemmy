@@ -22,6 +22,14 @@ internal class DefaultUserTagRepository(
                 .map { it.toModel() }
         }
 
+    override suspend fun getById(tagId: Long): UserTagModel? =
+        withContext(Dispatchers.IO) {
+            db.usertagsQueries
+                .getBy(tagId)
+                .executeAsOneOrNull()
+                ?.toModel()
+        }
+
     override suspend fun getMembers(tagId: Long): List<UserTagMemberModel> =
         withContext(Dispatchers.IO) {
             db.usertagmembersQueries
@@ -36,7 +44,7 @@ internal class DefaultUserTagRepository(
     ): List<UserTagModel> =
         withContext(Dispatchers.IO) {
             db.usertagmembersQueries
-                .getAllBy(username, accountId)
+                .getBy(username, accountId)
                 .executeAsList()
                 .map { e ->
                     UserTagModel(
@@ -52,6 +60,7 @@ internal class DefaultUserTagRepository(
     ) = withContext(Dispatchers.IO) {
         db.usertagsQueries.create(
             name = model.name,
+            color = model.color?.toLong(),
             account_id = accountId,
         )
     }
@@ -59,10 +68,12 @@ internal class DefaultUserTagRepository(
     override suspend fun update(
         id: Long,
         name: String,
+        color: Int?,
     ) = withContext(Dispatchers.IO) {
         db.usertagsQueries.update(
             id = id,
             name = name,
+            color = color?.toLong(),
         )
     }
 
@@ -97,7 +108,7 @@ internal class DefaultUserTagRepository(
     ): List<UserTagModel> =
         withContext(Dispatchers.IO) {
             db.usertagmembersQueries
-                .getAllBy(
+                .getBy(
                     username = username,
                     account_id = accountId,
                 ).executeAsList()
@@ -114,6 +125,7 @@ private fun UserTagEntity.toModel() =
     UserTagModel(
         id = id,
         name = name,
+        color = color?.toInt(),
     )
 
 private fun UserTagMemberEntity.toModel() =
