@@ -50,6 +50,7 @@ internal class DefaultUserTagRepository(
                     UserTagModel(
                         name = e.name,
                         id = e.user_tag_id ?: 0,
+                        color = e.color?.toInt(),
                     )
                 }
         }
@@ -116,6 +117,7 @@ internal class DefaultUserTagRepository(
                     UserTagModel(
                         name = e.name,
                         id = e.user_tag_id ?: 0,
+                        color = e.color?.toInt(),
                     )
                 }
         }
