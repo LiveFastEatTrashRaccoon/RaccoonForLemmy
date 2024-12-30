@@ -1,5 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -22,14 +23,22 @@ fun IndicatorChip(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onBackground,
+    full: Boolean = false,
 ) {
+    val shape = RoundedCornerShape(CornerSize.m)
     Box(
         modifier =
             modifier
                 .border(
                     color = color,
                     width = Dp.Hairline,
-                    shape = RoundedCornerShape(CornerSize.m),
+                    shape = shape,
+                ).then(
+                    if (full) {
+                        Modifier.background(color, shape)
+                    } else {
+                        Modifier
+                    },
                 ).padding(
                     vertical = Spacing.xxxs,
                     horizontal = Spacing.xs,
@@ -42,7 +51,21 @@ fun IndicatorChip(
             fontSize = 8.sp,
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.SemiBold,
-            color = color,
+            color =
+                if (full) {
+                    getReadableColorFor(color)
+                } else {
+                    color
+                },
         )
     }
+}
+
+private fun getReadableColorFor(backgroundColor: Color): Color {
+    val r = backgroundColor.red
+    val g = backgroundColor.green
+    val b = backgroundColor.blue
+    // calculate the Y (luma) component of the YIQ color space
+    val y = ((r * 0.299) + (g * 0.587) + (b * 0.114))
+    return if (y >= 0.5) Color.Black else Color.White
 }

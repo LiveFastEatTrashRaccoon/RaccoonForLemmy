@@ -150,6 +150,7 @@ val identityModule =
                     settingsRepository = instance(),
                     communitySortRepository = instance(),
                     bottomNavItemsRepository = instance(),
+                    userTagHelper = instance(),
                     lemmyValueCache = instance(),
                 )
             }
@@ -165,6 +166,7 @@ val identityModule =
                     communitySortRepository = instance(),
                     communityPreferredLanguageRepository = instance(),
                     bottomNavItemsRepository = instance(),
+                    userTagHelper = instance(),
                     lemmyValueCache = instance(),
                 )
             }

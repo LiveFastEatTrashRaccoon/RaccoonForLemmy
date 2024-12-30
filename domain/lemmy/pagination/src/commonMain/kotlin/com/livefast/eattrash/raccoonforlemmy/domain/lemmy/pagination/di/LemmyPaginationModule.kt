@@ -26,6 +26,7 @@ val lemmyPaginationModule =
                     identityRepository = instance(),
                     commentRepository = instance(),
                     userRepository = instance(),
+                    userTagHelper = instance(),
                     notificationCenter = instance(),
                 )
             }
@@ -49,6 +50,7 @@ val lemmyPaginationModule =
                     userRepository = instance(),
                     domainBlocklistRepository = instance(),
                     stopWordRepository = instance(),
+                    userTagHelper = instance(),
                 )
             }
         }
@@ -77,6 +79,7 @@ val lemmyPaginationModule =
                     multiCommunityPaginator = instance(),
                     domainBlocklistRepository = instance(),
                     stopWordRepository = instance(),
+                    userTagHelper = instance(),
                     notificationCenter = instance(),
                 )
             }

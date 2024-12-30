@@ -9,6 +9,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Communi
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 
 internal class DefaultLogoutUseCase(
     private val identityRepository: IdentityRepository,
@@ -18,6 +19,7 @@ internal class DefaultLogoutUseCase(
     private val communitySortRepository: CommunitySortRepository,
     private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val lemmyValueCache: LemmyValueCache,
+    private val userTagHelper: UserTagHelper,
 ) : LogoutUseCase {
     override suspend operator fun invoke() {
         notificationCenter.send(NotificationCenterEvent.ResetExplore)
@@ -37,5 +39,7 @@ internal class DefaultLogoutUseCase(
 
         val bottomBarSections = bottomNavItemsRepository.get(null)
         settingsRepository.changeCurrentBottomBarSections(bottomBarSections.toInts())
+
+        userTagHelper.clear()
     }
 }

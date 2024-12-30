@@ -6,6 +6,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserDetailSection
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
@@ -33,6 +34,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueC
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -59,6 +61,7 @@ class UserDetailViewModel(
     private val hapticFeedback: HapticFeedback,
     private val settingsRepository: SettingsRepository,
     private val userTagRepository: UserTagRepository,
+    private val userTagHelper: UserTagHelper,
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
     private val imagePreloadManager: ImagePreloadManager,
@@ -272,6 +275,8 @@ class UserDetailViewModel(
                 postNavigationManager.push(state)
             }
 
+            is UserDetailMviModel.Intent.AddUserTag ->
+                addUserTag(name = intent.name, color = intent.color)
             is UserDetailMviModel.Intent.UpdateTags -> updateTags(intent.ids)
         }
     }
@@ -627,6 +632,21 @@ class UserDetailViewModel(
         }
     }
 
+    private fun addUserTag(
+        name: String,
+        color: Int?,
+    ) {
+        screenModelScope.launch {
+            val accountId = accountRepository.getActive()?.id ?: return@launch
+            val model = UserTagModel(name = name, color = color)
+            userTagRepository.create(model = model, accountId = accountId)
+            val allTags = userTagRepository.getAll(accountId)
+            updateState {
+                it.copy(availableUserTags = allTags)
+            }
+        }
+    }
+
     private fun updateTags(ids: List<Long>) {
         screenModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
@@ -653,6 +673,7 @@ class UserDetailViewModel(
                     userTagId = id,
                 )
             }
+            userTagHelper.clear()
             refreshCurrentUserTags()
         }
     }

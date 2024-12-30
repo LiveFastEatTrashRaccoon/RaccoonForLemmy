@@ -21,6 +21,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultPost
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultPrivateMessageRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultSiteRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultUserRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultUserTagHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSiteSupportsHiddenPostsUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSiteSupportsMediaListUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
@@ -34,6 +35,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostReposit
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.instance
@@ -162,6 +164,14 @@ val lemmyRepositoryModule =
                 DefaultUserRepository(
                     services = instance(tag = "default"),
                     customServices = instance(tag = "custom"),
+                )
+            }
+        }
+        bind<UserTagHelper> {
+            singleton {
+                DefaultUserTagHelper(
+                    accountRepository = instance(),
+                    userTagRepository = instance(),
                 )
             }
         }

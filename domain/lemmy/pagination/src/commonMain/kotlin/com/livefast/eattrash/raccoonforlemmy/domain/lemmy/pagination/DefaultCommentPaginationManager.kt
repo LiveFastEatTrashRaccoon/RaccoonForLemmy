@@ -7,6 +7,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ internal class DefaultCommentPaginationManager(
     private val identityRepository: IdentityRepository,
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
+    private val userTagHelper: UserTagHelper,
     notificationCenter: NotificationCenter,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : CommentPaginationManager {
@@ -73,7 +75,7 @@ internal class DefaultCommentPaginationManager(
                             .also {
                                 // deleted comments should not be counted
                                 canFetchMore = it.isNotEmpty()
-                            }
+                            }.withUserTags()
                     }
 
                     is CommentPaginationSpecification.User -> {
@@ -96,7 +98,7 @@ internal class DefaultCommentPaginationManager(
                             .filterDeleted(includeCurrentCreator = specification.includeDeleted)
                             .also {
                                 canFetchMore = it.isNotEmpty()
-                            }
+                            }.withUserTags()
                     }
 
                     is CommentPaginationSpecification.Votes -> {
@@ -117,7 +119,7 @@ internal class DefaultCommentPaginationManager(
                             .filterDeleted(includeCurrentCreator = true)
                             .also {
                                 canFetchMore = it.isNotEmpty()
-                            }
+                            }.withUserTags()
                     }
 
                     is CommentPaginationSpecification.Saved -> {
@@ -138,7 +140,7 @@ internal class DefaultCommentPaginationManager(
                             .filterDeleted()
                             .also {
                                 canFetchMore = it.isNotEmpty()
-                            }
+                            }.withUserTags()
                     }
                 }
 
@@ -159,6 +161,15 @@ internal class DefaultCommentPaginationManager(
             !comment.deleted || (includeCurrentCreator && comment.creator?.id == currentUserId)
         }
     }
+
+    private suspend fun List<CommentModel>.withUserTags(): List<CommentModel> =
+        map {
+            with(userTagHelper) {
+                it.copy(
+                    creator = it.creator.withTags(),
+                )
+            }
+        }
 
     private fun handleCommentUpdate(comment: CommentModel) {
         val index = history.indexOfFirst { it.id == comment.id }.takeIf { it >= 0 } ?: return
