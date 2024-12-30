@@ -1,6 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.modals
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -10,8 +10,12 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -42,6 +46,7 @@ fun AssignUserTagBottomSheet(
     initiallyCheckedIds: List<Long> = emptyList(),
     onSelect: ((List<Long>) -> Unit)? = null,
     onDismiss: (() -> Unit)? = null,
+    onAddNewTag: (() -> Unit)? = null,
 ) {
     val selectedIds =
         remember {
@@ -61,17 +66,31 @@ fun AssignUserTagBottomSheet(
         Column(
             modifier = Modifier.padding(bottom = Spacing.xs),
         ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                text = LocalStrings.current.manageUserTagsTitle,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
+            Box {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = LocalStrings.current.manageUserTagsTitle,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                if (onAddNewTag != null) {
+                    IconButton(
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                        onClick = {
+                            onAddNewTag()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AddCircle,
+                            contentDescription = LocalStrings.current.buttonAdd,
+                        )
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(Spacing.xs))
             LazyColumn(
                 modifier = Modifier.padding(top = Spacing.m).height(400.dp),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(tags) { tag ->

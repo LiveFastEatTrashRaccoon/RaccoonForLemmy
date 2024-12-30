@@ -55,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
@@ -91,6 +92,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNest
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.AssignUserTagBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditUserTagDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -138,8 +140,8 @@ class UserDetailScreen(
                     UserDetailMviModelParams(
                         userId = userId,
                         otherInstance = otherInstance,
+                    ),
             )
-        )
         val uiState by model.uiState.collectAsState()
         val lazyListState = rememberLazyListState()
         val scope = rememberCoroutineScope()
@@ -171,7 +173,8 @@ class UserDetailScreen(
         var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
         var sortBottomSheetOpened by remember { mutableStateOf(false) }
         var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
-        var manageTagsBottomSheetOpened by remember { mutableStateOf(false) }
+        var manageUserTagsBottomSheetOpened by remember { mutableStateOf(false) }
+        var addNewUserTagDialogOpen by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
             model.effects
@@ -291,7 +294,7 @@ class UserDetailScreen(
                                         this +=
                                             Option(
                                                 OptionId.ManageTags,
-                                                LocalStrings.current.userTagsTitle,
+                                                LocalStrings.current.manageUserTagsTitle,
                                             )
                                     }
                                 }
@@ -373,7 +376,7 @@ class UserDetailScreen(
                                                 }
 
                                                 OptionId.ManageTags -> {
-                                                    manageTagsBottomSheetOpened = true
+                                                    manageUserTagsBottomSheetOpened = true
                                                 }
 
                                                 else -> Unit
@@ -1291,16 +1294,37 @@ class UserDetailScreen(
             )
         }
 
-        if (manageTagsBottomSheetOpened) {
+        if (manageUserTagsBottomSheetOpened) {
             AssignUserTagBottomSheet(
                 tags = uiState.availableUserTags,
                 initiallyCheckedIds = uiState.currentUserTagIds,
                 onDismiss = {
-                    manageTagsBottomSheetOpened = false
+                    manageUserTagsBottomSheetOpened = false
                 },
                 onSelect = { ids ->
-                    manageTagsBottomSheetOpened = false
+                    manageUserTagsBottomSheetOpened = false
                     model.reduce(UserDetailMviModel.Intent.UpdateTags(ids))
+                },
+                onAddNewTag = {
+                    addNewUserTagDialogOpen = true
+                },
+            )
+        }
+
+        if (addNewUserTagDialogOpen) {
+            EditUserTagDialog(
+                title = LocalStrings.current.buttonAdd,
+                value = "",
+                onClose = { name, color ->
+                    addNewUserTagDialogOpen = false
+                    if (name != null) {
+                        model.reduce(
+                            UserDetailMviModel.Intent.AddUserTag(
+                                name = name,
+                                color = color?.toArgb(),
+                            ),
+                        )
+                    }
                 },
             )
         }

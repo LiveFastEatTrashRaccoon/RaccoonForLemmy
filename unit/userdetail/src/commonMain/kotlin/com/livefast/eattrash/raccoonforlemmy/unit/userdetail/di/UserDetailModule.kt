@@ -32,6 +32,7 @@ val userDetailModule =
                     hapticFeedback = instance(),
                     settingsRepository = instance(),
                     userTagRepository = instance(),
+                    userTagHelper = instance(),
                     accountRepository = instance(),
                     notificationCenter = instance(),
                     imagePreloadManager = instance(),

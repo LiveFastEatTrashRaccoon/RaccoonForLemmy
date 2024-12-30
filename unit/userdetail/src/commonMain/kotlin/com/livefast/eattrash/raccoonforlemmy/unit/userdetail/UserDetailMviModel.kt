@@ -71,6 +71,11 @@ interface UserDetailMviModel :
         data class UpdateTags(
             val ids: List<Long>,
         ) : Intent
+
+        data class AddUserTag(
+            val name: String,
+            val color: Int? = null,
+        ) : Intent
     }
 
     data class UiState(
