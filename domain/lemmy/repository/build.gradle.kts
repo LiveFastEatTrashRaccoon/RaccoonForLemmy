@@ -12,6 +12,7 @@ kotlin {
                 implementation(libs.ktorfit.lib)
 
                 implementation(projects.core.api)
+                implementation(projects.core.persistence)
                 implementation(projects.core.utils)
 
                 implementation(projects.domain.lemmy.data)
