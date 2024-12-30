@@ -12,6 +12,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Communi
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 
 internal class DefaultSwitchAccountUseCase(
     private val identityRepository: IdentityRepository,
@@ -23,6 +24,7 @@ internal class DefaultSwitchAccountUseCase(
     private val communityPreferredLanguageRepository: CommunityPreferredLanguageRepository,
     private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val lemmyValueCache: LemmyValueCache,
+    private val userTagHelper: UserTagHelper,
 ) : SwitchAccountUseCase {
     override suspend fun invoke(account: AccountModel) {
         val accountId = account.id ?: return
@@ -50,5 +52,7 @@ internal class DefaultSwitchAccountUseCase(
 
         val bottomBarSections = bottomNavItemsRepository.get(accountId)
         settingsRepository.changeCurrentBottomBarSections(bottomBarSections.toInts())
+
+        userTagHelper.clear()
     }
 }

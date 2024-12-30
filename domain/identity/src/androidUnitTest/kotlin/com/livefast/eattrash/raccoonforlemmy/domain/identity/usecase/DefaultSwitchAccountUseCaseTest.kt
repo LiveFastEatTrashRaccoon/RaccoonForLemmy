@@ -13,6 +13,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Setting
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -37,6 +38,7 @@ class DefaultSwitchAccountUseCaseTest {
         mockk<BottomNavItemsRepository>(relaxUnitFun = true) {
             coEvery { get(accountId = any()) } returns BottomNavItemsRepository.DEFAULT_ITEMS
         }
+    private val userTagHelper = mockk<UserTagHelper>(relaxUnitFun = true)
     private val sut =
         DefaultSwitchAccountUseCase(
             identityRepository = identityRepository,
@@ -48,6 +50,7 @@ class DefaultSwitchAccountUseCaseTest {
             communityPreferredLanguageRepository = communityPreferredLanguageRepository,
             bottomNavItemsRepository = bottomNavItemsRepository,
             lemmyValueCache = lemmyValueCache,
+            userTagHelper = userTagHelper,
         )
 
     @Test
@@ -97,6 +100,7 @@ class DefaultSwitchAccountUseCaseTest {
                 identityRepository.storeToken("new-token")
                 identityRepository.refreshLoggedState()
                 serviceProvider.changeInstance("new-instance")
+                userTagHelper.clear()
             }
         }
 }
