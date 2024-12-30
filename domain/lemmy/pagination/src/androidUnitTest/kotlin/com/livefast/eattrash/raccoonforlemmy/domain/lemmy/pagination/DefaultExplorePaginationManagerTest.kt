@@ -13,6 +13,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepo
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence
@@ -64,6 +65,10 @@ class DefaultExplorePaginationManagerTest {
         mockk<StopWordRepository>(relaxUnitFun = true) {
             coEvery { get(accountId = any()) } returns emptyList()
         }
+    private val userTagHelper =
+        mockk<UserTagHelper> {
+            coEvery { any<UserModel>().withTags() } answers { firstArg() }
+        }
 
     private val sut =
         DefaultExplorePaginationManager(
@@ -75,6 +80,7 @@ class DefaultExplorePaginationManagerTest {
             userRepository = userRepository,
             domainBlocklistRepository = domainBlocklistRepository,
             stopWordRepository = stopWordRepository,
+            userTagHelper = userTagHelper,
         )
 
     @Test

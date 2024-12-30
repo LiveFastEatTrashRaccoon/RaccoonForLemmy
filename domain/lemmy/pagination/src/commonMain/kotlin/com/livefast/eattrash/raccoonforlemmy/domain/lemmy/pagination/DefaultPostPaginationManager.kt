@@ -13,6 +13,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,7 @@ internal class DefaultPostPaginationManager(
     private val multiCommunityPaginator: MultiCommunityPaginator,
     private val domainBlocklistRepository: DomainBlocklistRepository,
     private val stopWordRepository: StopWordRepository,
+    private val userTagHelper: UserTagHelper,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     notificationCenter: NotificationCenter,
 ) : PostPaginationManager {
@@ -103,6 +105,7 @@ internal class DefaultPostPaginationManager(
                             .filterDeleted()
                             .filterByUrlDomain()
                             .filterByStopWords()
+                            .withUserTags()
                     }
 
                     is PostPaginationSpecification.Community -> {
@@ -145,6 +148,7 @@ internal class DefaultPostPaginationManager(
                             .filterDeleted(includeCurrentCreator = true)
                             .filterByUrlDomain()
                             .filterByStopWords()
+                            .withUserTags()
                     }
 
                     is PostPaginationSpecification.MultiCommunity -> {
@@ -160,6 +164,7 @@ internal class DefaultPostPaginationManager(
                             .filterDeleted(includeCurrentCreator = true)
                             .filterByUrlDomain()
                             .filterByStopWords()
+                            .withUserTags()
                     }
 
                     is PostPaginationSpecification.User -> {
@@ -207,6 +212,7 @@ internal class DefaultPostPaginationManager(
                             .filterDeleted(includeCurrentCreator = true)
                             .filterByUrlDomain()
                             .filterByStopWords()
+                            .withUserTags()
                     }
 
                     is PostPaginationSpecification.Saved -> {
@@ -227,6 +233,7 @@ internal class DefaultPostPaginationManager(
                             .filterDeleted()
                             .filterByUrlDomain()
                             .filterByStopWords()
+                            .withUserTags()
                     }
 
                     is PostPaginationSpecification.Hidden -> {
@@ -250,6 +257,7 @@ internal class DefaultPostPaginationManager(
                             .filterDeleted()
                             .filterByUrlDomain()
                             .filterByStopWords()
+                            .withUserTags()
                     }
                 }
 
@@ -317,6 +325,15 @@ internal class DefaultPostPaginationManager(
                     )
                 }
             } ?: true
+        }
+
+    private suspend fun List<PostModel>.withUserTags(): List<PostModel> =
+        map {
+            with(userTagHelper) {
+                it.copy(
+                    creator = it.creator.withTags(),
+                )
+            }
         }
 
     private fun handlePostUpdate(post: PostModel) {

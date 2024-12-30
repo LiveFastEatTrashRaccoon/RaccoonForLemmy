@@ -11,6 +11,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepo
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
@@ -24,6 +25,7 @@ class DefaultExplorePaginationManager(
     private val userRepository: UserRepository,
     private val domainBlocklistRepository: DomainBlocklistRepository,
     private val stopWordRepository: StopWordRepository,
+    private val userTagHelper: UserTagHelper,
 ) : ExplorePaginationManager {
     override var canFetchMore: Boolean = true
 
@@ -141,6 +143,7 @@ class DefaultExplorePaginationManager(
                     .filterDeleted()
                     .filterByUrlDomain()
                     .filterByStopWords()
+                    .withUserTags()
 
             history.addAll(result)
             // returns a copy of the whole history
@@ -205,6 +208,40 @@ class DefaultExplorePaginationManager(
                 }
 
                 else -> true
+            }
+        }
+
+    private suspend fun List<SearchResult>.withUserTags(): List<SearchResult> =
+        map {
+            when (it) {
+                is SearchResult.Post ->
+                    with(userTagHelper) {
+                        it.copy(
+                            model =
+                                it.model.let { post ->
+                                    post.copy(creator = post.creator.withTags())
+                                },
+                        )
+                    }
+
+                is SearchResult.Comment ->
+                    with(userTagHelper) {
+                        it.copy(
+                            model =
+                                it.model.let { comment ->
+                                    comment.copy(creator = comment.creator.withTags())
+                                },
+                        )
+                    }
+
+                is SearchResult.User ->
+                    with(userTagHelper) {
+                        it.copy(
+                            model = it.model.withTags() ?: it.model,
+                        )
+                    }
+
+                else -> it
             }
         }
 }
