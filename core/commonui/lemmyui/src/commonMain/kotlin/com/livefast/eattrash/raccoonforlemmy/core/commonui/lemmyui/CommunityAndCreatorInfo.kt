@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
@@ -23,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.LinkAnnotation
@@ -165,49 +169,73 @@ fun CommunityAndCreatorInfo(
                                     onDoubleClick = onDoubleClick ?: {},
                                     onLongClick = onLongClick ?: {},
                                 ),
-                        text = buildAnnotatedString {
-                            pushLink(
-                                LinkAnnotation.Clickable("click-community") {
-                                    onOpenCommunity?.invoke(community)
-                                },
-                            )
-                            append(communityName)
-                            pop()
-                            if (compact && creator != null) {
-                                append(" • ")
+                        text =
+                            buildAnnotatedString {
                                 pushLink(
-                                    LinkAnnotation.Clickable("click-user") {
-                                        onOpenCreator?.invoke(creator)
+                                    LinkAnnotation.Clickable("click-community") {
+                                        onOpenCommunity?.invoke(community)
                                     },
                                 )
-                                pushStyle(SpanStyle(color = ancillaryColor))
-                                append(creatorName)
+                                append(communityName)
                                 pop()
-                                pop()
-                            }
-                        },
+                                if (compact && creator != null) {
+                                    append(" • ")
+                                    pushLink(
+                                        LinkAnnotation.Clickable("click-user") {
+                                            onOpenCreator?.invoke(creator)
+                                        },
+                                    )
+                                    pushStyle(SpanStyle(color = ancillaryColor))
+                                    append(creatorName)
+                                    pop()
+                                    pop()
+                                }
+                            },
                         style = MaterialTheme.typography.bodySmall,
                         color = if (creator == null) ancillaryColor else fullColor,
                         maxLines = 1,
                     )
                 }
                 if (creator != null && !compact) {
-                    Text(
-                        modifier =
-                            Modifier
-                                .onClick(
-                                    indication = null,
-                                    onClick = {
-                                        onOpenCreator?.invoke(creator)
-                                    },
-                                    onDoubleClick = onDoubleClick ?: {},
-                                    onLongClick = onLongClick ?: {},
-                                ),
-                        text = creatorName,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = ancillaryColor,
-                        maxLines = 1,
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            modifier =
+                                Modifier
+                                    .onClick(
+                                        indication = null,
+                                        onClick = {
+                                            onOpenCreator?.invoke(creator)
+                                        },
+                                        onDoubleClick = onDoubleClick ?: {},
+                                        onLongClick = onLongClick ?: {},
+                                    ),
+                            text = creatorName,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = ancillaryColor,
+                            maxLines = 1,
+                        )
+
+                        // user tags
+                        if (creator.tags.isNotEmpty()) {
+                            LazyRow(
+                                modifier = Modifier.widthIn(max = 150.dp),
+                                horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                            ) {
+                                items(creator.tags) { tag ->
+                                    IndicatorChip(
+                                        text = tag.name,
+                                        color =
+                                            tag.color?.let { Color(it) }
+                                                ?: MaterialTheme.colorScheme.onBackground,
+                                        full = true,
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
             if (isOp) {
