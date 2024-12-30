@@ -1,5 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data
 
+import kotlin.jvm.Transient
+
 data class UserModel(
     val id: Long = 0,
     val instanceId: Long = 0,
@@ -15,6 +17,7 @@ data class UserModel(
     val banned: Boolean = false,
     val updateDate: String? = null,
     val bot: Boolean = false,
+    @Transient val tags: List<TagModel> = emptyList(),
 )
 
 fun List<UserModel>.containsId(value: Long?): Boolean = any { it.id == value }
