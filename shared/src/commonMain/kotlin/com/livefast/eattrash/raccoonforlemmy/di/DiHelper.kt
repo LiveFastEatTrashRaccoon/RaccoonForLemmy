@@ -55,6 +55,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity.di.selectCommu
 import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.di.selectInstanceModule
 import com.livefast.eattrash.raccoonforlemmy.unit.userdetail.di.userDetailModule
 import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.di.userInfoModule
+import com.livefast.eattrash.raccoonforlemmy.unit.usertags.di.userTagsModule
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.di.zoomableImageModule
 import org.kodein.di.DI
 
@@ -131,6 +132,7 @@ fun initDi(additionalBuilder: DI.Builder.() -> Unit = {}) {
                 selectInstanceModule,
                 userDetailModule,
                 userInfoModule,
+                userTagsModule,
                 zoomableImageModule,
             )
 

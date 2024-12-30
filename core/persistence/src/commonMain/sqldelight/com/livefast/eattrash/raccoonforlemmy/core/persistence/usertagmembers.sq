@@ -22,13 +22,8 @@ WHERE username = ? AND user_tag_id = ?;
 
 getBy:
 SELECT *
-FROM UserTagMemberEntity m JOIN UserTagEntity t ON m.user_tag_id = t.id
-WHERE m.username = ? AND t.account_id = ?;
-
-getAllBy:
-SELECT *
-FROM UserTagMemberEntity m JOIN UserTagEntity t ON m.user_tag_id = t.id
-WHERE m.username = ? AND t.account_id = ?;
+FROM UserTagMemberEntity JOIN UserTagEntity ON UserTagMemberEntity.user_tag_id = UserTagEntity.id
+WHERE UserTagMemberEntity.username = ? AND UserTagEntity.account_id = ?;
 
 getMembers:
 SELECT *

@@ -8,4 +8,5 @@ data class UserTagMemberModel(
 data class UserTagModel(
     val id: Long? = null,
     val name: String,
+    val color: Int? = null,
 )

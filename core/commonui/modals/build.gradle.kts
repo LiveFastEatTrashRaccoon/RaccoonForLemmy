@@ -7,6 +7,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(libs.compose.colorpicker)
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.bottomsheet)
 

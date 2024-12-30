@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.feature.settings.ui.components
+package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +19,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.MultiColor
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
-internal fun SettingsMultiColorRow(
+fun SettingsMultiColorRow(
     title: String,
     values: List<Color>,
     modifier: Modifier = Modifier,

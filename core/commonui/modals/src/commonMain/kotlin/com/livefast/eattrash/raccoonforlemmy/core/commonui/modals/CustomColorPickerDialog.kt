@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.unit.choosecolor
+package com.livefast.eattrash.raccoonforlemmy.core.commonui.modals
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,9 +41,7 @@ fun CustomColorPickerDialog(
     initialValue: Color,
     onClose: ((Color?) -> Unit)? = null,
 ) {
-    val controller =
-        rememberColorPickerController().apply {
-        }
+    val controller = rememberColorPickerController()
     var selectedColor by remember { mutableStateOf(initialValue) }
     var selectedColorHex by remember { mutableStateOf("") }
 
@@ -62,7 +60,7 @@ fun CustomColorPickerDialog(
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
             Text(
-                text = "", // LocalStrings.current.colorPickerDialogTitle
+                text = LocalStrings.current.settingsColorDialogTitle,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
             )

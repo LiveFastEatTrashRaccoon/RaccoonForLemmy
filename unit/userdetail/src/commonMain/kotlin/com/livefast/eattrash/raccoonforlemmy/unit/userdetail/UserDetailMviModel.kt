@@ -7,6 +7,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserDetailSection
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
@@ -66,6 +67,10 @@ interface UserDetailMviModel :
         data object BlockInstance : Intent
 
         data object WillOpenDetail : Intent
+
+        data class UpdateTags(
+            val ids: List<Long>,
+        ) : Intent
     }
 
     data class UiState(
@@ -99,6 +104,8 @@ interface UserDetailMviModel :
         val actionsOnSwipeToEndPosts: List<ActionOnSwipe> = emptyList(),
         val actionsOnSwipeToStartComments: List<ActionOnSwipe> = emptyList(),
         val actionsOnSwipeToEndComments: List<ActionOnSwipe> = emptyList(),
+        val currentUserTagIds: List<Long> = emptyList(),
+        val availableUserTags: List<UserTagModel> = emptyList(),
     )
 
     sealed interface Effect {

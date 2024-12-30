@@ -182,6 +182,7 @@ import raccoonforlemmy.shared.generated.resources.manage_accounts_button_add
 import raccoonforlemmy.shared.generated.resources.manage_accounts_title
 import raccoonforlemmy.shared.generated.resources.manage_subscriptions_header_multicommunities
 import raccoonforlemmy.shared.generated.resources.manage_subscriptions_header_subscriptions
+import raccoonforlemmy.shared.generated.resources.manage_user_tag_title
 import raccoonforlemmy.shared.generated.resources.message_are_you_sure
 import raccoonforlemmy.shared.generated.resources.message_auth_issue
 import raccoonforlemmy.shared.generated.resources.message_auth_issue_segue_0
@@ -452,34 +453,112 @@ import raccoonforlemmy.shared.generated.resources.undetermined
 import raccoonforlemmy.shared.generated.resources.user_detail_info
 import raccoonforlemmy.shared.generated.resources.user_info_admin
 import raccoonforlemmy.shared.generated.resources.user_info_moderates
+import raccoonforlemmy.shared.generated.resources.user_tag_color
+import raccoonforlemmy.shared.generated.resources.user_tags_title
 
 internal class SharedStrings : Strings {
+    override val actionActivateZombieMode: String
+        @Composable get() = stringResource(Res.string.action_activate_zombie_mode)
     override val actionBackToTop: String
         @Composable get() = stringResource(Res.string.action_back_to_top)
     override val actionChat: String
         @Composable get() = stringResource(Res.string.action_chat)
     override val actionClearRead: String
         @Composable get() = stringResource(Res.string.action_clear_read)
+    override val actionCopyClipboard: String
+        @Composable get() = stringResource(Res.string.action_copy_clipboard)
+    override val actionCreateCommunity: String
+        @Composable get() = stringResource(Res.string.action_create_community)
     override val actionCreatePost: String
         @Composable get() = stringResource(Res.string.action_create_post)
-    override val actionReply: String
-        @Composable get() = stringResource(Res.string.action_reply)
-    override val actionActivateZombieMode: String
-        @Composable get() = stringResource(Res.string.action_activate_zombie_mode)
     override val actionDeactivateZombieMode: String
         @Composable get() = stringResource(Res.string.action_deactivate_zombie_mode)
+    override val actionDownvote: String
+        @Composable get() = stringResource(Res.string.action_downvote)
+    override val actionExitSearch: String
+        @Composable get() = stringResource(Res.string.action_exit_search)
+    override val actionLogout: String
+        @Composable get() = stringResource(Res.string.action_logout)
+    override val actionQuote: String
+        @Composable get() = stringResource(Res.string.action_quote)
+    override val actionReply: String
+        @Composable get() = stringResource(Res.string.action_reply)
+    override val actionRestore: String
+        @Composable get() = stringResource(Res.string.action_restore)
+    override val actionSave: String
+        @Composable get() = stringResource(Res.string.action_save)
+    override val actionSearchInComments: String
+        @Composable get() = stringResource(Res.string.action_search_in_comments)
+    override val actionSearchInCommunity: String
+        @Composable get() = stringResource(Res.string.action_search_in_community)
+    override val actionToggleRead: String
+        @Composable get() = stringResource(Res.string.action_toggle_read)
+    override val actionUpvote: String
+        @Composable get() = stringResource(Res.string.action_upvote)
+    override val adminActionMarkAsFeatured: String
+        @Composable get() = stringResource(Res.string.admin_action_mark_as_featured)
+    override val adminActionPurge: String
+        @Composable get() = stringResource(Res.string.admin_action_purge)
+    override val adminActionUnmarkAsFeatured: String
+        @Composable get() = stringResource(Res.string.admin_action_unmark_as_featured)
+    override val advancedSettingsDefaultLanguage: String
+        @Composable get() = stringResource(Res.string.advanced_settings_default_language)
+    override val appIconAlt1: String
+        @Composable get() = stringResource(Res.string.app_icon_alt_1)
+    override val appIconClassical: String
+        @Composable get() = stringResource(Res.string.app_icon_classical)
+    override val appIconDefault: String
+        @Composable get() = stringResource(Res.string.app_icon_default)
+    override val banItemDurationDays: String
+        @Composable get() = stringResource(Res.string.ban_item_duration_days)
+    override val banItemPermanent: String
+        @Composable get() = stringResource(Res.string.ban_item_permanent)
+    override val banItemRemoveData: String
+        @Composable get() = stringResource(Res.string.ban_item_remove_data)
+    override val banReasonPlaceholder: String
+        @Composable get() = stringResource(Res.string.ban_reason_placeholder)
+    override val barThemeOpaque: String
+        @Composable get() = stringResource(Res.string.bar_theme_opaque)
+    override val barThemeSolid: String
+        @Composable get() = stringResource(Res.string.bar_theme_solid)
+    override val barThemeTransparent: String
+        @Composable get() = stringResource(Res.string.bar_theme_transparent)
+    override val beta: String
+        @Composable get() = stringResource(Res.string.beta)
+    override val blockActionCommunity: String
+        @Composable get() = stringResource(Res.string.block_action_community)
+    override val blockActionUser: String
+        @Composable get() = stringResource(Res.string.block_action_user)
+    override val buttonAdd: String
+        @Composable get() = stringResource(Res.string.button_add)
+    override val buttonCancel: String
+        @Composable get() = stringResource(Res.string.button_cancel)
     override val buttonClose: String
         @Composable get() = stringResource(Res.string.button_close)
     override val buttonConfirm: String
         @Composable get() = stringResource(Res.string.button_confirm)
     override val buttonLoad: String
         @Composable get() = stringResource(Res.string.button_load)
+    override val buttonNoStay: String
+        @Composable get() = stringResource(Res.string.button_no_stay)
     override val buttonReset: String
         @Composable get() = stringResource(Res.string.button_reset)
     override val buttonRetry: String
         @Composable get() = stringResource(Res.string.button_retry)
+    override val buttonYesQuit: String
+        @Composable get() = stringResource(Res.string.button_yes_quit)
     override val commentActionDelete: String
         @Composable get() = stringResource(Res.string.comment_action_delete)
+    override val communityActionAddFavorite: String
+        @Composable get() = stringResource(Res.string.community_action_add_favorite)
+    override val communityActionEdit: String
+        @Composable get() = stringResource(Res.string.community_action_edit)
+    override val communityActionRemoveFavorite: String
+        @Composable get() = stringResource(Res.string.community_action_remove_favorite)
+    override val communityActionUnsubscribe: String
+        @Composable get() = stringResource(Res.string.community_action_unsubscribe)
+    override val communityActionViewModlog: String
+        @Composable get() = stringResource(Res.string.community_action_view_modlog)
     override val communityDetailBlock: String
         @Composable get() = stringResource(Res.string.community_detail_block)
     override val communityDetailBlockInstance: String
@@ -492,6 +571,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.community_info_comments)
     override val communityInfoDailyActiveUsers: String
         @Composable get() = stringResource(Res.string.community_info_daily_active_users)
+    override val communityInfoModerators: String
+        @Composable get() = stringResource(Res.string.community_info_moderators)
     override val communityInfoMonthlyActiveUsers: String
         @Composable get() = stringResource(Res.string.community_info_monthly_active_users)
     override val communityInfoPosts: String
@@ -500,6 +581,30 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.community_info_subscribers)
     override val communityInfoWeeklyActiveUsers: String
         @Composable get() = stringResource(Res.string.community_info_weekly_active_users)
+    override val communitySetCustomSort: String
+        @Composable get() = stringResource(Res.string.community_set_custom_sort)
+    override val communitySetPreferredLanguage: String
+        @Composable get() = stringResource(Res.string.community_set_preferred_language)
+    override val communityVisibilityLocalOnly: String
+        @Composable get() = stringResource(Res.string.community_visibility_local_only)
+    override val communityVisibilityPublic: String
+        @Composable get() = stringResource(Res.string.community_visibility_public)
+    override val configureActionsSideEnd: String
+        @Composable get() = stringResource(Res.string.configure_actions_side_end)
+    override val configureActionsSideStart: String
+        @Composable get() = stringResource(Res.string.configure_actions_side_start)
+    override val contentScaleFillHeight: String
+        @Composable get() = stringResource(Res.string.content_scale_fill_height)
+    override val contentScaleFillWidth: String
+        @Composable get() = stringResource(Res.string.content_scale_fill_width)
+    override val contentScaleFit: String
+        @Composable get() = stringResource(Res.string.content_scale_fit)
+    override val copyBoth: String
+        @Composable get() = stringResource(Res.string.copy_both)
+    override val copyText: String
+        @Composable get() = stringResource(Res.string.copy_text)
+    override val copyTitle: String
+        @Composable get() = stringResource(Res.string.copy_title)
     override val createCommentBody: String
         @Composable get() = stringResource(Res.string.create_comment_body)
     override val createCommentTitle: String
@@ -534,6 +639,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.dialog_raw_content_title)
     override val dialogRawContentUrl: String
         @Composable get() = stringResource(Res.string.dialog_raw_content_url)
+    override val dialogTitleAddInstance: String
+        @Composable get() = stringResource(Res.string.dialog_title_add_instance)
     override val dialogTitleChangeInstance: String
         @Composable get() = stringResource(Res.string.dialog_title_change_instance)
     override val dialogTitleRawContent: String
@@ -542,6 +649,15 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.dialog_title_select_community)
     override val editCommentTitle: String
         @Composable get() = stringResource(Res.string.edit_comment_title)
+    override val editCommunityHeaderTextual: String
+        @Composable get() = stringResource(Res.string.edit_community_header_textual)
+    override val editCommunityItemPostingRestrictedToMods: String
+        @Composable get() =
+            stringResource(Res.string.edit_community_item_posting_restricted_to_mods)
+    override val editCommunityItemSidebar: String
+        @Composable get() = stringResource(Res.string.edit_community_item_sidebar)
+    override val editCommunityItemVisibility: String
+        @Composable get() = stringResource(Res.string.edit_community_item_visibility)
     override val editPostTitle: String
         @Composable get() = stringResource(Res.string.edit_post_title)
     override val exploreResultTypeAll: String
@@ -552,10 +668,14 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.explore_result_type_communities)
     override val exploreResultTypePosts: String
         @Composable get() = stringResource(Res.string.explore_result_type_posts)
+    override val exploreResultTypeTitle: String
+        @Composable get() = stringResource(Res.string.explore_result_type_title)
     override val exploreResultTypeUsers: String
         @Composable get() = stringResource(Res.string.explore_result_type_users)
     override val exploreSearchPlaceholder: String
         @Composable get() = stringResource(Res.string.explore_search_placeholder)
+    override val filteredContentsType: String
+        @Composable get() = stringResource(Res.string.filtered_contents_type)
     override val homeInstanceVia: String
         @Composable get() = stringResource(Res.string.home_instance_via)
     override val homeListingTitle: String
@@ -584,8 +704,6 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.home_sort_type_old)
     override val homeSortTypeScaled: String
         @Composable get() = stringResource(Res.string.home_sort_type_scaled)
-    override val homeSortTypeTop: String
-        @Composable get() = stringResource(Res.string.home_sort_type_top)
     override val homeSortTypeTop12Hours: String
         @Composable get() = stringResource(Res.string.home_sort_type_top_12_hours)
     override val homeSortTypeTop12HoursShort: String
@@ -594,6 +712,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.home_sort_type_top_6_hours)
     override val homeSortTypeTop6HoursShort: String
         @Composable get() = stringResource(Res.string.home_sort_type_top_6_hours_short)
+    override val homeSortTypeTop: String
+        @Composable get() = stringResource(Res.string.home_sort_type_top)
     override val homeSortTypeTopDay: String
         @Composable get() = stringResource(Res.string.home_sort_type_top_day)
     override val homeSortTypeTopDayShort: String
@@ -683,9 +803,31 @@ internal class SharedStrings : Strings {
     override val manageAccountsTitle: String
         @Composable get() = stringResource(Res.string.manage_accounts_title)
     override val manageSubscriptionsHeaderMulticommunities: String
-        @Composable get() = stringResource(Res.string.manage_subscriptions_header_multicommunities)
+        @Composable get() =
+            stringResource(Res.string.manage_subscriptions_header_multicommunities)
     override val manageSubscriptionsHeaderSubscriptions: String
-        @Composable get() = stringResource(Res.string.manage_subscriptions_header_subscriptions)
+        @Composable get() =
+            stringResource(Res.string.manage_subscriptions_header_subscriptions)
+    override val manageUserTagsTitle: String
+        @Composable get() = stringResource(Res.string.manage_user_tag_title)
+    override val messageAreYouSure: String
+        @Composable get() = stringResource(Res.string.message_are_you_sure)
+    override val messageAuthIssue: String
+        @Composable get() = stringResource(Res.string.message_auth_issue)
+    override val messageAuthIssueSegue0: String
+        @Composable get() = stringResource(Res.string.message_auth_issue_segue_0)
+    override val messageAuthIssueSegue1: String
+        @Composable get() = stringResource(Res.string.message_auth_issue_segue_1)
+    override val messageAuthIssueSegue2: String
+        @Composable get() = stringResource(Res.string.message_auth_issue_segue_2)
+    override val messageAuthIssueSegue3: String
+        @Composable get() = stringResource(Res.string.message_auth_issue_segue_3)
+    override val messageConfirmExit: String
+        @Composable get() = stringResource(Res.string.message_confirm_exit)
+    override val messageContentDeleted: String
+        @Composable get() = stringResource(Res.string.message_content_deleted)
+    override val messageContentRemoved: String
+        @Composable get() = stringResource(Res.string.message_content_removed)
     override val messageEmptyComments: String
         @Composable get() = stringResource(Res.string.message_empty_comments)
     override val messageEmptyList: String
@@ -700,8 +842,84 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.message_invalid_field)
     override val messageMissingField: String
         @Composable get() = stringResource(Res.string.message_missing_field)
+    override val messageNoResult: String
+        @Composable get() = stringResource(Res.string.message_no_result)
     override val messageOperationSuccessful: String
         @Composable get() = stringResource(Res.string.message_operation_successful)
+    override val messageReadAllInboxSuccess: String
+        @Composable get() = stringResource(Res.string.message_read_all_inbox_success)
+    override val messageUnsavedChanges: String
+        @Composable get() = stringResource(Res.string.message_unsaved_changes)
+    override val messageVideoNsfw: String
+        @Composable get() = stringResource(Res.string.message_video_nsfw)
+    override val modActionAddMod: String
+        @Composable get() = stringResource(Res.string.mod_action_add_mod)
+    override val modActionAllow: String
+        @Composable get() = stringResource(Res.string.mod_action_allow)
+    override val modActionBan: String
+        @Composable get() = stringResource(Res.string.mod_action_ban)
+    override val modActionLock: String
+        @Composable get() = stringResource(Res.string.mod_action_lock)
+    override val modActionMarkAsDistinguished: String
+        @Composable get() = stringResource(Res.string.mod_action_mark_as_distinguished)
+    override val modActionMarkAsFeatured: String
+        @Composable get() = stringResource(Res.string.mod_action_mark_as_featured)
+    override val modActionOpenReports: String
+        @Composable get() = stringResource(Res.string.mod_action_open_reports)
+    override val modActionRemove: String
+        @Composable get() = stringResource(Res.string.mod_action_remove)
+    override val modActionRemoveMod: String
+        @Composable get() = stringResource(Res.string.mod_action_remove_mod)
+    override val modActionUnlock: String
+        @Composable get() = stringResource(Res.string.mod_action_unlock)
+    override val modActionUnmarkAsDistinguished: String
+        @Composable get() = stringResource(Res.string.mod_action_unmark_as_distinguished)
+    override val modActionUnmarkAsFeatured: String
+        @Composable get() = stringResource(Res.string.mod_action_unmark_as_featured)
+    override val moderatorZoneActionContents: String
+        @Composable get() = stringResource(Res.string.moderator_zone_action_contents)
+    override val moderatorZoneTitle: String
+        @Composable get() = stringResource(Res.string.moderator_zone_title)
+    override val modlogItemCommentPurged: String
+        @Composable get() = stringResource(Res.string.modlog_item_comment_purged)
+    override val modlogItemCommentRemoved: String
+        @Composable get() = stringResource(Res.string.modlog_item_comment_removed)
+    override val modlogItemCommentRestored: String
+        @Composable get() = stringResource(Res.string.modlog_item_comment_restored)
+    override val modlogItemCommunityPurged: String
+        @Composable get() = stringResource(Res.string.modlog_item_community_purged)
+    override val modlogItemCommunityTransfer: String
+        @Composable get() = stringResource(Res.string.modlog_item_community_transfer)
+    override val modlogItemHidden: String
+        @Composable get() = stringResource(Res.string.modlog_item_hidden)
+    override val modlogItemModAdded: String
+        @Composable get() = stringResource(Res.string.modlog_item_mod_added)
+    override val modlogItemModRemoved: String
+        @Composable get() = stringResource(Res.string.modlog_item_mod_removed)
+    override val modlogItemPersonPurged: String
+        @Composable get() = stringResource(Res.string.modlog_item_person_purged)
+    override val modlogItemPostFeatured: String
+        @Composable get() = stringResource(Res.string.modlog_item_post_featured)
+    override val modlogItemPostLocked: String
+        @Composable get() = stringResource(Res.string.modlog_item_post_locked)
+    override val modlogItemPostPurged: String
+        @Composable get() = stringResource(Res.string.modlog_item_post_purged)
+    override val modlogItemPostRemoved: String
+        @Composable get() = stringResource(Res.string.modlog_item_post_removed)
+    override val modlogItemPostRestored: String
+        @Composable get() = stringResource(Res.string.modlog_item_post_restored)
+    override val modlogItemPostUnfeatured: String
+        @Composable get() = stringResource(Res.string.modlog_item_post_unfeatured)
+    override val modlogItemPostUnlocked: String
+        @Composable get() = stringResource(Res.string.modlog_item_post_unlocked)
+    override val modlogItemUnhidden: String
+        @Composable get() = stringResource(Res.string.modlog_item_unhidden)
+    override val modlogItemUserBanned: String
+        @Composable get() = stringResource(Res.string.modlog_item_user_banned)
+    override val modlogItemUserUnbanned: String
+        @Composable get() = stringResource(Res.string.modlog_item_user_unbanned)
+    override val modlogTitle: String
+        @Composable get() = stringResource(Res.string.modlog_title)
     override val multiCommunityEditorCommunities: String
         @Composable get() = stringResource(Res.string.multi_community_editor_communities)
     override val multiCommunityEditorIcon: String
@@ -714,8 +932,11 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.navigation_drawer_anonymous)
     override val navigationDrawerTitleBookmarks: String
         @Composable get() = stringResource(Res.string.navigation_drawer_title_bookmarks)
+    override val navigationDrawerTitleDrafts: String
+        @Composable get() = stringResource(Res.string.navigation_drawer_title_drafts)
     override val navigationDrawerTitleSubscriptions: String
-        @Composable get() = stringResource(Res.string.navigation_drawer_title_subscriptions)
+        @Composable get() =
+            stringResource(Res.string.navigation_drawer_title_subscriptions)
     override val navigationHome: String
         @Composable get() = stringResource(Res.string.navigation_home)
     override val navigationInbox: String
@@ -726,6 +947,12 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.navigation_search)
     override val navigationSettings: String
         @Composable get() = stringResource(Res.string.navigation_settings)
+    override val never: String
+        @Composable get() = stringResource(Res.string.never)
+    override val noticeBannedUser: String
+        @Composable get() = stringResource(Res.string.notice_banned_user)
+    override val noticeCommunityLocalOnly: String
+        @Composable get() = stringResource(Res.string.notice_community_local_only)
     override val postActionCrossPost: String
         @Composable get() = stringResource(Res.string.post_action_cross_post)
     override val postActionEdit: String
@@ -738,14 +965,20 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.post_action_see_raw)
     override val postActionShare: String
         @Composable get() = stringResource(Res.string.post_action_share)
+    override val postActionUnhide: String
+        @Composable get() = stringResource(Res.string.post_action_unhide)
     override val postDetailCrossPosts: String
         @Composable get() = stringResource(Res.string.post_detail_cross_posts)
     override val postDetailLoadMoreComments: String
         @Composable get() = stringResource(Res.string.post_detail_load_more_comments)
     override val postHourShort: String
         @Composable get() = stringResource(Res.string.post_hour_short)
+    override val postListLoadMorePosts: String
+        @Composable get() = stringResource(Res.string.post_list_load_more_posts)
     override val postMinuteShort: String
         @Composable get() = stringResource(Res.string.post_minute_short)
+    override val postReplySourceAccount: String
+        @Composable get() = stringResource(Res.string.post_reply_source_account)
     override val postSecondShort: String
         @Composable get() = stringResource(Res.string.post_second_short)
     override val profileButtonLogin: String
@@ -764,26 +997,60 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.profile_section_posts)
     override val profileThousandShort: String
         @Composable get() = stringResource(Res.string.profile_thousand_short)
+    override val profileUpvotesDownvotes: String
+        @Composable get() = stringResource(Res.string.profile_upvotes_downvotes)
     override val profileYearShort: String
         @Composable get() = stringResource(Res.string.profile_year_short)
+    override val reportActionResolve: String
+        @Composable get() = stringResource(Res.string.report_action_resolve)
+    override val reportActionUnresolve: String
+        @Composable get() = stringResource(Res.string.report_action_unresolve)
+    override val reportListTitle: String
+        @Composable get() = stringResource(Res.string.report_list_title)
+    override val reportListTypeAll: String
+        @Composable get() = stringResource(Res.string.report_list_type_all)
+    override val reportListTypeTitle: String
+        @Composable get() = stringResource(Res.string.report_list_type_title)
+    override val reportListTypeUnresolved: String
+        @Composable get() = stringResource(Res.string.report_list_type_unresolved)
+    override val requiresRestart: String
+        @Composable get() = stringResource(Res.string.requires_restart)
+    override val selectActionTitle: String
+        @Composable get() = stringResource(Res.string.select_action_title)
+    override val selectTabNavigationTitle: String
+        @Composable get() = stringResource(Res.string.select_tab_navigation_title)
     override val settingsAbout: String
         @Composable get() = stringResource(Res.string.settings_about)
+    override val settingsAboutAcknowledgements: String
+        @Composable get() = stringResource(Res.string.settings_about_acknowledgements)
     override val settingsAboutAppVersion: String
         @Composable get() = stringResource(Res.string.settings_about_app_version)
     override val settingsAboutChangelog: String
         @Composable get() = stringResource(Res.string.settings_about_changelog)
-    override val settingsAboutReportGithub: String
-        @Composable get() = stringResource(Res.string.settings_about_report_github)
+    override val settingsAboutLicences: String
+        @Composable get() = stringResource(Res.string.settings_about_licences)
+    override val settingsAboutMatrix: String
+        @Composable get() = stringResource(Res.string.settings_about_matrix)
     override val settingsAboutReportEmail: String
         @Composable get() = stringResource(Res.string.settings_about_report_email)
+    override val settingsAboutReportGithub: String
+        @Composable get() = stringResource(Res.string.settings_about_report_github)
     override val settingsAboutViewGithub: String
         @Composable get() = stringResource(Res.string.settings_about_view_github)
     override val settingsAboutViewLemmy: String
         @Composable get() = stringResource(Res.string.settings_about_view_lemmy)
+    override val settingsAdvanced: String
+        @Composable get() = stringResource(Res.string.settings_advanced)
+    override val settingsAncillaryFontScale: String
+        @Composable get() = stringResource(Res.string.settings_ancillary_font_scale)
+    override val settingsAppIcon: String
+        @Composable get() = stringResource(Res.string.settings_app_icon)
     override val settingsAutoExpandComments: String
         @Composable get() = stringResource(Res.string.settings_auto_expand_comments)
     override val settingsAutoLoadImages: String
         @Composable get() = stringResource(Res.string.settings_auto_load_images)
+    override val settingsBarTheme: String
+        @Composable get() = stringResource(Res.string.settings_bar_theme)
     override val settingsBlurNsfw: String
         @Composable get() = stringResource(Res.string.settings_blur_nsfw)
     override val settingsColorAquamarine: String
@@ -818,6 +1085,34 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.settings_color_red)
     override val settingsColorWhite: String
         @Composable get() = stringResource(Res.string.settings_color_white)
+    override val settingsColorsAndFonts: String
+        @Composable get() = stringResource(Res.string.settings_colors_and_fonts)
+    override val settingsCommentBarTheme: String
+        @Composable get() = stringResource(Res.string.settings_comment_bar_theme)
+    override val settingsCommentBarThemeBlue: String
+        @Composable get() = stringResource(Res.string.settings_comment_bar_theme_blue)
+    override val settingsCommentBarThemeGreen: String
+        @Composable get() = stringResource(Res.string.settings_comment_bar_theme_green)
+    override val settingsCommentBarThemeMulti: String
+        @Composable get() = stringResource(Res.string.settings_comment_bar_theme_multi)
+    override val settingsCommentBarThemeRed: String
+        @Composable get() = stringResource(Res.string.settings_comment_bar_theme_red)
+    override val settingsCommentBarThickness: String
+        @Composable get() = stringResource(Res.string.settings_comment_bar_thickness)
+    override val settingsCommentFontScale: String
+        @Composable get() = stringResource(Res.string.settings_comment_font_scale)
+    override val settingsCommentIndentAmount: String
+        @Composable get() = stringResource(Res.string.settings_comment_indent_amount)
+    override val settingsConfigureContent: String
+        @Composable get() = stringResource(Res.string.settings_configure_content)
+    override val settingsConfigureCustomizations: String
+        @Composable get() = stringResource(Res.string.settings_configure_customizations)
+    override val settingsConfigureSwipeActions: String
+        @Composable get() = stringResource(Res.string.settings_configure_swipe_actions)
+    override val settingsConfigureText: String
+        @Composable get() = stringResource(Res.string.settings_configure_text)
+    override val settingsContentFontFamily: String
+        @Composable get() = stringResource(Res.string.settings_content_font_family)
     override val settingsContentFontLarge: String
         @Composable get() = stringResource(Res.string.settings_content_font_large)
     override val settingsContentFontLarger: String
@@ -838,6 +1133,13 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.settings_custom_seed_color)
     override val settingsDefaultCommentSortType: String
         @Composable get() = stringResource(Res.string.settings_default_comment_sort_type)
+    override val settingsDefaultExploreResultType: String
+        @Composable get() =
+            stringResource(Res.string.settings_default_explore_result_type)
+    override val settingsDefaultExploreType: String
+        @Composable get() = stringResource(Res.string.settings_default_explore_type)
+    override val settingsDefaultInboxType: String
+        @Composable get() = stringResource(Res.string.settings_default_inbox_type)
     override val settingsDefaultListingType: String
         @Composable get() = stringResource(Res.string.settings_default_listing_type)
     override val settingsDefaultPostSortType: String
@@ -846,24 +1148,95 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.settings_downvote_color)
     override val settingsDynamicColors: String
         @Composable get() = stringResource(Res.string.settings_dynamic_colors)
+    override val settingsEdgeToEdge: String
+        @Composable get() = stringResource(Res.string.settings_edge_to_edge)
+    override val settingsEnableButtonsToScrollBetweenComments: String
+        @Composable get() =
+            stringResource(Res.string.settings_enable_buttons_to_scroll_between_comments)
     override val settingsEnableCrashReport: String
         @Composable get() = stringResource(Res.string.settings_enable_crash_report)
     override val settingsEnableDoubleTap: String
         @Composable get() = stringResource(Res.string.settings_enable_double_tap)
     override val settingsEnableSwipeActions: String
         @Composable get() = stringResource(Res.string.settings_enable_swipe_actions)
+    override val settingsEnableToggleFavoriteInNavDrawer: String
+        @Composable get() =
+            stringResource(Res.string.settings_enable_toggle_favorite_in_nav_drawer)
+    override val settingsExport: String
+        @Composable get() = stringResource(Res.string.settings_export)
+    override val settingsFadeReadPosts: String
+        @Composable get() = stringResource(Res.string.settings_fade_read_posts)
+    override val settingsFontFamilyDefault: String
+        @Composable get() = stringResource(Res.string.settings_font_family_default)
     override val settingsFullHeightImages: String
         @Composable get() = stringResource(Res.string.settings_full_height_images)
+    override val settingsFullWidthImages: String
+        @Composable get() = stringResource(Res.string.settings_full_width_images)
+    override val settingsHiddenPosts: String
+        @Composable get() = stringResource(Res.string.settings_hidden_posts)
+    override val settingsHideNavigationBar: String
+        @Composable get() = stringResource(Res.string.settings_hide_navigation_bar)
+    override val settingsImport: String
+        @Composable get() = stringResource(Res.string.settings_import)
+    override val settingsInboxBackgroundCheckPeriod: String
+        @Composable get() =
+            stringResource(Res.string.settings_inbox_background_check_period)
+    override val settingsInboxPreviewMaxLines: String
+        @Composable get() = stringResource(Res.string.settings_inbox_preview_max_lines)
     override val settingsIncludeNsfw: String
         @Composable get() = stringResource(Res.string.settings_include_nsfw)
+    override val settingsInfiniteScrollDisabled: String
+        @Composable get() = stringResource(Res.string.settings_infinite_scroll_disabled)
+    override val settingsItemAlternateMarkdownRendering: String
+        @Composable get() =
+            stringResource(Res.string.settings_item_alternate_markdown_rendering)
+    override val settingsItemConfigureBottomNavigationBar: String
+        @Composable get() =
+            stringResource(Res.string.settings_item_configure_bottom_navigation_bar)
+    override val settingsItemImageSourcePath: String
+        @Composable get() = stringResource(Res.string.settings_item_image_source_path)
+    override val settingsItemOpenPostWebPageOnImageClick: String
+        @Composable get() =
+            stringResource(Res.string.settings_item_open_post_web_page_on_image_click)
+    override val settingsItemRandomThemeColor: String
+        @Composable get() = stringResource(Res.string.settings_item_random_theme_color)
     override val settingsLanguage: String
         @Composable get() = stringResource(Res.string.settings_language)
+    override val settingsManageBan: String
+        @Composable get() = stringResource(Res.string.settings_manage_ban)
+    override val settingsManageBanActionUnban: String
+        @Composable get() = stringResource(Res.string.settings_manage_ban_action_unban)
+    override val settingsManageBanDomainPlaceholder: String
+        @Composable get() =
+            stringResource(Res.string.settings_manage_ban_domain_placeholder)
+    override val settingsManageBanSectionDomains: String
+        @Composable get() = stringResource(Res.string.settings_manage_ban_section_domains)
+    override val settingsManageBanSectionInstances: String
+        @Composable get() =
+            stringResource(Res.string.settings_manage_ban_section_instances)
+    override val settingsManageBanSectionStopWords: String
+        @Composable get() =
+            stringResource(Res.string.settings_manage_ban_section_stop_words)
+    override val settingsManageBanStopWordPlaceholder: String
+        @Composable get() =
+            stringResource(Res.string.settings_manage_ban_stop_word_placeholder)
+    override val settingsMarkAsReadWhileScrolling: String
+        @Composable get() =
+            stringResource(Res.string.settings_mark_as_read_while_scrolling)
+    override val settingsMediaList: String
+        @Composable get() = stringResource(Res.string.settings_media_list)
     override val settingsNavigationBarTitlesVisible: String
-        @Composable get() = stringResource(Res.string.settings_navigation_bar_titles_visible)
+        @Composable get() =
+            stringResource(Res.string.settings_navigation_bar_titles_visible)
     override val settingsOpenUrlExternal: String
         @Composable get() = stringResource(Res.string.settings_open_url_external)
     override val settingsPointsShort: String
         @Composable get() = stringResource(Res.string.settings_points_short)
+    override val settingsPostBodyMaxLines: String
+        @Composable get() = stringResource(Res.string.settings_post_body_max_lines)
+    override val settingsPostBodyMaxLinesUnlimited: String
+        @Composable get() =
+            stringResource(Res.string.settings_post_body_max_lines_unlimited)
     override val settingsPostLayout: String
         @Composable get() = stringResource(Res.string.settings_post_layout)
     override val settingsPostLayoutCard: String
@@ -872,22 +1245,51 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.settings_post_layout_compact)
     override val settingsPostLayoutFull: String
         @Composable get() = stringResource(Res.string.settings_post_layout_full)
+    override val settingsPreferUserNicknames: String
+        @Composable get() = stringResource(Res.string.settings_prefer_user_nicknames)
+    override val settingsReplyColor: String
+        @Composable get() = stringResource(Res.string.settings_reply_color)
+    override val settingsSaveColor: String
+        @Composable get() = stringResource(Res.string.settings_save_color)
+    override val settingsSearchPostsTitleOnly: String
+        @Composable get() = stringResource(Res.string.settings_search_posts_title_only)
+    override val settingsSectionAccount: String
+        @Composable get() = stringResource(Res.string.settings_section_account)
     override val settingsSectionAppearance: String
         @Composable get() = stringResource(Res.string.settings_section_appearance)
-    override val settingsAdvanced: String
-        @Composable get() = stringResource(Res.string.settings_advanced)
     override val settingsSectionDebug: String
         @Composable get() = stringResource(Res.string.settings_section_debug)
     override val settingsSectionGeneral: String
         @Composable get() = stringResource(Res.string.settings_section_general)
     override val settingsSectionNsfw: String
         @Composable get() = stringResource(Res.string.settings_section_nsfw)
+    override val settingsShowScores: String
+        @Composable get() = stringResource(Res.string.settings_show_scores)
+    override val settingsShowUnreadComments: String
+        @Composable get() = stringResource(Res.string.settings_show_unread_comments)
+    override val settingsSubtitleImageSourcePath: String
+        @Composable get() = stringResource(Res.string.settings_subtitle_image_source_path)
+    override val settingsSubtitleOpenPostWebPageOnImageClick: String
+        @Composable get() =
+            stringResource(Res.string.settings_subtitle_open_post_web_page_on_image_click)
+    override val settingsSubtitleRandomThemeColor: String
+        @Composable get() = stringResource(Res.string.settings_subtitle_random_theme_color)
     override val settingsThemeBlack: String
         @Composable get() = stringResource(Res.string.settings_theme_black)
     override val settingsThemeDark: String
         @Composable get() = stringResource(Res.string.settings_theme_dark)
     override val settingsThemeLight: String
         @Composable get() = stringResource(Res.string.settings_theme_light)
+    override val settingsTitleDisplay: String
+        @Composable get() = stringResource(Res.string.settings_title_display)
+    override val settingsTitleExperimental: String
+        @Composable get() = stringResource(Res.string.settings_title_experimental)
+    override val settingsTitleFontScale: String
+        @Composable get() = stringResource(Res.string.settings_title_font_scale)
+    override val settingsTitlePictures: String
+        @Composable get() = stringResource(Res.string.settings_title_pictures)
+    override val settingsTitleReading: String
+        @Composable get() = stringResource(Res.string.settings_title_reading)
     override val settingsUiFontFamily: String
         @Composable get() = stringResource(Res.string.settings_ui_font_family)
     override val settingsUiFontScale: String
@@ -896,144 +1298,28 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.settings_ui_theme)
     override val settingsUpvoteColor: String
         @Composable get() = stringResource(Res.string.settings_upvote_color)
-    override val settingsHideNavigationBar: String
-        @Composable get() = stringResource(Res.string.settings_hide_navigation_bar)
-    override val settingsZombieModeInterval: String
-        @Composable get() = stringResource(Res.string.settings_zombie_mode_interval)
-    override val settingsZombieModeScrollAmount: String
-        @Composable get() = stringResource(Res.string.settings_zombie_mode_scroll_amount)
-    override val settingsMarkAsReadWhileScrolling: String
-        @Composable get() = stringResource(Res.string.settings_mark_as_read_while_scrolling)
-    override val actionQuote: String
-        @Composable get() = stringResource(Res.string.action_quote)
-    override val modActionAllow: String
-        @Composable get() = stringResource(Res.string.mod_action_allow)
-    override val modActionBan: String
-        @Composable get() = stringResource(Res.string.mod_action_ban)
-    override val modActionOpenReports: String
-        @Composable get() = stringResource(Res.string.mod_action_open_reports)
-    override val modActionMarkAsFeatured: String
-        @Composable get() = stringResource(Res.string.mod_action_mark_as_featured)
-    override val modActionUnmarkAsFeatured: String
-        @Composable get() = stringResource(Res.string.mod_action_unmark_as_featured)
-    override val modActionLock: String
-        @Composable get() = stringResource(Res.string.mod_action_lock)
-    override val modActionUnlock: String
-        @Composable get() = stringResource(Res.string.mod_action_unlock)
-    override val modActionRemove: String
-        @Composable get() = stringResource(Res.string.mod_action_remove)
-    override val modActionMarkAsDistinguished: String
-        @Composable get() = stringResource(Res.string.mod_action_mark_as_distinguished)
-    override val modActionUnmarkAsDistinguished: String
-        @Composable get() = stringResource(Res.string.mod_action_unmark_as_distinguished)
-    override val reportListTitle: String
-        @Composable get() = stringResource(Res.string.report_list_title)
-    override val reportListTypeTitle: String
-        @Composable get() = stringResource(Res.string.report_list_type_title)
-    override val reportListTypeAll: String
-        @Composable get() = stringResource(Res.string.report_list_type_all)
-    override val reportListTypeUnresolved: String
-        @Composable get() = stringResource(Res.string.report_list_type_unresolved)
-    override val reportActionResolve: String
-        @Composable get() = stringResource(Res.string.report_action_resolve)
-    override val reportActionUnresolve: String
-        @Composable get() = stringResource(Res.string.report_action_unresolve)
-    override val sidebarNotLoggedMessage: String
-        @Composable get() = stringResource(Res.string.sidebar_not_logged_message)
-    override val settingsDefaultInboxType: String
-        @Composable get() = stringResource(Res.string.settings_default_inbox_type)
-    override val modActionAddMod: String
-        @Composable get() = stringResource(Res.string.mod_action_add_mod)
-    override val modActionRemoveMod: String
-        @Composable get() = stringResource(Res.string.mod_action_remove_mod)
+    override val settingsUrlOpeningModeCustomTabs: String
+        @Composable get() =
+            stringResource(Res.string.settings_url_opening_mode_custom_tabs)
+    override val settingsUrlOpeningModeExternal: String
+        @Composable get() = stringResource(Res.string.settings_url_opening_mode_external)
+    override val settingsUrlOpeningModeInternal: String
+        @Composable get() = stringResource(Res.string.settings_url_opening_mode_internal)
+    override val settingsUseAvatarAsProfileNavigationIcon: String
+        @Composable get() =
+            stringResource(Res.string.settings_use_avatar_as_profile_navigation_icon)
+    override val settingsUserManual: String
+        @Composable get() = stringResource(Res.string.settings_user_manual)
     override val settingsVoteFormat: String
         @Composable get() = stringResource(Res.string.settings_vote_format)
     override val settingsVoteFormatAggregated: String
         @Composable get() = stringResource(Res.string.settings_vote_format_aggregated)
-    override val settingsVoteFormatSeparated: String
-        @Composable get() = stringResource(Res.string.settings_vote_format_separated)
+    override val settingsVoteFormatHidden: String
+        @Composable get() = stringResource(Res.string.settings_vote_format_hidden)
     override val settingsVoteFormatPercentage: String
         @Composable get() = stringResource(Res.string.settings_vote_format_percentage)
-    override val settingsFontFamilyDefault: String
-        @Composable get() = stringResource(Res.string.settings_font_family_default)
-    override val postReplySourceAccount: String
-        @Composable get() = stringResource(Res.string.post_reply_source_account)
-    override val settingsCommentBarTheme: String
-        @Composable get() = stringResource(Res.string.settings_comment_bar_theme)
-    override val settingsCommentBarThemeBlue: String
-        @Composable get() = stringResource(Res.string.settings_comment_bar_theme_blue)
-    override val settingsCommentBarThemeGreen: String
-        @Composable get() = stringResource(Res.string.settings_comment_bar_theme_green)
-    override val settingsCommentBarThemeRed: String
-        @Composable get() = stringResource(Res.string.settings_comment_bar_theme_red)
-    override val settingsCommentBarThemeMulti: String
-        @Composable get() = stringResource(Res.string.settings_comment_bar_theme_multi)
-    override val messageConfirmExit: String
-        @Composable get() = stringResource(Res.string.message_confirm_exit)
-    override val communityActionUnsubscribe: String
-        @Composable get() = stringResource(Res.string.community_action_unsubscribe)
-    override val settingsSearchPostsTitleOnly: String
-        @Composable get() = stringResource(Res.string.settings_search_posts_title_only)
-    override val settingsContentFontFamily: String
-        @Composable get() = stringResource(Res.string.settings_content_font_family)
-    override val communityInfoModerators: String
-        @Composable get() = stringResource(Res.string.community_info_moderators)
-    override val communityActionAddFavorite: String
-        @Composable get() = stringResource(Res.string.community_action_add_favorite)
-    override val communityActionRemoveFavorite: String
-        @Composable get() = stringResource(Res.string.community_action_remove_favorite)
-    override val communityActionViewModlog: String
-        @Composable get() = stringResource(Res.string.community_action_view_modlog)
-    override val modlogTitle: String
-        @Composable get() = stringResource(Res.string.modlog_title)
-    override val modlogItemModAdded: String
-        @Composable get() = stringResource(Res.string.modlog_item_mod_added)
-    override val modlogItemModRemoved: String
-        @Composable get() = stringResource(Res.string.modlog_item_mod_removed)
-    override val modlogItemUserBanned: String
-        @Composable get() = stringResource(Res.string.modlog_item_user_banned)
-    override val modlogItemUserUnbanned: String
-        @Composable get() = stringResource(Res.string.modlog_item_user_unbanned)
-    override val modlogItemPostFeatured: String
-        @Composable get() = stringResource(Res.string.modlog_item_post_featured)
-    override val modlogItemPostUnfeatured: String
-        @Composable get() = stringResource(Res.string.modlog_item_post_unfeatured)
-    override val modlogItemPostLocked: String
-        @Composable get() = stringResource(Res.string.modlog_item_post_locked)
-    override val modlogItemPostUnlocked: String
-        @Composable get() = stringResource(Res.string.modlog_item_post_unlocked)
-    override val modlogItemPostRemoved: String
-        @Composable get() = stringResource(Res.string.modlog_item_post_removed)
-    override val modlogItemPostRestored: String
-        @Composable get() = stringResource(Res.string.modlog_item_post_restored)
-    override val modlogItemCommentRemoved: String
-        @Composable get() = stringResource(Res.string.modlog_item_comment_removed)
-    override val modlogItemCommentRestored: String
-        @Composable get() = stringResource(Res.string.modlog_item_comment_restored)
-    override val modlogItemCommunityTransfer: String
-        @Composable get() = stringResource(Res.string.modlog_item_community_transfer)
-    override val blockActionUser: String
-        @Composable get() = stringResource(Res.string.block_action_user)
-    override val blockActionCommunity: String
-        @Composable get() = stringResource(Res.string.block_action_community)
-    override val userDetailInfo: String
-        @Composable get() = stringResource(Res.string.user_detail_info)
-    override val userInfoModerates: String
-        @Composable get() = stringResource(Res.string.user_info_moderates)
-    override val userInfoAdmin: String
-        @Composable get() = stringResource(Res.string.user_info_admin)
-    override val settingsReplyColor: String
-        @Composable get() = stringResource(Res.string.settings_reply_color)
-    override val settingsSectionAccount: String
-        @Composable get() = stringResource(Res.string.settings_section_account)
-    override val settingsWebPreferences: String
-        @Composable get() = stringResource(Res.string.settings_web_preferences)
-    override val settingsWebHeaderPersonal: String
-        @Composable get() = stringResource(Res.string.settings_web_header_personal)
-    override val settingsWebHeaderContents: String
-        @Composable get() = stringResource(Res.string.settings_web_header_contents)
-    override val settingsWebHeaderNotifications: String
-        @Composable get() = stringResource(Res.string.settings_web_header_notifications)
+    override val settingsVoteFormatSeparated: String
+        @Composable get() = stringResource(Res.string.settings_vote_format_separated)
     override val settingsWebAvatar: String
         @Composable get() = stringResource(Res.string.settings_web_avatar)
     override val settingsWebBanner: String
@@ -1044,304 +1330,48 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.settings_web_bot)
     override val settingsWebDisplayName: String
         @Composable get() = stringResource(Res.string.settings_web_display_name)
-    override val settingsWebMatrix: String
-        @Composable get() = stringResource(Res.string.settings_web_matrix)
     override val settingsWebEmail: String
         @Composable get() = stringResource(Res.string.settings_web_email)
+    override val settingsWebEmailNotifications: String
+        @Composable get() = stringResource(Res.string.settings_web_email_notifications)
+    override val settingsWebHeaderContents: String
+        @Composable get() = stringResource(Res.string.settings_web_header_contents)
+    override val settingsWebHeaderNotifications: String
+        @Composable get() = stringResource(Res.string.settings_web_header_notifications)
+    override val settingsWebHeaderPersonal: String
+        @Composable get() = stringResource(Res.string.settings_web_header_personal)
+    override val settingsWebMatrix: String
+        @Composable get() = stringResource(Res.string.settings_web_matrix)
+    override val settingsWebPreferences: String
+        @Composable get() = stringResource(Res.string.settings_web_preferences)
     override val settingsWebShowBot: String
         @Composable get() = stringResource(Res.string.settings_web_show_bot)
     override val settingsWebShowNsfw: String
         @Composable get() = stringResource(Res.string.settings_web_show_nsfw)
     override val settingsWebShowRead: String
         @Composable get() = stringResource(Res.string.settings_web_show_read)
-    override val settingsWebEmailNotifications: String
-        @Composable get() = stringResource(Res.string.settings_web_email_notifications)
-    override val settingsManageBan: String
-        @Composable get() = stringResource(Res.string.settings_manage_ban)
-    override val settingsManageBanActionUnban: String
-        @Composable get() = stringResource(Res.string.settings_manage_ban_action_unban)
-    override val settingsManageBanSectionInstances: String
-        @Composable get() = stringResource(Res.string.settings_manage_ban_section_instances)
-    override val settingsEdgeToEdge: String
-        @Composable get() = stringResource(Res.string.settings_edge_to_edge)
-    override val settingsPostBodyMaxLines: String
-        @Composable get() = stringResource(Res.string.settings_post_body_max_lines)
-    override val settingsPostBodyMaxLinesUnlimited: String
-        @Composable get() = stringResource(Res.string.settings_post_body_max_lines_unlimited)
-    override val messageContentRemoved: String
-        @Composable get() = stringResource(Res.string.message_content_removed)
-    override val postListLoadMorePosts: String
-        @Composable get() = stringResource(Res.string.post_list_load_more_posts)
-    override val settingsInfiniteScrollDisabled: String
-        @Composable get() = stringResource(Res.string.settings_infinite_scroll_disabled)
-    override val dialogTitleAddInstance: String
-        @Composable get() = stringResource(Res.string.dialog_title_add_instance)
-    override val settingsSaveColor: String
-        @Composable get() = stringResource(Res.string.settings_save_color)
-    override val settingsConfigureSwipeActions: String
-        @Composable get() = stringResource(Res.string.settings_configure_swipe_actions)
-    override val actionUpvote: String
-        @Composable get() = stringResource(Res.string.action_upvote)
-    override val actionDownvote: String
-        @Composable get() = stringResource(Res.string.action_downvote)
-    override val actionSave: String
-        @Composable get() = stringResource(Res.string.action_save)
-    override val actionToggleRead: String
-        @Composable get() = stringResource(Res.string.action_toggle_read)
-    override val configureActionsSideStart: String
-        @Composable get() = stringResource(Res.string.configure_actions_side_start)
-    override val configureActionsSideEnd: String
-        @Composable get() = stringResource(Res.string.configure_actions_side_end)
-    override val selectActionTitle: String
-        @Composable get() = stringResource(Res.string.select_action_title)
-    override val buttonAdd: String
-        @Composable get() = stringResource(Res.string.button_add)
-    override val barThemeOpaque: String
-        @Composable get() = stringResource(Res.string.bar_theme_opaque)
-    override val barThemeSolid: String
-        @Composable get() = stringResource(Res.string.bar_theme_solid)
-    override val barThemeTransparent: String
-        @Composable get() = stringResource(Res.string.bar_theme_transparent)
-    override val settingsBarTheme: String
-        @Composable get() = stringResource(Res.string.settings_bar_theme)
-    override val settingsColorsAndFonts: String
-        @Composable get() = stringResource(Res.string.settings_colors_and_fonts)
-    override val settingsUserManual: String
-        @Composable get() = stringResource(Res.string.settings_user_manual)
-    override val settingsShowScores: String
-        @Composable get() = stringResource(Res.string.settings_show_scores)
-    override val settingsVoteFormatHidden: String
-        @Composable get() = stringResource(Res.string.settings_vote_format_hidden)
-    override val settingsCommentBarThickness: String
-        @Composable get() = stringResource(Res.string.settings_comment_bar_thickness)
-    override val settingsPreferUserNicknames: String
-        @Composable get() = stringResource(Res.string.settings_prefer_user_nicknames)
-    override val messageVideoNsfw: String
-        @Composable get() = stringResource(Res.string.message_video_nsfw)
-    override val settingsTitleFontScale: String
-        @Composable get() = stringResource(Res.string.settings_title_font_scale)
-    override val settingsCommentFontScale: String
-        @Composable get() = stringResource(Res.string.settings_comment_font_scale)
-    override val settingsAncillaryFontScale: String
-        @Composable get() = stringResource(Res.string.settings_ancillary_font_scale)
-    override val settingsConfigureContent: String
-        @Composable get() = stringResource(Res.string.settings_configure_content)
-    override val settingsConfigureText: String
-        @Composable get() = stringResource(Res.string.settings_configure_text)
-    override val settingsConfigureCustomizations: String
-        @Composable get() = stringResource(Res.string.settings_configure_customizations)
-    override val navigationDrawerTitleDrafts: String
-        @Composable get() = stringResource(Res.string.navigation_drawer_title_drafts)
-    override val moderatorZoneTitle: String
-        @Composable get() = stringResource(Res.string.moderator_zone_title)
-    override val moderatorZoneActionContents: String
-        @Composable get() = stringResource(Res.string.moderator_zone_action_contents)
-    override val messageAuthIssue: String
-        @Composable get() = stringResource(Res.string.message_auth_issue)
-    override val banReasonPlaceholder: String
-        @Composable get() = stringResource(Res.string.ban_reason_placeholder)
-    override val banItemPermanent: String
-        @Composable get() = stringResource(Res.string.ban_item_permanent)
-    override val banItemRemoveData: String
-        @Composable get() = stringResource(Res.string.ban_item_remove_data)
-    override val banItemDurationDays: String
-        @Composable get() = stringResource(Res.string.ban_item_duration_days)
-    override val messageUnsavedChanges: String
-        @Composable get() = stringResource(Res.string.message_unsaved_changes)
-    override val buttonNoStay: String
-        @Composable get() = stringResource(Res.string.button_no_stay)
-    override val buttonYesQuit: String
-        @Composable get() = stringResource(Res.string.button_yes_quit)
-    override val settingsItemImageSourcePath: String
-        @Composable get() = stringResource(Res.string.settings_item_image_source_path)
-    override val settingsSubtitleImageSourcePath: String
-        @Composable get() = stringResource(Res.string.settings_subtitle_image_source_path)
-    override val settingsTitleDisplay: String
-        @Composable get() = stringResource(Res.string.settings_title_display)
-    override val settingsTitleReading: String
-        @Composable get() = stringResource(Res.string.settings_title_reading)
-    override val settingsTitlePictures: String
-        @Composable get() = stringResource(Res.string.settings_title_pictures)
-    override val settingsTitleExperimental: String
-        @Composable get() = stringResource(Res.string.settings_title_experimental)
-    override val communitySetCustomSort: String
-        @Composable get() = stringResource(Res.string.community_set_custom_sort)
-    override val settingsDefaultExploreType: String
-        @Composable get() = stringResource(Res.string.settings_default_explore_type)
-    override val actionSearchInCommunity: String
-        @Composable get() = stringResource(Res.string.action_search_in_community)
-    override val actionExitSearch: String
-        @Composable get() = stringResource(Res.string.action_exit_search)
-    override val beta: String
-        @Composable get() = stringResource(Res.string.beta)
-    override val actionCopyClipboard: String
-        @Composable get() = stringResource(Res.string.action_copy_clipboard)
-    override val copyTitle: String
-        @Composable get() = stringResource(Res.string.copy_title)
-    override val copyText: String
-        @Composable get() = stringResource(Res.string.copy_text)
-    override val copyBoth: String
-        @Composable get() = stringResource(Res.string.copy_both)
-    override val profileUpvotesDownvotes: String
-        @Composable get() = stringResource(Res.string.profile_upvotes_downvotes)
-    override val filteredContentsType: String
-        @Composable get() = stringResource(Res.string.filtered_contents_type)
-    override val actionSearchInComments: String
-        @Composable get() = stringResource(Res.string.action_search_in_comments)
-    override val advancedSettingsDefaultLanguage: String
-        @Composable get() = stringResource(Res.string.advanced_settings_default_language)
-    override val undetermined: String
-        @Composable get() = stringResource(Res.string.undetermined)
-    override val exploreResultTypeTitle: String
-        @Composable get() = stringResource(Res.string.explore_result_type_title)
-    override val communityActionEdit: String
-        @Composable get() = stringResource(Res.string.community_action_edit)
-    override val editCommunityHeaderTextual: String
-        @Composable get() = stringResource(Res.string.edit_community_header_textual)
-    override val editCommunityItemSidebar: String
-        @Composable get() = stringResource(Res.string.edit_community_item_sidebar)
-    override val editCommunityItemPostingRestrictedToMods: String
-        @Composable get() = stringResource(Res.string.edit_community_item_posting_restricted_to_mods)
-    override val messageAreYouSure: String
-        @Composable get() = stringResource(Res.string.message_are_you_sure)
-    override val buttonCancel: String
-        @Composable get() = stringResource(Res.string.button_cancel)
-    override val shareModeUrl: String
-        @Composable get() = stringResource(Res.string.share_mode_url)
+    override val settingsZombieModeInterval: String
+        @Composable get() = stringResource(Res.string.settings_zombie_mode_interval)
+    override val settingsZombieModeScrollAmount: String
+        @Composable get() = stringResource(Res.string.settings_zombie_mode_scroll_amount)
     override val shareModeFile: String
         @Composable get() = stringResource(Res.string.share_mode_file)
-    override val modlogItemCommunityPurged: String
-        @Composable get() = stringResource(Res.string.modlog_item_community_purged)
-    override val modlogItemCommentPurged: String
-        @Composable get() = stringResource(Res.string.modlog_item_comment_purged)
-    override val modlogItemPersonPurged: String
-        @Composable get() = stringResource(Res.string.modlog_item_person_purged)
-    override val modlogItemPostPurged: String
-        @Composable get() = stringResource(Res.string.modlog_item_post_purged)
-    override val modlogItemHidden: String
-        @Composable get() = stringResource(Res.string.modlog_item_hidden)
-    override val modlogItemUnhidden: String
-        @Composable get() = stringResource(Res.string.modlog_item_unhidden)
-    override val settingsAboutLicences: String
-        @Composable get() = stringResource(Res.string.settings_about_licences)
-    override val settingsInboxBackgroundCheckPeriod: String
-        @Composable get() = stringResource(Res.string.settings_inbox_background_check_period)
-    override val never: String
-        @Composable get() = stringResource(Res.string.never)
-    override val settingsAppIcon: String
-        @Composable get() = stringResource(Res.string.settings_app_icon)
-    override val requiresRestart: String
-        @Composable get() = stringResource(Res.string.requires_restart)
-    override val appIconDefault: String
-        @Composable get() = stringResource(Res.string.app_icon_default)
-    override val appIconAlt1: String
-        @Composable get() = stringResource(Res.string.app_icon_alt_1)
-    override val settingsFadeReadPosts: String
-        @Composable get() = stringResource(Res.string.settings_fade_read_posts)
-    override val settingsShowUnreadComments: String
-        @Composable get() = stringResource(Res.string.settings_show_unread_comments)
-    override val actionLogout: String
-        @Composable get() = stringResource(Res.string.action_logout)
-    override val settingsImport: String
-        @Composable get() = stringResource(Res.string.settings_import)
-    override val settingsExport: String
-        @Composable get() = stringResource(Res.string.settings_export)
-    override val settingsEnableButtonsToScrollBetweenComments: String
-        @Composable get() = stringResource(Res.string.settings_enable_buttons_to_scroll_between_comments)
-    override val settingsUrlOpeningModeInternal: String
-        @Composable get() = stringResource(Res.string.settings_url_opening_mode_internal)
-    override val settingsUrlOpeningModeExternal: String
-        @Composable get() = stringResource(Res.string.settings_url_opening_mode_external)
-    override val settingsUrlOpeningModeCustomTabs: String
-        @Composable get() = stringResource(Res.string.settings_url_opening_mode_custom_tabs)
-    override val settingsFullWidthImages: String
-        @Composable get() = stringResource(Res.string.settings_full_width_images)
-    override val contentScaleFit: String
-        @Composable get() = stringResource(Res.string.content_scale_fit)
-    override val contentScaleFillWidth: String
-        @Composable get() = stringResource(Res.string.content_scale_fill_width)
-    override val contentScaleFillHeight: String
-        @Composable get() = stringResource(Res.string.content_scale_fill_height)
-    override val settingsCommentIndentAmount: String
-        @Composable get() = stringResource(Res.string.settings_comment_indent_amount)
-    override val postActionUnhide: String
-        @Composable get() = stringResource(Res.string.post_action_unhide)
-    override val adminActionPurge: String
-        @Composable get() = stringResource(Res.string.admin_action_purge)
-    override val adminActionMarkAsFeatured: String
-        @Composable get() = stringResource(Res.string.admin_action_mark_as_featured)
-    override val adminActionUnmarkAsFeatured: String
-        @Composable get() = stringResource(Res.string.admin_action_unmark_as_featured)
-    override val communitySetPreferredLanguage: String
-        @Composable get() = stringResource(Res.string.community_set_preferred_language)
-    override val appIconClassical: String
-        @Composable get() = stringResource(Res.string.app_icon_classical)
-    override val settingsAboutAcknowledgements: String
-        @Composable get() = stringResource(Res.string.settings_about_acknowledgements)
-    override val actionCreateCommunity: String
-        @Composable get() = stringResource(Res.string.action_create_community)
-    override val editCommunityItemVisibility: String
-        @Composable get() = stringResource(Res.string.edit_community_item_visibility)
-    override val communityVisibilityLocalOnly: String
-        @Composable get() = stringResource(Res.string.community_visibility_local_only)
-    override val communityVisibilityPublic: String
-        @Composable get() = stringResource(Res.string.community_visibility_public)
-    override val noticeCommunityLocalOnly: String
-        @Composable get() = stringResource(Res.string.notice_community_local_only)
-    override val noticeBannedUser: String
-        @Composable get() = stringResource(Res.string.notice_banned_user)
-    override val settingsHiddenPosts: String
-        @Composable get() = stringResource(Res.string.settings_hidden_posts)
-    override val settingsMediaList: String
-        @Composable get() = stringResource(Res.string.settings_media_list)
-    override val settingsEnableToggleFavoriteInNavDrawer: String
-        @Composable get() = stringResource(Res.string.settings_enable_toggle_favorite_in_nav_drawer)
-    override val messageContentDeleted: String
-        @Composable get() = stringResource(Res.string.message_content_deleted)
-    override val actionRestore: String
-        @Composable get() = stringResource(Res.string.action_restore)
-    override val settingsInboxPreviewMaxLines: String
-        @Composable get() = stringResource(Res.string.settings_inbox_preview_max_lines)
-    override val settingsDefaultExploreResultType: String
-        @Composable get() = stringResource(Res.string.settings_default_explore_result_type)
-    override val settingsUseAvatarAsProfileNavigationIcon: String
-        @Composable get() = stringResource(Res.string.settings_use_avatar_as_profile_navigation_icon)
-    override val messageReadAllInboxSuccess: String
-        @Composable get() = stringResource(Res.string.message_read_all_inbox_success)
-    override val settingsItemRandomThemeColor: String
-        @Composable get() = stringResource(Res.string.settings_item_random_theme_color)
-    override val settingsSubtitleRandomThemeColor: String
-        @Composable get() = stringResource(Res.string.settings_subtitle_random_theme_color)
-    override val settingsItemOpenPostWebPageOnImageClick: String
-        @Composable get() = stringResource(Res.string.settings_item_open_post_web_page_on_image_click)
-    override val settingsSubtitleOpenPostWebPageOnImageClick: String
-        @Composable get() = stringResource(Res.string.settings_subtitle_open_post_web_page_on_image_click)
-    override val settingsItemAlternateMarkdownRendering: String
-        @Composable get() = stringResource(Res.string.settings_item_alternate_markdown_rendering)
-    override val settingsItemConfigureBottomNavigationBar: String
-        @Composable get() = stringResource(Res.string.settings_item_configure_bottom_navigation_bar)
-    override val selectTabNavigationTitle: String
-        @Composable get() = stringResource(Res.string.select_tab_navigation_title)
-    override val messageAuthIssueSegue0: String
-        @Composable get() = stringResource(Res.string.message_auth_issue_segue_0)
-    override val messageAuthIssueSegue1: String
-        @Composable get() = stringResource(Res.string.message_auth_issue_segue_1)
-    override val messageAuthIssueSegue2: String
-        @Composable get() = stringResource(Res.string.message_auth_issue_segue_2)
-    override val messageAuthIssueSegue3: String
-        @Composable get() = stringResource(Res.string.message_auth_issue_segue_3)
-    override val settingsManageBanSectionDomains: String
-        @Composable get() = stringResource(Res.string.settings_manage_ban_section_domains)
-    override val settingsManageBanDomainPlaceholder: String
-        @Composable get() = stringResource(Res.string.settings_manage_ban_domain_placeholder)
-    override val settingsManageBanSectionStopWords: String
-        @Composable get() = stringResource(Res.string.settings_manage_ban_section_stop_words)
-    override val settingsManageBanStopWordPlaceholder: String
-        @Composable get() = stringResource(Res.string.settings_manage_ban_stop_word_placeholder)
-    override val settingsAboutMatrix: String
-        @Composable get() = stringResource(Res.string.settings_about_matrix)
-    override val messageNoResult: String
-        @Composable get() = stringResource(Res.string.message_no_result)
+    override val shareModeUrl: String
+        @Composable get() = stringResource(Res.string.share_mode_url)
+    override val sidebarNotLoggedMessage: String
+        @Composable get() = stringResource(Res.string.sidebar_not_logged_message)
+    override val undetermined: String
+        @Composable get() = stringResource(Res.string.undetermined)
+    override val userDetailInfo: String
+        @Composable get() = stringResource(Res.string.user_detail_info)
+    override val userInfoAdmin: String
+        @Composable get() = stringResource(Res.string.user_info_admin)
+    override val userInfoModerates: String
+        @Composable get() = stringResource(Res.string.user_info_moderates)
+    override val userTagColor: String
+        @Composable get() = stringResource(Res.string.user_tag_color)
+    override val userTagsTitle: String
+        @Composable get() = stringResource(Res.string.user_tags_title)
 
     override suspend fun inboxNotificationTitle(): String = getString(Res.string.inbox_notification_title)
 

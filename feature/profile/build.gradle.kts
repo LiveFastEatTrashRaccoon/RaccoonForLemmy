@@ -45,6 +45,7 @@ kotlin {
                 implementation(projects.unit.modlog)
                 implementation(projects.unit.myaccount)
                 implementation(projects.unit.reportlist)
+                implementation(projects.unit.usertags)
                 implementation(projects.unit.web)
                 implementation(projects.unit.zoomableimage)
             }

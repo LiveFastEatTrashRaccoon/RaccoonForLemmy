@@ -57,8 +57,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.MultiColorPreview
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsColorRow
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsMultiColorRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomColorPickerDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
@@ -66,9 +69,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.feature.settings.ui.components.SettingsColorRow
-import com.livefast.eattrash.raccoonforlemmy.feature.settings.ui.components.SettingsMultiColorRow
-import com.livefast.eattrash.raccoonforlemmy.unit.choosecolor.CustomColorPickerDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn

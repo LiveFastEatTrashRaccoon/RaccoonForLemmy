@@ -6,7 +6,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserDetailSection
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
@@ -56,6 +58,8 @@ class UserDetailViewModel(
     private val shareHelper: ShareHelper,
     private val hapticFeedback: HapticFeedback,
     private val settingsRepository: SettingsRepository,
+    private val userTagRepository: UserTagRepository,
+    private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
     private val imagePreloadManager: ImagePreloadManager,
     private val getSortTypesUseCase: GetSortTypesUseCase,
@@ -81,6 +85,15 @@ class UserDetailViewModel(
                 updateState {
                     it.copy(user = user)
                 }
+
+                val accountId = accountRepository.getActive()?.id
+                if (accountId != null) {
+                    val allTags = userTagRepository.getAll(accountId)
+                    updateState {
+                        it.copy(availableUserTags = allTags)
+                    }
+                }
+                refreshCurrentUserTags()
             }
             themeRepository.postLayout
                 .onEach { layout ->
@@ -258,6 +271,8 @@ class UserDetailViewModel(
                 val state = postPaginationManager.extractState()
                 postNavigationManager.push(state)
             }
+
+            is UserDetailMviModel.Intent.UpdateTags -> updateTags(intent.ids)
         }
     }
 
@@ -594,6 +609,51 @@ class UserDetailViewModel(
             } finally {
                 updateState { it.copy(asyncInProgress = false) }
             }
+        }
+    }
+
+    private suspend fun refreshCurrentUserTags() {
+        val accountId = accountRepository.getActive()?.id ?: return
+        val user = uiState.value.user
+        val currentTags =
+            userTagRepository.getBelonging(
+                accountId = accountId,
+                username = user.readableHandle,
+            )
+        updateState {
+            it.copy(
+                currentUserTagIds = currentTags.mapNotNull { tag -> tag.id },
+            )
+        }
+    }
+
+    private fun updateTags(ids: List<Long>) {
+        screenModelScope.launch {
+            val accountId = accountRepository.getActive()?.id ?: return@launch
+            val username = uiState.value.user.readableHandle
+            val currentTagIds =
+                userTagRepository
+                    .getTags(
+                        username = username,
+                        accountId = accountId,
+                    ).mapNotNull { it.id }
+
+            val idsToRemove = currentTagIds.filter { it !in ids }
+            for (id in idsToRemove) {
+                userTagRepository.removeMember(
+                    username = username,
+                    userTagId = id,
+                )
+            }
+
+            val idsToAdd = ids.filter { it !in currentTagIds }
+            for (id in idsToAdd) {
+                userTagRepository.addMember(
+                    username = username,
+                    userTagId = id,
+                )
+            }
+            refreshCurrentUserTags()
         }
     }
 }

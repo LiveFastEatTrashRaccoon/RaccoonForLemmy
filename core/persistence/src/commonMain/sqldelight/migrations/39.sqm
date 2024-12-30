@@ -1,6 +1,7 @@
 CREATE TABLE UserTagEntity(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
+    color INTEGER DEFAULT NULL,
     account_id INTEGER,
     FOREIGN KEY (account_id) REFERENCES AccountEntity(id) ON DELETE CASCADE,
     UNIQUE (account_id, name)
