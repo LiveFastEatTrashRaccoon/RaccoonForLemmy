@@ -429,7 +429,6 @@
     <string name="user_detail_info">Eolas úsáideora</string>
     <string name="user_info_admin">riarthóir</string>
     <string name="user_info_moderates">Modhnóir na</string>
-
     <plurals name="inbox_notification_content">
         <item quantity="one">Tá %1$d mír neamhléite</item>
         <item quantity="other">Tá a %1$d mír neamhléite</item>
