@@ -23,6 +23,8 @@ kotlin {
                 implementation(projects.core.navigation)
                 implementation(projects.core.persistence)
                 implementation(projects.core.utils)
+
+                implementation(projects.domain.lemmy.repository)
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.unit.usertags.components
+package com.livefast.eattrash.raccoonforlemmy.core.commonui.modals
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,12 +30,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeReposito
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsColorRow
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomColorPickerDialog
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun EditUserTagDialog(
+fun EditUserTagDialog(
     title: String,
     value: String = "",
     color: Color = MaterialTheme.colorScheme.primary,

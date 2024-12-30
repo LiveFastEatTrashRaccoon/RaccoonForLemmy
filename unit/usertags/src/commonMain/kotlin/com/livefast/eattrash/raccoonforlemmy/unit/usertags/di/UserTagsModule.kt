@@ -17,6 +17,7 @@ val userTagsModule =
                 UserTagsViewModel(
                     accountRepository = instance(),
                     userTagRepository = instance(),
+                    userTagHelper = instance(),
                 )
             }
         }

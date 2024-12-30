@@ -5,11 +5,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 import kotlinx.coroutines.launch
 
 internal class UserTagsViewModel(
     private val accountRepository: AccountRepository,
     private val userTagRepository: UserTagRepository,
+    private val userTagHelper: UserTagHelper,
 ) : DefaultMviModel<UserTagsMviModel.Intent, UserTagsMviModel.UiState, UserTagsMviModel.Effect>(
         initialState = UserTagsMviModel.UiState(),
     ),
@@ -55,6 +57,7 @@ internal class UserTagsViewModel(
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val tag = UserTagModel(name = name, color = color)
             userTagRepository.create(tag, accountId)
+            userTagHelper.clear()
             refresh()
         }
     }
@@ -70,6 +73,7 @@ internal class UserTagsViewModel(
                 name = name,
                 color = color,
             )
+            userTagHelper.clear()
             refresh()
         }
     }
@@ -77,6 +81,7 @@ internal class UserTagsViewModel(
     private fun removeTag(id: Long) {
         screenModelScope.launch {
             userTagRepository.delete(id)
+            userTagHelper.clear()
             refresh()
         }
     }
