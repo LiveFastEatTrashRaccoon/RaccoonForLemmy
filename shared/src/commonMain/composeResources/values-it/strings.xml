@@ -435,4 +435,7 @@
         <item quantity="other">Ci sono %1$d elementi non letti</item>
     </plurals>
     <string name="bar_theme_solid">Solido</string>
+    <string name="manage_user_tag_title">Gestisci tag utente</string>
+    <string name="user_tag_color">Colore tag</string>
+    <string name="user_tags_title">Tag utente</string>
 </resources>
