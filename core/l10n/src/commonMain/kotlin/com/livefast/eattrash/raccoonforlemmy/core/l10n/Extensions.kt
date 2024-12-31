@@ -7,10 +7,11 @@ import androidx.compose.ui.unit.LayoutDirection
 fun String.toLanguageName() =
     when (this) {
         Locales.DE -> LocalStrings.current.languageDe
-        Locales.GA -> LocalStrings.current.languageGa
+        Locales.EN -> LocalStrings.current.languageEn
         Locales.ES -> LocalStrings.current.languageEs
         Locales.FI -> LocalStrings.current.languageFi
         Locales.FR -> LocalStrings.current.languageFr
+        Locales.GA -> LocalStrings.current.languageGa
         Locales.IT -> LocalStrings.current.languageIt
         Locales.PL -> LocalStrings.current.languagePl
         Locales.PT -> LocalStrings.current.languagePt
@@ -19,7 +20,6 @@ fun String.toLanguageName() =
         Locales.ZH_CN -> LocalStrings.current.languageZhCn
         Locales.ZH_HK -> LocalStrings.current.languageZhHk
         Locales.ZH_TW -> LocalStrings.current.languageZhTw
-        Locales.EN -> LocalStrings.current.languageEn
         else -> ""
     }
 
@@ -29,17 +29,17 @@ fun String.toLanguageFlag(): String =
         Locales.DE -> "🇩🇪"
         Locales.EN -> "🇬🇧"
         Locales.ES -> "🇪🇸"
-        Locales.GA -> "🇮🇪"
         Locales.FI -> "🇫🇮"
         Locales.FR -> "🇫🇷"
+        Locales.GA -> "🇮🇪"
         Locales.IT -> "🇮🇹"
         Locales.PL -> "🇵🇱"
         Locales.PT -> "🇵🇹"
         Locales.PT_BR -> "🇧🇷"
         Locales.UA -> "🇺🇦"
         Locales.ZH_CN -> "🇨🇳"
-        Locales.ZH_TW -> "🇹🇼"
         Locales.ZH_HK -> "🇭🇰"
+        Locales.ZH_TW -> "🇹🇼"
         else -> ""
     }
 
