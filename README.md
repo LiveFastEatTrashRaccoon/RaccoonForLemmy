@@ -48,7 +48,7 @@ Main features:
 ## Want to try it out?
 
 Here are some options to install the application on your device, apart from downloading the APKs
-from the [Releases](https://github.com/LiveFastEatTrashRaccoon/RaccoonForFriendica/releases) page.
+from the [Releases](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/releases) page.
 
 <div align="center">
   <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;">
