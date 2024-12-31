@@ -436,4 +436,7 @@
     </plurals>
     <string name="message_no_result">Ups… ¡no se han encontrado resultados!</string>
     <string name="bar_theme_solid">Sólido</string>
+    <string name="user_tags_title">Etiquetas de usuario</string>
+    <string name="user_tag_color">Color de la etiqueta</string>
+    <string name="manage_user_tag_title">Gestionar etiquetas de usuario</string>
 </resources>
