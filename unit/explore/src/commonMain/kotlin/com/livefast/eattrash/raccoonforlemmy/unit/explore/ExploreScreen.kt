@@ -826,7 +826,7 @@ class ExploreScreen(
                     SearchResultType.Urls,
                 )
             CustomModalBottomSheet(
-                title = LocalStrings.current.inboxListingTypeTitle,
+                title = LocalStrings.current.exploreResultTypeTitle,
                 items =
                     values.map { value ->
                         CustomModalBottomSheetItem(
