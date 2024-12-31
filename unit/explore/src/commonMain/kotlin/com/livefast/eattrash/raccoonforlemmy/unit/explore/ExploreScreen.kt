@@ -787,7 +787,7 @@ class ExploreScreen(
                     this += ListingType.Local
                 }
             CustomModalBottomSheet(
-                title = LocalStrings.current.inboxListingTypeTitle,
+                title = LocalStrings.current.homeListingTitle,
                 items =
                     values.map { value ->
                         CustomModalBottomSheetItem(
