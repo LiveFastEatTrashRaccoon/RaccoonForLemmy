@@ -54,8 +54,14 @@ from the [Releases](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/r
   <div style="display: flex; flex-flow: row wrap; justify-content: center; align-items: center;">
     <a href="https://github.com/ImranR98/Obtainium/releases"><img alt="Get it on Obtainium" width="200" height="80" src="https://github.com/user-attachments/assets/377575fe-a651-4420-afad-8dee21618c44" /></a>
     <a href="https://f-droid.org/packages/com.livefast.eattrash.raccoonforlemmy.android"><img alt="Get it on F-Droid" width="200" height="80" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"></a>
+    <a href="https://play.google.com/apps/testing/com.livefast.eattrash.raccoonforlemmy.android"><img alt="Get it on Google Play" width="200" height="80" src="https://github.com/user-attachments/assets/e4b9e82a-8630-45ba-90f4-de4cf3207ee6"></a>
   </div>
 </div>
+
+> [!TIP]
+> To participate in the Google Play test program, you need to join [this group](https://groups.google.com/u/2/g/raccoonforlemmy-tester)
+> with the email address you are going to use in the Play Store. This will add you to alpha testers, then you will be able
+> to enroll in the closed test program.
 
 > [!TIP]
 > On Obtainium, please make sure to check the "Include pre-releases" option: by doing so you will be
