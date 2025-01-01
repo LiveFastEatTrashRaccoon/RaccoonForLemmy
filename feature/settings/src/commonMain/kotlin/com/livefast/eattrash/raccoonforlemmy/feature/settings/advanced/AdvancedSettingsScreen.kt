@@ -500,10 +500,22 @@ class AdvancedSettingsScreen : Screen {
                     // search posts only in title
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsSearchPostsTitleOnly,
+                        subtitle = LocalStrings.current.settingsSearchPostsTitleOnlySubtitle,
                         value = uiState.searchPostTitleOnly,
                         onValueChanged = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeSearchPostTitleOnly(value),
+                            )
+                        },
+                    )
+                    // restrict local user search to results
+                    SettingsSwitchRow(
+                        title = LocalStrings.current.settingsSearchRestrictLocalUserSearch,
+                        subtitle = LocalStrings.current.settingsSearchRestrictLocalUserSearchSubtitle,
+                        value = uiState.restrictLocalUserSearch,
+                        onValueChanged = { value ->
+                            model.reduce(
+                                AdvancedSettingsMviModel.Intent.ChangeRestrictLocalUserSearch(value),
                             )
                         },
                     )
