@@ -50,6 +50,7 @@ val lemmyPaginationModule =
                     userRepository = instance(),
                     domainBlocklistRepository = instance(),
                     stopWordRepository = instance(),
+                    apiConfigurationRepository = instance(),
                     userTagHelper = instance(),
                 )
             }

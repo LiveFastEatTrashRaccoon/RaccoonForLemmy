@@ -10,6 +10,7 @@ data class ExplorePaginationSpecification(
     val sortType: SortType = SortType.Active,
     val includeNsfw: Boolean = true,
     val searchPostTitleOnly: Boolean = false,
+    val restrictLocalUserSearch: Boolean = false,
     val otherInstance: String? = null,
     val query: String? = null,
 )
