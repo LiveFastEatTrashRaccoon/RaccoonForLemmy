@@ -59,7 +59,7 @@ from the [Releases](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/r
 </div>
 
 > [!TIP]
-> To participate in the Google Play test program, you need to join [this group](https://groups.google.com/u/2/g/raccoonforlemmy-tester)
+> To participate in the Google Play test program, you need to join [this group](https://groups.google.com/g/raccoonforlemmy-tester)
 > with the email address you are going to use in the Play Store. This will add you to alpha testers, then you will be able
 > to enroll in the closed test program.
 
