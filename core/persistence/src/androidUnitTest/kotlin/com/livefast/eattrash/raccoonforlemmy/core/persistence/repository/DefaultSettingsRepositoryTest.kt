@@ -174,6 +174,7 @@ class DefaultSettingsRepositoryTest {
                     useAvatarAsProfileNavigationIcon = if (model.useAvatarAsProfileNavigationIcon) 1 else 0,
                     randomThemeColor = if (model.randomThemeColor) 1 else 0,
                     openPostWebPageOnImageClick = if (model.openPostWebPageOnImageClick) 1 else 0,
+                    restrictLocalUserSearch = if (model.restrictLocalUserSearch) 1 else 0,
                 )
             }
         }
@@ -251,6 +252,7 @@ class DefaultSettingsRepositoryTest {
                     useAvatarAsProfileNavigationIcon = if (model.useAvatarAsProfileNavigationIcon) 1 else 0,
                     randomThemeColor = if (model.randomThemeColor) 1 else 0,
                     openPostWebPageOnImageClick = if (model.openPostWebPageOnImageClick) 1 else 0,
+                    restrictLocalUserSearch = if (model.restrictLocalUserSearch) 1 else 0,
                 )
             }
         }
@@ -392,6 +394,7 @@ class DefaultSettingsRepositoryTest {
         useAvatarAsProfileNavigationIcon: Boolean = false,
         randomThemeColor: Boolean = true,
         openPostWebPageOnImageClick: Boolean = true,
+        restrictLocalUserSearch: Boolean = false,
     ) = GetBy(
         id = id,
         theme = theme,
@@ -458,5 +461,6 @@ class DefaultSettingsRepositoryTest {
         useAvatarAsProfileNavigationIcon = if (useAvatarAsProfileNavigationIcon) 1 else 0,
         randomThemeColor = if (randomThemeColor) 1 else 0,
         openPostWebPageOnImageClick = if (openPostWebPageOnImageClick) 1 else 0,
+        restrictLocalUserSearch = if (restrictLocalUserSearch) 1 else 0,
     )
 }
