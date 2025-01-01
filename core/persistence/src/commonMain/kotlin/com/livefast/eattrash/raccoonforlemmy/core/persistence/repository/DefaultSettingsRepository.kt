@@ -69,6 +69,7 @@ private object KeyStoreKeys {
     const val RANDOM_THEME_COLOR = "randomThemeColor"
     const val OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK = "openPostWebPageOnImageClick"
     const val ENABLE_ALTERNATE_MARKDOWN_RENDERING = "enableAlternateMarkdownRendering"
+    const val RESTRICT_LOCAL_USER_SEARCH = "restrictLocalUserSearch"
 }
 
 internal class DefaultSettingsRepository(
@@ -168,6 +169,7 @@ internal class DefaultSettingsRepository(
             useAvatarAsProfileNavigationIcon = if (settings.useAvatarAsProfileNavigationIcon) 1L else 0L,
             randomThemeColor = if (settings.randomThemeColor) 1L else 0L,
             openPostWebPageOnImageClick = if (settings.openPostWebPageOnImageClick) 1L else 0L,
+            restrictLocalUserSearch = if (settings.restrictLocalUserSearch) 1L else 0L,
         )
     }
 
@@ -250,6 +252,7 @@ internal class DefaultSettingsRepository(
                     randomThemeColor = keyStore[KeyStoreKeys.RANDOM_THEME_COLOR, true],
                     openPostWebPageOnImageClick = keyStore[KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK, true],
                     enableAlternateMarkdownRendering = keyStore[KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING, false],
+                    restrictLocalUserSearch = keyStore[KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH, false],
                 )
             } else {
                 val entity = db.settingsQueries.getBy(accountId).executeAsOneOrNull()
@@ -381,6 +384,7 @@ internal class DefaultSettingsRepository(
                 KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK,
                 settings.openPostWebPageOnImageClick,
             )
+            keyStore.save(KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH, settings.restrictLocalUserSearch)
         } else {
             db.settingsQueries.update(
                 theme = settings.theme?.toLong(),
@@ -466,6 +470,7 @@ internal class DefaultSettingsRepository(
                 useAvatarAsProfileNavigationIcon = if (settings.useAvatarAsProfileNavigationIcon) 1L else 0L,
                 randomThemeColor = if (settings.randomThemeColor) 1L else 0L,
                 openPostWebPageOnImageClick = if (settings.openPostWebPageOnImageClick) 1L else 0L,
+                restrictLocalUserSearch = if (settings.restrictLocalUserSearch) 1L else 0L,
             )
         }
     }
@@ -573,4 +578,5 @@ private fun GetBy.toModel() =
         useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon == 1L,
         randomThemeColor = randomThemeColor == 1L,
         openPostWebPageOnImageClick = openPostWebPageOnImageClick == 1L,
+        restrictLocalUserSearch = restrictLocalUserSearch == 1L,
     )

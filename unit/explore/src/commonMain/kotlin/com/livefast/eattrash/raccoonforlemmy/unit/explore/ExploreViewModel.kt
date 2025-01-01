@@ -357,13 +357,15 @@ class ExploreViewModel(
     }
 
     private suspend fun refresh(initial: Boolean = false) {
+        val currentSettings = settingsRepository.currentSettings.value
         paginationManager.reset(
             ExplorePaginationSpecification(
                 listingType = uiState.value.listingType,
                 sortType = uiState.value.sortType,
                 query = uiState.value.searchText,
-                includeNsfw = settingsRepository.currentSettings.value.includeNsfw,
-                searchPostTitleOnly = settingsRepository.currentSettings.value.searchPostTitleOnly,
+                includeNsfw = currentSettings.includeNsfw,
+                searchPostTitleOnly = currentSettings.searchPostTitleOnly,
+                restrictLocalUserSearch = currentSettings.restrictLocalUserSearch,
                 otherInstance = otherInstance,
                 resultType = uiState.value.resultType,
             ),

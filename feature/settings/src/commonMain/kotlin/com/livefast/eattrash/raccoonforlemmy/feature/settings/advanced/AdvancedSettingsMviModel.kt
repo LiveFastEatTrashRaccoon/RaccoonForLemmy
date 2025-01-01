@@ -90,6 +90,10 @@ interface AdvancedSettingsMviModel :
         data class ChangeEnableAlternateMarkdownRendering(
             val value: Boolean,
         ) : Intent
+
+        data class ChangeRestrictLocalUserSearch(
+            val value: Boolean,
+        ) : Intent
     }
 
     data class UiState(
@@ -126,6 +130,7 @@ interface AdvancedSettingsMviModel :
         val openPostWebPageOnImageClick: Boolean = true,
         val alternateMarkdownRenderingItemVisible: Boolean = false,
         val enableAlternateMarkdownRendering: Boolean = false,
+        val restrictLocalUserSearch: Boolean = false,
     )
 
     sealed interface Effect {

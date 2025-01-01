@@ -390,6 +390,9 @@
     <string name="settings_reply_color">Reply action color</string>
     <string name="settings_save_color">Save action color</string>
     <string name="settings_search_posts_title_only">Search posts only in title</string>
+    <string name="settings_search_posts_title_only_subtitle">Filter post search results based on title match</string>
+    <string name="settings_search_posts_restrict_local_user_search">Restrict local user search</string>
+    <string name="settings_search_posts_restrict_local_user_search_subtitle">Filter local user search results on current instance</string>
     <string name="settings_section_account">Account settings</string>
     <string name="settings_section_appearance">Look and feel</string>
     <string name="settings_section_debug">Debug</string>

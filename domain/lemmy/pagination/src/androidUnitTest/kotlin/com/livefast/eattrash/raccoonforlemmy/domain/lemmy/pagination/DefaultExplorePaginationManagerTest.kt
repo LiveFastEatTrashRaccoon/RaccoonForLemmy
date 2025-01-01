@@ -4,7 +4,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Account
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.StopWordRepository
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResult
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
@@ -69,6 +71,10 @@ class DefaultExplorePaginationManagerTest {
         mockk<UserTagHelper> {
             coEvery { any<UserModel>().withTags() } answers { firstArg() }
         }
+    private val apiConfigurationRepository =
+        mockk<ApiConfigurationRepository> {
+            every { instance } returns MutableStateFlow("instance")
+        }
 
     private val sut =
         DefaultExplorePaginationManager(
@@ -80,6 +86,7 @@ class DefaultExplorePaginationManagerTest {
             userRepository = userRepository,
             domainBlocklistRepository = domainBlocklistRepository,
             stopWordRepository = stopWordRepository,
+            apiConfigurationRepository = apiConfigurationRepository,
             userTagHelper = userTagHelper,
         )
 
@@ -405,6 +412,70 @@ class DefaultExplorePaginationManagerTest {
                     query = query,
                 )
                 postRepository.getResolved(query = query, auth = AUTH_TOKEN)
+            }
+        }
+
+    @Test
+    fun givenResultsAndRestrictLocalUserSearch_whenLoadNextPage_thenResultIsAsExpected() =
+        runTest {
+            val page = slot<Int>()
+            coEvery {
+                communityRepository.search(
+                    query = any(),
+                    auth = any(),
+                    page = capture(page),
+                    limit = any(),
+                    sortType = any(),
+                    listingType = any(),
+                    resultType = any(),
+                    instance = any(),
+                    communityId = any(),
+                )
+            } answers {
+                val pageNumber = page.captured
+                if (pageNumber == 1) {
+                    (0..<20).map { idx ->
+                        SearchResult.User(
+                            UserModel(
+                                id = idx.toLong(),
+                                host =
+                                    if (idx == 0) {
+                                        "instance"
+                                    } else {
+                                        ""
+                                    },
+                            ),
+                        )
+                    }
+                } else {
+                    emptyList()
+                }
+            }
+            val specification =
+                ExplorePaginationSpecification(
+                    resultType = SearchResultType.Users,
+                    listingType = ListingType.Local,
+                    restrictLocalUserSearch = true,
+                )
+            sut.reset(specification)
+
+            val items = sut.loadNextPage()
+
+            assertEquals(1, items.size)
+            assertTrue(sut.canFetchMore)
+
+            coVerify {
+                communityRepository.search(
+                    auth = AUTH_TOKEN,
+                    page = 1,
+                    limit = 20,
+                    listingType = specification.listingType,
+                    sortType = specification.sortType,
+                    communityId = null,
+                    instance = null,
+                    resultType = specification.resultType,
+                    query = "",
+                )
             }
         }
 

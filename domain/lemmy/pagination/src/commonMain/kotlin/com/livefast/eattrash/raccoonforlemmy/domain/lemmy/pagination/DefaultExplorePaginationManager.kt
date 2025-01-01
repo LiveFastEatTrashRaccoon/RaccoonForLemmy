@@ -3,7 +3,9 @@ package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.StopWordRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResult
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.uniqueIdentifier
@@ -25,6 +27,7 @@ class DefaultExplorePaginationManager(
     private val userRepository: UserRepository,
     private val domainBlocklistRepository: DomainBlocklistRepository,
     private val stopWordRepository: StopWordRepository,
+    private val apiConfigurationRepository: ApiConfigurationRepository,
     private val userTagHelper: UserTagHelper,
 ) : ExplorePaginationManager {
     override var canFetchMore: Boolean = true
@@ -130,6 +133,19 @@ class DefaultExplorePaginationManager(
                                             other = searchText,
                                             ignoreCase = true,
                                         )
+                                    }
+                                } else {
+                                    it
+                                }
+                            }
+
+                            SearchResultType.Users -> {
+                                if (specification.listingType == ListingType.Local && specification.restrictLocalUserSearch) {
+                                    val referenceHost =
+                                        specification.otherInstance?.takeIf { s -> s.isNotEmpty() }
+                                            ?: apiConfigurationRepository.instance.value
+                                    it.filterIsInstance<SearchResult.User>().filter { res ->
+                                        res.model.host == referenceHost
                                     }
                                 } else {
                                     it

@@ -65,6 +65,7 @@ CREATE TABLE SettingsEntity (
     useAvatarAsProfileNavigationIcon INTEGER NOT NULL DEFAULT 0,
     randomThemeColor INTEGER NOT NULL DEFAULT 1,
     openPostWebPageOnImageClick INTEGER NOT NULL DEFAULT 1,
+    restrictLocalUserSearch INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (account_id) REFERENCES AccountEntity(id) ON DELETE CASCADE,
     UNIQUE(account_id)
 );
@@ -135,8 +136,10 @@ INSERT OR IGNORE INTO SettingsEntity (
     useAvatarAsProfileNavigationIcon,
     randomThemeColor,
     openPostWebPageOnImageClick,
-    account_id
+    account_id,
+    restrictLocalUserSearch
 ) VALUES (
+    ?,
     ?,
     ?,
     ?,
@@ -269,7 +272,8 @@ SET theme = ?,
     defaultExploreResultType = ?,
     useAvatarAsProfileNavigationIcon = ?,
     randomThemeColor = ?,
-    openPostWebPageOnImageClick = ?
+    openPostWebPageOnImageClick = ?,
+    restrictLocalUserSearch = ?
 WHERE account_id = ?;
 
 getBy:
@@ -338,6 +342,7 @@ SELECT
     defaultExploreResultType,
     useAvatarAsProfileNavigationIcon,
     randomThemeColor,
-    openPostWebPageOnImageClick
+    openPostWebPageOnImageClick,
+    restrictLocalUserSearch
 FROM SettingsEntity
 WHERE account_id = ?;

@@ -164,6 +164,7 @@ class AdvancedSettingsViewModel(
                     useAvatarAsProfileNavigationIcon = settings.useAvatarAsProfileNavigationIcon,
                     openPostWebPageOnImageClick = settings.openPostWebPageOnImageClick,
                     enableAlternateMarkdownRendering = settings.enableAlternateMarkdownRendering,
+                    restrictLocalUserSearch = settings.restrictLocalUserSearch,
                 )
             }
         }
@@ -218,6 +219,9 @@ class AdvancedSettingsViewModel(
 
             is AdvancedSettingsMviModel.Intent.ChangeEnableAlternateMarkdownRendering ->
                 changeEnableAlternateMarkdownRendering(intent.value)
+
+            is AdvancedSettingsMviModel.Intent.ChangeRestrictLocalUserSearch ->
+                changeRestrictLocalUserSearch(intent.value)
         }
     }
 
@@ -454,6 +458,15 @@ class AdvancedSettingsViewModel(
             updateState { it.copy(enableAlternateMarkdownRendering = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(enableAlternateMarkdownRendering = value)
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeRestrictLocalUserSearch(value: Boolean) {
+        screenModelScope.launch {
+            updateState { it.copy(restrictLocalUserSearch = value) }
+            val settings =
+                settingsRepository.currentSettings.value.copy(restrictLocalUserSearch = value)
             saveSettings(settings)
         }
     }
