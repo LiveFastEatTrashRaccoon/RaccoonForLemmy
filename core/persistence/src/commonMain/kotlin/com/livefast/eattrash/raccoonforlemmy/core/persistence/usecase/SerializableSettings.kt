@@ -80,6 +80,7 @@ internal data class SerializableSettings(
     val useAvatarAsProfileNavigationIcon: Boolean = false,
     val randomThemeColor: Boolean = false,
     val openPostWebPageOnImageClick: Boolean = true,
+    val restrictLocalUserSearch: Boolean = true,
 )
 
 internal fun SerializableSettings.toModel() =
@@ -150,6 +151,7 @@ internal fun SerializableSettings.toModel() =
         useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon,
         randomThemeColor = randomThemeColor,
         openPostWebPageOnImageClick = openPostWebPageOnImageClick,
+        restrictLocalUserSearch = restrictLocalUserSearch,
     )
 
 internal fun SettingsModel.toData() =
@@ -222,4 +224,5 @@ internal fun SettingsModel.toData() =
         useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon,
         randomThemeColor = randomThemeColor,
         openPostWebPageOnImageClick = openPostWebPageOnImageClick,
+        restrictLocalUserSearch = restrictLocalUserSearch,
     )

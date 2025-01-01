@@ -69,4 +69,5 @@ data class SettingsModel(
     val randomThemeColor: Boolean = true,
     val openPostWebPageOnImageClick: Boolean = true,
     val enableAlternateMarkdownRendering: Boolean = false,
+    val restrictLocalUserSearch: Boolean = false,
 )
