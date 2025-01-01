@@ -392,6 +392,9 @@ interface Strings {
     val settingsReplyColor: String @Composable get
     val settingsSaveColor: String @Composable get
     val settingsSearchPostsTitleOnly: String @Composable get
+    val settingsSearchPostsTitleOnlySubtitle: String @Composable get
+    val settingsSearchRestrictLocalUserSearch: String @Composable get
+    val settingsSearchRestrictLocalUserSearchSubtitle: String @Composable get
     val settingsSectionAccount: String @Composable get
     val settingsSectionAppearance: String @Composable get
     val settingsSectionDebug: String @Composable get

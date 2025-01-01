@@ -396,7 +396,10 @@ import raccoonforlemmy.shared.generated.resources.settings_post_layout_full
 import raccoonforlemmy.shared.generated.resources.settings_prefer_user_nicknames
 import raccoonforlemmy.shared.generated.resources.settings_reply_color
 import raccoonforlemmy.shared.generated.resources.settings_save_color
+import raccoonforlemmy.shared.generated.resources.settings_search_posts_restrict_local_user_search
+import raccoonforlemmy.shared.generated.resources.settings_search_posts_restrict_local_user_search_subtitle
 import raccoonforlemmy.shared.generated.resources.settings_search_posts_title_only
+import raccoonforlemmy.shared.generated.resources.settings_search_posts_title_only_subtitle
 import raccoonforlemmy.shared.generated.resources.settings_section_account
 import raccoonforlemmy.shared.generated.resources.settings_section_appearance
 import raccoonforlemmy.shared.generated.resources.settings_section_debug
@@ -1253,6 +1256,12 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.settings_save_color)
     override val settingsSearchPostsTitleOnly: String
         @Composable get() = stringResource(Res.string.settings_search_posts_title_only)
+    override val settingsSearchPostsTitleOnlySubtitle: String
+        @Composable get() = stringResource(Res.string.settings_search_posts_title_only_subtitle)
+    override val settingsSearchRestrictLocalUserSearch: String
+        @Composable get() = stringResource(Res.string.settings_search_posts_restrict_local_user_search)
+    override val settingsSearchRestrictLocalUserSearchSubtitle: String
+        @Composable get() = stringResource(Res.string.settings_search_posts_restrict_local_user_search_subtitle)
     override val settingsSectionAccount: String
         @Composable get() = stringResource(Res.string.settings_section_account)
     override val settingsSectionAppearance: String
