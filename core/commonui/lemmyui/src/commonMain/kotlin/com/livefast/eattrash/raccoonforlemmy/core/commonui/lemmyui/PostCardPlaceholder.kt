@@ -34,7 +34,7 @@ fun PostCardPlaceholder(
     when (postLayout) {
         PostLayout.Compact -> {
             Column(
-                modifier = modifier.background(MaterialTheme.colorScheme.background),
+                modifier = modifier,
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 Row(
@@ -43,7 +43,8 @@ fun PostCardPlaceholder(
                 ) {
                     Box(
                         modifier =
-                            Modifier.size(IconSize.s)
+                            Modifier
+                                .size(IconSize.s)
                                 .clip(CircleShape)
                                 .shimmerEffect(),
                     )
@@ -53,7 +54,8 @@ fun PostCardPlaceholder(
                     ) {
                         Box(
                             modifier =
-                                Modifier.height(IconSize.s)
+                                Modifier
+                                    .height(IconSize.s)
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(CornerSize.m))
                                     .shimmerEffect(),
@@ -100,8 +102,7 @@ fun PostCardPlaceholder(
                         .clip(RoundedCornerShape(CornerSize.l))
                         .background(
                             color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                        )
-                        .padding(Spacing.s),
+                        ).padding(Spacing.s),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
                 Row(
@@ -121,14 +122,16 @@ fun PostCardPlaceholder(
                     ) {
                         Box(
                             modifier =
-                                Modifier.height(IconSize.s)
+                                Modifier
+                                    .height(IconSize.s)
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(CornerSize.m))
                                     .shimmerEffect(),
                         )
                         Box(
                             modifier =
-                                Modifier.height(IconSize.s)
+                                Modifier
+                                    .height(IconSize.s)
                                     .fillMaxWidth(0.5f)
                                     .clip(RoundedCornerShape(CornerSize.m))
                                     .shimmerEffect(),
@@ -137,7 +140,8 @@ fun PostCardPlaceholder(
                 }
                 Box(
                     modifier =
-                        Modifier.height(IconSize.l)
+                        Modifier
+                            .height(IconSize.l)
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(CornerSize.m))
                             .shimmerEffect(),
@@ -163,7 +167,6 @@ fun PostCardPlaceholder(
 
         PostLayout.Full -> {
             Column(
-                modifier = Modifier.background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
                 Row(
@@ -183,14 +186,16 @@ fun PostCardPlaceholder(
                     ) {
                         Box(
                             modifier =
-                                Modifier.height(IconSize.s)
+                                Modifier
+                                    .height(IconSize.s)
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(CornerSize.m))
                                     .shimmerEffect(),
                         )
                         Box(
                             modifier =
-                                Modifier.height(IconSize.s)
+                                Modifier
+                                    .height(IconSize.s)
                                     .fillMaxWidth(0.5f)
                                     .clip(RoundedCornerShape(CornerSize.m))
                                     .shimmerEffect(),
