@@ -14,7 +14,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Rule
-import org.junit.Test
+import kotlin.test.Test
 
 class DefaultCustomUriHandlerTest {
     @get:Rule

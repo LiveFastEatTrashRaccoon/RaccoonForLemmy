@@ -25,8 +25,8 @@ import kotlin.time.Duration
 sealed interface NotificationCenterEvent {
     data class ChangeSortType(
         val value: SortType,
-        val defaultForCommunity: Boolean = false,
         val screenKey: String?,
+        val saveAsDefault: Boolean = false,
     ) : NotificationCenterEvent
 
     data class ChangeCommentSortType(

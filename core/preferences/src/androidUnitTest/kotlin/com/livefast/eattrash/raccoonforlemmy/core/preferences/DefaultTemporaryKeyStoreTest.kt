@@ -9,11 +9,11 @@ import com.russhwolf.settings.set
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Rule
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class DefaultTemporaryKeyStoreTest {
     @get:Rule

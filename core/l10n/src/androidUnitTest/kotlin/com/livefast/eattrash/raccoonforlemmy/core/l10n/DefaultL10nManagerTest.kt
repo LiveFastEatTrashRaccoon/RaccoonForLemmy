@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.l10n
 
-import org.junit.Test
 import java.util.Locale
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class DefaultL10nManagerTest {

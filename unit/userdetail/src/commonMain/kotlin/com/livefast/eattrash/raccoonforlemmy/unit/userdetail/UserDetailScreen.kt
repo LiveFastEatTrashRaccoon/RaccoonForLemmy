@@ -172,6 +172,7 @@ class UserDetailScreen(
         val clipboardManager = LocalClipboardManager.current
         var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
         var sortBottomSheetOpened by remember { mutableStateOf(false) }
+        var defaultSortBottomSheetOpened by remember { mutableStateOf(false) }
         var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
         var manageUserTagsBottomSheetOpened by remember { mutableStateOf(false) }
         var addNewUserTagDialogOpen by remember { mutableStateOf(false) }
@@ -244,8 +245,13 @@ class UserDetailScreen(
                                 sortBottomSheetOpened = true
                             },
                         ) {
+                            val sortType =
+                                when (uiState.section) {
+                                    UserDetailSection.Comments -> uiState.commentSortType
+                                    UserDetailSection.Posts -> uiState.postSortType
+                                }
                             Icon(
-                                imageVector = uiState.sortType.toIcon(),
+                                imageVector = sortType.toIcon(),
                                 contentDescription = null,
                             )
                         }
@@ -254,6 +260,11 @@ class UserDetailScreen(
                         Box {
                             val options =
                                 buildList {
+                                    this +=
+                                        Option(
+                                            OptionId.SetCustomSort,
+                                            LocalStrings.current.communitySetCustomSort,
+                                        )
                                     this +=
                                         Option(
                                             OptionId.ExploreInstance,
@@ -377,6 +388,10 @@ class UserDetailScreen(
 
                                                 OptionId.ManageTags -> {
                                                     manageUserTagsBottomSheetOpened = true
+                                                }
+
+                                                OptionId.SetCustomSort -> {
+                                                    defaultSortBottomSheetOpened = true
                                                 }
 
                                                 else -> Unit
@@ -522,9 +537,7 @@ class UserDetailScreen(
                                         else -> UserDetailSection.Posts
                                     }
                                 model.reduce(
-                                    UserDetailMviModel.Intent.ChangeSection(
-                                        section,
-                                    ),
+                                    UserDetailMviModel.Intent.ChangeSection(section),
                                 )
                             },
                         )
@@ -1241,17 +1254,20 @@ class UserDetailScreen(
             )
         }
 
-        if (sortBottomSheetOpened) {
+        if (sortBottomSheetOpened || defaultSortBottomSheetOpened) {
             SortBottomSheet(
                 values = uiState.availableSortTypes,
                 expandTop = true,
                 onSelected = { value ->
+                    val wasDefaultSortBottomSheetOpened = defaultSortBottomSheetOpened
                     sortBottomSheetOpened = false
+                    defaultSortBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeSortType(
                                 value = value,
                                 screenKey = uiState.user.readableHandle,
+                                saveAsDefault = wasDefaultSortBottomSheetOpened,
                             ),
                         )
                     }

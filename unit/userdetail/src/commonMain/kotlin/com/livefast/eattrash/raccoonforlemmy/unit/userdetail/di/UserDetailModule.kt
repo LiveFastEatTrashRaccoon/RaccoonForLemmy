@@ -40,6 +40,7 @@ val userDetailModule =
                     itemCache = instance(),
                     postNavigationManager = instance(),
                     lemmyValueCache = instance(),
+                    userSortRepository = instance(),
                 )
             }
         }

@@ -3,7 +3,7 @@ package com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 

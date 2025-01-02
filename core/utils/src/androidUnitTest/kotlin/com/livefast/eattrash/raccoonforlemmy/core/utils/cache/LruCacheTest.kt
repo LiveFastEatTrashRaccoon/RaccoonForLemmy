@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.cache
 
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
