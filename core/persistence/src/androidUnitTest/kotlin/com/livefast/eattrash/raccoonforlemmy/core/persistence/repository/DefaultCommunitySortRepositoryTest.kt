@@ -8,7 +8,7 @@ import io.mockk.verify
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class DefaultCommunitySortRepositoryTest {
@@ -16,30 +16,49 @@ class DefaultCommunitySortRepositoryTest {
     val dispatcherTestRule = DispatcherTestRule()
 
     private val keyStore = mockk<TemporaryKeyStore>(relaxUnitFun = true)
+    private val serializer =
+        mockk<SortSerializer> {
+            every { deserializeMap(any()) } answers {
+                firstArg<List<String>>()
+                    .associate { s ->
+                        val tokens = s.split(":").map { it.trim() }
+                        tokens[0] to tokens[1].toInt()
+                    }.toMutableMap()
+            }
+            every { serializeMap(any()) } answers {
+                firstArg<Map<String, Int>>()
+                    .map { entry ->
+                        "${entry.key}:${entry.value}"
+                    }.toList()
+            }
+        }
 
-    private val sut = DefaultCommunitySortRepository(keyStore = keyStore)
+    private val sut =
+        DefaultCommunitySortRepository(
+            keyStore = keyStore,
+            serializer = serializer,
+        )
 
     @Test
     fun givenEmptyInitialState_whenSave_thenValueIsStored() =
         runTest {
             every { keyStore.get(KEY, listOf()) } returns listOf()
-
-            sut.save("!raccoonforlemmy@lemmy.world", 1)
+            sut.save(HANDLE, 1)
 
             verify {
-                keyStore.save(KEY, listOf("!raccoonforlemmy@lemmy.world:1"))
+                keyStore.save(KEY, listOf("$HANDLE:1"))
             }
         }
 
     @Test
     fun givenCommunityAlreadyExisting_whenSave_thenValueIsStored() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("!raccoonforlemmy@lemmy.world:0")
+            every { keyStore.get(KEY, listOf()) } returns listOf("$HANDLE:0")
 
-            sut.save("!raccoonforlemmy@lemmy.world", 1)
+            sut.save(HANDLE, 1)
 
             verify {
-                keyStore.save(KEY, listOf("!raccoonforlemmy@lemmy.world:1"))
+                keyStore.save(KEY, listOf("$HANDLE:1"))
             }
         }
 
@@ -48,10 +67,10 @@ class DefaultCommunitySortRepositoryTest {
         runTest {
             every { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
 
-            sut.save("!raccoonforlemmy@lemmy.world", 1)
+            sut.save(HANDLE, 1)
 
             verify {
-                keyStore.save(KEY, listOf("!test@lemmy.world:1", "!raccoonforlemmy@lemmy.world:1"))
+                keyStore.save(KEY, listOf("!test@lemmy.world:1", "$HANDLE:1"))
             }
         }
 
@@ -60,7 +79,7 @@ class DefaultCommunitySortRepositoryTest {
         runTest {
             every { keyStore.get(KEY, listOf()) } returns listOf()
 
-            val res = sut.get("!raccoonforlemmy@lemmy.world")
+            val res = sut.get(HANDLE)
 
             assertNull(res)
         }
@@ -68,9 +87,9 @@ class DefaultCommunitySortRepositoryTest {
     @Test
     fun givenCommunityExists_whenGet_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("!raccoonforlemmy@lemmy.world:2")
+            every { keyStore.get(KEY, listOf()) } returns listOf("$HANDLE:2")
 
-            val res = sut.get("!raccoonforlemmy@lemmy.world")
+            val res = sut.get(HANDLE)
 
             assertEquals(2, res)
         }
@@ -80,12 +99,13 @@ class DefaultCommunitySortRepositoryTest {
         runTest {
             every { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:2")
 
-            val res = sut.get("!raccoonforlemmy@lemmy.world")
+            val res = sut.get(HANDLE)
 
             assertNull(res)
         }
 
     companion object {
         private const val KEY = "communitySort"
+        private const val HANDLE = "!raccoonforlemmy@lemmy.world"
     }
 }
