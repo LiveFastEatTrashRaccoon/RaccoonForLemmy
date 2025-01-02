@@ -3,7 +3,6 @@ package com.livefast.eattrash.raccoonforlemmy.unit.explore.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -17,32 +16,21 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.getAdditionalLabel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +39,6 @@ internal fun ExploreTopBar(
     listingType: ListingType,
     sortType: SortType,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    edgeToEdge: Boolean = true,
     resultType: SearchResultType,
     otherInstance: String = "",
     onSelectListingType: (() -> Unit)? = null,
@@ -60,21 +47,8 @@ internal fun ExploreTopBar(
     onHamburgerTapped: (() -> Unit)? = null,
     onBack: (() -> Unit)? = null,
 ) {
-    val scope = rememberCoroutineScope()
-    val maxTopInset = Dimensions.maxTopBarInset.toLocalPixel()
-    var topInset by remember { mutableStateOf(maxTopInset) }
-    snapshotFlow { topAppBarState.collapsedFraction }
-        .onEach {
-            topInset = maxTopInset * (1 - it)
-        }.launchIn(scope)
-
     TopAppBar(
-        windowInsets =
-            if (edgeToEdge) {
-                WindowInsets(0, topInset.roundToInt(), 0, 0)
-            } else {
-                TopAppBarDefaults.windowInsets
-            },
+        windowInsets = topAppBarState.toWindowInsets(),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
             when {
