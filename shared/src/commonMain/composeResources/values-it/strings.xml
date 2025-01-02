@@ -438,4 +438,7 @@
     <string name="manage_user_tag_title">Gestisci tag utente</string>
     <string name="user_tag_color">Colore tag</string>
     <string name="user_tags_title">Tag utente</string>
+    <string name="settings_search_posts_title_only_subtitle">Filtra risultati di ricerca post sulla base del titolo esatto</string>
+    <string name="settings_search_posts_restrict_local_user_search">Restringi ricerca utenti locali</string>
+    <string name="settings_search_posts_restrict_local_user_search_subtitle">Filtra risultati di ricerca utenti locali su istanza attuale</string>
 </resources>
