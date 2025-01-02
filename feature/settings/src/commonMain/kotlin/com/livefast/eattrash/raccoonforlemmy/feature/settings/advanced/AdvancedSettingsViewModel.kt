@@ -146,7 +146,6 @@ class AdvancedSettingsViewModel(
                     zombieModeScrollAmount = settings.zombieModeScrollAmount,
                     markAsReadWhileScrolling = settings.markAsReadWhileScrolling,
                     searchPostTitleOnly = settings.searchPostTitleOnly,
-                    edgeToEdge = settings.edgeToEdge,
                     infiniteScrollDisabled = !settings.infiniteScrollEnabled,
                     systemBarTheme = settings.systemBarTheme.toUiBarTheme(),
                     imageSourceSupported = galleryHelper.supportsCustomPath,
@@ -191,7 +190,6 @@ class AdvancedSettingsViewModel(
             is AdvancedSettingsMviModel.Intent.ChangeSearchPostTitleOnly ->
                 changeSearchPostTitleOnly(intent.value)
 
-            is AdvancedSettingsMviModel.Intent.ChangeEdgeToEdge -> changeEdgeToEdge(intent.value)
             is AdvancedSettingsMviModel.Intent.ChangeInfiniteScrollDisabled ->
                 changeInfiniteScrollDisabled(intent.value)
 
@@ -330,14 +328,6 @@ class AdvancedSettingsViewModel(
                 settingsRepository.currentSettings.value.copy(defaultExploreResultType = value.toInt())
             saveSettings(settings)
             notificationCenter.send(NotificationCenterEvent.ResetExplore)
-        }
-    }
-
-    private fun changeEdgeToEdge(value: Boolean) {
-        screenModelScope.launch {
-            updateState { it.copy(edgeToEdge = value) }
-            val settings = settingsRepository.currentSettings.value.copy(edgeToEdge = value)
-            saveSettings(settings)
         }
     }
 

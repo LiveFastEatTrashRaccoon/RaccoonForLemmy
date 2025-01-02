@@ -196,17 +196,6 @@ class AdvancedSettingsScreen : Screen {
                         },
                     )
 
-                    // edge to edge
-                    SettingsSwitchRow(
-                        title = LocalStrings.current.settingsEdgeToEdge,
-                        value = uiState.edgeToEdge,
-                        onValueChanged = { value ->
-                            model.reduce(
-                                AdvancedSettingsMviModel.Intent.ChangeEdgeToEdge(value),
-                            )
-                        },
-                    )
-
                     // system bar theme
                     SettingsRow(
                         title = LocalStrings.current.settingsBarTheme,
