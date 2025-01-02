@@ -1,10 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.advanced
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,6 +47,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
@@ -128,14 +129,15 @@ class AdvancedSettingsScreen : Screen {
         }
 
         Scaffold(
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             modifier =
                 Modifier
-                    .background(MaterialTheme.colorScheme.background)
                     .onGloballyPositioned {
                         screenWidth = it.size.toSize().width
                     },
             topBar = {
                 TopAppBar(
+                    windowInsets = topAppBarState.toWindowInsets(),
                     scrollBehavior = scrollBehavior,
                     title = {
                         Text(
@@ -192,17 +194,6 @@ class AdvancedSettingsScreen : Screen {
                         onValueChanged = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeNavBarTitlesVisible(value),
-                            )
-                        },
-                    )
-
-                    // edge to edge
-                    SettingsSwitchRow(
-                        title = LocalStrings.current.settingsEdgeToEdge,
-                        value = uiState.edgeToEdge,
-                        onValueChanged = { value ->
-                            model.reduce(
-                                AdvancedSettingsMviModel.Intent.ChangeEdgeToEdge(value),
                             )
                         },
                     )

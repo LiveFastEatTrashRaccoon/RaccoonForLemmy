@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +26,7 @@ fun CommentCardPlaceholder(
     hideAuthor: Boolean = false,
 ) {
     Column(
-        modifier = modifier.background(MaterialTheme.colorScheme.background),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
         if (!hideAuthor) {
@@ -38,7 +36,8 @@ fun CommentCardPlaceholder(
             ) {
                 Box(
                     modifier =
-                        Modifier.size(IconSize.s)
+                        Modifier
+                            .size(IconSize.s)
                             .clip(CircleShape)
                             .shimmerEffect(),
                 )
@@ -48,14 +47,16 @@ fun CommentCardPlaceholder(
                 ) {
                     Box(
                         modifier =
-                            Modifier.height(IconSize.s)
+                            Modifier
+                                .height(IconSize.s)
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(CornerSize.m))
                                 .shimmerEffect(),
                     )
                     Box(
                         modifier =
-                            Modifier.height(IconSize.s)
+                            Modifier
+                                .height(IconSize.s)
                                 .fillMaxWidth(0.5f)
                                 .clip(RoundedCornerShape(CornerSize.m))
                                 .shimmerEffect(),

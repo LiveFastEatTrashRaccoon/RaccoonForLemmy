@@ -3,12 +3,11 @@ package com.livefast.eattrash.raccoonforlemmy.unit.manageban
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -126,7 +125,7 @@ class ManageBanScreen : Screen {
         }
 
         Scaffold(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
@@ -221,8 +220,7 @@ class ManageBanScreen : Screen {
                     Modifier
                         .padding(
                             top = padding.calculateTopPadding(),
-                        ).navigationBarsPadding()
-                        .then(
+                        ).then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                             } else {

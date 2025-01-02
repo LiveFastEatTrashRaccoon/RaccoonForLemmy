@@ -41,10 +41,6 @@ interface AdvancedSettingsMviModel :
             val value: Boolean,
         ) : Intent
 
-        data class ChangeEdgeToEdge(
-            val value: Boolean,
-        ) : Intent
-
         data class ChangeInfiniteScrollDisabled(
             val value: Boolean,
         ) : Intent
@@ -109,7 +105,6 @@ interface AdvancedSettingsMviModel :
         val zombieModeScrollAmount: Float = 100f,
         val markAsReadWhileScrolling: Boolean = true,
         val searchPostTitleOnly: Boolean = false,
-        val edgeToEdge: Boolean = true,
         val infiniteScrollDisabled: Boolean = false,
         val systemBarTheme: UiBarTheme = UiBarTheme.Transparent,
         val imageSourceSupported: Boolean = true,

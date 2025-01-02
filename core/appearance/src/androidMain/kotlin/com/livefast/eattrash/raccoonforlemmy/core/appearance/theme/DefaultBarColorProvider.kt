@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.appearance.theme
 
 import android.app.Activity
 import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
@@ -18,11 +19,19 @@ internal class DefaultBarColorProvider : BarColorProvider {
         barTheme: UiBarTheme,
     ) {
         val view = LocalView.current
+        val isSystemInDarkTheme = isSystemInDarkTheme()
         LaunchedEffect(theme, barTheme) {
             (view.context as? Activity)?.window?.apply {
                 val baseColor =
                     when (theme) {
                         UiTheme.Light -> Color.White
+                        UiTheme.Black, UiTheme.Dark -> Color.Black
+                        UiTheme.Default ->
+                            if (isSystemInDarkTheme) {
+                                Color.Black
+                            } else {
+                                Color.White
+                            }
                         else -> Color.Black
                     }
                 val barColor =
@@ -31,15 +40,17 @@ internal class DefaultBarColorProvider : BarColorProvider {
                         UiBarTheme.Transparent -> baseColor.copy(alpha = 0.01f)
                         else -> baseColor
                     }.toArgb()
-                statusBarColor = barColor
-                navigationBarColor = barColor
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                    statusBarColor = barColor
+                    navigationBarColor = barColor
+                }
 
                 if (barTheme != UiBarTheme.Solid) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        setDecorFitsSystemWindows(false)
-                    }
+                    WindowCompat.setDecorFitsSystemWindows(this, false)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        isStatusBarContrastEnforced = true
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                            isStatusBarContrastEnforced = true
+                        }
                         isNavigationBarContrastEnforced = true
                     }
                 }

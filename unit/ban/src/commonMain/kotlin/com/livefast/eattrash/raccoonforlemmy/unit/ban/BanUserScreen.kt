@@ -102,7 +102,7 @@ class BanUserScreen(
         }
 
         Scaffold(
-            modifier = Modifier.navigationBarsPadding(),
+            modifier = Modifier.navigationBarsPadding().safeImePadding(),
             topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,

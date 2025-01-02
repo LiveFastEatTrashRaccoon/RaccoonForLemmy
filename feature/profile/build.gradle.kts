@@ -14,7 +14,6 @@ kotlin {
                 implementation(libs.voyager.screenmodel)
                 implementation(libs.voyager.kodein)
                 implementation(libs.voyager.tab)
-                implementation(libs.voyager.bottomsheet)
                 implementation(libs.ktor.cio)
 
                 implementation(projects.core.appearance)

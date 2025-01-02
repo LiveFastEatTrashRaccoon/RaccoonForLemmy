@@ -123,11 +123,8 @@ class InboxChatScreen(
         }
 
         Scaffold(
-            modifier =
-                Modifier
-                    .background(MaterialTheme.colorScheme.background)
-                    .navigationBarsPadding(),
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
+            modifier = Modifier.navigationBarsPadding().safeImePadding(),
             topBar = {
                 TopAppBar(
                     title = {
@@ -176,9 +173,9 @@ class InboxChatScreen(
                 Column(
                     modifier =
                         Modifier
+                            .navigationBarsPadding()
                             .safeImePadding()
                             .fillMaxWidth()
-                            .navigationBarsPadding()
                             .padding(bottom = Spacing.s)
                             .background(MaterialTheme.colorScheme.background),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),

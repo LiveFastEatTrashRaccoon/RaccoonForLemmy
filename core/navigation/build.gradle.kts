@@ -12,7 +12,6 @@ kotlin {
             implementation(libs.stately.common)
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tab)
-            implementation(libs.voyager.bottomsheet)
             implementation(libs.voyager.screenmodel)
             implementation(libs.voyager.kodein)
 

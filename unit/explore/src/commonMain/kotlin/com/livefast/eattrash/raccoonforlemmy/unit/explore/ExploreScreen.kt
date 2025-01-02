@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -191,6 +192,7 @@ class ExploreScreen(
         }
 
         Scaffold(
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 ExploreTopBar(
                     topAppBarState = topAppBarState,
@@ -199,7 +201,6 @@ class ExploreScreen(
                     sortType = uiState.sortType,
                     resultType = uiState.resultType,
                     otherInstance = otherInstanceName,
-                    edgeToEdge = settings.edgeToEdge,
                     onSelectListingType = {
                         focusManager.clearFocus()
                         listingTypeBottomSheetOpened = true

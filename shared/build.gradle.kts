@@ -18,7 +18,6 @@ kotlin {
                 implementation(libs.voyager.kodein)
                 implementation(libs.voyager.transition)
                 implementation(libs.voyager.tab)
-                implementation(libs.voyager.bottomsheet)
 
                 implementation(projects.core.api)
                 implementation(projects.core.appearance)

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -50,7 +49,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -70,8 +68,8 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
@@ -103,7 +101,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
-import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -122,7 +119,6 @@ import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScr
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 class UserDetailScreen(
     private val userId: Long,
@@ -211,23 +207,11 @@ class UserDetailScreen(
         }
 
         Scaffold(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 val userName = uiState.user.readableName(uiState.preferNicknames)
-                val maxTopInset = Dimensions.maxTopBarInset.toLocalPixel()
-                var topInset by remember { mutableStateOf(maxTopInset) }
-                snapshotFlow { topAppBarState.collapsedFraction }
-                    .onEach {
-                        topInset = maxTopInset * (1 - it)
-                    }.launchIn(scope)
-
                 TopAppBar(
-                    windowInsets =
-                        if (settings.edgeToEdge) {
-                            WindowInsets(0, topInset.roundToInt(), 0, 0)
-                        } else {
-                            TopAppBarDefaults.windowInsets
-                        },
+                    windowInsets = topAppBarState.toWindowInsets(),
                     scrollBehavior = scrollBehavior,
                     title = {
                         Text(
@@ -483,8 +467,7 @@ class UserDetailScreen(
                             } else {
                                 Modifier
                             },
-                        ).navigationBarsPadding()
-                        .nestedScroll(fabNestedScrollConnection),
+                        ).nestedScroll(fabNestedScrollConnection),
                 isRefreshing = uiState.refreshing,
                 onRefresh = {
                     model.reduce(UserDetailMviModel.Intent.Refresh)
