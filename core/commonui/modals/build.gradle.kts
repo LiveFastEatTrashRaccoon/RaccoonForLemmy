@@ -9,7 +9,6 @@ kotlin {
             dependencies {
                 implementation(libs.compose.colorpicker)
                 implementation(libs.voyager.navigator)
-                implementation(libs.voyager.bottomsheet)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.commonui.components)

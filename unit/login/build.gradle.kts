@@ -10,7 +10,6 @@ kotlin {
             dependencies {
                 implementation(libs.kodein)
                 implementation(libs.voyager.navigator)
-                implementation(libs.voyager.bottomsheet)
                 implementation(libs.voyager.screenmodel)
                 implementation(libs.voyager.kodein)
 
