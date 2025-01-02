@@ -167,13 +167,16 @@ class CommunityDetailViewModel(
                         )
                     }
                 }.launchIn(this)
-            val communityHandle = uiState.value.community.readableHandle
             notificationCenter
                 .subscribe(NotificationCenterEvent.ChangeSortType::class)
                 .onEach { evt ->
+                    val communityHandle = uiState.value.community.readableHandle
                     if (evt.screenKey == communityHandle) {
-                        if (evt.defaultForCommunity) {
-                            communitySortRepository.save(communityHandle, evt.value.toInt())
+                        if (evt.saveAsDefault) {
+                            communitySortRepository.save(
+                                handle = communityHandle,
+                                value = evt.value.toInt(),
+                            )
                         }
                         applySortType(evt.value)
                     }
@@ -216,6 +219,7 @@ class CommunityDetailViewModel(
                 }.launchIn(this)
 
             if (uiState.value.initial) {
+                val communityHandle = uiState.value.community.readableHandle
                 val defaultPostSortType =
                     settingsRepository.currentSettings.value.defaultPostSortType
                         .toSortType()

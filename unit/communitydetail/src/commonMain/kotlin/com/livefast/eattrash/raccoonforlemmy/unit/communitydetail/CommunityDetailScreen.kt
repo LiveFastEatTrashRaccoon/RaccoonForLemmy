@@ -1623,8 +1623,8 @@ class CommunityDetailScreen(
                         notificationCenter.send(
                             NotificationCenterEvent.ChangeSortType(
                                 value = value,
-                                defaultForCommunity = wasDefaultSortBottomSheetOpened,
                                 screenKey = uiState.community.readableHandle,
+                                saveAsDefault = wasDefaultSortBottomSheetOpened,
                             ),
                         )
                     }
