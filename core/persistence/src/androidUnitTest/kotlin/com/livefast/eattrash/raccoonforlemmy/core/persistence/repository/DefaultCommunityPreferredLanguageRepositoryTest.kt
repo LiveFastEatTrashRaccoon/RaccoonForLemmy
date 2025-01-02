@@ -8,7 +8,7 @@ import io.mockk.verify
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class DefaultCommunityPreferredLanguageRepositoryTest {

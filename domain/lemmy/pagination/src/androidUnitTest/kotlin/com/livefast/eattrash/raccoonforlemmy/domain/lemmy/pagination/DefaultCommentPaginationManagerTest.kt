@@ -19,12 +19,12 @@ import io.mockk.slot
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertTrue
 import org.junit.Rule
-import org.junit.Test
 import kotlin.reflect.KClass
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class DefaultCommentPaginationManagerTest {
     @get:Rule

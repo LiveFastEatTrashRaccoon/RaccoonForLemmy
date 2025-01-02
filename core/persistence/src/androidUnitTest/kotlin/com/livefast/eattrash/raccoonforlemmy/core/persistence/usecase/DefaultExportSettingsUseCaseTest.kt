@@ -8,7 +8,7 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class DefaultExportSettingsUseCaseTest {
