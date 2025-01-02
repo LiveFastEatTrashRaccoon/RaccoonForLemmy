@@ -9,6 +9,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
@@ -21,6 +22,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.imageUrl
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommentPaginationManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommentPaginationSpecification
@@ -69,6 +71,7 @@ class UserDetailViewModel(
     private val itemCache: LemmyItemCache,
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
+    private val userSortRepository: UserSortRepository,
 ) : DefaultMviModel<UserDetailMviModel.Intent, UserDetailMviModel.UiState, UserDetailMviModel.Effect>(
         initialState = UserDetailMviModel.UiState(),
     ),
@@ -110,8 +113,28 @@ class UserDetailViewModel(
             notificationCenter
                 .subscribe(NotificationCenterEvent.ChangeSortType::class)
                 .onEach { evt ->
-                    if (evt.screenKey == uiState.value.user.readableHandle) {
-                        applySortType(evt.value)
+                    val userHandle = uiState.value.user.readableHandle
+                    if (evt.screenKey == userHandle) {
+                        val section = uiState.value.section
+                        if (evt.saveAsDefault) {
+                            when (section) {
+                                UserDetailSection.Comments ->
+                                    userSortRepository.saveForComments(
+                                        handle = userHandle,
+                                        value = evt.value.toInt(),
+                                    )
+
+                                UserDetailSection.Posts ->
+                                    userSortRepository.saveForPosts(
+                                        handle = userHandle,
+                                        value = evt.value.toInt(),
+                                    )
+                            }
+                        }
+                        applySortType(
+                            value = evt.value,
+                            section = section,
+                        )
                     }
                 }.launchIn(this)
             notificationCenter
@@ -184,9 +207,23 @@ class UserDetailViewModel(
             }
 
             if (uiState.value.initial) {
+                val userHandle = uiState.value.user.readableHandle
                 val defaultPostSortType =
                     settingsRepository.currentSettings.value.defaultPostSortType
-                updateState { it.copy(sortType = defaultPostSortType.toSortType()) }
+                        .toSortType()
+                val customPostSortType =
+                    userSortRepository.getForPosts(userHandle)?.toSortType()
+                val defaultCommentSortType =
+                    settingsRepository.currentSettings.value.defaultCommentSortType
+                        .toSortType()
+                val customCommentSortType =
+                    userSortRepository.getForComments(userHandle)?.toSortType()
+                updateState {
+                    it.copy(
+                        postSortType = customPostSortType ?: defaultPostSortType,
+                        commentSortType = customCommentSortType ?: defaultCommentSortType,
+                    )
+                }
 
                 refresh(initial = true)
             }
@@ -281,12 +318,23 @@ class UserDetailViewModel(
         }
     }
 
-    private fun applySortType(value: SortType) {
-        if (uiState.value.sortType == value) {
+    private fun applySortType(
+        value: SortType,
+        section: UserDetailSection,
+    ) {
+        if (uiState.value.postSortType == value && section == UserDetailSection.Posts) {
+            return
+        }
+        if (uiState.value.commentSortType == value && section == UserDetailSection.Comments) {
             return
         }
         screenModelScope.launch(Dispatchers.Main) {
-            updateState { it.copy(sortType = value) }
+            updateState {
+                when (section) {
+                    UserDetailSection.Comments -> it.copy(commentSortType = value)
+                    UserDetailSection.Posts -> it.copy(postSortType = value)
+                }
+            }
             emitEffect(UserDetailMviModel.Effect.BackToTop)
             delay(50)
             refresh()
@@ -298,19 +346,18 @@ class UserDetailViewModel(
             updateState {
                 it.copy(section = section)
             }
+            updateAvailableSortTypes()
         }
     }
 
-    private fun updateAvailableSortTypes() {
-        screenModelScope.launch {
-            val sortTypes =
-                if (uiState.value.section == UserDetailSection.Posts) {
-                    getSortTypesUseCase.getTypesForPosts(otherInstance = otherInstance)
-                } else {
-                    getSortTypesUseCase.getTypesForComments(otherInstance = otherInstance)
-                }
-            updateState { it.copy(availableSortTypes = sortTypes) }
-        }
+    private suspend fun updateAvailableSortTypes() {
+        val sortTypes =
+            if (uiState.value.section == UserDetailSection.Posts) {
+                getSortTypesUseCase.getTypesForPosts(otherInstance = otherInstance)
+            } else {
+                getSortTypesUseCase.getTypesForComments(otherInstance = otherInstance)
+            }
+        updateState { it.copy(availableSortTypes = sortTypes) }
     }
 
     private suspend fun refresh(initial: Boolean = false) {
@@ -318,7 +365,7 @@ class UserDetailViewModel(
             PostPaginationSpecification.User(
                 id = userId,
                 name = uiState.value.user.name,
-                sortType = uiState.value.sortType,
+                sortType = uiState.value.postSortType,
                 otherInstance = otherInstance,
             ),
         )
@@ -326,7 +373,7 @@ class UserDetailViewModel(
             CommentPaginationSpecification.User(
                 id = userId,
                 name = uiState.value.user.name,
-                sortType = uiState.value.sortType,
+                sortType = uiState.value.commentSortType,
                 otherInstance = otherInstance,
             ),
         )
