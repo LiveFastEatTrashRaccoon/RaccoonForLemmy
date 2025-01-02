@@ -44,7 +44,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,8 +57,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeAction
@@ -81,7 +80,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
-import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.getAdditionalLabel
@@ -94,7 +92,6 @@ import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScr
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 class MultiCommunityScreen(
     private val communityId: Long,
@@ -145,21 +142,11 @@ class MultiCommunityScreen(
         }
 
         Scaffold(
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 val sortType = uiState.sortType
-                val maxTopInset = Dimensions.maxTopBarInset.toLocalPixel()
-                var topInset by remember { mutableStateOf(maxTopInset) }
-                snapshotFlow { topAppBarState.collapsedFraction }
-                    .onEach {
-                        topInset = maxTopInset * (1 - it)
-                    }.launchIn(scope)
                 TopAppBar(
-                    windowInsets =
-                        if (settings.edgeToEdge) {
-                            WindowInsets(0, topInset.roundToInt(), 0, 0)
-                        } else {
-                            TopAppBarDefaults.windowInsets
-                        },
+                    windowInsets = topAppBarState.toWindowInsets(),
                     title = {
                         Text(
                             text = uiState.community.name,

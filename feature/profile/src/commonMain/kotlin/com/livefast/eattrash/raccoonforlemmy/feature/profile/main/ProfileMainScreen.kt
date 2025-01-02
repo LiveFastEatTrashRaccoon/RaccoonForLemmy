@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -39,9 +38,9 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Dimensions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.ModeratorZoneAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toIcon
@@ -56,7 +55,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalPixel
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.menu.ProfileSideMenuScreen
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.notlogged.ProfileNotLoggedScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.drafts.DraftsScreen
@@ -76,7 +74,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 internal object ProfileMainScreen : Tab {
     override val options: TabOptions
@@ -172,22 +169,10 @@ internal object ProfileMainScreen : Tab {
         }
 
         Scaffold(
-            modifier = Modifier.padding(Spacing.xxs),
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
-                val maxTopInset = Dimensions.maxTopBarInset.toLocalPixel()
-                var topInset by remember { mutableStateOf(maxTopInset) }
-                snapshotFlow { topAppBarState.collapsedFraction }
-                    .onEach {
-                        topInset = maxTopInset * (1 - it)
-                    }.launchIn(scope)
-
                 TopAppBar(
-                    windowInsets =
-                        if (settings.edgeToEdge) {
-                            WindowInsets(0, topInset.roundToInt(), 0, 0)
-                        } else {
-                            TopAppBarDefaults.windowInsets
-                        },
+                    windowInsets = topAppBarState.toWindowInsets(),
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
                         IconButton(

@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -201,7 +200,7 @@ class PostListScreen : Screen {
         }
 
         Scaffold(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 PostsTopBar(
                     currentInstance = uiState.instance,
@@ -209,7 +208,6 @@ class PostListScreen : Screen {
                     sortType = uiState.sortType,
                     scrollBehavior = scrollBehavior,
                     topAppBarState = topAppBarState,
-                    edgeToEdge = settings.edgeToEdge,
                     onHamburgerTapped = {
                         scope.launch {
                             drawerCoordinator.toggleDrawer()
