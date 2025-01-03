@@ -13,6 +13,7 @@ interface ColorSchemeProvider {
         theme: UiTheme,
         dynamic: Boolean,
         customSeed: Color? = null,
+        isSystemInDarkTheme: Boolean = false,
     ): ColorScheme
 }
 
