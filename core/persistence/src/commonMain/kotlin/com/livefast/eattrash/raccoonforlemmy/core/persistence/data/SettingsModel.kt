@@ -7,7 +7,7 @@ import kotlin.time.Duration.Companion.seconds
 
 data class SettingsModel(
     val id: Long? = null,
-    val theme: Int? = null,
+    val theme: Int = 0,
     val uiFontFamily: Int = 0,
     val uiFontScale: Float = 1f,
     val contentFontScale: ContentFontScales = ContentFontScales(),
