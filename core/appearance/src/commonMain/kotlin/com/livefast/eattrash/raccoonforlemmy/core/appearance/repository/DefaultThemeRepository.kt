@@ -8,7 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 internal class DefaultThemeRepository : ThemeRepository {
-    override val uiTheme = MutableStateFlow<UiTheme?>(null)
+    override val uiTheme = MutableStateFlow<UiTheme>(UiTheme.Default)
     override val uiFontFamily = MutableStateFlow(UiFontFamily.Poppins)
     override val uiFontScale = MutableStateFlow(1f)
     override val contentFontScale = MutableStateFlow(ContentFontScales())
@@ -23,7 +23,7 @@ internal class DefaultThemeRepository : ThemeRepository {
     override val postLayout = MutableStateFlow<PostLayout>(PostLayout.Card)
     override val commentBarTheme = MutableStateFlow<CommentBarTheme>(CommentBarTheme.Blue)
 
-    override fun changeUiTheme(value: UiTheme?) {
+    override fun changeUiTheme(value: UiTheme) {
         uiTheme.value = value
     }
 

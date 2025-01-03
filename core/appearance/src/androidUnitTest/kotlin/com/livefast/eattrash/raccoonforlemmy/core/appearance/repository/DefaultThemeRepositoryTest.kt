@@ -21,7 +21,7 @@ class DefaultThemeRepositoryTest {
     @Test
     fun whenChangeUiTheme_thenValueIsAsExpected() {
         val resBefore = sut.uiTheme.value
-        assertNull(resBefore)
+        assertEquals(resBefore, UiTheme.Default)
 
         sut.changeUiTheme(UiTheme.Dark)
 
