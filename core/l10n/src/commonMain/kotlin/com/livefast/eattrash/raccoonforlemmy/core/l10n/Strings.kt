@@ -4,23 +4,51 @@ import androidx.compose.runtime.Composable
 
 interface Strings {
     val actionActivateZombieMode: String @Composable get
+    val actionAddImage: String @Composable get
+    val actionAddLink: String @Composable get
+    val actionAddToBookmarks: String @Composable get
     val actionBackToTop: String @Composable get
+    val actionChangeImageScaleMode: String @Composable get
     val actionChat: String @Composable get
+    val actionClear: String @Composable get
     val actionClearRead: String @Composable get
+    val actionCloseSideMenu: String @Composable get
+    val actionCollapse: String @Composable get
     val actionCopyClipboard: String @Composable get
     val actionCreateCommunity: String @Composable get
     val actionCreatePost: String @Composable get
     val actionDeactivateZombieMode: String @Composable get
+    val actionDecrement: String @Composable get
+    val actionDownload: String @Composable get
     val actionDownvote: String @Composable get
     val actionExitSearch: String @Composable get
+    val actionExpand: String @Composable get
+    val actionGoBack: String @Composable get
+    val actionIncrement: String @Composable get
     val actionLogout: String @Composable get
+    val actionMarkAllAsRead: String @Composable get
+    val actionMarkAsRead: String @Composable get
+    val actionMarkAsResolved: String @Composable get
+    val actionNavigateToNextComment: String @Composable get
+    val actionNavigateToNextPost: String @Composable get
+    val actionNavigateToPreviousComment: String @Composable get
+    val actionNavigateToPreviousPost: String @Composable get
+    val actionOpen: String @Composable get
+    val actionOpenActionMenu: String @Composable get
+    val actionOpenFullScreen: String @Composable get
+    val actionOpenOptionMenu: String @Composable get
+    val actionOpenSideMenu: String @Composable get
     val actionQuote: String @Composable get
     val actionReply: String @Composable get
     val actionRestore: String @Composable get
     val actionSave: String @Composable get
     val actionSearchInComments: String @Composable get
     val actionSearchInCommunity: String @Composable get
+    val actionSend: String @Composable get
+    val actionSwitchAccount: String @Composable get
+    val actionSwitchInstance: String @Composable get
     val actionToggleRead: String @Composable get
+    val actionToggleVisibility: String @Composable get
     val actionUpvote: String @Composable get
     val adminActionMarkAsFeatured: String @Composable get
     val adminActionPurge: String @Composable get
@@ -67,6 +95,9 @@ interface Strings {
     val communityInfoWeeklyActiveUsers: String @Composable get
     val communitySetCustomSort: String @Composable get
     val communitySetPreferredLanguage: String @Composable get
+    val communityStatusNotSubscribed: String @Composable get
+    val communityStatusPending: String @Composable get
+    val communityStatusSubscribed: String @Composable get
     val communityVisibilityLocalOnly: String @Composable get
     val communityVisibilityPublic: String @Composable get
     val configureActionsSideEnd: String @Composable get
@@ -91,6 +122,7 @@ interface Strings {
     val createReportPlaceholder: String @Composable get
     val createReportTitleComment: String @Composable get
     val createReportTitlePost: String @Composable get
+    val creationDate: String @Composable get
     val dialogRawContentText: String @Composable get
     val dialogRawContentTitle: String @Composable get
     val dialogRawContentUrl: String @Composable get
@@ -112,6 +144,11 @@ interface Strings {
     val exploreResultTypeUsers: String @Composable get
     val exploreSearchPlaceholder: String @Composable get
     val filteredContentsType: String @Composable get
+    val formatBold: String @Composable get
+    val formatItalic: String @Composable get
+    val formatMonospace: String @Composable get
+    val formatQuote: String @Composable get
+    val formatStrikethrough: String @Composable get
     val homeInstanceVia: String @Composable get
     val homeListingTitle: String @Composable get
     val homeListingTypeAll: String @Composable get
@@ -152,8 +189,15 @@ interface Strings {
     val inboxSectionMentions: String @Composable get
     val inboxSectionMessages: String @Composable get
     val inboxSectionReplies: String @Composable get
+    val insertBulletedList: String @Composable get
+    val insertNumberedList: String @Composable get
     val instanceDetailCommunities: String @Composable get
     val instanceDetailTitle: String @Composable get
+    val itemDistinguished: String @Composable get
+    val itemFeaturedCommunity: String @Composable get
+    val itemFeaturedInstance: String @Composable get
+    val itemFromModerator: String @Composable get
+    val itemUnread: String @Composable get
     val languageDe: String @Composable get
     val languageEn: String @Composable get
     val languageEs: String @Composable get
@@ -233,6 +277,7 @@ interface Strings {
     val modlogItemUserBanned: String @Composable get
     val modlogItemUserUnbanned: String @Composable get
     val modlogTitle: String @Composable get
+    val moreInfo: String @Composable get
     val multiCommunityEditorCommunities: String @Composable get
     val multiCommunityEditorIcon: String @Composable get
     val multiCommunityEditorName: String @Composable get
@@ -447,10 +492,18 @@ interface Strings {
     val shareModeFile: String @Composable get
     val shareModeUrl: String @Composable get
     val sidebarNotLoggedMessage: String @Composable get
+    val swipeActionEndOne: String @Composable get
+    val swipeActionEndTwo: String @Composable get
+    val swipeActionStartOne: String @Composable get
+    val swipeActionStartTwo: String @Composable get
     val undetermined: String @Composable get
+    val updateDate: String @Composable get
+    val userAccountAge: String @Composable get
+    val userCommentScore: String @Composable get
     val userDetailInfo: String @Composable get
     val userInfoAdmin: String @Composable get
     val userInfoModerates: String @Composable get
+    val userPostScore: String @Composable get
     val userTagColor: String @Composable get
     val userTagsTitle: String @Composable get
 

@@ -7,23 +7,51 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import raccoonforlemmy.shared.generated.resources.Res
 import raccoonforlemmy.shared.generated.resources.action_activate_zombie_mode
+import raccoonforlemmy.shared.generated.resources.action_add_image
+import raccoonforlemmy.shared.generated.resources.action_add_link
+import raccoonforlemmy.shared.generated.resources.action_add_to_bookmarks
 import raccoonforlemmy.shared.generated.resources.action_back_to_top
+import raccoonforlemmy.shared.generated.resources.action_change_image_scale_mode
 import raccoonforlemmy.shared.generated.resources.action_chat
+import raccoonforlemmy.shared.generated.resources.action_clear
 import raccoonforlemmy.shared.generated.resources.action_clear_read
+import raccoonforlemmy.shared.generated.resources.action_close_side_menu
+import raccoonforlemmy.shared.generated.resources.action_collapse
 import raccoonforlemmy.shared.generated.resources.action_copy_clipboard
 import raccoonforlemmy.shared.generated.resources.action_create_community
 import raccoonforlemmy.shared.generated.resources.action_create_post
 import raccoonforlemmy.shared.generated.resources.action_deactivate_zombie_mode
+import raccoonforlemmy.shared.generated.resources.action_decrement
+import raccoonforlemmy.shared.generated.resources.action_download
 import raccoonforlemmy.shared.generated.resources.action_downvote
 import raccoonforlemmy.shared.generated.resources.action_exit_search
+import raccoonforlemmy.shared.generated.resources.action_expand
+import raccoonforlemmy.shared.generated.resources.action_go_back
+import raccoonforlemmy.shared.generated.resources.action_increment
 import raccoonforlemmy.shared.generated.resources.action_logout
+import raccoonforlemmy.shared.generated.resources.action_mark_all_as_read
+import raccoonforlemmy.shared.generated.resources.action_mark_as_read
+import raccoonforlemmy.shared.generated.resources.action_mark_as_resolved
+import raccoonforlemmy.shared.generated.resources.action_navigate_to_next_comment
+import raccoonforlemmy.shared.generated.resources.action_navigate_to_next_post
+import raccoonforlemmy.shared.generated.resources.action_navigate_to_previous_comment
+import raccoonforlemmy.shared.generated.resources.action_navigate_to_previous_post
+import raccoonforlemmy.shared.generated.resources.action_open
+import raccoonforlemmy.shared.generated.resources.action_open_action_menu
+import raccoonforlemmy.shared.generated.resources.action_open_full_screen
+import raccoonforlemmy.shared.generated.resources.action_open_option_menu
+import raccoonforlemmy.shared.generated.resources.action_open_side_menu
 import raccoonforlemmy.shared.generated.resources.action_quote
 import raccoonforlemmy.shared.generated.resources.action_reply
 import raccoonforlemmy.shared.generated.resources.action_restore
 import raccoonforlemmy.shared.generated.resources.action_save
 import raccoonforlemmy.shared.generated.resources.action_search_in_comments
 import raccoonforlemmy.shared.generated.resources.action_search_in_community
+import raccoonforlemmy.shared.generated.resources.action_send
+import raccoonforlemmy.shared.generated.resources.action_switch_account
+import raccoonforlemmy.shared.generated.resources.action_switch_instance
 import raccoonforlemmy.shared.generated.resources.action_toggle_read
+import raccoonforlemmy.shared.generated.resources.action_toggle_visibility
 import raccoonforlemmy.shared.generated.resources.action_upvote
 import raccoonforlemmy.shared.generated.resources.admin_action_mark_as_featured
 import raccoonforlemmy.shared.generated.resources.admin_action_purge
@@ -70,6 +98,9 @@ import raccoonforlemmy.shared.generated.resources.community_info_subscribers
 import raccoonforlemmy.shared.generated.resources.community_info_weekly_active_users
 import raccoonforlemmy.shared.generated.resources.community_set_custom_sort
 import raccoonforlemmy.shared.generated.resources.community_set_preferred_language
+import raccoonforlemmy.shared.generated.resources.community_status_not_subscribed
+import raccoonforlemmy.shared.generated.resources.community_status_pending
+import raccoonforlemmy.shared.generated.resources.community_status_subscribed
 import raccoonforlemmy.shared.generated.resources.community_visibility_local_only
 import raccoonforlemmy.shared.generated.resources.community_visibility_public
 import raccoonforlemmy.shared.generated.resources.configure_actions_side_end
@@ -94,6 +125,7 @@ import raccoonforlemmy.shared.generated.resources.create_post_url
 import raccoonforlemmy.shared.generated.resources.create_report_placeholder
 import raccoonforlemmy.shared.generated.resources.create_report_title_comment
 import raccoonforlemmy.shared.generated.resources.create_report_title_post
+import raccoonforlemmy.shared.generated.resources.creation_date
 import raccoonforlemmy.shared.generated.resources.dialog_raw_content_text
 import raccoonforlemmy.shared.generated.resources.dialog_raw_content_title
 import raccoonforlemmy.shared.generated.resources.dialog_raw_content_url
@@ -115,6 +147,11 @@ import raccoonforlemmy.shared.generated.resources.explore_result_type_title
 import raccoonforlemmy.shared.generated.resources.explore_result_type_users
 import raccoonforlemmy.shared.generated.resources.explore_search_placeholder
 import raccoonforlemmy.shared.generated.resources.filtered_contents_type
+import raccoonforlemmy.shared.generated.resources.format_bold
+import raccoonforlemmy.shared.generated.resources.format_italic
+import raccoonforlemmy.shared.generated.resources.format_monospace
+import raccoonforlemmy.shared.generated.resources.format_quote
+import raccoonforlemmy.shared.generated.resources.format_strikethrough
 import raccoonforlemmy.shared.generated.resources.home_instance_via
 import raccoonforlemmy.shared.generated.resources.home_listing_title
 import raccoonforlemmy.shared.generated.resources.home_listing_type_all
@@ -157,8 +194,15 @@ import raccoonforlemmy.shared.generated.resources.inbox_notification_title
 import raccoonforlemmy.shared.generated.resources.inbox_section_mentions
 import raccoonforlemmy.shared.generated.resources.inbox_section_messages
 import raccoonforlemmy.shared.generated.resources.inbox_section_replies
+import raccoonforlemmy.shared.generated.resources.insert_bulleted_list
+import raccoonforlemmy.shared.generated.resources.insert_numbered_list
 import raccoonforlemmy.shared.generated.resources.instance_detail_communities
 import raccoonforlemmy.shared.generated.resources.instance_detail_title
+import raccoonforlemmy.shared.generated.resources.item_distinguished
+import raccoonforlemmy.shared.generated.resources.item_featured_community
+import raccoonforlemmy.shared.generated.resources.item_featured_instance
+import raccoonforlemmy.shared.generated.resources.item_from_moderator
+import raccoonforlemmy.shared.generated.resources.item_unread
 import raccoonforlemmy.shared.generated.resources.language_de
 import raccoonforlemmy.shared.generated.resources.language_en
 import raccoonforlemmy.shared.generated.resources.language_es
@@ -238,6 +282,7 @@ import raccoonforlemmy.shared.generated.resources.modlog_item_unhidden
 import raccoonforlemmy.shared.generated.resources.modlog_item_user_banned
 import raccoonforlemmy.shared.generated.resources.modlog_item_user_unbanned
 import raccoonforlemmy.shared.generated.resources.modlog_title
+import raccoonforlemmy.shared.generated.resources.more_info
 import raccoonforlemmy.shared.generated.resources.multi_community_editor_communities
 import raccoonforlemmy.shared.generated.resources.multi_community_editor_icon
 import raccoonforlemmy.shared.generated.resources.multi_community_editor_name
@@ -452,22 +497,44 @@ import raccoonforlemmy.shared.generated.resources.settings_zombie_mode_scroll_am
 import raccoonforlemmy.shared.generated.resources.share_mode_file
 import raccoonforlemmy.shared.generated.resources.share_mode_url
 import raccoonforlemmy.shared.generated.resources.sidebar_not_logged_message
+import raccoonforlemmy.shared.generated.resources.swipe_action_end_one
+import raccoonforlemmy.shared.generated.resources.swipe_action_end_two
+import raccoonforlemmy.shared.generated.resources.swipe_action_start_one
+import raccoonforlemmy.shared.generated.resources.swipe_action_start_two
 import raccoonforlemmy.shared.generated.resources.undetermined
+import raccoonforlemmy.shared.generated.resources.update_date
+import raccoonforlemmy.shared.generated.resources.user_account_age
+import raccoonforlemmy.shared.generated.resources.user_comment_score
 import raccoonforlemmy.shared.generated.resources.user_detail_info
 import raccoonforlemmy.shared.generated.resources.user_info_admin
 import raccoonforlemmy.shared.generated.resources.user_info_moderates
+import raccoonforlemmy.shared.generated.resources.user_post_score
 import raccoonforlemmy.shared.generated.resources.user_tag_color
 import raccoonforlemmy.shared.generated.resources.user_tags_title
 
 internal class SharedStrings : Strings {
     override val actionActivateZombieMode: String
         @Composable get() = stringResource(Res.string.action_activate_zombie_mode)
+    override val actionAddImage: String
+        @Composable get() = stringResource(Res.string.action_add_image)
+    override val actionAddLink: String
+        @Composable get() = stringResource(Res.string.action_add_link)
+    override val actionAddToBookmarks: String
+        @Composable get() = stringResource(Res.string.action_add_to_bookmarks)
     override val actionBackToTop: String
         @Composable get() = stringResource(Res.string.action_back_to_top)
+    override val actionChangeImageScaleMode: String
+        @Composable get() = stringResource(Res.string.action_change_image_scale_mode)
     override val actionChat: String
         @Composable get() = stringResource(Res.string.action_chat)
+    override val actionClear: String
+        @Composable get() = stringResource(Res.string.action_clear)
     override val actionClearRead: String
         @Composable get() = stringResource(Res.string.action_clear_read)
+    override val actionCloseSideMenu: String
+        @Composable get() = stringResource(Res.string.action_close_side_menu)
+    override val actionCollapse: String
+        @Composable get() = stringResource(Res.string.action_collapse)
     override val actionCopyClipboard: String
         @Composable get() = stringResource(Res.string.action_copy_clipboard)
     override val actionCreateCommunity: String
@@ -476,12 +543,46 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.action_create_post)
     override val actionDeactivateZombieMode: String
         @Composable get() = stringResource(Res.string.action_deactivate_zombie_mode)
+    override val actionDecrement: String
+        @Composable get() = stringResource(Res.string.action_decrement)
+    override val actionDownload: String
+        @Composable get() = stringResource(Res.string.action_download)
     override val actionDownvote: String
         @Composable get() = stringResource(Res.string.action_downvote)
     override val actionExitSearch: String
         @Composable get() = stringResource(Res.string.action_exit_search)
+    override val actionExpand: String
+        @Composable get() = stringResource(Res.string.action_expand)
+    override val actionGoBack: String
+        @Composable get() = stringResource(Res.string.action_go_back)
+    override val actionIncrement: String
+        @Composable get() = stringResource(Res.string.action_increment)
     override val actionLogout: String
         @Composable get() = stringResource(Res.string.action_logout)
+    override val actionMarkAllAsRead: String
+        @Composable get() = stringResource(Res.string.action_mark_all_as_read)
+    override val actionMarkAsRead: String
+        @Composable get() = stringResource(Res.string.action_mark_as_read)
+    override val actionMarkAsResolved: String
+        @Composable get() = stringResource(Res.string.action_mark_as_resolved)
+    override val actionNavigateToNextComment: String
+        @Composable get() = stringResource(Res.string.action_navigate_to_next_comment)
+    override val actionNavigateToNextPost: String
+        @Composable get() = stringResource(Res.string.action_navigate_to_next_post)
+    override val actionNavigateToPreviousComment: String
+        @Composable get() = stringResource(Res.string.action_navigate_to_previous_comment)
+    override val actionNavigateToPreviousPost: String
+        @Composable get() = stringResource(Res.string.action_navigate_to_previous_post)
+    override val actionOpen: String
+        @Composable get() = stringResource(Res.string.action_open)
+    override val actionOpenActionMenu: String
+        @Composable get() = stringResource(Res.string.action_open_action_menu)
+    override val actionOpenFullScreen: String
+        @Composable get() = stringResource(Res.string.action_open_full_screen)
+    override val actionOpenOptionMenu: String
+        @Composable get() = stringResource(Res.string.action_open_option_menu)
+    override val actionOpenSideMenu: String
+        @Composable get() = stringResource(Res.string.action_open_side_menu)
     override val actionQuote: String
         @Composable get() = stringResource(Res.string.action_quote)
     override val actionReply: String
@@ -494,8 +595,16 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.action_search_in_comments)
     override val actionSearchInCommunity: String
         @Composable get() = stringResource(Res.string.action_search_in_community)
+    override val actionSend: String
+        @Composable get() = stringResource(Res.string.action_send)
+    override val actionSwitchAccount: String
+        @Composable get() = stringResource(Res.string.action_switch_account)
+    override val actionSwitchInstance: String
+        @Composable get() = stringResource(Res.string.action_switch_instance)
     override val actionToggleRead: String
         @Composable get() = stringResource(Res.string.action_toggle_read)
+    override val actionToggleVisibility: String
+        @Composable get() = stringResource(Res.string.action_toggle_visibility)
     override val actionUpvote: String
         @Composable get() = stringResource(Res.string.action_upvote)
     override val adminActionMarkAsFeatured: String
@@ -588,6 +697,12 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.community_set_custom_sort)
     override val communitySetPreferredLanguage: String
         @Composable get() = stringResource(Res.string.community_set_preferred_language)
+    override val communityStatusNotSubscribed: String
+        @Composable get() = stringResource(Res.string.community_status_not_subscribed)
+    override val communityStatusPending: String
+        @Composable get() = stringResource(Res.string.community_status_pending)
+    override val communityStatusSubscribed: String
+        @Composable get() = stringResource(Res.string.community_status_subscribed)
     override val communityVisibilityLocalOnly: String
         @Composable get() = stringResource(Res.string.community_visibility_local_only)
     override val communityVisibilityPublic: String
@@ -636,6 +751,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.create_report_title_comment)
     override val createReportTitlePost: String
         @Composable get() = stringResource(Res.string.create_report_title_post)
+    override val creationDate: String
+        @Composable get() = stringResource(Res.string.creation_date)
     override val dialogRawContentText: String
         @Composable get() = stringResource(Res.string.dialog_raw_content_text)
     override val dialogRawContentTitle: String
@@ -655,8 +772,7 @@ internal class SharedStrings : Strings {
     override val editCommunityHeaderTextual: String
         @Composable get() = stringResource(Res.string.edit_community_header_textual)
     override val editCommunityItemPostingRestrictedToMods: String
-        @Composable get() =
-            stringResource(Res.string.edit_community_item_posting_restricted_to_mods)
+        @Composable get() = stringResource(Res.string.edit_community_item_posting_restricted_to_mods)
     override val editCommunityItemSidebar: String
         @Composable get() = stringResource(Res.string.edit_community_item_sidebar)
     override val editCommunityItemVisibility: String
@@ -679,6 +795,16 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.explore_search_placeholder)
     override val filteredContentsType: String
         @Composable get() = stringResource(Res.string.filtered_contents_type)
+    override val formatBold: String
+        @Composable get() = stringResource(Res.string.format_bold)
+    override val formatItalic: String
+        @Composable get() = stringResource(Res.string.format_italic)
+    override val formatMonospace: String
+        @Composable get() = stringResource(Res.string.format_monospace)
+    override val formatQuote: String
+        @Composable get() = stringResource(Res.string.format_quote)
+    override val formatStrikethrough: String
+        @Composable get() = stringResource(Res.string.format_strikethrough)
     override val homeInstanceVia: String
         @Composable get() = stringResource(Res.string.home_instance_via)
     override val homeListingTitle: String
@@ -759,10 +885,24 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.inbox_section_messages)
     override val inboxSectionReplies: String
         @Composable get() = stringResource(Res.string.inbox_section_replies)
+    override val insertBulletedList: String
+        @Composable get() = stringResource(Res.string.insert_bulleted_list)
+    override val insertNumberedList: String
+        @Composable get() = stringResource(Res.string.insert_numbered_list)
     override val instanceDetailCommunities: String
         @Composable get() = stringResource(Res.string.instance_detail_communities)
     override val instanceDetailTitle: String
         @Composable get() = stringResource(Res.string.instance_detail_title)
+    override val itemDistinguished: String
+        @Composable get() = stringResource(Res.string.item_distinguished)
+    override val itemFeaturedCommunity: String
+        @Composable get() = stringResource(Res.string.item_featured_community)
+    override val itemFeaturedInstance: String
+        @Composable get() = stringResource(Res.string.item_featured_instance)
+    override val itemFromModerator: String
+        @Composable get() = stringResource(Res.string.item_from_moderator)
+    override val itemUnread: String
+        @Composable get() = stringResource(Res.string.item_unread)
     override val languageDe: String
         @Composable get() = stringResource(Res.string.language_de)
     override val languageEn: String
@@ -806,11 +946,9 @@ internal class SharedStrings : Strings {
     override val manageAccountsTitle: String
         @Composable get() = stringResource(Res.string.manage_accounts_title)
     override val manageSubscriptionsHeaderMulticommunities: String
-        @Composable get() =
-            stringResource(Res.string.manage_subscriptions_header_multicommunities)
+        @Composable get() = stringResource(Res.string.manage_subscriptions_header_multicommunities)
     override val manageSubscriptionsHeaderSubscriptions: String
-        @Composable get() =
-            stringResource(Res.string.manage_subscriptions_header_subscriptions)
+        @Composable get() = stringResource(Res.string.manage_subscriptions_header_subscriptions)
     override val manageUserTagsTitle: String
         @Composable get() = stringResource(Res.string.manage_user_tag_title)
     override val messageAreYouSure: String
@@ -923,6 +1061,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.modlog_item_user_unbanned)
     override val modlogTitle: String
         @Composable get() = stringResource(Res.string.modlog_title)
+    override val moreInfo: String
+        @Composable get() = stringResource(Res.string.more_info)
     override val multiCommunityEditorCommunities: String
         @Composable get() = stringResource(Res.string.multi_community_editor_communities)
     override val multiCommunityEditorIcon: String
@@ -938,8 +1078,7 @@ internal class SharedStrings : Strings {
     override val navigationDrawerTitleDrafts: String
         @Composable get() = stringResource(Res.string.navigation_drawer_title_drafts)
     override val navigationDrawerTitleSubscriptions: String
-        @Composable get() =
-            stringResource(Res.string.navigation_drawer_title_subscriptions)
+        @Composable get() = stringResource(Res.string.navigation_drawer_title_subscriptions)
     override val navigationHome: String
         @Composable get() = stringResource(Res.string.navigation_home)
     override val navigationInbox: String
@@ -1137,8 +1276,7 @@ internal class SharedStrings : Strings {
     override val settingsDefaultCommentSortType: String
         @Composable get() = stringResource(Res.string.settings_default_comment_sort_type)
     override val settingsDefaultExploreResultType: String
-        @Composable get() =
-            stringResource(Res.string.settings_default_explore_result_type)
+        @Composable get() = stringResource(Res.string.settings_default_explore_result_type)
     override val settingsDefaultExploreType: String
         @Composable get() = stringResource(Res.string.settings_default_explore_type)
     override val settingsDefaultInboxType: String
@@ -1154,8 +1292,7 @@ internal class SharedStrings : Strings {
     override val settingsEdgeToEdge: String
         @Composable get() = stringResource(Res.string.settings_edge_to_edge)
     override val settingsEnableButtonsToScrollBetweenComments: String
-        @Composable get() =
-            stringResource(Res.string.settings_enable_buttons_to_scroll_between_comments)
+        @Composable get() = stringResource(Res.string.settings_enable_buttons_to_scroll_between_comments)
     override val settingsEnableCrashReport: String
         @Composable get() = stringResource(Res.string.settings_enable_crash_report)
     override val settingsEnableDoubleTap: String
@@ -1163,8 +1300,7 @@ internal class SharedStrings : Strings {
     override val settingsEnableSwipeActions: String
         @Composable get() = stringResource(Res.string.settings_enable_swipe_actions)
     override val settingsEnableToggleFavoriteInNavDrawer: String
-        @Composable get() =
-            stringResource(Res.string.settings_enable_toggle_favorite_in_nav_drawer)
+        @Composable get() = stringResource(Res.string.settings_enable_toggle_favorite_in_nav_drawer)
     override val settingsExport: String
         @Composable get() = stringResource(Res.string.settings_export)
     override val settingsFadeReadPosts: String
@@ -1182,8 +1318,7 @@ internal class SharedStrings : Strings {
     override val settingsImport: String
         @Composable get() = stringResource(Res.string.settings_import)
     override val settingsInboxBackgroundCheckPeriod: String
-        @Composable get() =
-            stringResource(Res.string.settings_inbox_background_check_period)
+        @Composable get() = stringResource(Res.string.settings_inbox_background_check_period)
     override val settingsInboxPreviewMaxLines: String
         @Composable get() = stringResource(Res.string.settings_inbox_preview_max_lines)
     override val settingsIncludeNsfw: String
@@ -1191,16 +1326,13 @@ internal class SharedStrings : Strings {
     override val settingsInfiniteScrollDisabled: String
         @Composable get() = stringResource(Res.string.settings_infinite_scroll_disabled)
     override val settingsItemAlternateMarkdownRendering: String
-        @Composable get() =
-            stringResource(Res.string.settings_item_alternate_markdown_rendering)
+        @Composable get() = stringResource(Res.string.settings_item_alternate_markdown_rendering)
     override val settingsItemConfigureBottomNavigationBar: String
-        @Composable get() =
-            stringResource(Res.string.settings_item_configure_bottom_navigation_bar)
+        @Composable get() = stringResource(Res.string.settings_item_configure_bottom_navigation_bar)
     override val settingsItemImageSourcePath: String
         @Composable get() = stringResource(Res.string.settings_item_image_source_path)
     override val settingsItemOpenPostWebPageOnImageClick: String
-        @Composable get() =
-            stringResource(Res.string.settings_item_open_post_web_page_on_image_click)
+        @Composable get() = stringResource(Res.string.settings_item_open_post_web_page_on_image_click)
     override val settingsItemRandomThemeColor: String
         @Composable get() = stringResource(Res.string.settings_item_random_theme_color)
     override val settingsLanguage: String
@@ -1210,27 +1342,21 @@ internal class SharedStrings : Strings {
     override val settingsManageBanActionUnban: String
         @Composable get() = stringResource(Res.string.settings_manage_ban_action_unban)
     override val settingsManageBanDomainPlaceholder: String
-        @Composable get() =
-            stringResource(Res.string.settings_manage_ban_domain_placeholder)
+        @Composable get() = stringResource(Res.string.settings_manage_ban_domain_placeholder)
     override val settingsManageBanSectionDomains: String
         @Composable get() = stringResource(Res.string.settings_manage_ban_section_domains)
     override val settingsManageBanSectionInstances: String
-        @Composable get() =
-            stringResource(Res.string.settings_manage_ban_section_instances)
+        @Composable get() = stringResource(Res.string.settings_manage_ban_section_instances)
     override val settingsManageBanSectionStopWords: String
-        @Composable get() =
-            stringResource(Res.string.settings_manage_ban_section_stop_words)
+        @Composable get() = stringResource(Res.string.settings_manage_ban_section_stop_words)
     override val settingsManageBanStopWordPlaceholder: String
-        @Composable get() =
-            stringResource(Res.string.settings_manage_ban_stop_word_placeholder)
+        @Composable get() = stringResource(Res.string.settings_manage_ban_stop_word_placeholder)
     override val settingsMarkAsReadWhileScrolling: String
-        @Composable get() =
-            stringResource(Res.string.settings_mark_as_read_while_scrolling)
+        @Composable get() = stringResource(Res.string.settings_mark_as_read_while_scrolling)
     override val settingsMediaList: String
         @Composable get() = stringResource(Res.string.settings_media_list)
     override val settingsNavigationBarTitlesVisible: String
-        @Composable get() =
-            stringResource(Res.string.settings_navigation_bar_titles_visible)
+        @Composable get() = stringResource(Res.string.settings_navigation_bar_titles_visible)
     override val settingsOpenUrlExternal: String
         @Composable get() = stringResource(Res.string.settings_open_url_external)
     override val settingsPointsShort: String
@@ -1238,8 +1364,7 @@ internal class SharedStrings : Strings {
     override val settingsPostBodyMaxLines: String
         @Composable get() = stringResource(Res.string.settings_post_body_max_lines)
     override val settingsPostBodyMaxLinesUnlimited: String
-        @Composable get() =
-            stringResource(Res.string.settings_post_body_max_lines_unlimited)
+        @Composable get() = stringResource(Res.string.settings_post_body_max_lines_unlimited)
     override val settingsPostLayout: String
         @Composable get() = stringResource(Res.string.settings_post_layout)
     override val settingsPostLayoutCard: String
@@ -1279,8 +1404,7 @@ internal class SharedStrings : Strings {
     override val settingsSubtitleImageSourcePath: String
         @Composable get() = stringResource(Res.string.settings_subtitle_image_source_path)
     override val settingsSubtitleOpenPostWebPageOnImageClick: String
-        @Composable get() =
-            stringResource(Res.string.settings_subtitle_open_post_web_page_on_image_click)
+        @Composable get() = stringResource(Res.string.settings_subtitle_open_post_web_page_on_image_click)
     override val settingsSubtitleRandomThemeColor: String
         @Composable get() = stringResource(Res.string.settings_subtitle_random_theme_color)
     override val settingsThemeBlack: String
@@ -1308,15 +1432,13 @@ internal class SharedStrings : Strings {
     override val settingsUpvoteColor: String
         @Composable get() = stringResource(Res.string.settings_upvote_color)
     override val settingsUrlOpeningModeCustomTabs: String
-        @Composable get() =
-            stringResource(Res.string.settings_url_opening_mode_custom_tabs)
+        @Composable get() = stringResource(Res.string.settings_url_opening_mode_custom_tabs)
     override val settingsUrlOpeningModeExternal: String
         @Composable get() = stringResource(Res.string.settings_url_opening_mode_external)
     override val settingsUrlOpeningModeInternal: String
         @Composable get() = stringResource(Res.string.settings_url_opening_mode_internal)
     override val settingsUseAvatarAsProfileNavigationIcon: String
-        @Composable get() =
-            stringResource(Res.string.settings_use_avatar_as_profile_navigation_icon)
+        @Composable get() = stringResource(Res.string.settings_use_avatar_as_profile_navigation_icon)
     override val settingsUserManual: String
         @Composable get() = stringResource(Res.string.settings_user_manual)
     override val settingsVoteFormat: String
@@ -1369,14 +1491,30 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.share_mode_url)
     override val sidebarNotLoggedMessage: String
         @Composable get() = stringResource(Res.string.sidebar_not_logged_message)
+    override val swipeActionEndOne: String
+        @Composable get() = stringResource(Res.string.swipe_action_end_one)
+    override val swipeActionEndTwo: String
+        @Composable get() = stringResource(Res.string.swipe_action_end_two)
+    override val swipeActionStartOne: String
+        @Composable get() = stringResource(Res.string.swipe_action_start_one)
+    override val swipeActionStartTwo: String
+        @Composable get() = stringResource(Res.string.swipe_action_start_two)
     override val undetermined: String
         @Composable get() = stringResource(Res.string.undetermined)
+    override val updateDate: String
+        @Composable get() = stringResource(Res.string.update_date)
+    override val userAccountAge: String
+        @Composable get() = stringResource(Res.string.user_account_age)
+    override val userCommentScore: String
+        @Composable get() = stringResource(Res.string.user_comment_score)
     override val userDetailInfo: String
         @Composable get() = stringResource(Res.string.user_detail_info)
     override val userInfoAdmin: String
         @Composable get() = stringResource(Res.string.user_info_admin)
     override val userInfoModerates: String
         @Composable get() = stringResource(Res.string.user_info_moderates)
+    override val userPostScore: String
+        @Composable get() = stringResource(Res.string.user_post_score)
     override val userTagColor: String
         @Composable get() = stringResource(Res.string.user_tag_color)
     override val userTagsTitle: String
