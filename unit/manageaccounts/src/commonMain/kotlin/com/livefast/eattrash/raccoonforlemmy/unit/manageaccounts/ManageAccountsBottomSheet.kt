@@ -145,7 +145,7 @@ fun ManageAccountsBottomSheet(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.buttonAdd,
                     )
                     Text(LocalStrings.current.manageAccountsButtonAdd)
                 }

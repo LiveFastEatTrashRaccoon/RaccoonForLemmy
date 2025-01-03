@@ -184,7 +184,7 @@ internal object ProfileMainScreen : Tab {
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionOpenSideMenu,
                             )
                         }
                     },
@@ -206,7 +206,7 @@ internal object ProfileMainScreen : Tab {
                             ) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Default.MenuOpen,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionOpenSideMenu,
                                 )
                             }
                         }

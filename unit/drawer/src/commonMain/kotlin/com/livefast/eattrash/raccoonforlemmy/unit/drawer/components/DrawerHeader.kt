@@ -110,7 +110,7 @@ internal fun DrawerHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionSwitchAccount,
                         tint = MaterialTheme.colorScheme.onBackground,
                     )
                 }
@@ -143,7 +143,7 @@ internal fun DrawerHeader(
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowDropDown,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionSwitchInstance,
                             tint = MaterialTheme.colorScheme.onBackground,
                         )
                     }

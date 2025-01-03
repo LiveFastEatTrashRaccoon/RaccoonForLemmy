@@ -107,6 +107,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.chat.InboxChatScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.explore.ExploreScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
@@ -236,7 +237,7 @@ class UserDetailScreen(
                                 }
                             Icon(
                                 imageVector = sortType.toIcon(),
-                                contentDescription = null,
+                                contentDescription = sortType.toReadableName(),
                             )
                         }
 
@@ -307,7 +308,7 @@ class UserDetailScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.MoreVert,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionOpenOptionMenu,
                                 )
                             }
 
@@ -395,7 +396,7 @@ class UserDetailScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionGoBack,
                                 )
                             }
                         }
@@ -555,7 +556,7 @@ class UserDetailScreen(
                                                     Icon(
                                                         modifier = VoteAction.UpVote.toModifier(),
                                                         imageVector = VoteAction.UpVote.toIcon(),
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionUpvote,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -575,7 +576,7 @@ class UserDetailScreen(
                                                     Icon(
                                                         modifier = VoteAction.DownVote.toModifier(),
                                                         imageVector = VoteAction.DownVote.toIcon(),
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionDownvote,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -596,7 +597,7 @@ class UserDetailScreen(
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.AutoMirrored.Default.Reply,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionReply,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -613,7 +614,7 @@ class UserDetailScreen(
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.Default.Bookmark,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -854,7 +855,7 @@ class UserDetailScreen(
                                                     Icon(
                                                         modifier = VoteAction.UpVote.toModifier(),
                                                         imageVector = VoteAction.UpVote.toIcon(),
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionUpvote,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -876,7 +877,7 @@ class UserDetailScreen(
                                                     Icon(
                                                         modifier = VoteAction.DownVote.toModifier(),
                                                         imageVector = VoteAction.DownVote.toIcon(),
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionDownvote,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -897,7 +898,7 @@ class UserDetailScreen(
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.AutoMirrored.Default.Reply,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionReply,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -917,7 +918,7 @@ class UserDetailScreen(
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.Default.Bookmark,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                         tint = Color.White,
                                                     )
                                                 },

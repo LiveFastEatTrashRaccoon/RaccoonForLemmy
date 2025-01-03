@@ -358,7 +358,7 @@ private fun CompactPost(
                             loadButtonContent = @Composable {
                                 Icon(
                                     imageVector = Icons.Default.Download,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionDownload,
                                 )
                             },
                             blurred = blurNsfw && post.nsfw,

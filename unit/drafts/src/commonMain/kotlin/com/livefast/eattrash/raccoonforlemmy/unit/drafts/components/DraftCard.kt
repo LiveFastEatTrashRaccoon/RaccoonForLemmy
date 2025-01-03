@@ -46,6 +46,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardTitle
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftType
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
@@ -97,7 +98,11 @@ fun DraftCard(
                             }
                         Icon(
                             imageVector = imageVector,
-                            contentDescription = null,
+                            contentDescription =
+                                when (draft.type) {
+                                    DraftType.Comment -> LocalStrings.current.exploreResultTypePosts
+                                    DraftType.Post -> LocalStrings.current.exploreResultTypeComments
+                                },
                             modifier = Modifier.size(IconSize.s),
                         )
                         Text(
@@ -161,7 +166,7 @@ private fun DraftFooter(
                 Icon(
                     modifier = Modifier.size(IconSize.m).padding(1.5.dp),
                     imageVector = Icons.Default.Schedule,
-                    contentDescription = null,
+                    contentDescription = LocalStrings.current.creationDate,
                     tint = ancillaryColor,
                 )
                 Text(
@@ -190,7 +195,7 @@ private fun DraftFooter(
                 ) {
                     Icon(
                         imageVector = Icons.Default.MoreHoriz,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
                     )
                 }

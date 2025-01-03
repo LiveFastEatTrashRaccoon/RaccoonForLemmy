@@ -42,6 +42,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.Customized
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 
@@ -153,7 +154,7 @@ internal fun MessageCard(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.MoreHoriz,
-                                        contentDescription = null,
+                                        contentDescription = LocalStrings.current.actionOpenOptionMenu,
                                         tint = ancillaryColor,
                                     )
                                 }
@@ -167,7 +168,7 @@ internal fun MessageCard(
                                     Icon(
                                         modifier = Modifier.size(IconSize.m).padding(0.5.dp),
                                         imageVector = Icons.Default.Schedule,
-                                        contentDescription = null,
+                                        contentDescription = LocalStrings.current.creationDate,
                                         tint = ancillaryColor,
                                     )
                                     Text(

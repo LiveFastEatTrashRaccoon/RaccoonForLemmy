@@ -85,6 +85,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.getAdditionalLabel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
@@ -164,7 +165,7 @@ class MultiCommunityScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
                     },
@@ -189,7 +190,7 @@ class MultiCommunityScreen(
                             ) {
                                 Icon(
                                     imageVector = sortType.toIcon(),
-                                    contentDescription = null,
+                                    contentDescription = sortType.toReadableName(),
                                 )
                             }
                         }
@@ -298,7 +299,7 @@ class MultiCommunityScreen(
                                                 Icon(
                                                     modifier = VoteAction.UpVote.toModifier(),
                                                     imageVector = VoteAction.UpVote.toIcon(),
-                                                    contentDescription = null,
+                                                    contentDescription = LocalStrings.current.actionUpvote,
                                                     tint = Color.White,
                                                 )
                                             },
@@ -316,7 +317,7 @@ class MultiCommunityScreen(
                                                 Icon(
                                                     modifier = VoteAction.DownVote.toModifier(),
                                                     imageVector = VoteAction.DownVote.toIcon(),
-                                                    contentDescription = null,
+                                                    contentDescription = LocalStrings.current.actionDownvote,
                                                     tint = Color.White,
                                                 )
                                             },
@@ -335,7 +336,7 @@ class MultiCommunityScreen(
                                             swipeContent = {
                                                 Icon(
                                                     imageVector = Icons.AutoMirrored.Default.Reply,
-                                                    contentDescription = null,
+                                                    contentDescription = LocalStrings.current.actionReply,
                                                     tint = Color.White,
                                                 )
                                             },
@@ -350,7 +351,7 @@ class MultiCommunityScreen(
                                             swipeContent = {
                                                 Icon(
                                                     imageVector = Icons.Default.Bookmark,
-                                                    contentDescription = null,
+                                                    contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                     tint = Color.White,
                                                 )
                                             },

@@ -121,7 +121,7 @@ class LoginScreen : Screen {
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
                     },
@@ -133,7 +133,7 @@ class LoginScreen : Screen {
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.HelpOutline,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.moreInfo,
                             )
                         }
                     },
@@ -213,7 +213,7 @@ class LoginScreen : Screen {
                                             },
                                         ),
                                     imageVector = Icons.Default.Clear,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionClear,
                                 )
                             }
                         },
@@ -318,7 +318,7 @@ class LoginScreen : Screen {
                                         } else {
                                             Icons.Default.Visibility
                                         },
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionToggleVisibility,
                                 )
                             }
                         },

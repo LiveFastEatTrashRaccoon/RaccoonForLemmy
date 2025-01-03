@@ -49,6 +49,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.getAdditionalLabel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -100,7 +101,7 @@ class InstanceInfoScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
                     },
@@ -136,7 +137,7 @@ class InstanceInfoScreen(
                         ) {
                             Icon(
                                 imageVector = uiState.sortType.toIcon(),
-                                contentDescription = null,
+                                contentDescription = uiState.sortType.toReadableName(),
                             )
                         }
                     },

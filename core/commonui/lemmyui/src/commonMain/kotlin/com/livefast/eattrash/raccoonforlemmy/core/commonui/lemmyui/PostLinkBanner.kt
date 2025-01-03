@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
@@ -50,7 +51,7 @@ fun PostLinkBanner(
             )
             Icon(
                 imageVector = Icons.Default.Link,
-                contentDescription = null,
+                contentDescription = LocalStrings.current.actionOpen,
             )
         }
     }

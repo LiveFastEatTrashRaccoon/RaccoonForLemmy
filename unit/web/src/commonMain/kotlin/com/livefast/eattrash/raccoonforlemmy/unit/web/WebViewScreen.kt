@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
@@ -72,7 +73,7 @@ class WebViewScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
                     },
@@ -87,7 +88,7 @@ class WebViewScreen(
                                         },
                                     ),
                             imageVector = Icons.Default.Share,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.postActionShare,
                             tint = MaterialTheme.colorScheme.onBackground,
                         )
                     },

@@ -79,7 +79,7 @@ fun InboxCardHeader(
                         .padding(end = Spacing.s)
                         .size(IconSize.xs),
                 imageVector = Icons.Filled.FiberManualRecord,
-                contentDescription = null,
+                contentDescription = LocalStrings.current.itemUnread,
                 tint = ancillaryColor,
             )
         }

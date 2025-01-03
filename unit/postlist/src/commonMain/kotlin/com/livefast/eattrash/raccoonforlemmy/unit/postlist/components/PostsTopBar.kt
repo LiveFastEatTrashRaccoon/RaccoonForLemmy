@@ -59,7 +59,7 @@ internal fun PostsTopBar(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Menu,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionOpenSideMenu,
                         )
                     }
                 }
@@ -140,7 +140,7 @@ internal fun PostsTopBar(
                 ) {
                     Icon(
                         imageVector = sortType.toIcon(),
-                        contentDescription = null,
+                        contentDescription = sortType.toReadableName(),
                     )
                 }
             }

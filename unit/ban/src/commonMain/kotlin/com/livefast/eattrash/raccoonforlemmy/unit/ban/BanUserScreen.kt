@@ -114,7 +114,7 @@ class BanUserScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.buttonClose,
                             )
                         }
                     },
@@ -140,7 +140,7 @@ class BanUserScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.Send,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionSend,
                             )
                         }
                     },

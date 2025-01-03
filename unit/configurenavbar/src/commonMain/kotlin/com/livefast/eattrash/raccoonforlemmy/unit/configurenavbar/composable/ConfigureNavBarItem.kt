@@ -87,7 +87,7 @@ internal fun ConfigureNavBarItem(
             ) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
-                    contentDescription = null,
+                    contentDescription = LocalStrings.current.actionOpenOptionMenu,
                     tint = ancillaryColor,
                 )
             }

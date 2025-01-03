@@ -130,6 +130,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.containsId
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.ban.BanUserScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
@@ -298,7 +299,7 @@ class PostDetailScreen(
                         ) {
                             Icon(
                                 imageVector = uiState.sortType.toIcon(),
-                                contentDescription = null,
+                                contentDescription = uiState.sortType.toReadableName(),
                             )
                         }
 
@@ -453,7 +454,7 @@ class PostDetailScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.MoreVert,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionOpenOptionMenu,
                                 )
                             }
 
@@ -632,7 +633,7 @@ class PostDetailScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionGoBack,
                                 )
                             }
                         }
@@ -938,7 +939,7 @@ class PostDetailScreen(
                                                                 Icon(
                                                                     modifier = VoteAction.UpVote.toModifier(),
                                                                     imageVector = VoteAction.UpVote.toIcon(),
-                                                                    contentDescription = null,
+                                                                    contentDescription = LocalStrings.current.actionUpvote,
                                                                     tint = Color.White,
                                                                 )
                                                             },
@@ -960,7 +961,7 @@ class PostDetailScreen(
                                                                 Icon(
                                                                     modifier = VoteAction.DownVote.toModifier(),
                                                                     imageVector = VoteAction.DownVote.toIcon(),
-                                                                    contentDescription = null,
+                                                                    contentDescription = LocalStrings.current.actionDownvote,
                                                                     tint = Color.White,
                                                                 )
                                                             },
@@ -981,7 +982,7 @@ class PostDetailScreen(
                                                             swipeContent = {
                                                                 Icon(
                                                                     imageVector = Icons.AutoMirrored.Default.Reply,
-                                                                    contentDescription = null,
+                                                                    contentDescription = LocalStrings.current.actionReply,
                                                                     tint = Color.White,
                                                                 )
                                                             },
@@ -1001,7 +1002,7 @@ class PostDetailScreen(
                                                             swipeContent = {
                                                                 Icon(
                                                                     imageVector = Icons.Default.Bookmark,
-                                                                    contentDescription = null,
+                                                                    contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                                     tint = Color.White,
                                                                 )
                                                             },
@@ -1022,7 +1023,7 @@ class PostDetailScreen(
                                                             swipeContent = {
                                                                 Icon(
                                                                     imageVector = Icons.Default.Edit,
-                                                                    contentDescription = null,
+                                                                    contentDescription = LocalStrings.current.postActionEdit,
                                                                     tint = Color.White,
                                                                 )
                                                             },
@@ -1792,7 +1793,7 @@ class PostDetailScreen(
                                             },
                                         ),
                                 imageVector = Icons.AutoMirrored.Default.NavigateBefore,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionNavigateToPreviousPost,
                                 tint = MaterialTheme.colorScheme.onBackground,
                             )
                         }
@@ -1810,7 +1811,7 @@ class PostDetailScreen(
                                         },
                                     ),
                             imageVector = Icons.Default.KeyboardArrowUp,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionNavigateToPreviousComment,
                             tint = MaterialTheme.colorScheme.onBackground,
                         )
                         Icon(
@@ -1827,7 +1828,7 @@ class PostDetailScreen(
                                         },
                                     ),
                             imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionNavigateToNextComment,
                             tint = MaterialTheme.colorScheme.onBackground,
                         )
                         if (uiState.isNavigationSupported) {
@@ -1842,7 +1843,7 @@ class PostDetailScreen(
                                             },
                                         ),
                                 imageVector = Icons.AutoMirrored.Default.NavigateNext,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionNavigateToNextPost,
                                 tint = MaterialTheme.colorScheme.onBackground,
                             )
                         }

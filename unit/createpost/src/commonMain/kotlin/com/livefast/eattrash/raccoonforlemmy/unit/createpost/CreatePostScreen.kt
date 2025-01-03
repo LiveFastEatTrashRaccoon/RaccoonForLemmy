@@ -260,7 +260,7 @@ class CreatePostScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.buttonClose,
                             )
                         }
                     },
@@ -284,7 +284,7 @@ class CreatePostScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Save,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionSave,
                                 )
                             }
                         }
@@ -295,7 +295,7 @@ class CreatePostScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.Send,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionSend,
                             )
                         }
                     },

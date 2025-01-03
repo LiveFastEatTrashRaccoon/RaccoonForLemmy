@@ -148,7 +148,7 @@ fun CommunityHeader(
                         Icon(
                             modifier = Modifier.size(iconSize),
                             imageVector = Icons.Default.Group,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.communityInfoSubscribers,
                         )
                         Text(
                             text =
@@ -164,7 +164,7 @@ fun CommunityHeader(
                         Icon(
                             modifier = Modifier.size(iconSize),
                             imageVector = Icons.Default.CalendarViewMonth,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.communityInfoMonthlyActiveUsers,
                         )
                         Text(
                             text =
@@ -188,7 +188,7 @@ fun CommunityHeader(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Info,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.moreInfo,
                             )
                         }
                     }

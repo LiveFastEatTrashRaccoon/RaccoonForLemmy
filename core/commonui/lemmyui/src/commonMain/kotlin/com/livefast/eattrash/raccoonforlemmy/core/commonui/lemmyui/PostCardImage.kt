@@ -144,7 +144,7 @@ fun PostCardImage(
                             } else {
                                 Icons.Default.Visibility
                             },
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionToggleVisibility,
                         tint = MaterialTheme.colorScheme.onBackground,
                     )
                 }

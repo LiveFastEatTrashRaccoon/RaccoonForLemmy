@@ -93,7 +93,7 @@ fun PostCardVideo(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Fullscreen,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionOpenFullScreen,
                     )
                 }
             } else {

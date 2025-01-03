@@ -130,7 +130,7 @@ fun SelectInstanceBottomSheet(
                 ) {
                     Icon(
                         imageVector = Icons.Default.AddCircle,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.buttonAdd,
                     )
                 }
             }
