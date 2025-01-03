@@ -44,7 +44,7 @@ sealed interface NotificationCenterEvent {
     ) : NotificationCenterEvent
 
     data class ChangeTheme(
-        val value: UiTheme?,
+        val value: UiTheme,
     ) : NotificationCenterEvent
 
     data class ChangeContentFontSize(
