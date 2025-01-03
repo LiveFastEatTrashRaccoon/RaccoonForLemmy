@@ -381,7 +381,7 @@ class PostListScreen : Screen {
                                                     Icon(
                                                         modifier = VoteAction.UpVote.toModifier(),
                                                         imageVector = VoteAction.UpVote.toIcon(),
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionUpvote,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -401,7 +401,7 @@ class PostListScreen : Screen {
                                                     Icon(
                                                         modifier = VoteAction.DownVote.toModifier(),
                                                         imageVector = VoteAction.DownVote.toIcon(),
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionDownvote,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -422,7 +422,7 @@ class PostListScreen : Screen {
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.AutoMirrored.Default.Reply,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionReply,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -437,7 +437,7 @@ class PostListScreen : Screen {
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.Default.Bookmark,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -456,7 +456,7 @@ class PostListScreen : Screen {
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.Default.Edit,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.postActionEdit,
                                                         tint = Color.White,
                                                     )
                                                 },

@@ -41,6 +41,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getColorSchemePr
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 data class FloatingActionButtonMenuItem(
@@ -179,7 +180,7 @@ fun FloatingActionButtonMenu(
                 Icon(
                     modifier = Modifier.rotate(fabRotation),
                     imageVector = Icons.Default.Add,
-                    contentDescription = null,
+                    contentDescription = LocalStrings.current.actionOpenActionMenu,
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
             },

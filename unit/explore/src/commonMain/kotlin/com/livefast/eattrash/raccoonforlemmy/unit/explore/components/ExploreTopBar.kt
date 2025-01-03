@@ -60,7 +60,7 @@ internal fun ExploreTopBar(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionGoBack,
                         )
                     }
                 }
@@ -73,7 +73,7 @@ internal fun ExploreTopBar(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Menu,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionOpenSideMenu,
                         )
                     }
                 }
@@ -136,7 +136,7 @@ internal fun ExploreTopBar(
             ) {
                 Icon(
                     imageVector = resultType.toIcon(),
-                    contentDescription = null,
+                    contentDescription = resultType.toReadableName(),
                 )
             }
 
@@ -160,7 +160,7 @@ internal fun ExploreTopBar(
             ) {
                 Icon(
                     imageVector = sortType.toIcon(),
-                    contentDescription = null,
+                    contentDescription = sortType.toReadableName(),
                 )
             }
         },

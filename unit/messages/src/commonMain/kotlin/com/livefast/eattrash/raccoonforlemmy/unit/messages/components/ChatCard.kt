@@ -40,6 +40,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.Placeholde
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ellipsize
@@ -170,7 +171,7 @@ internal fun ChatCard(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.MoreHoriz,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionOpenOptionMenu,
                                     tint = ancillaryColor,
                                 )
                             }

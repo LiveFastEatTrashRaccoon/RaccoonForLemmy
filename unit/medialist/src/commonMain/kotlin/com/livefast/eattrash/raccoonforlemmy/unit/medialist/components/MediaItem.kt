@@ -46,6 +46,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardVideo
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAVideo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
@@ -128,7 +129,10 @@ internal fun MediaItem(
                     contentScale = if (fullHeightImage) ContentScale.FillWidth else ContentScale.Crop,
                     maxHeight = if (fullHeightImage) Dp.Unspecified else EXTENDED_POST_MAX_HEIGHT,
                     loadButtonContent = @Composable {
-                        Icon(imageVector = Icons.Default.Download, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Default.Download,
+                            contentDescription = LocalStrings.current.actionDownload,
+                        )
                     },
                 )
             }
@@ -172,7 +176,7 @@ private fun MediaFooter(
                 Icon(
                     modifier = Modifier.size(IconSize.m).padding(1.5.dp),
                     imageVector = Icons.Default.Schedule,
-                    contentDescription = null,
+                    contentDescription = LocalStrings.current.creationDate,
                     tint = ancillaryColor,
                 )
                 Text(
@@ -198,7 +202,7 @@ private fun MediaFooter(
                 ) {
                     Icon(
                         imageVector = Icons.Default.MoreHoriz,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
                     )
                 }
@@ -212,7 +216,7 @@ private fun MediaFooter(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.OpenInNew,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionOpen,
                     )
                 }
             }

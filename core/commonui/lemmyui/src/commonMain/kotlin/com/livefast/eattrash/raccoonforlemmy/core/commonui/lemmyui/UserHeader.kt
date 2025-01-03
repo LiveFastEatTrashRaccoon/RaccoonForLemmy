@@ -150,7 +150,7 @@ fun UserHeader(
                         Icon(
                             modifier = Modifier.size(iconSize),
                             imageVector = Icons.AutoMirrored.Default.Article,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.userPostScore,
                         )
                         Text(
                             text =
@@ -169,7 +169,7 @@ fun UserHeader(
                         Icon(
                             modifier = Modifier.size(iconSize),
                             imageVector = Icons.AutoMirrored.Default.Reply,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.userCommentScore,
                         )
                         Text(
                             text =
@@ -189,7 +189,7 @@ fun UserHeader(
                         Icon(
                             modifier = Modifier.size(iconSize),
                             imageVector = Icons.Default.Cake,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.userAccountAge,
                         )
                         Text(
                             text = user.accountAge.prettifyDate(),
@@ -216,7 +216,7 @@ fun UserHeader(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Info,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.moreInfo,
                             )
                         }
                     }

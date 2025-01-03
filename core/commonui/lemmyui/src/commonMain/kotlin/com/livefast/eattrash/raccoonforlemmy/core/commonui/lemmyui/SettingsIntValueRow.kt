@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FeedbackButton
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 
 @Composable
 fun SettingsIntValueRow(
@@ -57,6 +58,7 @@ fun SettingsIntValueRow(
             FeedbackButton(
                 imageVector = Icons.Default.RemoveCircleOutline,
                 tintColor = MaterialTheme.colorScheme.secondary,
+                contentDescription = LocalStrings.current.actionDecrement,
                 onClick = onDecrement,
             )
             Text(
@@ -72,6 +74,7 @@ fun SettingsIntValueRow(
             FeedbackButton(
                 imageVector = Icons.Default.AddCircleOutline,
                 tintColor = MaterialTheme.colorScheme.secondary,
+                contentDescription = LocalStrings.current.actionIncrement,
                 onClick = onIncrement,
             )
         }

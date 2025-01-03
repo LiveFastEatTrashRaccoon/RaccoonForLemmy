@@ -103,7 +103,7 @@ class ConfigureSwipeActionsScreen : Screen {
                             ) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionGoBack,
                                 )
                             }
                         }
@@ -175,7 +175,12 @@ class ConfigureSwipeActionsScreen : Screen {
                                     1 -> Icons.Default.KeyboardDoubleArrowLeft
                                     else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
                                 },
-                            action = action,
+                            iconContentDescription =
+                                when (idx) {
+                                    1 -> LocalStrings.current.swipeActionStartTwo
+                                    else -> LocalStrings.current.swipeActionStartOne
+                                },
+                                action = action,
                             options =
                                 buildList {
                                     this +=
@@ -234,7 +239,12 @@ class ConfigureSwipeActionsScreen : Screen {
                                     1 -> Icons.Default.KeyboardDoubleArrowRight
                                     else -> Icons.AutoMirrored.Default.KeyboardArrowRight
                                 },
-                            action = action,
+                            iconContentDescription =
+                                when (idx) {
+                                    1 -> LocalStrings.current.swipeActionEndTwo
+                                    else -> LocalStrings.current.swipeActionEndOne
+                            },
+                                action = action,
                             options =
                                 buildList {
                                     this +=
@@ -321,7 +331,12 @@ class ConfigureSwipeActionsScreen : Screen {
                                     1 -> Icons.Default.KeyboardDoubleArrowLeft
                                     else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
                                 },
-                            action = action,
+                            iconContentDescription =
+                                when (idx) {
+                                    1 -> LocalStrings.current.swipeActionStartTwo
+                                    else -> LocalStrings.current.swipeActionStartOne
+                            },
+                                action = action,
                             options =
                                 buildList {
                                     this +=
@@ -380,7 +395,12 @@ class ConfigureSwipeActionsScreen : Screen {
                                     1 -> Icons.Default.KeyboardDoubleArrowRight
                                     else -> Icons.AutoMirrored.Default.KeyboardArrowRight
                                 },
-                            action = action,
+                            iconContentDescription =
+                                when (idx) {
+                                    1 -> LocalStrings.current.swipeActionEndTwo
+                                else -> LocalStrings.current.swipeActionEndOne
+                            },
+                                action = action,
                             options =
                                 buildList {
                                     this +=
@@ -467,7 +487,12 @@ class ConfigureSwipeActionsScreen : Screen {
                                     1 -> Icons.Default.KeyboardDoubleArrowLeft
                                     else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
                                 },
-                            action = action,
+                            iconContentDescription =
+                                when (idx) {
+                                    1 -> LocalStrings.current.swipeActionStartTwo
+                                else -> LocalStrings.current.swipeActionStartOne
+                            },
+                                action = action,
                             options =
                                 buildList {
                                     this +=
@@ -526,7 +551,12 @@ class ConfigureSwipeActionsScreen : Screen {
                                     1 -> Icons.Default.KeyboardDoubleArrowRight
                                     else -> Icons.AutoMirrored.Default.KeyboardArrowRight
                                 },
-                            action = action,
+                            iconContentDescription =
+                                when (idx) {
+                                1 -> LocalStrings.current.swipeActionEndTwo
+                                else -> LocalStrings.current.swipeActionEndOne
+                            },
+                                action = action,
                             options =
                                 buildList {
                                     this +=

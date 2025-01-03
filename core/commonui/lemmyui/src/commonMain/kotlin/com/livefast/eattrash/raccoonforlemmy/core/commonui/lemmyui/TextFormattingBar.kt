@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.Dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.LanguageModel
 
@@ -46,6 +47,7 @@ fun TextFormattingBar(
     availableLanguages: List<LanguageModel> = emptyList(),
     onSelectLanguage: (() -> Unit)? = null,
     lastActionIcon: ImageVector? = null,
+    lastActionDescription: String? = null,
     onLastAction: (() -> Unit)? = null,
 ) {
     val textPlaceholder = "text here"
@@ -100,7 +102,7 @@ fun TextFormattingBar(
                         },
                     ),
                 imageVector = Icons.Default.FormatBold,
-                contentDescription = null,
+                contentDescription = LocalStrings.current.formatBold,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
         }
@@ -151,7 +153,7 @@ fun TextFormattingBar(
                         },
                     ),
                 imageVector = Icons.Default.FormatItalic,
-                contentDescription = null,
+                contentDescription = LocalStrings.current.formatItalic,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
         }
@@ -203,7 +205,7 @@ fun TextFormattingBar(
                     ),
                 imageVector = Icons.Default.FormatStrikethrough,
                 tint = MaterialTheme.colorScheme.onBackground,
-                contentDescription = null,
+                contentDescription = LocalStrings.current.formatStrikethrough,
             )
         }
 
@@ -218,7 +220,7 @@ fun TextFormattingBar(
                             },
                         ),
                     imageVector = Icons.Default.Image,
-                    contentDescription = null,
+                    contentDescription = LocalStrings.current.actionAddImage,
                     tint = MaterialTheme.colorScheme.onBackground,
                 )
             }
@@ -272,7 +274,7 @@ fun TextFormattingBar(
                         },
                     ),
                 imageVector = Icons.Default.InsertLink,
-                contentDescription = null,
+                contentDescription = LocalStrings.current.actionAddLink,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
         }
@@ -323,7 +325,7 @@ fun TextFormattingBar(
                         },
                     ),
                 imageVector = Icons.Default.Code,
-                contentDescription = null,
+                contentDescription = LocalStrings.current.formatMonospace,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
         }
@@ -355,7 +357,7 @@ fun TextFormattingBar(
                         },
                     ),
                 imageVector = Icons.Default.FormatQuote,
-                contentDescription = null,
+                contentDescription = LocalStrings.current.formatQuote,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
         }
@@ -387,7 +389,7 @@ fun TextFormattingBar(
                         },
                     ),
                 imageVector = Icons.AutoMirrored.Default.FormatListBulleted,
-                contentDescription = null,
+                contentDescription = LocalStrings.current.insertBulletedList,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
         }
@@ -419,7 +421,7 @@ fun TextFormattingBar(
                         },
                     ),
                 imageVector = Icons.Default.FormatListNumbered,
-                contentDescription = null,
+                contentDescription = LocalStrings.current.insertNumberedList,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
         }
@@ -467,7 +469,7 @@ fun TextFormattingBar(
                             },
                         ),
                     imageVector = lastActionIcon,
-                    contentDescription = null,
+                    contentDescription = lastActionDescription,
                     tint = MaterialTheme.colorScheme.onBackground,
                 )
             }

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 
 class ProfileSideMenuScreen : Screen {
@@ -49,7 +50,7 @@ class ProfileSideMenuScreen : Screen {
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.buttonClose,
                             )
                         }
                     },

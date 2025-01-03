@@ -103,7 +103,7 @@ class ZoomableImageScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
                     },
@@ -115,7 +115,7 @@ class ZoomableImageScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Download,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionDownload,
                             )
                         }
                         IconButton(
@@ -131,7 +131,7 @@ class ZoomableImageScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Share,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.postActionShare,
                             )
                         }
 
@@ -158,7 +158,7 @@ class ZoomableImageScreen(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.AspectRatio,
-                                        contentDescription = null,
+                                        contentDescription = LocalStrings.current.actionChangeImageScaleMode,
                                     )
                                 }
 

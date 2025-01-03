@@ -124,7 +124,7 @@ class SettingsScreen : Screen {
                             ) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionGoBack,
                                 )
                             }
                         } else {
@@ -137,7 +137,7 @@ class SettingsScreen : Screen {
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Menu,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionOpenSideMenu,
                                 )
                             }
                         }

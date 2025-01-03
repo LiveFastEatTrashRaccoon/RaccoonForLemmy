@@ -46,6 +46,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDrop
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FeedbackButton
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
@@ -206,7 +207,7 @@ fun InboxReplySubtitle(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.Chat,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionReply,
                                 tint = ancillaryColor,
                             )
                         }
@@ -216,7 +217,7 @@ fun InboxReplySubtitle(
                             Icon(
                                 modifier = Modifier.size(IconSize.m).padding(1.5.dp),
                                 imageVector = Icons.Default.Schedule,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.creationDate,
                                 tint = ancillaryColor,
                             )
                             Text(
@@ -241,7 +242,7 @@ fun InboxReplySubtitle(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.MoreHoriz,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionOpenOptionMenu,
                                     tint = ancillaryColor,
                                 )
                             }
@@ -263,6 +264,7 @@ fun InboxReplySubtitle(
                                 } else {
                                     ancillaryColor
                                 },
+                            contentDescription = LocalStrings.current.actionUpvote,
                             onClick = {
                                 onUpVote?.invoke()
                             },
@@ -300,6 +302,7 @@ fun InboxReplySubtitle(
                                     } else {
                                         ancillaryColor
                                     },
+                                contentDescription = LocalStrings.current.actionDownvote,
                                 onClick = {
                                     onDownVote?.invoke()
                                 },

@@ -40,6 +40,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.buildAnnotatedStringWithHighlights
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -206,7 +207,7 @@ fun CommunityItem(
                 ) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
                     )
                 }

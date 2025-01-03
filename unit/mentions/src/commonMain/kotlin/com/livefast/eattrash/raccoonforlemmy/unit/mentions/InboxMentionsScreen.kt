@@ -150,7 +150,7 @@ class InboxMentionsScreen : Tab {
                                             Icon(
                                                 modifier = VoteAction.UpVote.toModifier(),
                                                 imageVector = VoteAction.UpVote.toIcon(),
-                                                contentDescription = null,
+                                                contentDescription = LocalStrings.current.actionUpvote,
                                                 tint = Color.White,
                                             )
                                         },
@@ -170,7 +170,7 @@ class InboxMentionsScreen : Tab {
                                             Icon(
                                                 modifier = VoteAction.DownVote.toModifier(),
                                                 imageVector = VoteAction.DownVote.toIcon(),
-                                                contentDescription = null,
+                                                contentDescription = LocalStrings.current.actionDownvote,
                                                 tint = Color.White,
                                             )
                                         },
@@ -194,7 +194,7 @@ class InboxMentionsScreen : Tab {
                                                 }
                                             Icon(
                                                 imageVector = icon,
-                                                contentDescription = null,
+                                                contentDescription = LocalStrings.current.actionMarkAsRead,
                                                 tint = Color.White,
                                             )
                                         },

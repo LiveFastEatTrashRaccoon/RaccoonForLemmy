@@ -98,7 +98,7 @@ internal fun ChangeInstanceDialog(
                                     },
                                 ),
                             imageVector = Icons.Default.Clear,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionClear,
                         )
                     }
                 },

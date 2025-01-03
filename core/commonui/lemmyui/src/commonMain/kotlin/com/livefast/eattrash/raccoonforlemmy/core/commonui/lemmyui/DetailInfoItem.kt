@@ -28,7 +28,10 @@ fun DetailInfoItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (icon != null) {
-            Icon(imageVector = icon, contentDescription = null)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+            )
         }
         Text(
             text =

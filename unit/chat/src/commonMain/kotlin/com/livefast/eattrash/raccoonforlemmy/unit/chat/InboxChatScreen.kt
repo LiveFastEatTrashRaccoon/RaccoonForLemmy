@@ -163,7 +163,7 @@ class InboxChatScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
                     },
@@ -239,6 +239,7 @@ class InboxChatScreen(
                             openImagePicker = true
                         },
                         lastActionIcon = Icons.AutoMirrored.Default.Send,
+                        lastActionDescription = LocalStrings.current.actionSend,
                         onLastAction = {
                             model.reduce(
                                 InboxChatMviModel.Intent.SubmitNewMessage(

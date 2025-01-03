@@ -23,6 +23,7 @@ fun FeedbackButton(
     imageVector: ImageVector,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    contentDescription: String?,
     tintColor: Color = MaterialTheme.colorScheme.background.copy(alpha = ancillaryTextAlpha),
     onClick: () -> Unit,
 ) {
@@ -54,7 +55,7 @@ fun FeedbackButton(
                     },
                 ),
         imageVector = imageVector,
-        contentDescription = null,
+        contentDescription = contentDescription,
         tint = tintColor,
     )
 }

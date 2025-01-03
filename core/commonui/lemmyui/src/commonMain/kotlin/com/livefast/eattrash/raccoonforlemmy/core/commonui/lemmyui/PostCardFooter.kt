@@ -45,6 +45,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.readContentAl
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FeedbackButton
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
@@ -128,7 +129,7 @@ fun PostCardFooter(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.Chat,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionReply,
                                 tint = ancillaryColor,
                             )
                         }
@@ -180,7 +181,7 @@ fun PostCardFooter(
                                 } else {
                                     Icons.Default.Schedule
                                 },
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.creationDate,
                             tint = ancillaryColor,
                         )
                         Text(
@@ -206,7 +207,7 @@ fun PostCardFooter(
                     ) {
                         Icon(
                             imageVector = Icons.Default.MoreHoriz,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionOpenOptionMenu,
                             tint = ancillaryColor,
                         )
                     }
@@ -233,6 +234,7 @@ fun PostCardFooter(
                                 ancillaryColor
                             },
                         enabled = actionButtonsActive,
+                        contentDescription = LocalStrings.current.actionAddToBookmarks,
                         onClick = {
                             onSave?.invoke()
                         },
@@ -251,6 +253,7 @@ fun PostCardFooter(
                             ancillaryColor
                         },
                     enabled = actionButtonsActive,
+                    contentDescription = LocalStrings.current.actionUpvote,
                     onClick = {
                         onUpVote?.invoke()
                     },
@@ -289,6 +292,7 @@ fun PostCardFooter(
                                 ancillaryColor
                             },
                         enabled = actionButtonsActive,
+                        contentDescription = LocalStrings.current.actionDownvote,
                         onClick = {
                             onDownVote?.invoke()
                         },

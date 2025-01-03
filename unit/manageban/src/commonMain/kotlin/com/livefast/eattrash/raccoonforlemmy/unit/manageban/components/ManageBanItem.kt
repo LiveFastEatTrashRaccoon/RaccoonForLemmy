@@ -31,6 +31,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDrop
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 
 @Composable
@@ -83,7 +84,7 @@ internal fun ManageBanItem(
                 ) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
                     )
                 }

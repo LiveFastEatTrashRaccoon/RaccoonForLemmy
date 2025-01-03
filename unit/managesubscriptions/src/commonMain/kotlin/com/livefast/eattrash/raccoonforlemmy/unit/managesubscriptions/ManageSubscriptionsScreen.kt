@@ -144,7 +144,7 @@ class ManageSubscriptionsScreen : Screen {
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
                     },
@@ -252,7 +252,7 @@ class ManageSubscriptionsScreen : Screen {
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.AddCircle,
-                                        contentDescription = null,
+                                        contentDescription = LocalStrings.current.buttonAdd,
                                     )
                                 }
                             }

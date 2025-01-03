@@ -102,7 +102,7 @@ class MultiCommunityEditorScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
                     },
@@ -115,7 +115,7 @@ class MultiCommunityEditorScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.CheckCircle,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.buttonConfirm,
                             )
                         }
                     },

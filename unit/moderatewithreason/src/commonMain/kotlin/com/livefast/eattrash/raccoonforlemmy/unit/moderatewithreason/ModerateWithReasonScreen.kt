@@ -110,7 +110,7 @@ class ModerateWithReasonScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.buttonClose,
                             )
                         }
                     },
@@ -143,7 +143,7 @@ class ModerateWithReasonScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.Send,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionSend,
                             )
                         }
                     },

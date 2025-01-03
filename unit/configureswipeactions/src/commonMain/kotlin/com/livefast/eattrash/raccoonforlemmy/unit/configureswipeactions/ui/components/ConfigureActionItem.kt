@@ -31,6 +31,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
@@ -40,6 +41,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 internal fun ConfigureActionItem(
     action: ActionOnSwipe,
     icon: ImageVector,
+    iconContentDescription: String?,
     modifier: Modifier = Modifier,
     options: List<Option> = emptyList(),
     onOptionSelected: ((OptionId) -> Unit)? = null,
@@ -59,7 +61,7 @@ internal fun ConfigureActionItem(
             Icon(
                 modifier = Modifier.size(IconSize.m),
                 imageVector = icon,
-                contentDescription = null,
+                contentDescription = iconContentDescription,
             )
             Text(
                 text = action.toReadableName(),
@@ -82,7 +84,7 @@ internal fun ConfigureActionItem(
                 ) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
                     )
                 }

@@ -22,6 +22,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 
 @Composable
 fun SettingsImageInfo(
@@ -75,7 +76,7 @@ fun SettingsImageInfo(
                 ) {
                     Icon(
                         imageVector = Icons.Default.FileOpen,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionOpen,
                         tint = MaterialTheme.colorScheme.onBackground,
                     )
                 }

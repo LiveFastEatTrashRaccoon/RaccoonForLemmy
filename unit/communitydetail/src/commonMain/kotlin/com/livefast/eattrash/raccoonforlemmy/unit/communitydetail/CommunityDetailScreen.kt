@@ -119,6 +119,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.containsId
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.ban.BanUserScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.communitydetail.di.CommunityDetailMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.communityinfo.CommunityInfoScreen
@@ -299,7 +300,12 @@ class CommunityDetailScreen(
                                             false -> Icons.Outlined.AddCircleOutline
                                             else -> Icons.Outlined.Pending
                                         },
-                                    contentDescription = null,
+                                    contentDescription =
+                                        when (uiState.community.subscribed) {
+                                            true -> LocalStrings.current.communityStatusSubscribed
+                                            false -> LocalStrings.current.communityStatusNotSubscribed
+                                            else -> LocalStrings.current.communityStatusPending
+                                        },
                                 )
                             }
                         }
@@ -312,7 +318,7 @@ class CommunityDetailScreen(
                         ) {
                             Icon(
                                 imageVector = uiState.sortType.toIcon(),
-                                contentDescription = null,
+                                contentDescription = uiState.sortType.toReadableName(),
                             )
                         }
 
@@ -449,7 +455,7 @@ class CommunityDetailScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.MoreVert,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionOpenOptionMenu,
                                 )
                             }
 
@@ -602,7 +608,7 @@ class CommunityDetailScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionGoBack,
                                 )
                             }
                         }
@@ -833,7 +839,7 @@ class CommunityDetailScreen(
                                                         Icon(
                                                             modifier = VoteAction.UpVote.toModifier(),
                                                             imageVector = VoteAction.UpVote.toIcon(),
-                                                            contentDescription = null,
+                                                            contentDescription = LocalStrings.current.actionUpvote,
                                                             tint = Color.White,
                                                         )
                                                     },
@@ -855,7 +861,7 @@ class CommunityDetailScreen(
                                                         Icon(
                                                             modifier = VoteAction.DownVote.toModifier(),
                                                             imageVector = VoteAction.DownVote.toIcon(),
-                                                            contentDescription = null,
+                                                            contentDescription = LocalStrings.current.actionDownvote,
                                                             tint = Color.White,
                                                         )
                                                     },
@@ -876,7 +882,7 @@ class CommunityDetailScreen(
                                                     swipeContent = {
                                                         Icon(
                                                             imageVector = Icons.AutoMirrored.Default.Reply,
-                                                            contentDescription = null,
+                                                            contentDescription = LocalStrings.current.actionReply,
                                                             tint = Color.White,
                                                         )
                                                     },
@@ -893,7 +899,7 @@ class CommunityDetailScreen(
                                                     swipeContent = {
                                                         Icon(
                                                             imageVector = Icons.Default.Bookmark,
-                                                            contentDescription = null,
+                                                            contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                             tint = Color.White,
                                                         )
                                                     },
@@ -912,7 +918,7 @@ class CommunityDetailScreen(
                                                     swipeContent = {
                                                         Icon(
                                                             imageVector = Icons.Default.Edit,
-                                                            contentDescription = null,
+                                                            contentDescription = LocalStrings.current.postActionEdit,
                                                             tint = Color.White,
                                                         )
                                                     },

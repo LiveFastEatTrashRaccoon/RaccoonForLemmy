@@ -108,7 +108,7 @@ object InboxScreen : Tab {
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionOpenSideMenu,
                             )
                         }
                     },
@@ -146,7 +146,7 @@ object InboxScreen : Tab {
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.DoneAll,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionMarkAllAsRead,
                                 )
                             }
                         }

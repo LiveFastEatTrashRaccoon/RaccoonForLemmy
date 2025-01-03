@@ -33,6 +33,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import sh.calvin.reorderable.ReorderableCollectionItemScope
@@ -115,7 +116,7 @@ internal fun SelectInstanceItem(
                                 .size(IconSize.m)
                                 .padding(Spacing.xs),
                         imageVector = Icons.Default.MoreVert,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
                     )
                 }

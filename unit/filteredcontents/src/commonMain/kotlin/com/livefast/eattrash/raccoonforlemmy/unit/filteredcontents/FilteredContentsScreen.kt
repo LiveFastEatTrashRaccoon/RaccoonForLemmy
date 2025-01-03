@@ -181,7 +181,7 @@ class FilteredContentsScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionGoBack,
                                 )
                             }
                         } else {
@@ -194,7 +194,7 @@ class FilteredContentsScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Menu,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionOpenSideMenu,
                                 )
                             }
                         }
@@ -383,7 +383,7 @@ class FilteredContentsScreen(
                                                     Icon(
                                                         modifier = VoteAction.UpVote.toModifier(),
                                                         imageVector = VoteAction.UpVote.toIcon(),
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionUpvote,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -403,7 +403,7 @@ class FilteredContentsScreen(
                                                     Icon(
                                                         modifier = VoteAction.DownVote.toModifier(),
                                                         imageVector = VoteAction.DownVote.toIcon(),
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionDownvote,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -424,7 +424,7 @@ class FilteredContentsScreen(
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.AutoMirrored.Default.Reply,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionReply,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -439,7 +439,7 @@ class FilteredContentsScreen(
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.Default.Bookmark,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -718,7 +718,7 @@ class FilteredContentsScreen(
                                                     Icon(
                                                         modifier = VoteAction.UpVote.toModifier(),
                                                         imageVector = VoteAction.UpVote.toIcon(),
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionUpvote,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -738,7 +738,7 @@ class FilteredContentsScreen(
                                                     Icon(
                                                         modifier = VoteAction.DownVote.toModifier(),
                                                         imageVector = VoteAction.DownVote.toIcon(),
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionDownvote,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -759,7 +759,7 @@ class FilteredContentsScreen(
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.AutoMirrored.Default.Reply,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionReply,
                                                         tint = Color.White,
                                                     )
                                                 },
@@ -777,7 +777,7 @@ class FilteredContentsScreen(
                                                 swipeContent = {
                                                     Icon(
                                                         imageVector = Icons.Default.Bookmark,
-                                                        contentDescription = null,
+                                                        contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                         tint = Color.White,
                                                     )
                                                 },

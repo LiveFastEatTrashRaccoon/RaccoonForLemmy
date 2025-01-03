@@ -186,7 +186,7 @@ private fun SortBottomSheetTop(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionGoBack,
                     )
                 }
                 Spacer(modifier = Modifier.weight(1f))

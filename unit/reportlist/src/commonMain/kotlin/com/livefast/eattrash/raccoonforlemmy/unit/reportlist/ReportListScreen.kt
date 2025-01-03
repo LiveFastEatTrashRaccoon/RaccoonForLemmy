@@ -121,7 +121,7 @@ class ReportListScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
                     },
@@ -256,7 +256,7 @@ class ReportListScreen(
                                                             }
                                                         Icon(
                                                             imageVector = icon,
-                                                            contentDescription = null,
+                                                            contentDescription = LocalStrings.current.actionMarkAsResolved,
                                                             tint = Color.White,
                                                         )
                                                     },
@@ -367,7 +367,7 @@ class ReportListScreen(
                                                             }
                                                         Icon(
                                                             imageVector = icon,
-                                                            contentDescription = null,
+                                                            contentDescription = LocalStrings.current.actionMarkAsResolved,
                                                             tint = Color.White,
                                                         )
                                                     },

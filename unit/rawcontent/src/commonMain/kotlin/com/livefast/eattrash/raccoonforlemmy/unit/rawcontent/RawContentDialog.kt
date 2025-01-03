@@ -194,7 +194,7 @@ fun RawContentDialog(
                                     Icon(
                                         modifier = Modifier.size(IconSize.m).padding(1.5.dp),
                                         imageVector = Icons.Default.Schedule,
-                                        contentDescription = null,
+                                        contentDescription = LocalStrings.current.creationDate,
                                         tint = fullColor,
                                     )
                                     Text(
@@ -219,7 +219,7 @@ fun RawContentDialog(
                                 Icon(
                                     modifier = Modifier.size(IconSize.m).padding(0.25.dp),
                                     imageVector = Icons.Default.Update,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.updateDate,
                                     tint = fullColor,
                                 )
                                 Text(
@@ -247,7 +247,7 @@ fun RawContentDialog(
                                             .padding(end = 3.5.dp)
                                             .then(VoteAction.UpVote.toModifier()),
                                     imageVector = VoteAction.UpVote.toIcon(),
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionUpvote,
                                     tint = fullColor,
                                 )
                                 Text(
@@ -265,7 +265,7 @@ fun RawContentDialog(
                                             .padding(end = 3.5.dp)
                                             .then(VoteAction.DownVote.toModifier()),
                                     imageVector = VoteAction.DownVote.toIcon(),
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.actionDownvote,
                                     tint = fullColor,
                                 )
                                 Text(
@@ -283,7 +283,7 @@ fun RawContentDialog(
                                 Icon(
                                     modifier = Modifier.size(IconSize.m).padding(end = 3.5.dp),
                                     imageVector = Icons.Default.Percent,
-                                    contentDescription = null,
+                                    contentDescription = LocalStrings.current.settingsVoteFormatPercentage,
                                     tint = fullColor,
                                 )
                                 Text(

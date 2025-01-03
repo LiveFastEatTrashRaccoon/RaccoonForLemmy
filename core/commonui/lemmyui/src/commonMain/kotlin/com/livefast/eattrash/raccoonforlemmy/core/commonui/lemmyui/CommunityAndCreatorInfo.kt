@@ -42,6 +42,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.readContentAl
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -270,26 +271,26 @@ fun CommunityAndCreatorInfo(
                 Icon(
                     modifier = buttonModifier,
                     imageVector = Icons.Default.LocalPolice,
-                    contentDescription = null,
+                    contentDescription = LocalStrings.current.itemFromModerator,
                 )
             }
             if (distinguished) {
                 Icon(
                     modifier = buttonModifier,
                     imageVector = Icons.Default.WorkspacePremium,
-                    contentDescription = null,
+                    contentDescription = LocalStrings.current.itemDistinguished,
                 )
             } else if (featuredLocal) {
                 Icon(
                     modifier = buttonModifier,
                     imageVector = Icons.Default.Verified,
-                    contentDescription = null,
+                    contentDescription = LocalStrings.current.itemFeaturedInstance,
                 )
             } else if (featuredCommunity) {
                 Icon(
                     modifier = buttonModifier,
                     imageVector = Icons.Default.Stars,
-                    contentDescription = null,
+                    contentDescription = LocalStrings.current.itemFeaturedCommunity,
                 )
             }
 
@@ -297,7 +298,7 @@ fun CommunityAndCreatorInfo(
                 Icon(
                     modifier = buttonModifier,
                     imageVector = Icons.Default.Lock,
-                    contentDescription = null,
+                    contentDescription = LocalStrings.current.itemFeaturedInstance,
                 )
             }
             if (indicatorExpanded != null) {
@@ -309,12 +310,12 @@ fun CommunityAndCreatorInfo(
                     if (indicatorExpanded) {
                         Icon(
                             imageVector = Icons.Default.ExpandLess,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionCollapse,
                         )
                     } else {
                         Icon(
                             imageVector = Icons.Default.ExpandMore,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionExpand,
                         )
                     }
                 }

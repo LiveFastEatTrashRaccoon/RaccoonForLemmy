@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.toSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 
 @Composable
@@ -124,7 +125,7 @@ fun SearchField(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Clear,
-                                contentDescription = null,
+                                contentDescription = LocalStrings.current.actionClear,
                                 tint = MaterialTheme.colorScheme.onBackground,
                             )
                         }

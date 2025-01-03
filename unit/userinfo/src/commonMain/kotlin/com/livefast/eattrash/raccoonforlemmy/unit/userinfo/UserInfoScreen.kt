@@ -70,8 +70,8 @@ class UserInfoScreen(
                         userId = userId,
                         username = username,
                         otherInstance = otherInstance,
-                ),
-                    )
+                    ),
+            )
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val scope = rememberCoroutineScope()
@@ -106,7 +106,7 @@ class UserInfoScreen(
                                     },
                                 ),
                             imageVector = Icons.Default.Close,
-                            contentDescription = null,
+                            contentDescription = LocalStrings.current.actionCloseSideMenu,
                             tint = MaterialTheme.colorScheme.onBackground,
                         )
                     },

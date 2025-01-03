@@ -39,6 +39,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDrop
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
@@ -127,7 +128,7 @@ internal fun AccountItem(
                 ) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
-                        contentDescription = null,
+                        contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
                     )
                 }
