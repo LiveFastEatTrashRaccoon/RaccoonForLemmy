@@ -7,7 +7,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getBarColorProvider
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
@@ -25,19 +24,14 @@ fun AppTheme(
 
     val themeState by repository.uiTheme.collectAsState()
     val customSeedColor by repository.customSeedColor.collectAsState()
-    val defaultTheme =
-        if (isSystemInDarkTheme()) {
-            UiTheme.Dark
-        } else {
-            UiTheme.Light
-        }
 
     val colorSchemeProvider = remember { getColorSchemeProvider() }
     val colorScheme =
         colorSchemeProvider.getColorScheme(
-            theme = themeState ?: defaultTheme,
+            theme = themeState,
             dynamic = useDynamicColors,
             customSeed = customSeedColor,
+            isSystemInDarkTheme = isSystemInDarkTheme(),
         )
 
     val fontFamily by repository.uiFontFamily.collectAsState()
@@ -45,7 +39,7 @@ fun AppTheme(
 
     val barColorProvider = remember { getBarColorProvider() }
     barColorProvider.setBarColorAccordingToTheme(
-        theme = themeState ?: defaultTheme,
+        theme = themeState,
         barTheme = barTheme,
     )
 

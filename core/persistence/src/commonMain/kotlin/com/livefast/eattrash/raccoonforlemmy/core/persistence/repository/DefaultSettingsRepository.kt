@@ -86,7 +86,7 @@ internal class DefaultSettingsRepository(
         accountId: Long,
     ) = withContext(Dispatchers.IO) {
         db.settingsQueries.create(
-            theme = settings.theme?.toLong(),
+            theme = settings.theme.toLong(),
             uiFontScale = settings.uiFontScale.toDouble(),
             uiFontFamily = settings.uiFontFamily.toLong(),
             titleFontScale = settings.contentFontScale.title.toDouble(),
@@ -185,12 +185,7 @@ internal class DefaultSettingsRepository(
                         ancillary = keyStore[KeyStoreKeys.CONTENT_ANCILLARY_FONT_SCALE, 1f],
                     )
                 SettingsModel(
-                    theme =
-                        if (keyStore.containsKey(KeyStoreKeys.UI_THEME)) {
-                            keyStore[KeyStoreKeys.UI_THEME, 0]
-                        } else {
-                            null
-                        },
+                    theme = keyStore[KeyStoreKeys.UI_THEME, 0],
                     uiFontScale = keyStore[KeyStoreKeys.UI_FONT_SCALE, 1f],
                     uiFontFamily = keyStore[KeyStoreKeys.UI_FONT_FAMILY, 0],
                     contentFontScale = contentFontScale,
@@ -273,11 +268,7 @@ internal class DefaultSettingsRepository(
         )
         if (accountId == null) {
             // anonymous user, storing into keystore
-            if (settings.theme != null) {
-                keyStore.save(KeyStoreKeys.UI_THEME, settings.theme)
-            } else {
-                keyStore.remove(KeyStoreKeys.UI_THEME)
-            }
+            keyStore.save(KeyStoreKeys.UI_THEME, settings.theme)
             keyStore.save(KeyStoreKeys.UI_FONT_SCALE, settings.uiFontScale)
             keyStore.save(KeyStoreKeys.UI_FONT_FAMILY, settings.uiFontFamily)
             keyStore.save(
@@ -387,7 +378,7 @@ internal class DefaultSettingsRepository(
             keyStore.save(KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH, settings.restrictLocalUserSearch)
         } else {
             db.settingsQueries.update(
-                theme = settings.theme?.toLong(),
+                theme = settings.theme.toLong(),
                 uiFontScale = settings.uiFontScale.toDouble(),
                 uiFontFamily = settings.uiFontFamily.toLong(),
                 titleFontScale = settings.contentFontScale.title.toDouble(),
@@ -487,7 +478,7 @@ internal class DefaultSettingsRepository(
 private fun GetBy.toModel() =
     SettingsModel(
         id = id,
-        theme = theme?.toInt(),
+        theme = theme?.toInt() ?: 0,
         uiFontScale = uiFontScale.toFloat(),
         uiFontFamily = uiFontFamily.toInt(),
         contentFontScale =

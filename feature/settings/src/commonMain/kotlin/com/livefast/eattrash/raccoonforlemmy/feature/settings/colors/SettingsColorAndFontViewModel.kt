@@ -133,13 +133,11 @@ class SettingsColorAndFontViewModel(
         }
     }
 
-    private fun changeTheme(value: UiTheme?) {
+    private fun changeTheme(value: UiTheme) {
         themeRepository.changeUiTheme(value)
         screenModelScope.launch {
             val settings =
-                settingsRepository.currentSettings.value.copy(
-                    theme = value?.toInt(),
-                )
+                settingsRepository.currentSettings.value.copy(theme = value.toInt())
             saveSettings(settings)
         }
     }

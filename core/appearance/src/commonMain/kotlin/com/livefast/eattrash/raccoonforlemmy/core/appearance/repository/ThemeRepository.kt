@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Stable
 interface ThemeRepository {
-    val uiTheme: StateFlow<UiTheme?>
+    val uiTheme: StateFlow<UiTheme>
     val uiFontFamily: StateFlow<UiFontFamily>
     val uiFontScale: StateFlow<Float>
     val contentFontScale: StateFlow<ContentFontScales>
@@ -25,7 +25,7 @@ interface ThemeRepository {
     val postLayout: StateFlow<PostLayout>
     val commentBarTheme: StateFlow<CommentBarTheme>
 
-    fun changeUiTheme(value: UiTheme?)
+    fun changeUiTheme(value: UiTheme)
 
     fun changeUiFontFamily(value: UiFontFamily)
 

@@ -19,7 +19,7 @@ internal val jsonSerializationStrategy =
 
 @Serializable
 internal data class SerializableSettings(
-    val theme: Int? = null,
+    val theme: Int = 0,
     val uiFontFamily: Int = 0,
     val uiFontScale: Float = 1f,
     val contentFontScale: List<Float> = listOf(),
