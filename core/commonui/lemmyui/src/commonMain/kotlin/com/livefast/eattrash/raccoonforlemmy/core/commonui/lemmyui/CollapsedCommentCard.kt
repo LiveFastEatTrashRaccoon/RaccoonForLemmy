@@ -16,12 +16,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
@@ -67,12 +71,113 @@ fun CollapsedCommentCard(
         } else {
             0.dp
         }
+    var optionsMenuOpen by remember { mutableStateOf(false) }
+    val optionsActionLabel = LocalStrings.current.actionOpenOptionMenu
+    val openUserActionLabel =
+        buildString {
+            append(LocalStrings.current.postReplySourceAccount)
+            append(" ")
+            append(comment.creator?.name.orEmpty())
+        }
+    val upVoteActionLabel =
+        buildString {
+            append(LocalStrings.current.actionUpvote)
+            append(": ")
+            append(comment.upvotes)
+        }
+    val downVoteActionLabel =
+        buildString {
+            append(LocalStrings.current.actionDownvote)
+            append(": ")
+            append(comment.downvotes)
+        }
+    val saveActionLabel =
+        buildString {
+            if (comment.saved) {
+                append(LocalStrings.current.actionRemoveFromBookmarks)
+            } else {
+                append(LocalStrings.current.actionAddToBookmarks)
+            }
+        }
+    val toggleExpandedActionLabel =
+        buildString {
+            if (comment.expanded) {
+                append(LocalStrings.current.actionCollapse)
+            } else {
+                append(LocalStrings.current.actionExpand)
+            }
+        }
+    val replyActionLabel =
+        buildString {
+            append(LocalStrings.current.actionReply)
+        }
 
     Row(
         modifier =
-            modifier.onClick(
-                onClick = onClick ?: {},
-            ),
+            modifier
+                .onClick(
+                    onClick = onClick ?: {},
+                ).semantics(mergeDescendants = true) {
+                    val helperActions =
+                        buildList {
+                            val user = comment.creator
+                            if (user != null && onOpenCreator != null) {
+                                this +=
+                                    CustomAccessibilityAction(openUserActionLabel) {
+                                        onOpenCreator(user)
+                                        true
+                                    }
+                            }
+                            if (onUpVote != null) {
+                                this +=
+                                    CustomAccessibilityAction(upVoteActionLabel) {
+                                        onUpVote()
+                                        true
+                                    }
+                            }
+                            if (onDownVote != null) {
+                                this +=
+                                    CustomAccessibilityAction(downVoteActionLabel) {
+                                        onDownVote()
+                                        true
+                                    }
+                            }
+                            if (onSave != null) {
+                                this +=
+                                    CustomAccessibilityAction(saveActionLabel) {
+                                        onSave()
+                                        true
+                                    }
+                            }
+                            if (onReply != null) {
+                                this +=
+                                    CustomAccessibilityAction(replyActionLabel) {
+                                        onReply()
+                                        true
+                                    }
+                            }
+                            if (onToggleExpanded != null) {
+                                this +=
+                                    CustomAccessibilityAction(toggleExpandedActionLabel) {
+                                        onToggleExpanded()
+                                        true
+                                    }
+                            }
+                            if (options.isNotEmpty()) {
+                                this +=
+                                    CustomAccessibilityAction(
+                                        label = optionsActionLabel,
+                                        action = {
+                                            optionsMenuOpen = true
+                                            true
+                                        },
+                                    )
+                            }
+                        }
+                    if (helperActions.isNotEmpty()) {
+                        customActions = helperActions
+                    }
+                },
     ) {
         Box(
             modifier = Modifier.width((indentAmount * comment.depth).dp),
@@ -136,6 +241,10 @@ fun CollapsedCommentCard(
                 actionButtonsActive = actionButtonsActive,
                 options = options,
                 onOptionSelected = onOptionSelected,
+                optionsMenuOpen = optionsMenuOpen,
+                onOptionsMenuToggled = {
+                    optionsMenuOpen = it
+                },
             )
         }
     }
