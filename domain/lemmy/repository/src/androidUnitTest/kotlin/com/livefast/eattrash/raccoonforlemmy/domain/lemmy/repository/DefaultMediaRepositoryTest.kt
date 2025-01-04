@@ -12,8 +12,11 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
+import java.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class DefaultMediaRepositoryTest {
@@ -45,11 +48,42 @@ class DefaultMediaRepositoryTest {
                 )
             } returns mockk(relaxed = true)
 
-            sut.uploadImage(
-                auth = AUTH_TOKEN,
-                bytes = byteArrayOf(),
-            )
+            val res =
+                sut.uploadImage(
+                    auth = AUTH_TOKEN,
+                    bytes = byteArrayOf(),
+                )
 
+            assertNotNull(res)
+            coVerify {
+                postService.uploadImage(
+                    authHeader = AUTH_TOKEN.toAuthHeader(),
+                    url = "https://$INSTANCE/pictrs/image",
+                    token = "jwt=${AUTH_TOKEN}",
+                    content = any(),
+                )
+            }
+        }
+
+    @Test
+    fun givenError_whenUploadImage_thenInteractionsAreAsExpected() =
+        runTest {
+            coEvery {
+                postService.uploadImage(
+                    authHeader = any(),
+                    url = any(),
+                    token = any(),
+                    content = any(),
+                )
+            } throws IOException("Network error")
+
+            val res =
+                sut.uploadImage(
+                    auth = AUTH_TOKEN,
+                    bytes = byteArrayOf(),
+                )
+
+            assertNull(res)
             coVerify {
                 postService.uploadImage(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
@@ -73,6 +107,33 @@ class DefaultMediaRepositoryTest {
                 mockk {
                     every { images } returns emptyList()
                 }
+
+            val res =
+                sut.getAll(
+                    auth = AUTH_TOKEN,
+                    page = 1,
+                )
+
+            assertTrue(res.isEmpty())
+            coVerify {
+                userService.listMedia(
+                    authHeader = AUTH_TOKEN.toAuthHeader(),
+                    page = 1,
+                    limit = 20,
+                )
+            }
+        }
+
+    @Test
+    fun givenError_whenGetAll_thenResultAndInteractionsAreAsExpected() =
+        runTest {
+            coEvery {
+                userService.listMedia(
+                    authHeader = any(),
+                    page = any(),
+                    limit = any(),
+                )
+            } throws IOException("Network error")
 
             val res =
                 sut.getAll(
