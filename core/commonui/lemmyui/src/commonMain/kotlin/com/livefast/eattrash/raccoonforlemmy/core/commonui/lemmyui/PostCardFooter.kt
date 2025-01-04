@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
@@ -71,12 +72,14 @@ fun PostCardFooter(
     actionButtonsActive: Boolean = true,
     markRead: Boolean = false,
     downVoteEnabled: Boolean = true,
+    optionsMenuOpen: Boolean = false,
     options: List<Option> = emptyList(),
     onClick: (() -> Unit)? = null,
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
+    onOptionsMenuToggled: ((Boolean) -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
 ) {
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
@@ -88,7 +91,6 @@ fun PostCardFooter(
     val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
     val ancillaryColor =
         MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha * additionalAlphaFactor)
-    var optionsMenuOpen by remember { mutableStateOf(false) }
 
     CustomizedContent(ContentFontClass.AncillaryText) {
         Box(
@@ -100,7 +102,7 @@ fun PostCardFooter(
                     },
                     onLongClick = {
                         if (!optionsMenuOpen) {
-                            optionsMenuOpen = true
+                            onOptionsMenuToggled?.invoke(true)
                         }
                     },
                 ),
@@ -109,7 +111,7 @@ fun PostCardFooter(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
-                val buttonModifier = Modifier.size(IconSize.l)
+                val buttonModifier = Modifier.size(IconSize.l).clearAndSetSemantics { }
                 if (comments != null) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -200,9 +202,9 @@ fun PostCardFooter(
                                 .padding(Spacing.xs)
                                 .onGloballyPositioned {
                                     optionsOffset = it.positionInParent()
-                                },
+                                }.clearAndSetSemantics { },
                         onClick = {
-                            optionsMenuOpen = true
+                            onOptionsMenuToggled?.invoke(true)
                         },
                     ) {
                         Icon(
@@ -303,7 +305,7 @@ fun PostCardFooter(
             CustomDropDown(
                 expanded = optionsMenuOpen,
                 onDismiss = {
-                    optionsMenuOpen = false
+                    onOptionsMenuToggled?.invoke(false)
                 },
                 offset =
                     DpOffset(
@@ -317,7 +319,7 @@ fun PostCardFooter(
                             Text(option.text)
                         },
                         onClick = {
-                            optionsMenuOpen = false
+                            onOptionsMenuToggled?.invoke(false)
                             onOptionSelected?.invoke(option.id)
                         },
                     )

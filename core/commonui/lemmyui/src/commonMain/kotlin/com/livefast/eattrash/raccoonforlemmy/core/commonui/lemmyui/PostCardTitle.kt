@@ -9,6 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -60,8 +62,11 @@ fun PostCardTitle(
 
     SelectionContainer {
         CustomMarkdownWrapper(
-            modifier = modifier.padding(horizontal = Spacing.xxs),
-            content = text,
+            modifier =
+                modifier
+                    .padding(horizontal = Spacing.xxs)
+                    .semantics { heading() },
+                content = text,
             autoLoadImages = autoLoadImages,
             typography =
                 markdownTypography(
