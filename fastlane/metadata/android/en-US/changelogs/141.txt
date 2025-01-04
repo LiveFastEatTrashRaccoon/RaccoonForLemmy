@@ -1,0 +1,12 @@
+- feat: implement user tags
+- feat: restrict local user search on current instance
+- feat: custom sort for user posts and comments
+- fix: prevent crash while switching account
+- fix: explore result and listing type bottom sheet titles
+- fix: window insets and bar colors
+- fix: default theme color
+- enhancement: improve accessibility
+- chore: update dependencies
+- chore: update l10n
+- chore: update acknowledgements
+- chore: add more unit tests
