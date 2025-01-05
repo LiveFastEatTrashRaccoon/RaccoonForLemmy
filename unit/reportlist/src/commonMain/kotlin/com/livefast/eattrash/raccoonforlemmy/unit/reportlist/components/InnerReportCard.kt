@@ -35,6 +35,10 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
@@ -73,6 +77,19 @@ internal fun InnerReportCard(
     originalContent: (@Composable () -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
 ) {
+    var optionsMenuOpen by remember { mutableStateOf(false) }
+    val optionsActionLabel = LocalStrings.current.actionOpenOptionMenu
+    val openUserActionLabel =
+        buildString {
+            append(LocalStrings.current.postReplySourceAccount)
+            append(" ")
+            append(creator?.name.orEmpty())
+        }
+    val openResolveActionLabel =
+        buildString {
+            append(LocalStrings.current.actionOpen)
+        }
+
     Box(
         modifier =
             modifier.then(
@@ -90,7 +107,35 @@ internal fun InnerReportCard(
                 } else {
                     Modifier.background(MaterialTheme.colorScheme.background)
                 },
-            ),
+            ).semantics {
+                val helperActions =
+                    buildList {
+                        if (creator != null && onOpenCreator != null) {
+                            this +=
+                                CustomAccessibilityAction(openUserActionLabel) {
+                                    onOpenCreator(creator)
+                                    true
+                                }
+                        }
+                        if (onOpen != null) {
+                            this +=
+                                CustomAccessibilityAction(openResolveActionLabel) {
+                                    onOpen()
+                                    true
+                                }
+                        }
+                        if (options.isNotEmpty()) {
+                            this +=
+                                CustomAccessibilityAction(optionsActionLabel) {
+                                    optionsMenuOpen = true
+                                    true
+                                }
+                        }
+                    }
+                if (helperActions.isNotEmpty()) {
+                    customActions = helperActions
+                }
+            },
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
@@ -131,6 +176,10 @@ internal fun InnerReportCard(
                 date = date,
                 onOpenResolve = onOpen,
                 options = options,
+                optionsMenuOpen = optionsMenuOpen,
+                onOptionsMenuToggled = {
+                    optionsMenuOpen = it
+                },
                 onOptionSelected = onOptionSelected,
             )
         }
@@ -158,7 +207,7 @@ private fun ReportHeader(
                                 onOpenCreator?.invoke(creator)
                             }
                         },
-                    ),
+                    ).clearAndSetSemantics { },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
@@ -191,11 +240,12 @@ private fun ReportHeader(
 private fun ReportFooter(
     modifier: Modifier = Modifier,
     date: String? = null,
+    optionsMenuOpen: Boolean = false,
     options: List<Option> = emptyList(),
     onOpenResolve: (() -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
+    onOptionsMenuToggled: ((Boolean) -> Unit)? = null,
 ) {
-    var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
 
@@ -231,9 +281,9 @@ private fun ReportFooter(
                             .padding(top = Spacing.xxs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            },
+                            }.clearAndSetSemantics { },
                     onClick = {
-                        optionsExpanded = true
+                        onOptionsMenuToggled?.invoke(true)
                     },
                 ) {
                     Icon(
@@ -246,6 +296,7 @@ private fun ReportFooter(
             Spacer(modifier = Modifier.weight(1f))
             if (onOpenResolve != null) {
                 IconButton(
+                    modifier = Modifier.clearAndSetSemantics { },
                     onClick = {
                         onOpenResolve.invoke()
                     },
@@ -258,9 +309,9 @@ private fun ReportFooter(
             }
         }
         CustomDropDown(
-            expanded = optionsExpanded,
+            expanded = optionsMenuOpen,
             onDismiss = {
-                optionsExpanded = false
+                onOptionsMenuToggled?.invoke(false)
             },
             offset =
                 DpOffset(
@@ -274,7 +325,7 @@ private fun ReportFooter(
                         Text(option.text)
                     },
                     onClick = {
-                        optionsExpanded = false
+                        onOptionsMenuToggled?.invoke(false)
                         onOptionSelected?.invoke(option.id)
                     },
                 )
