@@ -25,7 +25,7 @@ internal fun AdminPurgePostItem(
         preferNicknames = preferNicknames,
         date = item.date,
         postLayout = postLayout,
-        moderator = item.admin,
+        creator = item.admin,
         onOpenUser = onOpenUser,
         innerContent = {
             Text(

@@ -29,7 +29,7 @@ internal fun HideCommunityItem(
         preferNicknames = preferNicknames,
         date = item.date,
         postLayout = postLayout,
-        moderator = item.admin,
+        creator = item.admin,
         onOpenUser = onOpenUser,
         onOpen = {
             item.admin?.also {

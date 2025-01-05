@@ -29,7 +29,7 @@ internal fun ModAddItem(
         preferNicknames = preferNicknames,
         date = item.date,
         postLayout = postLayout,
-        moderator = item.moderator,
+        creator = item.moderator,
         onOpenUser = onOpenUser,
         onOpen = {
             item.user?.also {
