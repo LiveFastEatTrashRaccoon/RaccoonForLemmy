@@ -6,7 +6,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Account
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.cache.LruCache
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.TagModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import io.mockk.Called
@@ -81,7 +80,7 @@ class DefaultUserTagHelperTest {
 
             assertNotNull(res)
             assertEquals(1, res.tags.size)
-            assertEquals(TagModel(name = tagName, color = null), res.tags.first())
+            assertEquals(UserTagModel(name = tagName, color = null), res.tags.first())
 
             coVerify {
                 cache.get(user.readableHandle)
@@ -104,7 +103,7 @@ class DefaultUserTagHelperTest {
 
             assertNotNull(res)
             assertEquals(1, res.tags.size)
-            assertEquals(TagModel(name = tagName, color = null), res.tags.first())
+            assertEquals(UserTagModel(name = tagName, color = null), res.tags.first())
 
             coVerify {
                 cache.get(user.readableHandle)

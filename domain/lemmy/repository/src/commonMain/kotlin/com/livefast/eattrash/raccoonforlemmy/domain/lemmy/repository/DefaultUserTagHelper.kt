@@ -4,7 +4,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.cache.LruCache
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.TagModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 
@@ -31,9 +30,10 @@ internal class DefaultUserTagHelper(
         copy(
             tags =
                 tags.map {
-                    TagModel(
+                    UserTagModel(
                         name = it.name,
                         color = it.color,
+                        type = it.type,
                     )
                 },
         )
