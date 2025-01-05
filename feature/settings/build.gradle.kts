@@ -41,6 +41,7 @@ kotlin {
                 implementation(projects.unit.configurecontentview)
                 implementation(projects.unit.filteredcontents)
                 implementation(projects.unit.medialist)
+                implementation(projects.unit.usertags)
             }
         }
     }

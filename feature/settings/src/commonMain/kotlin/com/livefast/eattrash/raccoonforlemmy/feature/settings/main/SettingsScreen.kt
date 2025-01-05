@@ -76,6 +76,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredConte
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.manageban.ManageBanScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.medialist.MediaListScreen
+import com.livefast.eattrash.raccoonforlemmy.unit.usertags.list.UserTagsScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -289,8 +290,8 @@ class SettingsScreen : Screen {
                             },
                         )
 
+                        // uploaded media
                         if (uiState.supportsMediaList) {
-                            // uploaded media
                             SettingsRow(
                                 title = LocalStrings.current.settingsMediaList,
                                 disclosureIndicator = true,
@@ -323,6 +324,15 @@ class SettingsScreen : Screen {
                                 },
                             )
                         }
+
+                        // user tags
+                        SettingsRow(
+                            title = LocalStrings.current.userTagsTitle,
+                            disclosureIndicator = true,
+                            onTap = {
+                                navigationCoordinator.pushScreen(UserTagsScreen())
+                            },
+                        )
                     }
 
                     SettingsHeader(

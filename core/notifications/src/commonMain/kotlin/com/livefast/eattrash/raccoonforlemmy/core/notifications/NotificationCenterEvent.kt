@@ -227,8 +227,6 @@ sealed interface NotificationCenterEvent {
 
         data object CreateCommunity : ProfileSideMenuAction
 
-        data object UserTags : ProfileSideMenuAction
-
         data object Logout : ProfileSideMenuAction
     }
 
