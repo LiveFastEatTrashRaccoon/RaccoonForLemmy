@@ -953,6 +953,8 @@ class CommunityDetailScreen(
                                             isFromModerator = uiState.moderators.containsId(post.creator?.id),
                                             postLayout = uiState.postLayout,
                                             limitBodyHeight = true,
+                                            showBot = true,
+                                            isCurrentUser = post.creator?.id == uiState.currentUserId,
                                             fullHeightImage = uiState.fullHeightImages,
                                             fullWidthImage = uiState.fullWidthImages,
                                             voteFormat = uiState.voteFormat,
@@ -969,6 +971,8 @@ class CommunityDetailScreen(
                                                 },
                                             fadeRead = uiState.fadeReadPosts,
                                             showUnreadComments = uiState.showUnreadComments,
+                                            botTagColor = uiState.botTagColor,
+                                            meTagColor = uiState.meTagColor,
                                             onClick = {
                                                 model.reduce(
                                                     CommunityDetailMviModel.Intent.MarkAsRead(

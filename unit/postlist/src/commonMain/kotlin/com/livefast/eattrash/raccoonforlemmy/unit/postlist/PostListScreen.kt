@@ -489,6 +489,8 @@ class PostListScreen : Screen {
                                         post = post,
                                         postLayout = uiState.postLayout,
                                         limitBodyHeight = true,
+                                        isCurrentUser = post.creator?.id == uiState.currentUserId,
+                                        showBot = true,
                                         fullHeightImage = uiState.fullHeightImages,
                                         fullWidthImage = uiState.fullWidthImages,
                                         voteFormat = uiState.voteFormat,
@@ -500,6 +502,8 @@ class PostListScreen : Screen {
                                         fadeRead = uiState.fadeReadPosts,
                                         showUnreadComments = uiState.showUnreadComments,
                                         downVoteEnabled = uiState.downVoteEnabled,
+                                        botTagColor = uiState.botTagColor,
+                                        meTagColor = uiState.meTagColor,
                                         onClick = {
                                             model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
                                             model.reduce(PostListMviModel.Intent.WillOpenDetail)

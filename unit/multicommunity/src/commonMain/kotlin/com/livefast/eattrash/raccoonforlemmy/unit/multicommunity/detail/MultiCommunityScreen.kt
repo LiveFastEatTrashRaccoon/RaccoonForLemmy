@@ -387,6 +387,8 @@ class MultiCommunityScreen(
                                     post = post,
                                     postLayout = uiState.postLayout,
                                     limitBodyHeight = true,
+                                    showBot = true,
+                                    isCurrentUser = post.creator?.id == uiState.currentUserId,
                                     fullHeightImage = uiState.fullHeightImages,
                                     fullWidthImage = uiState.fullWidthImages,
                                     voteFormat = uiState.voteFormat,
@@ -397,6 +399,8 @@ class MultiCommunityScreen(
                                     fadeRead = uiState.fadeReadPosts,
                                     showUnreadComments = uiState.showUnreadComments,
                                     downVoteEnabled = uiState.downVoteEnabled,
+                                    botTagColor = uiState.botTagColor,
+                                    meTagColor = uiState.meTagColor,
                                     onClick = {
                                         model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))
                                         model.reduce(MultiCommunityMviModel.Intent.WillOpenDetail)

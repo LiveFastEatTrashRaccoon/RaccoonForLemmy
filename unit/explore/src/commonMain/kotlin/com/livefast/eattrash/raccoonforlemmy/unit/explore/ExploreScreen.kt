@@ -436,6 +436,8 @@ class ExploreScreen(
                                                 post = result.model,
                                                 postLayout = uiState.postLayout,
                                                 limitBodyHeight = true,
+                                                showBot = true,
+                                                isCurrentUser = result.model.creator?.id == uiState.currentUserId,
                                                 fullHeightImage = uiState.fullHeightImages,
                                                 fullWidthImage = uiState.fullWidthImages,
                                                 voteFormat = uiState.voteFormat,
@@ -446,6 +448,8 @@ class ExploreScreen(
                                                 actionButtonsActive = uiState.isLogged,
                                                 downVoteEnabled = uiState.downVoteEnabled,
                                                 highlightText = uiState.searchText,
+                                                botTagColor = uiState.botTagColor,
+                                                meTagColor = uiState.meTagColor,
                                                 onClick = {
                                                     detailOpener.openPostDetail(
                                                         post = result.model,
@@ -650,10 +654,13 @@ class ExploreScreen(
                                                 showScores = uiState.showScores,
                                                 showBot = true,
                                                 showExpandedIndicator = false,
+                                                isCurrentUser = result.model.creator?.id == uiState.currentUserId,
                                                 indentAmount = 0,
                                                 actionButtonsActive = uiState.isLogged,
                                                 downVoteEnabled = uiState.downVoteEnabled,
                                                 highlightText = uiState.searchText,
+                                                botTagColor = uiState.botTagColor,
+                                                meTagColor = uiState.meTagColor,
                                                 onClick = {
                                                     detailOpener.openPostDetail(
                                                         post = PostModel(id = result.model.postId),

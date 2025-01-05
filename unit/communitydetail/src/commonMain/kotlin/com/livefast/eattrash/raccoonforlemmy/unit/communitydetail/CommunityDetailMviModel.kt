@@ -153,6 +153,8 @@ interface CommunityDetailMviModel :
         val currentPreferredLanguageId: Long? = null,
         val availableLanguages: List<LanguageModel> = emptyList(),
         val notices: List<CommunityNotices> = emptyList(),
+        val botTagColor: Int? = null,
+        val meTagColor: Int? = null,
     )
 
     sealed interface Effect {

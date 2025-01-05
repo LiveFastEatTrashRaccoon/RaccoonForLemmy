@@ -84,11 +84,14 @@ interface ExploreMviModel :
         val preferNicknames: Boolean = true,
         val showScores: Boolean = true,
         val downVoteEnabled: Boolean = true,
+        val currentUserId: Long? = null,
         val availableSortTypes: List<SortType> = emptyList(),
         val actionsOnSwipeToStartPosts: List<ActionOnSwipe> = emptyList(),
         val actionsOnSwipeToEndPosts: List<ActionOnSwipe> = emptyList(),
         val actionsOnSwipeToStartComments: List<ActionOnSwipe> = emptyList(),
         val actionsOnSwipeToEndComments: List<ActionOnSwipe> = emptyList(),
+        val botTagColor: Int? = null,
+        val meTagColor: Int? = null,
     )
 
     sealed interface Effect {

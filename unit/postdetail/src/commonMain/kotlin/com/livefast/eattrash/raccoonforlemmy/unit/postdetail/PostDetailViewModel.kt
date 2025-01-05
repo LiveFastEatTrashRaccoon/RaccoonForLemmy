@@ -5,7 +5,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRep
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
@@ -54,6 +57,8 @@ class PostDetailViewModel(
     private val siteRepository: SiteRepository,
     private val themeRepository: ThemeRepository,
     private val settingsRepository: SettingsRepository,
+    private val accountRepository: AccountRepository,
+    private val userTagRepository: UserTagRepository,
     private val shareHelper: ShareHelper,
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
@@ -477,6 +482,41 @@ class PostDetailViewModel(
                 canFetchMore = true,
                 refreshing = !initial,
                 loading = false,
+            )
+        }
+        val accountId = accountRepository.getActive()?.id
+        val adminTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.Admin,
+            )
+        val botTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.Bot,
+            )
+        val meTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.Me,
+            )
+        val modTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.Moderator,
+            )
+        val opTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.OriginalPoster,
+            )
+        updateState {
+            it.copy(
+                adminTagColor = adminTagColor,
+                botTagColor = botTagColor,
+                meTagColor = meTagColor,
+                modTagColor = modTagColor,
+                opTagColor = opTagColor,
             )
         }
         loadNextPage()

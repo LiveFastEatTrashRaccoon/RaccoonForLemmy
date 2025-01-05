@@ -44,33 +44,61 @@ interface FilteredContentsMviModel :
     ScreenModel,
     MviModel<FilteredContentsMviModel.Intent, FilteredContentsMviModel.State, FilteredContentsMviModel.Effect> {
     sealed interface Intent {
-        data class ChangeSection(val value: FilteredContentsSection) : Intent
+        data class ChangeSection(
+            val value: FilteredContentsSection,
+        ) : Intent
 
         data object Refresh : Intent
 
         data object LoadNextPage : Intent
 
-        data class UpVotePost(val id: Long, val feedback: Boolean = false) : Intent
+        data class UpVotePost(
+            val id: Long,
+            val feedback: Boolean = false,
+        ) : Intent
 
-        data class DownVotePost(val id: Long, val feedback: Boolean = false) : Intent
+        data class DownVotePost(
+            val id: Long,
+            val feedback: Boolean = false,
+        ) : Intent
 
-        data class SavePost(val id: Long, val feedback: Boolean = false) : Intent
+        data class SavePost(
+            val id: Long,
+            val feedback: Boolean = false,
+        ) : Intent
 
-        data class UpVoteComment(val commentId: Long, val feedback: Boolean = false) : Intent
+        data class UpVoteComment(
+            val commentId: Long,
+            val feedback: Boolean = false,
+        ) : Intent
 
-        data class DownVoteComment(val commentId: Long, val feedback: Boolean = false) : Intent
+        data class DownVoteComment(
+            val commentId: Long,
+            val feedback: Boolean = false,
+        ) : Intent
 
-        data class SaveComment(val commentId: Long, val feedback: Boolean = false) : Intent
+        data class SaveComment(
+            val commentId: Long,
+            val feedback: Boolean = false,
+        ) : Intent
 
         data object HapticIndication : Intent
 
-        data class ModFeaturePost(val id: Long) : Intent
+        data class ModFeaturePost(
+            val id: Long,
+        ) : Intent
 
-        data class AdminFeaturePost(val id: Long) : Intent
+        data class AdminFeaturePost(
+            val id: Long,
+        ) : Intent
 
-        data class ModLockPost(val id: Long) : Intent
+        data class ModLockPost(
+            val id: Long,
+        ) : Intent
 
-        data class ModDistinguishComment(val commentId: Long) : Intent
+        data class ModDistinguishComment(
+            val commentId: Long,
+        ) : Intent
 
         data object WillOpenDetail : Intent
     }
@@ -97,10 +125,13 @@ interface FilteredContentsMviModel :
         val showUnreadComments: Boolean = false,
         val downVoteEnabled: Boolean = true,
         val isPostOnly: Boolean = false,
+        val currentUserId: Long? = null,
         val actionsOnSwipeToStartPosts: List<ActionOnSwipe> = emptyList(),
         val actionsOnSwipeToEndPosts: List<ActionOnSwipe> = emptyList(),
         val actionsOnSwipeToStartComments: List<ActionOnSwipe> = emptyList(),
         val actionsOnSwipeToEndComments: List<ActionOnSwipe> = emptyList(),
+        val botTagColor: Int? = null,
+        val meTagColor: Int? = null,
     )
 
     sealed interface Effect {

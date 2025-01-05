@@ -6,11 +6,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.FavoriteCommunityModel
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunityPreferredLanguageRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.FavoriteCommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
@@ -70,6 +72,7 @@ class CommunityDetailViewModel(
     private val communitySortRepository: CommunitySortRepository,
     private val postNavigationManager: PostNavigationManager,
     private val communityPreferredLanguageRepository: CommunityPreferredLanguageRepository,
+    private val userTagRepository: UserTagRepository,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<CommunityDetailMviModel.Intent, CommunityDetailMviModel.UiState, CommunityDetailMviModel.Effect>(
         initialState = CommunityDetailMviModel.UiState(),
@@ -444,6 +447,19 @@ class CommunityDetailViewModel(
                     notices = newNotices,
                 )
             }
+        }
+        val botTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.Bot,
+            )
+        val meTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.Me,
+            )
+        updateState {
+            it.copy(botTagColor = botTagColor, meTagColor = meTagColor)
         }
 
         loadNextPage()

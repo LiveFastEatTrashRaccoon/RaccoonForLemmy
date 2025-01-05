@@ -97,6 +97,8 @@ interface PostListMviModel :
         val fadeReadPosts: Boolean = false,
         val showUnreadComments: Boolean = false,
         val downVoteEnabled: Boolean = true,
+        val botTagColor: Int? = null,
+        val meTagColor: Int? = null,
     )
 
     sealed interface Effect {

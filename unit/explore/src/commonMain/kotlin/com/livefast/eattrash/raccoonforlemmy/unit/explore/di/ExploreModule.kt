@@ -21,12 +21,14 @@ val exploreModule =
                     commentRepository = instance(),
                     themeRepository = instance(),
                     settingsRepository = instance(),
+                    userTagRepository = instance(),
+                    accountRepository = instance(),
                     notificationCenter = instance(),
                     hapticFeedback = instance(),
                     getSortTypesUseCase = instance(),
                     imagePreloadManager = instance(),
                     lemmyValueCache = instance(),
-            )
+                )
+            }
         }
     }
-}

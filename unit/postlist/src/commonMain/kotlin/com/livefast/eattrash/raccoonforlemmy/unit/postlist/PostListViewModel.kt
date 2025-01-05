@@ -5,7 +5,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRep
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
@@ -45,6 +48,8 @@ class PostListViewModel(
     private val settingsRepository: SettingsRepository,
     private val userRepository: UserRepository,
     private val communityRepository: CommunityRepository,
+    private val accountRepository: AccountRepository,
+    private val userTagRepository: UserTagRepository,
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
     private val zombieModeHelper: ZombieModeHelper,
@@ -320,6 +325,20 @@ class PostListViewModel(
                 loading = false,
                 zombieModeActive = false,
             )
+        }
+        val accountId = accountRepository.getActive()?.id
+        val botTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.Bot,
+            )
+        val meTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.Me,
+            )
+        updateState {
+            it.copy(botTagColor = botTagColor, meTagColor = meTagColor)
         }
         loadNextPage()
         if (identityRepository.isLogged.value == null) {
