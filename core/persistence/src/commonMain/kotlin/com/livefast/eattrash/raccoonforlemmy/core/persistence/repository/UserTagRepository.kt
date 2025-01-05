@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagMemberModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
 
 interface UserTagRepository {
     suspend fun getAll(accountId: Long): List<UserTagModel>
@@ -24,6 +25,7 @@ interface UserTagRepository {
         id: Long,
         name: String,
         color: Int? = null,
+        type: Int,
     )
 
     suspend fun delete(id: Long)
@@ -42,4 +44,9 @@ interface UserTagRepository {
         accountId: Long,
         username: String,
     ): List<UserTagModel>
+
+    suspend fun getSpecialTagColor(
+        accountId: Long,
+        type: UserTagType,
+    ): Int?
 }

@@ -4,6 +4,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagMemberEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagMemberModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toInt
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toUserTagType
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -51,6 +54,7 @@ internal class DefaultUserTagRepository(
                         name = e.name,
                         id = e.user_tag_id ?: 0,
                         color = e.color?.toInt(),
+                        type = e.type.toInt().toUserTagType(),
                     )
                 }
         }
@@ -63,6 +67,7 @@ internal class DefaultUserTagRepository(
             name = model.name,
             color = model.color?.toLong(),
             account_id = accountId,
+            type = model.type.toInt().toLong(),
         )
     }
 
@@ -70,11 +75,13 @@ internal class DefaultUserTagRepository(
         id: Long,
         name: String,
         color: Int?,
+        type: Int,
     ) = withContext(Dispatchers.IO) {
         db.usertagsQueries.update(
             id = id,
             name = name,
             color = color?.toLong(),
+            type = type.toLong(),
         )
     }
 
@@ -118,9 +125,18 @@ internal class DefaultUserTagRepository(
                         name = e.name,
                         id = e.user_tag_id ?: 0,
                         color = e.color?.toInt(),
+                        type = e.type.toInt().toUserTagType(),
                     )
                 }
         }
+
+    override suspend fun getSpecialTagColor(
+        accountId: Long,
+        type: UserTagType,
+    ): Int? {
+        val allTags = getAll(accountId)
+        return allTags.firstOrNull { it.type == type }?.color
+    }
 }
 
 private fun UserTagEntity.toModel() =
@@ -128,6 +144,7 @@ private fun UserTagEntity.toModel() =
         id = id,
         name = name,
         color = color?.toInt(),
+        type = type.toInt().toUserTagType(),
     )
 
 private fun UserTagMemberEntity.toModel() =

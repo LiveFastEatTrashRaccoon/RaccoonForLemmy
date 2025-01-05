@@ -9,6 +9,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.UsertagmembersQuer
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UsertagsQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagMemberModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.isSpecial
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usertagmembers.GetBy
@@ -20,6 +23,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 
 class DefaultUserTagRepositoryTest {
@@ -31,8 +35,8 @@ class DefaultUserTagRepositoryTest {
         mockk<UsertagsQueries>(relaxUnitFun = true) {
             every { getBy(any()) } returns tagQuery
             every { getAllBy(any()) } returns tagQuery
-            every { create(any(), any(), any()) } returns mockk(relaxUnitFun = true)
-            every { update(any(), any(), any()) } returns mockk(relaxUnitFun = true)
+            every { create(any(), any(), any(), any()) } returns mockk(relaxUnitFun = true)
+            every { update(any(), any(), any(), any()) } returns mockk(relaxUnitFun = true)
             every { delete(any()) } returns mockk(relaxUnitFun = true)
         }
     private val memberQuery = mockk<Query<UserTagMemberEntity>>()
@@ -68,6 +72,7 @@ class DefaultUserTagRepositoryTest {
                         name = model.name,
                         account_id = accountId,
                         color = model.color?.toLong(),
+                        type = model.type.toInt().toLong(),
                     ),
                 )
 
@@ -75,6 +80,7 @@ class DefaultUserTagRepositoryTest {
 
             assertEquals(1, res.size)
             assertEquals(model, res.first())
+            assertFalse(res.first().isSpecial)
             verify {
                 tagQueries.getAllBy(accountId)
             }
@@ -91,6 +97,7 @@ class DefaultUserTagRepositoryTest {
                     name = model.name,
                     account_id = 0L,
                     color = model.color?.toLong(),
+                    type = model.type.toInt().toLong(),
                 )
 
             val res = sut.getById(tagId)
@@ -142,6 +149,7 @@ class DefaultUserTagRepositoryTest {
                         account_id = accountId,
                         color = model.color?.toLong(),
                         id_ = tagId,
+                        type = model.type.toInt().toLong(),
                     ),
                 )
 
@@ -174,6 +182,7 @@ class DefaultUserTagRepositoryTest {
                     name = model.name,
                     account_id = accountId,
                     color = model.color?.toLong(),
+                    type = model.type.toInt().toLong(),
                 )
             }
         }
@@ -184,14 +193,21 @@ class DefaultUserTagRepositoryTest {
             val tagId = 1L
             val newName = "new-tag"
             val color = Color.Red.toArgb()
+            val type = UserTagType.Regular
 
-            sut.update(id = tagId, name = newName, color = color)
+            sut.update(
+                id = tagId,
+                name = newName,
+                color = color,
+                type = type.toInt(),
+            )
 
             verify {
                 tagQueries.update(
                     id = tagId,
                     name = newName,
                     color = color.toLong(),
+                    type = type.toInt().toLong(),
                 )
             }
         }
@@ -251,6 +267,7 @@ class DefaultUserTagRepositoryTest {
                         account_id = accountId,
                         color = model.color?.toLong(),
                         id_ = tagId,
+                        type = model.type.toInt().toLong(),
                     ),
                 )
 
@@ -260,6 +277,37 @@ class DefaultUserTagRepositoryTest {
             assertEquals(model, res.first())
             verify {
                 memberQueries.getBy(username = username, account_id = accountId)
+            }
+        }
+
+    @Test
+    fun whenGetSpecialTagColor_thenInteractionsAreAsExpected() =
+        runTest {
+            val accountId = 1L
+            val color = Color.Red.toArgb()
+            every { tagQuery.executeAsList() } returns
+                listOf(
+                    UserTagEntity(
+                        id = 2L,
+                        name = "me",
+                        account_id = accountId,
+                        color = color.toLong(),
+                        type = UserTagType.Me.toInt().toLong(),
+                    ),
+                    UserTagEntity(
+                        id = 3L,
+                        name = "mod",
+                        account_id = accountId,
+                        color = Color.Green.toArgb().toLong(),
+                        type = UserTagType.Moderator.toInt().toLong(),
+                    ),
+                )
+
+            val res = sut.getSpecialTagColor(type = UserTagType.Me, accountId = accountId)
+
+            assertEquals(color, res)
+            verify {
+                tagQueries.getAllBy(accountId)
             }
         }
 }

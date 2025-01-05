@@ -9,6 +9,7 @@ kotlin {
             dependencies {
                 implementation(projects.core.l10n)
                 implementation(projects.core.utils)
+                implementation(projects.core.persistence)
             }
         }
     }

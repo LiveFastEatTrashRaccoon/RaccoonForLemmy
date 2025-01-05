@@ -3,6 +3,7 @@ CREATE TABLE UserTagEntity(
     name TEXT NOT NULL,
     color INTEGER DEFAULT NULL,
     account_id INTEGER,
+    type INTEGER NOT NULL  DEFAULT 0,
     FOREIGN KEY (account_id) REFERENCES AccountEntity(id) ON DELETE CASCADE,
     UNIQUE (account_id, name)
 );
@@ -11,11 +12,13 @@ create:
 INSERT OR IGNORE INTO UserTagEntity (
     name,
     color,
-    account_id
+    account_id,
+    type
 ) VALUES (
     ?,
     ?,
-    ?
+    ?,
+     ?
 );
 
 getAllBy:
@@ -30,7 +33,7 @@ WHERE id = ?;
 
 update:
 UPDATE UserTagEntity
-SET name = ?, color = ?
+SET name = ?, color = ?, type = ?
 WHERE id = ?;
 
 delete:
