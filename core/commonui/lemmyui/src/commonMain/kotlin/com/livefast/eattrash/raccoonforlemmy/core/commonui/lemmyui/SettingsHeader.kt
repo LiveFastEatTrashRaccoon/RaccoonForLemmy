@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 
@@ -43,6 +45,7 @@ fun SettingsHeader(
             )
         }
         Text(
+            modifier = Modifier.semantics { heading() },
             text = title,
             color = fullColor,
             style = MaterialTheme.typography.titleMedium,
