@@ -22,6 +22,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
@@ -79,6 +82,36 @@ fun InboxCard(
     }
     val shareActionLabel = LocalStrings.current.postActionShare
     val cancelActionLabel = LocalStrings.current.buttonCancel
+    var optionsMenuOpen by remember { mutableStateOf(false) }
+    val optionsActionLabel = LocalStrings.current.actionOpenOptionMenu
+    val openCommunityActionLabel =
+        buildString {
+            append(LocalStrings.current.exploreResultTypeCommunities)
+            append(": ")
+            append(mention.community.name)
+        }
+    val openUserActionLabel =
+        buildString {
+            append(LocalStrings.current.postReplySourceAccount)
+            append(" ")
+            append(mention.creator.name)
+        }
+    val upVoteActionLabel =
+        buildString {
+            append(LocalStrings.current.actionUpvote)
+            append(": ")
+            append(mention.upvotes)
+        }
+    val downVoteActionLabel =
+        buildString {
+            append(LocalStrings.current.actionDownvote)
+            append(": ")
+            append(mention.downvotes)
+        }
+    val replyActionLabel =
+        buildString {
+            append(LocalStrings.current.actionReply)
+        }
 
     Box(
         modifier =
@@ -106,7 +139,55 @@ fun InboxCard(
                             onClickPost()
                         }
                     },
-                ),
+                ).semantics(mergeDescendants = true) {
+                    val helperActions =
+                        buildList {
+                            this +=
+                                CustomAccessibilityAction(openCommunityActionLabel) {
+                                    onOpenCommunity(mention.community)
+                                    true
+                                }
+                            this +=
+                                CustomAccessibilityAction(openUserActionLabel) {
+                                    onOpenCreator(mention.creator, "")
+                                    true
+                                }
+                            if (onUpVote != null) {
+                                this +=
+                                    CustomAccessibilityAction(upVoteActionLabel) {
+                                        onUpVote()
+                                        true
+                                    }
+                            }
+                            if (onDownVote != null) {
+                                this +=
+                                    CustomAccessibilityAction(downVoteActionLabel) {
+                                        onDownVote()
+                                        true
+                                    }
+                            }
+                            if (onReply != null) {
+                                this +=
+                                    CustomAccessibilityAction(replyActionLabel) {
+                                        onReply()
+                                        true
+                                    }
+                            }
+                            if (options.isNotEmpty()) {
+                                this +=
+                                    CustomAccessibilityAction(
+                                        label = optionsActionLabel,
+                                        action = {
+                                            optionsMenuOpen = true
+                                            true
+                                        },
+                                    )
+                            }
+                        }
+                    if (helperActions.isNotEmpty()) {
+                        customActions = helperActions
+                    }
+                },
     ) {
         CompositionLocalProvider(
             LocalTextToolbar provides
@@ -197,6 +278,7 @@ fun InboxCard(
                     upVoted = mention.myVote > 0,
                     downVoted = mention.myVote < 0,
                     downVoteEnabled = downVoteEnabled,
+                    optionsMenuOpen = optionsMenuOpen,
                     options = options,
                     onOpenCommunity = onOpenCommunity,
                     onOpenCreator = { user ->
@@ -204,6 +286,9 @@ fun InboxCard(
                     },
                     onUpVote = onUpVote,
                     onDownVote = onDownVote,
+                    onOptionsMenuToggled = {
+                        optionsMenuOpen = it
+                    },
                     onOptionSelected = onOptionSelected,
                     onReply = onReply,
                 )
