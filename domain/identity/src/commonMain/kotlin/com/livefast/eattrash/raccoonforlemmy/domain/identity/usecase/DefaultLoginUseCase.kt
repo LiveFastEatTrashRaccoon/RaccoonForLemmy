@@ -8,6 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Account
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunityPreferredLanguageRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.CreateSpecialTagsUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.AuthRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -25,6 +26,7 @@ internal class DefaultLoginUseCase(
     private val communityPreferredLanguageRepository: CommunityPreferredLanguageRepository,
     private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val lemmyValueCache: LemmyValueCache,
+    private val createSpecialTagsUseCase: CreateSpecialTagsUseCase,
 ) : LoginUseCase {
     override suspend operator fun invoke(
         instance: String,
@@ -112,6 +114,8 @@ internal class DefaultLoginUseCase(
 
             val bottomBarSections = bottomNavItemsRepository.get(accountId)
             settingsRepository.changeCurrentBottomBarSections(bottomBarSections.toInts())
+
+            createSpecialTagsUseCase()
         }
     }
 }
