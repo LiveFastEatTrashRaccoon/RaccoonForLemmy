@@ -124,6 +124,11 @@ interface Strings {
     val createReportTitleComment: String @Composable get
     val createReportTitlePost: String @Composable get
     val creationDate: String @Composable get
+    val defaultTagAdmin: String @Composable get
+    val defaultTagBot: String @Composable get
+    val defaultTagCurrentUser: String @Composable get
+    val defaultTagModerator: String @Composable get
+    val defaultTagOriginalPoster: String @Composable get
     val dialogRawContentText: String @Composable get
     val dialogRawContentTitle: String @Composable get
     val dialogRawContentUrl: String @Composable get
