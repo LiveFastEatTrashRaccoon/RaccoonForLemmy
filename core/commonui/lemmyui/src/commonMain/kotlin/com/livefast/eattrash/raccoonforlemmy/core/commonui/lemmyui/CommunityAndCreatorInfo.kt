@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.LinkAnnotation
@@ -229,12 +230,16 @@ fun CommunityAndCreatorInfo(
                                 horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                             ) {
                                 items(creator.tags) { tag ->
+                                    val isColorful =
+                                        tag.color != null && tag.color != Color.Transparent.toArgb()
+                                    val tagColor =
+                                        tag.color?.let {
+                                            Color(it)
+                                        } ?: MaterialTheme.colorScheme.onBackground
                                     IndicatorChip(
                                         text = tag.name,
-                                        color =
-                                            tag.color?.let { Color(it) }
-                                                ?: MaterialTheme.colorScheme.onBackground,
-                                        full = true,
+                                        color = tagColor,
+                                        full = isColorful,
                                     )
                                 }
                             }
