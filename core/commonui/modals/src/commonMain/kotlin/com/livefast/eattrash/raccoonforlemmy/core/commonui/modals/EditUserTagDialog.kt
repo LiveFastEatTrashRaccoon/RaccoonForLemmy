@@ -73,6 +73,9 @@ fun EditUserTagDialog(
                 onTap = {
                     selectCustomColorDialogOpen = true
                 },
+                onClear = {
+                    selectedColor = Color.Transparent
+                },
             )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -103,7 +106,10 @@ fun EditUserTagDialog(
             Spacer(modifier = Modifier.height(Spacing.xs))
             Button(
                 onClick = {
-                    onClose?.invoke(textFieldValue.text, selectedColor)
+                    onClose?.invoke(
+                        textFieldValue.text,
+                        selectedColor.takeIf { it != Color.Transparent },
+                    )
                 },
             ) {
                 Text(text = LocalStrings.current.buttonConfirm)
@@ -114,9 +120,11 @@ fun EditUserTagDialog(
     if (selectCustomColorDialogOpen) {
         CustomColorPickerDialog(
             initialValue = color,
-            onClose = {
+            onClose = { newColor ->
                 selectCustomColorDialogOpen = false
-                selectedColor = it ?: Color.Transparent
+                if (newColor != null) {
+                    selectedColor = newColor
+                }
             },
         )
     }
