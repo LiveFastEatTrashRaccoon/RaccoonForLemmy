@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
@@ -71,6 +72,7 @@ fun InboxReplySubtitle(
     upVotes: Int = 0,
     downVotes: Int = 0,
     downVoteEnabled: Boolean = true,
+    optionsMenuOpen: Boolean = false,
     options: List<Option> = emptyList(),
     voteFormat: VoteFormat = VoteFormat.Aggregated,
     upVoted: Boolean = false,
@@ -80,15 +82,15 @@ fun InboxReplySubtitle(
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
+    onOptionsMenuToggled: ((Boolean) -> Unit)? = null,
     onReply: (() -> Unit)? = null,
 ) {
-    val buttonModifier = Modifier.size(IconSize.l)
+    val buttonModifier = Modifier.size(IconSize.l).clearAndSetSemantics { }
     val themeRepository = remember { getThemeRepository() }
     val upVoteColor by themeRepository.upVoteColor.collectAsState()
     val downVoteColor by themeRepository.downVoteColor.collectAsState()
     val defaultUpvoteColor = MaterialTheme.colorScheme.primary
     val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
-    var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
 
@@ -118,7 +120,7 @@ fun InboxReplySubtitle(
                                                 onOpenCreator?.invoke(creator)
                                             }
                                         },
-                                    ),
+                                    ).clearAndSetSemantics { },
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
                         ) {
@@ -156,7 +158,7 @@ fun InboxReplySubtitle(
                                                 onOpenCommunity?.invoke(community)
                                             }
                                         },
-                                    ),
+                                    ).clearAndSetSemantics { },
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                         ) {
@@ -237,7 +239,7 @@ fun InboxReplySubtitle(
                                             optionsOffset = it.positionInParent()
                                         },
                                 onClick = {
-                                    optionsExpanded = true
+                                    onOptionsMenuToggled?.invoke(true)
                                 },
                             ) {
                                 Icon(
@@ -310,9 +312,9 @@ fun InboxReplySubtitle(
                         }
                     }
                     CustomDropDown(
-                        expanded = optionsExpanded,
+                        expanded = optionsMenuOpen,
                         onDismiss = {
-                            optionsExpanded = false
+                            onOptionsMenuToggled?.invoke(false)
                         },
                         offset =
                             DpOffset(
@@ -326,7 +328,7 @@ fun InboxReplySubtitle(
                                     Text(option.text)
                                 },
                                 onClick = {
-                                    optionsExpanded = false
+                                    onOptionsMenuToggled?.invoke(false)
                                     onOptionSelected?.invoke(option.id)
                                 },
                             )

@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -108,7 +109,7 @@ fun CommunityAndCreatorInfo(
                                         }
                                     },
                                     onDoubleClick = onDoubleClick ?: {},
-                                ),
+                                ).clearAndSetSemantics { },
                         url = communityIcon,
                         autoload = autoLoadImages,
                         quality = FilterQuality.Low,
@@ -116,6 +117,7 @@ fun CommunityAndCreatorInfo(
                     )
                 } else {
                     PlaceholderImage(
+                        modifier = Modifier.clearAndSetSemantics { },
                         onClick = {
                             if (community != null) {
                                 onOpenCommunity?.invoke(community)
@@ -140,7 +142,7 @@ fun CommunityAndCreatorInfo(
                                         }
                                     },
                                     onDoubleClick = onDoubleClick ?: {},
-                                ),
+                                ).clearAndSetSemantics { },
                         url = creatorAvatar,
                         quality = FilterQuality.Low,
                         autoload = autoLoadImages,
@@ -148,6 +150,7 @@ fun CommunityAndCreatorInfo(
                     )
                 } else {
                     PlaceholderImage(
+                        modifier = Modifier.clearAndSetSemantics { },
                         onClick = {
                             if (creator != null) {
                                 onOpenCreator?.invoke(creator)
@@ -169,7 +172,7 @@ fun CommunityAndCreatorInfo(
                                     indication = null,
                                     onDoubleClick = onDoubleClick ?: {},
                                     onLongClick = onLongClick ?: {},
-                                ),
+                                ).clearAndSetSemantics { },
                         text =
                             buildAnnotatedString {
                                 pushLink(
@@ -212,7 +215,7 @@ fun CommunityAndCreatorInfo(
                                         },
                                         onDoubleClick = onDoubleClick ?: {},
                                         onLongClick = onLongClick ?: {},
-                                    ),
+                                    ).clearAndSetSemantics { },
                             text = creatorName,
                             style = MaterialTheme.typography.bodySmall,
                             color = ancillaryColor,
@@ -303,6 +306,7 @@ fun CommunityAndCreatorInfo(
             }
             if (indicatorExpanded != null) {
                 IconButton(
+                    modifier = Modifier.clearAndSetSemantics { },
                     onClick = {
                         onToggleExpanded?.invoke()
                     },

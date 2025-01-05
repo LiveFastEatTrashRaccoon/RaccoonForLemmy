@@ -42,6 +42,7 @@ import raccoonforlemmy.shared.generated.resources.action_open_full_screen
 import raccoonforlemmy.shared.generated.resources.action_open_option_menu
 import raccoonforlemmy.shared.generated.resources.action_open_side_menu
 import raccoonforlemmy.shared.generated.resources.action_quote
+import raccoonforlemmy.shared.generated.resources.action_remove_from_bookmarks
 import raccoonforlemmy.shared.generated.resources.action_reply
 import raccoonforlemmy.shared.generated.resources.action_restore
 import raccoonforlemmy.shared.generated.resources.action_save
@@ -585,6 +586,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.action_open_side_menu)
     override val actionQuote: String
         @Composable get() = stringResource(Res.string.action_quote)
+    override val actionRemoveFromBookmarks: String
+        @Composable get() = stringResource(Res.string.action_remove_from_bookmarks)
     override val actionReply: String
         @Composable get() = stringResource(Res.string.action_reply)
     override val actionRestore: String

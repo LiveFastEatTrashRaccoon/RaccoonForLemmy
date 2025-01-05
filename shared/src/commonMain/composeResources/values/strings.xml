@@ -12,6 +12,7 @@
     <string name="action_exit_search">Exit search</string>
     <string name="action_logout">Logout</string>
     <string name="action_quote">Quote</string>
+    <string name="action_remove_from_bookmarks">Remove from saved</string>
     <string name="action_reply">Reply</string>
     <string name="action_restore">Restore</string>
     <string name="action_save">Save</string>

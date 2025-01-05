@@ -34,6 +34,10 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
@@ -64,7 +68,7 @@ internal fun InnerModlogItem(
     autoLoadImages: Boolean = true,
     preferNicknames: Boolean = true,
     date: String? = null,
-    moderator: UserModel? = null,
+    creator: UserModel? = null,
     postLayout: PostLayout = PostLayout.Card,
     options: List<Option> = emptyList(),
     onOpenUser: ((UserModel) -> Unit)? = null,
@@ -72,32 +76,74 @@ internal fun InnerModlogItem(
     innerContent: (@Composable () -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
 ) {
+    var optionsMenuOpen by remember { mutableStateOf(false) }
+    val optionsActionLabel = LocalStrings.current.actionOpenOptionMenu
+    val openUserActionLabel =
+        buildString {
+            append(LocalStrings.current.postReplySourceAccount)
+            append(" ")
+            append(creator?.name.orEmpty())
+        }
+    val openActionLabel =
+        buildString {
+            append(LocalStrings.current.actionOpen)
+        }
+
     Box(
         modifier =
-            modifier.then(
-                if (postLayout == PostLayout.Card) {
-                    Modifier
-                        .padding(horizontal = Spacing.xs)
-                        .shadow(
-                            elevation = 5.dp,
-                            shape = RoundedCornerShape(CornerSize.l),
-                        ).clip(RoundedCornerShape(CornerSize.l))
-                        .padding(horizontal = Spacing.xs)
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                            shape = RoundedCornerShape(CornerSize.l),
-                        ).padding(vertical = Spacing.xs)
-                } else {
-                    Modifier.background(MaterialTheme.colorScheme.background)
+            modifier
+                .then(
+                    if (postLayout == PostLayout.Card) {
+                        Modifier
+                            .padding(horizontal = Spacing.xs)
+                            .shadow(
+                                elevation = 5.dp,
+                                shape = RoundedCornerShape(CornerSize.l),
+                            ).clip(RoundedCornerShape(CornerSize.l))
+                            .padding(horizontal = Spacing.xs)
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                                shape = RoundedCornerShape(CornerSize.l),
+                            ).padding(vertical = Spacing.xs)
+                    } else {
+                        Modifier.background(MaterialTheme.colorScheme.background)
+                    },
+                ).semantics {
+                    val helperActions =
+                        buildList {
+                            if (creator != null && onOpenUser != null) {
+                                this +=
+                                    CustomAccessibilityAction(openUserActionLabel) {
+                                        onOpenUser(creator)
+                                        true
+                                    }
+                            }
+                            if (onOpen != null) {
+                                this +=
+                                    CustomAccessibilityAction(openActionLabel) {
+                                        onOpen()
+                                        true
+                                    }
+                            }
+                            if (options.isNotEmpty()) {
+                                this +=
+                                    CustomAccessibilityAction(optionsActionLabel) {
+                                        optionsMenuOpen = true
+                                        true
+                                    }
+                            }
+                        }
+                    if (helperActions.isNotEmpty()) {
+                        customActions = helperActions
+                    }
                 },
-            ),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             ModlogHeader(
                 modifier = Modifier.padding(horizontal = Spacing.s),
-                creator = moderator,
+                creator = creator,
                 autoLoadImages = autoLoadImages,
                 preferNicknames = preferNicknames,
                 onOpenCreator = onOpenUser,
@@ -135,6 +181,10 @@ internal fun InnerModlogItem(
                 date = date,
                 onOpen = onOpen,
                 options = options,
+                optionsMenuOpen = optionsMenuOpen,
+                onOptionsMenuToggled = {
+                    optionsMenuOpen = it
+                },
                 onOptionSelected = onOptionSelected,
             )
         }
@@ -162,7 +212,7 @@ private fun ModlogHeader(
                                 onOpenCreator?.invoke(creator)
                             }
                         },
-                    ),
+                    ).clearAndSetSemantics { },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
@@ -195,11 +245,12 @@ private fun ModlogHeader(
 private fun ModlogFooter(
     modifier: Modifier = Modifier,
     date: String? = null,
+    optionsMenuOpen: Boolean = false,
     options: List<Option> = emptyList(),
     onOpen: (() -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
+    onOptionsMenuToggled: ((Boolean) -> Unit)? = null,
 ) {
-    var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
 
@@ -235,9 +286,9 @@ private fun ModlogFooter(
                             .padding(top = Spacing.xxs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            },
+                            }.clearAndSetSemantics { },
                     onClick = {
-                        optionsExpanded = true
+                        onOptionsMenuToggled?.invoke(true)
                     },
                 ) {
                     Icon(
@@ -250,6 +301,7 @@ private fun ModlogFooter(
             Spacer(modifier = Modifier.weight(1f))
             if (onOpen != null) {
                 IconButton(
+                    modifier = Modifier.clearAndSetSemantics { },
                     onClick = {
                         onOpen.invoke()
                     },
@@ -262,9 +314,9 @@ private fun ModlogFooter(
             }
         }
         CustomDropDown(
-            expanded = optionsExpanded,
+            expanded = optionsMenuOpen,
             onDismiss = {
-                optionsExpanded = false
+                onOptionsMenuToggled?.invoke(false)
             },
             offset =
                 DpOffset(
@@ -278,7 +330,7 @@ private fun ModlogFooter(
                         Text(option.text)
                     },
                     onClick = {
-                        optionsExpanded = false
+                        onOptionsMenuToggled?.invoke(false)
                         onOptionSelected?.invoke(option.id)
                     },
                 )

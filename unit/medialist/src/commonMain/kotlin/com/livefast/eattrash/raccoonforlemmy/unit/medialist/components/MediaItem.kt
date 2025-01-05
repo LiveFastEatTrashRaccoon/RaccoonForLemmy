@@ -33,6 +33,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -72,6 +76,9 @@ internal fun MediaItem(
             PostLayout.Card -> MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
             else -> MaterialTheme.colorScheme.background
         }
+    var optionsMenuOpen by remember { mutableStateOf(false) }
+    val optionsActionLabel = LocalStrings.current.actionOpenOptionMenu
+
     Box(
         modifier =
             modifier
@@ -88,7 +95,19 @@ internal fun MediaItem(
                     } else {
                         Modifier
                     },
-                ),
+                ).semantics(mergeDescendants = true) {
+                    val helperActions =
+                        buildList {
+                            if (options.isNotEmpty()) {
+                                this +=
+                                    CustomAccessibilityAction(optionsActionLabel) {
+                                        optionsMenuOpen = true
+                                        true
+                                    }
+                            }
+                        }
+                    customActions = helperActions
+                },
     ) {
         Column(
             modifier =
@@ -145,6 +164,10 @@ internal fun MediaItem(
                     ),
                 date = media.date,
                 options = options,
+                optionsMenuOpen = optionsMenuOpen,
+                onOptionsMenuToggled = {
+                    optionsMenuOpen = it
+                },
                 onOptionSelected = onOptionSelected,
             )
         }
@@ -155,11 +178,12 @@ internal fun MediaItem(
 private fun MediaFooter(
     modifier: Modifier = Modifier,
     date: String? = null,
+    optionsMenuOpen: Boolean = false,
     options: List<Option> = emptyList(),
     onOpen: (() -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
+    onOptionsMenuToggled: ((Boolean) -> Unit)? = null,
 ) {
-    var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
 
@@ -195,9 +219,9 @@ private fun MediaFooter(
                             .padding(top = Spacing.xxs)
                             .onGloballyPositioned {
                                 optionsOffset = it.positionInParent()
-                            },
+                            }.clearAndSetSemantics { },
                     onClick = {
-                        optionsExpanded = true
+                        onOptionsMenuToggled?.invoke(true)
                     },
                 ) {
                     Icon(
@@ -210,6 +234,7 @@ private fun MediaFooter(
             Spacer(modifier = Modifier.weight(1f))
             if (onOpen != null) {
                 IconButton(
+                    modifier = Modifier.clearAndSetSemantics { },
                     onClick = {
                         onOpen.invoke()
                     },
@@ -222,9 +247,9 @@ private fun MediaFooter(
             }
         }
         CustomDropDown(
-            expanded = optionsExpanded,
+            expanded = optionsMenuOpen,
             onDismiss = {
-                optionsExpanded = false
+                onOptionsMenuToggled?.invoke(false)
             },
             offset =
                 DpOffset(
@@ -238,7 +263,7 @@ private fun MediaFooter(
                         Text(option.text)
                     },
                     onClick = {
-                        optionsExpanded = false
+                        onOptionsMenuToggled?.invoke(false)
                         onOptionSelected?.invoke(option.id)
                     },
                 )

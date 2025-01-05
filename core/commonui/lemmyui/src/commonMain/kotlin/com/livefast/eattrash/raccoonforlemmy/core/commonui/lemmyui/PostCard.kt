@@ -34,6 +34,9 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -92,6 +95,46 @@ fun PostCard(
     onDoubleClick: (() -> Unit)? = null,
 ) {
     val markRead = post.read && fadeRead
+    var optionsMenuOpen by remember { mutableStateOf(false) }
+
+    val openCommunityActionLabel =
+        buildString {
+            append(LocalStrings.current.exploreResultTypeCommunities)
+            append(": ")
+            append(post.community?.name.orEmpty())
+        }
+    val openUserActionLabel =
+        buildString {
+            append(LocalStrings.current.postReplySourceAccount)
+            append(" ")
+            append(post.creator?.name.orEmpty())
+        }
+    val upVoteActionLabel =
+        buildString {
+            append(LocalStrings.current.actionUpvote)
+            append(": ")
+            append(post.upvotes)
+        }
+    val downVoteActionLabel =
+        buildString {
+            append(LocalStrings.current.actionDownvote)
+            append(": ")
+            append(post.downvotes)
+        }
+    val saveActionLabel =
+        buildString {
+            if (post.saved) {
+                append(LocalStrings.current.actionRemoveFromBookmarks)
+            } else {
+                append(LocalStrings.current.actionAddToBookmarks)
+            }
+        }
+    val replyActionLabel =
+        buildString {
+            append(LocalStrings.current.actionReply)
+        }
+    val optionsActionLabel = LocalStrings.current.actionOpenOptionMenu
+
     Box(
         modifier =
             modifier
@@ -111,7 +154,65 @@ fun PostCard(
                     },
                 ).onClick(
                     onDoubleClick = onDoubleClick ?: {},
-                ),
+                ).semantics(mergeDescendants = true) {
+                    val helperActions =
+                        buildList {
+                            val community = post.community
+                            if (community != null && onOpenCommunity != null) {
+                                this +=
+                                    CustomAccessibilityAction(openCommunityActionLabel) {
+                                        onOpenCommunity(community, "")
+                                        true
+                                    }
+                            }
+                            val user = post.creator
+                            if (user != null && onOpenCreator != null) {
+                                this +=
+                                    CustomAccessibilityAction(openUserActionLabel) {
+                                        onOpenCreator(user, "")
+                                        true
+                                    }
+                            }
+                            if (onUpVote != null) {
+                                this +=
+                                    CustomAccessibilityAction(upVoteActionLabel) {
+                                        onUpVote()
+                                        true
+                                    }
+                            }
+                            if (onDownVote != null) {
+                                this +=
+                                    CustomAccessibilityAction(downVoteActionLabel) {
+                                        onDownVote()
+                                        true
+                                    }
+                            }
+                            if (onSave != null) {
+                                this +=
+                                    CustomAccessibilityAction(saveActionLabel) {
+                                        onSave()
+                                        true
+                                    }
+                            }
+                            if (onReply != null) {
+                                this +=
+                                    CustomAccessibilityAction(replyActionLabel) {
+                                        onReply()
+                                        true
+                                    }
+                            }
+                            if (options.isNotEmpty()) {
+                                this +=
+                                    CustomAccessibilityAction(optionsActionLabel) {
+                                        optionsMenuOpen = true
+                                        true
+                                    }
+                            }
+                        }
+                    if (helperActions.isNotEmpty()) {
+                        customActions = helperActions
+                    }
+                },
     ) {
         if (postLayout != PostLayout.Compact) {
             ExtendedPost(
@@ -150,6 +251,10 @@ fun PostCard(
                 onOptionSelected = onOptionSelected,
                 onClick = onClick,
                 onDoubleClick = onDoubleClick,
+                optionsMenuOpen = optionsMenuOpen,
+                onOptionsMenuToggled = {
+                    optionsMenuOpen = it
+                },
             )
         } else {
             CompactPost(
@@ -178,6 +283,10 @@ fun PostCard(
                 onOptionSelected = onOptionSelected,
                 onClick = onClick,
                 onDoubleClick = onDoubleClick,
+                optionsMenuOpen = optionsMenuOpen,
+                onOptionsMenuToggled = {
+                    optionsMenuOpen = it
+                },
             )
         }
     }
@@ -199,6 +308,7 @@ private fun CompactPost(
     voteFormat: VoteFormat,
     showUnreadComments: Boolean,
     downVoteEnabled: Boolean,
+    optionsMenuOpen: Boolean,
     options: List<Option>,
     onOpenCommunity: ((CommunityModel, String) -> Unit)?,
     onOpenCreator: ((UserModel, String) -> Unit)?,
@@ -208,6 +318,7 @@ private fun CompactPost(
     onReply: (() -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
     onOpenVideo: ((String) -> Unit)?,
+    onOptionsMenuToggled: ((Boolean) -> Unit)?,
     onOptionSelected: ((OptionId) -> Unit)?,
     onClick: (() -> Unit)?,
     onDoubleClick: (() -> Unit)?,
@@ -406,6 +517,8 @@ private fun CompactPost(
                 options = options,
                 onOptionSelected = onOptionSelected,
                 actionButtonsActive = actionButtonsActive,
+                optionsMenuOpen = optionsMenuOpen,
+                onOptionsMenuToggled = onOptionsMenuToggled,
             )
         }
     }
@@ -433,6 +546,7 @@ private fun ExtendedPost(
     backgroundColor: Color,
     showUnreadComments: Boolean,
     downVoteEnabled: Boolean,
+    optionsMenuOpen: Boolean,
     options: List<Option>,
     onOpenCommunity: ((CommunityModel, String) -> Unit)?,
     onOpenCreator: ((UserModel, String) -> Unit)?,
@@ -442,6 +556,7 @@ private fun ExtendedPost(
     onReply: (() -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
     onOpenVideo: ((String) -> Unit)?,
+    onOptionsMenuToggled: ((Boolean) -> Unit)?,
     onOptionSelected: ((OptionId) -> Unit)?,
     onClick: (() -> Unit)?,
     onDoubleClick: (() -> Unit)?,
@@ -703,6 +818,8 @@ private fun ExtendedPost(
                 options = options,
                 onOptionSelected = onOptionSelected,
                 actionButtonsActive = actionButtonsActive,
+                optionsMenuOpen = optionsMenuOpen,
+                onOptionsMenuToggled = onOptionsMenuToggled,
             )
         }
     }

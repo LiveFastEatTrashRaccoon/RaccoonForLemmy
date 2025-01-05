@@ -25,6 +25,9 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -105,6 +108,52 @@ fun CommentCard(
     }
     val shareActionLabel = LocalStrings.current.postActionShare
     val cancelActionLabel = LocalStrings.current.buttonCancel
+    var optionsMenuOpen by remember { mutableStateOf(false) }
+    val optionsActionLabel = LocalStrings.current.actionOpenOptionMenu
+    val openCommunityActionLabel =
+        buildString {
+            append(LocalStrings.current.exploreResultTypeCommunities)
+            append(": ")
+            append(comment.community?.name.orEmpty())
+        }
+    val openUserActionLabel =
+        buildString {
+            append(LocalStrings.current.postReplySourceAccount)
+            append(" ")
+            append(comment.creator?.name.orEmpty())
+        }
+    val upVoteActionLabel =
+        buildString {
+            append(LocalStrings.current.actionUpvote)
+            append(": ")
+            append(comment.upvotes)
+        }
+    val downVoteActionLabel =
+        buildString {
+            append(LocalStrings.current.actionDownvote)
+            append(": ")
+            append(comment.downvotes)
+        }
+    val saveActionLabel =
+        buildString {
+            if (comment.saved) {
+                append(LocalStrings.current.actionRemoveFromBookmarks)
+            } else {
+                append(LocalStrings.current.actionAddToBookmarks)
+            }
+        }
+    val toggleExpandedActionLabel =
+        buildString {
+            if (comment.expanded) {
+                append(LocalStrings.current.actionCollapse)
+            } else {
+                append(LocalStrings.current.actionExpand)
+            }
+        }
+    val replyActionLabel =
+        buildString {
+            append(LocalStrings.current.actionReply)
+        }
 
     CompositionLocalProvider(
         LocalTextToolbar provides
@@ -118,7 +167,76 @@ fun CommentCard(
             ),
     ) {
         Row(
-            modifier = modifier,
+            modifier =
+                modifier.semantics(mergeDescendants = true) {
+                    val helperActions =
+                        buildList {
+                            val community = comment.community
+                            if (community != null && onOpenCommunity != null) {
+                                this +=
+                                    CustomAccessibilityAction(openCommunityActionLabel) {
+                                        onOpenCommunity(community, "")
+                                        true
+                                    }
+                            }
+                            val user = comment.creator
+                            if (user != null && onOpenCreator != null) {
+                                this +=
+                                    CustomAccessibilityAction(openUserActionLabel) {
+                                        onOpenCreator(user, "")
+                                        true
+                                    }
+                            }
+                            if (onUpVote != null) {
+                                this +=
+                                    CustomAccessibilityAction(upVoteActionLabel) {
+                                        onUpVote()
+                                        true
+                                    }
+                            }
+                            if (onDownVote != null) {
+                                this +=
+                                    CustomAccessibilityAction(downVoteActionLabel) {
+                                        onDownVote()
+                                        true
+                                    }
+                            }
+                            if (onSave != null) {
+                                this +=
+                                    CustomAccessibilityAction(saveActionLabel) {
+                                        onSave()
+                                        true
+                                    }
+                            }
+                            if (onReply != null) {
+                                this +=
+                                    CustomAccessibilityAction(replyActionLabel) {
+                                        onReply()
+                                        true
+                                    }
+                            }
+                            if (onToggleExpanded != null) {
+                                this +=
+                                    CustomAccessibilityAction(toggleExpandedActionLabel) {
+                                        onToggleExpanded()
+                                        true
+                                    }
+                            }
+                            if (options.isNotEmpty()) {
+                                this +=
+                                    CustomAccessibilityAction(
+                                        label = optionsActionLabel,
+                                        action = {
+                                            optionsMenuOpen = true
+                                            true
+                                        },
+                                    )
+                            }
+                        }
+                    if (helperActions.isNotEmpty()) {
+                        customActions = helperActions
+                    }
+                },
         ) {
             Box(
                 modifier = Modifier.width((indentAmount * comment.depth).dp),
@@ -250,6 +368,10 @@ fun CommentCard(
                         updateDate = comment.updateDate,
                         options = options,
                         onOptionSelected = onOptionSelected,
+                        optionsMenuOpen = optionsMenuOpen,
+                        onOptionsMenuToggled = {
+                            optionsMenuOpen = it
+                        },
                     )
                 }
             }

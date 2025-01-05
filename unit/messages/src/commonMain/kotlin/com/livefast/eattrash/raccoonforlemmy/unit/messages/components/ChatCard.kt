@@ -28,6 +28,10 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.DpOffset
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
@@ -61,12 +65,23 @@ internal fun ChatCard(
     onOpen: (() -> Unit)? = null,
     onOptionSelected: ((OptionId) -> Unit)? = null,
 ) {
-    var optionsExpanded by remember { mutableStateOf(false) }
+    var optionsMenuOpen by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val creatorName = user?.readableName(preferNicknames).orEmpty()
     val creatorAvatar = user?.avatar.orEmpty()
     val iconSize = IconSize.xl
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
+    val optionsActionLabel = LocalStrings.current.actionOpenOptionMenu
+    val openUserActionLabel =
+        buildString {
+            append(LocalStrings.current.postReplySourceAccount)
+            append(" ")
+            append(user?.name.orEmpty())
+        }
+    val openActionLabel =
+        buildString {
+            append(LocalStrings.current.actionOpen)
+        }
 
     Row(
         modifier =
@@ -76,7 +91,35 @@ internal fun ChatCard(
                     onClick = {
                         onOpen?.invoke()
                     },
-                ),
+                ).semantics {
+                    val helperActions =
+                        buildList {
+                            if (user != null && onOpenUser != null) {
+                                this +=
+                                    CustomAccessibilityAction(openUserActionLabel) {
+                                        onOpenUser(user)
+                                        true
+                                    }
+                            }
+                            if (onOpen != null) {
+                                this +=
+                                    CustomAccessibilityAction(openActionLabel) {
+                                        onOpen()
+                                        true
+                                    }
+                            }
+                            if (options.isNotEmpty()) {
+                                this +=
+                                    CustomAccessibilityAction(optionsActionLabel) {
+                                        optionsMenuOpen = true
+                                        true
+                                    }
+                            }
+                        }
+                    if (helperActions.isNotEmpty()) {
+                        customActions = helperActions
+                    }
+                },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
     ) {
@@ -93,7 +136,7 @@ internal fun ChatCard(
                                     onOpenUser?.invoke(user)
                                 }
                             },
-                        ),
+                        ).clearAndSetSemantics { },
                 quality = FilterQuality.Low,
                 url = creatorAvatar,
                 autoload = autoLoadImages,
@@ -101,6 +144,7 @@ internal fun ChatCard(
             )
         } else {
             PlaceholderImage(
+                modifier = Modifier.clearAndSetSemantics { },
                 onClick = {
                     if (user != null) {
                         onOpenUser?.invoke(user)
@@ -164,9 +208,9 @@ internal fun ChatCard(
                                         .padding(Spacing.xs)
                                         .onGloballyPositioned {
                                             optionsOffset = it.positionInParent()
-                                        },
+                                        }.clearAndSetSemantics { },
                                 onClick = {
-                                    optionsExpanded = true
+                                    optionsMenuOpen = true
                                 },
                             ) {
                                 Icon(
@@ -179,9 +223,9 @@ internal fun ChatCard(
                     }
 
                     CustomDropDown(
-                        expanded = optionsExpanded,
+                        expanded = optionsMenuOpen,
                         onDismiss = {
-                            optionsExpanded = false
+                            optionsMenuOpen = false
                         },
                         offset =
                             DpOffset(
@@ -195,7 +239,7 @@ internal fun ChatCard(
                                     Text(option.text)
                                 },
                                 onClick = {
-                                    optionsExpanded = false
+                                    optionsMenuOpen = false
                                     onOptionSelected?.invoke(option.id)
                                 },
                             )

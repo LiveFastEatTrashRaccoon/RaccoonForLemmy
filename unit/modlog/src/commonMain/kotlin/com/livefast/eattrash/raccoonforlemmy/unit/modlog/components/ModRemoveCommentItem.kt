@@ -29,7 +29,7 @@ internal fun ModRemoveCommentItem(
         preferNicknames = preferNicknames,
         date = item.date,
         postLayout = postLayout,
-        moderator = item.moderator,
+        creator = item.moderator,
         onOpenUser = onOpenUser,
         innerContent = {
             Text(

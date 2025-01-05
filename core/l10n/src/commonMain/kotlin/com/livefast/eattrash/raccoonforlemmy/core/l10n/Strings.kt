@@ -39,6 +39,7 @@ interface Strings {
     val actionOpenOptionMenu: String @Composable get
     val actionOpenSideMenu: String @Composable get
     val actionQuote: String @Composable get
+    val actionRemoveFromBookmarks: String @Composable get
     val actionReply: String @Composable get
     val actionRestore: String @Composable get
     val actionSave: String @Composable get
