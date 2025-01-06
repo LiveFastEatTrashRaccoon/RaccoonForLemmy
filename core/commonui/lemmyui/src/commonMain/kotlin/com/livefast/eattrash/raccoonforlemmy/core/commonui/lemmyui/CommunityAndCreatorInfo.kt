@@ -221,7 +221,12 @@ fun CommunityAndCreatorInfo(
                                     ).clearAndSetSemantics { },
                             text = creatorName,
                             style = MaterialTheme.typography.bodySmall,
-                            color = ancillaryColor,
+                            color =
+                                when {
+                                    isCurrentUser && meTagColor != null -> Color(meTagColor)
+                                    isOp && opTagColor != null -> Color(opTagColor)
+                                    else -> ancillaryColor
+                                },
                             maxLines = 1,
                         )
 
