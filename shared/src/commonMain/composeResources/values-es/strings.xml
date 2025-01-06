@@ -495,4 +495,10 @@
     <string name="format_quote">Cita</string>
     <string name="item_distinguished">Respaldado por un moderador</string>
     <string name="action_collapse">Comprimir</string>
+    <string name="default_tag_bot">bot</string>
+    <string name="default_tag_admin">admin</string>
+    <string name="default_tag_current_user">mí</string>
+    <string name="default_tag_moderator">mod</string>
+    <string name="action_remove_from_bookmarks">Remover de guardados</string>
+    <string name="default_tag_original_poster">op</string>
 </resources>
