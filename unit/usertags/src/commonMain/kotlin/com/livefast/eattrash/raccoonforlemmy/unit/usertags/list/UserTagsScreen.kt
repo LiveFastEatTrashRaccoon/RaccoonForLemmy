@@ -53,6 +53,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditUserTagDia
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.isSpecial
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.unit.usertags.detail.UserTagDetailScreen
 import kotlinx.coroutines.flow.launchIn
@@ -184,9 +186,11 @@ class UserTagsScreen : Screen {
                             modifier =
                                 Modifier.fillMaxWidth().onClick(
                                     onClick = {
-                                        tag.id?.also {
-                                            val screen = UserTagDetailScreen(it)
-                                            navigatorCoordinator.pushScreen(screen)
+                                        if (!tag.isSpecial) {
+                                            tag.id?.also {
+                                                val screen = UserTagDetailScreen(it)
+                                                navigatorCoordinator.pushScreen(screen)
+                                            }
                                         }
                                     },
                                 ),
@@ -198,11 +202,13 @@ class UserTagsScreen : Screen {
                                             id = OptionId.Edit,
                                             text = LocalStrings.current.postActionEdit,
                                         )
-                                    this +=
-                                        Option(
-                                            id = OptionId.Delete,
-                                            text = LocalStrings.current.commentActionDelete,
-                                        )
+                                    if (!tag.isSpecial) {
+                                        this +=
+                                            Option(
+                                                id = OptionId.Delete,
+                                                text = LocalStrings.current.commentActionDelete,
+                                            )
+                                    }
                                 },
                             onOptionSelected = { optionId ->
                                 when (optionId) {
@@ -261,15 +267,18 @@ class UserTagsScreen : Screen {
             EditUserTagDialog(
                 title = LocalStrings.current.postActionEdit,
                 value = tagToEdit?.name.orEmpty(),
+                canEditName = tagToEdit?.isSpecial != true,
                 color = tagToEdit?.color?.let { Color(it) } ?: MaterialTheme.colorScheme.primary,
                 onClose = { name, color ->
                     val tagId = tagToEdit?.id
+                    val type = tagToEdit?.type ?: UserTagType.Regular
                     tagToEdit = null
                     if (tagId != null && name != null) {
                         model.reduce(
                             UserTagsMviModel.Intent.Edit(
                                 id = tagId,
                                 name = name,
+                                type = type,
                                 color = color?.toArgb(),
                             ),
                         )

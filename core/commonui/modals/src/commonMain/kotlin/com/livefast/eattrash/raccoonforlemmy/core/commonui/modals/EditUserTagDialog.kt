@@ -37,6 +37,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 fun EditUserTagDialog(
     title: String,
     value: String = "",
+    canEditName: Boolean = true,
     color: Color = MaterialTheme.colorScheme.primary,
     onClose: ((String?, Color?) -> Unit)? = null,
 ) {
@@ -77,31 +78,34 @@ fun EditUserTagDialog(
                     selectedColor = Color.Transparent
                 },
             )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                colors =
-                    TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                    ),
-                label = {
-                    Text(
-                        text = LocalStrings.current.multiCommunityEditorName,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                },
-                textStyle = typography.bodyMedium,
-                value = textFieldValue,
-                keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        autoCorrectEnabled = true,
-                    ),
-                onValueChange = { value ->
-                    textFieldValue = value
-                },
-            )
+
+            if (canEditName) {
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors =
+                        TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                        ),
+                    label = {
+                        Text(
+                            text = LocalStrings.current.multiCommunityEditorName,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    },
+                    textStyle = typography.bodyMedium,
+                    value = textFieldValue,
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            autoCorrectEnabled = true,
+                        ),
+                    onValueChange = { value ->
+                        textFieldValue = value
+                    },
+                )
+            }
 
             Spacer(modifier = Modifier.height(Spacing.xs))
             Button(

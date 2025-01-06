@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
 
 @Stable
 interface UserTagsMviModel :
@@ -24,6 +25,7 @@ interface UserTagsMviModel :
         data class Edit(
             val id: Long,
             val name: String,
+            val type: UserTagType,
             val color: Int? = null,
         ) : Intent
     }
