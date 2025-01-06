@@ -688,9 +688,9 @@ class UserDetailViewModel(
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val model = UserTagModel(name = name, color = color)
             userTagRepository.create(model = model, accountId = accountId)
-            val allTags = userTagRepository.getAll(accountId)
+            val tags = userTagRepository.getAll(accountId).filter { !it.isSpecial }
             updateState {
-                it.copy(availableUserTags = allTags)
+                it.copy(availableUserTags = tags)
             }
         }
     }
