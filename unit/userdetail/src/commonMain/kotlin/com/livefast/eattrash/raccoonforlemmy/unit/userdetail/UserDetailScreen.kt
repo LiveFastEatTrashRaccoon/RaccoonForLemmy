@@ -98,6 +98,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
@@ -173,6 +174,7 @@ class UserDetailScreen(
         var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
         var manageUserTagsBottomSheetOpened by remember { mutableStateOf(false) }
         var addNewUserTagDialogOpen by remember { mutableStateOf(false) }
+        var addNewUserTagTitleError by remember { mutableStateOf<ValidationError?>(null) }
 
         LaunchedEffect(model) {
             model.effects
@@ -1312,18 +1314,42 @@ class UserDetailScreen(
         }
 
         if (addNewUserTagDialogOpen) {
+            val forbiddenTagNames =
+                buildList {
+                    addAll(
+                        listOf(
+                            LocalStrings.current.defaultTagAdmin,
+                            LocalStrings.current.defaultTagBot,
+                            LocalStrings.current.defaultTagCurrentUser,
+                            LocalStrings.current.defaultTagModerator,
+                            LocalStrings.current.defaultTagOriginalPoster,
+                        ).map { it.lowercase() },
+                    )
+                    addAll(
+                        uiState.availableUserTags.map { it.name.lowercase() },
+                    )
+                }
             EditUserTagDialog(
                 title = LocalStrings.current.buttonAdd,
+                titleError = addNewUserTagTitleError,
                 value = "",
                 onClose = { name, color ->
-                    addNewUserTagDialogOpen = false
-                    if (name != null) {
-                        model.reduce(
-                            UserDetailMviModel.Intent.AddUserTag(
-                                name = name,
-                                color = color?.toArgb(),
-                            ),
-                        )
+                    addNewUserTagTitleError =
+                        if (name?.lowercase() in forbiddenTagNames) {
+                            ValidationError.InvalidField
+                        } else {
+                            null
+                        }
+                    if (addNewUserTagTitleError == null) {
+                        addNewUserTagDialogOpen = false
+                        if (name != null) {
+                            model.reduce(
+                                UserDetailMviModel.Intent.AddUserTag(
+                                    name = name,
+                                    color = color?.toArgb(),
+                                ),
+                            )
+                        }
                     }
                 },
             )

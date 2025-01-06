@@ -55,6 +55,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.isSpecial
+import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.unit.usertags.detail.UserTagDetailScreen
 import kotlinx.coroutines.flow.launchIn
@@ -75,7 +76,9 @@ class UserTagsScreen : Screen {
         val lazyListState = rememberLazyListState()
         val scope = rememberCoroutineScope()
         var addTagDialogOpen by remember { mutableStateOf(false) }
+        var addTagTitleError by remember { mutableStateOf<ValidationError?>(null) }
         var tagToEdit by remember { mutableStateOf<UserTagModel?>(null) }
+        var editTagTitleError by remember { mutableStateOf<ValidationError?>(null) }
 
         LaunchedEffect(model) {
             model.effects
@@ -247,41 +250,68 @@ class UserTagsScreen : Screen {
         }
 
         if (addTagDialogOpen) {
+            val forbiddenTagNames = uiState.tags.map { it.name.lowercase() }
             EditUserTagDialog(
                 title = LocalStrings.current.buttonAdd,
+                titleError = addTagTitleError,
                 value = "",
                 onClose = { name, color ->
-                    addTagDialogOpen = false
-                    if (name != null) {
-                        model.reduce(
-                            UserTagsMviModel.Intent.Add(
-                                name = name,
-                                color = color?.toArgb(),
-                            ),
-                        )
+                    addTagTitleError =
+                        if (name?.lowercase() in forbiddenTagNames) {
+                            ValidationError.InvalidField
+                        } else {
+                            null
+                        }
+                    if (addTagTitleError == null) {
+                        addTagDialogOpen = false
+                        if (name != null) {
+                            model.reduce(
+                                UserTagsMviModel.Intent.Add(
+                                    name = name,
+                                    color = color?.toArgb(),
+                                ),
+                            )
+                        }
                     }
                 },
             )
         }
         if (tagToEdit != null) {
+            val forbiddenTagNames =
+                uiState.tags.mapNotNull {
+                    if (it.id != tagToEdit?.id) {
+                        it.name.lowercase()
+                    } else {
+                        null
+                    }
+                }
             EditUserTagDialog(
                 title = LocalStrings.current.postActionEdit,
+                titleError = editTagTitleError,
                 value = tagToEdit?.name.orEmpty(),
                 canEditName = tagToEdit?.isSpecial != true,
                 color = tagToEdit?.color?.let { Color(it) } ?: MaterialTheme.colorScheme.primary,
                 onClose = { name, color ->
-                    val tagId = tagToEdit?.id
-                    val type = tagToEdit?.type ?: UserTagType.Regular
-                    tagToEdit = null
-                    if (tagId != null && name != null) {
-                        model.reduce(
-                            UserTagsMviModel.Intent.Edit(
-                                id = tagId,
-                                name = name,
-                                type = type,
-                                color = color?.toArgb(),
-                            ),
-                        )
+                    editTagTitleError =
+                        if (name?.lowercase() in forbiddenTagNames) {
+                            ValidationError.InvalidField
+                        } else {
+                            null
+                        }
+                    if (editTagTitleError == null) {
+                        val tagId = tagToEdit?.id
+                        val type = tagToEdit?.type ?: UserTagType.Regular
+                        tagToEdit = null
+                        if (tagId != null && name != null) {
+                            model.reduce(
+                                UserTagsMviModel.Intent.Edit(
+                                    id = tagId,
+                                    name = name,
+                                    type = type,
+                                    color = color?.toArgb(),
+                                ),
+                            )
+                        }
                     }
                 },
             )
