@@ -494,4 +494,10 @@
     <string name="community_status_not_subscribed">Non iscritto</string>
     <string name="update_date">Data di modifica</string>
     <string name="action_mark_as_read">Segna come letto</string>
+    <string name="default_tag_original_poster">op</string>
+    <string name="default_tag_bot">bot</string>
+    <string name="default_tag_admin">admin</string>
+    <string name="default_tag_moderator">mod</string>
+    <string name="default_tag_current_user">me</string>
+    <string name="action_remove_from_bookmarks">Rimuovi da salvati</string>
 </resources>
