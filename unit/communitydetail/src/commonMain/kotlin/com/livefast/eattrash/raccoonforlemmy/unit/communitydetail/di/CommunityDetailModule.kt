@@ -39,6 +39,7 @@ val communityDetailModule =
                     communitySortRepository = instance(),
                     postNavigationManager = instance(),
                     communityPreferredLanguageRepository = instance(),
+                    userTagRepository = instance(),
                     lemmyValueCache = instance(),
                 )
             }

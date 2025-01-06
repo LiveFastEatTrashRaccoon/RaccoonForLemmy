@@ -127,6 +127,11 @@ import raccoonforlemmy.shared.generated.resources.create_report_placeholder
 import raccoonforlemmy.shared.generated.resources.create_report_title_comment
 import raccoonforlemmy.shared.generated.resources.create_report_title_post
 import raccoonforlemmy.shared.generated.resources.creation_date
+import raccoonforlemmy.shared.generated.resources.default_tag_admin
+import raccoonforlemmy.shared.generated.resources.default_tag_bot
+import raccoonforlemmy.shared.generated.resources.default_tag_current_user
+import raccoonforlemmy.shared.generated.resources.default_tag_moderator
+import raccoonforlemmy.shared.generated.resources.default_tag_original_poster
 import raccoonforlemmy.shared.generated.resources.dialog_raw_content_text
 import raccoonforlemmy.shared.generated.resources.dialog_raw_content_title
 import raccoonforlemmy.shared.generated.resources.dialog_raw_content_url
@@ -756,6 +761,16 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.create_report_title_post)
     override val creationDate: String
         @Composable get() = stringResource(Res.string.creation_date)
+    override val defaultTagAdmin: String
+        @Composable get() = stringResource(Res.string.default_tag_admin)
+    override val defaultTagBot: String
+        @Composable get() = stringResource(Res.string.default_tag_bot)
+    override val defaultTagCurrentUser: String
+        @Composable get() = stringResource(Res.string.default_tag_current_user)
+    override val defaultTagModerator: String
+        @Composable get() = stringResource(Res.string.default_tag_moderator)
+    override val defaultTagOriginalPoster: String
+        @Composable get() = stringResource(Res.string.default_tag_original_poster)
     override val dialogRawContentText: String
         @Composable get() = stringResource(Res.string.dialog_raw_content_text)
     override val dialogRawContentTitle: String

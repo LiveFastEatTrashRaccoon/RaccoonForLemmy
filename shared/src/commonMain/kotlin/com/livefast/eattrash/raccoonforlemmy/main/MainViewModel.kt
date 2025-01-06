@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toTabNavigationSections
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.CreateSpecialTagsUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.notification.InboxNotificationChecker
@@ -22,6 +23,7 @@ class MainViewModel(
     private val userRepository: UserRepository,
     private val notificationChecker: InboxNotificationChecker,
     private val lemmyValueCache: LemmyValueCache,
+    private val createSpecialTagsUseCase: CreateSpecialTagsUseCase,
 ) : DefaultMviModel<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect>(
         initialState =
             MainMviModel.UiState(
@@ -34,6 +36,7 @@ class MainViewModel(
             identityRepository.startup()
             val auth = identityRepository.authToken.value
             lemmyValueCache.refresh(auth)
+            createSpecialTagsUseCase()
 
             inboxCoordinator.totalUnread
                 .onEach { unreadCount ->

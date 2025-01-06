@@ -20,12 +20,14 @@ val filteredContentsModule =
                     identityRepository = instance(),
                     postRepository = instance(),
                     commentRepository = instance(),
+                    accountRepository = instance(),
+                    userTagRepository = instance(),
                     imagePreloadManager = instance(),
                     hapticFeedback = instance(),
                     notificationCenter = instance(),
                     postNavigationManager = instance(),
                     lemmyValueCache = instance(),
-            )
+                )
+            }
         }
     }
-}

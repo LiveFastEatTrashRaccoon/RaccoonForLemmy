@@ -7,6 +7,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserDetailSec
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.isSpecial
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
@@ -94,9 +95,9 @@ class UserDetailViewModel(
 
                 val accountId = accountRepository.getActive()?.id
                 if (accountId != null) {
-                    val allTags = userTagRepository.getAll(accountId)
+                    val tags = userTagRepository.getAll(accountId).filter { !it.isSpecial }
                     updateState {
-                        it.copy(availableUserTags = allTags)
+                        it.copy(availableUserTags = tags)
                     }
                 }
                 refreshCurrentUserTags()

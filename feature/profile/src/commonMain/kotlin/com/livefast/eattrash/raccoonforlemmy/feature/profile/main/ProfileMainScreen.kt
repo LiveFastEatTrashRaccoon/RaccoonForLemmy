@@ -68,7 +68,6 @@ import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubs
 import com.livefast.eattrash.raccoonforlemmy.unit.modlog.ModlogScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.reportlist.ReportListScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.usertags.list.UserTagsScreen
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -159,10 +158,6 @@ internal object ProfileMainScreen : Tab {
 
                         NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity -> {
                             navigationCoordinator.pushScreen(EditCommunityScreen())
-                        }
-
-                        NotificationCenterEvent.ProfileSideMenuAction.UserTags -> {
-                            navigationCoordinator.pushScreen(UserTagsScreen())
                         }
                     }
                 }.launchIn(this)

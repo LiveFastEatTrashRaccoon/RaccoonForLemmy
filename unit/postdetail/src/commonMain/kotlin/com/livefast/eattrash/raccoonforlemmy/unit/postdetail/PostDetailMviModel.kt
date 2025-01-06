@@ -145,6 +145,11 @@ interface PostDetailMviModel :
         val enableButtonsToScrollBetweenComments: Boolean = false,
         val isNavigationSupported: Boolean = false,
         val downVoteEnabled: Boolean = true,
+        val adminTagColor: Int? = null,
+        val botTagColor: Int? = null,
+        val meTagColor: Int? = null,
+        val modTagColor: Int? = null,
+        val opTagColor: Int? = null,
     )
 
     sealed interface Effect {

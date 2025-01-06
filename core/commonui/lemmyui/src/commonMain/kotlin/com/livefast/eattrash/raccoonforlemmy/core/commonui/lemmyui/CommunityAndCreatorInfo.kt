@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.LinkAnnotation
@@ -47,12 +48,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.populateSpecialTags
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
-
-private const val OP_LABEL = "OP"
-private const val BOT_LABEL = "BOT"
-private const val MOD_LABEL = "M"
-private const val ADMIN_LABEL = "A"
 
 @Composable
 fun CommunityAndCreatorInfo(
@@ -72,8 +69,14 @@ fun CommunityAndCreatorInfo(
     isBot: Boolean = false,
     isMod: Boolean = false,
     isAdmin: Boolean = false,
+    isCurrentUser: Boolean = false,
     markRead: Boolean = false,
     compact: Boolean = false,
+    adminTagColor: Int? = null,
+    botTagColor: Int? = null,
+    meTagColor: Int? = null,
+    opTagColor: Int? = null,
+    modTagColor: Int? = null,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
     onOpenCreator: ((UserModel) -> Unit)? = null,
     onToggleExpanded: (() -> Unit)? = null,
@@ -218,53 +221,52 @@ fun CommunityAndCreatorInfo(
                                     ).clearAndSetSemantics { },
                             text = creatorName,
                             style = MaterialTheme.typography.bodySmall,
-                            color = ancillaryColor,
+                            color =
+                                when {
+                                    isCurrentUser && meTagColor != null -> Color(meTagColor)
+                                    isOp && opTagColor != null -> Color(opTagColor)
+                                    else -> ancillaryColor
+                                },
                             maxLines = 1,
                         )
 
                         // user tags
-                        if (creator.tags.isNotEmpty()) {
+                        val userWithTags =
+                            creator.populateSpecialTags(
+                                isAdmin = isAdmin,
+                                isOp = isOp,
+                                isMe = isCurrentUser,
+                                isBot = isBot,
+                                isMod = isMod,
+                                adminColor = adminTagColor,
+                                opColor = opTagColor,
+                                meColor = meTagColor,
+                                botColor = botTagColor,
+                                modColor = modTagColor,
+                            )
+                        if (userWithTags.tags.isNotEmpty()) {
                             LazyRow(
-                                modifier = Modifier.widthIn(max = 150.dp),
+                                modifier = Modifier.widthIn(max = 180.dp),
                                 horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                items(creator.tags) { tag ->
+                                items(userWithTags.tags) { tag ->
+                                    val isColorful =
+                                        tag.color != null && tag.color != Color.Transparent.toArgb()
+                                    val tagColor =
+                                        tag.color?.let {
+                                            Color(it)
+                                        } ?: MaterialTheme.colorScheme.onBackground
                                     IndicatorChip(
                                         text = tag.name,
-                                        color =
-                                            tag.color?.let { Color(it) }
-                                                ?: MaterialTheme.colorScheme.onBackground,
-                                        full = true,
+                                        color = tagColor,
+                                        full = isColorful,
                                     )
                                 }
                             }
                         }
                     }
                 }
-            }
-            if (isOp) {
-                IndicatorChip(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    text = OP_LABEL,
-                )
-            }
-            if (isBot) {
-                IndicatorChip(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    text = BOT_LABEL,
-                )
-            }
-            if (isMod) {
-                IndicatorChip(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    text = MOD_LABEL,
-                )
-            }
-            if (isAdmin) {
-                IndicatorChip(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    text = ADMIN_LABEL,
-                )
             }
 
             Spacer(modifier = Modifier.weight(1f))

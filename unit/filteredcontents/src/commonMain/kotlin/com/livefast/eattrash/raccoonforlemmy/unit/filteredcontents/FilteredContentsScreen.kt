@@ -469,6 +469,8 @@ class FilteredContentsScreen(
                                         post = post,
                                         postLayout = uiState.postLayout,
                                         limitBodyHeight = true,
+                                        showBot = true,
+                                        isCurrentUser = post.creator?.id == uiState.currentUserId,
                                         fullHeightImage = uiState.fullHeightImages,
                                         fullWidthImage = uiState.fullWidthImages,
                                         voteFormat = uiState.voteFormat,
@@ -477,6 +479,8 @@ class FilteredContentsScreen(
                                         fadeRead = uiState.fadeReadPosts,
                                         showUnreadComments = uiState.showUnreadComments,
                                         downVoteEnabled = uiState.downVoteEnabled,
+                                        botTagColor = uiState.botTagColor,
+                                        meTagColor = uiState.meTagColor,
                                         onClick = {
                                             model.reduce(FilteredContentsMviModel.Intent.WillOpenDetail)
                                             detailOpener.openPostDetail(post)
@@ -811,6 +815,7 @@ class FilteredContentsScreen(
                                         autoLoadImages = uiState.autoLoadImages,
                                         preferNicknames = uiState.preferNicknames,
                                         downVoteEnabled = uiState.downVoteEnabled,
+                                        isCurrentUser = comment.creator?.id == uiState.currentUserId,
                                         onOpenUser = { user, instance ->
                                             detailOpener.openUserDetail(user, instance)
                                         },

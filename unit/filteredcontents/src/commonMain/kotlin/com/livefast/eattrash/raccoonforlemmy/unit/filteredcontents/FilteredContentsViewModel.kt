@@ -5,7 +5,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRep
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -37,6 +40,8 @@ class FilteredContentsViewModel(
     private val identityRepository: IdentityRepository,
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
+    private val accountRepository: AccountRepository,
+    private val userTagRepository: UserTagRepository,
     private val imagePreloadManager: ImagePreloadManager,
     private val hapticFeedback: HapticFeedback,
     private val notificationCenter: NotificationCenter,
@@ -56,6 +61,10 @@ class FilteredContentsViewModel(
                 )
             }
 
+            identityRepository.isLogged
+                .onEach {
+                    updateState { it.copy(currentUserId = identityRepository.cachedUser?.id) }
+                }.launchIn(this)
             themeRepository.postLayout
                 .onEach { layout ->
                     updateState { it.copy(postLayout = layout) }
@@ -268,6 +277,20 @@ class FilteredContentsViewModel(
                 initial = initial,
                 loading = false,
             )
+        }
+        val accountId = accountRepository.getActive()?.id
+        val botTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.Bot,
+            )
+        val meTagColor =
+            userTagRepository.getSpecialTagColor(
+                accountId = accountId ?: 0,
+                type = UserTagType.Me,
+            )
+        updateState {
+            it.copy(botTagColor = botTagColor, meTagColor = meTagColor)
         }
         screenModelScope.launch {
             loadNextPage()

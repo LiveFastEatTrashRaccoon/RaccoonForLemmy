@@ -3,6 +3,9 @@ package com.livefast.eattrash.raccoonforlemmy.unit.usertags.list
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.isSpecial
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
@@ -19,7 +22,7 @@ internal class UserTagsViewModel(
     init {
         screenModelScope.launch {
             if (uiState.value.initial) {
-                refresh()
+                refresh(initial = true)
             }
         }
     }
@@ -31,15 +34,34 @@ internal class UserTagsViewModel(
                 addTag(name = intent.name, color = intent.color)
 
             is UserTagsMviModel.Intent.Edit ->
-                editTag(id = intent.id, name = intent.name, color = intent.color)
+                editTag(
+                    id = intent.id,
+                    name = intent.name,
+                    color = intent.color,
+                    type = intent.type,
+                )
 
             is UserTagsMviModel.Intent.Delete -> removeTag(intent.id)
         }
     }
 
-    private suspend fun refresh() {
+    private suspend fun refresh(initial: Boolean = false) {
         val accountId = accountRepository.getActive()?.id ?: return
-        val tags = userTagRepository.getAll(accountId)
+        updateState {
+            it.copy(
+                initial = initial,
+                refreshing = !initial,
+            )
+        }
+        val tags =
+            userTagRepository
+                .getAll(accountId)
+                .partition { it.isSpecial }
+                .let { (specialTags, regularTags) ->
+                    val sortedSpecial = specialTags.sortedBy { it.name }
+                    val sortedRegular = regularTags.sortedBy { it.name }
+                    sortedSpecial + sortedRegular
+                }
         updateState {
             it.copy(
                 tags = tags,
@@ -66,12 +88,14 @@ internal class UserTagsViewModel(
         id: Long,
         name: String,
         color: Int?,
+        type: UserTagType,
     ) {
         screenModelScope.launch {
             userTagRepository.update(
                 id = id,
                 name = name,
                 color = color,
+                type = type.toInt(),
             )
             userTagHelper.clear()
             refresh()
@@ -86,3 +110,5 @@ internal class UserTagsViewModel(
         }
     }
 }
+
+private val UserTagModel.sortKey: Int get() = if (isSpecial) 0 else 1

@@ -18,7 +18,8 @@ internal val mainModule =
                     userRepository = instance(),
                     notificationChecker = instance(),
                     lemmyValueCache = instance(),
-            )
+                    createSpecialTagsUseCase = instance(),
+                )
+            }
         }
     }
-}

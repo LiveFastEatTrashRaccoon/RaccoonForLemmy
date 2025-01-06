@@ -138,6 +138,7 @@ val identityModule =
                     communityPreferredLanguageRepository = instance(),
                     bottomNavItemsRepository = instance(),
                     lemmyValueCache = instance(),
+                    createSpecialTagsUseCase = instance(),
                 )
             }
         }

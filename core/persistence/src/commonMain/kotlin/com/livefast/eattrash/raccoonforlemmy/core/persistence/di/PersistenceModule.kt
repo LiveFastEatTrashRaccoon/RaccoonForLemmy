@@ -28,6 +28,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SortSer
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.StopWordRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.CreateSpecialTagsUseCase
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.DefaultCreateSpecialTagsUseCase
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.DefaultExportSettingsUseCase
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.DefaultImportSettingsUseCase
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.ExportSettingsUseCase
@@ -151,6 +153,14 @@ val persistenceModule =
             singleton {
                 DefaultExportSettingsUseCase(
                     settingsRepository = instance(),
+                )
+            }
+        }
+        bind<CreateSpecialTagsUseCase> {
+            singleton {
+                DefaultCreateSpecialTagsUseCase(
+                    accountRepository = instance(),
+                    userTagRepository = instance(),
                 )
             }
         }

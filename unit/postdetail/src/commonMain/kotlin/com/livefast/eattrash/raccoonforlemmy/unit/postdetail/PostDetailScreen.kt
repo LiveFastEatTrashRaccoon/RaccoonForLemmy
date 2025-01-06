@@ -785,6 +785,8 @@ class PostDetailScreen(
                                         fullHeightImage = uiState.fullHeightImages,
                                         fullWidthImage = uiState.fullWidthImages,
                                         includeFullBody = true,
+                                        showBot = true,
+                                        isCurrentUser = uiState.post.creator?.id == uiState.currentUserId,
                                         voteFormat = uiState.voteFormat,
                                         autoLoadImages = uiState.autoLoadImages,
                                         preferNicknames = uiState.preferNicknames,
@@ -793,6 +795,8 @@ class PostDetailScreen(
                                         blurNsfw = false,
                                         downVoteEnabled = uiState.downVoteEnabled,
                                         highlightText = uiState.searchText,
+                                        botTagColor = uiState.botTagColor,
+                                        meTagColor = uiState.meTagColor,
                                         onOpenCommunity = { community, instance ->
                                             detailOpener.openCommunityDetail(community, instance)
                                         },
@@ -1083,6 +1087,7 @@ class PostDetailScreen(
                                                         comment = comment,
                                                         isOp = comment.creator?.id == uiState.post.creator?.id,
                                                         showBot = true,
+                                                        isCurrentUser = comment.creator?.id == uiState.currentUserId,
                                                         isMod =
                                                             comment.creator?.id.let { id ->
                                                                 uiState.moderators.containsId(id)
@@ -1103,6 +1108,11 @@ class PostDetailScreen(
                                                         actionButtonsActive = uiState.isLogged,
                                                         downVoteEnabled = uiState.downVoteEnabled,
                                                         highlightText = uiState.searchText,
+                                                        adminTagColor = uiState.adminTagColor,
+                                                        botTagColor = uiState.botTagColor,
+                                                        meTagColor = uiState.meTagColor,
+                                                        modTagColor = uiState.modTagColor,
+                                                        opTagColor = uiState.opTagColor,
                                                         onToggleExpanded = {
                                                             model.reduce(
                                                                 PostDetailMviModel.Intent.ToggleExpandComment(
@@ -1421,6 +1431,7 @@ class PostDetailScreen(
                                                 comment = comment,
                                                 isOp = comment.creator?.id == uiState.post.creator?.id,
                                                 showBot = true,
+                                                isCurrentUser = comment.creator?.id == uiState.currentUserId,
                                                 isMod =
                                                     comment.creator?.id.let { id ->
                                                         uiState.moderators.containsId(id)

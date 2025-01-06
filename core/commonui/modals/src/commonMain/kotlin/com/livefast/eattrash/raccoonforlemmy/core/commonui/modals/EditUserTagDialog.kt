@@ -37,6 +37,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 fun EditUserTagDialog(
     title: String,
     value: String = "",
+    canEditName: Boolean = true,
     color: Color = MaterialTheme.colorScheme.primary,
     onClose: ((String?, Color?) -> Unit)? = null,
 ) {
@@ -73,37 +74,46 @@ fun EditUserTagDialog(
                 onTap = {
                     selectCustomColorDialogOpen = true
                 },
-            )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                colors =
-                    TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                    ),
-                label = {
-                    Text(
-                        text = LocalStrings.current.multiCommunityEditorName,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                },
-                textStyle = typography.bodyMedium,
-                value = textFieldValue,
-                keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        autoCorrectEnabled = true,
-                    ),
-                onValueChange = { value ->
-                    textFieldValue = value
+                onClear = {
+                    selectedColor = Color.Transparent
                 },
             )
+
+            if (canEditName) {
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors =
+                        TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                        ),
+                    label = {
+                        Text(
+                            text = LocalStrings.current.multiCommunityEditorName,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    },
+                    textStyle = typography.bodyMedium,
+                    value = textFieldValue,
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            autoCorrectEnabled = true,
+                        ),
+                    onValueChange = { value ->
+                        textFieldValue = value
+                    },
+                )
+            }
 
             Spacer(modifier = Modifier.height(Spacing.xs))
             Button(
                 onClick = {
-                    onClose?.invoke(textFieldValue.text, selectedColor)
+                    onClose?.invoke(
+                        textFieldValue.text,
+                        selectedColor.takeIf { it != Color.Transparent },
+                    )
                 },
             ) {
                 Text(text = LocalStrings.current.buttonConfirm)
@@ -114,9 +124,11 @@ fun EditUserTagDialog(
     if (selectCustomColorDialogOpen) {
         CustomColorPickerDialog(
             initialValue = color,
-            onClose = {
+            onClose = { newColor ->
                 selectCustomColorDialogOpen = false
-                selectedColor = it ?: Color.Transparent
+                if (newColor != null) {
+                    selectedColor = newColor
+                }
             },
         )
     }

@@ -1,6 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -65,6 +67,16 @@ fun UserTagItem(
                     .background(
                         color = color,
                         shape = CircleShape,
+                    ).then(
+                        if (color == Color.Transparent) {
+                            Modifier.border(
+                                color = MaterialTheme.colorScheme.onBackground,
+                                width = Dp.Hairline,
+                                shape = CircleShape,
+                            )
+                        } else {
+                            Modifier
+                        },
                     ),
         )
         Column(

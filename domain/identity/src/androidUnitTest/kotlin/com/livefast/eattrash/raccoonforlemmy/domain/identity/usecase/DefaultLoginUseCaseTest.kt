@@ -8,6 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Account
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunityPreferredLanguageRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.CreateSpecialTagsUseCase
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.AuthRepository
@@ -46,6 +47,7 @@ class DefaultLoginUseCaseTest {
             coEvery { get(accountId = any()) } returns BottomNavItemsRepository.DEFAULT_ITEMS
         }
     private val lemmyValueCache = mockk<LemmyValueCache>(relaxUnitFun = true)
+    private val createSpecialTagsUseCase = mockk<CreateSpecialTagsUseCase>(relaxUnitFun = true)
     private val sut =
         DefaultLoginUseCase(
             authRepository = authRepository,
@@ -58,6 +60,7 @@ class DefaultLoginUseCaseTest {
             communityPreferredLanguageRepository = communityPreferredLanguageRepository,
             bottomNavItemsRepository = bottomNavItemsRepository,
             lemmyValueCache = lemmyValueCache,
+            createSpecialTagsUseCase = createSpecialTagsUseCase,
         )
 
     @Test

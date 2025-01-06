@@ -89,6 +89,11 @@
     <string name="create_report_placeholder">Report text (optional)</string>
     <string name="create_report_title_comment">Report comment</string>
     <string name="create_report_title_post">Report post</string>
+    <string name="default_tag_admin">admin</string>
+    <string name="default_tag_bot">bot</string>
+    <string name="default_tag_current_user">me</string>
+    <string name="default_tag_moderator">mod</string>
+    <string name="default_tag_original_poster">op</string>
     <string name="dialog_raw_content_text">Text</string>
     <string name="dialog_raw_content_title">Title</string>
     <string name="dialog_raw_content_url">URL</string>
