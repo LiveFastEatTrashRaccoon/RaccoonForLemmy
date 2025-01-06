@@ -34,6 +34,7 @@ val postDetailModule =
                     settingsRepository = instance(),
                     accountRepository = instance(),
                     userTagRepository = instance(),
+                    userTagHelper = instance(),
                     shareHelper = instance(),
                     notificationCenter = instance(),
                     hapticFeedback = instance(),

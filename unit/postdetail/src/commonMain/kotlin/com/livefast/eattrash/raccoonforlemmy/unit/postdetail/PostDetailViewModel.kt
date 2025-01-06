@@ -28,6 +28,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyItemCa
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
 import com.livefast.eattrash.raccoonforlemmy.unit.postdetail.utils.populateLoadMoreComments
 import com.livefast.eattrash.raccoonforlemmy.unit.postdetail.utils.sortToNestedOrder
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +60,7 @@ class PostDetailViewModel(
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
     private val userTagRepository: UserTagRepository,
+    private val userTagHelper: UserTagHelper,
     private val shareHelper: ShareHelper,
     private val notificationCenter: NotificationCenter,
     private val hapticFeedback: HapticFeedback,
@@ -228,11 +230,16 @@ class PostDetailViewModel(
 
             val auth = identityRepository.authToken.value
             val updatedPost =
-                postRepository.get(
-                    id = postId,
-                    auth = auth,
-                    instance = otherInstance,
-                )
+                postRepository
+                    .get(
+                        id = postId,
+                        auth = auth,
+                        instance = otherInstance,
+                    )?.let {
+                        with(userTagHelper) {
+                            it.copy(creator = it.creator.withTags())
+                        }
+                    }
             if (updatedPost != null) {
                 updateState {
                     it.copy(post = updatedPost)
@@ -456,13 +463,18 @@ class PostDetailViewModel(
             val auth = identityRepository.authToken.value
             val post = uiState.value.post
             val updatedPost =
-                postRepository.get(
-                    id = post.id,
-                    auth = auth,
-                    instance = otherInstance,
-                ) ?: post
+                postRepository
+                    .get(
+                        id = post.id,
+                        auth = auth,
+                        instance = otherInstance,
+                    )?.let {
+                        with(userTagHelper) {
+                            it.copy(creator = it.creator.withTags())
+                        }
+                    }
             updateState {
-                it.copy(post = updatedPost)
+                it.copy(post = updatedPost ?: post)
             }
         }
     }
@@ -594,8 +606,14 @@ class PostDetailViewModel(
 
     private fun handlePostUpdate(post: PostModel) {
         screenModelScope.launch {
+            val newPost =
+                post.let {
+                    with(userTagHelper) {
+                        it.copy(creator = it.creator.withTags())
+                    }
+                }
             updateState {
-                it.copy(post = post)
+                it.copy(post = newPost)
             }
         }
     }
