@@ -510,6 +510,8 @@
     <string name="swipe_action_start_two">Start side (step 2)</string>
     <string name="swipe_action_end_one">End side(step 1)</string>
     <string name="swipe_action_end_two">End side (step 2)</string>
+    <string name="user_tags_special_section_title">Special</string>
+    <string name="user_tags_regular_section_title">Regular</string>
 
     <plurals name="inbox_notification_content">
         <item quantity="one">There is %1$d unread item</item>

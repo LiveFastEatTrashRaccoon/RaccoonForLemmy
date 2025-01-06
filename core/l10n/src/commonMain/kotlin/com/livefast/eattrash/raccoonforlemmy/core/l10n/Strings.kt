@@ -511,6 +511,8 @@ interface Strings {
     val userInfoModerates: String @Composable get
     val userPostScore: String @Composable get
     val userTagColor: String @Composable get
+    val userTagsRegularSectionTitle: String @Composable get
+    val userTagsSpecialSectionTitle: String @Composable get
     val userTagsTitle: String @Composable get
 
     suspend fun inboxNotificationTitle(): String
