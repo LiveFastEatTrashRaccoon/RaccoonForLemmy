@@ -47,6 +47,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingAc
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItemPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserTagItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditUserTagDialog
@@ -55,6 +56,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.isSpecial
+import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.unit.usertags.detail.UserTagDetailScreen
 import kotlinx.coroutines.flow.launchIn
@@ -75,7 +77,9 @@ class UserTagsScreen : Screen {
         val lazyListState = rememberLazyListState()
         val scope = rememberCoroutineScope()
         var addTagDialogOpen by remember { mutableStateOf(false) }
+        var addTagTitleError by remember { mutableStateOf<ValidationError?>(null) }
         var tagToEdit by remember { mutableStateOf<UserTagModel?>(null) }
+        var editTagTitleError by remember { mutableStateOf<ValidationError?>(null) }
 
         LaunchedEffect(model) {
             model.effects
@@ -181,16 +185,50 @@ class UserTagsScreen : Screen {
                             CommunityItemPlaceholder()
                         }
                     }
-                    items(uiState.tags) { tag ->
+
+                    if (uiState.specialTags.isNotEmpty()) {
+                        item {
+                            SettingsHeader(
+                                title = LocalStrings.current.userTagsSpecialSectionTitle,
+                            )
+                        }
+                    }
+                    items(uiState.specialTags) { tag ->
+                        UserTagItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            tag = tag,
+                            options =
+                                buildList {
+                                    this +=
+                                        Option(
+                                            id = OptionId.Edit,
+                                            text = LocalStrings.current.postActionEdit,
+                                        )
+                                },
+                            onOptionSelected = { optionId ->
+                                when (optionId) {
+                                    OptionId.Edit -> tagToEdit = tag
+                                    else -> Unit
+                                }
+                            },
+                        )
+                    }
+
+                    if (uiState.regularTags.isNotEmpty()) {
+                        item {
+                            SettingsHeader(
+                                title = LocalStrings.current.userTagsRegularSectionTitle,
+                            )
+                        }
+                    }
+                    items(uiState.regularTags) { tag ->
                         UserTagItem(
                             modifier =
                                 Modifier.fillMaxWidth().onClick(
                                     onClick = {
-                                        if (!tag.isSpecial) {
-                                            tag.id?.also {
-                                                val screen = UserTagDetailScreen(it)
-                                                navigatorCoordinator.pushScreen(screen)
-                                            }
+                                        tag.id?.also {
+                                            val screen = UserTagDetailScreen(it)
+                                            navigatorCoordinator.pushScreen(screen)
                                         }
                                     },
                                 ),
@@ -202,18 +240,15 @@ class UserTagsScreen : Screen {
                                             id = OptionId.Edit,
                                             text = LocalStrings.current.postActionEdit,
                                         )
-                                    if (!tag.isSpecial) {
-                                        this +=
-                                            Option(
-                                                id = OptionId.Delete,
-                                                text = LocalStrings.current.commentActionDelete,
-                                            )
-                                    }
+                                    this +=
+                                        Option(
+                                            id = OptionId.Delete,
+                                            text = LocalStrings.current.commentActionDelete,
+                                        )
                                 },
                             onOptionSelected = { optionId ->
                                 when (optionId) {
-                                    OptionId.Edit ->
-                                        tagToEdit = tag
+                                    OptionId.Edit -> tagToEdit = tag
 
                                     OptionId.Delete ->
                                         tag.id?.also {
@@ -225,7 +260,7 @@ class UserTagsScreen : Screen {
                             },
                         )
                     }
-                    if (uiState.tags.isEmpty() && !uiState.initial) {
+                    if ((uiState.specialTags + uiState.regularTags).isEmpty() && !uiState.initial) {
                         item {
                             Text(
                                 modifier =
@@ -247,41 +282,71 @@ class UserTagsScreen : Screen {
         }
 
         if (addTagDialogOpen) {
+            val forbiddenTagNames =
+                (uiState.specialTags + uiState.regularTags).map {
+                    it.name.lowercase()
+                }
             EditUserTagDialog(
                 title = LocalStrings.current.buttonAdd,
+                titleError = addTagTitleError,
                 value = "",
                 onClose = { name, color ->
-                    addTagDialogOpen = false
-                    if (name != null) {
-                        model.reduce(
-                            UserTagsMviModel.Intent.Add(
-                                name = name,
-                                color = color?.toArgb(),
-                            ),
-                        )
+                    addTagTitleError =
+                        if (name?.lowercase() in forbiddenTagNames) {
+                            ValidationError.InvalidField
+                        } else {
+                            null
+                        }
+                    if (addTagTitleError == null) {
+                        addTagDialogOpen = false
+                        if (name != null) {
+                            model.reduce(
+                                UserTagsMviModel.Intent.Add(
+                                    name = name,
+                                    color = color?.toArgb(),
+                                ),
+                            )
+                        }
                     }
                 },
             )
         }
         if (tagToEdit != null) {
+            val forbiddenTagNames =
+                (uiState.specialTags + uiState.regularTags).mapNotNull {
+                    if (it.id != tagToEdit?.id) {
+                        it.name.lowercase()
+                    } else {
+                        null
+                    }
+                }
             EditUserTagDialog(
                 title = LocalStrings.current.postActionEdit,
+                titleError = editTagTitleError,
                 value = tagToEdit?.name.orEmpty(),
                 canEditName = tagToEdit?.isSpecial != true,
                 color = tagToEdit?.color?.let { Color(it) } ?: MaterialTheme.colorScheme.primary,
                 onClose = { name, color ->
-                    val tagId = tagToEdit?.id
-                    val type = tagToEdit?.type ?: UserTagType.Regular
-                    tagToEdit = null
-                    if (tagId != null && name != null) {
-                        model.reduce(
-                            UserTagsMviModel.Intent.Edit(
-                                id = tagId,
-                                name = name,
-                                type = type,
-                                color = color?.toArgb(),
-                            ),
-                        )
+                    editTagTitleError =
+                        if (name?.lowercase() in forbiddenTagNames) {
+                            ValidationError.InvalidField
+                        } else {
+                            null
+                        }
+                    if (editTagTitleError == null) {
+                        val tagId = tagToEdit?.id
+                        val type = tagToEdit?.type ?: UserTagType.Regular
+                        tagToEdit = null
+                        if (tagId != null && name != null) {
+                            model.reduce(
+                                UserTagsMviModel.Intent.Edit(
+                                    id = tagId,
+                                    name = name,
+                                    type = type,
+                                    color = color?.toArgb(),
+                                ),
+                            )
+                        }
                     }
                 },
             )

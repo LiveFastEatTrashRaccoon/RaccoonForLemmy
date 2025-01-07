@@ -53,18 +53,17 @@ internal class UserTagsViewModel(
                 refreshing = !initial,
             )
         }
-        val tags =
+        val (specialTags, regularTags) =
             userTagRepository
                 .getAll(accountId)
                 .partition { it.isSpecial }
                 .let { (specialTags, regularTags) ->
-                    val sortedSpecial = specialTags.sortedBy { it.name }
-                    val sortedRegular = regularTags.sortedBy { it.name }
-                    sortedSpecial + sortedRegular
+                    specialTags.sortedBy { it.name } to regularTags.sortedBy { it.name }
                 }
         updateState {
             it.copy(
-                tags = tags,
+                specialTags = specialTags,
+                regularTags = regularTags,
                 initial = false,
                 refreshing = false,
             )

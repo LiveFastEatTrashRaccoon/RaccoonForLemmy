@@ -33,7 +33,8 @@ interface UserTagsMviModel :
     data class UiState(
         val initial: Boolean = true,
         val refreshing: Boolean = false,
-        val tags: List<UserTagModel> = emptyList(),
+        val specialTags: List<UserTagModel> = emptyList(),
+        val regularTags: List<UserTagModel> = emptyList(),
     )
 
     sealed interface Effect {

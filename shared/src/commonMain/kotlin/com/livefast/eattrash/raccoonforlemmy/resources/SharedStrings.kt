@@ -516,6 +516,8 @@ import raccoonforlemmy.shared.generated.resources.user_info_admin
 import raccoonforlemmy.shared.generated.resources.user_info_moderates
 import raccoonforlemmy.shared.generated.resources.user_post_score
 import raccoonforlemmy.shared.generated.resources.user_tag_color
+import raccoonforlemmy.shared.generated.resources.user_tags_regular_section_title
+import raccoonforlemmy.shared.generated.resources.user_tags_special_section_title
 import raccoonforlemmy.shared.generated.resources.user_tags_title
 
 internal class SharedStrings : Strings {
@@ -1535,6 +1537,10 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.user_post_score)
     override val userTagColor: String
         @Composable get() = stringResource(Res.string.user_tag_color)
+    override val userTagsRegularSectionTitle: String
+        @Composable get() = stringResource(Res.string.user_tags_regular_section_title)
+    override val userTagsSpecialSectionTitle: String
+        @Composable get() = stringResource(Res.string.user_tags_special_section_title)
     override val userTagsTitle: String
         @Composable get() = stringResource(Res.string.user_tags_title)
 

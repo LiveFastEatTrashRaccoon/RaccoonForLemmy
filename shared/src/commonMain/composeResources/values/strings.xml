@@ -456,7 +456,7 @@
     <string name="user_info_admin">administrator</string>
     <string name="user_info_moderates">Moderator of</string>
     <string name="user_tag_color">Tag color</string>
-    <string name="user_tags_title">User tags</string>
+    <string name="user_tags_title">User tags and roles</string>
     <string name="action_go_back">Go back</string>
     <string name="action_open_side_menu">Open side menu</string>
     <string name="action_close_side_menu">Close side menu</string>
@@ -510,6 +510,8 @@
     <string name="swipe_action_start_two">Start side (step 2)</string>
     <string name="swipe_action_end_one">End side(step 1)</string>
     <string name="swipe_action_end_two">End side (step 2)</string>
+    <string name="user_tags_special_section_title">Special</string>
+    <string name="user_tags_regular_section_title">Regular</string>
 
     <plurals name="inbox_notification_content">
         <item quantity="one">There is %1$d unread item</item>

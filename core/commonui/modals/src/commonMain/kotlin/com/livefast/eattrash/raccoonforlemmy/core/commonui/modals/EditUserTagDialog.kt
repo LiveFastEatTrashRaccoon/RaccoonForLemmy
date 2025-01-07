@@ -31,11 +31,14 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsColorRow
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
+import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditUserTagDialog(
     title: String,
+    titleError: ValidationError? = null,
     value: String = "",
     canEditName: Boolean = true,
     color: Color = MaterialTheme.colorScheme.primary,
@@ -96,6 +99,15 @@ fun EditUserTagDialog(
                     },
                     textStyle = typography.bodyMedium,
                     value = textFieldValue,
+                    isError = titleError != null,
+                    supportingText = {
+                        if (titleError != null) {
+                            Text(
+                                text = titleError.toReadableMessage(),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    },
                     keyboardOptions =
                         KeyboardOptions(
                             keyboardType = KeyboardType.Text,
