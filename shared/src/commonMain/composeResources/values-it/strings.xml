@@ -437,7 +437,7 @@
     <string name="bar_theme_solid">Solido</string>
     <string name="manage_user_tag_title">Gestisci tag utente</string>
     <string name="user_tag_color">Colore tag</string>
-    <string name="user_tags_title">Tag utente</string>
+    <string name="user_tags_title">Tag e ruoli utente</string>
     <string name="settings_search_posts_title_only_subtitle">Filtra risultati di ricerca post sulla base del titolo esatto</string>
     <string name="settings_search_posts_restrict_local_user_search">Restringi ricerca utenti locali</string>
     <string name="settings_search_posts_restrict_local_user_search_subtitle">Filtra risultati di ricerca utenti locali su istanza attuale</string>
@@ -500,4 +500,6 @@
     <string name="default_tag_moderator">mod</string>
     <string name="default_tag_current_user">me</string>
     <string name="action_remove_from_bookmarks">Rimuovi da salvati</string>
+    <string name="user_tags_special_section_title">Speciali</string>
+    <string name="user_tags_regular_section_title">Normali</string>
 </resources>
