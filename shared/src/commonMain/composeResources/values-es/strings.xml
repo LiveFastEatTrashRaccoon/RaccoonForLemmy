@@ -436,7 +436,7 @@
     </plurals>
     <string name="message_no_result">Ups… ¡no se han encontrado resultados!</string>
     <string name="bar_theme_solid">Sólido</string>
-    <string name="user_tags_title">Etiquetas de usuario</string>
+    <string name="user_tags_title">Etiquetas y roles de usuario</string>
     <string name="user_tag_color">Color de la etiqueta</string>
     <string name="manage_user_tag_title">Gestionar etiquetas de usuario</string>
     <string name="settings_search_posts_title_only_subtitle">Filtrar resultados búsqueda publicaciones por correspondencia exacta del título</string>
@@ -501,4 +501,6 @@
     <string name="default_tag_moderator">mod</string>
     <string name="action_remove_from_bookmarks">Remover de guardados</string>
     <string name="default_tag_original_poster">op</string>
+    <string name="user_tags_special_section_title">Especiales</string>
+    <string name="user_tags_regular_section_title">Ordinarios</string>
 </resources>
