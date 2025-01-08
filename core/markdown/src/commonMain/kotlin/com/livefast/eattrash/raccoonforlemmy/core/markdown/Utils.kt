@@ -75,17 +75,21 @@ private fun String.quoteFixUp(): String =
         val quoteAndList1 = Regex("^>-")
         val quoteAndList2 = Regex("^> -")
         val quoteEmpty = Regex("^>\\s*$")
-        lines().forEach { line ->
+        lines().forEach { originalLine ->
             val cleanLine =
-                line
+                originalLine
                     // removes list inside quotes
                     .replace(quoteAndList1, "-")
                     .replace(quoteAndList2, "> ")
                     // replace empty quotes
                     .replace(quoteEmpty, " \n")
             val isLastEmpty = finalLines.isNotEmpty() && finalLines.last().isEmpty()
-            if (!isLastEmpty || cleanLine.isNotEmpty()) {
+            if (!isLastEmpty || cleanLine.isNotEmpty() || originalLine.isBlank()) {
                 finalLines += cleanLine
+                // blank lines to better isolate paragraphs
+                repeat(2) {
+                    finalLines += ""
+                }
             }
         }
         finalLines.joinToString("\n")

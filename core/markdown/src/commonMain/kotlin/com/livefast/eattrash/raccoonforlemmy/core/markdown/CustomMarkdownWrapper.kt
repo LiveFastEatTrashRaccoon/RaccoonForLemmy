@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
@@ -29,17 +28,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isUnspecified
 import androidx.compose.ui.unit.sp
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
+import com.mikepenz.markdown.compose.LocalMarkdownAnnotator
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.compose.components.markdownComponents
 import com.mikepenz.markdown.compose.elements.MarkdownText
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
+import com.mikepenz.markdown.model.MarkdownAnnotator
 import com.mikepenz.markdown.model.MarkdownColors
 import com.mikepenz.markdown.model.MarkdownPadding
 import com.mikepenz.markdown.model.MarkdownTypography
 import com.mikepenz.markdown.model.markdownPadding
 import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
+import com.mikepenz.markdown.utils.codeSpanStyle
+import com.mikepenz.markdown.utils.linkTextSpanStyle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.intellij.markdown.ast.ASTNode
@@ -294,14 +297,21 @@ internal fun markdownParagraphWithHighlights(
     content: String,
     node: ASTNode,
     modifier: Modifier = Modifier,
-    style: TextStyle = LocalMarkdownTypography.current.paragraph,
+    typography: MarkdownTypography = LocalMarkdownTypography.current,
+    annotator: MarkdownAnnotator = LocalMarkdownAnnotator.current,
     highlightText: String? = null,
 ) {
     val highlightColor = Color(255, 194, 10, 150)
     var styledText =
         buildAnnotatedString {
-            pushStyle(style.toSpanStyle())
-            buildMarkdownAnnotatedString(content, node)
+            pushStyle(typography.paragraph.toSpanStyle())
+            buildMarkdownAnnotatedString(
+                content = content,
+                node = node,
+                linkTextStyle = typography.linkTextSpanStyle,
+                codeStyle = typography.codeSpanStyle,
+                annotator = annotator,
+            )
             pop()
         }
 
@@ -322,7 +332,7 @@ internal fun markdownParagraphWithHighlights(
     MarkdownText(
         styledText,
         modifier = modifier,
-        style = style,
+        style = typography.paragraph,
     )
 }
 
