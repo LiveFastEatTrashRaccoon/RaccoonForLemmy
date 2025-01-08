@@ -503,4 +503,5 @@
     <string name="default_tag_original_poster">op</string>
     <string name="user_tags_special_section_title">Especiales</string>
     <string name="user_tags_regular_section_title">Ordinarios</string>
+    <string name="settings_color_dialog_insert_hex">Insertar código hex color</string>
 </resources>
