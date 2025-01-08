@@ -60,7 +60,7 @@ fun SettingsSwitchRow(
             }
         }
         Switch(
-            modifier = Modifier.padding(start = Spacing.xs),
+            modifier = Modifier.padding(start = Spacing.xs, top = Spacing.xs),
             checked = value,
             onCheckedChange = null,
         )
