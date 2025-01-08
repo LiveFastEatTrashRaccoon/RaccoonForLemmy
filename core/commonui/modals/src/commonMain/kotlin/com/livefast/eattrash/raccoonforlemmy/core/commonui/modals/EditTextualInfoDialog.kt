@@ -36,6 +36,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 fun EditTextualInfoDialog(
     title: String,
     label: String = "",
+    isError: Boolean = false,
+    singleLine: Boolean = false,
     value: String = "",
     onClose: ((String?) -> Unit)? = null,
 ) {
@@ -74,6 +76,8 @@ fun EditTextualInfoDialog(
                         unfocusedContainerColor = Color.Transparent,
                         disabledContainerColor = Color.Transparent,
                     ),
+                isError = isError,
+                singleLine = singleLine,
                 label = {
                     Text(
                         text = label,

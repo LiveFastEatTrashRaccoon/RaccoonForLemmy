@@ -310,6 +310,7 @@
     <string name="settings_color_dialog_alpha">A</string>
     <string name="settings_color_dialog_blue">B</string>
     <string name="settings_color_dialog_green">G</string>
+    <string name="settings_color_dialog_insert_hex">Insert hex color code</string>
     <string name="settings_color_dialog_red">R</string>
     <string name="settings_color_dialog_title">Pick a color</string>
     <string name="settings_color_gray">🦝 Ravenous raccoon</string>

@@ -362,6 +362,7 @@ import raccoonforlemmy.shared.generated.resources.settings_color_custom
 import raccoonforlemmy.shared.generated.resources.settings_color_dialog_alpha
 import raccoonforlemmy.shared.generated.resources.settings_color_dialog_blue
 import raccoonforlemmy.shared.generated.resources.settings_color_dialog_green
+import raccoonforlemmy.shared.generated.resources.settings_color_dialog_insert_hex
 import raccoonforlemmy.shared.generated.resources.settings_color_dialog_red
 import raccoonforlemmy.shared.generated.resources.settings_color_dialog_title
 import raccoonforlemmy.shared.generated.resources.settings_color_gray
@@ -1229,6 +1230,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.settings_color_dialog_blue)
     override val settingsColorDialogGreen: String
         @Composable get() = stringResource(Res.string.settings_color_dialog_green)
+    override val settingsColorDialogInsertHex: String
+        @Composable get() = stringResource(Res.string.settings_color_dialog_insert_hex)
     override val settingsColorDialogRed: String
         @Composable get() = stringResource(Res.string.settings_color_dialog_red)
     override val settingsColorDialogTitle: String
