@@ -357,6 +357,7 @@ interface Strings {
     val settingsColorDialogAlpha: String @Composable get
     val settingsColorDialogBlue: String @Composable get
     val settingsColorDialogGreen: String @Composable get
+    val settingsColorDialogInsertHex: String @Composable get
     val settingsColorDialogRed: String @Composable get
     val settingsColorDialogTitle: String @Composable get
     val settingsColorGray: String @Composable get
