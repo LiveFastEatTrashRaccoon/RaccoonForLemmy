@@ -136,6 +136,7 @@ fun EditUserTagDialog(
     if (selectCustomColorDialogOpen) {
         CustomColorPickerDialog(
             initialValue = color,
+            allowManualSelection = true,
             onClose = { newColor ->
                 selectCustomColorDialogOpen = false
                 if (newColor != null) {
