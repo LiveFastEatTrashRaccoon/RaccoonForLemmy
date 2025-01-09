@@ -1,0 +1,34 @@
+<p>
+    <i>Raccoon for Lemmy</i> está formada totalmente de código abierto, y pretende ofrecer una experiencia sin publicidad y lo más funcional posible en Lemmy.
+</p>
+<p>
+    En esta app, cualquiera debería encontrarse tan a gusto como en su propia casa, por eso se le atribuye gran importancia a la localización y personalización de la interfaz de usuario.
+</p>
+<p>
+    <b>Características principales:</b>
+</p>
+<ul>
+    <li>visualización de publicaciones y comentarios con distintos tipos de listado y orden;</li>
+    <li>expresar votos positivos y negativos (con posibilidad de configurar las acciones al deslizamiento);</li>
+    <li>detalle comunidad y usuario (con indicaciones sobre moderadores/comunidades moderadas);</li>
+    <li>perfil usuario con visualización de las publicaciones, comentarios y elementos guardados;</li>
+    <li>buzón de entrada con respuestas, menciones y mensajes directos;</li>
+    <li>búsqueda global con distintos tipos de resultados (todo, publicaciones, comentarios, usuarios, comunidades);</li>
+    <li>crear de nuevas publicaciones o modificarlas (opcionalmente con imágenes);</li>
+    <li>compartir contenidos en otras comunidades (cross-post);</li>
+    <li>responder a publicaciones y comentarios (y modificar las respuestas);</li>
+    <li>marcar publicaciones como leídas (includo durante el desplazamiento) y esconder los contenidos ya leídos;</li>
+    <li>personalización (esquema colores, fuentes, tamaño del texto, formato de las publicaciones, etc.);</li>
+    <li>cambiar la localización (independientemente de los ajustes de sistema);</li>
+    <li>bloquear usuarios, comunidades e instancias;</li>
+    <li>denunciar publicaciones y comentarios a los moderadores;</li>
+    <li>soporte para cuentas múltiples con ajustes específicos para cada cuenta;</li>
+    <li>desplazamiento automático (llamado "modo zombie");</li>
+    <li>explorar todas las comunidades de las otras instancias en modo huésped ;</li>
+    <li>multi-comunidades (agregación de comunidades);</li>
+    <li>visualización del registro de moderación;</li>
+    <li>herramientas de moderación de las comunidades (ver y resolver las denuncias, prohibir el acceso a usuarios, fijar publicaciones en la comunidad, bloquear nuevos comentarios, avalar comentarios, remover publicaciones/comentarios, examinar todas la publicaciones/comentarios creadas, modificar/crear comunidades)</li>
+    <li>guardar borradores para publicaciones y comentarios</li>
+    <li>acceder de forma anónima con posibilidad de cambiar de instancia de forma rápida</li>
+    <li>herramientas para administradores (eliminar usuarios/publicaciones/comentarios/comunidades, fijar publicaciones en la instancia, esconder/mostrar comunidades)</li>
+</ul>
