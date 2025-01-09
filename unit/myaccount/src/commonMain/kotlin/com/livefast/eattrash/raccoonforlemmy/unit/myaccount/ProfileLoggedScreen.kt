@@ -276,7 +276,9 @@ object ProfileLoggedScreen : Tab {
                             }
                             items(
                                 items = uiState.posts,
-                                key = { it.id.toString() + (it.updateDate ?: it.publishDate) },
+                                key = {
+                                    it.id.toString() + (it.updateDate ?: it.publishDate) + it.read
+                                },
                             ) { post ->
                                 PostCard(
                                     post = post,

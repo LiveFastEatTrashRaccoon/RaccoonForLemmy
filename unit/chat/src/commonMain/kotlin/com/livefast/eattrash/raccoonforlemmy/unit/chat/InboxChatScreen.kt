@@ -276,7 +276,9 @@ class InboxChatScreen(
                         }
                         items(
                             items = uiState.messages,
-                            key = { it.id.toString() + (it.updateDate ?: it.publishDate) },
+                            key = {
+                                it.id.toString() + (it.updateDate ?: it.publishDate) + it.read
+                            },
                         ) { message ->
                             val isMyMessage = message.creator?.id == uiState.currentUserId
                             val content = message.content.orEmpty()

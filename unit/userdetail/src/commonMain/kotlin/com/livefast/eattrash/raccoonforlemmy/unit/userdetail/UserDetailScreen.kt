@@ -544,8 +544,10 @@ class UserDetailScreen(
                             }
                         }
                         items(
-                            uiState.posts,
-                            { it.id.toString() + (it.updateDate ?: it.publishDate) },
+                            items = uiState.posts,
+                            key = {
+                                it.id.toString() + (it.updateDate ?: it.publishDate) + it.read
+                            },
                         ) { post ->
 
                             @Composable
