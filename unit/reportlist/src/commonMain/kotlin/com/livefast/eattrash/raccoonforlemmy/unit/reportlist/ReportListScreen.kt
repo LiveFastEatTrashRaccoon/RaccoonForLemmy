@@ -233,8 +233,7 @@ class ReportListScreen(
                                 items = uiState.postReports,
                                 key = {
                                     it.id.toString() + (
-                                        it.updateDate
-                                            ?: it.publishDate
+                                        it.updateDate ?: it.publishDate
                                     ) + it.resolved + uiState.unresolvedOnly
                                 },
                             ) { report ->
@@ -346,8 +345,12 @@ class ReportListScreen(
                                 }
                             }
                             items(
-                                uiState.commentReports,
-                                { it.id.toString() + (it.updateDate ?: it.publishDate) },
+                                items = uiState.commentReports,
+                                key = {
+                                    it.id.toString() + (
+                                        it.updateDate ?: it.publishDate
+                                    ) + it.resolved
+                                },
                             ) { report ->
                                 SwipeActionCard(
                                     modifier = Modifier.fillMaxWidth(),

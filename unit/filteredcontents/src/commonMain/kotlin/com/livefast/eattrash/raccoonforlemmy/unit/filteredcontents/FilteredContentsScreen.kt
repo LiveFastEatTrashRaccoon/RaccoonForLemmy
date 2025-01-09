@@ -369,7 +369,7 @@ class FilteredContentsScreen(
                         items(
                             items = uiState.posts,
                             key = {
-                                it.id.toString() + (it.updateDate ?: it.publishDate)
+                                it.id.toString() + (it.updateDate ?: it.publishDate) + it.read
                             },
                         ) { post ->
 
@@ -708,8 +708,8 @@ class FilteredContentsScreen(
                             }
                         }
                         items(
-                            uiState.comments,
-                            { it.id.toString() + (it.updateDate ?: it.publishDate) },
+                            items = uiState.comments,
+                            key = { it.id.toString() + (it.updateDate ?: it.publishDate) },
                         ) { comment ->
 
                             @Composable
