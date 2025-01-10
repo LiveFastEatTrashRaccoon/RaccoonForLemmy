@@ -429,7 +429,6 @@
     <string name="user_detail_info">Informations de l'utilisateur</string>
     <string name="user_info_admin">administrateur</string>
     <string name="user_info_moderates">Modérateur de</string>
-
     <plurals name="inbox_notification_content">
         <item quantity="one">Il y a %1$d élément non lu</item>
         <item quantity="other">Il y a %1$d éléments non lus</item>
