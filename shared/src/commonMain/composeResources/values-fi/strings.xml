@@ -429,7 +429,6 @@
     <string name="user_detail_info">Käyttäjän tiedot</string>
     <string name="user_info_admin">järjestelmänvalvoja</string>
     <string name="user_info_moderates">Moderaattori</string>
-
     <plurals name="inbox_notification_content">
         <item quantity="one">%1$d lukematonta kohdetta</item>
         <item quantity="other">%1$d lukematonta kohdetta</item>
