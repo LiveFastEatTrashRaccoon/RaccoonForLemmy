@@ -1,0 +1,1 @@
+Cliente móvil para Lemmy, una plataforma federada de agregación y debate.
