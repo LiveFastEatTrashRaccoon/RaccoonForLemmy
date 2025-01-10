@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -57,6 +58,9 @@ class CommunityInfoScreen(
     private val communityName: String = "",
     private val otherInstance: String = "",
 ) : Screen {
+    override val key: ScreenKey
+        get() = super.key + communityId.toString()
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
