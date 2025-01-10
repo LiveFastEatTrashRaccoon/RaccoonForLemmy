@@ -19,6 +19,7 @@ interface Strings {
     val actionCreatePost: String @Composable get
     val actionDeactivateZombieMode: String @Composable get
     val actionDecrement: String @Composable get
+    val actionDeleteAccount: String @Composable get
     val actionDownload: String @Composable get
     val actionDownvote: String @Composable get
     val actionExitSearch: String @Composable get
@@ -129,6 +130,8 @@ interface Strings {
     val defaultTagCurrentUser: String @Composable get
     val defaultTagModerator: String @Composable get
     val defaultTagOriginalPoster: String @Composable get
+    val deleteAccountBody: String @Composable get
+    val deleteAccountRemoveContent: String @Composable get
     val dialogRawContentText: String @Composable get
     val dialogRawContentTitle: String @Composable get
     val dialogRawContentUrl: String @Composable get
