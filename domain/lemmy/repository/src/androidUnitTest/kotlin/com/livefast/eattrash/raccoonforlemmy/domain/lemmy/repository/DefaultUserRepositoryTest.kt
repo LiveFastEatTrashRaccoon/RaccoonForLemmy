@@ -18,6 +18,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -710,6 +711,70 @@ class DefaultUserRepositoryTest {
                     pageCursor = null,
                     sort = SortType.New,
                     showHidden = true,
+                )
+            }
+        }
+
+    @Test
+    fun whenDeleteAccount_thenResultIsAsExpected() =
+        runTest {
+            coEvery {
+                userService.deleteAccount(any(), any())
+            } returns
+                mockk(relaxUnitFun = true) {
+                    every { isSuccessful } returns true
+                }
+            val password = "fake-password"
+            val deleteContent = true
+
+            val res =
+                sut.deleteAccount(
+                    auth = AUTH_TOKEN,
+                    password = password,
+                    deleteContent = deleteContent,
+                )
+
+            assertTrue(res)
+            coVerify {
+                userService.deleteAccount(
+                    authHeader = AUTH_TOKEN.toAuthHeader(),
+                    withArg {
+                        assertEquals(AUTH_TOKEN, it.auth)
+                        assertEquals(password, it.password)
+                        assertEquals(deleteContent, it.deleteContent)
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun givenError_whenDeleteAccount_thenResultIsAsExpected() =
+        runTest {
+            coEvery {
+                userService.deleteAccount(any(), any())
+            } returns
+                mockk(relaxUnitFun = true) {
+                    every { isSuccessful } returns false
+                }
+            val password = "fake-password"
+            val deleteContent = true
+
+            val res =
+                sut.deleteAccount(
+                    auth = AUTH_TOKEN,
+                    password = password,
+                    deleteContent = deleteContent,
+                )
+
+            assertFalse(res)
+            coVerify {
+                userService.deleteAccount(
+                    authHeader = AUTH_TOKEN.toAuthHeader(),
+                    withArg {
+                        assertEquals(AUTH_TOKEN, it.auth)
+                        assertEquals(password, it.password)
+                        assertEquals(deleteContent, it.deleteContent)
+                    },
                 )
             }
         }

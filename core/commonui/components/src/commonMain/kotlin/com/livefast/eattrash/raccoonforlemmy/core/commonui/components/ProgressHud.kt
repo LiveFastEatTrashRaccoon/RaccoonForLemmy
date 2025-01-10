@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun ProgressHud(
-    overlayColor: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f),
+    overlayColor: Color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.65f),
     color: Color = MaterialTheme.colorScheme.primary,
 ) {
     Box(

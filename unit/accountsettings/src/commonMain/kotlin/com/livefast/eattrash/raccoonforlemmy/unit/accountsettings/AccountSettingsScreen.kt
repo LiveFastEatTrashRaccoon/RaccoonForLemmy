@@ -4,8 +4,10 @@ import androidx.compose.animation.core.InfiniteRepeatableSpec
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
@@ -58,6 +60,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeReposito
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsFormattedInfo
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsImageInfo
@@ -74,10 +77,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
+import com.livefast.eattrash.raccoonforlemmy.unit.accountsettings.components.DeleteAccountDialog
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -110,18 +115,26 @@ class AccountSettingsScreen : Screen {
         var confirmBackWithUnsavedChangesDialog by remember { mutableStateOf(false) }
         var defaultListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
         var sortBottomSheetOpened by remember { mutableStateOf(false) }
+        var deleteAccountDialogOpen by remember { mutableStateOf(false) }
+        var deleteAccountValidationError by remember { mutableStateOf<ValidationError?>(null) }
 
         LaunchedEffect(model) {
             model.effects
                 .onEach { evt ->
                     when (evt) {
-                        AccountSettingsMviModel.Effect.Failure -> {
+                        AccountSettingsMviModel.Effect.Failure ->
                             snackbarHostState.showSnackbar(errorMessage)
-                        }
 
-                        AccountSettingsMviModel.Effect.Success -> {
+                        AccountSettingsMviModel.Effect.Success ->
                             snackbarHostState.showSnackbar(successMessage)
-                        }
+
+                        AccountSettingsMviModel.Effect.CloseDeleteAccountDialog ->
+                            deleteAccountDialogOpen = false
+
+                        is AccountSettingsMviModel.Effect.SetDeleteAccountValidationError ->
+                            deleteAccountValidationError = evt.error
+
+                        AccountSettingsMviModel.Effect.Close -> navigationCoordinator.popScreen()
                     }
                 }.launchIn(this)
         }
@@ -418,6 +431,21 @@ class AccountSettingsScreen : Screen {
                     )
 
                     Spacer(modifier = Modifier.height(Spacing.m))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround,
+                    ) {
+                        Button(
+                            onClick = {
+                                deleteAccountDialogOpen = true
+                            },
+                        ) {
+                            Text(text = LocalStrings.current.actionDeleteAccount)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(Spacing.m))
                 }
 
                 Box(
@@ -434,6 +462,10 @@ class AccountSettingsScreen : Screen {
                     }
                 }
             }
+        }
+
+        if (uiState.operationInProgress) {
+            ProgressHud()
         }
 
         if (openDisplayNameEditDialog) {
@@ -589,6 +621,23 @@ class AccountSettingsScreen : Screen {
                             ),
                         )
                     }
+                },
+            )
+        }
+
+        if (deleteAccountDialogOpen) {
+            DeleteAccountDialog(
+                validationError = deleteAccountValidationError,
+                onDismiss = {
+                    deleteAccountDialogOpen = false
+                },
+                onConfirm = { text, deleteContent ->
+                    model.reduce(
+                        AccountSettingsMviModel.Intent.DeleteAccount(
+                            deleteContent = deleteContent,
+                            password = text,
+                        ),
+                    )
                 },
             )
         }

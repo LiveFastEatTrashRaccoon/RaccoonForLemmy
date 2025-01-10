@@ -10,6 +10,7 @@ kotlin {
             dependencies {
                 implementation(libs.kodein)
                 implementation(libs.ktorfit.lib)
+                implementation(libs.ktorfit.converters.response)
 
                 implementation(projects.core.api)
                 implementation(projects.core.persistence)

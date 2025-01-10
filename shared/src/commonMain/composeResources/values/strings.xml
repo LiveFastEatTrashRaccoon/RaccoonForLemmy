@@ -8,6 +8,7 @@
     <string name="action_create_community">Create community</string>
     <string name="action_create_post">Create post</string>
     <string name="action_deactivate_zombie_mode">Deactivate zombie mode</string>
+    <string name="action_delete_account">Delete account</string>
     <string name="action_downvote">Downvote</string>
     <string name="action_exit_search">Exit search</string>
     <string name="action_logout">Logout</string>
@@ -94,6 +95,8 @@
     <string name="default_tag_current_user">me</string>
     <string name="default_tag_moderator">mod</string>
     <string name="default_tag_original_poster">op</string>
+    <string name="delete_account_body">Please enter your password to confirm account deletion.</string>
+    <string name="delete_account_remove_content">Delete content</string>
     <string name="dialog_raw_content_text">Text</string>
     <string name="dialog_raw_content_title">Title</string>
     <string name="dialog_raw_content_url">URL</string>

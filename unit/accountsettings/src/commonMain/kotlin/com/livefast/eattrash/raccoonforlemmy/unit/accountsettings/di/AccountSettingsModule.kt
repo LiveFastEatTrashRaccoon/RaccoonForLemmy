@@ -15,7 +15,9 @@ val accountSettingsModule =
                     siteRepository = instance(),
                     identityRepository = instance(),
                     mediaRepository = instance(),
+                    userRepository = instance(),
                     getSortTypesUseCase = instance(),
+                    logoutUseCase = instance(),
                     notificationCenter = instance(),
                 )
             }

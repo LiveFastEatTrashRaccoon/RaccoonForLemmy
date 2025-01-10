@@ -22,6 +22,7 @@ import raccoonforlemmy.shared.generated.resources.action_create_community
 import raccoonforlemmy.shared.generated.resources.action_create_post
 import raccoonforlemmy.shared.generated.resources.action_deactivate_zombie_mode
 import raccoonforlemmy.shared.generated.resources.action_decrement
+import raccoonforlemmy.shared.generated.resources.action_delete_account
 import raccoonforlemmy.shared.generated.resources.action_download
 import raccoonforlemmy.shared.generated.resources.action_downvote
 import raccoonforlemmy.shared.generated.resources.action_exit_search
@@ -132,6 +133,8 @@ import raccoonforlemmy.shared.generated.resources.default_tag_bot
 import raccoonforlemmy.shared.generated.resources.default_tag_current_user
 import raccoonforlemmy.shared.generated.resources.default_tag_moderator
 import raccoonforlemmy.shared.generated.resources.default_tag_original_poster
+import raccoonforlemmy.shared.generated.resources.delete_account_body
+import raccoonforlemmy.shared.generated.resources.delete_account_remove_content
 import raccoonforlemmy.shared.generated.resources.dialog_raw_content_text
 import raccoonforlemmy.shared.generated.resources.dialog_raw_content_title
 import raccoonforlemmy.shared.generated.resources.dialog_raw_content_url
@@ -554,6 +557,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.action_deactivate_zombie_mode)
     override val actionDecrement: String
         @Composable get() = stringResource(Res.string.action_decrement)
+    override val actionDeleteAccount: String
+        @Composable get() = stringResource(Res.string.action_delete_account)
     override val actionDownload: String
         @Composable get() = stringResource(Res.string.action_download)
     override val actionDownvote: String
@@ -774,6 +779,10 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.default_tag_moderator)
     override val defaultTagOriginalPoster: String
         @Composable get() = stringResource(Res.string.default_tag_original_poster)
+    override val deleteAccountBody: String
+        @Composable get() = stringResource(Res.string.delete_account_body)
+    override val deleteAccountRemoveContent: String
+        @Composable get() = stringResource(Res.string.delete_account_remove_content)
     override val dialogRawContentText: String
         @Composable get() = stringResource(Res.string.dialog_raw_content_text)
     override val dialogRawContentTitle: String
