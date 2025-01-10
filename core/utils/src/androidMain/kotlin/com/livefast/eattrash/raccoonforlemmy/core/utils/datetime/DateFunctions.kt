@@ -1,5 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.datetime
 
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.Period
 import java.time.ZoneOffset
@@ -7,7 +8,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.TimeZone
-import kotlin.math.abs
+import kotlin.time.toKotlinDuration
 
 actual fun epochMillis(): Long = System.currentTimeMillis()
 
@@ -41,52 +42,65 @@ actual fun getPrettyDate(
     hourLabel: String,
     minuteLabel: String,
     secondLabel: String,
+    finePrecision: Boolean,
 ): String {
     val now = ZonedDateTime.now()
     val date = getDateFromIso8601Timestamp(iso8601Timestamp)
-    val delta = Period.between(date.toLocalDate(), now.toLocalDate())
-    val years = delta.years
-    val months = delta.months
-    val days = delta.days
-    val nowSeconds = now.toEpochSecond()
-    val dateSeconds = date.toEpochSecond()
-    val diffSeconds = abs(nowSeconds - dateSeconds)
-    val hours = ((diffSeconds % 86400) / 3600) % 24
-    val minutes = ((diffSeconds % 3600) / 60) % 60
-    val seconds = diffSeconds % 60
+    val period = Period.between(date.toLocalDate(), now.toLocalDate())
+    val duration = Duration.between(date.toInstant(), now.toInstant()).toKotlinDuration()
+
+    val years = period.years
+    val months = period.months
+    val days = duration.inWholeDays
+    val hours = duration.inWholeHours % 24
+    val minutes = duration.inWholeMinutes % 60
+    val seconds = duration.inWholeSeconds % 60
+
     return when {
         years >= 1 ->
             buildString {
                 append("${years}$yearLabel")
-                if (months >= 1) {
-                    append(" ${months}$monthLabel")
-                }
-                if (days >= 1) {
-                    append(" ${days}$dayLabel")
+                if (finePrecision) {
+                    if (months > 0) {
+                        append(" ${months}$monthLabel")
+                    }
+                    if (days > 0) {
+                        append(" ${days}$dayLabel")
+                    }
                 }
             }
 
         months >= 1 ->
             buildString {
                 append("${months}$monthLabel")
-                if (days >= 1) {
-                    append(" ${days}$dayLabel")
+                if (finePrecision) {
+                    if (days > 0) {
+                        append(" ${days}$dayLabel")
+                    }
                 }
             }
 
         days >= 1 ->
             buildString {
                 append("${days}$dayLabel")
+                if (finePrecision) {
+                    if (hours > 0 || minutes > 0) {
+                        append(" ${hours}$hourLabel")
+                    }
+                    // minutes and seconds are intentionally omitted
+                }
             }
 
         hours >= 1 ->
             buildString {
                 append(" ${hours}$hourLabel")
+                // minutes and seconds are intentionally omitted
             }
 
         minutes >= 1 ->
             buildString {
                 append(" ${minutes}$minuteLabel")
+                // seconds are intentionally omitted
             }
 
         else ->

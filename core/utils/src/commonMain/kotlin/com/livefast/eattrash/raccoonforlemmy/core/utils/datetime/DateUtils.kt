@@ -40,23 +40,53 @@ fun Duration.getPrettyDuration(
     secondsLabel: String,
     minutesLabel: String,
     hoursLabel: String,
+    daysLabel: String,
+    finePrecision: Boolean = true,
 ): String =
     when {
+        inWholeDays > 0 ->
+            buildString {
+                append(inWholeDays)
+                append(daysLabel)
+                val remainderHours = inWholeHours % 24
+                val remainderMinutes = inWholeMinutes % 60
+                val remainderSeconds = inWholeSeconds % 60
+                if (remainderHours > 0) {
+                    append(" ")
+                    append(remainderHours)
+                    append(hoursLabel)
+                }
+                if (finePrecision) {
+                    if (remainderMinutes > 0) {
+                        append(" ")
+                        append(remainderMinutes)
+                        append(minutesLabel)
+                    }
+                    if (remainderSeconds > 0) {
+                        append(" ")
+                        append(remainderSeconds)
+                        append(secondsLabel)
+                    }
+                }
+            }
+
         inWholeHours > 0 ->
             buildString {
                 append(inWholeHours)
                 append(hoursLabel)
                 val remainderMinutes = inWholeMinutes % 60
                 val remainderSeconds = inWholeSeconds % 60
-                if (remainderMinutes > 0 || remainderSeconds > 0) {
+                if (remainderMinutes > 0) {
                     append(" ")
                     append(remainderMinutes)
                     append(minutesLabel)
                 }
-                if (remainderSeconds > 0) {
-                    append(" ")
-                    append(remainderSeconds)
-                    append(secondsLabel)
+                if (finePrecision) {
+                    if (remainderSeconds > 0) {
+                        append(" ")
+                        append(remainderSeconds)
+                        append(secondsLabel)
+                    }
                 }
             }
 
