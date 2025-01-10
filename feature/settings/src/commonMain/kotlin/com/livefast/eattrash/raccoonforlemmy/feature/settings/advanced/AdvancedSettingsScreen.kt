@@ -370,6 +370,7 @@ class AdvancedSettingsScreen : Screen {
                                 secondsLabel = LocalStrings.current.postSecondShort,
                                 minutesLabel = LocalStrings.current.postMinuteShort,
                                 hoursLabel = LocalStrings.current.homeSortTypeTop6Hours,
+                                daysLabel = LocalStrings.current.profileDayShort,
                             ),
                         onTap = {
                             zombieModeDurationBottomSheetOpened = true
@@ -524,6 +525,7 @@ class AdvancedSettingsScreen : Screen {
                                         secondsLabel = LocalStrings.current.postSecondShort,
                                         minutesLabel = LocalStrings.current.postMinuteShort,
                                         hoursLabel = LocalStrings.current.postHourShort,
+                                        daysLabel = LocalStrings.current.profileDayShort,
                                     ) ?: LocalStrings.current.never
                                 },
                             onTap = {
@@ -692,6 +694,7 @@ class AdvancedSettingsScreen : Screen {
                                     secondsLabel = LocalStrings.current.postSecondShort,
                                     minutesLabel = LocalStrings.current.postMinuteShort,
                                     hoursLabel = LocalStrings.current.postHourShort,
+                                    daysLabel = LocalStrings.current.profileDayShort,
                                 ),
                         )
                     },
@@ -727,6 +730,7 @@ class AdvancedSettingsScreen : Screen {
                                     secondsLabel = LocalStrings.current.postSecondShort,
                                     minutesLabel = LocalStrings.current.postMinuteShort,
                                     hoursLabel = LocalStrings.current.postHourShort,
+                                    daysLabel = LocalStrings.current.profileDayShort,
                                 ) ?: LocalStrings.current.never,
                         )
                     },

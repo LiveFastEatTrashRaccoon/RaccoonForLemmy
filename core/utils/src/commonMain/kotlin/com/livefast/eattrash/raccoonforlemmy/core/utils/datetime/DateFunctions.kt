@@ -17,4 +17,5 @@ expect fun getPrettyDate(
     hourLabel: String,
     minuteLabel: String,
     secondLabel: String,
+    finePrecision: Boolean = true,
 ): String
