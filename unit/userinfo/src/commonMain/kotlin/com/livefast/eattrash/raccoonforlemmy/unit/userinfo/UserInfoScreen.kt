@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
@@ -60,6 +61,9 @@ class UserInfoScreen(
     private val username: String,
     private val otherInstance: String,
 ) : Screen {
+    override val key: ScreenKey
+        get() = super.key + userId.toString()
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
