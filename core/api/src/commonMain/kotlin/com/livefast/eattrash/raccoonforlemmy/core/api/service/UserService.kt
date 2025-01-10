@@ -4,6 +4,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.BlockPersonForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.BlockPersonResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommentSortType
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommunityId
+import com.livefast.eattrash.raccoonforlemmy.core.api.dto.DeleteAccountForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetPersonDetailsResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetPersonMentionsResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetRepliesResponse
@@ -16,6 +17,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.PurgePersonForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SaveUserSettingsForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SaveUserSettingsResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SuccessResponse
+import de.jensklingenberg.ktorfit.Response
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Header
@@ -99,4 +101,11 @@ interface UserService {
         @Query("page") page: Int? = null,
         @Query("limit") limit: Int? = null,
     ): ListMediaResponse
+
+    @POST("user/delete_account")
+    @Headers("Content-Type: application/json")
+    suspend fun deleteAccount(
+        @Header("Authorization") authHeader: String? = null,
+        @Body form: DeleteAccountForm,
+    ): Response<Unit>
 }
