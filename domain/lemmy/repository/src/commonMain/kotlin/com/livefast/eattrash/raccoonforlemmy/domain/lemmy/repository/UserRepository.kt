@@ -127,4 +127,10 @@ interface UserRepository {
         limit: Int = PostRepository.DEFAULT_PAGE_SIZE,
         sort: SortType = SortType.New,
     ): Pair<List<PostModel>, String?>?
+
+    suspend fun deleteAccount(
+        auth: String?,
+        password: String,
+        deleteContent: Boolean = false,
+    ): Boolean
 }

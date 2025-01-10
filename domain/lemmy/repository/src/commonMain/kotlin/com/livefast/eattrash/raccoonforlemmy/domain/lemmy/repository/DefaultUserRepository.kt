@@ -1,6 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.BlockPersonForm
+import com.livefast.eattrash.raccoonforlemmy.core.api.dto.DeleteAccountForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.ListingType
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.MarkAllAsReadForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.MarkCommentAsReadForm
@@ -403,5 +404,27 @@ internal class DefaultUserRepository(
                 val posts = response.posts.map { it.toModel() }
                 posts to response.nextPage
             }.getOrNull()
+        }
+
+    override suspend fun deleteAccount(
+        auth: String?,
+        password: String,
+        deleteContent: Boolean,
+    ): Boolean =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                val data =
+                    DeleteAccountForm(
+                        auth = auth.orEmpty(),
+                        deleteContent = deleteContent,
+                        password = password,
+                    )
+                val res =
+                    services.user.deleteAccount(
+                        authHeader = auth.toAuthHeader(),
+                        form = data,
+                    )
+                res.isSuccessful
+            }.getOrElse { false }
         }
 }
