@@ -51,7 +51,7 @@ actual fun getPrettyDate(
 
     val years = period.years
     val months = period.months
-    val days = duration.inWholeDays
+    val days = period.days
     val hours = duration.inWholeHours % 24
     val minutes = duration.inWholeMinutes % 60
     val seconds = duration.inWholeSeconds % 60
