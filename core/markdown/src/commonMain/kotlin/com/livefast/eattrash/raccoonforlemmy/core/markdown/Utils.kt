@@ -81,13 +81,12 @@ private fun String.quoteFixUp(): String =
                     .replace(Regex("^> \\*"), "> •")
                     // empty quotes
                     .replace(Regex("^>\\s*$"), " \n")
-            val isLastEmpty = finalLines.isNotEmpty() && finalLines.last().isEmpty()
-            if (!isLastEmpty || cleanLine.isNotEmpty() || originalLine.isBlank()) {
+            if (cleanLine.isNotEmpty()) {
                 finalLines += cleanLine
+            }
+            if (originalLine.isBlank()) {
                 // blank lines to better isolate paragraphs
-                repeat(2) {
-                    finalLines += ""
-                }
+                finalLines += "\n\n"
             }
         }
         finalLines.joinToString("\n")
