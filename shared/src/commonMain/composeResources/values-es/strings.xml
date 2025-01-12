@@ -246,12 +246,12 @@
     <string name="post_second_short">s</string>
     <string name="profile_button_login">Acceder</string>
     <string name="profile_day_short">d</string>
-    <string name="profile_million_short">m</string>
+    <string name="profile_million_short">M</string>
     <string name="profile_month_short">m</string>
     <string name="profile_not_logged_message">No ha sido posible entrar.\nAñade una cuenta para continuar.</string>
     <string name="profile_section_comments">Comentarios</string>
     <string name="profile_section_posts">Publicaciones</string>
-    <string name="profile_thousand_short">k</string>
+    <string name="profile_thousand_short">K</string>
     <string name="profile_upvotes_downvotes">Votos positivos &amp; negativos</string>
     <string name="profile_year_short">a</string>
     <string name="report_action_resolve">Resueltos</string>
@@ -504,4 +504,7 @@
     <string name="user_tags_special_section_title">Especiales</string>
     <string name="user_tags_regular_section_title">Ordinarios</string>
     <string name="settings_color_dialog_insert_hex">Insertar código hex color</string>
+    <string name="delete_account_remove_content">Eliminar contenidos</string>
+    <string name="action_delete_account">Eliminar cuenta</string>
+    <string name="delete_account_body">Inserta tu contraseña para confirmar la eliminación de la cuenta.</string>
 </resources>
