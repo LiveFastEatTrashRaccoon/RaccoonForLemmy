@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
@@ -66,7 +65,7 @@ fun PostCardTitle(
                 modifier
                     .padding(horizontal = Spacing.xxs)
                     .semantics { heading() },
-                content = text,
+            content = text,
             autoLoadImages = autoLoadImages,
             typography =
                 markdownTypography(
@@ -78,7 +77,7 @@ fun PostCardTitle(
                     h6 = typography.titleSmall,
                     text = typography.bodyMedium.copy(fontWeight = weightMediumOrNormal),
                     paragraph = typography.bodyMedium.copy(fontWeight = weightMediumOrNormal),
-                    quote = typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
+                    quote = typography.bodyMedium,
                     bullet = typography.bodyMedium,
                     list = typography.bodyMedium,
                     ordered = typography.bodyMedium,
