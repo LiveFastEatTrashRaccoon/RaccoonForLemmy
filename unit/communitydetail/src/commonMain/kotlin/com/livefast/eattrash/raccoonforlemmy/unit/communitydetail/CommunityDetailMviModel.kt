@@ -102,7 +102,9 @@ interface CommunityDetailMviModel :
             val value: Boolean,
         ) : Intent
 
-        data object WillOpenDetail : Intent
+        data class WillOpenDetail(
+            val id: Long,
+        ) : Intent
 
         data object UnhideCommunity : Intent
 
@@ -175,5 +177,9 @@ interface CommunityDetailMviModel :
         ) : Effect
 
         data object Back : Effect
+
+        data class OpenDetail(
+            val post: PostModel,
+        ) : Effect
     }
 }
