@@ -48,7 +48,9 @@ interface MultiCommunityMviModel :
             val url: String,
         ) : Intent
 
-        data object WillOpenDetail : Intent
+        data class WillOpenDetail(
+            val id: Long,
+        ) : Intent
     }
 
     data class UiState(
@@ -83,5 +85,9 @@ interface MultiCommunityMviModel :
 
     sealed interface Effect {
         data object BackToTop : Effect
+
+        data class OpenDetail(
+            val post: PostModel,
+        ) : Effect
     }
 }
