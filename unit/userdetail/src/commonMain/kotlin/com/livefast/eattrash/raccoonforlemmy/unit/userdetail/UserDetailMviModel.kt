@@ -66,7 +66,10 @@ interface UserDetailMviModel :
 
         data object BlockInstance : Intent
 
-        data object WillOpenDetail : Intent
+        data class WillOpenDetail(
+            val postId: Long,
+            val commentId: Long? = null,
+        ) : Intent
 
         data class UpdateTags(
             val ids: List<Long>,
@@ -122,5 +125,10 @@ interface UserDetailMviModel :
         ) : Effect
 
         data object BackToTop : Effect
+
+        data class OpenDetail(
+            val postId: Long,
+            val commentId: Long? = null,
+        ) : Effect
     }
 }

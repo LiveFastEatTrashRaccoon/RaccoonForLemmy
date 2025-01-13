@@ -308,10 +308,19 @@ class UserDetailViewModel(
             UserDetailMviModel.Intent.Block -> blockUser()
             UserDetailMviModel.Intent.BlockInstance -> blockInstance()
 
-            UserDetailMviModel.Intent.WillOpenDetail -> {
-                val state = postPaginationManager.extractState()
-                postNavigationManager.push(state)
-            }
+            is UserDetailMviModel.Intent.WillOpenDetail ->
+                screenModelScope.launch {
+                    if (intent.commentId == null) {
+                        val state = postPaginationManager.extractState()
+                        postNavigationManager.push(state)
+                    }
+                    emitEffect(
+                        UserDetailMviModel.Effect.OpenDetail(
+                            postId = intent.postId,
+                            commentId = intent.commentId,
+                        ),
+                    )
+                }
 
             is UserDetailMviModel.Intent.AddUserTag ->
                 addUserTag(name = intent.name, color = intent.color)

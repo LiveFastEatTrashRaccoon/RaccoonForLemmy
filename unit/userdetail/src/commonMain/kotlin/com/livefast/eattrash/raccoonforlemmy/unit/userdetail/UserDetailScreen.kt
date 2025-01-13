@@ -197,6 +197,12 @@ class UserDetailScreen(
                                 }
                             }
                         }
+
+                        is UserDetailMviModel.Effect.OpenDetail ->
+                            detailOpener.openPostDetail(
+                                post = PostModel(id = effect.postId),
+                                highlightCommentId = effect.commentId,
+                            )
                     }
                 }.launchIn(this)
         }
@@ -546,7 +552,7 @@ class UserDetailScreen(
                         items(
                             items = uiState.posts,
                             key = {
-                                it.id.toString() + (it.updateDate ?: it.publishDate) + it.read
+                                it.id.toString() + (it.updateDate ?: it.publishDate)
                             },
                         ) { post ->
 
@@ -665,8 +671,11 @@ class UserDetailScreen(
                                         actionButtonsActive = uiState.isLogged,
                                         downVoteEnabled = uiState.downVoteEnabled,
                                         onClick = {
-                                            model.reduce(UserDetailMviModel.Intent.WillOpenDetail)
-                                            detailOpener.openPostDetail(post)
+                                            model.reduce(
+                                                UserDetailMviModel.Intent.WillOpenDetail(
+                                                    postId = post.id,
+                                                ),
+                                            )
                                         },
                                         onDoubleClick =
                                             {
@@ -709,8 +718,11 @@ class UserDetailScreen(
                                         },
                                         onReply =
                                             {
-                                                model.reduce(UserDetailMviModel.Intent.WillOpenDetail)
-                                                detailOpener.openPostDetail(post)
+                                                model.reduce(
+                                                    UserDetailMviModel.Intent.WillOpenDetail(
+                                                        postId = post.id,
+                                                    ),
+                                                )
                                             }.takeIf { uiState.isLogged && !isOnOtherInstance },
                                         onOpenImage = { url ->
                                             navigationCoordinator.pushScreen(
@@ -969,9 +981,11 @@ class UserDetailScreen(
                                         downVoteEnabled = uiState.downVoteEnabled,
                                         actionButtonsActive = uiState.isLogged,
                                         onClick = {
-                                            detailOpener.openPostDetail(
-                                                post = PostModel(id = comment.postId),
-                                                highlightCommentId = comment.id,
+                                            model.reduce(
+                                                UserDetailMviModel.Intent.WillOpenDetail(
+                                                    postId = comment.postId,
+                                                    commentId = comment.id,
+                                                ),
                                             )
                                         },
                                         onImageClick = { url ->
