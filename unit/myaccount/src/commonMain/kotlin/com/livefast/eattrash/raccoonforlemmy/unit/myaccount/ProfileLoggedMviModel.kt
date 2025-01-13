@@ -63,7 +63,10 @@ interface ProfileLoggedMviModel :
             val feedback: Boolean = false,
         ) : Intent
 
-        data object WillOpenDetail : Intent
+        data class WillOpenDetail(
+            val postId: Long,
+            val commentId: Long? = null,
+        ) : Intent
 
         data class RestorePost(
             val id: Long,
@@ -96,5 +99,10 @@ interface ProfileLoggedMviModel :
         val isModerator: Boolean = false,
     )
 
-    sealed interface Effect
+    sealed interface Effect {
+        data class OpenDetail(
+            val postId: Long,
+            val commentId: Long? = null,
+        ) : Effect
+    }
 }

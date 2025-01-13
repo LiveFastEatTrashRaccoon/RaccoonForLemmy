@@ -123,6 +123,18 @@ object ProfileLoggedScreen : Tab {
                     model.reduce(ProfileLoggedMviModel.Intent.Refresh)
                 }.launchIn(this)
         }
+        LaunchedEffect(model) {
+            model.effects
+                .onEach { effect ->
+                    when (effect) {
+                        is ProfileLoggedMviModel.Effect.OpenDetail ->
+                            detailOpener.openPostDetail(
+                                post = PostModel(id = effect.postId),
+                                highlightCommentId = effect.commentId,
+                            )
+                    }
+                }.launchIn(this)
+        }
 
         if (uiState.initial) {
             ProgressHud()
@@ -277,7 +289,7 @@ object ProfileLoggedScreen : Tab {
                             items(
                                 items = uiState.posts,
                                 key = {
-                                    it.id.toString() + (it.updateDate ?: it.publishDate) + it.read
+                                    it.id.toString() + (it.updateDate ?: it.publishDate)
                                 },
                             ) { post ->
                                 PostCard(
@@ -295,12 +307,18 @@ object ProfileLoggedScreen : Tab {
                                     blurNsfw = false,
                                     downVoteEnabled = uiState.downVoteEnabled,
                                     onClick = {
-                                        model.reduce(ProfileLoggedMviModel.Intent.WillOpenDetail)
-                                        detailOpener.openPostDetail(post)
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.WillOpenDetail(
+                                                postId = post.id,
+                                            ),
+                                        )
                                     },
                                     onReply = {
-                                        model.reduce(ProfileLoggedMviModel.Intent.WillOpenDetail)
-                                        detailOpener.openPostDetail(post)
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.WillOpenDetail(
+                                                postId = post.id,
+                                            ),
+                                        )
                                     },
                                     onOpenCommunity = { community, instance ->
                                         detailOpener.openCommunityDetail(community, instance)
@@ -494,9 +512,11 @@ object ProfileLoggedScreen : Tab {
                                         detailOpener.openCommunityDetail(community, instance)
                                     },
                                     onClick = {
-                                        detailOpener.openPostDetail(
-                                            post = PostModel(id = comment.postId),
-                                            highlightCommentId = comment.id,
+                                        model.reduce(
+                                            ProfileLoggedMviModel.Intent.WillOpenDetail(
+                                                postId = comment.postId,
+                                                commentId = comment.id,
+                                            ),
                                         )
                                     },
                                     onReply = {
