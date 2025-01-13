@@ -154,6 +154,13 @@ class FilteredContentsScreen(
                                 topAppBarState.contentOffset = 0f
                             }
                         }
+
+                        is FilteredContentsMviModel.Effect.OpenDetail ->
+                            detailOpener.openPostDetail(
+                                post = PostModel(id = effect.postId),
+                                highlightCommentId = effect.commentId,
+                                isMod = true,
+                            )
                     }
                 }.launchIn(this)
         }
@@ -369,7 +376,7 @@ class FilteredContentsScreen(
                         items(
                             items = uiState.posts,
                             key = {
-                                it.id.toString() + (it.updateDate ?: it.publishDate) + it.read
+                                it.id.toString() + (it.updateDate ?: it.publishDate)
                             },
                         ) { post ->
 
@@ -482,8 +489,11 @@ class FilteredContentsScreen(
                                         botTagColor = uiState.botTagColor,
                                         meTagColor = uiState.meTagColor,
                                         onClick = {
-                                            model.reduce(FilteredContentsMviModel.Intent.WillOpenDetail)
-                                            detailOpener.openPostDetail(post)
+                                            model.reduce(
+                                                FilteredContentsMviModel.Intent.WillOpenDetail(
+                                                    postId = post.id,
+                                                ),
+                                            )
                                         },
                                         onOpenCommunity = { community, instance ->
                                             detailOpener.openCommunityDetail(
@@ -512,8 +522,11 @@ class FilteredContentsScreen(
                                             )
                                         },
                                         onReply = {
-                                            model.reduce(FilteredContentsMviModel.Intent.WillOpenDetail)
-                                            detailOpener.openPostDetail(post)
+                                            model.reduce(
+                                                FilteredContentsMviModel.Intent.WillOpenDetail(
+                                                    postId = post.id,
+                                                ),
+                                            )
                                         },
                                         onOpenImage = { url ->
                                             navigationCoordinator.pushScreen(
@@ -820,11 +833,11 @@ class FilteredContentsScreen(
                                             detailOpener.openUserDetail(user, instance)
                                         },
                                         onOpen = {
-                                            model.reduce(FilteredContentsMviModel.Intent.WillOpenDetail)
-                                            detailOpener.openPostDetail(
-                                                post = PostModel(id = comment.postId),
-                                                highlightCommentId = comment.id,
-                                                isMod = true,
+                                            model.reduce(
+                                                FilteredContentsMviModel.Intent.WillOpenDetail(
+                                                    postId = comment.postId,
+                                                    commentId = comment.id,
+                                                ),
                                             )
                                         },
                                         onUpVote = {

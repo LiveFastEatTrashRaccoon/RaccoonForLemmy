@@ -100,7 +100,10 @@ interface FilteredContentsMviModel :
             val commentId: Long,
         ) : Intent
 
-        data object WillOpenDetail : Intent
+        data class WillOpenDetail(
+            val postId: Long,
+            val commentId: Long? = null,
+        ) : Intent
     }
 
     data class State(
@@ -136,5 +139,10 @@ interface FilteredContentsMviModel :
 
     sealed interface Effect {
         data object BackToTop : Effect
+
+        data class OpenDetail(
+            val postId: Long,
+            val commentId: Long? = null,
+        ) : Effect
     }
 }

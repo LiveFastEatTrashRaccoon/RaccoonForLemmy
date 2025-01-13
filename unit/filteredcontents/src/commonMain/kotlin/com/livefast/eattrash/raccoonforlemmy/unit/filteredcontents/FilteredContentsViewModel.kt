@@ -212,10 +212,19 @@ class FilteredContentsViewModel(
                         distinguish(comment)
                     }
 
-            FilteredContentsMviModel.Intent.WillOpenDetail -> {
-                val state = postPaginationManager.extractState()
-                postNavigationManager.push(state)
-            }
+            is FilteredContentsMviModel.Intent.WillOpenDetail ->
+                screenModelScope.launch {
+                    if (intent.commentId == null) {
+                        val state = postPaginationManager.extractState()
+                        postNavigationManager.push(state)
+                    }
+                    emitEffect(
+                        FilteredContentsMviModel.Effect.OpenDetail(
+                            postId = intent.postId,
+                            commentId = intent.commentId,
+                        ),
+                    )
+                }
         }
     }
 
