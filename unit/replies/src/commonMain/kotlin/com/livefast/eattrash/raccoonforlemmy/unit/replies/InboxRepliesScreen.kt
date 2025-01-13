@@ -99,6 +99,12 @@ class InboxRepliesScreen : Tab {
                                 lazyListState.scrollToItem(0)
                             }
                         }
+
+                        is InboxRepliesMviModel.Effect.OpenDetail ->
+                            detailOpener.openPostDetail(
+                                post = effect.post,
+                                highlightCommentId = effect.commentId,
+                            )
                     }
                 }.launchIn(this)
         }
@@ -138,7 +144,7 @@ class InboxRepliesScreen : Tab {
                 }
                 items(
                     items = uiState.replies,
-                    key = { it.id.toString() + it.read + uiState.unreadOnly },
+                    key = { it.id.toString() + uiState.unreadOnly },
                 ) { reply ->
 
                     @Composable
@@ -234,17 +240,12 @@ class InboxRepliesScreen : Tab {
                                 downVoteEnabled = uiState.downVoteEnabled,
                                 previewMaxLines = uiState.previewMaxLines,
                                 onClick = { post ->
-                                    if (!reply.read) {
-                                        model.reduce(
-                                            InboxRepliesMviModel.Intent.MarkAsRead(
-                                                read = true,
-                                                id = reply.id,
-                                            ),
-                                        )
-                                    }
-                                    detailOpener.openPostDetail(
-                                        post = post,
-                                        highlightCommentId = reply.comment.id,
+                                    model.reduce(
+                                        InboxRepliesMviModel.Intent.WillOpenDetail(
+                                            id = reply.id,
+                                            post = post,
+                                            commentId = reply.comment.id,
+                                        ),
                                     )
                                 },
                                 onOpenCreator = { user, instance ->

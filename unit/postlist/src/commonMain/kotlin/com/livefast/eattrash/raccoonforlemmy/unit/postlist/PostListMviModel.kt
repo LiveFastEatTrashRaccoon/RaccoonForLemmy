@@ -66,7 +66,9 @@ interface PostListMviModel :
 
         data object PauseZombieMode : Intent
 
-        data object WillOpenDetail : Intent
+        data class WillOpenDetail(
+            val id: Long,
+        ) : Intent
     }
 
     data class UiState(
@@ -106,6 +108,10 @@ interface PostListMviModel :
 
         data class ZombieModeTick(
             val index: Int,
+        ) : Effect
+
+        data class OpenDetail(
+            val post: PostModel,
         ) : Effect
     }
 }

@@ -191,19 +191,26 @@ class MultiCommunityViewModel(
 
             MultiCommunityMviModel.Intent.ClearRead -> clearRead()
             is MultiCommunityMviModel.Intent.MarkAsRead ->
-                markAsRead(
-                    post = uiState.value.posts.first { it.id == intent.id },
-                )
+                screenModelScope.launch {
+                    markAsRead(
+                        post = uiState.value.posts.first { it.id == intent.id },
+                    )
+                }
 
             is MultiCommunityMviModel.Intent.Hide ->
                 hide(
                     post = uiState.value.posts.first { it.id == intent.id },
                 )
 
-            MultiCommunityMviModel.Intent.WillOpenDetail -> {
-                val state = postPaginationManager.extractState()
-                postNavigationManager.push(state)
-            }
+            is MultiCommunityMviModel.Intent.WillOpenDetail ->
+                screenModelScope.launch {
+                    uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                        markAsRead(post)
+                        val state = postPaginationManager.extractState()
+                        postNavigationManager.push(state)
+                        emitEffect(MultiCommunityMviModel.Effect.OpenDetail(post))
+                    }
+                }
         }
     }
 
@@ -314,24 +321,22 @@ class MultiCommunityViewModel(
         }
     }
 
-    private fun markAsRead(post: PostModel) {
+    private suspend fun markAsRead(post: PostModel) {
         if (post.read) {
             return
         }
         val newPost = post.copy(read = true)
-        screenModelScope.launch {
-            try {
-                val auth = identityRepository.authToken.value.orEmpty()
-                postRepository.setRead(
-                    read = true,
-                    postId = post.id,
-                    auth = auth,
-                )
-                handlePostUpdate(newPost)
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                handlePostUpdate(post)
-            }
+        try {
+            val auth = identityRepository.authToken.value.orEmpty()
+            postRepository.setRead(
+                read = true,
+                postId = post.id,
+                auth = auth,
+            )
+            handlePostUpdate(newPost)
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            handlePostUpdate(post)
         }
     }
 

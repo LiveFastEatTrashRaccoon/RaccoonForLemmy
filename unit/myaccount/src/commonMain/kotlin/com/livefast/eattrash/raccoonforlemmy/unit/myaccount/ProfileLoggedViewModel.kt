@@ -217,9 +217,18 @@ class ProfileLoggedViewModel(
                 }
             }
 
-            ProfileLoggedMviModel.Intent.WillOpenDetail -> {
-                val state = postPaginationManager.extractState()
-                postNavigationManager.push(state)
+            is ProfileLoggedMviModel.Intent.WillOpenDetail ->
+                screenModelScope.launch {
+                    if (intent.commentId == null) {
+                        val state = postPaginationManager.extractState()
+                        postNavigationManager.push(state)
+                    }
+                    emitEffect(
+                        ProfileLoggedMviModel.Effect.OpenDetail(
+                            postId = intent.postId,
+                            commentId = intent.commentId,
+                        ),
+                )
             }
 
             is ProfileLoggedMviModel.Intent.RestorePost -> {

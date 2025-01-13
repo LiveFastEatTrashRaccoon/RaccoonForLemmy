@@ -7,6 +7,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 
 @Stable
 interface InboxMentionsMviModel :
@@ -30,6 +31,12 @@ interface InboxMentionsMviModel :
 
         data class DownVoteComment(
             val id: Long,
+        ) : Intent
+
+        data class WillOpenDetail(
+            val id: Long,
+            val post: PostModel,
+            val commentId: Long,
         ) : Intent
     }
 
@@ -58,5 +65,10 @@ interface InboxMentionsMviModel :
         ) : Effect
 
         data object BackToTop : Effect
+
+        data class OpenDetail(
+            val post: PostModel,
+            val commentId: Long,
+        ) : Effect
     }
 }

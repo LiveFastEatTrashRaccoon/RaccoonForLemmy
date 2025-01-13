@@ -166,21 +166,19 @@ class InboxChatViewModel(
         }
     }
 
-    private fun markAsRead(
+    private suspend fun markAsRead(
         read: Boolean,
         messageId: Long,
     ) {
         val auth = identityRepository.authToken.value
-        screenModelScope.launch {
-            val newMessage =
-                messageRepository.markAsRead(
-                    read = read,
-                    messageId = messageId,
-                    auth = auth,
-                )
-            if (newMessage != null) {
-                handleMessageUpdate(newMessage)
-            }
+        val newMessage =
+            messageRepository.markAsRead(
+                read = read,
+                messageId = messageId,
+                auth = auth,
+            )
+        if (newMessage != null) {
+            handleMessageUpdate(newMessage)
         }
     }
 

@@ -268,11 +268,12 @@ class PostListViewModel(
                 shareHelper.share(intent.url)
             }
 
-            is PostListMviModel.Intent.MarkAsRead -> {
-                uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    markAsRead(post = post)
+            is PostListMviModel.Intent.MarkAsRead ->
+                screenModelScope.launch {
+                    uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                        markAsRead(post = post)
+                    }
                 }
-            }
 
             PostListMviModel.Intent.ClearRead -> clearRead()
             is PostListMviModel.Intent.Hide -> {
@@ -298,9 +299,15 @@ class PostListViewModel(
                 }
             }
 
-            PostListMviModel.Intent.WillOpenDetail -> {
-                val state = postPaginationManager.extractState()
-                postNavigationManager.push(state)
+            is PostListMviModel.Intent.WillOpenDetail -> {
+                screenModelScope.launch {
+                    uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                        markAsRead(post)
+                        val state = postPaginationManager.extractState()
+                        postNavigationManager.push(state)
+                        emitEffect(PostListMviModel.Effect.OpenDetail(post))
+                    }
+                }
             }
         }
     }
@@ -427,24 +434,22 @@ class PostListViewModel(
         }
     }
 
-    private fun markAsRead(post: PostModel) {
+    private suspend fun markAsRead(post: PostModel) {
         if (post.read) {
             return
         }
         val newPost = post.copy(read = true)
-        screenModelScope.launch {
-            try {
-                val auth = identityRepository.authToken.value.orEmpty()
-                postRepository.setRead(
-                    read = true,
-                    postId = post.id,
-                    auth = auth,
-                )
-                handlePostUpdate(newPost)
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                handlePostUpdate(post)
-            }
+        try {
+            val auth = identityRepository.authToken.value.orEmpty()
+            postRepository.setRead(
+                read = true,
+                postId = post.id,
+                auth = auth,
+            )
+            handlePostUpdate(newPost)
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            handlePostUpdate(post)
         }
     }
 

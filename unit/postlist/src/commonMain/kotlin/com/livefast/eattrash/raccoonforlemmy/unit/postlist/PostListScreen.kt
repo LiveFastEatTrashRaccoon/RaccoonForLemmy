@@ -188,6 +188,9 @@ class PostListScreen : Screen {
                                 }
                             }
                         }
+
+                        is PostListMviModel.Effect.OpenDetail ->
+                            detailOpener.openPostDetail(effect.post)
                     }
                 }.launchIn(this)
         }
@@ -361,7 +364,7 @@ class PostListScreen : Screen {
                             key = {
                                 it.id.toString() + (
                                     it.updateDate ?: it.publishDate
-                                ) + it.read + uiState.isLogged
+                                ) + uiState.isLogged
                             },
                         ) { post ->
                             LaunchedEffect(post.id) {
@@ -504,9 +507,7 @@ class PostListScreen : Screen {
                                         botTagColor = uiState.botTagColor,
                                         meTagColor = uiState.meTagColor,
                                         onClick = {
-                                            model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
-                                            model.reduce(PostListMviModel.Intent.WillOpenDetail)
-                                            detailOpener.openPostDetail(post)
+                                            model.reduce(PostListMviModel.Intent.WillOpenDetail(post.id))
                                         },
                                         onDoubleClick =
                                             {
@@ -549,9 +550,9 @@ class PostListScreen : Screen {
                                         },
                                         onReply = {
                                             if (uiState.isLogged) {
-                                                model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
-                                                model.reduce(PostListMviModel.Intent.WillOpenDetail)
-                                                detailOpener.openPostDetail(post)
+                                                model.reduce(
+                                                    PostListMviModel.Intent.WillOpenDetail(post.id),
+                                                )
                                             }
                                         },
                                         onOpenImage = { url ->

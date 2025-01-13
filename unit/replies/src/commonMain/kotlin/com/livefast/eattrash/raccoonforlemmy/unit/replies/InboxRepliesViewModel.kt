@@ -101,10 +101,11 @@ class InboxRepliesViewModel(
                     emitEffect(InboxRepliesMviModel.Effect.BackToTop)
                 }
 
-            is InboxRepliesMviModel.Intent.MarkAsRead -> {
-                val reply = uiState.value.replies.first { it.id == intent.id }
-                markAsRead(read = intent.read, reply = reply)
-            }
+            is InboxRepliesMviModel.Intent.MarkAsRead ->
+                screenModelScope.launch {
+                    val reply = uiState.value.replies.first { it.id == intent.id }
+                    markAsRead(read = intent.read, reply = reply)
+                }
 
             InboxRepliesMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             is InboxRepliesMviModel.Intent.DownVoteComment -> {
@@ -116,6 +117,24 @@ class InboxRepliesViewModel(
                 val reply = uiState.value.replies.first { it.id == intent.id }
                 toggleUpVoteComment(reply)
             }
+
+            is InboxRepliesMviModel.Intent.WillOpenDetail ->
+                screenModelScope.launch {
+                    uiState.value.replies.firstOrNull { it.id == intent.id }?.also { reply ->
+                        if (!reply.read) {
+                            markAsRead(
+                                reply = reply,
+                                read = true,
+                            )
+                        }
+                        emitEffect(
+                            InboxRepliesMviModel.Effect.OpenDetail(
+                                post = intent.post,
+                                commentId = intent.commentId,
+                            ),
+                        )
+                    }
+                }
         }
     }
 
@@ -199,33 +218,31 @@ class InboxRepliesViewModel(
         }
     }
 
-    private fun markAsRead(
+    private suspend fun markAsRead(
         read: Boolean,
         reply: PersonMentionModel,
     ) {
         val auth = identityRepository.authToken.value
-        screenModelScope.launch {
-            userRepository.setReplyRead(
-                read = read,
-                replyId = reply.id,
-                auth = auth,
-            )
-            val currentState = uiState.value
-            if (read && currentState.unreadOnly) {
-                updateState {
-                    it.copy(
-                        replies =
-                            currentState.replies.filter { r ->
-                                r.id != reply.id
-                            },
-                    )
-                }
-            } else {
-                val newItem = reply.copy(read = read)
-                handleItemUpdate(newItem)
+        userRepository.setReplyRead(
+            read = read,
+            replyId = reply.id,
+            auth = auth,
+        )
+        val currentState = uiState.value
+        if (read && currentState.unreadOnly) {
+            updateState {
+                it.copy(
+                    replies =
+                        currentState.replies.filter { r ->
+                            r.id != reply.id
+                        },
+                )
             }
-            updateUnreadItems()
+        } else {
+            val newItem = reply.copy(read = read)
+            handleItemUpdate(newItem)
         }
+        updateUnreadItems()
     }
 
     private fun toggleUpVoteComment(mention: PersonMentionModel) {

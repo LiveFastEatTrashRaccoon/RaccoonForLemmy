@@ -138,6 +138,9 @@ class MultiCommunityScreen(
                                 topAppBarState.contentOffset = 0f
                             }
                         }
+
+                        is MultiCommunityMviModel.Effect.OpenDetail ->
+                            detailOpener.openPostDetail(post = effect.post)
                     }
                 }.launchIn(this)
         }
@@ -282,7 +285,7 @@ class MultiCommunityScreen(
                     items(
                         items = uiState.posts,
                         key = {
-                            it.id.toString() + (it.updateDate ?: it.publishDate) + it.read
+                            it.id.toString() + (it.updateDate ?: it.publishDate)
                         },
                     ) { post ->
                         LaunchedEffect(post.id) {
@@ -404,9 +407,9 @@ class MultiCommunityScreen(
                                     botTagColor = uiState.botTagColor,
                                     meTagColor = uiState.meTagColor,
                                     onClick = {
-                                        model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))
-                                        model.reduce(MultiCommunityMviModel.Intent.WillOpenDetail)
-                                        detailOpener.openPostDetail(post)
+                                        model.reduce(
+                                            MultiCommunityMviModel.Intent.WillOpenDetail(post.id),
+                                        )
                                     },
                                     onDoubleClick =
                                         {
@@ -439,8 +442,9 @@ class MultiCommunityScreen(
                                         )
                                     },
                                     onReply = {
-                                        model.reduce(MultiCommunityMviModel.Intent.WillOpenDetail)
-                                        detailOpener.openPostDetail(post)
+                                        model.reduce(
+                                            MultiCommunityMviModel.Intent.WillOpenDetail(post.id),
+                                        )
                                     },
                                     onOpenImage = { url ->
                                         model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))

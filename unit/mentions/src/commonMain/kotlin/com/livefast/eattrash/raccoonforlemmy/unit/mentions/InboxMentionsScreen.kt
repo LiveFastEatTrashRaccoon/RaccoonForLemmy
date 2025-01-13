@@ -99,6 +99,12 @@ class InboxMentionsScreen : Tab {
                                 lazyListState.scrollToItem(0)
                             }
                         }
+
+                        is InboxMentionsMviModel.Effect.OpenDetail ->
+                            detailOpener.openPostDetail(
+                                post = effect.post,
+                                highlightCommentId = effect.commentId,
+                            )
                     }
                 }.launchIn(this)
         }
@@ -138,7 +144,7 @@ class InboxMentionsScreen : Tab {
                 }
                 items(
                     items = uiState.mentions,
-                    key = { it.id.toString() + it.read + uiState.unreadOnly },
+                    key = { it.id.toString() + uiState.unreadOnly },
                 ) { mention ->
                     @Composable
                     fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> =
@@ -233,18 +239,12 @@ class InboxMentionsScreen : Tab {
                                 downVoteEnabled = uiState.downVoteEnabled,
                                 previewMaxLines = uiState.previewMaxLines,
                                 onClick = { post ->
-                                    if (!mention.read) {
-                                        model.reduce(
-                                            InboxMentionsMviModel.Intent.MarkAsRead(
-                                                read = true,
-                                                id = mention.id,
-                                            ),
-                                        )
-                                    }
-                                    detailOpener.openPostDetail(
-                                        post = post,
-                                        highlightCommentId = mention.comment.id,
-                                        otherInstance = "",
+                                    model.reduce(
+                                        InboxMentionsMviModel.Intent.WillOpenDetail(
+                                            id = mention.id,
+                                            post = post,
+                                            commentId = mention.comment.id,
+                                        ),
                                     )
                                 },
                                 onOpenCreator = { user, instance ->

@@ -246,6 +246,8 @@ class CommunityDetailScreen(
                         }
 
                         CommunityDetailMviModel.Effect.Back -> navigationCoordinator.popScreen()
+                        is CommunityDetailMviModel.Effect.OpenDetail ->
+                            detailOpener.openPostDetail(effect.post)
                     }
                 }.launchIn(this)
         }
@@ -822,7 +824,7 @@ class CommunityDetailScreen(
                             items(
                                 items = uiState.posts,
                                 key = {
-                                    it.id.toString() + (it.updateDate ?: it.publishDate) + it.read
+                                    it.id.toString() + (it.updateDate ?: it.publishDate)
                                 },
                             ) { post ->
                                 LaunchedEffect(post.id) {
@@ -977,11 +979,10 @@ class CommunityDetailScreen(
                                             meTagColor = uiState.meTagColor,
                                             onClick = {
                                                 model.reduce(
-                                                    CommunityDetailMviModel.Intent.MarkAsRead(
+                                                    CommunityDetailMviModel.Intent.WillOpenDetail(
                                                         post.id,
                                                     ),
                                                 )
-                                                model.reduce(CommunityDetailMviModel.Intent.WillOpenDetail)
                                                 detailOpener.openPostDetail(
                                                     post = post,
                                                     otherInstance = otherInstanceName,
@@ -1027,11 +1028,10 @@ class CommunityDetailScreen(
                                             onReply =
                                                 {
                                                     model.reduce(
-                                                        CommunityDetailMviModel.Intent.MarkAsRead(
+                                                        CommunityDetailMviModel.Intent.WillOpenDetail(
                                                             post.id,
                                                         ),
                                                     )
-                                                    model.reduce(CommunityDetailMviModel.Intent.WillOpenDetail)
                                                     detailOpener.openPostDetail(post)
                                                 }.takeIf { uiState.isLogged && !isOnOtherInstance },
                                             onOpenImage = { url ->
