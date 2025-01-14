@@ -746,9 +746,7 @@ private fun ExtendedPost(
                             if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
                                 uriHandler.openUri(postLinkUrl)
                             } else {
-                                val urlToOpen =
-                                    post.url?.takeIf { it.looksLikeAnImage } ?: post.imageUrl
-                                onOpenImage?.invoke(urlToOpen)
+                                onOpenImage?.invoke(post.imageUrl)
                             }
                         },
                         onDoubleClick = onDoubleClick,
