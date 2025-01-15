@@ -21,7 +21,7 @@ internal class DefaultPostProcessor(
                 )
 
             if (resolved != null) {
-                detailOpener.openPostDetail(post = resolved)
+                detailOpener.openPostDetail(resolved)
                 true
             } else {
                 val (post, instance) = urlDecoder.getPost(url)

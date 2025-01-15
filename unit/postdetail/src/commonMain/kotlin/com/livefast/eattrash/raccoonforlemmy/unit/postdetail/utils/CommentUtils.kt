@@ -20,7 +20,7 @@ internal fun List<CommentModel>.sortToNestedOrder(ancestorId: Long? = null): Lis
     // populate a memo for quick access
     val memo = mutableMapOf<Long, CommentNode>()
     for (comment in this) {
-        val node = CommentNode.Actual(comment = comment)
+        val node = CommentNode.Actual(comment)
         memo[comment.id] = node
     }
 
@@ -44,22 +44,23 @@ internal fun List<CommentModel>.sortToNestedOrder(ancestorId: Long? = null): Lis
         )
 
     // linearize the tree and convert to comment list
-    return mutableListOf<CommentNode>().apply {
-        linearize(
-            node = root,
-            list = this,
-        )
-    }.map { node ->
-        when (node) {
-            is CommentNode.Actual -> node.comment
-            is CommentNode.Placeholder ->
-                CommentModel(
-                    id = node.id,
-                    text = "",
-                    removed = true,
-                )
+    return mutableListOf<CommentNode>()
+        .apply {
+            linearize(
+                node = root,
+                list = this,
+            )
+        }.map { node ->
+            when (node) {
+                is CommentNode.Actual -> node.comment
+                is CommentNode.Placeholder ->
+                    CommentModel(
+                        id = node.id,
+                        text = "",
+                        removed = true,
+                    )
+            }
         }
-    }
 }
 
 data class PlaceholderComment(
@@ -146,20 +147,20 @@ private fun connectNodesAndGeneratePlaceholders(
 private fun joinForestUnderSingleRoot(
     ancestorId: Long?,
     memo: Map<Long, CommentNode>,
-): CommentNode {
-    return CommentNode.Placeholder(
-        missingComment =
-            PlaceholderComment(
-                id = 0,
-                path = "",
-            ),
-    ).apply {
-        children +=
-            memo.values.filter { node ->
-                node.parent?.id == ancestorId
-            }
-    }
-}
+): CommentNode =
+    CommentNode
+        .Placeholder(
+            missingComment =
+                PlaceholderComment(
+                    id = 0,
+                    path = "",
+                ),
+        ).apply {
+            children +=
+                memo.values.filter { node ->
+                    node.parent?.id == ancestorId
+                }
+        }
 
 private fun linearize(
     node: CommentNode,

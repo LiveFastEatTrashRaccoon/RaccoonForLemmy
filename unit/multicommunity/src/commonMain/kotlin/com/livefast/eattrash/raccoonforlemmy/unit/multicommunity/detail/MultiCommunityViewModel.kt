@@ -186,7 +186,7 @@ class MultiCommunityViewModel(
                 if (intent.feedback) {
                     hapticFeedback.vibrate()
                 }
-                toggleUpVote(post = uiState.value.posts.first { it.id == intent.id })
+                toggleUpVote(uiState.value.posts.first { it.id == intent.id })
             }
 
             MultiCommunityMviModel.Intent.ClearRead -> clearRead()

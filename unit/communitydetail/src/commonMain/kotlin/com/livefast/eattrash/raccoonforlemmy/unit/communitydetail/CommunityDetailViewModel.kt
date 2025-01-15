@@ -266,7 +266,7 @@ class CommunityDetailViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleDownVotePost(post = post)
+                    toggleDownVotePost(post)
                 }
             }
 
@@ -279,7 +279,7 @@ class CommunityDetailViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleSavePost(post = post)
+                    toggleSavePost(post)
                 }
             }
 
@@ -288,7 +288,7 @@ class CommunityDetailViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleUpVotePost(post = post)
+                    toggleUpVotePost(post)
                 }
             }
 
@@ -302,12 +302,12 @@ class CommunityDetailViewModel(
             is CommunityDetailMviModel.Intent.MarkAsRead ->
                 screenModelScope.launch {
                     markAsRead(uiState.value.posts.first { it.id == intent.id })
-            }
+                }
 
             CommunityDetailMviModel.Intent.ClearRead -> clearRead()
             is CommunityDetailMviModel.Intent.Hide -> {
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    hide(post = post)
+                    hide(post)
                 }
             }
 
@@ -332,21 +332,21 @@ class CommunityDetailViewModel(
                 uiState.value.posts
                     .firstOrNull { it.id == intent.id }
                     ?.also { post ->
-                        feature(post = post)
+                        feature(post)
                     }
 
             is CommunityDetailMviModel.Intent.AdminFeaturePost ->
                 uiState.value.posts
                     .firstOrNull { it.id == intent.id }
                     ?.also { post ->
-                        featureLocal(post = post)
+                        featureLocal(post)
                     }
 
             is CommunityDetailMviModel.Intent.ModLockPost ->
                 uiState.value.posts
                     .firstOrNull { it.id == intent.id }
                     ?.also { post ->
-                        lock(post = post)
+                        lock(post)
                     }
 
             is CommunityDetailMviModel.Intent.ModToggleModUser -> {
@@ -376,8 +376,8 @@ class CommunityDetailViewModel(
                             markAsRead(post)
                             val state = postPaginationManager.extractState()
                             postNavigationManager.push(state)
-                    }
-            }
+                        }
+                }
 
             CommunityDetailMviModel.Intent.UnhideCommunity -> {
                 unhideCommunity()
@@ -421,7 +421,10 @@ class CommunityDetailViewModel(
         val auth = identityRepository.authToken.value
         val accountId = accountRepository.getActive()?.id
         val isFavorite =
-            favoriteCommunityRepository.getBy(accountId, currentState.community.id) != null
+            favoriteCommunityRepository.getBy(
+                accountId = accountId,
+                communityId = currentState.community.id,
+            ) != null
         val refreshedCommunity =
             communityRepository
                 .get(

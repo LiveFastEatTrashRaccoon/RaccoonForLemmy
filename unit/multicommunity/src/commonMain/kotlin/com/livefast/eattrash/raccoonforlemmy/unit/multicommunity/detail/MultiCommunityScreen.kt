@@ -140,7 +140,7 @@ class MultiCommunityScreen(
                         }
 
                         is MultiCommunityMviModel.Effect.OpenDetail ->
-                            detailOpener.openPostDetail(post = effect.post)
+                            detailOpener.openPostDetail(effect.post)
                     }
                 }.launchIn(this)
         }

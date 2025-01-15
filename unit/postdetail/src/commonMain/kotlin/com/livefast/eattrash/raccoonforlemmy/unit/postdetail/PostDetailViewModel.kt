@@ -214,17 +214,13 @@ class PostDetailViewModel(
             lemmyValueCache.isCurrentUserAdmin
                 .onEach { value ->
                     updateState {
-                        it.copy(
-                            isAdmin = value,
-                        )
+                        it.copy(isAdmin = value)
                     }
                 }.launchIn(this)
             lemmyValueCache.isDownVoteEnabled
                 .onEach { value ->
                     updateState {
-                        it.copy(
-                            downVoteEnabled = value,
-                        )
+                        it.copy(downVoteEnabled = value)
                     }
                 }.launchIn(this)
 
@@ -246,7 +242,10 @@ class PostDetailViewModel(
                 }
                 // reset unread comments
                 notificationCenter.send(
-                    event = NotificationCenterEvent.PostUpdated(updatedPost.copy(unreadComments = 0)),
+                    event =
+                        NotificationCenterEvent.PostUpdated(
+                            updatedPost.copy(unreadComments = 0),
+                        ),
                 )
             }
 
@@ -272,9 +271,7 @@ class PostDetailViewModel(
                 val admins =
                     uiState.value.post.community
                         .let { community ->
-                            siteRepository.getAdmins(
-                                otherInstance = community?.host,
-                            )
+                            siteRepository.getAdmins(otherInstance = community?.host)
                         }
 
                 val sortTypes =
@@ -356,7 +353,7 @@ class PostDetailViewModel(
                 uiState.value.comments
                     .firstOrNull { it.id == intent.commentId }
                     ?.also { comment ->
-                        toggleDownVoteComment(comment = comment)
+                        toggleDownVoteComment(comment)
                     }
             }
 
@@ -364,7 +361,7 @@ class PostDetailViewModel(
                 if (intent.feedback) {
                     hapticFeedback.vibrate()
                 }
-                toggleDownVotePost(post = uiState.value.post)
+                toggleDownVotePost(uiState.value.post)
             }
 
             is PostDetailMviModel.Intent.SaveComment -> {
@@ -374,7 +371,7 @@ class PostDetailViewModel(
                 uiState.value.comments
                     .firstOrNull { it.id == intent.commentId }
                     ?.also { comment ->
-                        toggleSaveComment(comment = comment)
+                        toggleSaveComment(comment)
                     }
             }
 
@@ -382,7 +379,7 @@ class PostDetailViewModel(
                 if (intent.feedback) {
                     hapticFeedback.vibrate()
                 }
-                toggleSavePost(post = intent.post)
+                toggleSavePost(intent.post)
             }
 
             is PostDetailMviModel.Intent.Share -> {
@@ -396,7 +393,7 @@ class PostDetailViewModel(
                 uiState.value.comments
                     .firstOrNull { it.id == intent.commentId }
                     ?.also { comment ->
-                        toggleUpVoteComment(comment = comment)
+                        toggleUpVoteComment(comment)
                     }
             }
 
@@ -404,7 +401,7 @@ class PostDetailViewModel(
                 if (intent.feedback) {
                     hapticFeedback.vibrate()
                 }
-                toggleUpVotePost(post = uiState.value.post)
+                toggleUpVotePost(uiState.value.post)
             }
 
             is PostDetailMviModel.Intent.FetchMoreComments -> {

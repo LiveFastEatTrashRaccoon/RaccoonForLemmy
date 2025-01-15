@@ -134,7 +134,7 @@ class FilteredContentsViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleUpVote(post = post)
+                    toggleUpVote(post)
                 }
             }
 
@@ -143,7 +143,7 @@ class FilteredContentsViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleDownVote(post = post)
+                    toggleDownVote(post)
                 }
             }
 
@@ -152,7 +152,7 @@ class FilteredContentsViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleSave(post = post)
+                    toggleSave(post)
                 }
             }
 
@@ -160,21 +160,21 @@ class FilteredContentsViewModel(
                 uiState.value.posts
                     .firstOrNull { it.id == intent.id }
                     ?.also { post ->
-                        feature(post = post)
+                        feature(post)
                     }
 
             is FilteredContentsMviModel.Intent.AdminFeaturePost ->
                 uiState.value.posts
                     .firstOrNull { it.id == intent.id }
                     ?.also { post ->
-                        featureLocal(post = post)
+                        featureLocal(post)
                     }
 
             is FilteredContentsMviModel.Intent.ModLockPost ->
                 uiState.value.posts
                     .firstOrNull { it.id == intent.id }
                     ?.also { post ->
-                        lock(post = post)
+                        lock(post)
                     }
 
             is FilteredContentsMviModel.Intent.UpVoteComment -> {
@@ -182,7 +182,7 @@ class FilteredContentsViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.comments.firstOrNull { it.id == intent.commentId }?.also { comment ->
-                    toggleUpVoteComment(comment = comment)
+                    toggleUpVoteComment(comment)
                 }
             }
 
@@ -191,7 +191,7 @@ class FilteredContentsViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.comments.firstOrNull { it.id == intent.commentId }?.also { comment ->
-                    toggleDownVoteComment(comment = comment)
+                    toggleDownVoteComment(comment)
                 }
             }
 
@@ -200,7 +200,7 @@ class FilteredContentsViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.comments.firstOrNull { it.id == intent.commentId }?.also { comment ->
-                    toggleSaveComment(comment = comment)
+                    toggleSaveComment(comment)
                 }
             }
 

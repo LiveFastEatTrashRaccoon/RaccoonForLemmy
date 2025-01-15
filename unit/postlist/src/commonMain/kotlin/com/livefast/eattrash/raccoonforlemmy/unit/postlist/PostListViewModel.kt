@@ -240,7 +240,7 @@ class PostListViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleDownVote(post = post)
+                    toggleDownVote(post)
                 }
             }
 
@@ -249,7 +249,7 @@ class PostListViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleSave(post = post)
+                    toggleSave(post)
                 }
             }
 
@@ -258,7 +258,7 @@ class PostListViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleUpVote(post = post)
+                    toggleUpVote(post)
                 }
             }
 
@@ -271,14 +271,14 @@ class PostListViewModel(
             is PostListMviModel.Intent.MarkAsRead ->
                 screenModelScope.launch {
                     uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                        markAsRead(post = post)
+                        markAsRead(post)
                     }
                 }
 
             PostListMviModel.Intent.ClearRead -> clearRead()
             is PostListMviModel.Intent.Hide -> {
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    hide(post = post)
+                    hide(post)
                 }
             }
 
