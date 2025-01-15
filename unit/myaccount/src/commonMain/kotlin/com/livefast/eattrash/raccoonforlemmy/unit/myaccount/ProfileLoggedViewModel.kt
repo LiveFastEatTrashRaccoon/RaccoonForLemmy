@@ -168,7 +168,7 @@ class ProfileLoggedViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.comments.firstOrNull { it.id == intent.id }?.also { comment ->
-                    toggleDownVoteComment(comment = comment)
+                    toggleDownVoteComment(comment)
                 }
             }
 
@@ -177,7 +177,7 @@ class ProfileLoggedViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleDownVotePost(post = post)
+                    toggleDownVotePost(post)
                 }
             }
 
@@ -186,7 +186,7 @@ class ProfileLoggedViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.comments.firstOrNull { it.id == intent.id }?.also { comment ->
-                    toggleSaveComment(comment = comment)
+                    toggleSaveComment(comment)
                 }
             }
 
@@ -195,7 +195,7 @@ class ProfileLoggedViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleSavePost(post = post)
+                    toggleSavePost(post)
                 }
             }
 
@@ -204,7 +204,7 @@ class ProfileLoggedViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.comments.firstOrNull { it.id == intent.id }?.also { comment ->
-                    toggleUpVoteComment(comment = comment)
+                    toggleUpVoteComment(comment)
                 }
             }
 
@@ -213,7 +213,7 @@ class ProfileLoggedViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleUpVotePost(post = post)
+                    toggleUpVotePost(post)
                 }
             }
 
@@ -228,8 +228,8 @@ class ProfileLoggedViewModel(
                             postId = intent.postId,
                             commentId = intent.commentId,
                         ),
-                )
-            }
+                    )
+                }
 
             is ProfileLoggedMviModel.Intent.RestorePost -> {
                 restorePost(intent.id)

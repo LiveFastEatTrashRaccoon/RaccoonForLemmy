@@ -239,7 +239,7 @@ class UserDetailViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.comments.firstOrNull { it.id == intent.id }?.also { comment ->
-                    toggleDownVoteComment(comment = comment)
+                    toggleDownVoteComment(comment)
                 }
             }
 
@@ -248,9 +248,7 @@ class UserDetailViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleDownVote(
-                        post = post,
-                    )
+                    toggleDownVote(post)
                 }
             }
 
@@ -270,7 +268,7 @@ class UserDetailViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.comments.firstOrNull { it.id == intent.id }?.also { comment ->
-                    toggleSaveComment(comment = comment)
+                    toggleSaveComment(comment)
                 }
             }
 
@@ -279,7 +277,7 @@ class UserDetailViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleSave(post = post)
+                    toggleSave(post)
                 }
             }
 
@@ -288,7 +286,7 @@ class UserDetailViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.comments.firstOrNull { it.id == intent.id }?.also { comment ->
-                    toggleUpVoteComment(comment = comment)
+                    toggleUpVoteComment(comment)
                 }
             }
 
@@ -297,7 +295,7 @@ class UserDetailViewModel(
                     hapticFeedback.vibrate()
                 }
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
-                    toggleUpVote(post = post)
+                    toggleUpVote(post)
                 }
             }
 

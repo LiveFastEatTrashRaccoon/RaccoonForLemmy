@@ -20,7 +20,7 @@ internal class DefaultUserProcessor(
                     auth = auth,
                 )
             if (resolved != null) {
-                detailOpener.openUserDetail(user = resolved)
+                detailOpener.openUserDetail(resolved)
                 true
             } else {
                 val user = urlDecoder.getUser(url)
