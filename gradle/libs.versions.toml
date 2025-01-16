@@ -1,6 +1,6 @@
 [versions]
 
-androidx-activity = "1.9.3"
+androidx-activity = "1.10.0"
 androidx-browser = "1.8.0"
 androidx-core = "1.15.0"
 androidx-crypto = "1.0.0"
