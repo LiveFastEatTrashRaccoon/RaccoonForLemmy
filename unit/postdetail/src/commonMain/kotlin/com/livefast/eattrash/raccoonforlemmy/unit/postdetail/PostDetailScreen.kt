@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -206,10 +205,6 @@ class PostDetailScreen(
             }
         var postToDelete by remember { mutableStateOf<Unit?>(null) }
         var commentIdToDelete by remember { mutableStateOf<Long?>(null) }
-        val statusBarInset =
-            with(LocalDensity.current) {
-                WindowInsets.statusBars.getTop(this)
-            }
         val bottomNavigationInsetPx =
             with(LocalDensity.current) {
                 WindowInsets.navigationBars.getBottom(this)
@@ -2006,7 +2001,7 @@ class PostDetailScreen(
         if (sortBottomSheetOpened) {
             SortBottomSheet(
                 values = uiState.availableSortTypes,
-                expandTop = true,
+                expandTop = false,
                 onSelected = { value ->
                     sortBottomSheetOpened = false
                     if (value != null) {
