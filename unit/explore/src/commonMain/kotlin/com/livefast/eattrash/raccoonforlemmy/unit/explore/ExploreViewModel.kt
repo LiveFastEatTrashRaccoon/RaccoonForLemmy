@@ -223,7 +223,12 @@ class ExploreViewModel(
     }
 
     private suspend fun updateAvailableSortTypes() {
-        val sortTypes = getSortTypesUseCase.getTypesForPosts()
+        val sortTypes =
+            if (uiState.value.resultType == SearchResultType.Comments) {
+                getSortTypesUseCase.getTypesForComments(otherInstance = otherInstance)
+            } else {
+                getSortTypesUseCase.getTypesForPosts(otherInstance = otherInstance)
+            }
         updateState { it.copy(availableSortTypes = sortTypes) }
     }
 
@@ -362,6 +367,7 @@ class ExploreViewModel(
         screenModelScope.launch {
             updateState { it.copy(resultType = value) }
             emitEffect(ExploreMviModel.Effect.BackToTop)
+            updateAvailableSortTypes()
             refresh()
         }
     }

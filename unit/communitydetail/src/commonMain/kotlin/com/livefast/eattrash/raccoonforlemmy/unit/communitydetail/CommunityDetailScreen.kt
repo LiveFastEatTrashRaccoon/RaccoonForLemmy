@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -70,7 +69,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -198,10 +196,6 @@ class CommunityDetailScreen(
                 }
             }
         var itemIdToDelete by remember { mutableStateOf<Long?>(null) }
-        val statusBarInset =
-            with(LocalDensity.current) {
-                WindowInsets.statusBars.getTop(this)
-            }
         var selectLanguageDialogOpen by remember { mutableStateOf(false) }
         var unsubscribeConfirmDialogOpen by remember { mutableStateOf(false) }
         var deleteConfirmDialogOpen by remember { mutableStateOf(false) }

@@ -1259,7 +1259,7 @@ class UserDetailScreen(
         if (sortBottomSheetOpened || defaultSortBottomSheetOpened) {
             SortBottomSheet(
                 values = uiState.availableSortTypes,
-                expandTop = true,
+                expandTop = uiState.section == UserDetailSection.Posts,
                 onSelected = { value ->
                     val wasDefaultSortBottomSheetOpened = defaultSortBottomSheetOpened
                     sortBottomSheetOpened = false
