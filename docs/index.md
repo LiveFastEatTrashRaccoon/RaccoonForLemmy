@@ -165,6 +165,7 @@ A special thanks goes to all those who contributed so far (in nearly chronologic
 - [monstorix](https://hosted.weblate.org/user/monstorix)
 - [gnu-ewm](https://hosted.weblate.org/user/gnu-ewm)
 - [beyanibash](https://hosted.weblate.org/user/beyanibash)
+- [Tigg](https://hosted.weblate.org/user/tigg)
 - all those who reported feedback and ideas through the Lemmy community, GitHub issues, emails,
   private messages, homing pigeons and every other imaginable media.
 
