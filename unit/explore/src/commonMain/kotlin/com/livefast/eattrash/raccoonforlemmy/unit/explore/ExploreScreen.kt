@@ -866,7 +866,7 @@ class ExploreScreen(
         if (sortBottomSheetOpened) {
             SortBottomSheet(
                 values = uiState.availableSortTypes,
-                expandTop = true,
+                expandTop = uiState.resultType != SearchResultType.Comments,
                 onSelected = { value ->
                     sortBottomSheetOpened = false
                     if (value != null) {
