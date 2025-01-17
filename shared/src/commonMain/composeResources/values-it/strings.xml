@@ -154,7 +154,7 @@
     <string name="login_field_instance_name">Nome istanza</string>
     <string name="login_field_label_optional">(opzionale)</string>
     <string name="login_field_password">Password</string>
-    <string name="login_field_token">TOTP 2FA token</string>
+    <string name="login_field_token">Token TOTP 2FA</string>
     <string name="login_field_user_name">Nome utente (o email)</string>
     <string name="manage_accounts_button_add">Aggiungi account</string>
     <string name="manage_accounts_title">Gestisci account</string>
@@ -255,7 +255,7 @@
     <string name="profile_thousand_short">K</string>
     <string name="profile_upvotes_downvotes">Voti positivi &amp; negativi</string>
     <string name="profile_year_short">a</string>
-    <string name="report_action_resolve">Segna come risolto</string>
+    <string name="report_action_resolve">Risolvi</string>
     <string name="report_action_unresolve">Segna come non risolto</string>
     <string name="report_list_title">Elenco segnalazioni</string>
     <string name="report_list_type_all">Tutte</string>
@@ -431,7 +431,8 @@
     <string name="user_info_admin">amministratore</string>
     <string name="user_info_moderates">Moderatore di</string>
     <plurals name="inbox_notification_content">
-        <item quantity="one">C'è %1$d elemento non letto</item>
+        <item quantity="one">C\'è %1$d elemento non letto</item>
+        <item quantity="many">Ci sono %1$d di elementi non letti</item>
         <item quantity="other">Ci sono %1$d elementi non letti</item>
     </plurals>
     <string name="bar_theme_solid">Solido</string>
