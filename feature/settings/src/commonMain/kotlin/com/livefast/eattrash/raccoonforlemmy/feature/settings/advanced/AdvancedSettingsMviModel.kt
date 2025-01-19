@@ -126,6 +126,7 @@ interface AdvancedSettingsMviModel :
         val alternateMarkdownRenderingItemVisible: Boolean = false,
         val enableAlternateMarkdownRendering: Boolean = false,
         val restrictLocalUserSearch: Boolean = false,
+        val isBarThemeSupported: Boolean = false,
     )
 
     sealed interface Effect {
