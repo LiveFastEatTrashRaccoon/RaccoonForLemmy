@@ -75,12 +75,12 @@ private fun String.quoteFixUp(): String =
         lines().forEach { originalLine ->
             val cleanLine =
                 originalLine
-                    // removes list inside quotes
+                    // fix bug due to which list inside quotes are not rendered correctly
                     .replace(Regex("^>-"), "> •")
                     .replace(Regex("^> -"), "> •")
                     .replace(Regex("^> \\*"), "> •")
-                    // empty quotes
-                    .replace(Regex("^>\\s*$"), " \n")
+                    // fix bug due to which only first paragraph is shown in quote if "> \n" occurs
+                    .replace(Regex("^>\\s*$"), "> ")
             if (cleanLine.isNotEmpty()) {
                 finalLines += cleanLine
             }
