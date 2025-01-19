@@ -29,6 +29,7 @@ val settingsTabModule =
                     exportSettings = instance(),
                     appConfigStore = instance(),
                     appInfoRepository = instance(),
+                    barColorProvider = instance(),
                 )
             }
         }
