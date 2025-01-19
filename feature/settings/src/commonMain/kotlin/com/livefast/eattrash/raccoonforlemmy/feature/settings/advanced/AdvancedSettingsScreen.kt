@@ -199,13 +199,15 @@ class AdvancedSettingsScreen : Screen {
                     )
 
                     // system bar theme
-                    SettingsRow(
-                        title = LocalStrings.current.settingsBarTheme,
-                        value = uiState.systemBarTheme.toReadableName(),
-                        onTap = {
-                            barThemeBottomSheetOpened = true
-                        },
-                    )
+                    if (uiState.isBarThemeSupported) {
+                        SettingsRow(
+                            title = LocalStrings.current.settingsBarTheme,
+                            value = uiState.systemBarTheme.toReadableName(),
+                            onTap = {
+                                barThemeBottomSheetOpened = true
+                            },
+                        )
+                    }
 
                     // bottom navigation hiding
                     SettingsSwitchRow(

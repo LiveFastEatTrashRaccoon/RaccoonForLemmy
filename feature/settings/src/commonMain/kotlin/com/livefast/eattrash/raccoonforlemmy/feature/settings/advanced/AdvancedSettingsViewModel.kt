@@ -5,6 +5,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.BarColorProvider
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.toSelectNumberBottomSheetType
@@ -52,6 +53,7 @@ class AdvancedSettingsViewModel(
     private val exportSettings: ExportSettingsUseCase,
     private val appConfigStore: AppConfigStore,
     private val appInfoRepository: AppInfoRepository,
+    private val barColorProvider: BarColorProvider,
 ) : DefaultMviModel<AdvancedSettingsMviModel.Intent, AdvancedSettingsMviModel.UiState, AdvancedSettingsMviModel.Effect>(
         initialState = AdvancedSettingsMviModel.UiState(),
     ),
@@ -164,6 +166,7 @@ class AdvancedSettingsViewModel(
                     openPostWebPageOnImageClick = settings.openPostWebPageOnImageClick,
                     enableAlternateMarkdownRendering = settings.enableAlternateMarkdownRendering,
                     restrictLocalUserSearch = settings.restrictLocalUserSearch,
+                    isBarThemeSupported = barColorProvider.isBarThemeSupported,
                 )
             }
         }
