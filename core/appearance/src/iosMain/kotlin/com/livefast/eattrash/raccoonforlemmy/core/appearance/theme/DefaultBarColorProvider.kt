@@ -10,6 +10,8 @@ import platform.UIKit.UIStatusBarStyleLightContent
 import platform.UIKit.setStatusBarStyle
 
 internal class DefaultBarColorProvider : BarColorProvider {
+    override val isBarThemeSupported = false
+
     @Composable
     override fun setBarColorAccordingToTheme(
         theme: UiTheme,
