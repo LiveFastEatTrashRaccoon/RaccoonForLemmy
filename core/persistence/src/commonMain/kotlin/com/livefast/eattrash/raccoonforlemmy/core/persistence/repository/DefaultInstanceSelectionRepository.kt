@@ -10,6 +10,7 @@ private val DEFAULT_INSTANCES =
     listOf(
         "discuss.tchncs.de",
         "feddit.it",
+        "feddit.org",
         "infosec.pub",
         "lemm.ee",
         "lemmy.blahaj.zone",
