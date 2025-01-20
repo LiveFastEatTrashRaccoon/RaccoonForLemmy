@@ -431,7 +431,7 @@
     <string name="user_info_moderates">Moderaattori</string>
     <plurals name="inbox_notification_content">
         <item quantity="one">%1$d lukematonta kohdetta</item>
-        <item quantity="other">%1$d lukematonta kohdetta</item>
+        <item quantity="other">%1$d ei ole luettavissa</item>
     </plurals>
     <string name="default_tag_admin">admin</string>
     <string name="default_tag_bot">bot</string>
