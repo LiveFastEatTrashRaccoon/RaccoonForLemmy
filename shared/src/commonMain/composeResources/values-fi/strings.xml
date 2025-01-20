@@ -246,12 +246,12 @@
     <string name="post_second_short">s</string>
     <string name="profile_button_login">Kirjaudu sisään</string>
     <string name="profile_day_short">d</string>
-    <string name="profile_million_short">m</string>
+    <string name="profile_million_short">M</string>
     <string name="profile_month_short">m</string>
     <string name="profile_not_logged_message">Et ole tällä hetkellä kirjautunut sisään.\nLisää tili jatkaaksesi.</string>
     <string name="profile_section_comments">Kommentit</string>
     <string name="profile_section_posts">Viestit</string>
-    <string name="profile_thousand_short">k</string>
+    <string name="profile_thousand_short">K</string>
     <string name="profile_upvotes_downvotes">Plussat &amp; miinusääniä</string>
     <string name="profile_year_short">k</string>
     <string name="report_action_resolve">Ratkaise</string>
