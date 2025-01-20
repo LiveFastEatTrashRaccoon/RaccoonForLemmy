@@ -476,4 +476,8 @@
     <string name="action_expand">Laajennettu</string>
     <string name="action_collapse">Romahdus</string>
     <string name="more_info">Lisää tietoa..</string>
+    <string name="bar_theme_solid">Kiinteä</string>
+    <string name="settings_color_dialog_insert_hex">Lisää heksavärikoodi</string>
+    <string name="community_status_subscribed">Tilaa</string>
+    <string name="item_unread">Lukematon</string>
 </resources>
