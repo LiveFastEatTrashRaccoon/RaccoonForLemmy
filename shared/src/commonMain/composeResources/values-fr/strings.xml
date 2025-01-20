@@ -251,7 +251,7 @@
     <string name="profile_not_logged_message">Vous n\'êtes pas connecté.\nAjoutez un compte pour continuer.</string>
     <string name="profile_section_comments">Commentaires</string>
     <string name="profile_section_posts">Publications</string>
-    <string name="profile_thousand_short">k</string>
+    <string name="profile_thousand_short">K</string>
     <string name="profile_upvotes_downvotes">Votes positifs &amp; négatifs</string>
     <string name="profile_year_short">a</string>
     <string name="report_action_resolve">Résoudre</string>
@@ -431,6 +431,7 @@
     <string name="user_info_moderates">Modérateur de</string>
     <plurals name="inbox_notification_content">
         <item quantity="one">Il y a %1$d élément non lu</item>
+        <item quantity="many">Il y a %1$d d\'élément non lus</item>
         <item quantity="other">Il y a %1$d éléments non lus</item>
     </plurals>
     <string name="default_tag_admin">admin</string>
@@ -497,4 +498,13 @@
     <string name="manage_user_tag_title">Gérer les tags de l\'utilisateur</string>
     <string name="action_navigate_to_previous_comment">Retourner aux commentaires précédents</string>
     <string name="format_bold">Gras</string>
+    <string name="item_featured_instance">Mis en avant dans l\'instance</string>
+    <string name="action_open_action_menu">Ouvrir le menu des actions</string>
+    <string name="action_toggle_visibility">Afficher la visibilité</string>
+    <string name="swipe_action_end_two">Côté droit (2ème étape)</string>
+    <string name="swipe_action_end_one">Côté droit (1ère étape)</string>
+    <string name="user_tags_regular_section_title">Réguliers</string>
+    <string name="item_featured_community">Mis en avant dans la communauté</string>
+    <string name="swipe_action_start_two">Côté gauche (2ème étape)</string>
+    <string name="swipe_action_start_one">Côté gauche (1ère étape)</string>
 </resources>
