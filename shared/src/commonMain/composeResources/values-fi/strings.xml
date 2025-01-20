@@ -480,4 +480,6 @@
     <string name="settings_color_dialog_insert_hex">Lisää heksavärikoodi</string>
     <string name="community_status_subscribed">Tilaa</string>
     <string name="item_unread">Lukematon</string>
+    <string name="format_bold">Rohkea</string>
+    <string name="user_account_age">Tilin ikä</string>
 </resources>
