@@ -385,6 +385,8 @@
     <string name="settings_manage_ban_section_instances">Instances</string>
     <string name="settings_manage_ban_section_stop_words">Words</string>
     <string name="settings_manage_ban_stop_word_placeholder">Forbidden expression</string>
+    <string name="settings_mark_as_read_on_interaction">Mark posts as read on interaction</string>
+    <string name="settings_mark_as_read_on_interaction_subtitle">After voting or saving a post, mark it as read</string>
     <string name="settings_mark_as_read_while_scrolling">Mark posts as read while scrolling</string>
     <string name="settings_media_list">Media uploads</string>
     <string name="settings_navigation_bar_titles_visible">Show navigation bar titles</string>
