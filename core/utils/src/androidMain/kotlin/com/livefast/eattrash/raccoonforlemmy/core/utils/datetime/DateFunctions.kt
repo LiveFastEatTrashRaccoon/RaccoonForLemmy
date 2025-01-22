@@ -25,6 +25,11 @@ actual fun Long.toIso8601Timestamp(): String? {
     return safeFormatter.format(date)
 }
 
+actual fun String.toTimestamp(): Long {
+    val date = getDateFromIso8601Timestamp(this)
+    return date.toInstant().toEpochMilli()
+}
+
 actual fun getFormattedDate(
     iso8601Timestamp: String,
     format: String,
