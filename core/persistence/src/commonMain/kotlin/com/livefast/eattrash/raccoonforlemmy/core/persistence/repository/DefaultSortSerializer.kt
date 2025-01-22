@@ -15,6 +15,10 @@ internal class DefaultSortSerializer : SortSerializer {
 
     override fun serializeMap(map: Map<String, Int>): List<String> =
         map.map { e ->
-            e.key + ":" + e.value
+            buildString {
+                append(e.key)
+                append(":")
+                append(e.value)
+            }
         }
 }
