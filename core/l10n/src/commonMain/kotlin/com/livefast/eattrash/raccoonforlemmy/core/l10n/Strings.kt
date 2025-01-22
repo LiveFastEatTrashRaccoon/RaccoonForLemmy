@@ -433,6 +433,8 @@ interface Strings {
     val settingsManageBanSectionStopWords: String @Composable get
     val settingsManageBanStopWordPlaceholder: String @Composable get
     val settingsMarkAsReadWhileScrolling: String @Composable get
+    val settingsMarkAsReadOnInteraction: String @Composable get
+    val settingsMarkAsReadOnInteractionSubtitle: String @Composable get
     val settingsMediaList: String @Composable get
     val settingsNavigationBarTitlesVisible: String @Composable get
     val settingsOpenUrlExternal: String @Composable get

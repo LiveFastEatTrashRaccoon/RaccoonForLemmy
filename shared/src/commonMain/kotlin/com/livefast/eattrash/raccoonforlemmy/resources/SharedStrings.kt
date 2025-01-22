@@ -437,6 +437,8 @@ import raccoonforlemmy.shared.generated.resources.settings_manage_ban_section_do
 import raccoonforlemmy.shared.generated.resources.settings_manage_ban_section_instances
 import raccoonforlemmy.shared.generated.resources.settings_manage_ban_section_stop_words
 import raccoonforlemmy.shared.generated.resources.settings_manage_ban_stop_word_placeholder
+import raccoonforlemmy.shared.generated.resources.settings_mark_as_read_on_interaction
+import raccoonforlemmy.shared.generated.resources.settings_mark_as_read_on_interaction_subtitle
 import raccoonforlemmy.shared.generated.resources.settings_mark_as_read_while_scrolling
 import raccoonforlemmy.shared.generated.resources.settings_media_list
 import raccoonforlemmy.shared.generated.resources.settings_navigation_bar_titles_visible
@@ -1383,6 +1385,10 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.settings_manage_ban_section_stop_words)
     override val settingsManageBanStopWordPlaceholder: String
         @Composable get() = stringResource(Res.string.settings_manage_ban_stop_word_placeholder)
+    override val settingsMarkAsReadOnInteraction: String
+        @Composable get() = stringResource(Res.string.settings_mark_as_read_on_interaction)
+    override val settingsMarkAsReadOnInteractionSubtitle: String
+        @Composable get() = stringResource(Res.string.settings_mark_as_read_on_interaction_subtitle)
     override val settingsMarkAsReadWhileScrolling: String
         @Composable get() = stringResource(Res.string.settings_mark_as_read_while_scrolling)
     override val settingsMediaList: String

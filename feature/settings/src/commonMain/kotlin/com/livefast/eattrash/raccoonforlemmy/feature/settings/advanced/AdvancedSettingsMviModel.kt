@@ -33,6 +33,10 @@ interface AdvancedSettingsMviModel :
             val value: Boolean,
         ) : Intent
 
+        data class ChangeMarkAsReadOnInteraction(
+            val value: Boolean,
+        ) : Intent
+
         data class ChangeNavBarTitlesVisible(
             val value: Boolean,
         ) : Intent
@@ -127,6 +131,7 @@ interface AdvancedSettingsMviModel :
         val enableAlternateMarkdownRendering: Boolean = false,
         val restrictLocalUserSearch: Boolean = false,
         val isBarThemeSupported: Boolean = false,
+        val markAsReadOnInteraction: Boolean = true,
     )
 
     sealed interface Effect {

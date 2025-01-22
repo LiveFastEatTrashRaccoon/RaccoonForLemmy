@@ -170,6 +170,7 @@ internal class DefaultSettingsRepository(
             randomThemeColor = if (settings.randomThemeColor) 1L else 0L,
             openPostWebPageOnImageClick = if (settings.openPostWebPageOnImageClick) 1L else 0L,
             restrictLocalUserSearch = if (settings.restrictLocalUserSearch) 1L else 0L,
+            markAsReadOnInteraction = if (settings.markAsReadOnInteraction) 1L else 0L,
         )
     }
 
@@ -462,6 +463,7 @@ internal class DefaultSettingsRepository(
                 randomThemeColor = if (settings.randomThemeColor) 1L else 0L,
                 openPostWebPageOnImageClick = if (settings.openPostWebPageOnImageClick) 1L else 0L,
                 restrictLocalUserSearch = if (settings.restrictLocalUserSearch) 1L else 0L,
+                markAsReadOnInteraction = if (settings.markAsReadOnInteraction) 1L else 0L,
             )
         }
     }
@@ -570,4 +572,5 @@ private fun GetBy.toModel() =
         randomThemeColor = randomThemeColor == 1L,
         openPostWebPageOnImageClick = openPostWebPageOnImageClick == 1L,
         restrictLocalUserSearch = restrictLocalUserSearch == 1L,
+        markAsReadOnInteraction = markAsReadOnInteraction == 1L,
     )
