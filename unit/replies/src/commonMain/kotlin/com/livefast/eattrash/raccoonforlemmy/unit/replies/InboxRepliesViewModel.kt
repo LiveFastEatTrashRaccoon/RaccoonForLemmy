@@ -252,6 +252,7 @@ class InboxRepliesViewModel(
                 mention = mention,
                 voted = newValue,
             )
+        val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handleItemUpdate(newMention)
         screenModelScope.launch {
             try {
@@ -261,7 +262,7 @@ class InboxRepliesViewModel(
                     comment = mention.comment,
                     voted = newValue,
                 )
-                if (!mention.read) {
+                if (!mention.read && shouldBeMarkedAsRead) {
                     userRepository.setReplyRead(
                         read = true,
                         replyId = mention.id,
@@ -283,6 +284,7 @@ class InboxRepliesViewModel(
                 mention = mention,
                 downVoted = newValue,
             )
+        val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handleItemUpdate(newMention)
         screenModelScope.launch {
             try {
@@ -292,7 +294,7 @@ class InboxRepliesViewModel(
                     comment = mention.comment,
                     downVoted = newValue,
                 )
-                if (!mention.read) {
+                if (!mention.read && shouldBeMarkedAsRead) {
                     userRepository.setReplyRead(
                         read = true,
                         replyId = mention.id,

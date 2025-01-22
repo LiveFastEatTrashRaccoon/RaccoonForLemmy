@@ -418,6 +418,7 @@ class PostListViewModel(
                 voted = newVote,
             )
         handlePostUpdate(newPost)
+        val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         screenModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -426,7 +427,11 @@ class PostListViewModel(
                     auth = auth,
                     voted = newVote,
                 )
-                markAsRead(newPost)
+                if (shouldBeMarkedAsRead) {
+                    markAsRead(newPost)
+                } else {
+                    handlePostUpdate(newPost)
+                }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 handlePostUpdate(post)
@@ -460,6 +465,7 @@ class PostListViewModel(
                 post = post,
                 downVoted = newValue,
             )
+        val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
         screenModelScope.launch {
             try {
@@ -469,7 +475,11 @@ class PostListViewModel(
                     auth = auth,
                     downVoted = newValue,
                 )
-                markAsRead(newPost)
+                if (shouldBeMarkedAsRead) {
+                    markAsRead(newPost)
+                } else {
+                    handlePostUpdate(newPost)
+                }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 handlePostUpdate(post)
@@ -484,6 +494,7 @@ class PostListViewModel(
                 post = post,
                 saved = newValue,
             )
+        val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
         screenModelScope.launch {
             try {
@@ -493,7 +504,11 @@ class PostListViewModel(
                     auth = auth,
                     saved = newValue,
                 )
-                markAsRead(newPost)
+                if (shouldBeMarkedAsRead) {
+                    markAsRead(newPost)
+                } else {
+                    handlePostUpdate(newPost)
+                }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 handlePostUpdate(post)

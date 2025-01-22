@@ -542,6 +542,7 @@ class CommunityDetailViewModel(
                 post = post,
                 voted = newValue,
             )
+        val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
         screenModelScope.launch {
             try {
@@ -551,7 +552,11 @@ class CommunityDetailViewModel(
                     post = post,
                     voted = newValue,
                 )
-                markAsRead(newPost)
+                if (shouldBeMarkedAsRead) {
+                    markAsRead(newPost)
+                } else {
+                    handlePostUpdate(newPost)
+                }
                 notificationCenter.send(
                     event = NotificationCenterEvent.PostUpdated(newPost),
                 )
@@ -588,6 +593,7 @@ class CommunityDetailViewModel(
                 post = post,
                 downVoted = newValue,
             )
+        val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
         screenModelScope.launch {
             try {
@@ -597,7 +603,11 @@ class CommunityDetailViewModel(
                     post = post,
                     downVoted = newValue,
                 )
-                markAsRead(newPost)
+                if (shouldBeMarkedAsRead) {
+                    markAsRead(newPost)
+                } else {
+                    handlePostUpdate(newPost)
+                }
                 notificationCenter.send(
                     event = NotificationCenterEvent.PostUpdated(newPost),
                 )
@@ -615,6 +625,7 @@ class CommunityDetailViewModel(
                 post = post,
                 saved = newValue,
             )
+        val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
         screenModelScope.launch {
             try {
@@ -624,7 +635,11 @@ class CommunityDetailViewModel(
                     post = post,
                     saved = newValue,
                 )
-                markAsRead(newPost)
+                if (shouldBeMarkedAsRead) {
+                    markAsRead(newPost)
+                } else {
+                    handlePostUpdate(newPost)
+                }
                 notificationCenter.send(
                     event = NotificationCenterEvent.PostUpdated(newPost),
                 )
