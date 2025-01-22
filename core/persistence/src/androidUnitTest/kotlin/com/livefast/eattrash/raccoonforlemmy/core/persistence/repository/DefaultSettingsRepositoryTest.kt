@@ -109,7 +109,7 @@ class DefaultSettingsRepositoryTest {
 
             verify {
                 queries.create(
-                    theme = model.theme?.toLong(),
+                    theme = model.theme.toLong(),
                     uiFontScale = model.uiFontScale.toDouble(),
                     uiFontFamily = model.uiFontFamily.toLong(),
                     titleFontScale = model.contentFontScale.title.toDouble(),
@@ -175,6 +175,7 @@ class DefaultSettingsRepositoryTest {
                     randomThemeColor = if (model.randomThemeColor) 1 else 0,
                     openPostWebPageOnImageClick = if (model.openPostWebPageOnImageClick) 1 else 0,
                     restrictLocalUserSearch = if (model.restrictLocalUserSearch) 1 else 0,
+                    markAsReadOnInteraction = if (model.markAsReadOnInteraction) 1 else 0,
                 )
             }
         }
@@ -187,7 +188,7 @@ class DefaultSettingsRepositoryTest {
 
             verify {
                 queries.update(
-                    theme = model.theme?.toLong(),
+                    theme = model.theme.toLong(),
                     uiFontScale = model.uiFontScale.toDouble(),
                     uiFontFamily = model.uiFontFamily.toLong(),
                     titleFontScale = model.contentFontScale.title.toDouble(),
@@ -253,6 +254,7 @@ class DefaultSettingsRepositoryTest {
                     randomThemeColor = if (model.randomThemeColor) 1 else 0,
                     openPostWebPageOnImageClick = if (model.openPostWebPageOnImageClick) 1 else 0,
                     restrictLocalUserSearch = if (model.restrictLocalUserSearch) 1 else 0,
+                    markAsReadOnInteraction = if (model.markAsReadOnInteraction) 1 else 0,
                 )
             }
         }
@@ -268,7 +270,7 @@ class DefaultSettingsRepositoryTest {
             sut.updateSettings(model, null)
 
             coVerify {
-                keyStore.save("uiTheme", model.theme ?: 0)
+                keyStore.save("uiTheme", model.theme)
                 keyStore.save("uiFontFamily", model.uiFontFamily)
                 keyStore.save("uiFontSize", model.uiFontScale)
                 keyStore.save("titleFontSize", model.contentFontScale.title)
@@ -462,5 +464,6 @@ class DefaultSettingsRepositoryTest {
         randomThemeColor = if (randomThemeColor) 1 else 0,
         openPostWebPageOnImageClick = if (openPostWebPageOnImageClick) 1 else 0,
         restrictLocalUserSearch = if (restrictLocalUserSearch) 1 else 0,
+        markAsReadOnInteraction = if (restrictLocalUserSearch) 1 else 0,
     )
 }
