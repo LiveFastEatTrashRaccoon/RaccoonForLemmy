@@ -167,6 +167,7 @@ class AdvancedSettingsViewModel(
                     enableAlternateMarkdownRendering = settings.enableAlternateMarkdownRendering,
                     restrictLocalUserSearch = settings.restrictLocalUserSearch,
                     isBarThemeSupported = barColorProvider.isBarThemeSupported,
+                    markAsReadOnInteraction = settings.markAsReadOnInteraction,
                 )
             }
         }
@@ -189,6 +190,9 @@ class AdvancedSettingsViewModel(
 
             is AdvancedSettingsMviModel.Intent.ChangeMarkAsReadWhileScrolling ->
                 changeMarkAsReadWhileScrolling(intent.value)
+
+            is AdvancedSettingsMviModel.Intent.ChangeMarkAsReadOnInteraction ->
+                changeMarkAsReadOnInteraction(intent.value)
 
             is AdvancedSettingsMviModel.Intent.ChangeSearchPostTitleOnly ->
                 changeSearchPostTitleOnly(intent.value)
@@ -274,6 +278,15 @@ class AdvancedSettingsViewModel(
             updateState { it.copy(markAsReadWhileScrolling = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(markAsReadWhileScrolling = value)
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeMarkAsReadOnInteraction(value: Boolean) {
+        screenModelScope.launch {
+            updateState { it.copy(markAsReadOnInteraction = value) }
+            val settings =
+                settingsRepository.currentSettings.value.copy(markAsReadOnInteraction = value)
             saveSettings(settings)
         }
     }

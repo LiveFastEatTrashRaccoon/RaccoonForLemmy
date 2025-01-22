@@ -362,6 +362,19 @@ class AdvancedSettingsScreen : Screen {
                                 )
                             },
                         )
+                        // mark as read on vote or save
+                        SettingsSwitchRow(
+                            title = LocalStrings.current.settingsMarkAsReadOnInteraction,
+                            subtitle = LocalStrings.current.settingsMarkAsReadOnInteractionSubtitle,
+                            value = uiState.markAsReadOnInteraction,
+                            onValueChanged = { value ->
+                                model.reduce(
+                                    AdvancedSettingsMviModel.Intent.ChangeMarkAsReadOnInteraction(
+                                        value,
+                                    ),
+                                )
+                            },
+                        )
                     }
 
                     // zombie mode interval
