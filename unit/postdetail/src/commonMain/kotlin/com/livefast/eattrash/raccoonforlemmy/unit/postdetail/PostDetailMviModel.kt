@@ -150,6 +150,7 @@ interface PostDetailMviModel :
         val meTagColor: Int? = null,
         val modTagColor: Int? = null,
         val opTagColor: Int? = null,
+        val lastSeenTimestamp: Long? = null,
     )
 
     sealed interface Effect {

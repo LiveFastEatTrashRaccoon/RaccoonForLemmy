@@ -120,6 +120,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
+import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.toTimestamp
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
@@ -1063,22 +1064,33 @@ class PostDetailScreen(
                                                         emptyList()
                                                     },
                                                 content = {
+                                                    val commentTs =
+                                                        with(comment) {
+                                                            updateDate ?: publishDate
+                                                        }?.toTimestamp()
+                                                    val lastSeenTs = uiState.lastSeenTimestamp
+                                                    val isAfterLastSeenTs =   commentTs != null &&
+                                                            lastSeenTs != null &&
+                                                            commentTs > lastSeenTs
+                                                    val backgroundModifier =
+                                                        when {
+                                                            commentIdToHighlight == comment.id ||
+                                                                (commentIdToHighlight == null && isAfterLastSeenTs)
+                                                            ->
+                                                                Modifier.background(
+                                                                    MaterialTheme.colorScheme
+                                                                        .surfaceColorAtElevation(
+                                                                            5.dp,
+                                                                        ).copy(alpha = 0.75f),
+                                                                )
+
+                                                            else -> Modifier
+                                                        }
                                                     CommentCard(
                                                         modifier =
                                                             Modifier
                                                                 .background(MaterialTheme.colorScheme.background)
-                                                                .then(
-                                                                    if (comment.id == commentIdToHighlight) {
-                                                                        Modifier.background(
-                                                                            MaterialTheme.colorScheme
-                                                                                .surfaceColorAtElevation(
-                                                                                    5.dp,
-                                                                                ).copy(alpha = 0.75f),
-                                                                        )
-                                                                    } else {
-                                                                        Modifier
-                                                                    },
-                                                                ),
+                                                                .then(backgroundModifier),
                                                         comment = comment,
                                                         isOp = comment.creator?.id == uiState.post.creator?.id,
                                                         showBot = true,

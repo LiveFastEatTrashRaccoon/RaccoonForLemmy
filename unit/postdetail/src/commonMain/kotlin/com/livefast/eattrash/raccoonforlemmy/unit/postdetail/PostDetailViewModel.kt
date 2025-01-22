@@ -7,8 +7,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLastSeenDateRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
+import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.epochMillis
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
@@ -60,6 +62,7 @@ class PostDetailViewModel(
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
     private val userTagRepository: UserTagRepository,
+    private val postLastSeenDateRepository: PostLastSeenDateRepository,
     private val userTagHelper: UserTagHelper,
     private val shareHelper: ShareHelper,
     private val notificationCenter: NotificationCenter,
@@ -95,13 +98,19 @@ class PostDetailViewModel(
             }
             if (uiState.value.post.id == 0L) {
                 val post = itemCache.getPost(postId) ?: PostModel()
+                val lastSeenTimestamp = postLastSeenDateRepository.get(postId)
                 updateState {
                     it.copy(
                         post = post,
                         isModerator = isModerator,
                         currentUserId = identityRepository.cachedUser?.id,
                         canFetchMore = it.comments.size < post.comments,
+                        lastSeenTimestamp = lastSeenTimestamp,
                     )
+                }
+                if (identityRepository.isLogged.value == true) {
+                    val now = epochMillis()
+                    postLastSeenDateRepository.save(postId = postId, timestamp = now)
                 }
             }
 
