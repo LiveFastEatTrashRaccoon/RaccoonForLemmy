@@ -12,7 +12,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Default
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultDraftRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultFavoriteCommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultInstanceSelectionRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultLongToLongMapSerializer
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultMultiCommunityRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultPostLastSeenDateRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultSortSerializer
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DefaultStopWordRepository
@@ -22,7 +24,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DomainB
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DraftRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.FavoriteCommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.InstanceSelectionRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.LongToLongMapSerializer
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.MultiCommunityRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLastSeenDateRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SortSerializer
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.StopWordRepository
@@ -161,6 +165,19 @@ val persistenceModule =
                 DefaultCreateSpecialTagsUseCase(
                     accountRepository = instance(),
                     userTagRepository = instance(),
+                )
+            }
+        }
+        bind<LongToLongMapSerializer> {
+            singleton {
+                DefaultLongToLongMapSerializer()
+            }
+        }
+        bind<PostLastSeenDateRepository> {
+            singleton {
+                DefaultPostLastSeenDateRepository(
+                    keyStore = instance(),
+                    serializer = instance(),
                 )
             }
         }
