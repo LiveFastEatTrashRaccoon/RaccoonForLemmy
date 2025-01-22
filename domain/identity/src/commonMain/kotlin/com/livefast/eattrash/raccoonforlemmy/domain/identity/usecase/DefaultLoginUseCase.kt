@@ -7,7 +7,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunityPreferredLanguageRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLastSeenDateRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.CreateSpecialTagsUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.AuthRepository
@@ -27,6 +29,8 @@ internal class DefaultLoginUseCase(
     private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val lemmyValueCache: LemmyValueCache,
     private val createSpecialTagsUseCase: CreateSpecialTagsUseCase,
+    private val userSortRepository: UserSortRepository,
+    private val postLastSeenDateRepository: PostLastSeenDateRepository,
 ) : LoginUseCase {
     override suspend operator fun invoke(
         instance: String,
@@ -108,6 +112,8 @@ internal class DefaultLoginUseCase(
 
             communitySortRepository.clear()
             communityPreferredLanguageRepository.clear()
+            userSortRepository.clear()
+            postLastSeenDateRepository.clear()
 
             val newSettings = settingsRepository.getSettings(accountId)
             settingsRepository.changeCurrentSettings(newSettings)

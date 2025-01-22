@@ -6,7 +6,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLastSeenDateRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
@@ -20,6 +22,8 @@ internal class DefaultLogoutUseCase(
     private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val lemmyValueCache: LemmyValueCache,
     private val userTagHelper: UserTagHelper,
+    private val userSortRepository: UserSortRepository,
+    private val postLastSeenDateRepository: PostLastSeenDateRepository,
 ) : LogoutUseCase {
     override suspend operator fun invoke() {
         notificationCenter.send(NotificationCenterEvent.ResetExplore)
@@ -27,6 +31,8 @@ internal class DefaultLogoutUseCase(
 
         identityRepository.clearToken()
         communitySortRepository.clear()
+        userSortRepository.clear()
+        postLastSeenDateRepository.clear()
         lemmyValueCache.refresh()
         notificationCenter.send(NotificationCenterEvent.Logout)
 

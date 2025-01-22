@@ -9,7 +9,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunityPreferredLanguageRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLastSeenDateRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
@@ -25,6 +27,8 @@ internal class DefaultSwitchAccountUseCase(
     private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val lemmyValueCache: LemmyValueCache,
     private val userTagHelper: UserTagHelper,
+    private val userSortRepository: UserSortRepository,
+    private val postLastSeenDateRepository: PostLastSeenDateRepository,
 ) : SwitchAccountUseCase {
     override suspend fun invoke(account: AccountModel) {
         val accountId = account.id ?: return
@@ -39,6 +43,8 @@ internal class DefaultSwitchAccountUseCase(
         notificationCenter.send(NotificationCenterEvent.Logout)
 
         communitySortRepository.clear()
+        userSortRepository.clear()
+        postLastSeenDateRepository.clear()
         communityPreferredLanguageRepository.clear()
 
         serviceProvider.changeInstance(instance)

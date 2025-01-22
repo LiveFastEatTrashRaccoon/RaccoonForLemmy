@@ -139,6 +139,8 @@ val identityModule =
                     bottomNavItemsRepository = instance(),
                     lemmyValueCache = instance(),
                     createSpecialTagsUseCase = instance(),
+                    userSortRepository = instance(),
+                    postLastSeenDateRepository = instance(),
                 )
             }
         }
@@ -153,6 +155,8 @@ val identityModule =
                     bottomNavItemsRepository = instance(),
                     userTagHelper = instance(),
                     lemmyValueCache = instance(),
+                    userSortRepository = instance(),
+                    postLastSeenDateRepository = instance(),
                 )
             }
         }
@@ -169,6 +173,8 @@ val identityModule =
                     bottomNavItemsRepository = instance(),
                     userTagHelper = instance(),
                     lemmyValueCache = instance(),
+                    userSortRepository = instance(),
+                    postLastSeenDateRepository = instance(),
                 )
             }
         }

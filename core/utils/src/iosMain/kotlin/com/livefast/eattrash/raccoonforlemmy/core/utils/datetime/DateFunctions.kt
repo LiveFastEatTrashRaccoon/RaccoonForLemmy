@@ -16,6 +16,7 @@ import platform.Foundation.NSTimeZone
 import platform.Foundation.autoupdatingCurrentLocale
 import platform.Foundation.localTimeZone
 import platform.Foundation.timeIntervalSince1970
+import kotlin.math.roundToLong
 
 actual fun epochMillis(): Long = (NSDate().timeIntervalSince1970 * 1000).toLong()
 
@@ -26,6 +27,11 @@ actual fun Long.toIso8601Timestamp(): String? {
     dateFormatter.calendar = NSCalendar(calendarIdentifier = NSCalendarIdentifierGregorian)
     val date = NSDate(timeIntervalSinceReferenceDate = (this.toDouble() / 1000))
     return dateFormatter.stringFromDate(date)
+}
+
+actual fun String.toTimestamp(): Long {
+    val date = getDateFromIso8601Timestamp(this)
+    return date?.timeIntervalSince1970?.let { (it * 1000).roundToLong() } ?: 0
 }
 
 actual fun getFormattedDate(

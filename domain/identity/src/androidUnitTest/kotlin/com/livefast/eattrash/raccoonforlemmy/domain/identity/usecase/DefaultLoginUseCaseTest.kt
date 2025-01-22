@@ -7,7 +7,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunityPreferredLanguageRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLastSeenDateRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.CreateSpecialTagsUseCase
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
@@ -42,6 +44,8 @@ class DefaultLoginUseCaseTest {
     private val communitySortRepository = mockk<CommunitySortRepository>(relaxUnitFun = true)
     private val communityPreferredLanguageRepository =
         mockk<CommunityPreferredLanguageRepository>(relaxUnitFun = true)
+    private val userSortRepository = mockk<UserSortRepository>(relaxUnitFun = true)
+    private val postLastSeenDateRepository = mockk<PostLastSeenDateRepository>(relaxUnitFun = true)
     private val bottomNavItemsRepository =
         mockk<BottomNavItemsRepository>(relaxUnitFun = true) {
             coEvery { get(accountId = any()) } returns BottomNavItemsRepository.DEFAULT_ITEMS
@@ -61,6 +65,8 @@ class DefaultLoginUseCaseTest {
             bottomNavItemsRepository = bottomNavItemsRepository,
             lemmyValueCache = lemmyValueCache,
             createSpecialTagsUseCase = createSpecialTagsUseCase,
+            userSortRepository = userSortRepository,
+            postLastSeenDateRepository = postLastSeenDateRepository,
         )
 
     @Test
@@ -104,6 +110,8 @@ class DefaultLoginUseCaseTest {
                 settingsRepository.createSettings(anonymousSettings, accountId)
                 settingsRepository.changeCurrentSettings(anonymousSettings)
                 communitySortRepository.clear()
+                userSortRepository.clear()
+                postLastSeenDateRepository.clear()
             }
         }
 
@@ -156,6 +164,8 @@ class DefaultLoginUseCaseTest {
                 settingsRepository.createSettings(anonymousSettings, accountId)
                 settingsRepository.changeCurrentSettings(anonymousSettings)
                 communitySortRepository.clear()
+                userSortRepository.clear()
+                postLastSeenDateRepository.clear()
             }
         }
 
@@ -201,6 +211,8 @@ class DefaultLoginUseCaseTest {
                 settingsRepository.changeCurrentSettings(oldSettings)
                 communitySortRepository.clear()
                 communityPreferredLanguageRepository.clear()
+                userSortRepository.clear()
+                postLastSeenDateRepository.clear()
             }
             coVerify(inverse = true) {
                 accountRepository.createAccount(any())

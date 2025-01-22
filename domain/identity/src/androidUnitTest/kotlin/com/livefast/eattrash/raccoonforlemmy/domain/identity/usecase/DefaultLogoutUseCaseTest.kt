@@ -7,7 +7,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLastSeenDateRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
@@ -29,6 +31,8 @@ class DefaultLogoutUseCaseTest {
     private val notificationCenter = mockk<NotificationCenter>(relaxUnitFun = true)
     private val communitySortRepository = mockk<CommunitySortRepository>(relaxUnitFun = true)
     private val lemmyValueCache = mockk<LemmyValueCache>(relaxUnitFun = true)
+    private val userSortRepository = mockk<UserSortRepository>(relaxUnitFun = true)
+    private val postLastSeenDateRepository = mockk<PostLastSeenDateRepository>(relaxUnitFun = true)
     private val bottomNavItemsRepository =
         mockk<BottomNavItemsRepository>(relaxUnitFun = true) {
             coEvery { get(accountId = any()) } returns BottomNavItemsRepository.DEFAULT_ITEMS
@@ -44,6 +48,8 @@ class DefaultLogoutUseCaseTest {
             bottomNavItemsRepository = bottomNavItemsRepository,
             lemmyValueCache = lemmyValueCache,
             userTagHelper = userTagHelper,
+            userSortRepository = userSortRepository,
+            postLastSeenDateRepository = postLastSeenDateRepository,
         )
 
     @Test
@@ -74,6 +80,8 @@ class DefaultLogoutUseCaseTest {
                 accountRepository.setActive(accountId, false)
                 settingsRepository.changeCurrentSettings(anonymousSettings)
                 userTagHelper.clear()
+                userSortRepository.clear()
+                postLastSeenDateRepository.clear()
             }
         }
 }
