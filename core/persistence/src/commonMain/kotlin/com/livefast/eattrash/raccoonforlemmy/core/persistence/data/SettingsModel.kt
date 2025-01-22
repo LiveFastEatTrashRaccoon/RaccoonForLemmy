@@ -70,4 +70,5 @@ data class SettingsModel(
     val openPostWebPageOnImageClick: Boolean = true,
     val enableAlternateMarkdownRendering: Boolean = false,
     val restrictLocalUserSearch: Boolean = false,
+    val markAsReadOnInteraction: Boolean = true,
 )
