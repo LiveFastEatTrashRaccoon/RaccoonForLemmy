@@ -188,25 +188,28 @@ class ManageBanScreen : Screen {
                                             }
                                         },
                                     )
-                                if (uiState.section == ManageBanSection.Domains) {
-                                    this +=
-                                        FloatingActionButtonMenuItem(
-                                            icon = Icons.Default.AddCircle,
-                                            text = LocalStrings.current.buttonAdd,
-                                            onSelected = {
-                                                addDomainDialogOpen = true
-                                            },
-                                        )
-                                }
-                                if (uiState.section == ManageBanSection.StopWords) {
-                                    this +=
-                                        FloatingActionButtonMenuItem(
-                                            icon = Icons.Default.AddCircle,
-                                            text = LocalStrings.current.buttonAdd,
-                                            onSelected = {
-                                                addStopWordDialogOpen = true
-                                            },
-                                        )
+                                when (uiState.section) {
+                                    ManageBanSection.Domains ->
+                                        this +=
+                                            FloatingActionButtonMenuItem(
+                                                icon = Icons.Default.AddCircle,
+                                                text = LocalStrings.current.buttonAdd,
+                                                onSelected = {
+                                                    addDomainDialogOpen = true
+                                                },
+                                            )
+
+                                    ManageBanSection.StopWords ->
+                                        this +=
+                                            FloatingActionButtonMenuItem(
+                                                icon = Icons.Default.AddCircle,
+                                                text = LocalStrings.current.buttonAdd,
+                                                onSelected = {
+                                                    addStopWordDialogOpen = true
+                                                },
+                                            )
+
+                                    else -> Unit
                                 }
                             },
                     )
