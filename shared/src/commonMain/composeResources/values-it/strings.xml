@@ -507,4 +507,6 @@
     <string name="delete_account_remove_content">Elimina contenuti</string>
     <string name="action_delete_account">Elimina account</string>
     <string name="delete_account_body">Inserisci la password per confermare l\'eliminazione dell\'account.</string>
+    <string name="settings_mark_as_read_on_interaction">Segna post come letti all\'interazione</string>
+    <string name="settings_mark_as_read_on_interaction_subtitle">Dopo aver votato o salvato un post, segnalo come letto</string>
 </resources>
