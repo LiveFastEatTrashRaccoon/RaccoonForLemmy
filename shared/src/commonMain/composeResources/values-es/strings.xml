@@ -507,4 +507,6 @@
     <string name="delete_account_remove_content">Eliminar contenidos</string>
     <string name="action_delete_account">Eliminar cuenta</string>
     <string name="delete_account_body">Inserta tu contraseña para confirmar la eliminación de la cuenta.</string>
+    <string name="settings_mark_as_read_on_interaction">Marcar publicaciones como leídas después de una interacción</string>
+    <string name="settings_mark_as_read_on_interaction_subtitle">Después de votar o guardar una publicación, marcarla como leída</string>
 </resources>
