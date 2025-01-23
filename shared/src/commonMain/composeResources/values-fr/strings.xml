@@ -507,4 +507,6 @@
     <string name="item_featured_community">Mis en avant dans la communauté</string>
     <string name="swipe_action_start_two">Côté gauche (2ième action)</string>
     <string name="swipe_action_start_one">Côté gauche (1ère action)</string>
+    <string name="settings_mark_as_read_on_interaction_subtitle">Après avoir voté ou sauvegardé une publication, la marquer comme lue</string>
+    <string name="settings_mark_as_read_on_interaction">Marquer lu les publications lors d\'une interaction avec elles</string>
 </resources>
