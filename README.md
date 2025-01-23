@@ -26,7 +26,7 @@ grew as a fully functional client.
 Main features:
 - view post feed and comments with different listing and sort types;
 - possibility to upvote and downvote (with configurable swipe actions);
-- community and user detail;
+- community and user detail (with custom sort types);
 - review your own posts and comments (created by you, bookmarked, liked/disliked);
 - inbox with replies, mentions and direct messages;
 - global search on Lemmy with different result types (all, posts, comments, user, communities);
@@ -43,7 +43,8 @@ Main features:
 - explore all the communities on a given instance in guest mode;
 - multi-community (community aggregation);
 - community moderation, instance moderation and moderation log;
-- save posts and comments you are creating as drafts to edit them later.
+- save posts and comments you are creating as drafts to edit them later;
+- add custom tags to users to easily recognize them across communities.
 
 ## Want to try it out?
 
@@ -157,8 +158,8 @@ with a platform like Lemmy.
 This project _is_ all about experimenting and learning, so please be patient.
 
 The app is intended both to regular users and moderators. To the formers, it offers the ability to
-change a lot of aspects like font face or size and app colors, vote format, bar transparency and so
-on in order to create a tailor-made solution for their needs.
+change a lot of aspects like font face or size and app colors, post layout, vote format, and so
+on in order to create a tailor-made solution for their needs and personal tastes.
 
 For moderators and admins who want to use their mobile device, the app provides a set of moderation
 tools (feature post, lock post, distinguish comment, remove post/comment, ban users) and the ability
@@ -206,5 +207,5 @@ where some polish is needed.
 > to file" option in the "Advanced Setting" screen and reimporting the JSON using "Import settings
 > from file" in the new app.
 
-The app is maintained by the same people and with the same policy, it was just a domain
-and package name change.
+The app is maintained by the same people and in the same spirit, it was just a package name change
+and the repository ownership was moved to an organization.
