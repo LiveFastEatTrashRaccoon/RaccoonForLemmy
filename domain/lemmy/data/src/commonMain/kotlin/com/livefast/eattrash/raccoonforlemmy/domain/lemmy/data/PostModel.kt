@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data
 
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAVideo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAnImage
+import com.livefast.eattrash.raccoonforlemmy.core.utils.normalizeImgurUrl
 
 data class PostModel(
     val id: Long = 0,
@@ -33,7 +34,14 @@ data class PostModel(
 )
 
 val PostModel.imageUrl: String
-    get() = (url?.takeIf { it.looksLikeAnImage } ?: thumbnailUrl).orEmpty()
+    get() =
+        url
+            ?.normalizeImgurUrl()
+            ?.takeIf { it.looksLikeAnImage } ?: thumbnailUrl
+            .orEmpty()
 
 val PostModel.videoUrl: String
-    get() = url?.takeIf { it.looksLikeAVideo }.orEmpty()
+    get() =
+        url
+            ?.takeIf { it.looksLikeAVideo }
+            .orEmpty()

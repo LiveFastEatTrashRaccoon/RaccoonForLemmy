@@ -79,8 +79,15 @@ val String.looksLikeAVideo: Boolean
         return extensions.any { this.endsWith(it) }
     }
 
-val String.isRedGifs: Boolean
-    get() = contains("redgifs.com")
+fun String.normalizeImgurUrl(): String =
+    this.let {
+        if (it.contains("i.imgur.com") && !it.looksLikeAnImage) {
+            // add extension so that is can be resolved
+            "$it.jpeg"
+        } else {
+            it
+        }
+    }
 
 fun String?.ellipsize(
     length: Int = 100,
