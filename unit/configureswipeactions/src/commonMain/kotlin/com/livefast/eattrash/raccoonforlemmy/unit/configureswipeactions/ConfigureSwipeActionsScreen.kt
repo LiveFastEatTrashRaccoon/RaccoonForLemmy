@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -83,7 +82,6 @@ class ConfigureSwipeActionsScreen : Screen {
         var selectActionBottomSheet by remember { mutableStateOf<ActionConfig?>(null) }
 
         Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,
@@ -180,7 +178,7 @@ class ConfigureSwipeActionsScreen : Screen {
                                     1 -> LocalStrings.current.swipeActionStartTwo
                                     else -> LocalStrings.current.swipeActionStartOne
                                 },
-                                action = action,
+                            action = action,
                             options =
                                 buildList {
                                     this +=
@@ -243,8 +241,8 @@ class ConfigureSwipeActionsScreen : Screen {
                                 when (idx) {
                                     1 -> LocalStrings.current.swipeActionEndTwo
                                     else -> LocalStrings.current.swipeActionEndOne
-                            },
-                                action = action,
+                                },
+                            action = action,
                             options =
                                 buildList {
                                     this +=
@@ -335,8 +333,8 @@ class ConfigureSwipeActionsScreen : Screen {
                                 when (idx) {
                                     1 -> LocalStrings.current.swipeActionStartTwo
                                     else -> LocalStrings.current.swipeActionStartOne
-                            },
-                                action = action,
+                                },
+                            action = action,
                             options =
                                 buildList {
                                     this +=
@@ -398,9 +396,9 @@ class ConfigureSwipeActionsScreen : Screen {
                             iconContentDescription =
                                 when (idx) {
                                     1 -> LocalStrings.current.swipeActionEndTwo
-                                else -> LocalStrings.current.swipeActionEndOne
-                            },
-                                action = action,
+                                    else -> LocalStrings.current.swipeActionEndOne
+                                },
+                            action = action,
                             options =
                                 buildList {
                                     this +=
@@ -490,9 +488,9 @@ class ConfigureSwipeActionsScreen : Screen {
                             iconContentDescription =
                                 when (idx) {
                                     1 -> LocalStrings.current.swipeActionStartTwo
-                                else -> LocalStrings.current.swipeActionStartOne
-                            },
-                                action = action,
+                                    else -> LocalStrings.current.swipeActionStartOne
+                                },
+                            action = action,
                             options =
                                 buildList {
                                     this +=
@@ -553,10 +551,10 @@ class ConfigureSwipeActionsScreen : Screen {
                                 },
                             iconContentDescription =
                                 when (idx) {
-                                1 -> LocalStrings.current.swipeActionEndTwo
-                                else -> LocalStrings.current.swipeActionEndOne
-                            },
-                                action = action,
+                                    1 -> LocalStrings.current.swipeActionEndTwo
+                                    else -> LocalStrings.current.swipeActionEndOne
+                                },
+                            action = action,
                             options =
                                 buildList {
                                     this +=

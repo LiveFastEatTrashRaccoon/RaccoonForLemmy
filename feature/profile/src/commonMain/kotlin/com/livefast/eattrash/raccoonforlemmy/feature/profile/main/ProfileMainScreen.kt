@@ -3,7 +3,6 @@ package com.livefast.eattrash.raccoonforlemmy.feature.profile.main
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -164,7 +163,6 @@ internal object ProfileMainScreen : Tab {
         }
 
         Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 TopAppBar(
                     windowInsets = topAppBarState.toWindowInsets(),
