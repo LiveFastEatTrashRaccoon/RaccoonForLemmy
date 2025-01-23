@@ -3,7 +3,6 @@ package com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -77,7 +76,6 @@ class ConfigureContentViewScreen : Screen {
         var selectPostBodyMaxLinesBottomSheetOpened by remember { mutableStateOf(false) }
 
         Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 TopAppBar(
                     scrollBehavior = scrollBehavior,

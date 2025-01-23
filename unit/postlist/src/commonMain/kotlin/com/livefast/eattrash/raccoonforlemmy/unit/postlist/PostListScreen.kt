@@ -203,7 +203,6 @@ class PostListScreen : Screen {
         }
 
         Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 PostsTopBar(
                     currentInstance = uiState.instance,
