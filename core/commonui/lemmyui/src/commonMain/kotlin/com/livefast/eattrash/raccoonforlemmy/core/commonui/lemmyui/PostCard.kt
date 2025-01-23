@@ -53,6 +53,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAVideo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAnImage
+import com.livefast.eattrash.raccoonforlemmy.core.utils.normalizeImgurUrl
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -593,6 +594,7 @@ private fun ExtendedPost(
     val postLinkUrl =
         post.url
             .orEmpty()
+            .normalizeImgurUrl()
             .takeIf {
                 it != post.imageUrl &&
                     it != post.videoUrl &&
