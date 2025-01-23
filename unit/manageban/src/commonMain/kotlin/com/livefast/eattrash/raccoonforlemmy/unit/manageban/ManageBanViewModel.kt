@@ -24,6 +24,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 @OptIn(FlowPreview::class)
 class ManageBanViewModel(
@@ -42,6 +44,7 @@ class ManageBanViewModel(
     private var originalBans: AccountBansModel? = null
     private var originalBlockedDomains: List<String> = emptyList()
     private var originalStopWords: List<String> = emptyList()
+    private val mutex = Mutex()
 
     init {
         screenModelScope.launch {
@@ -69,7 +72,7 @@ class ManageBanViewModel(
                 }.launchIn(this)
 
             if (uiState.value.initial) {
-                refresh()
+                refresh(initial = true)
             }
         }
     }
@@ -99,12 +102,15 @@ class ManageBanViewModel(
         }
     }
 
-    private suspend fun refresh() {
-        val auth = identityRepository.authToken.value.orEmpty()
-        originalBans = siteRepository.getBans(auth)
-        val accountId = accountRepository.getActive()?.id
-        originalBlockedDomains = blocklistRepository.get(accountId)
-        originalStopWords = stopWordRepository.get(accountId)
+    private suspend fun refresh(initial: Boolean = false) {
+        updateState { it.copy(refreshing = !initial) }
+        mutex.withLock {
+            val auth = identityRepository.authToken.value.orEmpty()
+            val accountId = accountRepository.getActive()?.id
+            originalBans = siteRepository.getBans(auth)
+            originalBlockedDomains = blocklistRepository.get(accountId)
+            originalStopWords = stopWordRepository.get(accountId)
+        }
         val query = uiState.value.searchText
         filterResults(query)
     }
@@ -173,16 +179,19 @@ class ManageBanViewModel(
     }
 
     private suspend fun filterResults(query: String) {
-        val bans = originalBans ?: AccountBansModel()
-        updateState {
-            it.copy(
-                bannedUsers = bans.users.filterUsersBy(query),
-                bannedCommunities = bans.communities.filterCommunitiesBy(query),
-                bannedInstances = bans.instances.filterInstancesBy(query),
-                blockedDomains = originalBlockedDomains.filterBy(query),
-                stopWords = originalStopWords.filterBy(query),
-                initial = false,
-            )
+        mutex.withLock {
+            val bans = originalBans ?: AccountBansModel()
+            updateState {
+                it.copy(
+                    bannedUsers = bans.users.filterUsersBy(query),
+                    bannedCommunities = bans.communities.filterCommunitiesBy(query),
+                    bannedInstances = bans.instances.filterInstancesBy(query),
+                    blockedDomains = originalBlockedDomains.filterBy(query),
+                    stopWords = originalStopWords.filterBy(query),
+                    initial = false,
+                    refreshing = false,
+                )
+            }
         }
     }
 
@@ -190,27 +199,31 @@ class ManageBanViewModel(
         if (domain.isBlank()) {
             return
         }
-        val newValues =
-            if (originalBlockedDomains.contains(domain)) {
-                originalBlockedDomains
-            } else {
-                originalBlockedDomains + domain
-            }
         screenModelScope.launch {
-            val accountId = accountRepository.getActive()?.id
-            originalBlockedDomains = newValues
-            blocklistRepository.update(accountId, newValues)
+            mutex.withLock {
+                val newValues =
+                    if (originalBlockedDomains.contains(domain)) {
+                        originalBlockedDomains
+                    } else {
+                        originalBlockedDomains + domain
+                    }
+                val accountId = accountRepository.getActive()?.id
+                originalBlockedDomains = newValues
+                blocklistRepository.update(accountId = accountId, items = newValues)
+            }
             val query = uiState.value.searchText
             filterResults(query)
         }
     }
 
     private fun unblockDomain(domain: String) {
-        val newValues = originalBlockedDomains - domain
         screenModelScope.launch {
-            val accountId = accountRepository.getActive()?.id
-            originalBlockedDomains = newValues
-            blocklistRepository.update(accountId, newValues)
+            mutex.withLock {
+                val newValues = originalBlockedDomains - domain
+                val accountId = accountRepository.getActive()?.id
+                originalBlockedDomains = newValues
+                blocklistRepository.update(accountId = accountId, items = newValues)
+            }
             val query = uiState.value.searchText
             filterResults(query)
         }
@@ -220,27 +233,31 @@ class ManageBanViewModel(
         if (word.isBlank()) {
             return
         }
-        val newValues =
-            if (originalStopWords.contains(word)) {
-                originalStopWords
-            } else {
-                originalStopWords + word
-            }
         screenModelScope.launch {
-            val accountId = accountRepository.getActive()?.id
-            originalStopWords = newValues
-            stopWordRepository.update(accountId, newValues)
+            mutex.withLock {
+                val newValues =
+                    if (originalStopWords.contains(word)) {
+                        originalStopWords
+                    } else {
+                        originalStopWords + word
+                    }
+                val accountId = accountRepository.getActive()?.id
+                originalStopWords = newValues
+                stopWordRepository.update(accountId = accountId, items = newValues)
+            }
             val query = uiState.value.searchText
             filterResults(query)
         }
     }
 
     private fun removeStopWord(word: String) {
-        val newValues = originalStopWords - word
         screenModelScope.launch {
-            val accountId = accountRepository.getActive()?.id
-            originalStopWords = newValues
-            stopWordRepository.update(accountId, newValues)
+            mutex.withLock {
+                val newValues = originalStopWords - word
+                val accountId = accountRepository.getActive()?.id
+                originalStopWords = newValues
+                stopWordRepository.update(accountId = accountId, items = newValues)
+            }
             val query = uiState.value.searchText
             filterResults(query)
         }
