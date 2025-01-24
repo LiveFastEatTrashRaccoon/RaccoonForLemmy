@@ -71,4 +71,6 @@ sealed class OptionId(
     data object Restore : OptionId(30)
 
     data object ManageTags : OptionId(31)
+
+    data object ToggleRead : OptionId(32)
 }
