@@ -587,6 +587,11 @@ class PostListScreen : Screen {
                                                 if (uiState.isLogged) {
                                                     this +=
                                                         Option(
+                                                            OptionId.ToggleRead,
+                                                            LocalStrings.current.actionToggleRead,
+                                                        )
+                                                    this +=
+                                                        Option(
                                                             OptionId.Hide,
                                                             LocalStrings.current.postActionHide,
                                                         )
@@ -745,6 +750,12 @@ class PostListScreen : Screen {
                                                     } else {
                                                         copyPostBottomSheet = post
                                                     }
+                                                }
+
+                                                OptionId.ToggleRead -> {
+                                                    model.reduce(
+                                                        PostListMviModel.Intent.ToggleRead(post.id),
+                                                    )
                                                 }
 
                                                 else -> Unit

@@ -117,6 +117,10 @@ interface CommunityDetailMviModel :
         data class RestorePost(
             val id: Long,
         ) : Intent
+
+        data class ToggleRead(
+            val id: Long,
+        ) : Intent
     }
 
     data class UiState(

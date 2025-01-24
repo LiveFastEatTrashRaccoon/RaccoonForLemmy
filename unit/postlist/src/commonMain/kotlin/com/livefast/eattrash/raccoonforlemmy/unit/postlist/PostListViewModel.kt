@@ -235,38 +235,33 @@ class PostListViewModel(
                 }
 
             is PostListMviModel.Intent.ChangeListing -> applyListingType(intent.value)
-            is PostListMviModel.Intent.DownVotePost -> {
-                if (intent.feedback) {
-                    hapticFeedback.vibrate()
-                }
+            is PostListMviModel.Intent.DownVotePost ->
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                    if (intent.feedback) {
+                        hapticFeedback.vibrate()
+                    }
                     toggleDownVote(post)
                 }
-            }
 
-            is PostListMviModel.Intent.SavePost -> {
-                if (intent.feedback) {
-                    hapticFeedback.vibrate()
-                }
+            is PostListMviModel.Intent.SavePost ->
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                    if (intent.feedback) {
+                        hapticFeedback.vibrate()
+                    }
                     toggleSave(post)
                 }
-            }
 
-            is PostListMviModel.Intent.UpVotePost -> {
-                if (intent.feedback) {
-                    hapticFeedback.vibrate()
-                }
+            is PostListMviModel.Intent.UpVotePost ->
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                    if (intent.feedback) {
+                        hapticFeedback.vibrate()
+                    }
                     toggleUpVote(post)
                 }
-            }
 
             PostListMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             is PostListMviModel.Intent.DeletePost -> deletePost(intent.id)
-            is PostListMviModel.Intent.Share -> {
-                shareHelper.share(intent.url)
-            }
+            is PostListMviModel.Intent.Share -> shareHelper.share(intent.url)
 
             is PostListMviModel.Intent.MarkAsRead ->
                 screenModelScope.launch {
@@ -276,20 +271,18 @@ class PostListViewModel(
                 }
 
             PostListMviModel.Intent.ClearRead -> clearRead()
-            is PostListMviModel.Intent.Hide -> {
+            is PostListMviModel.Intent.Hide ->
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
                     hide(post)
                 }
-            }
 
-            PostListMviModel.Intent.PauseZombieMode -> {
+            PostListMviModel.Intent.PauseZombieMode ->
                 screenModelScope.launch {
                     updateState { it.copy(zombieModeActive = false) }
                     zombieModeHelper.pause()
                 }
-            }
 
-            is PostListMviModel.Intent.StartZombieMode -> {
+            is PostListMviModel.Intent.StartZombieMode ->
                 screenModelScope.launch {
                     updateState { it.copy(zombieModeActive = true) }
                     zombieModeHelper.start(
@@ -297,9 +290,8 @@ class PostListViewModel(
                         interval = settingsRepository.currentSettings.value.zombieModeInterval,
                     )
                 }
-            }
 
-            is PostListMviModel.Intent.WillOpenDetail -> {
+            is PostListMviModel.Intent.WillOpenDetail ->
                 screenModelScope.launch {
                     uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
                         markAsRead(post)
@@ -308,7 +300,13 @@ class PostListViewModel(
                         emitEffect(PostListMviModel.Effect.OpenDetail(post))
                     }
                 }
-            }
+
+            is PostListMviModel.Intent.ToggleRead ->
+                screenModelScope.launch {
+                    uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                        setRead(post = post, read = !post.read)
+                    }
+                }
         }
     }
 
@@ -443,11 +441,19 @@ class PostListViewModel(
         if (post.read) {
             return
         }
-        val newPost = post.copy(read = true)
+
+        setRead(post = post, read = true)
+    }
+
+    private suspend fun setRead(
+        post: PostModel,
+        read: Boolean,
+    ) {
+        val newPost = post.copy(read = read)
         try {
             val auth = identityRepository.authToken.value.orEmpty()
             postRepository.setRead(
-                read = true,
+                read = read,
                 postId = post.id,
                 auth = auth,
             )

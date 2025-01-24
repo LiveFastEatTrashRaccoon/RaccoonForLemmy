@@ -477,6 +477,11 @@ class MultiCommunityScreen(
                                             if (uiState.currentUserId != null) {
                                                 this +=
                                                     Option(
+                                                        OptionId.ToggleRead,
+                                                        LocalStrings.current.actionToggleRead,
+                                                    )
+                                                this +=
+                                                    Option(
                                                         OptionId.Hide,
                                                         LocalStrings.current.postActionHide,
                                                     )
@@ -504,6 +509,12 @@ class MultiCommunityScreen(
                                                         post.id,
                                                     ),
                                                 )
+
+                                            OptionId.ToggleRead -> {
+                                                model.reduce(
+                                                    MultiCommunityMviModel.Intent.ToggleRead(post.id),
+                                                )
+                                            }
 
                                             OptionId.Share -> {
                                                 val urls =
