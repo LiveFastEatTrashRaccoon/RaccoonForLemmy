@@ -149,14 +149,13 @@ class MultiCommunityViewModel(
 
     override fun reduce(intent: MultiCommunityMviModel.Intent) {
         when (intent) {
-            is MultiCommunityMviModel.Intent.DownVotePost -> {
-                if (intent.feedback) {
-                    hapticFeedback.vibrate()
+            is MultiCommunityMviModel.Intent.DownVotePost ->
+                uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                    if (intent.feedback) {
+                        hapticFeedback.vibrate()
+                    }
+                    toggleDownVote(post)
                 }
-                toggleDownVote(
-                    post = uiState.value.posts.first { it.id == intent.id },
-                )
-            }
 
             MultiCommunityMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             MultiCommunityMviModel.Intent.LoadNextPage ->
@@ -169,25 +168,23 @@ class MultiCommunityViewModel(
                     refresh()
                 }
 
-            is MultiCommunityMviModel.Intent.SavePost -> {
-                if (intent.feedback) {
-                    hapticFeedback.vibrate()
+            is MultiCommunityMviModel.Intent.SavePost ->
+                uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                    if (intent.feedback) {
+                        hapticFeedback.vibrate()
+                    }
+                    toggleSave(post)
                 }
-                toggleSave(
-                    post = uiState.value.posts.first { it.id == intent.id },
-                )
-            }
 
-            is MultiCommunityMviModel.Intent.Share -> {
-                shareHelper.share(intent.url)
-            }
+            is MultiCommunityMviModel.Intent.Share -> shareHelper.share(intent.url)
 
-            is MultiCommunityMviModel.Intent.UpVotePost -> {
-                if (intent.feedback) {
-                    hapticFeedback.vibrate()
+            is MultiCommunityMviModel.Intent.UpVotePost ->
+                uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                    if (intent.feedback) {
+                        hapticFeedback.vibrate()
+                    }
+                    toggleUpVote(post)
                 }
-                toggleUpVote(uiState.value.posts.first { it.id == intent.id })
-            }
 
             MultiCommunityMviModel.Intent.ClearRead -> clearRead()
             is MultiCommunityMviModel.Intent.MarkAsRead ->
@@ -209,6 +206,13 @@ class MultiCommunityViewModel(
                         val state = postPaginationManager.extractState()
                         postNavigationManager.push(state)
                         emitEffect(MultiCommunityMviModel.Effect.OpenDetail(post))
+                    }
+                }
+
+            is MultiCommunityMviModel.Intent.ToggleRead ->
+                screenModelScope.launch {
+                    uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                        setRead(post = post, read = !post.read)
                     }
                 }
         }
@@ -330,11 +334,18 @@ class MultiCommunityViewModel(
         if (post.read) {
             return
         }
-        val newPost = post.copy(read = true)
+        setRead(post = post, read = true)
+    }
+
+    private suspend fun setRead(
+        post: PostModel,
+        read: Boolean,
+    ) {
+        val newPost = post.copy(read = read)
         try {
             val auth = identityRepository.authToken.value.orEmpty()
             postRepository.setRead(
-                read = true,
+                read = read,
                 postId = post.id,
                 auth = auth,
             )
