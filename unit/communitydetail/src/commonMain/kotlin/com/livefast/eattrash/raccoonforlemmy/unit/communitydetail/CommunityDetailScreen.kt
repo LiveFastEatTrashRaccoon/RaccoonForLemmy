@@ -1063,6 +1063,11 @@ class CommunityDetailScreen(
                                                     if (uiState.isLogged && !isOnOtherInstance) {
                                                         this +=
                                                             Option(
+                                                                OptionId.ToggleRead,
+                                                                LocalStrings.current.actionToggleRead,
+                                                            )
+                                                        this +=
+                                                            Option(
                                                                 OptionId.Hide,
                                                                 LocalStrings.current.postActionHide,
                                                             )
@@ -1327,6 +1332,14 @@ class CommunityDetailScreen(
                                                     OptionId.Restore -> {
                                                         model.reduce(
                                                             CommunityDetailMviModel.Intent.RestorePost(
+                                                                post.id,
+                                                            ),
+                                                        )
+                                                    }
+
+                                                    OptionId.ToggleRead -> {
+                                                        model.reduce(
+                                                            CommunityDetailMviModel.Intent.ToggleRead(
                                                                 post.id,
                                                             ),
                                                         )

@@ -261,42 +261,35 @@ class CommunityDetailViewModel(
                     refresh()
                 }
 
-            is CommunityDetailMviModel.Intent.DownVotePost -> {
-                if (intent.feedback) {
-                    hapticFeedback.vibrate()
-                }
+            is CommunityDetailMviModel.Intent.DownVotePost ->
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                    if (intent.feedback) {
+                        hapticFeedback.vibrate()
+                    }
                     toggleDownVotePost(post)
                 }
-            }
 
-            is CommunityDetailMviModel.Intent.Share -> {
-                shareHelper.share(intent.url)
-            }
-
-            is CommunityDetailMviModel.Intent.SavePost -> {
-                if (intent.feedback) {
-                    hapticFeedback.vibrate()
-                }
+            is CommunityDetailMviModel.Intent.Share -> shareHelper.share(intent.url)
+            is CommunityDetailMviModel.Intent.SavePost ->
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                    if (intent.feedback) {
+                        hapticFeedback.vibrate()
+                    }
                     toggleSavePost(post)
                 }
-            }
 
-            is CommunityDetailMviModel.Intent.UpVotePost -> {
-                if (intent.feedback) {
-                    hapticFeedback.vibrate()
-                }
+            is CommunityDetailMviModel.Intent.UpVotePost ->
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                    if (intent.feedback) {
+                        hapticFeedback.vibrate()
+                    }
                     toggleUpVotePost(post)
                 }
-            }
 
             CommunityDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             CommunityDetailMviModel.Intent.Subscribe -> subscribe()
             CommunityDetailMviModel.Intent.Unsubscribe -> unsubscribe()
             is CommunityDetailMviModel.Intent.DeletePost -> handlePostDelete(intent.id)
-
             CommunityDetailMviModel.Intent.Block -> blockCommunity()
             CommunityDetailMviModel.Intent.BlockInstance -> blockInstance()
             is CommunityDetailMviModel.Intent.MarkAsRead ->
@@ -305,27 +298,24 @@ class CommunityDetailViewModel(
                 }
 
             CommunityDetailMviModel.Intent.ClearRead -> clearRead()
-            is CommunityDetailMviModel.Intent.Hide -> {
+            is CommunityDetailMviModel.Intent.Hide ->
                 uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
                     hide(post)
                 }
-            }
 
-            CommunityDetailMviModel.Intent.PauseZombieMode -> {
+            CommunityDetailMviModel.Intent.PauseZombieMode ->
                 screenModelScope.launch {
                     updateState { it.copy(zombieModeActive = false) }
                     zombieModeHelper.pause()
                 }
-            }
 
-            is CommunityDetailMviModel.Intent.StartZombieMode -> {
+            is CommunityDetailMviModel.Intent.StartZombieMode ->
                 screenModelScope.launch {
                     updateState { it.copy(zombieModeActive = true) }
                     zombieModeHelper.start(
                         initialValue = intent.index,
                         interval = settingsRepository.currentSettings.value.zombieModeInterval,
-                    )
-                }
+                )
             }
 
             is CommunityDetailMviModel.Intent.ModFeaturePost ->
@@ -349,25 +339,17 @@ class CommunityDetailViewModel(
                         lock(post)
                     }
 
-            is CommunityDetailMviModel.Intent.ModToggleModUser -> {
-                toggleModeratorStatus(intent.id)
-            }
-
-            CommunityDetailMviModel.Intent.ToggleFavorite -> {
-                toggleFavorite()
-            }
-
-            is CommunityDetailMviModel.Intent.ChangeSearching -> {
+            is CommunityDetailMviModel.Intent.ModToggleModUser -> toggleModeratorStatus(intent.id)
+            CommunityDetailMviModel.Intent.ToggleFavorite -> toggleFavorite()
+            is CommunityDetailMviModel.Intent.ChangeSearching ->
                 screenModelScope.launch {
                     updateState { it.copy(searching = intent.value) }
                     if (!intent.value) {
-                        updateSearchText("")
-                    }
+                    updateSearchText("")
                 }
             }
 
             is CommunityDetailMviModel.Intent.SetSearch -> updateSearchText(intent.value)
-
             is CommunityDetailMviModel.Intent.WillOpenDetail ->
                 screenModelScope.launch {
                     uiState.value.posts
@@ -379,21 +361,18 @@ class CommunityDetailViewModel(
                         }
                 }
 
-            CommunityDetailMviModel.Intent.UnhideCommunity -> {
-                unhideCommunity()
-            }
-
-            is CommunityDetailMviModel.Intent.SelectPreferredLanguage -> {
+            CommunityDetailMviModel.Intent.UnhideCommunity -> unhideCommunity()
+            is CommunityDetailMviModel.Intent.SelectPreferredLanguage ->
                 updatePreferredLanguage(intent.languageId)
-            }
 
-            CommunityDetailMviModel.Intent.DeleteCommunity -> {
-                deleteCommunity()
-            }
-
-            is CommunityDetailMviModel.Intent.RestorePost -> {
-                restorePost(intent.id)
-            }
+            CommunityDetailMviModel.Intent.DeleteCommunity -> deleteCommunity()
+            is CommunityDetailMviModel.Intent.RestorePost -> restorePost(intent.id)
+            is CommunityDetailMviModel.Intent.ToggleRead ->
+                screenModelScope.launch {
+                    uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
+                        setRead(post = post, read = !post.read)
+                    }
+                }
         }
     }
 
@@ -571,11 +550,18 @@ class CommunityDetailViewModel(
         if (post.read) {
             return
         }
-        val newPost = post.copy(read = true)
+        setRead(post = post, read = true)
+    }
+
+    private suspend fun setRead(
+        post: PostModel,
+        read: Boolean,
+    ) {
+        val newPost = post.copy(read = read)
         try {
             val auth = identityRepository.authToken.value.orEmpty()
             postRepository.setRead(
-                read = true,
+                read = read,
                 postId = post.id,
                 auth = auth,
             )
