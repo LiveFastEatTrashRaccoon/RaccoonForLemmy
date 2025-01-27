@@ -1,15 +1,12 @@
 package com.livefast.eattrash.raccoonforlemmy.core.appearance.theme
 
-import androidx.compose.runtime.Composable
+import android.app.Activity
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 
-interface BarColorProvider {
-    val isBarThemeSupported: Boolean
-    val isOpaqueThemeSupported: Boolean
-
-    @Composable
-    fun setBarColorAccordingToTheme(
+interface SolidBarColorWorkaround {
+    fun apply(
+        activity: Activity,
         theme: UiTheme,
         barTheme: UiBarTheme,
     )

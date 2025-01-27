@@ -11,6 +11,7 @@ import platform.UIKit.setStatusBarStyle
 
 internal class DefaultBarColorProvider : BarColorProvider {
     override val isBarThemeSupported = false
+    override val isOpaqueThemeSupported = false
 
     @Composable
     override fun setBarColorAccordingToTheme(

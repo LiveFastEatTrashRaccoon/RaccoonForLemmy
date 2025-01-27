@@ -10,12 +10,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.livefast.eattrash.raccoonforlemmy.MainView
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiBarTheme
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiTheme
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getBarColorProvider
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.SolidBarColorWorkaround
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.ComposeEvent
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getAccountRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.feature.home.ui.HomeTab
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +86,11 @@ class MainActivity : ComponentActivity() {
         handleIntent(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        applyWorkaroundForSolidStatusBar()
+    }
+
     private fun handleIntent(intent: Intent?) =
         intent?.apply {
             when (action) {
@@ -109,5 +121,21 @@ class MainActivity : ComponentActivity() {
             }
         val navigationCoordinator = getNavigationCoordinator()
         navigationCoordinator.submitComposeEvent(event)
+    }
+
+    private fun applyWorkaroundForSolidStatusBar() {
+        val barColorProvider = getBarColorProvider()
+        val settingsRepository = getSettingsRepository()
+        val accountRepository = getAccountRepository()
+        val settings =
+            runBlocking {
+                val accountId = accountRepository.getActive()?.id
+                settingsRepository.getSettings(accountId)
+            }
+        (barColorProvider as? SolidBarColorWorkaround)?.apply(
+            activity = this@MainActivity,
+            theme = settings.theme.toUiTheme(),
+            barTheme = settings.systemBarTheme.toUiBarTheme(),
+        )
     }
 }
