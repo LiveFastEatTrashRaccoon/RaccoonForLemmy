@@ -6,6 +6,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 
 interface BarColorProvider {
     val isBarThemeSupported: Boolean
+    val isOpaqueThemeSupported: Boolean
 
     @Composable
     fun setBarColorAccordingToTheme(
