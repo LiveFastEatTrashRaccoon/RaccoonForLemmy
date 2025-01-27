@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.appearance.theme
 
 import android.app.Activity
 import android.os.Build
+import android.view.WindowInsets
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,9 +13,14 @@ import androidx.core.view.WindowCompat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 
-internal class DefaultBarColorProvider : BarColorProvider {
-    override val isBarThemeSupported: Boolean
-        get() = Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
+internal class DefaultBarColorProvider :
+    BarColorProvider,
+    SolidBarColorWorkaround {
+    override val isBarThemeSupported = true
+    override val isOpaqueThemeSupported: Boolean
+        get() {
+            return Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
+        }
 
     @Composable
     override fun setBarColorAccordingToTheme(
@@ -25,24 +31,8 @@ internal class DefaultBarColorProvider : BarColorProvider {
         val isSystemInDarkTheme = isSystemInDarkTheme()
         LaunchedEffect(theme, barTheme) {
             (view.context as? Activity)?.window?.apply {
-                val baseColor =
-                    when (theme) {
-                        UiTheme.Light -> Color.White
-                        UiTheme.Black, UiTheme.Dark -> Color.Black
-                        UiTheme.Default ->
-                            if (isSystemInDarkTheme) {
-                                Color.Black
-                            } else {
-                                Color.White
-                            }
-                        else -> Color.Black
-                    }
-                val barColor =
-                    when (barTheme) {
-                        UiBarTheme.Opaque -> baseColor.copy(alpha = 0.25f)
-                        UiBarTheme.Transparent -> baseColor.copy(alpha = 0.01f)
-                        else -> baseColor
-                    }.toArgb()
+                val baseColor = theme.getBaseColor(isSystemInDarkTheme)
+                val barColor = barTheme.getBarColor(baseColor).toArgb()
                 if (isBarThemeSupported) {
                     statusBarColor = barColor
                     navigationBarColor = barColor
@@ -50,7 +40,7 @@ internal class DefaultBarColorProvider : BarColorProvider {
 
                 WindowCompat.setDecorFitsSystemWindows(this, false)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                    if (isBarThemeSupported) {
                         isStatusBarContrastEnforced = true
                     }
                     isNavigationBarContrastEnforced = true
@@ -71,4 +61,50 @@ internal class DefaultBarColorProvider : BarColorProvider {
             }
         }
     }
+
+    override fun apply(
+        activity: Activity,
+        theme: UiTheme,
+        barTheme: UiBarTheme,
+    ) {
+        if (barTheme == UiBarTheme.Transparent) {
+            return
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            return
+        }
+
+        val decorView = activity.window.decorView
+        val isSystemInDarkTheme = activity.resources.configuration.isNightModeActive
+        val baseColor = theme.getBaseColor(isSystemInDarkTheme)
+        val barColor = barTheme.getBarColor(baseColor).toArgb()
+
+        decorView.setOnApplyWindowInsetsListener { view, insets ->
+            val systemBarInsets = insets.getInsets(WindowInsets.Type.systemBars())
+            view.setBackgroundColor(barColor)
+            view.setPadding(0, systemBarInsets.top, 0, systemBarInsets.bottom)
+            insets
+        }
+    }
 }
+
+private fun UiTheme.getBaseColor(isSystemInDarkTheme: Boolean): Color =
+    when (this) {
+        UiTheme.Light -> Color.White
+        UiTheme.Black, UiTheme.Dark -> Color.Black
+        UiTheme.Default ->
+            if (isSystemInDarkTheme) {
+                Color.Black
+            } else {
+                Color.White
+            }
+
+        else -> Color.Black
+    }
+
+private fun UiBarTheme.getBarColor(baseColor: Color): Color =
+    when (this) {
+        UiBarTheme.Opaque -> baseColor.copy(alpha = 0.25f)
+        UiBarTheme.Transparent -> baseColor.copy(alpha = 0.01f)
+        else -> baseColor
+    }
