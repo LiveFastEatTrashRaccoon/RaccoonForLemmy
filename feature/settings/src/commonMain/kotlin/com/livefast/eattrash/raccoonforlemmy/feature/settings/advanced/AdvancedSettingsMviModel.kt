@@ -131,6 +131,7 @@ interface AdvancedSettingsMviModel :
         val enableAlternateMarkdownRendering: Boolean = false,
         val restrictLocalUserSearch: Boolean = false,
         val isBarThemeSupported: Boolean = false,
+        val isBarOpaqueThemeSupported: Boolean = false,
         val markAsReadOnInteraction: Boolean = true,
     )
 

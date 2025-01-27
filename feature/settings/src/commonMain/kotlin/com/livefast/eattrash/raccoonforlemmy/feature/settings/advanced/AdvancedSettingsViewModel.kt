@@ -167,6 +167,7 @@ class AdvancedSettingsViewModel(
                     enableAlternateMarkdownRendering = settings.enableAlternateMarkdownRendering,
                     restrictLocalUserSearch = settings.restrictLocalUserSearch,
                     isBarThemeSupported = barColorProvider.isBarThemeSupported,
+                    isBarOpaqueThemeSupported = barColorProvider.isOpaqueThemeSupported,
                     markAsReadOnInteraction = settings.markAsReadOnInteraction,
                 )
             }

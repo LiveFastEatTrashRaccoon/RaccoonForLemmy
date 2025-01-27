@@ -665,11 +665,13 @@ class AdvancedSettingsScreen : Screen {
 
         if (barThemeBottomSheetOpened) {
             val values =
-                listOf(
-                    UiBarTheme.Transparent,
-                    UiBarTheme.Opaque,
-                    UiBarTheme.Solid,
-                )
+                buildList {
+                    this += UiBarTheme.Transparent
+                    if (uiState.isBarOpaqueThemeSupported) {
+                        this += UiBarTheme.Opaque
+                    }
+                    this += UiBarTheme.Solid
+                }
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsBarTheme,
                 items =
