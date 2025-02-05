@@ -16,9 +16,8 @@ val zoomableImageModule =
                     settingsRepository = instance(),
                     shareHelper = instance(),
                     galleryHelper = instance(),
-                    notificationCenter = instance(),
                     imagePreloadManager = instance(),
-            )
+                )
+            }
         }
     }
-}
