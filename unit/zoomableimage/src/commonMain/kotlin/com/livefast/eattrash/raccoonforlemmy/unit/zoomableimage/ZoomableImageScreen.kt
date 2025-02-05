@@ -47,8 +47,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import kotlinx.coroutines.flow.launchIn
@@ -70,7 +68,6 @@ class ZoomableImageScreen(
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val drawerCoordinator = remember { getDrawerCoordinator() }
         val shareHelper = remember { getShareHelper() }
-        val notificationCenter = remember { getNotificationCenter() }
         var imageShareBottomSheetOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(model) {
@@ -123,8 +120,10 @@ class ZoomableImageScreen(
                                 if (shareHelper.supportsShareImage) {
                                     imageShareBottomSheetOpened = true
                                 } else {
-                                    notificationCenter.send(
-                                        NotificationCenterEvent.ShareImageModeSelected.ModeUrl(url),
+                                    model.reduce(
+                                        ZoomableImageMviModel.Intent.ShareImageModeSelected.ModeUrl(
+                                            url,
+                                        ),
                                     )
                                 }
                             },
@@ -253,12 +252,14 @@ class ZoomableImageScreen(
                     imageShareBottomSheetOpened = false
                     if (index != null) {
                         if (index == 0) {
-                            notificationCenter.send(
-                                NotificationCenterEvent.ShareImageModeSelected.ModeUrl(url),
+                            model.reduce(
+                                ZoomableImageMviModel.Intent.ShareImageModeSelected.ModeUrl(
+                                    url,
+                                ),
                             )
                         } else {
-                            notificationCenter.send(
-                                NotificationCenterEvent.ShareImageModeSelected.ModeFile(
+                            model.reduce(
+                                ZoomableImageMviModel.Intent.ShareImageModeSelected.ModeFile(
                                     url = url,
                                     source = source,
                                 ),
