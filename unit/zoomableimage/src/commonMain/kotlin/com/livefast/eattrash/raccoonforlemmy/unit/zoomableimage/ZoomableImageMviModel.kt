@@ -14,7 +14,20 @@ interface ZoomableImageMviModel :
             val source: String,
         ) : Intent
 
-        data class ChangeContentScale(val contentScale: ContentScale) : Intent
+        sealed interface ShareImageModeSelected : Intent {
+            data class ModeUrl(
+                val url: String,
+            ) : ShareImageModeSelected
+
+            data class ModeFile(
+                val url: String,
+                val source: String,
+            ) : ShareImageModeSelected
+        }
+
+        data class ChangeContentScale(
+            val contentScale: ContentScale,
+        ) : Intent
     }
 
     data class UiState(
