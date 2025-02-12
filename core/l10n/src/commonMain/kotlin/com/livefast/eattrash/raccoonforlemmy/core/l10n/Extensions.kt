@@ -16,6 +16,7 @@ fun String.toLanguageName() =
         Locales.PL -> LocalStrings.current.languagePl
         Locales.PT -> LocalStrings.current.languagePt
         Locales.PT_BR -> LocalStrings.current.languagePtBr
+        Locales.TA -> LocalStrings.current.languageTa
         Locales.UA -> LocalStrings.current.languageUa
         Locales.ZH_CN -> LocalStrings.current.languageZhCn
         Locales.ZH_HK -> LocalStrings.current.languageZhHk
@@ -36,6 +37,7 @@ fun String.toLanguageFlag(): String =
         Locales.PL -> "🇵🇱"
         Locales.PT -> "🇵🇹"
         Locales.PT_BR -> "🇧🇷"
+        Locales.TA -> "🇮🇳"
         Locales.UA -> "🇺🇦"
         Locales.ZH_CN -> "🇨🇳"
         Locales.ZH_HK -> "🇭🇰"
