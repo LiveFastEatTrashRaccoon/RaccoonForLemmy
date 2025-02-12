@@ -222,6 +222,7 @@ import raccoonforlemmy.shared.generated.resources.language_it
 import raccoonforlemmy.shared.generated.resources.language_pl
 import raccoonforlemmy.shared.generated.resources.language_pt
 import raccoonforlemmy.shared.generated.resources.language_pt_br
+import raccoonforlemmy.shared.generated.resources.language_ta
 import raccoonforlemmy.shared.generated.resources.language_ua
 import raccoonforlemmy.shared.generated.resources.language_zh_cn
 import raccoonforlemmy.shared.generated.resources.language_zh_hk
@@ -955,6 +956,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.language_pt)
     override val languagePtBr: String
         @Composable get() = stringResource(Res.string.language_pt_br)
+    override val languageTa: String
+        @Composable get() = stringResource(Res.string.language_ta)
     override val languageUa: String
         @Composable get() = stringResource(Res.string.language_ua)
     override val languageZhCn: String
