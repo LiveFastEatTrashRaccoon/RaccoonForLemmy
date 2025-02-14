@@ -121,7 +121,7 @@ interface PostDetailMviModel :
         val loading: Boolean = false,
         val initial: Boolean = true,
         val canFetchMore: Boolean = true,
-        val sortType: SortType = SortType.New,
+        val sortType: SortType? = null,
         val comments: List<CommentModel> = emptyList(),
         val commentBarThickness: Int = 1,
         val commentIndentAmount: Int = 2,

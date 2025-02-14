@@ -287,15 +287,17 @@ class PostDetailScreen(
                         )
                     },
                     actions = {
-                        IconButton(
-                            onClick = {
-                                sortBottomSheetOpened = true
-                            },
-                        ) {
-                            Icon(
-                                imageVector = uiState.sortType.toIcon(),
-                                contentDescription = uiState.sortType.toReadableName(),
-                            )
+                        uiState.sortType?.also { sortType ->
+                            IconButton(
+                                onClick = {
+                                    sortBottomSheetOpened = true
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = sortType.toIcon(),
+                                    contentDescription = sortType.toReadableName(),
+                                )
+                            }
                         }
 
                         // options menu
