@@ -148,6 +148,7 @@ internal fun SortType.toCommentDto(): CommentSortType =
         SortType.New -> CommentSortType.New
         SortType.Top.Generic -> CommentSortType.Top
         SortType.Old -> CommentSortType.Old
+        SortType.Controversial -> CommentSortType.Controversial
         else -> CommentSortType.New
     }
 
