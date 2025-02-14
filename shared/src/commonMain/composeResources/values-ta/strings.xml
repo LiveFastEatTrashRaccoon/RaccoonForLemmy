@@ -5,10 +5,10 @@
     <string name="action_chat">செய்தி அனுப்பவும்</string>
     <string name="action_create_post">இடுகையை உருவாக்கவும்</string>
     <string name="action_deactivate_zombie_mode">சாம்பி பயன்முறையை செயலிழக்கச் செய்யுங்கள்</string>
-    <string name="action_restore">மீட்டமை</string>
+    <string name="action_restore">மீட்டெடு</string>
     <string name="action_save">சேமி</string>
     <string name="action_search_in_comments">கருத்துகளில் தேடுங்கள்</string>
-    <string name="admin_action_unmark_as_featured">இடம்பெற்றது (நிகழ்வு)</string>
+    <string name="admin_action_unmark_as_featured">இடம்பெறாதது (நிகழ்வு)</string>
     <string name="advanced_settings_default_language">எடிட்டரில் இயல்புநிலை மொழி</string>
     <string name="app_icon_alt_1">ஒற்றை நிறவியல்</string>
     <string name="app_icon_classical">பாரம்பரிய</string>
