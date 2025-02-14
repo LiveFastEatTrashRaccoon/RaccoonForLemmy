@@ -516,7 +516,7 @@ class SettingsScreen : Screen {
         if (sortCommentsBottomSheetOpened) {
             SortBottomSheet(
                 values = uiState.availableSortTypesForComments,
-                expandTop = true,
+                expandTop = false,
                 onSelected = { value ->
                     sortCommentsBottomSheetOpened = false
                     if (value != null) {

@@ -14,4 +14,7 @@ enum class CommentSortType {
 
     @SerialName("Old")
     Old,
+
+    @SerialName("Controversial")
+    Controversial,
 }

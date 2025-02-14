@@ -486,10 +486,13 @@ class PostDetailViewModel(
     }
 
     private suspend fun refresh(initial: Boolean = false) {
+        val currentState = uiState.value
+        val sortType = currentState.sortType ?: return
+        val postId = currentState.post.id
         commentPaginationManager.reset(
             CommentPaginationSpecification.Replies(
-                postId = uiState.value.post.id,
-                sortType = uiState.value.sortType,
+                postId = postId,
+                sortType = sortType,
                 otherInstance = otherInstance,
                 includeDeleted = true,
             ),
@@ -628,10 +631,10 @@ class PostDetailViewModel(
         parentId: Long,
         loadUntilHighlight: Boolean = false,
     ) {
+        val currentState = uiState.value
+        val sort = currentState.sortType ?: return
         screenModelScope.launch {
-            val currentState = uiState.value
             val auth = identityRepository.authToken.value
-            val sort = currentState.sortType
             val fetchResult =
                 commentRepository
                     .getChildren(
