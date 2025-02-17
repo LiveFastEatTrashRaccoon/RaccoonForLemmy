@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import chaintech.videoplayer.host.VideoPlayerHost
+import chaintech.videoplayer.host.MediaPlayerHost
 import chaintech.videoplayer.model.ScreenResize
 import chaintech.videoplayer.ui.preview.VideoPreviewComposable
 import chaintech.videoplayer.ui.video.VideoPlayerComposable
@@ -20,19 +20,22 @@ fun VideoPlayer(
     muted: Boolean = true,
 ) {
     val resources = remember { getCoreResources() }
-    VideoPlayerComposable(
-        modifier = modifier,
-        playerHost =
-            VideoPlayerHost(
-                url = url,
+    val playerHost =
+        remember {
+            MediaPlayerHost(
+                mediaUrl = url,
                 isMuted = muted,
                 initialVideoFitMode =
                     if (contentScale == ContentScale.Fit) {
                         ScreenResize.FIT
                     } else {
                         ScreenResize.FILL
-                    },
-            ),
+            },
+        )
+    }
+    VideoPlayerComposable(
+        modifier = modifier,
+        playerHost = playerHost,
         playerConfig = resources.videoPlayerConfig,
     )
 }
