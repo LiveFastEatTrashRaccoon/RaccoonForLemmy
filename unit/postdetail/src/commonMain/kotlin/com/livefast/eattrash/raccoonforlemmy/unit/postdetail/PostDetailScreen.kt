@@ -1129,13 +1129,6 @@ class PostDetailScreen(
                                                                 ),
                                                             )
                                                         },
-                                                        onClick = {
-                                                            model.reduce(
-                                                                PostDetailMviModel.Intent.ToggleExpandComment(
-                                                                    comment.id,
-                                                                ),
-                                                            )
-                                                        },
                                                         onDoubleClick =
                                                             {
                                                                 model.reduce(
@@ -1452,13 +1445,6 @@ class PostDetailScreen(
                                                 indentAmount = uiState.commentIndentAmount,
                                                 barThickness = uiState.commentBarThickness,
                                                 onToggleExpanded = {
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.ToggleExpandComment(
-                                                            comment.id,
-                                                        ),
-                                                    )
-                                                },
-                                                onClick = {
                                                     model.reduce(
                                                         PostDetailMviModel.Intent.ToggleExpandComment(
                                                             comment.id,
