@@ -2,7 +2,6 @@ package com.livefast.eattrash.raccoonforlemmy.core.appearance.theme
 
 import android.app.Activity
 import android.os.Build
-import android.view.WindowInsets
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -80,9 +79,7 @@ internal class DefaultBarColorProvider :
         val barColor = barTheme.getBarColor(baseColor).toArgb()
 
         decorView.setOnApplyWindowInsetsListener { view, insets ->
-            val systemBarInsets = insets.getInsets(WindowInsets.Type.systemBars())
             view.setBackgroundColor(barColor)
-            view.setPadding(0, systemBarInsets.top, 0, systemBarInsets.bottom)
             insets
         }
     }
