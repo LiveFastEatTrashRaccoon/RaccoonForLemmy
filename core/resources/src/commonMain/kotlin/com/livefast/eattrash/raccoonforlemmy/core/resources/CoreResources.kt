@@ -9,8 +9,7 @@ interface CoreResources {
     val github: Painter @Composable get
     val lemmy: Painter @Composable get
     val appIconDefault: Painter @Composable get
-    val appIconAlt1: Painter @Composable get
-    val appIconAlt2: Painter @Composable get
+    val appIconClassical: Painter @Composable get
     val notoSans: FontFamily @Composable get
     val poppins: FontFamily @Composable get
     val atkinsonHyperlegible: FontFamily @Composable get

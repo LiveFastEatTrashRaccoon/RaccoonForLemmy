@@ -13,8 +13,7 @@ import raccoonforlemmy.shared.generated.resources.Res
 import raccoonforlemmy.shared.generated.resources.atkinsonhyperlegible_bold
 import raccoonforlemmy.shared.generated.resources.atkinsonhyperlegible_italic
 import raccoonforlemmy.shared.generated.resources.atkinsonhyperlegible_regular
-import raccoonforlemmy.shared.generated.resources.ic_alt_1
-import raccoonforlemmy.shared.generated.resources.ic_alt_2
+import raccoonforlemmy.shared.generated.resources.ic_classical
 import raccoonforlemmy.shared.generated.resources.ic_default
 import raccoonforlemmy.shared.generated.resources.ic_github
 import raccoonforlemmy.shared.generated.resources.ic_lemmy
@@ -40,13 +39,9 @@ internal class SharedResources : CoreResources {
         @Composable
         get() = painterResource(Res.drawable.ic_default)
 
-    override val appIconAlt1: Painter
+    override val appIconClassical: Painter
         @Composable
-        get() = painterResource(Res.drawable.ic_alt_1)
-
-    override val appIconAlt2: Painter
-        @Composable
-        get() = painterResource(Res.drawable.ic_alt_2)
+        get() = painterResource(Res.drawable.ic_classical)
 
     override val notoSans: FontFamily
         @Composable
