@@ -10,7 +10,6 @@ internal class DefaultAppIconManager(
     private val allComponentNames =
         listOf(
             "com.livefast.eattrash.raccoonforlemmy.android.MainActivity",
-            "com.livefast.eattrash.raccoonforlemmy.android.MainActivityAlias1",
             "com.livefast.eattrash.raccoonforlemmy.android.MainActivityAlias2",
         )
 
