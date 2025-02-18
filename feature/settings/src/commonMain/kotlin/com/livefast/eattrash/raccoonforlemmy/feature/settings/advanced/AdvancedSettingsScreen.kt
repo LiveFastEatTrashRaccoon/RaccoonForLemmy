@@ -627,8 +627,7 @@ class AdvancedSettingsScreen : Screen {
             val values =
                 listOf(
                     AppIconVariant.Default,
-                    AppIconVariant.Alt1,
-                    AppIconVariant.Alt2,
+                    AppIconVariant.Classical,
                 )
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsAppIcon,
@@ -638,8 +637,7 @@ class AdvancedSettingsScreen : Screen {
                             leadingContent = {
                                 val painter =
                                     when (value) {
-                                        AppIconVariant.Alt2 -> coreResources.appIconAlt2
-                                        AppIconVariant.Alt1 -> coreResources.appIconAlt1
+                                        AppIconVariant.Classical -> coreResources.appIconClassical
                                         else -> coreResources.appIconDefault
                                     }
                                 Image(
