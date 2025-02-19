@@ -44,7 +44,7 @@ internal class CheckNotificationWorker(
                 .Builder(context, NotificationConstants.CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSmallIcon(R.drawable.ic_monochrome)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(getPendingIntent())
                 .setNumber(count)
                 .build()
