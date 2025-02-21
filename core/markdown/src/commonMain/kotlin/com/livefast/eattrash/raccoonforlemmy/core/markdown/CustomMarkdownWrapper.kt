@@ -83,10 +83,10 @@ fun CustomMarkdownWrapperController(
                     codeBlockMatches.none { codeBlock ->
                         codeBlock.range.first < spoiler.range.first && codeBlock.range.last > spoiler.range.last
                     }
-                }.forEach { spoiler ->
-                    if (previousIndex < spoiler.range.first) {
+                }.forEach { matchRes ->
+                    if (previousIndex < matchRes.range.first) {
                         CustomMarkdownWrapper(
-                            content = content.substring(previousIndex, spoiler.range.first - 1),
+                            content = content.substring(previousIndex, matchRes.range.first),
                             modifier = modifier,
                             colors = colors,
                             typography = typography,
@@ -104,7 +104,7 @@ fun CustomMarkdownWrapperController(
                         )
                     }
                     markdownSpoilerBlock(
-                        content = content.substring(previousIndex, spoiler.range.last + 1),
+                        content = content.substring(matchRes.range.first, matchRes.range.last),
                         modifier = modifier,
                         colors = colors,
                         typography = typography,
@@ -120,11 +120,11 @@ fun CustomMarkdownWrapperController(
                         onDoubleClick = onDoubleClick,
                         onLongClick = onLongClick,
                     )
-                    previousIndex = spoiler.range.last
+                    previousIndex = matchRes.range.last
                 }
             if (previousIndex < content.length - 1) {
                 CustomMarkdownWrapper(
-                    content = content.substring(previousIndex, content.length - 1),
+                    content = content.substring(previousIndex, content.length),
                     modifier = modifier,
                     colors = colors,
                     typography = typography,
@@ -337,7 +337,7 @@ internal fun markdownParagraphWithHighlights(
 }
 
 @Composable
-internal fun markdownSpoilerBlock(
+private fun markdownSpoilerBlock(
     content: String,
     modifier: Modifier,
     colors: MarkdownColors = markdownColor(),
@@ -400,10 +400,10 @@ internal fun markdownSpoilerBlock(
                 Column(
                     modifier = spoilerModifier,
                 ) {
-                    SpoilerRegex.spoilerFull.findAll(spoilerBody).forEach {
-                        if (previousIndex < it.range.first) {
+                    SpoilerRegex.spoilerFull.findAll(spoilerBody).forEach { matchRes ->
+                        if (previousIndex < matchRes.range.first) {
                             CustomMarkdownWrapper(
-                                content = spoilerBody.substring(previousIndex, it.range.first - 1),
+                                content = spoilerBody.substring(previousIndex, matchRes.range.first),
                                 modifier = modifier,
                                 colors = colors,
                                 typography = typography,
@@ -421,7 +421,7 @@ internal fun markdownSpoilerBlock(
                             )
                         }
                         markdownSpoilerBlock(
-                            content = spoilerBody.substring(it.range.first, it.range.last + 1),
+                            content = spoilerBody.substring(matchRes.range.first, matchRes.range.last),
                             modifier = modifier,
                             colors = colors,
                             typography = typography,
@@ -437,7 +437,7 @@ internal fun markdownSpoilerBlock(
                             onDoubleClick = onDoubleClick,
                             onLongClick = onLongClick,
                         )
-                        previousIndex = it.range.last + 1
+                        previousIndex = matchRes.range.last
                     }
                 }
             } else {
@@ -445,7 +445,7 @@ internal fun markdownSpoilerBlock(
                     modifier = spoilerModifier,
                 ) {
                     CustomMarkdownWrapper(
-                        content = spoilerBody,
+                        content = spoilerBody.trimEnd(':'),
                         modifier = modifier,
                         colors = colors,
                         typography = typography,
