@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isUnspecified
 import androidx.compose.ui.unit.sp
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
+import com.mikepenz.markdown.annotator.annotatorSettings
+import com.mikepenz.markdown.annotator.buildMarkdownAnnotatedString
 import com.mikepenz.markdown.compose.LocalMarkdownAnnotator
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
 import com.mikepenz.markdown.compose.Markdown
@@ -40,9 +42,7 @@ import com.mikepenz.markdown.model.MarkdownColors
 import com.mikepenz.markdown.model.MarkdownPadding
 import com.mikepenz.markdown.model.MarkdownTypography
 import com.mikepenz.markdown.model.markdownPadding
-import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
 import com.mikepenz.markdown.utils.codeSpanStyle
-import com.mikepenz.markdown.utils.linkTextSpanStyle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.intellij.markdown.ast.ASTNode
@@ -308,9 +308,12 @@ internal fun markdownParagraphWithHighlights(
             buildMarkdownAnnotatedString(
                 content = content,
                 node = node,
-                linkTextStyle = typography.linkTextSpanStyle,
-                codeStyle = typography.codeSpanStyle,
-                annotator = annotator,
+                annotatorSettings =
+                    annotatorSettings(
+                        linkTextSpanStyle = typography.textLink,
+                        codeSpanStyle = typography.codeSpanStyle,
+                        annotator = annotator,
+                    ),
             )
             pop()
         }
