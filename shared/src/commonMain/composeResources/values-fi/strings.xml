@@ -112,7 +112,7 @@
     <string name="home_listing_title">Feedit</string>
     <string name="home_listing_type_all">Kaikki</string>
     <string name="home_listing_type_local">Paikallinen</string>
-    <string name="home_listing_type_subscribed">Tilaa</string>
+    <string name="home_listing_type_subscribed">Tilattu</string>
     <string name="home_sort_title">Lajitteluperuste</string>
     <string name="home_sort_type_active">Aktiivinen</string>
     <string name="home_sort_type_controversial">Kiistanalainen</string>
