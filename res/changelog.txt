@@ -1,16 +1,7 @@
 ## What's Changed
 
-- feat: implement user tags by @AkesiSeli in #196, #197, #201
-- feat: restrict local user search on current instance by @AkesiSeli in #209
-- feat: custom sort for user posts and comments by @AkesiSeli in #213
-- fix(di): prevent crash while switching account by @AkesiSeli in #202
-- fix: explore result and listing type bottom sheet titles by @AkesiSeli in #205, #206
-- fix: window insets and bar colors by @AkesiSeli in #215
-- fix: default theme color by @AkesiSeli in #218
-- enhancement: improve accessibility • part 1 by @AkesiSeli in #217
-- chore(deps): update dependencies by @dependabot in #198, #199, #208
-- chore(l10n): update l10n by @Weblate and @diegoberaldin in #194, #200, #203, #212, #216, #220
-- chore: update acknowledgements by @AkesiSeli in #210
-- chore: add more unit tests by @AkesiSeli in #219
+- fix: window insets @AkesiSeli in #362
+- chore(l10n): update translations by @Weblate in #375
+- chore(deps): update dependencies by @dependabot in #340, #341, #342, #343, #345, #346, #347, #348, #350, #351, #356, #361, #363, #364, #365, #366, #370, #371, #372, #373, #374, #376, #377, #378 and #379
 
-**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.13.7...1.14.0
+**Full Changelog**: https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/compare/1.14.0...1.14.1

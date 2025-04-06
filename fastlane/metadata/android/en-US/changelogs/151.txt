@@ -1,0 +1,3 @@
+- fix: window insets
+- chore(l10n): update translations
+- chore(deps): update dependencies
