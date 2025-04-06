@@ -114,8 +114,8 @@ class SettingsScreen : Screen {
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 TopAppBar(
-                    scrollBehavior = scrollBehavior,
                     windowInsets = topAppBarState.toWindowInsets(),
+                    scrollBehavior = scrollBehavior,
                     navigationIcon = {
                         if (navigationCoordinator.canPop.value) {
                             IconButton(

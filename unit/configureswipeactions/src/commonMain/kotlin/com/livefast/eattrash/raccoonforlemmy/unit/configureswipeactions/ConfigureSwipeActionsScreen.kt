@@ -45,6 +45,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
@@ -86,6 +87,7 @@ class ConfigureSwipeActionsScreen : Screen {
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 TopAppBar(
+                    windowInsets = topAppBarState.toWindowInsets(),
                     scrollBehavior = scrollBehavior,
                     title = {
                         Text(
@@ -180,7 +182,7 @@ class ConfigureSwipeActionsScreen : Screen {
                                     1 -> LocalStrings.current.swipeActionStartTwo
                                     else -> LocalStrings.current.swipeActionStartOne
                                 },
-                                action = action,
+                            action = action,
                             options =
                                 buildList {
                                     this +=
@@ -243,8 +245,8 @@ class ConfigureSwipeActionsScreen : Screen {
                                 when (idx) {
                                     1 -> LocalStrings.current.swipeActionEndTwo
                                     else -> LocalStrings.current.swipeActionEndOne
-                            },
-                                action = action,
+                                },
+                            action = action,
                             options =
                                 buildList {
                                     this +=
@@ -335,8 +337,8 @@ class ConfigureSwipeActionsScreen : Screen {
                                 when (idx) {
                                     1 -> LocalStrings.current.swipeActionStartTwo
                                     else -> LocalStrings.current.swipeActionStartOne
-                            },
-                                action = action,
+                                },
+                            action = action,
                             options =
                                 buildList {
                                     this +=
@@ -398,9 +400,9 @@ class ConfigureSwipeActionsScreen : Screen {
                             iconContentDescription =
                                 when (idx) {
                                     1 -> LocalStrings.current.swipeActionEndTwo
-                                else -> LocalStrings.current.swipeActionEndOne
-                            },
-                                action = action,
+                                    else -> LocalStrings.current.swipeActionEndOne
+                                },
+                            action = action,
                             options =
                                 buildList {
                                     this +=
@@ -490,9 +492,9 @@ class ConfigureSwipeActionsScreen : Screen {
                             iconContentDescription =
                                 when (idx) {
                                     1 -> LocalStrings.current.swipeActionStartTwo
-                                else -> LocalStrings.current.swipeActionStartOne
-                            },
-                                action = action,
+                                    else -> LocalStrings.current.swipeActionStartOne
+                                },
+                            action = action,
                             options =
                                 buildList {
                                     this +=
@@ -553,10 +555,10 @@ class ConfigureSwipeActionsScreen : Screen {
                                 },
                             iconContentDescription =
                                 when (idx) {
-                                1 -> LocalStrings.current.swipeActionEndTwo
-                                else -> LocalStrings.current.swipeActionEndOne
-                            },
-                                action = action,
+                                    1 -> LocalStrings.current.swipeActionEndTwo
+                                    else -> LocalStrings.current.swipeActionEndOne
+                                },
+                            action = action,
                             options =
                                 buildList {
                                     this +=

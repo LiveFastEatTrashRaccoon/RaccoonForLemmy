@@ -45,6 +45,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsIntValueRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
@@ -80,6 +81,7 @@ class ConfigureContentViewScreen : Screen {
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 TopAppBar(
+                    windowInsets = topAppBarState.toWindowInsets(),
                     scrollBehavior = scrollBehavior,
                     title = {
                         Text(

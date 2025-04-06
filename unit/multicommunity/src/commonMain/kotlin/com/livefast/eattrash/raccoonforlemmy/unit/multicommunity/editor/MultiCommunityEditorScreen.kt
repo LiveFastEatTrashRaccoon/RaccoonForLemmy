@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -53,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
@@ -71,6 +73,7 @@ class MultiCommunityEditorScreen(
     override fun Content() {
         val model: MultiCommunityEditorMviModel = rememberScreenModel(arg = communityId ?: 0)
         val uiState by model.uiState.collectAsState()
+        val topAppBarState = rememberTopAppBarState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
 
         LaunchedEffect(model) {
@@ -87,6 +90,7 @@ class MultiCommunityEditorScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
+                    windowInsets = topAppBarState.toWindowInsets(),
                     title = {
                         Text(
                             text = LocalStrings.current.multiCommunityEditorTitle,
