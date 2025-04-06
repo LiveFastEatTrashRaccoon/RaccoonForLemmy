@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsIntValueRow
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
@@ -105,6 +106,7 @@ class BanUserScreen(
             modifier = Modifier.navigationBarsPadding().safeImePadding(),
             topBar = {
                 TopAppBar(
+                    windowInsets = topAppBarState.toWindowInsets(),
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
                         IconButton(

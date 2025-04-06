@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -52,6 +53,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommentCard
@@ -157,12 +159,14 @@ class CreateCommentScreen(
         }
 
         Scaffold(
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             modifier =
                 Modifier
                     .navigationBarsPadding()
                     .safeImePadding(),
             topBar = {
                 TopAppBar(
+                    windowInsets = topAppBarState.toWindowInsets(),
                     scrollBehavior = scrollBehavior,
                     navigationIcon = {
                         IconButton(

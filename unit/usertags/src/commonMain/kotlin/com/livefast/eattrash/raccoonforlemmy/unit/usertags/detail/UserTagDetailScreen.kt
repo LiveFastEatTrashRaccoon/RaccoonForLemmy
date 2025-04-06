@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItemPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
@@ -52,6 +53,7 @@ class UserTagDetailScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
+                    windowInsets = topAppBarState.toWindowInsets(),
                     title = {
                         Text(
                             modifier = Modifier.padding(horizontal = Spacing.s),

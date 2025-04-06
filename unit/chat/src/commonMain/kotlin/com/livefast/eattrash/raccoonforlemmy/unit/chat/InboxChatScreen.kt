@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +35,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -60,6 +62,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeReposito
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
@@ -85,6 +88,7 @@ class InboxChatScreen(
     override fun Content() {
         val model: InboxChatMviModel = rememberScreenModel(arg = otherUserId)
         val uiState by model.uiState.collectAsState()
+        val topAppBarState = rememberTopAppBarState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val galleryHelper = remember { getGalleryHelper() }
         var openImagePicker by remember { mutableStateOf(false) }
@@ -122,9 +126,11 @@ class InboxChatScreen(
         }
 
         Scaffold(
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             modifier = Modifier.navigationBarsPadding().safeImePadding(),
             topBar = {
                 TopAppBar(
+                    windowInsets = topAppBarState.toWindowInsets(),
                     title = {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),

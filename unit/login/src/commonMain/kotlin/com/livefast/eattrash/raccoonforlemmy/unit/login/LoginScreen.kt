@@ -33,6 +33,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -56,6 +57,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.autofill
@@ -75,6 +77,7 @@ class LoginScreen : Screen {
     override fun Content() {
         val model: LoginMviModel = rememberScreenModel()
         val uiState by model.uiState.collectAsState()
+        val topAppBarState = rememberTopAppBarState()
         val snackbarHostState = remember { SnackbarHostState() }
         val genericError = LocalStrings.current.messageGenericError
         val navigationCoordinator = remember { getNavigationCoordinator() }
@@ -106,6 +109,7 @@ class LoginScreen : Screen {
             modifier = Modifier.navigationBarsPadding(),
             topBar = {
                 TopAppBar(
+                    windowInsets = topAppBarState.toWindowInsets(),
                     title = {
                         Text(
                             text = LocalStrings.current.profileButtonLogin,

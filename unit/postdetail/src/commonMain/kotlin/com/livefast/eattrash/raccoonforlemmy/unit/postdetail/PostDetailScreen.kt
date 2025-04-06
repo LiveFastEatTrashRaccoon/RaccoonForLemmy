@@ -273,6 +273,7 @@ class PostDetailScreen(
         }
 
         Scaffold(
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 TopAppBar(
                     windowInsets = topAppBarState.toWindowInsets(),
@@ -1070,8 +1071,7 @@ class PostDetailScreen(
                                                             updateDate ?: publishDate
                                                         }?.toTimestamp()
                                                     val lastSeenTs = uiState.lastSeenTimestamp
-                                                    val isAfterLastSeenTs =
-                                                        commentTs != null &&
+                                                    val isAfterLastSeenTs =   commentTs != null &&
                                                             lastSeenTs != null &&
                                                             commentTs > lastSeenTs
                                                     val backgroundModifier =

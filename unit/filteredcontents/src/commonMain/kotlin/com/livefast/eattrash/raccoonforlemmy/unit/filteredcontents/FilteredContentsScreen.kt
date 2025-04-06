@@ -174,6 +174,7 @@ class FilteredContentsScreen(
         }
 
         Scaffold(
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 TopAppBar(
                     windowInsets = topAppBarState.toWindowInsets(),
