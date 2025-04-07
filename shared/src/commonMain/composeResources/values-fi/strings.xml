@@ -112,7 +112,7 @@
     <string name="home_listing_title">Feedit</string>
     <string name="home_listing_type_all">Kaikki</string>
     <string name="home_listing_type_local">Paikallinen</string>
-    <string name="home_listing_type_subscribed">Tilattu</string>
+    <string name="home_listing_type_subscribed">Tilaukset</string>
     <string name="home_sort_title">Lajitteluperuste</string>
     <string name="home_sort_type_active">Aktiivinen</string>
     <string name="home_sort_type_controversial">Kiistanalainen</string>
@@ -506,4 +506,6 @@
     <string name="action_open">Avoin avoin</string>
     <string name="format_strikethrough">Lakkoileminen</string>
     <string name="swipe_action_end_two">Loppupuoli (vaihe 2)</string>
+    <string name="settings_mark_as_read_on_interaction_subtitle">Julkaisun äänestyksen tai tallennuksen jälkeen, merkitse se luetuksi</string>
+    <string name="settings_mark_as_read_on_interaction">Vuorovaikutuksen jälkeen, merkitse julkaisu luetuksi</string>
 </resources>
