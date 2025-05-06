@@ -168,6 +168,8 @@ A special thanks goes to all those who contributed so far (in nearly chronologic
 - [Tigg](https://hosted.weblate.org/user/tigg)
 - [Matth7878](https://github.com/Matth7878)
 - [TamilNeram](https://github.com/TamilNeram)
+- [pHama](https://hosted.weblate.org/user/pHama)
+- [Coool](https://github.com/Coool)
 - all those who reported feedback and ideas through the Lemmy community, GitHub issues, emails,
   private messages, homing pigeons and every other imaginable media.
 
