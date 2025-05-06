@@ -138,4 +138,22 @@
     <string name="settings_color_purple">🐙 Okeāna astoņkājis</string>
     <string name="navigation_profile">Profils</string>
     <string name="settings_content_font_family">Satura fonts</string>
+    <string name="copy_title">Kopēt virsrakstu</string>
+    <string name="default_tag_bot">bots</string>
+    <string name="default_tag_current_user">es</string>
+    <string name="dialog_raw_content_text">Teksts</string>
+    <string name="edit_comment_title">Rediģēt komentāru</string>
+    <string name="edit_community_item_sidebar">Sānjosla</string>
+    <string name="edit_community_item_visibility">Redzamība</string>
+    <string name="explore_result_type_users">Lietotāji</string>
+    <string name="explore_search_placeholder">Meklēt</string>
+    <string name="inbox_chat_message">Ziņojums</string>
+    <string name="multi_community_editor_icon">Ikona</string>
+    <string name="multi_community_editor_name">Nosaukums</string>
+    <string name="navigation_drawer_title_subscriptions">Pārvaldīt abonementus</string>
+    <string name="post_action_share">Dalīties</string>
+    <string name="settings_bar_theme">Sistēmas paziņojumu un navigācijas joslas motīvs</string>
+    <string name="settings_about">Par lietotni</string>
+    <string name="settings_content_font_larger">Īpaši liels</string>
+    <string name="settings_content_font_large">Liels</string>
 </resources>
