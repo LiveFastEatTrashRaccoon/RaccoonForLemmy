@@ -176,13 +176,13 @@ internal fun Person.toModel() =
         displayName = displayName.orEmpty(),
         avatar = avatar,
         banner = banner,
-        host = actorId.toHost(),
+        host = safeValue(apId, actorId).toHost(),
         accountAge = published,
         banned = banned,
         bio = bio,
         matrixUserId = matrixUserId,
         updateDate = updated,
-        bot = botAccount ?: false,
+        bot = botAccount == true,
     )
 
 internal fun PersonView.toModel() =
@@ -266,8 +266,8 @@ internal fun Community.toModel() =
         description = description.orEmpty(),
         icon = icon,
         banner = banner,
-        instanceUrl = actorId.communityToInstanceUrl(),
-        host = actorId.toHost(),
+        instanceUrl = safeValue(apId, actorId).communityToInstanceUrl(),
+        host = safeValue(apId, actorId).toHost(),
         nsfw = nsfw,
         creationDate = published,
         postingRestrictedToMods = postingRestrictedToMods,
@@ -576,7 +576,7 @@ internal fun LocalUser.toModel() =
     AccountSettingsModel(
         email = email,
         defaultListingType = defaultListingType?.toModel(),
-        defaultSortType = defaultSortType?.toModel(),
+        defaultSortType = defaultPostSortType?.toModel(),
         sendNotificationsToEmail = sendNotificationsToEmail,
         showBotAccounts = showBotAccounts,
         showNsfw = showNsfw,
@@ -631,3 +631,6 @@ internal fun LocalImageView.toModel() =
         deleteToken = localImage.pictrsDeleteToken,
         date = localImage.published,
     )
+
+private fun safeValue(vararg values: String?): String =
+    values.firstOrNull { !it.isNullOrEmpty() }.orEmpty()

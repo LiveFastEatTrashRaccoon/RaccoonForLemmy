@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Person(
-    @SerialName("actor_id") val actorId: String,
+    @SerialName("actor_id") val actorId: String? = null,
+    @SerialName("ap_id") val apId: String? = null,
     @SerialName("avatar") val avatar: String? = null,
     @SerialName("ban_expires") val banExpires: String? = null,
     @SerialName("banned") val banned: Boolean,
