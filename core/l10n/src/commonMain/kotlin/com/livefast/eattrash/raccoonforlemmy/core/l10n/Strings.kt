@@ -214,6 +214,7 @@ interface Strings {
     val languageFr: String @Composable get
     val languageGa: String @Composable get
     val languageIt: String @Composable get
+    val languageLv: String @Composable get
     val languagePl: String @Composable get
     val languagePt: String @Composable get
     val languagePtBr: String @Composable get

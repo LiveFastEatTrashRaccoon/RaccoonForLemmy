@@ -8,6 +8,7 @@ object Locales {
     const val FR = "fr"
     const val GA = "ga"
     const val IT = "it"
+    const val LV = "lv"
     const val PL = "pl"
     const val PT = "pt"
     const val PT_BR = "pt_BR"
@@ -26,6 +27,7 @@ object Locales {
             FR,
             GA,
             IT,
+            LV,
             PL,
             PT,
             PT_BR,
