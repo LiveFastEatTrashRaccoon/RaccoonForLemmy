@@ -20,11 +20,9 @@ class DefaultIsSiteVersionAtLeastUseCaseTest {
     @Test
     fun givenSameVersion_whenExecute_thenResultIsAsExpected() =
         runTest {
-            coEvery {
-                siteRepository.getSiteVersion()
-            } returns "0.19.2"
+            coEvery { siteRepository.getSiteVersion() } returns "0.19.2"
 
-            val res = sut.execute(0, 19, 2)
+            val res = sut.execute(major = 0, minor = 19, patch = 2)
 
             assertTrue(res)
         }
@@ -32,11 +30,9 @@ class DefaultIsSiteVersionAtLeastUseCaseTest {
     @Test
     fun givenPatchLessThanThreshold_whenExecute_thenResultIsAsExpected() =
         runTest {
-            coEvery {
-                siteRepository.getSiteVersion()
-            } returns "0.19.2"
+            coEvery { siteRepository.getSiteVersion() } returns "0.19.2"
 
-            val res = sut.execute(0, 19, 3)
+            val res = sut.execute(major = 0, minor = 19, patch = 3)
 
             assertFalse(res)
         }
@@ -44,11 +40,9 @@ class DefaultIsSiteVersionAtLeastUseCaseTest {
     @Test
     fun givenPatchGreaterThanThreshold_whenExecute_thenResultIsAsExpected() =
         runTest {
-            coEvery {
-                siteRepository.getSiteVersion()
-            } returns "0.19.2"
+            coEvery { siteRepository.getSiteVersion() } returns "0.19.2"
 
-            val res = sut.execute(0, 19, 1)
+            val res = sut.execute(major = 0, minor = 19, patch = 1)
 
             assertTrue(res)
         }
@@ -56,11 +50,9 @@ class DefaultIsSiteVersionAtLeastUseCaseTest {
     @Test
     fun givenMinorLessThanThreshold_whenExecute_thenResultIsAsExpected() =
         runTest {
-            coEvery {
-                siteRepository.getSiteVersion()
-            } returns "0.18.2"
+            coEvery { siteRepository.getSiteVersion() } returns "0.18.2"
 
-            val res = sut.execute(0, 19, 1)
+            val res = sut.execute(major = 0, minor = 19, patch = 2)
 
             assertFalse(res)
         }
@@ -68,11 +60,9 @@ class DefaultIsSiteVersionAtLeastUseCaseTest {
     @Test
     fun givenMinorGreaterThanThreshold_whenExecute_thenResultIsAsExpected() =
         runTest {
-            coEvery {
-                siteRepository.getSiteVersion()
-            } returns "0.20.2"
+            coEvery { siteRepository.getSiteVersion() } returns "0.20.2"
 
-            val res = sut.execute(0, 19, 1)
+            val res = sut.execute(major = 0, minor = 19, patch = 2)
 
             assertTrue(res)
         }
@@ -80,11 +70,9 @@ class DefaultIsSiteVersionAtLeastUseCaseTest {
     @Test
     fun givenMajorLessThanThreshold_whenExecute_thenResultIsAsExpected() =
         runTest {
-            coEvery {
-                siteRepository.getSiteVersion()
-            } returns "0.2.1"
+            coEvery { siteRepository.getSiteVersion() } returns "0.19.2"
 
-            val res = sut.execute(1, 1, 1)
+            val res = sut.execute(major = 1, minor = 0, patch = 0)
 
             assertFalse(res)
         }
@@ -92,11 +80,9 @@ class DefaultIsSiteVersionAtLeastUseCaseTest {
     @Test
     fun givenMajorGreaterThanThreshold_whenExecute_thenResultIsAsExpected() =
         runTest {
-            coEvery {
-                siteRepository.getSiteVersion()
-            } returns "1.1.0"
+            coEvery { siteRepository.getSiteVersion() } returns "1.0.0"
 
-            val res = sut.execute(0, 19, 1)
+            val res = sut.execute(major = 0, minor = 19, patch = 2)
 
             assertTrue(res)
         }
