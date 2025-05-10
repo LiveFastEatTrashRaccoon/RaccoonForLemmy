@@ -12,7 +12,7 @@ kotlin {
                 implementation(compose.components.resources)
 
                 implementation(libs.compose.multiplatform.media.player)
-                implementation(libs.kodein)
+                implementation(libs.kodein.compose)
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.screenmodel)
                 implementation(libs.voyager.kodein)

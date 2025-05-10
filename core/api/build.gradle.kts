@@ -24,7 +24,7 @@ kotlin {
 
 // workaround after KSP 2.0.0
 tasks.configureEach {
-    if (name.contains(Regex("ksp.*KotlinAndroid"))) {
+    if (name.contains(Regex("ksp.*KotlinAndroid")) || name.contains(Regex("ksp.*KotlinIos*"))) {
         dependsOn(tasks.named("kspCommonMainKotlinMetadata"))
     }
 }
