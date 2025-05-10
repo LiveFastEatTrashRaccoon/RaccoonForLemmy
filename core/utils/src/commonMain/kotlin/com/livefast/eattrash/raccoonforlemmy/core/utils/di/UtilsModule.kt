@@ -19,6 +19,7 @@ val utilsModule =
             nativeCustomTabsModule,
             nativeFileSystemModule,
             nativeGalleryHelperModule,
+            nativeImageLoadModule,
             nativeHapticFeedbackModule,
             nativeNetworkModule,
             nativeShareHelperModule,
