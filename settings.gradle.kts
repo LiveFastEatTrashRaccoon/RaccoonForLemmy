@@ -46,6 +46,7 @@ include(":domain:inbox")
 include(":domain:lemmy:data")
 include(":domain:lemmy:pagination")
 include(":domain:lemmy:repository")
+include(":domain:lemmy:usecase")
 
 include(":feature:home")
 include(":feature:inbox")

@@ -27,6 +27,7 @@ kotlin {
                 implementation(projects.domain.identity)
                 implementation(projects.domain.lemmy.data)
                 implementation(projects.domain.lemmy.repository)
+                implementation(projects.domain.lemmy.usecase)
             }
         }
     }

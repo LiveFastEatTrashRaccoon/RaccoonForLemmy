@@ -616,7 +616,7 @@ internal fun LocalUserView.toModel() =
         avatar = person.avatar,
         banner = person.banner,
         bio = person.bio,
-        bot = person.botAccount ?: false,
+        bot = person.botAccount == true,
         displayName = person.displayName,
         matrixUserId = person.matrixUserId,
         showUpVotes = localUserVoteDisplayMode?.upvotes,

@@ -28,7 +28,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.ExplorePagi
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.ExplorePaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSortTypesUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import kotlinx.coroutines.FlowPreview

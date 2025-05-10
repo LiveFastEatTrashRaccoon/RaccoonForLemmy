@@ -31,7 +31,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostNavigat
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostPaginationManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSortTypesUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyItemCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository

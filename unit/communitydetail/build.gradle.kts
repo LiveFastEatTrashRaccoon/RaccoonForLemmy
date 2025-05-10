@@ -29,6 +29,7 @@ kotlin {
                 implementation(projects.domain.lemmy.data)
                 implementation(projects.domain.lemmy.pagination)
                 implementation(projects.domain.lemmy.repository)
+                implementation(projects.domain.lemmy.usecase)
 
                 implementation(projects.unit.ban)
                 implementation(projects.unit.communityinfo)

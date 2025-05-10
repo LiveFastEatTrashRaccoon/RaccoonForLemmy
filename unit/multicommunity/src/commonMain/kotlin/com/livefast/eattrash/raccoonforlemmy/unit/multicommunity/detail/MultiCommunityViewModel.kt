@@ -22,7 +22,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toSortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostNavigationManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostPaginationManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostPaginationSpecification
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSortTypesUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
