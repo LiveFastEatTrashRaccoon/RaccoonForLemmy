@@ -4,6 +4,11 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import coil3.decode.Decoder
+import coil3.decode.SkiaImageDecoder
+import coil3.network.NetworkFetcher
+import coil3.network.ktor3.KtorNetworkFetcherFactory
+import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngineFactory
+import io.ktor.client.HttpClient
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.ColorAlphaType
 import org.jetbrains.skia.ColorType
@@ -22,4 +27,11 @@ actual fun IntArray.toComposeImageBitmap(
     return bmp.asComposeImageBitmap()
 }
 
-actual fun getNativeDecoders(): List<Decoder.Factory> = emptyList()
+actual fun getNativeDecoders(): List<Decoder.Factory> = buildList {
+    add(SkiaImageDecoder.Factory())
+}
+
+actual fun getNativeFetchers(): List<NetworkFetcher.Factory> = buildList {
+    val httpClient = HttpClient(provideHttpClientEngineFactory())
+    add(KtorNetworkFetcherFactory(httpClient))
+}

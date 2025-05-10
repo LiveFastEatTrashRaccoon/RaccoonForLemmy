@@ -19,6 +19,11 @@ internal class DefaultImageLoaderProvider(
                 for (decoder in decoders) {
                     add(decoder)
                 }
+
+                val fetchers = getNativeFetchers()
+                for (fetcher in fetchers) {
+                    add(fetcher)
+                }
             }.memoryCache {
                 MemoryCache
                     .Builder()
