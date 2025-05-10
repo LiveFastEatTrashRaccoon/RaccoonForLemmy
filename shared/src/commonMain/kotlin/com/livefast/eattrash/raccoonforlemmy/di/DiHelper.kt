@@ -14,6 +14,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.identityModule
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.di.inboxModule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.di.lemmyPaginationModule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.di.lemmyRepositoryModule
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.di.lemmyUseCaseModule
 import com.livefast.eattrash.raccoonforlemmy.feature.inbox.di.inboxTabModule
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.di.profileTabModule
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.di.settingsTabModule
@@ -83,6 +84,7 @@ fun initDi(additionalBuilder: DI.Builder.() -> Unit = {}) {
                 inboxModule,
                 lemmyPaginationModule,
                 lemmyRepositoryModule,
+                lemmyUseCaseModule,
             )
 
             // features

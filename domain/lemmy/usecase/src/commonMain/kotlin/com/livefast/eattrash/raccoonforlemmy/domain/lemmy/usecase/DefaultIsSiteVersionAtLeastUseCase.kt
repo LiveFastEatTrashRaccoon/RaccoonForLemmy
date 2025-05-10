@@ -1,4 +1,6 @@
-package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
+package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase
+
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 
 internal class DefaultIsSiteVersionAtLeastUseCase(
     private val siteRepository: SiteRepository,

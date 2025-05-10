@@ -20,9 +20,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toSortType
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSiteSupportsHiddenPostsUseCase
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSiteSupportsMediaListUseCase
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSiteSupportsHiddenPostsUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSiteSupportsMediaListUseCase
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSortTypesUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch

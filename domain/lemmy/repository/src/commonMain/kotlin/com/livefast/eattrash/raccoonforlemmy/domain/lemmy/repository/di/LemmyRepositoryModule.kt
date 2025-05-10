@@ -8,10 +8,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepo
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultCommentRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultCommunityRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultGetSiteSupportsHiddenPostsUseCase
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultGetSiteSupportsMediaListUseCase
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultGetSortTypesUseCase
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultIsSiteVersionAtLeastUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultLemmyItemCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultLemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultLocalItemCache
@@ -22,10 +18,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultPriv
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultSiteRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultUserRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultUserTagHelper
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSiteSupportsHiddenPostsUseCase
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSiteSupportsMediaListUseCase
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.GetSortTypesUseCase
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.IsSiteVersionAtLeastUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyItemCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LocalItemCache
@@ -74,34 +66,6 @@ val lemmyRepositoryModule =
                 DefaultCommunityRepository(
                     services = instance(tag = "default"),
                     customServices = instance(tag = "custom"),
-                )
-            }
-        }
-        bind<GetSiteSupportsHiddenPostsUseCase> {
-            singleton {
-                DefaultGetSiteSupportsHiddenPostsUseCase(
-                    isSiteVersionAtLeastUseCase = instance(),
-                )
-            }
-        }
-        bind<GetSiteSupportsMediaListUseCase> {
-            singleton {
-                DefaultGetSiteSupportsMediaListUseCase(
-                    isSiteVersionAtLeastUseCase = instance(),
-                )
-            }
-        }
-        bind<GetSortTypesUseCase> {
-            singleton {
-                DefaultGetSortTypesUseCase(
-                    isSiteVersionAtLeastUseCase = instance(),
-                )
-            }
-        }
-        bind<IsSiteVersionAtLeastUseCase> {
-            singleton {
-                DefaultIsSiteVersionAtLeastUseCase(
-                    siteRepository = instance(),
                 )
             }
         }

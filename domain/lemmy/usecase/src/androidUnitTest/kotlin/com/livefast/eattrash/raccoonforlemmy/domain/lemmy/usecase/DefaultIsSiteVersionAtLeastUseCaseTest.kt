@@ -1,6 +1,7 @@
-package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
+package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase
 
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

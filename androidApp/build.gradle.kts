@@ -113,6 +113,7 @@ dependencies {
     kover(projects.domain.inbox)
     kover(projects.domain.lemmy.repository)
     kover(projects.domain.lemmy.pagination)
+    kover(projects.domain.lemmy.usecase)
     kover(projects.feature.inbox)
     kover(projects.feature.profile)
 }
