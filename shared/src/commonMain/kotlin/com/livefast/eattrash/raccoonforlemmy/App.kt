@@ -43,6 +43,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeReposito
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.DraggableSideMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
+import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.ProvideStrings
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.getL10nManager
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.ComposeEvent
@@ -71,10 +72,11 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.kodein.di.compose.withDI
 
 @OptIn(FlowPreview::class)
 @Composable
-fun App(onLoadingFinished: () -> Unit = {}) {
+fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
     val accountRepository = remember { getAccountRepository() }
     val settingsRepository = remember { getSettingsRepository() }
     val appColorRepository = remember { getAppColorRepository() }

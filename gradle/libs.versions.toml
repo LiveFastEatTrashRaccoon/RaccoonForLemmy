@@ -60,6 +60,7 @@ compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", vers
 gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
 
 kodein = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
+kodein-compose = { module = "org.kodein.di:kodein-di-framework-compose", version.ref = "kodein" }
 
 kotlincrypto-bom = { module = "org.kotlincrypto.hash:bom", version.ref = "kotlincrypto" }
 kotlincrypto-md5 = { module = "org.kotlincrypto.hash:md" }
