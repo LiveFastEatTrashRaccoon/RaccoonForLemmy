@@ -45,7 +45,7 @@ internal class DefaultPostRepository(
             runCatching {
                 val response =
                     if (otherInstance.isNullOrEmpty()) {
-                        services.post.getAll(
+                        services.v3.post.getAll(
                             authHeader = auth.toAuthHeader(),
                             auth = auth,
                             communityId = communityId,
@@ -57,7 +57,7 @@ internal class DefaultPostRepository(
                         )
                     } else {
                         customServices.changeInstance(otherInstance)
-                        customServices.post.getAll(
+                        customServices.v3.post.getAll(
                             communityName = communityName,
                             page = if (pageCursor.isNullOrEmpty()) page else null,
                             pageCursor = pageCursor,
@@ -80,14 +80,14 @@ internal class DefaultPostRepository(
             runCatching {
                 val response =
                     if (instance.isNullOrEmpty()) {
-                        services.post.get(
+                        services.v3.post.get(
                             authHeader = auth.toAuthHeader(),
                             auth = auth,
                             id = id,
                         )
                     } else {
                         customServices.changeInstance(instance)
-                        customServices.post.get(id = id)
+                        customServices.v3.post.get(id = id)
                     }
                 response.postView.toModel().copy(
                     crossPosts = response.crossPosts.map { it.toModel() },
@@ -131,7 +131,7 @@ internal class DefaultPostRepository(
                     score = if (voted) 1 else 0,
                     auth = auth,
                 )
-            services.post.like(
+            services.v3.post.like(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -175,7 +175,7 @@ internal class DefaultPostRepository(
                     score = if (downVoted) -1 else 0,
                     auth = auth,
                 )
-            services.post.like(
+            services.v3.post.like(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -200,7 +200,7 @@ internal class DefaultPostRepository(
                     save = saved,
                     auth = auth,
                 )
-            services.post.save(
+            services.v3.post.save(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -228,7 +228,7 @@ internal class DefaultPostRepository(
                     languageId = languageId,
                     auth = auth,
                 )
-            services.post.create(
+            services.v3.post.create(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -254,7 +254,7 @@ internal class DefaultPostRepository(
                     languageId = languageId,
                     auth = auth,
                 )
-            services.post.edit(
+            services.v3.post.edit(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -272,7 +272,7 @@ internal class DefaultPostRepository(
                     read = read,
                     auth = auth.orEmpty(),
                 )
-            services.post.markAsRead(
+            services.v3.post.markAsRead(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -291,7 +291,7 @@ internal class DefaultPostRepository(
                     postIds = listOf(postId),
                     hidden = hidden,
                 )
-            services.post.hide(
+            services.v3.post.hide(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -310,7 +310,7 @@ internal class DefaultPostRepository(
                     deleted = true,
                 )
             val res =
-                services.post.delete(
+                services.v3.post.delete(
                     authHeader = auth.toAuthHeader(),
                     form = data,
                 )
@@ -330,7 +330,7 @@ internal class DefaultPostRepository(
                         deleted = false,
                     )
                 val res =
-                    services.post.delete(
+                    services.v3.post.delete(
                         authHeader = auth.toAuthHeader(),
                         form = data,
                     )
@@ -351,7 +351,7 @@ internal class DefaultPostRepository(
                         reason = reason,
                         auth = auth,
                     )
-                services.post.createReport(
+                services.v3.post.createReport(
                     form = data,
                     authHeader = auth.toAuthHeader(),
                 )
@@ -373,7 +373,7 @@ internal class DefaultPostRepository(
                         featureType = PostFeatureType.Community,
                     )
                 val response =
-                    services.post.feature(
+                    services.v3.post.feature(
                         form = data,
                         authHeader = auth.toAuthHeader(),
                     )
@@ -396,7 +396,7 @@ internal class DefaultPostRepository(
                         featureType = PostFeatureType.Local,
                     )
                 val response =
-                    services.post.feature(
+                    services.v3.post.feature(
                         form = data,
                         authHeader = auth.toAuthHeader(),
                     )
@@ -418,7 +418,7 @@ internal class DefaultPostRepository(
                         locked = locked,
                     )
                 val response =
-                    services.post.lock(
+                    services.v3.post.lock(
                         form = data,
                         authHeader = auth.toAuthHeader(),
                     )
@@ -441,7 +441,7 @@ internal class DefaultPostRepository(
                     reason = reason,
                 )
             val response =
-                services.post.remove(
+                services.v3.post.remove(
                     form = data,
                     authHeader = auth.toAuthHeader(),
                 )
@@ -458,7 +458,7 @@ internal class DefaultPostRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.post.listReports(
+                    services.v3.post.listReports(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         communityId = communityId,
@@ -486,7 +486,7 @@ internal class DefaultPostRepository(
                         resolved = resolved,
                     )
                 val response =
-                    services.post.resolveReport(
+                    services.v3.post.resolveReport(
                         form = data,
                         authHeader = auth.toAuthHeader(),
                     )
@@ -505,7 +505,7 @@ internal class DefaultPostRepository(
                 reason = reason,
             )
         val response =
-            services.post.purge(
+            services.v3.post.purge(
                 form = data,
                 authHeader = auth.toAuthHeader(),
             )
@@ -519,7 +519,7 @@ internal class DefaultPostRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.search.resolveObject(
+                    services.v3.search.resolveObject(
                         authHeader = auth.toAuthHeader(),
                         q = query,
                     )

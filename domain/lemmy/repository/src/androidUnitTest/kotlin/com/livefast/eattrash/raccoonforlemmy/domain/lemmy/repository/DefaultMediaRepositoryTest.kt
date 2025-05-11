@@ -1,8 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.PostService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.UserService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.PostServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.UserServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.MediaModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
@@ -23,12 +23,15 @@ class DefaultMediaRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val userService = mockk<UserService>()
-    private val postService = mockk<PostService>(relaxUnitFun = true)
+    private val userServiceV3 = mockk<UserServiceV3>()
+    private val postServiceV3 = mockk<PostServiceV3>(relaxUnitFun = true)
     private val serviceProvider =
         mockk<ServiceProvider> {
-            every { user } returns userService
-            every { post } returns postService
+            every { v3 } returns
+                mockk {
+                    every { user } returns userServiceV3
+                    every { post } returns postServiceV3
+                }
             every { currentInstance } returns INSTANCE
         }
     private val sut =
@@ -40,7 +43,7 @@ class DefaultMediaRepositoryTest {
     fun whenUploadImage_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.uploadImage(
+                postServiceV3.uploadImage(
                     authHeader = any(),
                     url = any(),
                     token = any(),
@@ -56,7 +59,7 @@ class DefaultMediaRepositoryTest {
 
             assertNotNull(res)
             coVerify {
-                postService.uploadImage(
+                postServiceV3.uploadImage(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     url = "https://$INSTANCE/pictrs/image",
                     token = "jwt=${AUTH_TOKEN}",
@@ -69,7 +72,7 @@ class DefaultMediaRepositoryTest {
     fun givenError_whenUploadImage_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.uploadImage(
+                postServiceV3.uploadImage(
                     authHeader = any(),
                     url = any(),
                     token = any(),
@@ -85,7 +88,7 @@ class DefaultMediaRepositoryTest {
 
             assertNull(res)
             coVerify {
-                postService.uploadImage(
+                postServiceV3.uploadImage(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     url = "https://$INSTANCE/pictrs/image",
                     token = "jwt=${AUTH_TOKEN}",
@@ -98,7 +101,7 @@ class DefaultMediaRepositoryTest {
     fun givenNoResults_whenGetAll_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                userService.listMedia(
+                userServiceV3.listMedia(
                     authHeader = any(),
                     page = any(),
                     limit = any(),
@@ -116,7 +119,7 @@ class DefaultMediaRepositoryTest {
 
             assertTrue(res.isEmpty())
             coVerify {
-                userService.listMedia(
+                userServiceV3.listMedia(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     page = 1,
                     limit = 20,
@@ -128,7 +131,7 @@ class DefaultMediaRepositoryTest {
     fun givenError_whenGetAll_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                userService.listMedia(
+                userServiceV3.listMedia(
                     authHeader = any(),
                     page = any(),
                     limit = any(),
@@ -143,7 +146,7 @@ class DefaultMediaRepositoryTest {
 
             assertTrue(res.isEmpty())
             coVerify {
-                userService.listMedia(
+                userServiceV3.listMedia(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     page = 1,
                     limit = 20,
@@ -155,7 +158,7 @@ class DefaultMediaRepositoryTest {
     fun givenResults_whenGetAll_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                userService.listMedia(
+                userServiceV3.listMedia(
                     authHeader = any(),
                     page = any(),
                     limit = any(),
@@ -180,7 +183,7 @@ class DefaultMediaRepositoryTest {
             assertEquals(1, res.size)
             assertEquals("fake-alias", res.first().alias)
             coVerify {
-                userService.listMedia(
+                userServiceV3.listMedia(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     page = 1,
                     limit = 20,
@@ -200,7 +203,7 @@ class DefaultMediaRepositoryTest {
             )
 
             coVerify {
-                postService.deleteImage(
+                postServiceV3.deleteImage(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     url = "https://$instance/pictrs/image/delete/fake-delete-token/fake-alias",
                     token = "jwt=${AUTH_TOKEN}",

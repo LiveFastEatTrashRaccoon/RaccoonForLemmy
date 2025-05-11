@@ -7,8 +7,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.PostFeatureType
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.ResolveObjectResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SuccessResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.PostService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.SearchService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.PostServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.SearchServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -32,16 +32,22 @@ class DefaultPostRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val postService = mockk<PostService>()
-    private val searchService = mockk<SearchService>()
+    private val postServiceV3 = mockk<PostServiceV3>()
+    private val searchServiceV3 = mockk<SearchServiceV3>()
     private val serviceProvider =
         mockk<ServiceProvider> {
-            every { post } returns postService
-            every { search } returns searchService
+            every { v3 } returns
+                mockk {
+                    every { post } returns postServiceV3
+                    every { search } returns searchServiceV3
+                }
         }
     private val customServiceProvider =
         mockk<ServiceProvider> {
-            every { post } returns postService
+            every { v3 } returns
+                mockk {
+                    every { post } returns postServiceV3
+                }
         }
 
     private val sut =
@@ -54,7 +60,7 @@ class DefaultPostRepositoryTest {
     fun givenNoResults_whenGetAll_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.getAll(
+                postServiceV3.getAll(
                     authHeader = any(),
                     auth = any(),
                     limit = any(),
@@ -85,7 +91,7 @@ class DefaultPostRepositoryTest {
             assertTrue(posts.isEmpty())
             assertNull(res.second)
             coVerify {
-                postService.getAll(
+                postServiceV3.getAll(
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     limit = 20,
@@ -101,7 +107,7 @@ class DefaultPostRepositoryTest {
     fun givenResults_whenGetAll_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.getAll(
+                postServiceV3.getAll(
                     authHeader = any(),
                     auth = any(),
                     limit = any(),
@@ -140,7 +146,7 @@ class DefaultPostRepositoryTest {
 
             assertEquals(PAGE_CURSOR, res.second)
             coVerify {
-                postService.getAll(
+                postServiceV3.getAll(
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     limit = 20,
@@ -157,7 +163,7 @@ class DefaultPostRepositoryTest {
         runTest {
             val postId = 1L
             coEvery {
-                postService.get(
+                postServiceV3.get(
                     authHeader = any(),
                     auth = any(),
                     id = any(),
@@ -226,7 +232,7 @@ class DefaultPostRepositoryTest {
         runTest {
             val post = PostModel(id = 1L, myVote = 1, upvotes = 1, score = 0, downvotes = 1)
             coEvery {
-                postService.like(
+                postServiceV3.like(
                     authHeader = any(),
                     form = any(),
                 )
@@ -241,7 +247,7 @@ class DefaultPostRepositoryTest {
 
             assertTrue(res.isSuccess)
             coVerify {
-                postService.like(
+                postServiceV3.like(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -258,7 +264,7 @@ class DefaultPostRepositoryTest {
         runTest {
             val post = PostModel(id = 1L, myVote = 1, upvotes = 1, score = 0, downvotes = 1)
             coEvery {
-                postService.like(
+                postServiceV3.like(
                     authHeader = any(),
                     form = any(),
                 )
@@ -273,7 +279,7 @@ class DefaultPostRepositoryTest {
 
             assertTrue(res.isSuccess)
             coVerify {
-                postService.like(
+                postServiceV3.like(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -326,7 +332,7 @@ class DefaultPostRepositoryTest {
         runTest {
             val post = PostModel(id = 1L, myVote = 1, upvotes = 1, score = 0, downvotes = 1)
             coEvery {
-                postService.like(
+                postServiceV3.like(
                     authHeader = any(),
                     form = any(),
                 )
@@ -341,7 +347,7 @@ class DefaultPostRepositoryTest {
 
             assertTrue(res.isSuccess)
             coVerify {
-                postService.like(
+                postServiceV3.like(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -358,7 +364,7 @@ class DefaultPostRepositoryTest {
         runTest {
             val post = PostModel(id = 1L, myVote = 1, upvotes = 1, score = 0, downvotes = 1)
             coEvery {
-                postService.like(
+                postServiceV3.like(
                     authHeader = any(),
                     form = any(),
                 )
@@ -373,7 +379,7 @@ class DefaultPostRepositoryTest {
 
             assertTrue(res.isSuccess)
             coVerify {
-                postService.like(
+                postServiceV3.like(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -407,7 +413,7 @@ class DefaultPostRepositoryTest {
     fun whenSave_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.save(any(), any())
+                postServiceV3.save(any(), any())
             } returns mockk(relaxed = true)
 
             val post = PostModel(id = 1L, saved = false)
@@ -420,7 +426,7 @@ class DefaultPostRepositoryTest {
 
             assertTrue(res.isSuccess)
             coVerify {
-                postService.save(
+                postServiceV3.save(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -436,7 +442,7 @@ class DefaultPostRepositoryTest {
     fun whenSaveUndo_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.save(any(), any())
+                postServiceV3.save(any(), any())
             } returns mockk(relaxed = true)
 
             val post = PostModel(id = 1L, saved = true)
@@ -449,7 +455,7 @@ class DefaultPostRepositoryTest {
 
             assertTrue(res.isSuccess)
             coVerify {
-                postService.save(
+                postServiceV3.save(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -465,7 +471,7 @@ class DefaultPostRepositoryTest {
     fun whenCreate_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.create(
+                postServiceV3.create(
                     authHeader = any(),
                     form = any(),
                 )
@@ -484,7 +490,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.create(
+                postServiceV3.create(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -502,7 +508,7 @@ class DefaultPostRepositoryTest {
     fun whenEdit_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.edit(
+                postServiceV3.edit(
                     authHeader = any(),
                     form = any(),
                 )
@@ -521,7 +527,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.edit(
+                postServiceV3.edit(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -539,7 +545,7 @@ class DefaultPostRepositoryTest {
     fun whenSetRead_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.markAsRead(
+                postServiceV3.markAsRead(
                     authHeader = any(),
                     form = any(),
                 )
@@ -553,7 +559,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.markAsRead(
+                postServiceV3.markAsRead(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -569,7 +575,7 @@ class DefaultPostRepositoryTest {
     fun whenDelete_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.delete(
+                postServiceV3.delete(
                     authHeader = any(),
                     form = any(),
                 )
@@ -582,7 +588,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.delete(
+                postServiceV3.delete(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -597,7 +603,7 @@ class DefaultPostRepositoryTest {
     fun whenRestore_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.delete(
+                postServiceV3.delete(
                     authHeader = any(),
                     form = any(),
                 )
@@ -610,7 +616,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.delete(
+                postServiceV3.delete(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -625,7 +631,7 @@ class DefaultPostRepositoryTest {
     fun whenHide_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.hide(
+                postServiceV3.hide(
                     authHeader = any(),
                     form = any(),
                 )
@@ -639,7 +645,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.hide(
+                postServiceV3.hide(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -654,7 +660,7 @@ class DefaultPostRepositoryTest {
     fun whenReport_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.createReport(
+                postServiceV3.createReport(
                     authHeader = any(),
                     form = any(),
                 )
@@ -669,7 +675,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.createReport(
+                postServiceV3.createReport(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -684,7 +690,7 @@ class DefaultPostRepositoryTest {
     fun whenFeatureInCommunity_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.feature(
+                postServiceV3.feature(
                     authHeader = any(),
                     form = any(),
                 )
@@ -698,7 +704,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.feature(
+                postServiceV3.feature(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -714,7 +720,7 @@ class DefaultPostRepositoryTest {
     fun whenFeatureInInstance_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.feature(
+                postServiceV3.feature(
                     authHeader = any(),
                     form = any(),
                 )
@@ -728,7 +734,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.feature(
+                postServiceV3.feature(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -744,7 +750,7 @@ class DefaultPostRepositoryTest {
     fun whenLock_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.lock(
+                postServiceV3.lock(
                     authHeader = any(),
                     form = any(),
                 )
@@ -758,7 +764,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.lock(
+                postServiceV3.lock(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -773,7 +779,7 @@ class DefaultPostRepositoryTest {
     fun whenRemove_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.remove(
+                postServiceV3.remove(
                     authHeader = any(),
                     form = any(),
                 )
@@ -789,7 +795,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.remove(
+                postServiceV3.remove(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -805,7 +811,7 @@ class DefaultPostRepositoryTest {
     fun whenGetReports_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.listReports(
+                postServiceV3.listReports(
                     auth = any(),
                     authHeader = any(),
                     communityId = any(),
@@ -828,7 +834,7 @@ class DefaultPostRepositoryTest {
             assertNotNull(res)
             assertEquals(1, res.size)
             coVerify {
-                postService.listReports(
+                postServiceV3.listReports(
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     communityId = communityId,
@@ -843,7 +849,7 @@ class DefaultPostRepositoryTest {
     fun whenResolveReport_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.resolveReport(
+                postServiceV3.resolveReport(
                     authHeader = any(),
                     form = any(),
                 )
@@ -857,7 +863,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.resolveReport(
+                postServiceV3.resolveReport(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -872,7 +878,7 @@ class DefaultPostRepositoryTest {
     fun whenPurge_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                postService.purge(
+                postServiceV3.purge(
                     authHeader = any(),
                     form = any(),
                 )
@@ -887,7 +893,7 @@ class DefaultPostRepositoryTest {
             )
 
             coVerify {
-                postService.purge(
+                postServiceV3.purge(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -903,7 +909,7 @@ class DefaultPostRepositoryTest {
         runTest {
             val postId = 1L
             coEvery {
-                searchService.resolveObject(any(), any())
+                searchServiceV3.resolveObject(any(), any())
             } returns
                 ResolveObjectResponse(
                     post =
@@ -919,7 +925,7 @@ class DefaultPostRepositoryTest {
 
             assertEquals(postId, res?.id)
             coVerify {
-                searchService.resolveObject(
+                searchServiceV3.resolveObject(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     q = "text",
                 )

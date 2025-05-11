@@ -7,6 +7,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.AccountSettingsMo
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.LanguageModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.MetadataModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.SiteVersionDataSource
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
@@ -17,15 +18,22 @@ import kotlinx.coroutines.withContext
 internal class DefaultSiteRepository(
     private val services: ServiceProvider,
     private val customServices: ServiceProvider,
+    private val siteVersionDataSource: SiteVersionDataSource,
 ) : SiteRepository {
     override suspend fun getCurrentUser(auth: String): UserModel? =
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.site.get(
-                        auth = auth,
-                        authHeader = auth.toAuthHeader(),
-                    )
+                    if (siteVersionDataSource.shouldUseV4()) {
+                        services.v4.site.get(
+                            authHeader = auth.toAuthHeader(),
+                        )
+                    } else {
+                        services.v3.site.get(
+                            auth = auth,
+                            authHeader = auth.toAuthHeader(),
+                        )
+                    }
                 response.myUser?.let {
                     val user = it.localUserView?.person
                     val counts = it.localUserView?.counts
@@ -42,14 +50,14 @@ internal class DefaultSiteRepository(
             runCatching {
                 if (otherInstance.isNullOrEmpty()) {
                     val response =
-                        services.site.get(
+                        services.v3.site.get(
                             authHeader = auth.toAuthHeader(),
                         )
                     response.version.takeIf { !it.isNullOrEmpty() }
                 } else {
                     customServices.changeInstance(otherInstance)
                     val response =
-                        customServices.site.get(
+                        customServices.v3.site.get(
                             authHeader = "",
                         )
                     response.version.takeIf { !it.isNullOrEmpty() }
@@ -68,7 +76,7 @@ internal class DefaultSiteRepository(
                     instanceId = id,
                     block = blocked,
                 )
-            services.site.block(
+            services.v3.site.block(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -78,7 +86,7 @@ internal class DefaultSiteRepository(
     override suspend fun getMetadata(url: String): MetadataModel? =
         withContext(Dispatchers.IO) {
             runCatching {
-                val response = services.post.getSiteMetadata(url = url)
+                val response = services.v3.post.getSiteMetadata(url = url)
                 response.metadata.toModel()
             }.getOrNull()
         }
@@ -87,7 +95,7 @@ internal class DefaultSiteRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.site.get(
+                    services.v3.site.get(
                         auth = auth,
                         authHeader = auth.toAuthHeader(),
                     )
@@ -99,7 +107,7 @@ internal class DefaultSiteRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.site.get(
+                    services.v3.site.get(
                         auth = auth,
                         authHeader = auth.toAuthHeader(),
                     )
@@ -113,7 +121,7 @@ internal class DefaultSiteRepository(
     ): Unit =
         withContext(Dispatchers.IO) {
             val formData = value.toDto().copy(auth = auth)
-            services.user.saveUserSettings(
+            services.v3.user.saveUserSettings(
                 authHeader = auth.toAuthHeader(),
                 form = formData,
             )
@@ -123,7 +131,7 @@ internal class DefaultSiteRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.site.get(
+                    services.v3.site.get(
                         auth = auth,
                         authHeader = auth.toAuthHeader(),
                     )
@@ -141,11 +149,11 @@ internal class DefaultSiteRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 if (otherInstance.isNullOrEmpty()) {
-                    val response = services.site.get()
+                    val response = services.v3.site.get()
                     response.admins.map { it.toModel() }
                 } else {
                     customServices.changeInstance(otherInstance)
-                    val response = customServices.site.get()
+                    val response = customServices.v3.site.get()
                     response.admins.map { it.toModel() }
                 }
             }.getOrElse { emptyList() }

@@ -42,7 +42,7 @@ internal class DefaultCommunityRepository(
             runCatching {
                 val searchResponse =
                     if (instance.isNullOrEmpty()) {
-                        services.search.search(
+                        services.v3.search.search(
                             authHeader = auth.toAuthHeader(),
                             q = query,
                             auth = auth,
@@ -55,7 +55,7 @@ internal class DefaultCommunityRepository(
                         )
                     } else {
                         customServices.changeInstance(instance)
-                        customServices.search.search(
+                        customServices.v3.search.search(
                             authHeader = auth.toAuthHeader(),
                             q = query,
                             auth = auth,
@@ -93,7 +93,7 @@ internal class DefaultCommunityRepository(
             runCatching {
                 customServices.changeInstance(instance)
                 val response =
-                    customServices.community.getAll(
+                    customServices.v3.community.getAll(
                         page = page,
                         limit = limit,
                         sort = sortType.toDto(),
@@ -111,7 +111,7 @@ internal class DefaultCommunityRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val resolveResponse =
-                    services.search.resolveObject(
+                    services.v3.search.resolveObject(
                         authHeader = auth.toAuthHeader(),
                         q = query,
                     )
@@ -128,7 +128,7 @@ internal class DefaultCommunityRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.search.search(
+                    services.v3.search.search(
                         authHeader = auth.toAuthHeader(),
                         q = query,
                         auth = auth,
@@ -151,7 +151,7 @@ internal class DefaultCommunityRepository(
             runCatching {
                 val response =
                     if (instance.isNullOrEmpty()) {
-                        services.community.get(
+                        services.v3.community.get(
                             authHeader = auth.toAuthHeader(),
                             auth = auth,
                             id = id,
@@ -159,7 +159,7 @@ internal class DefaultCommunityRepository(
                         )
                     } else {
                         customServices.changeInstance(instance)
-                        customServices.community.get(name = name)
+                        customServices.v3.community.get(name = name)
                     }
                 response.communityView.toModel()
             }.getOrNull()
@@ -172,7 +172,7 @@ internal class DefaultCommunityRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.community.get(
+                    services.v3.community.get(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         id = id,
@@ -196,7 +196,7 @@ internal class DefaultCommunityRepository(
                         follow = true,
                     )
                 val response =
-                    services.community.follow(
+                    services.v3.community.follow(
                         authHeader = auth.toAuthHeader(),
                         form = data,
                     )
@@ -217,7 +217,7 @@ internal class DefaultCommunityRepository(
                         follow = false,
                     )
                 val response =
-                    services.community.follow(
+                    services.v3.community.follow(
                         authHeader = auth.toAuthHeader(),
                         form = data,
                     )
@@ -237,7 +237,7 @@ internal class DefaultCommunityRepository(
                     block = blocked,
                     auth = auth.orEmpty(),
                 )
-            services.community.block(
+            services.v3.community.block(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -265,7 +265,7 @@ internal class DefaultCommunityRepository(
                         expires = expires,
                     )
                 val response =
-                    services.community.ban(
+                    services.v3.community.ban(
                         authHeader = auth.toAuthHeader(),
                         form = data,
                     )
@@ -289,7 +289,7 @@ internal class DefaultCommunityRepository(
                         communityId = communityId,
                     )
                 val response =
-                    services.community.addMod(
+                    services.v3.community.addMod(
                         authHeader = auth.toAuthHeader(),
                         form = data,
                     )
@@ -316,7 +316,7 @@ internal class DefaultCommunityRepository(
                     postingRestrictedToMods = community.postingRestrictedToMods,
                 )
             val res =
-                services.community.create(
+                services.v3.community.create(
                     authHeader = auth.toAuthHeader(),
                     form = data,
                 )
@@ -338,7 +338,7 @@ internal class DefaultCommunityRepository(
                     nsfw = community.nsfw,
                     postingRestrictedToMods = community.postingRestrictedToMods,
                 )
-            services.community.edit(
+            services.v3.community.edit(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -354,7 +354,7 @@ internal class DefaultCommunityRepository(
                     communityId = communityId,
                     deleted = true,
                 )
-            services.community.delete(
+            services.v3.community.delete(
                 form = data,
                 authHeader = auth.toAuthHeader(),
             )
@@ -373,7 +373,7 @@ internal class DefaultCommunityRepository(
                 hidden = hidden,
             )
         val response =
-            services.community.hide(
+            services.v3.community.hide(
                 form = data,
                 authHeader = auth.toAuthHeader(),
             )
@@ -391,7 +391,7 @@ internal class DefaultCommunityRepository(
                 reason = reason,
             )
         val response =
-            services.community.purge(
+            services.v3.community.purge(
                 form = data,
                 authHeader = auth.toAuthHeader(),
             )

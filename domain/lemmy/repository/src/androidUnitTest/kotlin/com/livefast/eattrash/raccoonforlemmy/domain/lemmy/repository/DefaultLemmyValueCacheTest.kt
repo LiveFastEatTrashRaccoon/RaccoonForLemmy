@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.SiteService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.SiteServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import io.mockk.coEvery
@@ -18,10 +18,13 @@ class DefaultLemmyValueCacheTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val siteService = mockk<SiteService>()
+    private val siteServiceV3 = mockk<SiteServiceV3>()
     private val serviceProvider =
         mockk<ServiceProvider> {
-            every { site } returns siteService
+            every { v3 } returns
+                mockk {
+                    every { site } returns siteServiceV3
+                }
             every { currentInstance } returns "feddit.it"
         }
     private val sut =
@@ -33,7 +36,7 @@ class DefaultLemmyValueCacheTest {
     fun whenRefresh_thenInteractionsAreAsExpected() =
         runTest {
             val userId = 1L
-            coEvery { siteService.get(any(), any()) } returns
+            coEvery { siteServiceV3.get(any(), any()) } returns
                 mockk(relaxed = true) {
                     every { myUser } returns
                         mockk(relaxed = true) {
@@ -77,7 +80,7 @@ class DefaultLemmyValueCacheTest {
             assertTrue(isCurrentUserModerator)
 
             coVerify {
-                siteService.get(
+                siteServiceV3.get(
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                 )

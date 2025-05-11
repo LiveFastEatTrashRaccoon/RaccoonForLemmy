@@ -6,8 +6,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetCommentResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetCommentsResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.ResolveObjectResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.CommentService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.SearchService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.CommentServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.SearchServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -33,16 +33,22 @@ class DefaultCommentRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val searchService = mockk<SearchService>()
-    private val commentService = mockk<CommentService>()
+    private val searchServiceV3 = mockk<SearchServiceV3>()
+    private val commentServiceV3 = mockk<CommentServiceV3>()
     private val serviceProvider =
         mockk<ServiceProvider> {
-            every { comment } returns commentService
-            every { search } returns searchService
+            every { v3 } returns
+                mockk {
+                    every { comment } returns commentServiceV3
+                    every { search } returns searchServiceV3
+                }
         }
     private val customServiceProvider =
         mockk<ServiceProvider>(relaxUnitFun = true) {
-            every { comment } returns commentService
+            every { v3 } returns
+                mockk {
+                    every { comment } returns commentServiceV3
+                }
         }
     private val sut =
         DefaultCommentRepository(
@@ -54,7 +60,7 @@ class DefaultCommentRepositoryTest {
     fun givenSuccess_whenGetAll_thenResultIsAsExpected() =
         runTest {
             coEvery {
-                commentService.getAll(
+                commentServiceV3.getAll(
                     authHeader = any(),
                     auth = any(),
                     limit = any(),
@@ -88,7 +94,7 @@ class DefaultCommentRepositoryTest {
 
             coVerify {
                 customServiceProvider wasNot Called
-                commentService.getAll(
+                commentServiceV3.getAll(
                     authHeader = token.toAuthHeader(),
                     auth = token,
                     postId = 1,
@@ -106,7 +112,7 @@ class DefaultCommentRepositoryTest {
         runTest {
             val token = FAKE_TOKEN
             val commentId = 1L
-            coEvery { commentService.getBy(any(), any(), any()) } returns
+            coEvery { commentServiceV3.getBy(any(), any(), any()) } returns
                 GetCommentResponse(
                     commentView =
                         mockk(relaxed = true) {
@@ -120,7 +126,7 @@ class DefaultCommentRepositoryTest {
             assertEquals(1, res.id)
             coVerify {
                 customServiceProvider wasNot Called
-                commentService.getBy(
+                commentServiceV3.getBy(
                     authHeader = token.toAuthHeader(),
                     id = commentId,
                     auth = token,
@@ -132,7 +138,7 @@ class DefaultCommentRepositoryTest {
     fun whenGetChildren_thenResultIsAsExpected() =
         runTest {
             coEvery {
-                commentService.getAll(
+                commentServiceV3.getAll(
                     authHeader = any(),
                     auth = any(),
                     limit = any(),
@@ -165,7 +171,7 @@ class DefaultCommentRepositoryTest {
 
             coVerify {
                 customServiceProvider wasNot Called
-                commentService.getAll(
+                commentServiceV3.getAll(
                     authHeader = token.toAuthHeader(),
                     auth = token,
                     parentId = 2,
@@ -224,7 +230,7 @@ class DefaultCommentRepositoryTest {
             val comment = CommentModel(id = 1, text = "text")
             val token = FAKE_TOKEN
             coEvery {
-                commentService.like(
+                commentServiceV3.like(
                     any(),
                     any(),
                 )
@@ -238,7 +244,7 @@ class DefaultCommentRepositoryTest {
 
             assertNotNull(res)
             coVerify {
-                commentService.like(
+                commentServiceV3.like(
                     authHeader = token.toAuthHeader(),
                     form =
                         CreateCommentLikeForm(
@@ -297,7 +303,7 @@ class DefaultCommentRepositoryTest {
             val comment = CommentModel(id = 1, text = "text")
             val token = FAKE_TOKEN
             coEvery {
-                commentService.like(
+                commentServiceV3.like(
                     any(),
                     any(),
                 )
@@ -311,7 +317,7 @@ class DefaultCommentRepositoryTest {
 
             assertNotNull(res)
             coVerify {
-                commentService.like(
+                commentServiceV3.like(
                     authHeader = token.toAuthHeader(),
                     form =
                         CreateCommentLikeForm(
@@ -350,7 +356,7 @@ class DefaultCommentRepositoryTest {
             )
 
             coVerify {
-                commentService.create(
+                commentServiceV3.create(
                     authHeader = token.toAuthHeader(),
                     form =
                         withArg { data ->
@@ -376,7 +382,7 @@ class DefaultCommentRepositoryTest {
             )
 
             coVerify {
-                commentService.edit(
+                commentServiceV3.edit(
                     authHeader = token.toAuthHeader(),
                     form =
                         withArg { data ->
@@ -399,7 +405,7 @@ class DefaultCommentRepositoryTest {
             )
 
             coVerify {
-                commentService.delete(
+                commentServiceV3.delete(
                     authHeader = token.toAuthHeader(),
                     form =
                         withArg { data ->
@@ -421,7 +427,7 @@ class DefaultCommentRepositoryTest {
             )
 
             coVerify {
-                commentService.delete(
+                commentServiceV3.delete(
                     authHeader = token.toAuthHeader(),
                     form =
                         withArg { data ->
@@ -445,7 +451,7 @@ class DefaultCommentRepositoryTest {
             )
 
             coVerify {
-                commentService.createReport(
+                commentServiceV3.createReport(
                     authHeader = token.toAuthHeader(),
                     form =
                         withArg { data ->
@@ -471,7 +477,7 @@ class DefaultCommentRepositoryTest {
             )
 
             coVerify {
-                commentService.remove(
+                commentServiceV3.remove(
                     authHeader = token.toAuthHeader(),
                     form =
                         withArg { data ->
@@ -496,7 +502,7 @@ class DefaultCommentRepositoryTest {
             )
 
             coVerify {
-                commentService.distinguish(
+                commentServiceV3.distinguish(
                     authHeader = token.toAuthHeader(),
                     form =
                         withArg { data ->
@@ -521,7 +527,7 @@ class DefaultCommentRepositoryTest {
             )
 
             coVerify {
-                commentService.listReports(
+                commentServiceV3.listReports(
                     authHeader = token.toAuthHeader(),
                     communityId = itemId,
                     auth = token,
@@ -544,7 +550,7 @@ class DefaultCommentRepositoryTest {
             )
 
             coVerify {
-                commentService.resolveReport(
+                commentServiceV3.resolveReport(
                     authHeader = token.toAuthHeader(),
                     form =
                         withArg { data ->
@@ -561,7 +567,7 @@ class DefaultCommentRepositoryTest {
         runTest {
             val commentId = 1L
             coEvery {
-                searchService.resolveObject(any(), any())
+                searchServiceV3.resolveObject(any(), any())
             } returns
                 ResolveObjectResponse(
                     comment =
@@ -578,7 +584,7 @@ class DefaultCommentRepositoryTest {
 
             assertEquals(commentId, res?.id)
             coVerify {
-                searchService.resolveObject(
+                searchServiceV3.resolveObject(
                     authHeader = token.toAuthHeader(),
                     q = "text",
                 )

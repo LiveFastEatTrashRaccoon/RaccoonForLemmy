@@ -22,7 +22,7 @@ internal class DefaultModlogRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.modLog.getItems(
+                    services.v3.modLog.getItems(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         communityId = communityId,

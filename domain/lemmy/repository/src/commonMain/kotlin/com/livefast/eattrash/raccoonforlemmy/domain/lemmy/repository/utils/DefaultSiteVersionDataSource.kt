@@ -1,21 +1,27 @@
-package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase
+package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils
 
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
+import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 
-internal class DefaultIsSiteVersionAtLeastUseCase(
-    private val siteRepository: SiteRepository,
-) : IsSiteVersionAtLeastUseCase {
+internal class DefaultSiteVersionDataSource(
+    private val services: ServiceProvider,
+    private val customServices: ServiceProvider,
+) : SiteVersionDataSource {
     companion object {
         private val LEMMY_VERSION_REGEX = Regex("(?<major>\\d+).(?<minor>\\d+)(.(?<patch>\\d+))?")
     }
 
-    override suspend fun invoke(
+    override suspend fun isAtLeast(
         major: Int,
         minor: Int,
         patch: Int,
         otherInstance: String?,
     ): Boolean {
-        val version = siteRepository.getSiteVersion(otherInstance = otherInstance).orEmpty()
+        val version =
+            if (otherInstance.isNullOrEmpty()) {
+                services.getApiVersion()
+            } else {
+                customServices.getApiVersion()
+            }
         val matchResult = LEMMY_VERSION_REGEX.find(version)
         val actualMajor =
             matchResult
@@ -44,4 +50,6 @@ internal class DefaultIsSiteVersionAtLeastUseCase(
             else -> true
         }
     }
+
+    override suspend fun shouldUseV4(otherInstance: String?): Boolean = isAtLeast(major = 1, minor = 0, patch = 0)
 }

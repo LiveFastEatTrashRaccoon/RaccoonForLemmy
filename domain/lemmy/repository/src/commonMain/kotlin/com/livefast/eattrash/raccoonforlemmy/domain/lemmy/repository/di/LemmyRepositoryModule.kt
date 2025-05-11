@@ -28,6 +28,8 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PrivateMess
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.DefaultSiteVersionDataSource
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.SiteVersionDataSource
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.instance
@@ -120,6 +122,7 @@ val lemmyRepositoryModule =
                 DefaultSiteRepository(
                     services = instance(tag = "default"),
                     customServices = instance(tag = "custom"),
+                    siteVersionDataSource = instance(),
                 )
             }
         }
@@ -136,6 +139,14 @@ val lemmyRepositoryModule =
                 DefaultUserTagHelper(
                     accountRepository = instance(),
                     userTagRepository = instance(),
+                )
+            }
+        }
+        bind<SiteVersionDataSource> {
+            singleton {
+                DefaultSiteVersionDataSource(
+                    services = instance(tag = "default"),
+                    customServices = instance(tag = "custom"),
                 )
             }
         }

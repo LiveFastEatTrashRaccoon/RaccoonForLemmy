@@ -4,10 +4,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommentSortType
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.ListingType
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SortType
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.CommentService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.PostService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.SearchService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.UserService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.CommentServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.PostServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.SearchServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.UserServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import io.mockk.coEvery
@@ -26,23 +26,29 @@ class DefaultUserRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val userService = mockk<UserService>()
-    private val searchService = mockk<SearchService>()
-    private val postService = mockk<PostService>()
-    private val commentService = mockk<CommentService>()
+    private val userServiceV3 = mockk<UserServiceV3>()
+    private val searchServiceV3 = mockk<SearchServiceV3>()
+    private val postServiceV3 = mockk<PostServiceV3>()
+    private val commentServiceV3 = mockk<CommentServiceV3>()
     private val serviceProvider =
         mockk<ServiceProvider> {
-            every { user } returns userService
-            every { search } returns searchService
-            every { post } returns postService
-            every { comment } returns commentService
+            every { v3 } returns
+                mockk {
+                    every { user } returns userServiceV3
+                    every { search } returns searchServiceV3
+                    every { post } returns postServiceV3
+                    every { comment } returns commentServiceV3
+                }
         }
     private val customServiceProvider =
         mockk<ServiceProvider> {
-            every { user } returns userService
-            every { search } returns searchService
-            every { post } returns postService
-            every { comment } returns commentService
+            every { v3 } returns
+                mockk {
+                    every { user } returns userServiceV3
+                    every { search } returns searchServiceV3
+                    every { post } returns postServiceV3
+                    every { comment } returns commentServiceV3
+                }
         }
 
     private val sut =
@@ -56,7 +62,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val userId = 1L
             coEvery {
-                searchService.resolveObject(any(), any())
+                searchServiceV3.resolveObject(any(), any())
             } returns
                 mockk {
                     every { user } returns
@@ -74,7 +80,7 @@ class DefaultUserRepositoryTest {
             assertNotNull(res)
             assertEquals(userId, res.id)
             coVerify {
-                searchService.resolveObject(
+                searchServiceV3.resolveObject(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     q = query,
                 )
@@ -86,7 +92,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val userId = 1L
             coEvery {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = any(),
                     auth = any(),
                     personId = any(),
@@ -107,7 +113,7 @@ class DefaultUserRepositoryTest {
             assertNotNull(res)
             assertEquals(userId, res.id)
             coVerify {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     personId = userId,
@@ -120,7 +126,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val postId = 1L
             coEvery {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = any(),
                     auth = any(),
                     personId = any(),
@@ -153,7 +159,7 @@ class DefaultUserRepositoryTest {
             assertTrue(res.isNotEmpty())
             assertEquals(postId, res.first().id)
             coVerify {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     personId = postId,
@@ -169,7 +175,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val postId = 1L
             coEvery {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = any(),
                     auth = any(),
                     personId = any(),
@@ -202,7 +208,7 @@ class DefaultUserRepositoryTest {
             assertTrue(res.isNotEmpty())
             assertEquals(postId, res.first().id)
             coVerify {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     personId = postId,
@@ -219,7 +225,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val commentId = 1L
             coEvery {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = any(),
                     auth = any(),
                     personId = any(),
@@ -252,7 +258,7 @@ class DefaultUserRepositoryTest {
             assertTrue(res.isNotEmpty())
             assertEquals(commentId, res.first().id)
             coVerify {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     personId = commentId,
@@ -268,7 +274,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val commentId = 1L
             coEvery {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = any(),
                     auth = any(),
                     personId = any(),
@@ -301,7 +307,7 @@ class DefaultUserRepositoryTest {
             assertTrue(res.isNotEmpty())
             assertEquals(commentId, res.first().id)
             coVerify {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     personId = commentId,
@@ -318,7 +324,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val mentionId = 1L
             coEvery {
-                userService.getMentions(
+                userServiceV3.getMentions(
                     authHeader = any(),
                     auth = any(),
                     page = any(),
@@ -345,7 +351,7 @@ class DefaultUserRepositoryTest {
             assertTrue(res.isNotEmpty())
             assertEquals(mentionId, res.first().id)
             coVerify {
-                userService.getMentions(
+                userServiceV3.getMentions(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     page = 1,
@@ -361,7 +367,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val replyId = 1L
             coEvery {
-                userService.getReplies(
+                userServiceV3.getReplies(
                     authHeader = any(),
                     auth = any(),
                     page = any(),
@@ -388,7 +394,7 @@ class DefaultUserRepositoryTest {
             assertTrue(res.isNotEmpty())
             assertEquals(replyId, res.first().id)
             coVerify {
-                userService.getReplies(
+                userServiceV3.getReplies(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     page = 1,
@@ -403,7 +409,7 @@ class DefaultUserRepositoryTest {
     fun whenSetMentionRead_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                userService.markPersonMentionAsRead(any(), any())
+                userServiceV3.markPersonMentionAsRead(any(), any())
             } returns mockk(relaxed = true)
 
             val mentionId = 1L
@@ -414,7 +420,7 @@ class DefaultUserRepositoryTest {
             )
 
             coVerify {
-                userService.markPersonMentionAsRead(
+                userServiceV3.markPersonMentionAsRead(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -430,7 +436,7 @@ class DefaultUserRepositoryTest {
     fun whenSetReplyRead_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                commentService.markAsRead(any(), any())
+                commentServiceV3.markAsRead(any(), any())
             } returns mockk(relaxed = true)
 
             val mentionId = 1L
@@ -441,7 +447,7 @@ class DefaultUserRepositoryTest {
             )
 
             coVerify {
-                commentService.markAsRead(
+                commentServiceV3.markAsRead(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -457,7 +463,7 @@ class DefaultUserRepositoryTest {
     fun whenBlock_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                userService.block(any(), any())
+                userServiceV3.block(any(), any())
             } returns mockk(relaxed = true)
 
             val userId = 1L
@@ -468,7 +474,7 @@ class DefaultUserRepositoryTest {
             )
 
             coVerify {
-                userService.block(
+                userServiceV3.block(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -486,7 +492,7 @@ class DefaultUserRepositoryTest {
             val userId = 1L
             val communityId = 2L
             coEvery {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = any(),
                     auth = any(),
                     personId = any(),
@@ -519,7 +525,7 @@ class DefaultUserRepositoryTest {
             assertTrue(res.isNotEmpty())
             assertEquals(communityId, res.first().id)
             coVerify {
-                userService.getDetails(
+                userServiceV3.getDetails(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     personId = userId,
@@ -532,7 +538,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val postId = 1L
             coEvery {
-                postService.getAll(
+                postServiceV3.getAll(
                     authHeader = any(),
                     auth = any(),
                     page = any(),
@@ -568,7 +574,7 @@ class DefaultUserRepositoryTest {
             assertEquals(postId, posts.first().id)
             assertEquals(PAGE_CURSOR, res.second)
             coVerify {
-                postService.getAll(
+                postServiceV3.getAll(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     page = 1,
@@ -588,7 +594,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val commentId = 1L
             coEvery {
-                commentService.getAll(
+                commentServiceV3.getAll(
                     authHeader = any(),
                     auth = any(),
                     page = any(),
@@ -619,7 +625,7 @@ class DefaultUserRepositoryTest {
             assertTrue(res.isNotEmpty())
             assertEquals(commentId, res.first().id)
             coVerify {
-                commentService.getAll(
+                commentServiceV3.getAll(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     page = 1,
@@ -636,7 +642,7 @@ class DefaultUserRepositoryTest {
     fun whenPurge_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                userService.purge(any(), any())
+                userServiceV3.purge(any(), any())
             } returns
                 mockk {
                     every { success } returns true
@@ -651,7 +657,7 @@ class DefaultUserRepositoryTest {
             )
 
             coVerify {
-                userService.purge(
+                userServiceV3.purge(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -667,7 +673,7 @@ class DefaultUserRepositoryTest {
         runTest {
             val postId = 1L
             coEvery {
-                postService.getAll(
+                postServiceV3.getAll(
                     authHeader = any(),
                     auth = any(),
                     page = any(),
@@ -702,7 +708,7 @@ class DefaultUserRepositoryTest {
             assertEquals(postId, posts.first().id)
             assertEquals(PAGE_CURSOR, res.second)
             coVerify {
-                postService.getAll(
+                postServiceV3.getAll(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     page = 1,
@@ -719,7 +725,7 @@ class DefaultUserRepositoryTest {
     fun whenDeleteAccount_thenResultIsAsExpected() =
         runTest {
             coEvery {
-                userService.deleteAccount(any(), any())
+                userServiceV3.deleteAccount(any(), any())
             } returns
                 mockk(relaxUnitFun = true) {
                     every { isSuccessful } returns true
@@ -736,7 +742,7 @@ class DefaultUserRepositoryTest {
 
             assertTrue(res)
             coVerify {
-                userService.deleteAccount(
+                userServiceV3.deleteAccount(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     withArg {
                         assertEquals(AUTH_TOKEN, it.auth)
@@ -751,7 +757,7 @@ class DefaultUserRepositoryTest {
     fun givenError_whenDeleteAccount_thenResultIsAsExpected() =
         runTest {
             coEvery {
-                userService.deleteAccount(any(), any())
+                userServiceV3.deleteAccount(any(), any())
             } returns
                 mockk(relaxUnitFun = true) {
                     every { isSuccessful } returns false
@@ -768,7 +774,7 @@ class DefaultUserRepositoryTest {
 
             assertFalse(res)
             coVerify {
-                userService.deleteAccount(
+                userServiceV3.deleteAccount(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     withArg {
                         assertEquals(AUTH_TOKEN, it.auth)
