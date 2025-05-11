@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.core.api.service
+package com.livefast.eattrash.raccoonforlemmy.core.api.service.v3
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommentId
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommentReplyResponse
@@ -31,8 +31,8 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
 
-interface CommentService {
-    @GET("comment/list")
+interface CommentServiceV3 {
+    @GET("v3/comment/list")
     suspend fun getAll(
         @Header("Authorization") authHeader: String? = null,
         @Query("auth") auth: String? = null,
@@ -50,77 +50,77 @@ interface CommentService {
         @Query("disliked_only") dislikedOnly: Boolean? = null,
     ): GetCommentsResponse
 
-    @GET("comment")
+    @GET("v3/comment")
     suspend fun getBy(
         @Header("Authorization") authHeader: String? = null,
         @Query("id") id: CommentId,
         @Query("auth") auth: String? = null,
     ): GetCommentResponse
 
-    @PUT("comment/save")
+    @PUT("v3/comment/save")
     @Headers("Content-Type: application/json")
     suspend fun save(
         @Header("Authorization") authHeader: String? = null,
         @Body form: SaveCommentForm,
     ): CommentResponse
 
-    @POST("comment/like")
+    @POST("v3/comment/like")
     @Headers("Content-Type: application/json")
     suspend fun like(
         @Header("Authorization") authHeader: String? = null,
         @Body form: CreateCommentLikeForm,
     ): CommentResponse
 
-    @POST("comment")
+    @POST("v3/comment")
     @Headers("Content-Type: application/json")
     suspend fun create(
         @Header("Authorization") authHeader: String? = null,
         @Body form: CreateCommentForm,
     ): CommentResponse
 
-    @PUT("comment")
+    @PUT("v3/comment")
     @Headers("Content-Type: application/json")
     suspend fun edit(
         @Header("Authorization") authHeader: String? = null,
         @Body form: EditCommentForm,
     ): CommentResponse
 
-    @POST("comment/mark_as_read")
+    @POST("v3/comment/mark_as_read")
     @Headers("Content-Type: application/json")
     suspend fun markAsRead(
         @Header("Authorization") authHeader: String? = null,
         @Body form: MarkCommentAsReadForm,
     ): CommentReplyResponse
 
-    @POST("comment/delete")
+    @POST("v3/comment/delete")
     @Headers("Content-Type: application/json")
     suspend fun delete(
         @Header("Authorization") authHeader: String? = null,
         @Body form: DeleteCommentForm,
     ): CommentResponse
 
-    @POST("comment/report")
+    @POST("v3/comment/report")
     @Headers("Content-Type: application/json")
     suspend fun createReport(
-        @Body form: CreateCommentReportForm,
         @Header("Authorization") authHeader: String? = null,
+        @Body form: CreateCommentReportForm,
     ): CommentReportResponse
 
-    @POST("comment/remove")
+    @POST("v3/comment/remove")
     @Headers("Content-Type: application/json")
     suspend fun remove(
         @Header("Authorization") authHeader: String? = null,
         @Body form: RemoveCommentForm,
     ): CommentResponse
 
-    @POST("comment/distinguish")
+    @POST("v3/comment/distinguish")
     @Headers("Content-Type: application/json")
     suspend fun distinguish(
         @Header("Authorization") authHeader: String? = null,
         @Body form: DistinguishCommentForm,
     ): CommentResponse
 
-    @GET("comment/report/list")
+    @GET("v3/comment/report/list")
     @Headers("Content-Type: application/json")
     suspend fun listReports(
         @Header("Authorization") authHeader: String? = null,
@@ -131,14 +131,14 @@ interface CommentService {
         @Query("community_id") communityId: CommunityId? = null,
     ): ListCommentReportsResponse
 
-    @PUT("comment/report/resolve")
+    @PUT("v3/comment/report/resolve")
     @Headers("Content-Type: application/json")
     suspend fun resolveReport(
         @Header("Authorization") authHeader: String? = null,
         @Body form: ResolveCommentReportForm,
     ): CommentReportResponse
 
-    @POST("admin/purge/comment")
+    @POST("v3/admin/purge/comment")
     @Headers("Content-Type: application/json")
     suspend fun purge(
         @Header("Authorization") authHeader: String? = null,

@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.core.api.service
+package com.livefast.eattrash.raccoonforlemmy.core.api.service.v3
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommentId
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommunityId
@@ -36,8 +36,8 @@ import de.jensklingenberg.ktorfit.http.Query
 import de.jensklingenberg.ktorfit.http.Url
 import io.ktor.client.request.forms.MultiPartFormDataContent
 
-interface PostService {
-    @GET("post/list")
+interface PostServiceV3 {
+    @GET("v3/post/list")
     suspend fun getAll(
         @Header("Authorization") authHeader: String? = null,
         @Query("auth") auth: String? = null,
@@ -54,7 +54,7 @@ interface PostService {
         @Query("show_hidden") showHidden: Boolean? = null,
     ): GetPostsResponse
 
-    @GET("post")
+    @GET("v3/post")
     suspend fun get(
         @Header("Authorization") authHeader: String? = null,
         @Query("auth") auth: String? = null,
@@ -62,56 +62,56 @@ interface PostService {
         @Query("comment_id") commentId: CommentId? = null,
     ): GetPostResponse
 
-    @GET("post/site_metadata")
+    @GET("v3/post/site_metadata")
     suspend fun getSiteMetadata(
         @Header("Authorization") authHeader: String? = null,
         @Query("url")
         url: String,
     ): GetSiteMetadataResponse
 
-    @PUT("post/save")
+    @PUT("v3/post/save")
     @Headers("Content-Type: application/json")
     suspend fun save(
         @Header("Authorization") authHeader: String? = null,
         @Body form: SavePostForm,
     ): PostResponse
 
-    @POST("post/like")
+    @POST("v3/post/like")
     @Headers("Content-Type: application/json")
     suspend fun like(
         @Header("Authorization") authHeader: String? = null,
         @Body form: CreatePostLikeForm,
     ): PostResponse
 
-    @POST("post")
+    @POST("v3/post")
     @Headers("Content-Type: application/json")
     suspend fun create(
         @Header("Authorization") authHeader: String? = null,
         @Body form: CreatePostForm,
     ): PostResponse
 
-    @PUT("post")
+    @PUT("v3/post")
     @Headers("Content-Type: application/json")
     suspend fun edit(
         @Header("Authorization") authHeader: String? = null,
         @Body form: EditPostForm,
     ): PostResponse
 
-    @POST("post/mark_as_read")
+    @POST("v3/post/mark_as_read")
     @Headers("Content-Type: application/json")
     suspend fun markAsRead(
         @Header("Authorization") authHeader: String? = null,
         @Body form: MarkPostAsReadForm,
     ): PostResponse
 
-    @POST("post/hide")
+    @POST("v3/post/hide")
     @Headers("Content-Type: application/json")
     suspend fun hide(
         @Header("Authorization") authHeader: String? = null,
         @Body form: HidePostForm,
     ): PostResponse
 
-    @POST("post/delete")
+    @POST("v3/post/delete")
     @Headers("Content-Type: application/json")
     suspend fun delete(
         @Header("Authorization") authHeader: String? = null,
@@ -133,35 +133,35 @@ interface PostService {
         @Header("Authorization") authHeader: String? = null,
     )
 
-    @POST("post/report")
+    @POST("v3/post/report")
     @Headers("Content-Type: application/json")
     suspend fun createReport(
         @Header("Authorization") authHeader: String? = null,
         @Body form: CreatePostReportForm,
     ): PostReportResponse
 
-    @POST("post/feature")
+    @POST("v3/post/feature")
     @Headers("Content-Type: application/json")
     suspend fun feature(
         @Header("Authorization") authHeader: String? = null,
         @Body form: FeaturePostForm,
     ): PostResponse
 
-    @POST("post/remove")
+    @POST("v3/post/remove")
     @Headers("Content-Type: application/json")
     suspend fun remove(
         @Header("Authorization") authHeader: String? = null,
         @Body form: RemovePostForm,
     ): PostResponse
 
-    @POST("post/lock")
+    @POST("v3/post/lock")
     @Headers("Content-Type: application/json")
     suspend fun lock(
         @Header("Authorization") authHeader: String? = null,
         @Body form: LockPostForm,
     ): PostResponse
 
-    @GET("post/report/list")
+    @GET("v3/post/report/list")
     @Headers("Content-Type: application/json")
     suspend fun listReports(
         @Header("Authorization") authHeader: String? = null,
@@ -172,14 +172,14 @@ interface PostService {
         @Query("community_id") communityId: CommunityId? = null,
     ): ListPostReportsResponse
 
-    @PUT("post/report/resolve")
+    @PUT("v3/post/report/resolve")
     @Headers("Content-Type: application/json")
     suspend fun resolveReport(
         @Header("Authorization") authHeader: String? = null,
         @Body form: ResolvePostReportForm,
     ): PostReportResponse
 
-    @POST("admin/purge/post")
+    @POST("v3/admin/purge/post")
     @Headers("Content-Type: application/json")
     suspend fun purge(
         @Header("Authorization") authHeader: String? = null,

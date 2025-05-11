@@ -1,26 +1,14 @@
 package com.livefast.eattrash.raccoonforlemmy.core.api.provider
 
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.AuthService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.CommentService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.CommunityService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.ModlogService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.PostService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.PrivateMessageService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.SearchService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.SiteService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.UserService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.V3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.V4
 
 interface ServiceProvider {
     val currentInstance: String
-    val auth: AuthService
-    val post: PostService
-    val community: CommunityService
-    val user: UserService
-    val site: SiteService
-    val comment: CommentService
-    val search: SearchService
-    val privateMessages: PrivateMessageService
-    val modLog: ModlogService
+    val v3: V3
+    val v4: V4
 
     fun changeInstance(value: String)
+
+    suspend fun getApiVersion(): String
 }
