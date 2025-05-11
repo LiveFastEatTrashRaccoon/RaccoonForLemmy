@@ -13,31 +13,32 @@ import org.kodein.di.bind
 import org.kodein.di.instance
 import org.kodein.di.singleton
 
-val lemmyUseCaseModule = DI.Module("LemmyUseCaseModule") {
-    bind<GetSiteSupportsHiddenPostsUseCase> {
-        singleton {
-            DefaultGetSiteSupportsHiddenPostsUseCase(
-                isSiteVersionAtLeastUseCase = instance(),
-            )
+val lemmyUseCaseModule =
+    DI.Module("LemmyUseCaseModule") {
+        bind<GetSiteSupportsHiddenPostsUseCase> {
+            singleton {
+                DefaultGetSiteSupportsHiddenPostsUseCase(
+                    isSiteVersionAtLeast = instance(),
+                )
+            }
         }
-    }
-    bind<GetSiteSupportsMediaListUseCase> {
-        singleton {
-            DefaultGetSiteSupportsMediaListUseCase(
-                isSiteVersionAtLeastUseCase = instance(),
-            )
+        bind<GetSiteSupportsMediaListUseCase> {
+            singleton {
+                DefaultGetSiteSupportsMediaListUseCase(
+                    isSiteVersionAtLeast = instance(),
+                )
+            }
         }
-    }
-    bind<GetSortTypesUseCase> {
-        singleton {
-            DefaultGetSortTypesUseCase(
-                isSiteVersionAtLeastUseCase = instance(),
-            )
+        bind<GetSortTypesUseCase> {
+            singleton {
+                DefaultGetSortTypesUseCase(
+                    isSiteVersionAtLeast = instance(),
+                )
+            }
         }
-    }
-    bind<IsSiteVersionAtLeastUseCase> {
-        singleton {
-            DefaultIsSiteVersionAtLeastUseCase(
+        bind<IsSiteVersionAtLeastUseCase> {
+            singleton {
+                DefaultIsSiteVersionAtLeastUseCase(
                 siteRepository = instance(),
             )
         }

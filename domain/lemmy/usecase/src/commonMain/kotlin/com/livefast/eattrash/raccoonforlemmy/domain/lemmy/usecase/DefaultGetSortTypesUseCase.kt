@@ -3,7 +3,7 @@ package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 
 internal class DefaultGetSortTypesUseCase(
-    private val isSiteVersionAtLeastUseCase: IsSiteVersionAtLeastUseCase,
+    private val isSiteVersionAtLeast: IsSiteVersionAtLeastUseCase,
 ) : GetSortTypesUseCase {
     companion object {
         private const val THRESHOLD_MAJOR = 0
@@ -13,7 +13,7 @@ internal class DefaultGetSortTypesUseCase(
     override suspend fun getTypesForPosts(otherInstance: String?): List<SortType> =
         buildList {
             val isAtLeastThreshold =
-                isSiteVersionAtLeastUseCase.execute(
+                isSiteVersionAtLeast(
                     major = THRESHOLD_MAJOR,
                     minor = THRESHOLD_MINOR,
                     otherInstance = otherInstance,
@@ -34,7 +34,7 @@ internal class DefaultGetSortTypesUseCase(
     override suspend fun getTypesForComments(otherInstance: String?): List<SortType> =
         buildList {
             val isAtLeastThreshold =
-                isSiteVersionAtLeastUseCase.execute(
+                isSiteVersionAtLeast(
                     major = THRESHOLD_MAJOR,
                     minor = THRESHOLD_MINOR,
                     otherInstance = otherInstance,

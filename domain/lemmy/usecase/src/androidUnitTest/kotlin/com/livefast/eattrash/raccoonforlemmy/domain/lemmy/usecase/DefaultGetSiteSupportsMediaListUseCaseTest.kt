@@ -13,13 +13,20 @@ class DefaultGetSiteSupportsMediaListUseCaseTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val isSiteVersionAtLeastUseCase =
-        mockk<IsSiteVersionAtLeastUseCase> {
-            coEvery { execute(any(), any(), any(), any()) } returns true
+    private val isSiteVersionAtLeast: IsSiteVersionAtLeastUseCase =
+        mockk {
+            coEvery {
+                this@mockk.invoke(
+                    major = any(),
+                    minor = any(),
+                    patch = any(),
+                    otherInstance = any()
+                )
+            } returns true
         }
     private val sut =
         DefaultGetSiteSupportsMediaListUseCase(
-            isSiteVersionAtLeastUseCase = isSiteVersionAtLeastUseCase,
+            isSiteVersionAtLeast = isSiteVersionAtLeast,
         )
 
     @Test
@@ -29,7 +36,7 @@ class DefaultGetSiteSupportsMediaListUseCaseTest {
 
             assertTrue(res)
             coVerify {
-                isSiteVersionAtLeastUseCase.execute(major = 0, minor = 19, patch = 4)
+                isSiteVersionAtLeast(major = 0, minor = 19, patch = 4)
             }
         }
 }

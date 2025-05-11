@@ -9,7 +9,7 @@ internal class DefaultIsSiteVersionAtLeastUseCase(
         private val LEMMY_VERSION_REGEX = Regex("(?<major>\\d+).(?<minor>\\d+)(.(?<patch>\\d+))?")
     }
 
-    override suspend fun execute(
+    override suspend fun invoke(
         major: Int,
         minor: Int,
         patch: Int,
