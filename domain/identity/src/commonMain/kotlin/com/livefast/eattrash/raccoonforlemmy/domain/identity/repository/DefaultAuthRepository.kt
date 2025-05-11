@@ -23,7 +23,7 @@ internal class DefaultAuthRepository(
                         password = password,
                         totp2faToken = totp2faToken,
                     )
-                services.auth.login(data)
+                services.v3.auth.login(data)
             }
         }
 }
