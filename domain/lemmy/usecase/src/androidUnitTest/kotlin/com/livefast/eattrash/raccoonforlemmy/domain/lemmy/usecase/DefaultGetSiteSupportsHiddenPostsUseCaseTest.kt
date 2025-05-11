@@ -1,6 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase
 
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.SiteVersionDataSource
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -13,18 +14,18 @@ class DefaultGetSiteSupportsHiddenPostsUseCaseTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val isSiteVersionAtLeast: IsSiteVersionAtLeastUseCase = mockk()
+    private val siteVersionDataSource: SiteVersionDataSource = mockk()
 
     private val sut =
         DefaultGetSiteSupportsHiddenPostsUseCase(
-            isSiteVersionAtLeast = isSiteVersionAtLeast,
+            siteVersionDataSource = siteVersionDataSource,
         )
 
     @Test
     fun givenVersionAboveThreshold_whenInvoke_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeast(
+                siteVersionDataSource.isAtLeast(
                     major = any(),
                     minor = any(),
                     patch = any(),
@@ -41,7 +42,7 @@ class DefaultGetSiteSupportsHiddenPostsUseCaseTest {
     fun givenVersionBelowThreshold_whenInvoke_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeast(
+                siteVersionDataSource.isAtLeast(
                     major = any(),
                     minor = any(),
                     patch = any(),

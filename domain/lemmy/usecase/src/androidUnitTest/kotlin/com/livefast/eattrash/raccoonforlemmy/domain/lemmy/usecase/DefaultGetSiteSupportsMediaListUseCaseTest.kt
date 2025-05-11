@@ -1,6 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase
 
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.SiteVersionDataSource
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,20 +14,20 @@ class DefaultGetSiteSupportsMediaListUseCaseTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val isSiteVersionAtLeast: IsSiteVersionAtLeastUseCase =
+    private val siteVersionDataSource: SiteVersionDataSource =
         mockk {
             coEvery {
-                this@mockk.invoke(
+                isAtLeast(
                     major = any(),
                     minor = any(),
                     patch = any(),
-                    otherInstance = any()
+                    otherInstance = any(),
                 )
             } returns true
         }
     private val sut =
         DefaultGetSiteSupportsMediaListUseCase(
-            isSiteVersionAtLeast = isSiteVersionAtLeast,
+            siteVersionDataSource = siteVersionDataSource,
         )
 
     @Test
@@ -36,7 +37,7 @@ class DefaultGetSiteSupportsMediaListUseCaseTest {
 
             assertTrue(res)
             coVerify {
-                isSiteVersionAtLeast(major = 0, minor = 19, patch = 4)
+                siteVersionDataSource.isAtLeast(major = 0, minor = 19, patch = 4)
             }
         }
 }

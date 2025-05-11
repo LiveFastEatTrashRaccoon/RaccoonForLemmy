@@ -3,11 +3,9 @@ package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.di
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.DefaultGetSiteSupportsHiddenPostsUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.DefaultGetSiteSupportsMediaListUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.DefaultGetSortTypesUseCase
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.DefaultIsSiteVersionAtLeastUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSiteSupportsHiddenPostsUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSiteSupportsMediaListUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSortTypesUseCase
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.IsSiteVersionAtLeastUseCase
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.instance
@@ -18,29 +16,22 @@ val lemmyUseCaseModule =
         bind<GetSiteSupportsHiddenPostsUseCase> {
             singleton {
                 DefaultGetSiteSupportsHiddenPostsUseCase(
-                    isSiteVersionAtLeast = instance(),
+                    siteVersionDataSource = instance(),
                 )
             }
         }
         bind<GetSiteSupportsMediaListUseCase> {
             singleton {
                 DefaultGetSiteSupportsMediaListUseCase(
-                    isSiteVersionAtLeast = instance(),
+                    siteVersionDataSource = instance(),
                 )
             }
         }
         bind<GetSortTypesUseCase> {
             singleton {
                 DefaultGetSortTypesUseCase(
-                    isSiteVersionAtLeast = instance(),
+                    siteVersionDataSource = instance(),
                 )
             }
         }
-        bind<IsSiteVersionAtLeastUseCase> {
-            singleton {
-                DefaultIsSiteVersionAtLeastUseCase(
-                siteRepository = instance(),
-            )
-        }
     }
-}
