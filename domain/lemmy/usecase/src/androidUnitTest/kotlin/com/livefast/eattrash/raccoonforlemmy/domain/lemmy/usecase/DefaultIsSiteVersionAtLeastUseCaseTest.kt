@@ -19,71 +19,71 @@ class DefaultIsSiteVersionAtLeastUseCaseTest {
     private val sut = DefaultIsSiteVersionAtLeastUseCase(siteRepository = siteRepository)
 
     @Test
-    fun givenSameVersion_whenExecute_thenResultIsAsExpected() =
+    fun givenSameVersion_whenInvoke_thenResultIsAsExpected() =
         runTest {
             coEvery { siteRepository.getSiteVersion() } returns "0.19.2"
 
-            val res = sut.execute(major = 0, minor = 19, patch = 2)
+            val res = sut(major = 0, minor = 19, patch = 2)
 
             assertTrue(res)
         }
 
     @Test
-    fun givenPatchLessThanThreshold_whenExecute_thenResultIsAsExpected() =
+    fun givenPatchLessThanThreshold_whenInvoke_thenResultIsAsExpected() =
         runTest {
             coEvery { siteRepository.getSiteVersion() } returns "0.19.2"
 
-            val res = sut.execute(major = 0, minor = 19, patch = 3)
+            val res = sut(major = 0, minor = 19, patch = 3)
 
             assertFalse(res)
         }
 
     @Test
-    fun givenPatchGreaterThanThreshold_whenExecute_thenResultIsAsExpected() =
+    fun givenPatchGreaterThanThreshold_whenInvoke_thenResultIsAsExpected() =
         runTest {
             coEvery { siteRepository.getSiteVersion() } returns "0.19.2"
 
-            val res = sut.execute(major = 0, minor = 19, patch = 1)
+            val res = sut(major = 0, minor = 19, patch = 1)
 
             assertTrue(res)
         }
 
     @Test
-    fun givenMinorLessThanThreshold_whenExecute_thenResultIsAsExpected() =
+    fun givenMinorLessThanThreshold_whenInvoke_thenResultIsAsExpected() =
         runTest {
             coEvery { siteRepository.getSiteVersion() } returns "0.18.2"
 
-            val res = sut.execute(major = 0, minor = 19, patch = 2)
+            val res = sut(major = 0, minor = 19, patch = 2)
 
             assertFalse(res)
         }
 
     @Test
-    fun givenMinorGreaterThanThreshold_whenExecute_thenResultIsAsExpected() =
+    fun givenMinorGreaterThanThreshold_whenInvoke_thenResultIsAsExpected() =
         runTest {
             coEvery { siteRepository.getSiteVersion() } returns "0.20.2"
 
-            val res = sut.execute(major = 0, minor = 19, patch = 2)
+            val res = sut(major = 0, minor = 19, patch = 2)
 
             assertTrue(res)
         }
 
     @Test
-    fun givenMajorLessThanThreshold_whenExecute_thenResultIsAsExpected() =
+    fun givenMajorLessThanThreshold_whenInvoke_thenResultIsAsExpected() =
         runTest {
             coEvery { siteRepository.getSiteVersion() } returns "0.19.2"
 
-            val res = sut.execute(major = 1, minor = 0, patch = 0)
+            val res = sut(major = 1, minor = 0, patch = 0)
 
             assertFalse(res)
         }
 
     @Test
-    fun givenMajorGreaterThanThreshold_whenExecute_thenResultIsAsExpected() =
+    fun givenMajorGreaterThanThreshold_whenInvoke_thenResultIsAsExpected() =
         runTest {
             coEvery { siteRepository.getSiteVersion() } returns "1.0.0"
 
-            val res = sut.execute(major = 0, minor = 19, patch = 2)
+            val res = sut(major = 0, minor = 19, patch = 2)
 
             assertTrue(res)
         }

@@ -13,18 +13,18 @@ class DefaultGetSiteSupportsHiddenPostsUseCaseTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val isSiteVersionAtLeastUseCase: IsSiteVersionAtLeastUseCase = mockk()
+    private val isSiteVersionAtLeast: IsSiteVersionAtLeastUseCase = mockk()
 
     private val sut =
         DefaultGetSiteSupportsHiddenPostsUseCase(
-            isSiteVersionAtLeastUseCase = isSiteVersionAtLeastUseCase,
+            isSiteVersionAtLeast = isSiteVersionAtLeast,
         )
 
     @Test
     fun givenVersionAboveThreshold_whenInvoke_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeastUseCase.execute(
+                isSiteVersionAtLeast(
                     major = any(),
                     minor = any(),
                     patch = any(),
@@ -41,7 +41,7 @@ class DefaultGetSiteSupportsHiddenPostsUseCaseTest {
     fun givenVersionBelowThreshold_whenInvoke_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeastUseCase.execute(
+                isSiteVersionAtLeast(
                     major = any(),
                     minor = any(),
                     patch = any(),

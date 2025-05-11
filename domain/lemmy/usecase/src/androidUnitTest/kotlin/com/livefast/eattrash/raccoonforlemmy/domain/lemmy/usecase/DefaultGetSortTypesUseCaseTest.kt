@@ -14,18 +14,23 @@ class DefaultGetSortTypesUseCaseTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val isSiteVersionAtLeastUseCase: IsSiteVersionAtLeastUseCase = mockk()
+    private val isSiteVersionAtLeast: IsSiteVersionAtLeastUseCase = mockk()
 
     private val sut =
         DefaultGetSortTypesUseCase(
-            isSiteVersionAtLeastUseCase = isSiteVersionAtLeastUseCase,
+            isSiteVersionAtLeast = isSiteVersionAtLeast,
         )
 
     @Test
     fun givenVersionEqualToThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeastUseCase.execute(any(), any(), any(), any())
+                isSiteVersionAtLeast(
+                    major = any(),
+                    minor = any(),
+                    patch = any(),
+                    otherInstance = any()
+                )
             } returns true
 
             val res = sut.getTypesForPosts()
@@ -45,7 +50,12 @@ class DefaultGetSortTypesUseCaseTest {
     fun givenVersionGreaterThanThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeastUseCase.execute(any(), any(), any(), any())
+                isSiteVersionAtLeast(
+                    major = any(),
+                    minor = any(),
+                    patch = any(),
+                    otherInstance = any()
+                )
             } returns true
 
             val res = sut.getTypesForPosts()
@@ -65,7 +75,12 @@ class DefaultGetSortTypesUseCaseTest {
     fun givenVersionLessThanThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeastUseCase.execute(any(), any(), any(), any())
+                isSiteVersionAtLeast(
+                    major = any(),
+                    minor = any(),
+                    patch = any(),
+                    otherInstance = any()
+                )
             } returns false
 
             val res = sut.getTypesForPosts()
@@ -85,7 +100,12 @@ class DefaultGetSortTypesUseCaseTest {
     fun givenVersionGreaterThanThreshold_whenGetTypesForComments_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeastUseCase.execute(any(), any(), any(), any())
+                isSiteVersionAtLeast(
+                    major = any(),
+                    minor = any(),
+                    patch = any(),
+                    otherInstance = any()
+                )
             } returns true
 
             val res = sut.getTypesForComments()
@@ -101,7 +121,12 @@ class DefaultGetSortTypesUseCaseTest {
     fun givenVersionLessThanThreshold_whenGetTypesForComments_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeastUseCase.execute(any(), any(), any(), any())
+                isSiteVersionAtLeast(
+                    major = any(),
+                    minor = any(),
+                    patch = any(),
+                    otherInstance = any()
+                )
             } returns false
 
             val res = sut.getTypesForComments()
