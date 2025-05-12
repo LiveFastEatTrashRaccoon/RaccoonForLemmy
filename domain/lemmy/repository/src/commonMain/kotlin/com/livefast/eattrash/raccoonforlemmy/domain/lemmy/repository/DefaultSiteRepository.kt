@@ -8,6 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.LanguageModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.MetadataModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.SiteVersionDataSource
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.shouldUseV4
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
@@ -23,18 +24,16 @@ internal class DefaultSiteRepository(
     override suspend fun getCurrentUser(auth: String): UserModel? =
         withContext(Dispatchers.IO) {
             runCatching {
-                val response =
+                val remoteUser =
                     if (siteVersionDataSource.shouldUseV4()) {
-                        services.v4.site.get(
-                            authHeader = auth.toAuthHeader(),
-                        )
+                        services.v4.account.get(authHeader = auth.toAuthHeader())
                     } else {
                         services.v3.site.get(
                             auth = auth,
                             authHeader = auth.toAuthHeader(),
-                        )
+                        ).myUser
                     }
-                response.myUser?.let {
+                remoteUser?.let {
                     val user = it.localUserView?.person
                     val counts = it.localUserView?.counts
                     user?.toModel()?.copy(score = counts?.toModel())
@@ -49,17 +48,11 @@ internal class DefaultSiteRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 if (otherInstance.isNullOrEmpty()) {
-                    val response =
-                        services.v3.site.get(
-                            authHeader = auth.toAuthHeader(),
-                        )
+                    val response = services.v3.site.get(authHeader = auth.toAuthHeader())
                     response.version.takeIf { !it.isNullOrEmpty() }
                 } else {
                     customServices.changeInstance(otherInstance)
-                    val response =
-                        customServices.v3.site.get(
-                            authHeader = "",
-                        )
+                    val response = customServices.v3.site.get(authHeader = "")
                     response.version.takeIf { !it.isNullOrEmpty() }
                 }
             }.getOrNull()
