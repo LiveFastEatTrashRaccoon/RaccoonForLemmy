@@ -4,6 +4,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.Called
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -16,7 +17,10 @@ class DefaultSiteVersionDataSourceTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val services = mockk<ServiceProvider>()
+    private val services =
+        mockk<ServiceProvider> {
+            every { currentInstance } returns "feddit.it"
+        }
     private val customServices = mockk<ServiceProvider>()
 
     private val sut =
