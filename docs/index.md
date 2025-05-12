@@ -170,6 +170,7 @@ A special thanks goes to all those who contributed so far (in nearly chronologic
 - [TamilNeram](https://github.com/TamilNeram)
 - [pHama](https://hosted.weblate.org/user/pHama)
 - [Coool](https://github.com/Coool)
+- [ivnsch](https://github.com/ivnsch)
 - all those who reported feedback and ideas through the Lemmy community, GitHub issues, emails,
   private messages, homing pigeons and every other imaginable media.
 

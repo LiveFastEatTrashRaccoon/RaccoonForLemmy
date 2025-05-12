@@ -39,7 +39,7 @@ internal class RemoteAppConfigDataSource(
 
     companion object {
         private const val JSON_URL =
-            "https://raw.githubusercontent.com/N7-X/RaccoonForLemmy/master/docs/app_config.json"
+            "https://raw.githubusercontent.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/master/docs/app_config.json"
     }
 }
 
