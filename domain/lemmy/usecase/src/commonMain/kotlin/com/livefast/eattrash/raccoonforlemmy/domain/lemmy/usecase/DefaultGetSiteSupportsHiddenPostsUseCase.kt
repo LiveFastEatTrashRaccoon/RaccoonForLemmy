@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase
 
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.SiteVersionDataSource
+
 internal class DefaultGetSiteSupportsHiddenPostsUseCase(
-    private val isSiteVersionAtLeast: IsSiteVersionAtLeastUseCase,
+    private val siteVersionDataSource: SiteVersionDataSource,
 ) : GetSiteSupportsHiddenPostsUseCase {
     companion object {
         const val THRESHOLD_MAJOR = 0
@@ -10,7 +12,7 @@ internal class DefaultGetSiteSupportsHiddenPostsUseCase(
     }
 
     override suspend fun invoke(): Boolean =
-        isSiteVersionAtLeast(
+        siteVersionDataSource.isAtLeast(
             major = THRESHOLD_MAJOR,
             minor = THRESHOLD_MINOR,
             patch = THRESHOLD_PATCH,

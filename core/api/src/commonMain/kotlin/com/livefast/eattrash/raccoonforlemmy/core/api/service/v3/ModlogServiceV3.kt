@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.core.api.service
+package com.livefast.eattrash.raccoonforlemmy.core.api.service.v3
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommunityId
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetModlogResponse
@@ -8,8 +8,8 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.Query
 
-interface ModlogService {
-    @GET("modlog")
+interface ModlogServiceV3 {
+    @GET("v3/modlog")
     suspend fun getItems(
         @Header("Authorization") authHeader: String? = null,
         @Query("auth") auth: String? = null,

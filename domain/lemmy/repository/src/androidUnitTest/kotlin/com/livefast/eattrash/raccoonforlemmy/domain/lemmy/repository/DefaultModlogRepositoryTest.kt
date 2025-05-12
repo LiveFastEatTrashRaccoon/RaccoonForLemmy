@@ -2,7 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.GetModlogResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.ModlogService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.ModlogServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ModlogItemType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
@@ -21,10 +21,13 @@ class DefaultModlogRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val modLogService: ModlogService = mockk()
+    private val modLogServiceV3: ModlogServiceV3 = mockk()
     private val serviceProvider =
         mockk<ServiceProvider> {
-            every { modLog } returns modLogService
+            every { v3 } returns
+                mockk {
+                    every { modLog } returns modLogServiceV3
+                }
         }
     private val sut =
         DefaultModlogRepository(
@@ -35,7 +38,7 @@ class DefaultModlogRepositoryTest {
     fun givenEmptyResponse_whenGetItems_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                modLogService.getItems(
+                modLogServiceV3.getItems(
                     authHeader = any(),
                     auth = any(),
                     page = any(),
@@ -59,7 +62,7 @@ class DefaultModlogRepositoryTest {
             assertNotNull(res)
             assertEquals(0, res.size)
             coVerify {
-                modLogService.getItems(
+                modLogServiceV3.getItems(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     communityId = communityId,
@@ -74,7 +77,7 @@ class DefaultModlogRepositoryTest {
     fun givenNonEmptyResponse_whenGetItems_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                modLogService.getItems(
+                modLogServiceV3.getItems(
                     authHeader = any(),
                     auth = any(),
                     page = any(),
@@ -101,7 +104,7 @@ class DefaultModlogRepositoryTest {
             assertNotNull(res)
             assertEquals(2, res.size)
             coVerify {
-                modLogService.getItems(
+                modLogServiceV3.getItems(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     auth = AUTH_TOKEN,
                     communityId = communityId,

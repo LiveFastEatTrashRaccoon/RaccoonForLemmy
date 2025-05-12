@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.core.api.service
+package com.livefast.eattrash.raccoonforlemmy.core.api.service.v3
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.BlockPersonForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.BlockPersonResponse
@@ -26,8 +26,8 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
 
-interface UserService {
-    @GET("user")
+interface UserServiceV3 {
+    @GET("v3/user")
     suspend fun getDetails(
         @Header("Authorization") authHeader: String? = null,
         @Query("auth") auth: String? = null,
@@ -40,7 +40,7 @@ interface UserService {
         @Query("saved_only") savedOnly: Boolean? = null,
     ): GetPersonDetailsResponse
 
-    @GET("user/mention")
+    @GET("v3/user/mention")
     suspend fun getMentions(
         @Header("Authorization") authHeader: String? = null,
         @Query("auth") auth: String? = null,
@@ -50,7 +50,7 @@ interface UserService {
         @Query("unread_only") unreadOnly: Boolean? = null,
     ): GetPersonMentionsResponse
 
-    @GET("user/replies")
+    @GET("v3/user/replies")
     suspend fun getReplies(
         @Header("Authorization") authHeader: String? = null,
         @Query("auth") auth: String? = null,
@@ -60,49 +60,49 @@ interface UserService {
         @Query("unread_only") unreadOnly: Boolean? = null,
     ): GetRepliesResponse
 
-    @POST("user/mark_all_as_read")
+    @POST("v3/user/mark_all_as_read")
     @Headers("Content-Type: application/json")
     suspend fun markAllAsRead(
         @Header("Authorization") authHeader: String? = null,
         @Body form: MarkAllAsReadForm,
     ): GetRepliesResponse
 
-    @POST("user/mention/mark_as_read")
+    @POST("v3/user/mention/mark_as_read")
     @Headers("Content-Type: application/json")
     suspend fun markPersonMentionAsRead(
         @Header("Authorization") authHeader: String? = null,
         @Body form: MarkPersonMentionAsReadForm,
     ): PersonMentionResponse
 
-    @POST("user/block")
+    @POST("v3/user/block")
     @Headers("Content-Type: application/json")
     suspend fun block(
         @Header("Authorization") authHeader: String? = null,
         @Body form: BlockPersonForm,
     ): BlockPersonResponse
 
-    @PUT("user/save_user_settings")
+    @PUT("v3/user/save_user_settings")
     @Headers("Content-Type: application/json")
     suspend fun saveUserSettings(
         @Header("Authorization") authHeader: String? = null,
         @Body form: SaveUserSettingsForm,
     ): SaveUserSettingsResponse
 
-    @POST("admin/purge/person")
+    @POST("v3/admin/purge/person")
     @Headers("Content-Type: application/json")
     suspend fun purge(
         @Header("Authorization") authHeader: String? = null,
         @Body form: PurgePersonForm,
     ): SuccessResponse
 
-    @GET("account/list_media")
+    @GET("v3/account/list_media")
     suspend fun listMedia(
         @Header("Authorization") authHeader: String? = null,
         @Query("page") page: Int? = null,
         @Query("limit") limit: Int? = null,
     ): ListMediaResponse
 
-    @POST("user/delete_account")
+    @POST("v3/user/delete_account")
     @Headers("Content-Type: application/json")
     suspend fun deleteAccount(
         @Header("Authorization") authHeader: String? = null,

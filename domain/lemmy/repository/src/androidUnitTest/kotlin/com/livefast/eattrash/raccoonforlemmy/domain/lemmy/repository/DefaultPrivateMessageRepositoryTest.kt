@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.PrivateMessageService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.PrivateMessageServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import io.mockk.coEvery
@@ -19,10 +19,13 @@ class DefaultPrivateMessageRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val privateMessageService = mockk<PrivateMessageService>()
+    private val privateMessageServiceV3 = mockk<PrivateMessageServiceV3>()
     private val serviceProvider =
         mockk<ServiceProvider> {
-            every { privateMessages } returns privateMessageService
+            every { v3 } returns
+                mockk {
+                    every { privateMessages } returns privateMessageServiceV3
+                }
         }
 
     private val sut =
@@ -35,7 +38,7 @@ class DefaultPrivateMessageRepositoryTest {
         runTest {
             val creatorId = 1L
             coEvery {
-                privateMessageService.getAll(
+                privateMessageServiceV3.getAll(
                     auth = any(),
                     authHeader = any(),
                     page = any(),
@@ -59,7 +62,7 @@ class DefaultPrivateMessageRepositoryTest {
             assertNotNull(res)
             assertTrue(res.isEmpty())
             coVerify {
-                privateMessageService.getAll(
+                privateMessageServiceV3.getAll(
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     page = 1,
@@ -76,7 +79,7 @@ class DefaultPrivateMessageRepositoryTest {
             val creatorId = 1L
             val messageId = 2L
             coEvery {
-                privateMessageService.getAll(
+                privateMessageServiceV3.getAll(
                     auth = any(),
                     authHeader = any(),
                     page = any(),
@@ -107,7 +110,7 @@ class DefaultPrivateMessageRepositoryTest {
             assertTrue(res.isNotEmpty())
             assertEquals(messageId, res.first().id)
             coVerify {
-                privateMessageService.getAll(
+                privateMessageServiceV3.getAll(
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     page = 1,
@@ -124,7 +127,7 @@ class DefaultPrivateMessageRepositoryTest {
             val message = "fake-message"
             val recipientId = 1L
             coEvery {
-                privateMessageService.create(
+                privateMessageServiceV3.create(
                     authHeader = any(),
                     form = any(),
                 )
@@ -149,7 +152,7 @@ class DefaultPrivateMessageRepositoryTest {
             assertNotNull(res)
             assertEquals(message, res.content)
             coVerify {
-                privateMessageService.create(
+                privateMessageServiceV3.create(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -167,7 +170,7 @@ class DefaultPrivateMessageRepositoryTest {
             val message = "fake-message"
             val messageId = 1L
             coEvery {
-                privateMessageService.edit(
+                privateMessageServiceV3.edit(
                     authHeader = any(),
                     form = any(),
                 )
@@ -192,7 +195,7 @@ class DefaultPrivateMessageRepositoryTest {
             assertNotNull(res)
             assertEquals(message, res.content)
             coVerify {
-                privateMessageService.edit(
+                privateMessageServiceV3.edit(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -210,7 +213,7 @@ class DefaultPrivateMessageRepositoryTest {
             val message = "fake-message"
             val messageId = 1L
             coEvery {
-                privateMessageService.markAsRead(
+                privateMessageServiceV3.markAsRead(
                     authHeader = any(),
                     form = any(),
                 )
@@ -234,7 +237,7 @@ class DefaultPrivateMessageRepositoryTest {
 
             assertNotNull(res)
             coVerify {
-                privateMessageService.markAsRead(
+                privateMessageServiceV3.markAsRead(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -252,7 +255,7 @@ class DefaultPrivateMessageRepositoryTest {
             val message = "fake-message"
             val messageId = 1L
             coEvery {
-                privateMessageService.delete(
+                privateMessageServiceV3.delete(
                     authHeader = any(),
                     form = any(),
                 )
@@ -275,7 +278,7 @@ class DefaultPrivateMessageRepositoryTest {
 
             assertNotNull(res)
             coVerify {
-                privateMessageService.delete(
+                privateMessageServiceV3.delete(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {

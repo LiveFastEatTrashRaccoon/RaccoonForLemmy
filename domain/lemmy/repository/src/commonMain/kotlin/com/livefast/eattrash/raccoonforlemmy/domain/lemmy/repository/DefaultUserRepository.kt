@@ -33,7 +33,7 @@ internal class DefaultUserRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.search.resolveObject(
+                    services.v3.search.resolveObject(
                         authHeader = auth.toAuthHeader(),
                         q = query,
                     )
@@ -51,14 +51,14 @@ internal class DefaultUserRepository(
             runCatching {
                 val response =
                     if (otherInstance.isNullOrEmpty()) {
-                        services.user.getDetails(
+                        services.v3.user.getDetails(
                             authHeader = auth.toAuthHeader(),
                             auth = auth,
                             personId = id,
                         )
                     } else {
                         customServices.changeInstance(otherInstance)
-                        customServices.user.getDetails(
+                        customServices.v3.user.getDetails(
                             username = "$username@$otherInstance",
                         )
                     }
@@ -79,7 +79,7 @@ internal class DefaultUserRepository(
             runCatching {
                 val response =
                     if (otherInstance.isNullOrEmpty()) {
-                        services.user.getDetails(
+                        services.v3.user.getDetails(
                             authHeader = auth.toAuthHeader(),
                             auth = auth,
                             personId = id,
@@ -89,7 +89,7 @@ internal class DefaultUserRepository(
                         )
                     } else {
                         customServices.changeInstance(otherInstance)
-                        customServices.user.getDetails(
+                        customServices.v3.user.getDetails(
                             username = "$username@$otherInstance",
                             page = page,
                             limit = limit,
@@ -110,7 +110,7 @@ internal class DefaultUserRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.user.getDetails(
+                    services.v3.user.getDetails(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         personId = id,
@@ -136,7 +136,7 @@ internal class DefaultUserRepository(
             runCatching {
                 val response =
                     if (otherInstance.isNullOrEmpty()) {
-                        services.user.getDetails(
+                        services.v3.user.getDetails(
                             authHeader = auth.toAuthHeader(),
                             auth = auth,
                             personId = id,
@@ -146,7 +146,7 @@ internal class DefaultUserRepository(
                         )
                     } else {
                         customServices.changeInstance(otherInstance)
-                        customServices.user.getDetails(
+                        customServices.v3.user.getDetails(
                             username = "$username@$otherInstance",
                             page = page,
                             limit = limit,
@@ -167,7 +167,7 @@ internal class DefaultUserRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.user.getDetails(
+                    services.v3.user.getDetails(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         personId = id,
@@ -190,7 +190,7 @@ internal class DefaultUserRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.user.getMentions(
+                    services.v3.user.getMentions(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         limit = limit,
@@ -212,7 +212,7 @@ internal class DefaultUserRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.user.getReplies(
+                    services.v3.user.getReplies(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         limit = limit,
@@ -228,7 +228,7 @@ internal class DefaultUserRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val data = MarkAllAsReadForm(auth.orEmpty())
-                services.user.markAllAsRead(
+                services.v3.user.markAllAsRead(
                     authHeader = auth.toAuthHeader(),
                     form = data,
                 )
@@ -248,7 +248,7 @@ internal class DefaultUserRepository(
                         read = read,
                         auth = auth.orEmpty(),
                     )
-                services.user.markPersonMentionAsRead(
+                services.v3.user.markPersonMentionAsRead(
                     authHeader = auth.toAuthHeader(),
                     form = data,
                 )
@@ -268,7 +268,7 @@ internal class DefaultUserRepository(
                         read = read,
                         auth = auth.orEmpty(),
                     )
-                services.comment.markAsRead(
+                services.v3.comment.markAsRead(
                     authHeader = auth.toAuthHeader(),
                     form = data,
                 )
@@ -287,7 +287,7 @@ internal class DefaultUserRepository(
                     block = blocked,
                     auth = auth.orEmpty(),
                 )
-            services.user.block(
+            services.v3.user.block(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
@@ -301,7 +301,7 @@ internal class DefaultUserRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.user.getDetails(
+                    services.v3.user.getDetails(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         personId = id,
@@ -323,7 +323,7 @@ internal class DefaultUserRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.post.getAll(
+                    services.v3.post.getAll(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         page = page,
@@ -349,7 +349,7 @@ internal class DefaultUserRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.comment.getAll(
+                    services.v3.comment.getAll(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         page = page,
@@ -374,7 +374,7 @@ internal class DefaultUserRepository(
                 reason = reason,
             )
         val response =
-            services.user.purge(
+            services.v3.user.purge(
                 form = data,
                 authHeader = auth.toAuthHeader(),
             )
@@ -391,7 +391,7 @@ internal class DefaultUserRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.post.getAll(
+                    services.v3.post.getAll(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         page = page,
@@ -420,7 +420,7 @@ internal class DefaultUserRepository(
                         password = password,
                     )
                 val res =
-                    services.user.deleteAccount(
+                    services.v3.user.deleteAccount(
                         authHeader = auth.toAuthHeader(),
                         form = data,
                     )

@@ -42,7 +42,7 @@ internal class DefaultCommentRepository(
             runCatching {
                 val response =
                     if (instance.isNullOrEmpty()) {
-                        services.comment.getAll(
+                        services.v3.comment.getAll(
                             authHeader = auth.toAuthHeader(),
                             auth = auth,
                             postId = postId,
@@ -54,7 +54,7 @@ internal class DefaultCommentRepository(
                         )
                     } else {
                         customServices.changeInstance(instance)
-                        customServices.comment.getAll(
+                        customServices.v3.comment.getAll(
                             postId = postId,
                             page = page,
                             limit = limit,
@@ -75,14 +75,14 @@ internal class DefaultCommentRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 if (instance.isNullOrEmpty()) {
-                    services.comment.getBy(
+                    services.v3.comment.getBy(
                         authHeader = auth.toAuthHeader(),
                         id = id,
                         auth = auth,
                     )
                 } else {
                     customServices.changeInstance(instance)
-                    customServices.comment.getBy(id = id)
+                    customServices.v3.comment.getBy(id = id)
                 }.commentView.toModel()
             }.getOrNull()
         }
@@ -100,7 +100,7 @@ internal class DefaultCommentRepository(
             runCatching {
                 val response =
                     if (instance.isNullOrEmpty()) {
-                        services.comment.getAll(
+                        services.v3.comment.getAll(
                             authHeader = auth.toAuthHeader(),
                             auth = auth,
                             parentId = parentId,
@@ -111,7 +111,7 @@ internal class DefaultCommentRepository(
                         )
                     } else {
                         customServices.changeInstance(instance)
-                        customServices.comment.getAll(
+                        customServices.v3.comment.getAll(
                             parentId = parentId,
                             limit = limit,
                             type = type.toDto(),
@@ -183,7 +183,7 @@ internal class DefaultCommentRepository(
                     score = if (voted) 1 else 0,
                     auth = auth,
                 )
-            services.comment.like(authHeader = auth.toAuthHeader(), form = data)
+            services.v3.comment.like(authHeader = auth.toAuthHeader(), form = data)
             Unit
         }
     }
@@ -248,7 +248,7 @@ internal class DefaultCommentRepository(
                     score = if (downVoted) -1 else 0,
                     auth = auth,
                 )
-            services.comment.like(authHeader = auth.toAuthHeader(), form = data)
+            services.v3.comment.like(authHeader = auth.toAuthHeader(), form = data)
             Unit
         }
     }
@@ -269,7 +269,7 @@ internal class DefaultCommentRepository(
                 save = saved,
                 auth = auth,
             )
-        services.comment.save(authHeader = auth.toAuthHeader(), form = data)
+        services.v3.comment.save(authHeader = auth.toAuthHeader(), form = data)
         Unit
     }
 
@@ -289,7 +289,7 @@ internal class DefaultCommentRepository(
                     languageId = languageId,
                     auth = auth,
                 )
-            services.comment.create(authHeader = auth.toAuthHeader(), form = data)
+            services.v3.comment.create(authHeader = auth.toAuthHeader(), form = data)
             Unit
         }.getOrDefault(Unit)
     }
@@ -308,7 +308,7 @@ internal class DefaultCommentRepository(
                     languageId = languageId,
                     auth = auth,
                 )
-            services.comment.edit(authHeader = auth.toAuthHeader(), form = data)
+            services.v3.comment.edit(authHeader = auth.toAuthHeader(), form = data)
             Unit
         }.getOrDefault(Unit)
     }
@@ -323,7 +323,7 @@ internal class DefaultCommentRepository(
                     commentId = commentId,
                     deleted = true,
                 )
-            val res = services.comment.delete(authHeader = auth.toAuthHeader(), form = data)
+            val res = services.v3.comment.delete(authHeader = auth.toAuthHeader(), form = data)
             res.commentView.toModel()
         }.getOrNull()
     }
@@ -338,7 +338,7 @@ internal class DefaultCommentRepository(
                     commentId = commentId,
                     deleted = false,
                 )
-            val res = services.comment.delete(authHeader = auth.toAuthHeader(), form = data)
+            val res = services.v3.comment.delete(authHeader = auth.toAuthHeader(), form = data)
             res.commentView.toModel()
         }.getOrNull()
     }
@@ -355,7 +355,7 @@ internal class DefaultCommentRepository(
                     reason = reason,
                     auth = auth,
                 )
-            services.comment.createReport(
+            services.v3.comment.createReport(
                 form = data,
                 authHeader = auth.toAuthHeader(),
             )
@@ -379,7 +379,7 @@ internal class DefaultCommentRepository(
                         auth = auth,
                     )
                 val response =
-                    services.comment.remove(
+                    services.v3.comment.remove(
                         form = data,
                         authHeader = auth.toAuthHeader(),
                     )
@@ -401,7 +401,7 @@ internal class DefaultCommentRepository(
                         auth = auth,
                     )
                 val response =
-                    services.comment.distinguish(
+                    services.v3.comment.distinguish(
                         form = data,
                         authHeader = auth.toAuthHeader(),
                     )
@@ -419,7 +419,7 @@ internal class DefaultCommentRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.comment.listReports(
+                    services.v3.comment.listReports(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         communityId = communityId,
@@ -447,7 +447,7 @@ internal class DefaultCommentRepository(
                         auth = auth,
                     )
                 val response =
-                    services.comment.resolveReport(
+                    services.v3.comment.resolveReport(
                         form = data,
                         authHeader = auth.toAuthHeader(),
                     )
@@ -466,7 +466,7 @@ internal class DefaultCommentRepository(
                 reason = reason,
             )
         val res =
-            services.comment.purge(
+            services.v3.comment.purge(
                 form = data,
                 authHeader = auth.toAuthHeader(),
             )
@@ -480,7 +480,7 @@ internal class DefaultCommentRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.search.resolveObject(
+                    services.v3.search.resolveObject(
                         authHeader = auth.toAuthHeader(),
                         q = query,
                     )

@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.core.api.service
+package com.livefast.eattrash.raccoonforlemmy.core.api.service.v3
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CreatePrivateMessageForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.DeletePrivateMessageForm
@@ -15,8 +15,8 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
 
-interface PrivateMessageService {
-    @GET("private_message/list")
+interface PrivateMessageServiceV3 {
+    @GET("v3/private_message/list")
     suspend fun getAll(
         @Header("Authorization") authHeader: String? = null,
         @Query("auth") auth: String? = null,
@@ -26,28 +26,28 @@ interface PrivateMessageService {
         @Query("unread_only") unreadOnly: Boolean? = null,
     ): PrivateMessagesResponse
 
-    @POST("private_message")
+    @POST("v3/private_message")
     @Headers("Content-Type: application/json")
     suspend fun create(
         @Header("Authorization") authHeader: String? = null,
         @Body form: CreatePrivateMessageForm,
     ): PrivateMessageResponse
 
-    @PUT("private_message")
+    @PUT("v3/private_message")
     @Headers("Content-Type: application/json")
     suspend fun edit(
         @Header("Authorization") authHeader: String? = null,
         @Body form: EditPrivateMessageForm,
     ): PrivateMessageResponse
 
-    @POST("private_message/mark_as_read")
+    @POST("v3/private_message/mark_as_read")
     @Headers("Content-Type: application/json")
     suspend fun markAsRead(
         @Header("Authorization") authHeader: String? = null,
         @Body form: MarkPrivateMessageAsReadForm,
     ): PrivateMessageResponse
 
-    @POST("private_message/delete")
+    @POST("v3/private_message/delete")
     @Headers("Content-Type: application/json")
     suspend fun delete(
         @Header("Authorization") authHeader: String? = null,

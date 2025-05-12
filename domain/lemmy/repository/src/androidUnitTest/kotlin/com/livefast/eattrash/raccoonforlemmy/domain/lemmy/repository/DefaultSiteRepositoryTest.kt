@@ -5,11 +5,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.BlockInstanceResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.Language
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SiteMetadata
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.PostService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.SiteService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.UserService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.PostServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.SiteServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.UserServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.AccountSettingsModel
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.SiteVersionDataSource
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -27,27 +28,38 @@ class DefaultSiteRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val siteService = mockk<SiteService>()
-    private val postService = mockk<PostService>()
-    private val userService = mockk<UserService>()
+    private val siteServiceV3 = mockk<SiteServiceV3>()
+    private val postServiceV3 = mockk<PostServiceV3>()
+    private val userServiceV3 = mockk<UserServiceV3>()
     private val serviceProvider =
         mockk<ServiceProvider> {
-            every { site } returns siteService
-            every { post } returns postService
-            every { user } returns userService
+            every { v3 } returns
+                mockk {
+                    every { site } returns siteServiceV3
+                    every { post } returns postServiceV3
+                    every { user } returns userServiceV3
+                }
             every { currentInstance } returns "feddit.it"
         }
     private val customServiceProvider =
         mockk<ServiceProvider> {
-            every { site } returns siteService
-            every { post } returns postService
+            every { v3 } returns
+                mockk {
+                    every { site } returns siteServiceV3
+                    every { post } returns postServiceV3
+                }
             every { currentInstance } returns "lemmy.ml"
+        }
+    private val siteVersionDataSource =
+        mockk<SiteVersionDataSource> {
+            coEvery { shouldUseV4(any()) } returns false
         }
 
     private val sut =
         DefaultSiteRepository(
             services = serviceProvider,
             customServices = customServiceProvider,
+            siteVersionDataSource = siteVersionDataSource,
         )
 
     @Test
@@ -55,7 +67,7 @@ class DefaultSiteRepositoryTest {
         runTest {
             val userId = 1L
             coEvery {
-                siteService.get(auth = any(), authHeader = any())
+                siteServiceV3.get(auth = any(), authHeader = any())
             } returns
                 mockk(relaxed = true) {
                     every { myUser } returns
@@ -75,7 +87,7 @@ class DefaultSiteRepositoryTest {
             assertNotNull(res)
             assertEquals(userId, res.id)
             coVerify {
-                siteService.get(
+                siteServiceV3.get(
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                 )
@@ -87,7 +99,7 @@ class DefaultSiteRepositoryTest {
         runTest {
             val versionValue = "0.19.1"
             coEvery {
-                siteService.get(auth = any(), authHeader = any())
+                siteServiceV3.get(auth = any(), authHeader = any())
             } returns
                 mockk {
                     every { version } returns versionValue
@@ -97,7 +109,7 @@ class DefaultSiteRepositoryTest {
 
             assertEquals(versionValue, res)
             coVerify {
-                siteService.get()
+                siteServiceV3.get()
             }
         }
 
@@ -107,7 +119,7 @@ class DefaultSiteRepositoryTest {
             val instanceId = 1L
             val formSlot = slot<BlockInstanceForm>()
             coEvery {
-                siteService.block(authHeader = any(), form = capture(formSlot))
+                siteServiceV3.block(authHeader = any(), form = capture(formSlot))
             } answers {
                 BlockInstanceResponse(blocked = formSlot.captured.block)
             }
@@ -119,7 +131,7 @@ class DefaultSiteRepositoryTest {
             )
 
             coVerify {
-                siteService.block(
+                siteServiceV3.block(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -136,7 +148,7 @@ class DefaultSiteRepositoryTest {
             val instanceTitle = "feddit.it"
             val siteMetadata = SiteMetadata(title = instanceTitle)
             coEvery {
-                postService.getSiteMetadata(any(), any())
+                postServiceV3.getSiteMetadata(any(), any())
             } returns
                 mockk {
                     every { metadata } returns siteMetadata
@@ -147,7 +159,7 @@ class DefaultSiteRepositoryTest {
             assertNotNull(res)
             assertEquals(instanceTitle, res.title)
             coVerify {
-                postService.getSiteMetadata(
+                postServiceV3.getSiteMetadata(
                     url = "https://$instanceTitle",
                 )
             }
@@ -158,7 +170,7 @@ class DefaultSiteRepositoryTest {
         runTest {
             val languages = listOf(Language(id = 0, code = "en", name = "English"))
             coEvery {
-                siteService.get(auth = any(), authHeader = any())
+                siteServiceV3.get(auth = any(), authHeader = any())
             } returns
                 mockk {
                     every { allLanguages } returns languages
@@ -170,7 +182,7 @@ class DefaultSiteRepositoryTest {
             assertEquals(0L, res.first().id)
             assertEquals("en", res.first().code)
             coVerify {
-                siteService.get(
+                siteServiceV3.get(
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                 )
@@ -182,7 +194,7 @@ class DefaultSiteRepositoryTest {
         runTest {
             val personBio = "fake-bio"
             coEvery {
-                siteService.get(auth = any(), authHeader = any())
+                siteServiceV3.get(auth = any(), authHeader = any())
             } returns
                 mockk(relaxed = true) {
                     every { myUser } returns
@@ -205,7 +217,7 @@ class DefaultSiteRepositoryTest {
             assertNotNull(res)
             assertEquals(personBio, res.bio)
             coVerify {
-                siteService.get(
+                siteServiceV3.get(
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                 )
@@ -217,7 +229,7 @@ class DefaultSiteRepositoryTest {
         runTest {
             val personBio = "fake-bio"
             coEvery {
-                userService.saveUserSettings(authHeader = any(), form = any())
+                userServiceV3.saveUserSettings(authHeader = any(), form = any())
             } returns mockk(relaxed = true)
 
             sut.updateAccountSettings(
@@ -226,7 +238,7 @@ class DefaultSiteRepositoryTest {
             )
 
             coVerify {
-                userService.saveUserSettings(
+                userServiceV3.saveUserSettings(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     form =
                         withArg {
@@ -240,7 +252,7 @@ class DefaultSiteRepositoryTest {
     fun whenGetBans_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                siteService.get(auth = any(), authHeader = any())
+                siteServiceV3.get(auth = any(), authHeader = any())
             } returns
                 mockk(relaxed = true) {
                     every { myUser } returns
@@ -275,7 +287,7 @@ class DefaultSiteRepositoryTest {
             assertTrue(res.instances.isNotEmpty())
             assertEquals(3L, res.instances.first().id)
             coVerify {
-                siteService.get(
+                siteServiceV3.get(
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                 )
@@ -286,7 +298,7 @@ class DefaultSiteRepositoryTest {
     fun whenGetAdmins_thenResultAndInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                siteService.get(auth = any(), authHeader = any())
+                siteServiceV3.get(auth = any(), authHeader = any())
             } returns
                 mockk {
                     every { admins } returns

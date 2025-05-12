@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase
 
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.SiteVersionDataSource
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -14,22 +15,22 @@ class DefaultGetSortTypesUseCaseTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val isSiteVersionAtLeast: IsSiteVersionAtLeastUseCase = mockk()
+    private val siteVersionDataSource: SiteVersionDataSource = mockk()
 
     private val sut =
         DefaultGetSortTypesUseCase(
-            isSiteVersionAtLeast = isSiteVersionAtLeast,
+            siteVersionDataSource = siteVersionDataSource,
         )
 
     @Test
     fun givenVersionEqualToThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeast(
+                siteVersionDataSource.isAtLeast(
                     major = any(),
                     minor = any(),
                     patch = any(),
-                    otherInstance = any()
+                    otherInstance = any(),
                 )
             } returns true
 
@@ -50,11 +51,11 @@ class DefaultGetSortTypesUseCaseTest {
     fun givenVersionGreaterThanThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeast(
+                siteVersionDataSource.isAtLeast(
                     major = any(),
                     minor = any(),
                     patch = any(),
-                    otherInstance = any()
+                    otherInstance = any(),
                 )
             } returns true
 
@@ -75,11 +76,11 @@ class DefaultGetSortTypesUseCaseTest {
     fun givenVersionLessThanThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeast(
+                siteVersionDataSource.isAtLeast(
                     major = any(),
                     minor = any(),
                     patch = any(),
-                    otherInstance = any()
+                    otherInstance = any(),
                 )
             } returns false
 
@@ -100,11 +101,11 @@ class DefaultGetSortTypesUseCaseTest {
     fun givenVersionGreaterThanThreshold_whenGetTypesForComments_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeast(
+                siteVersionDataSource.isAtLeast(
                     major = any(),
                     minor = any(),
                     patch = any(),
-                    otherInstance = any()
+                    otherInstance = any(),
                 )
             } returns true
 
@@ -121,11 +122,11 @@ class DefaultGetSortTypesUseCaseTest {
     fun givenVersionLessThanThreshold_whenGetTypesForComments_thenResultsIsAsExpected() =
         runTest {
             coEvery {
-                isSiteVersionAtLeast(
+                siteVersionDataSource.isAtLeast(
                     major = any(),
                     minor = any(),
                     patch = any(),
-                    otherInstance = any()
+                    otherInstance = any(),
                 )
             } returns false
 

@@ -1,4 +1,4 @@
-package com.livefast.eattrash.raccoonforlemmy.core.api.service
+package com.livefast.eattrash.raccoonforlemmy.core.api.service.v3
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.CommunityId
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.ListingType
@@ -11,8 +11,8 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.Query
 
-interface SearchService {
-    @GET("search")
+interface SearchServiceV3 {
+    @GET("v3/search")
     suspend fun search(
         @Header("Authorization") authHeader: String? = null,
         @Query("q") q: String,
@@ -27,7 +27,7 @@ interface SearchService {
         @Query("auth") auth: String? = null,
     ): SearchResponse
 
-    @GET("resolve_object")
+    @GET("v3/resolve_object")
     suspend fun resolveObject(
         @Header("Authorization") authHeader: String? = null,
         @Query("q") q: String,

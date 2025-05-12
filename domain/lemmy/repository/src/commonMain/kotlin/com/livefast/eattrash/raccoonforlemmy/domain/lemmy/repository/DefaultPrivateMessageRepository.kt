@@ -25,7 +25,7 @@ internal class DefaultPrivateMessageRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.privateMessages.getAll(
+                    services.v3.privateMessages.getAll(
                         authHeader = auth.toAuthHeader(),
                         auth = auth,
                         creatorId = creatorId,
@@ -51,7 +51,7 @@ internal class DefaultPrivateMessageRepository(
                         recipientId = recipientId,
                     )
                 val response =
-                    services.privateMessages.create(
+                    services.v3.privateMessages.create(
                         authHeader = auth.toAuthHeader(),
                         form = data,
                     )
@@ -72,7 +72,7 @@ internal class DefaultPrivateMessageRepository(
                     privateMessageId = messageId,
                 )
             val response =
-                services.privateMessages.edit(
+                services.v3.privateMessages.edit(
                     authHeader = auth.toAuthHeader(),
                     form = data,
                 )
@@ -93,7 +93,7 @@ internal class DefaultPrivateMessageRepository(
                         read = read,
                     )
                 val response =
-                    services.privateMessages.markAsRead(
+                    services.v3.privateMessages.markAsRead(
                         authHeader = auth.toAuthHeader(),
                         form = data,
                     )
@@ -113,7 +113,7 @@ internal class DefaultPrivateMessageRepository(
                         privateMessageId = messageId,
                         deleted = true,
                     )
-                services.privateMessages.delete(
+                services.v3.privateMessages.delete(
                     authHeader = auth.toAuthHeader(),
                     form = data,
                 )

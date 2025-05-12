@@ -37,7 +37,7 @@ class DefaultMediaRepository(
                         },
                     )
                 val images =
-                    services.post.uploadImage(
+                    services.v3.post.uploadImage(
                         url = url,
                         token = "jwt=$auth",
                         authHeader = auth.toAuthHeader(),
@@ -59,7 +59,7 @@ class DefaultMediaRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val response =
-                    services.user.listMedia(
+                    services.v3.user.listMedia(
                         authHeader = auth.toAuthHeader(),
                         page = page,
                         limit = limit,
@@ -74,7 +74,7 @@ class DefaultMediaRepository(
     ) = withContext(Dispatchers.IO) {
         val url =
             "https://${services.currentInstance}/pictrs/image/delete/${media.deleteToken}/${media.alias}"
-        services.post.deleteImage(
+        services.v3.post.deleteImage(
             url = url,
             token = "jwt=$auth",
             authHeader = auth.toAuthHeader(),

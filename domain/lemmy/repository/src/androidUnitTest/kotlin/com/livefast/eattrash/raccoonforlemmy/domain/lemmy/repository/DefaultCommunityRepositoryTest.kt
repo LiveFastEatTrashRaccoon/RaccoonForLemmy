@@ -3,9 +3,9 @@ package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SearchResponse
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SearchType
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.CommunityService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.SearchService
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.SiteService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.CommunityServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.SearchServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.SiteServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -32,20 +32,26 @@ class DefaultCommunityRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
-    private val communityService = mockk<CommunityService>()
-    private val searchService = mockk<SearchService>()
-    private val siteService = mockk<SiteService>()
+    private val communityServiceV3 = mockk<CommunityServiceV3>()
+    private val searchServiceV3 = mockk<SearchServiceV3>()
+    private val siteServiceV3 = mockk<SiteServiceV3>()
     private val serviceProvider =
         mockk<ServiceProvider> {
-            every { community } returns communityService
-            every { search } returns searchService
-            every { site } returns siteService
+            every { v3 } returns
+                mockk {
+                    every { community } returns communityServiceV3
+                    every { search } returns searchServiceV3
+                    every { site } returns siteServiceV3
+                }
         }
     private val customServiceProvider =
         mockk<ServiceProvider>(relaxUnitFun = true) {
-            every { community } returns communityService
-            every { search } returns searchService
-            every { site } returns siteService
+            every { v3 } returns
+                mockk {
+                    every { community } returns communityServiceV3
+                    every { search } returns searchServiceV3
+                    every { site } returns siteServiceV3
+                }
         }
     private val sut =
         DefaultCommunityRepository(
@@ -57,7 +63,7 @@ class DefaultCommunityRepositoryTest {
     fun givenSuccess_whenSearch_thenResultIsAsExpected() =
         runTest {
             coEvery {
-                searchService.search(
+                searchServiceV3.search(
                     authHeader = any(),
                     auth = any(),
                     q = any(),
@@ -99,7 +105,7 @@ class DefaultCommunityRepositoryTest {
             assertIs<SearchResult.Community>(res.first())
             coVerify {
                 customServiceProvider wasNot Called
-                searchService.search(
+                searchServiceV3.search(
                     authHeader = token.toAuthHeader(),
                     auth = token,
                     q = query,
@@ -119,7 +125,7 @@ class DefaultCommunityRepositoryTest {
     fun givenSuccess_whenGetList_thenResultIsAsExpected() =
         runTest {
             coEvery {
-                communityService.getAll(
+                communityServiceV3.getAll(
                     authHeader = any(),
                     auth = any(),
                     sort = any(),
@@ -147,8 +153,7 @@ class DefaultCommunityRepositoryTest {
             coVerify {
                 serviceProvider wasNot Called
                 customServiceProvider.changeInstance(otherInstance)
-                customServiceProvider.community
-                communityService.getAll(
+                communityServiceV3.getAll(
                     authHeader = null,
                     auth = null,
                     page = 1,
@@ -163,7 +168,7 @@ class DefaultCommunityRepositoryTest {
     fun givenSuccess_whenGetResolved_thenResultIsAsExpected() =
         runTest {
             coEvery {
-                searchService.resolveObject(
+                searchServiceV3.resolveObject(
                     authHeader = any(),
                     q = any(),
                 )
@@ -182,7 +187,7 @@ class DefaultCommunityRepositoryTest {
 
             assertNotNull(res)
             coVerify {
-                searchService.resolveObject(
+                searchServiceV3.resolveObject(
                     authHeader = token.toAuthHeader(),
                     q = query,
                 )
@@ -193,7 +198,7 @@ class DefaultCommunityRepositoryTest {
     fun givenSuccess_whenGetSubscribed_thenResultIsAsExpected() =
         runTest {
             coEvery {
-                searchService.search(
+                searchServiceV3.search(
                     authHeader = any(),
                     auth = any(),
                     q = any(),
@@ -225,7 +230,7 @@ class DefaultCommunityRepositoryTest {
 
             assertEquals(1, res.size)
             coVerify {
-                searchService.search(
+                searchServiceV3.search(
                     authHeader = token.toAuthHeader(),
                     auth = token,
                     q = "",
@@ -246,7 +251,7 @@ class DefaultCommunityRepositoryTest {
         runTest {
             val communityId = 1L
             coEvery {
-                communityService.get(
+                communityServiceV3.get(
                     authHeader = any(),
                     auth = any(),
                     id = any(),
@@ -273,7 +278,7 @@ class DefaultCommunityRepositoryTest {
             assertNotNull(res)
             assertEquals(communityId, res.id)
             coVerify {
-                communityService.get(
+                communityServiceV3.get(
                     id = communityId,
                     name = null,
                     auth = token,
@@ -287,7 +292,7 @@ class DefaultCommunityRepositoryTest {
         runTest {
             val communityId = 1L
             coEvery {
-                communityService.get(
+                communityServiceV3.get(
                     authHeader = any(),
                     auth = any(),
                     id = any(),
@@ -314,7 +319,7 @@ class DefaultCommunityRepositoryTest {
 
             assertEquals(1, res.size)
             coVerify {
-                communityService.get(
+                communityServiceV3.get(
                     id = communityId,
                     name = null,
                     auth = token,
@@ -328,7 +333,7 @@ class DefaultCommunityRepositoryTest {
         runTest {
             val communityId = 1L
             coEvery {
-                communityService.follow(any(), any())
+                communityServiceV3.follow(any(), any())
             } returns
                 mockk {
                     every { communityView } returns
@@ -350,7 +355,7 @@ class DefaultCommunityRepositoryTest {
             assertNotNull(res)
             assertEquals(communityId, res.id)
             coVerify {
-                communityService.follow(
+                communityServiceV3.follow(
                     authHeader = token.toAuthHeader(),
                     withArg { data ->
                         assertEquals(communityId, data.communityId)
@@ -365,7 +370,7 @@ class DefaultCommunityRepositoryTest {
         runTest {
             val communityId = 1L
             coEvery {
-                communityService.follow(any(), any())
+                communityServiceV3.follow(any(), any())
             } returns
                 mockk {
                     every { communityView } returns
@@ -387,7 +392,7 @@ class DefaultCommunityRepositoryTest {
             assertNotNull(res)
             assertEquals(communityId, res.id)
             coVerify {
-                communityService.follow(
+                communityServiceV3.follow(
                     authHeader = token.toAuthHeader(),
                     withArg { data ->
                         assertEquals(communityId, data.communityId)
@@ -402,7 +407,7 @@ class DefaultCommunityRepositoryTest {
         runTest {
             val communityId = 1L
             coEvery {
-                communityService.block(any(), any())
+                communityServiceV3.block(any(), any())
             } returns mockk()
             val token = AUTH_TOKEN
 
@@ -413,7 +418,7 @@ class DefaultCommunityRepositoryTest {
             )
 
             coVerify {
-                communityService.block(
+                communityServiceV3.block(
                     authHeader = token.toAuthHeader(),
                     withArg { data ->
                         assertEquals(communityId, data.communityId)
@@ -429,7 +434,7 @@ class DefaultCommunityRepositoryTest {
             val communityId = 1L
             val userId = 2L
             coEvery {
-                communityService.ban(any(), any())
+                communityServiceV3.ban(any(), any())
             } returns mockk()
 
             val token = AUTH_TOKEN
@@ -441,7 +446,7 @@ class DefaultCommunityRepositoryTest {
             )
 
             coVerify {
-                communityService.ban(
+                communityServiceV3.ban(
                     authHeader = token.toAuthHeader(),
                     withArg { data ->
                         assertEquals(communityId, data.communityId)
@@ -458,7 +463,7 @@ class DefaultCommunityRepositoryTest {
             val communityId = 1L
             val userId = 2L
             coEvery {
-                communityService.addMod(any(), any())
+                communityServiceV3.addMod(any(), any())
             } returns mockk()
 
             val token = AUTH_TOKEN
@@ -470,7 +475,7 @@ class DefaultCommunityRepositoryTest {
             )
 
             coVerify {
-                communityService.addMod(
+                communityServiceV3.addMod(
                     authHeader = token.toAuthHeader(),
                     withArg { data ->
                         assertEquals(communityId, data.communityId)
@@ -486,7 +491,7 @@ class DefaultCommunityRepositoryTest {
         runTest {
             val communityId = 1L
             coEvery {
-                communityService.edit(any(), any())
+                communityServiceV3.edit(any(), any())
             } returns mockk()
 
             val token = AUTH_TOKEN
@@ -498,7 +503,7 @@ class DefaultCommunityRepositoryTest {
             )
 
             coVerify {
-                communityService.edit(
+                communityServiceV3.edit(
                     authHeader = token.toAuthHeader(),
                     withArg { data ->
                         assertEquals(communityId, data.communityId)
@@ -512,7 +517,7 @@ class DefaultCommunityRepositoryTest {
     fun givenSuccess_whenCreate_thenInteractionsAreAsExpected() =
         runTest {
             coEvery {
-                communityService.create(any(), any())
+                communityServiceV3.create(any(), any())
             } returns mockk(relaxed = true)
 
             val token = AUTH_TOKEN
@@ -527,7 +532,7 @@ class DefaultCommunityRepositoryTest {
 
             assertNotNull(res)
             coVerify {
-                communityService.create(
+                communityServiceV3.create(
                     authHeader = token.toAuthHeader(),
                     withArg { data ->
                         assertEquals(newName, data.name)
@@ -541,7 +546,7 @@ class DefaultCommunityRepositoryTest {
         runTest {
             val communityId = 1L
             coEvery {
-                communityService.delete(any(), any())
+                communityServiceV3.delete(any(), any())
             } returns mockk()
 
             sut.delete(
@@ -550,7 +555,7 @@ class DefaultCommunityRepositoryTest {
             )
 
             coVerify {
-                communityService.delete(
+                communityServiceV3.delete(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     withArg {
                         assertEquals(1, it.communityId)
@@ -565,7 +570,7 @@ class DefaultCommunityRepositoryTest {
         runTest {
             val communityId = 1L
             coEvery {
-                communityService.hide(any(), any())
+                communityServiceV3.hide(any(), any())
             } returns mockk { every { success } returns true }
 
             sut.hide(
@@ -576,7 +581,7 @@ class DefaultCommunityRepositoryTest {
             )
 
             coVerify {
-                communityService.hide(
+                communityServiceV3.hide(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     withArg {
                         assertEquals(1, it.communityId)
@@ -592,7 +597,7 @@ class DefaultCommunityRepositoryTest {
         runTest {
             val communityId = 1L
             coEvery {
-                communityService.purge(any(), any())
+                communityServiceV3.purge(any(), any())
             } returns mockk { every { success } returns true }
 
             sut.purge(
@@ -602,7 +607,7 @@ class DefaultCommunityRepositoryTest {
             )
 
             coVerify {
-                communityService.purge(
+                communityServiceV3.purge(
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                     withArg {
                         assertEquals(1, it.communityId)

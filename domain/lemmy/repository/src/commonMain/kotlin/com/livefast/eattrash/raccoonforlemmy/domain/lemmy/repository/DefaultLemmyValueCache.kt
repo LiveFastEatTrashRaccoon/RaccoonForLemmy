@@ -17,7 +17,7 @@ internal class DefaultLemmyValueCache(
     override suspend fun refresh(auth: String?) {
         val response =
             runCatching {
-                services.site.get(
+                services.v3.site.get(
                     auth = auth,
                     authHeader = auth.toAuthHeader(),
                 )
