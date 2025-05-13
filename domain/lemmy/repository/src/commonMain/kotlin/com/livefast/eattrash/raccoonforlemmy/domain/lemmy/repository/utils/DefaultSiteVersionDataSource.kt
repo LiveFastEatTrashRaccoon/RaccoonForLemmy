@@ -10,19 +10,46 @@ internal class DefaultSiteVersionDataSource(
         private val LEMMY_VERSION_REGEX = Regex("(?<major>\\d+).(?<minor>\\d+)(.(?<patch>\\d+))?")
     }
 
+    private val cache = mutableMapOf<String, String>()
+
     override suspend fun isAtLeast(
         major: Int,
         minor: Int,
         patch: Int,
         otherInstance: String?,
     ): Boolean {
+        val instance = otherInstance ?: services.currentInstance
         val version =
-            if (otherInstance.isNullOrEmpty()) {
-                services.getApiVersion()
+            if (cache.contains(instance)) {
+                cache[instance].orEmpty()
             } else {
-                customServices.getApiVersion()
+                retrieveVersion(otherInstance = otherInstance).also {
+                    cache[instance] = it
+                }
             }
-        val matchResult = LEMMY_VERSION_REGEX.find(version)
+
+        return determine(
+            actualVersion = version,
+            major = major,
+            minor = minor,
+            patch = patch,
+        )
+    }
+
+    private suspend fun retrieveVersion(otherInstance: String?): String =
+        if (otherInstance.isNullOrEmpty()) {
+            services.getApiVersion()
+        } else {
+            customServices.getApiVersion()
+        }
+
+    private fun determine(
+        actualVersion: String,
+        major: Int,
+        minor: Int,
+        patch: Int,
+    ): Boolean {
+        val matchResult = LEMMY_VERSION_REGEX.find(actualVersion)
         val actualMajor =
             matchResult
                 ?.groups
@@ -50,6 +77,4 @@ internal class DefaultSiteVersionDataSource(
             else -> true
         }
     }
-
-    override suspend fun shouldUseV4(otherInstance: String?): Boolean = isAtLeast(major = 1, minor = 0, patch = 0)
 }

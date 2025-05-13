@@ -8,10 +8,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.PostServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.SiteServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.UserServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.AccountServiceV4
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.AccountSettingsModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.SiteVersionDataSource
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
+import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -31,6 +33,7 @@ class DefaultSiteRepositoryTest {
     private val siteServiceV3 = mockk<SiteServiceV3>()
     private val postServiceV3 = mockk<PostServiceV3>()
     private val userServiceV3 = mockk<UserServiceV3>()
+    private val accountServiceV4 = mockk<AccountServiceV4>()
     private val serviceProvider =
         mockk<ServiceProvider> {
             every { v3 } returns
@@ -38,6 +41,10 @@ class DefaultSiteRepositoryTest {
                     every { site } returns siteServiceV3
                     every { post } returns postServiceV3
                     every { user } returns userServiceV3
+                }
+            every { v4 } returns
+                mockk {
+                    every { account } returns accountServiceV4
                 }
             every { currentInstance } returns "feddit.it"
         }
@@ -52,7 +59,14 @@ class DefaultSiteRepositoryTest {
         }
     private val siteVersionDataSource =
         mockk<SiteVersionDataSource> {
-            coEvery { shouldUseV4(any()) } returns false
+            coEvery {
+                isAtLeast(
+                    major = any(),
+                    minor = any(),
+                    patch = any(),
+                    otherInstance = any(),
+                )
+            } returns false
         }
 
     private val sut =
@@ -63,7 +77,7 @@ class DefaultSiteRepositoryTest {
         )
 
     @Test
-    fun whenGetCurrentUser_thenResultAndInteractionsAreAsExpected() =
+    fun givenV3_whenGetCurrentUser_thenResultAndInteractionsAreAsExpected() =
         runTest {
             val userId = 1L
             coEvery {
@@ -91,6 +105,44 @@ class DefaultSiteRepositoryTest {
                     auth = AUTH_TOKEN,
                     authHeader = AUTH_TOKEN.toAuthHeader(),
                 )
+                accountServiceV4 wasNot Called
+            }
+        }
+
+    @Test
+    fun givenV4_whenGetCurrentUser_thenResultAndInteractionsAreAsExpected() =
+        runTest {
+            coEvery {
+                siteVersionDataSource.isAtLeast(
+                    major = any(),
+                    minor = any(),
+                    patch = any(),
+                    otherInstance = any(),
+                )
+            } returns true
+            val userId = 1L
+            coEvery {
+                accountServiceV4.get(authHeader = any())
+            } returns
+                mockk(relaxed = true) {
+                    mockk(relaxed = true) {
+                        every { localUserView } returns
+                            mockk(relaxed = true) {
+                                every { person } returns
+                                    mockk(relaxed = true) {
+                                        every { id } returns userId
+                                    }
+                            }
+                    }
+                }
+
+            val res = sut.getCurrentUser(auth = AUTH_TOKEN)
+
+            assertNotNull(res)
+            assertEquals(userId, res.id)
+            coVerify {
+                siteServiceV3 wasNot Called
+                accountServiceV4.get(authHeader = AUTH_TOKEN.toAuthHeader())
             }
         }
 

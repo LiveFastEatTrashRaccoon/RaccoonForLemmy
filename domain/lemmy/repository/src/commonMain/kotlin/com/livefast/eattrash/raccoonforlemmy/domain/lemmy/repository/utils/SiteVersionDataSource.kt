@@ -7,6 +7,12 @@ interface SiteVersionDataSource {
         patch: Int = 0,
         otherInstance: String? = null,
     ): Boolean
-
-    suspend fun shouldUseV4(otherInstance: String? = null): Boolean
 }
+
+internal suspend fun SiteVersionDataSource.shouldUseV4(otherInstance: String? = null): Boolean =
+    isAtLeast(
+        otherInstance = otherInstance,
+        major = 1,
+        minor = 0,
+        patch = 0,
+    )

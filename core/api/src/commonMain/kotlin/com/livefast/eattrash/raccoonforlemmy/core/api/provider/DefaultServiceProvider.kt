@@ -11,6 +11,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createSearchSer
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createSiteServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createUserServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.V4
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.createAccountServiceV4
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.createSiteServiceV4
 import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.AppInfoRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngineFactory
@@ -102,6 +103,7 @@ internal class DefaultServiceProvider(
             }
         v4 =
             object : V4 {
+                override val account = ktorfit.createAccountServiceV4()
                 override val site = ktorfit.createSiteServiceV4()
             }
     }
