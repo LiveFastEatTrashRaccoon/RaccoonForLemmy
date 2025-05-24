@@ -9,7 +9,7 @@ interface SiteVersionDataSource {
     ): Boolean
 }
 
-internal suspend fun SiteVersionDataSource.shouldUseV4(otherInstance: String? = null): Boolean =
+suspend fun SiteVersionDataSource.shouldUseV4(otherInstance: String? = null): Boolean =
     isAtLeast(
         otherInstance = otherInstance,
         major = 1,
