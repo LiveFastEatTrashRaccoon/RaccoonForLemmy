@@ -11,6 +11,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLas
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.AuthRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
@@ -27,6 +28,7 @@ class DefaultLogoutUseCaseTest {
 
     private val identityRepository = mockk<IdentityRepository>(relaxUnitFun = true)
     private val accountRepository = mockk<AccountRepository>(relaxUnitFun = true)
+    private val authRepository = mockk<AuthRepository>(relaxUnitFun = true)
     private val settingsRepository = mockk<SettingsRepository>(relaxUnitFun = true)
     private val notificationCenter = mockk<NotificationCenter>(relaxUnitFun = true)
     private val communitySortRepository = mockk<CommunitySortRepository>(relaxUnitFun = true)
@@ -42,6 +44,7 @@ class DefaultLogoutUseCaseTest {
         DefaultLogoutUseCase(
             identityRepository = identityRepository,
             accountRepository = accountRepository,
+            authRepository = authRepository,
             settingsRepository = settingsRepository,
             notificationCenter = notificationCenter,
             communitySortRepository = communitySortRepository,
@@ -53,18 +56,19 @@ class DefaultLogoutUseCaseTest {
         )
 
     @Test
-    fun whenExecute_thenInteractionsAreAsExpected() =
+    fun givenSuccess_whenExecute_thenInteractionsAreAsExpected() =
         runTest {
+            coEvery { authRepository.logout() } returns Result.success(Unit)
             val accountId = 1L
             coEvery {
                 accountRepository.getActive()
             } returns
-                AccountModel(
-                    id = accountId,
-                    instance = "fake-instance",
-                    username = "fake-username",
-                    jwt = "fake-token",
-                )
+                    AccountModel(
+                        id = accountId,
+                        instance = "fake-instance",
+                        username = "fake-username",
+                        jwt = "fake-token",
+                    )
             val anonymousSettings = SettingsModel()
             coEvery {
                 settingsRepository.getSettings(any())
@@ -73,6 +77,7 @@ class DefaultLogoutUseCaseTest {
             sut()
 
             coVerify {
+                authRepository.logout()
                 notificationCenter.send(ofType(NotificationCenterEvent.ResetHome::class))
                 notificationCenter.send(ofType(NotificationCenterEvent.ResetExplore::class))
                 notificationCenter.send(ofType(NotificationCenterEvent.Logout::class))

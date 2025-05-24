@@ -150,6 +150,7 @@ val identityModule =
                 DefaultLogoutUseCase(
                     identityRepository = instance(),
                     accountRepository = instance(),
+                    authRepository = instance(),
                     notificationCenter = instance(),
                     settingsRepository = instance(),
                     communitySortRepository = instance(),
