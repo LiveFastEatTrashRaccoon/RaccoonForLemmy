@@ -8,4 +8,6 @@ interface AuthRepository {
         password: String,
         totp2faToken: String? = null,
     ): Result<LoginResponse>
+
+    suspend fun logout(): Result<Unit>
 }

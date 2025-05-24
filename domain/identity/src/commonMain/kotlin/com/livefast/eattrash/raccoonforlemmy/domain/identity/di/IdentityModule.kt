@@ -47,6 +47,7 @@ val identityModule =
             singleton {
                 DefaultAuthRepository(
                     services = instance(tag = "default"),
+                    siteVersionDataSource = instance(),
                 )
             }
         }
