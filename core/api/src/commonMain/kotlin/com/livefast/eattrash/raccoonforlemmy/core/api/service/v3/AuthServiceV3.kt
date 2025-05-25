@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.api.service.v3
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.LoginForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.LoginResponse
+import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SuccessResponse
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
@@ -12,4 +13,7 @@ interface AuthServiceV3 {
     suspend fun login(
         @Body form: LoginForm,
     ): LoginResponse
+
+    @POST("v3/user/logout")
+    suspend fun logout(): SuccessResponse
 }

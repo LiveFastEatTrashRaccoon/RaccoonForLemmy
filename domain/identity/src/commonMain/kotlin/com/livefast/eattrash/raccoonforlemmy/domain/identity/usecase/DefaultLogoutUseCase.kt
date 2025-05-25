@@ -9,6 +9,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Communi
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLastSeenDateRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.AuthRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.DefaultAuthRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
@@ -16,6 +18,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelp
 internal class DefaultLogoutUseCase(
     private val identityRepository: IdentityRepository,
     private val accountRepository: AccountRepository,
+    private val authRepository: AuthRepository,
     private val notificationCenter: NotificationCenter,
     private val settingsRepository: SettingsRepository,
     private val communitySortRepository: CommunitySortRepository,
@@ -29,6 +32,7 @@ internal class DefaultLogoutUseCase(
         notificationCenter.send(NotificationCenterEvent.ResetExplore)
         notificationCenter.send(NotificationCenterEvent.ResetHome)
 
+        authRepository.logout()
         identityRepository.clearToken()
         communitySortRepository.clear()
         userSortRepository.clear()

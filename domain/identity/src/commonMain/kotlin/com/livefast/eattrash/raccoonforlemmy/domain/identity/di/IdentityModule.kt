@@ -47,6 +47,7 @@ val identityModule =
             singleton {
                 DefaultAuthRepository(
                     services = instance(tag = "default"),
+                    siteVersionDataSource = instance(),
                 )
             }
         }
@@ -149,6 +150,7 @@ val identityModule =
                 DefaultLogoutUseCase(
                     identityRepository = instance(),
                     accountRepository = instance(),
+                    authRepository = instance(),
                     notificationCenter = instance(),
                     settingsRepository = instance(),
                     communitySortRepository = instance(),
