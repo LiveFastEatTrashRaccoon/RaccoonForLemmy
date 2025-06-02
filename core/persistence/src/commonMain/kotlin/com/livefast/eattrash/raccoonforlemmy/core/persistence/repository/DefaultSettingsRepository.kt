@@ -84,7 +84,7 @@ internal class DefaultSettingsRepository(
     override suspend fun createSettings(
         settings: SettingsModel,
         accountId: Long,
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         db.settingsQueries.create(
             theme = settings.theme.toLong(),
             uiFontScale = settings.uiFontScale.toDouble(),
@@ -262,7 +262,7 @@ internal class DefaultSettingsRepository(
     override suspend fun updateSettings(
         settings: SettingsModel,
         accountId: Long?,
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         keyStore.save(
             KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING,
             settings.enableAlternateMarkdownRendering,

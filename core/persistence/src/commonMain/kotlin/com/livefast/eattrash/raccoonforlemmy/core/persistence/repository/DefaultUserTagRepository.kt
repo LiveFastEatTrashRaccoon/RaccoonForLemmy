@@ -62,7 +62,7 @@ internal class DefaultUserTagRepository(
     override suspend fun create(
         model: UserTagModel,
         accountId: Long,
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         db.usertagsQueries.create(
             name = model.name,
             color = model.color?.toLong(),
@@ -76,7 +76,7 @@ internal class DefaultUserTagRepository(
         name: String,
         color: Int?,
         type: Int,
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         db.usertagsQueries.update(
             id = id,
             name = name,
@@ -85,7 +85,7 @@ internal class DefaultUserTagRepository(
         )
     }
 
-    override suspend fun delete(id: Long) =
+    override suspend fun delete(id: Long): Unit =
         withContext(Dispatchers.IO) {
             db.usertagsQueries.delete(id)
         }
@@ -93,7 +93,7 @@ internal class DefaultUserTagRepository(
     override suspend fun addMember(
         username: String,
         userTagId: Long,
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         db.usertagmembersQueries.create(
             username = username,
             user_tag_id = userTagId,
@@ -103,7 +103,7 @@ internal class DefaultUserTagRepository(
     override suspend fun removeMember(
         username: String,
         userTagId: Long,
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         db.usertagmembersQueries.delete(
             username = username,
             user_tag_id = userTagId,

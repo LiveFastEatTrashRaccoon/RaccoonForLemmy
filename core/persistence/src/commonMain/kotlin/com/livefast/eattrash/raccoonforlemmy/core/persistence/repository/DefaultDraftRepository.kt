@@ -35,7 +35,7 @@ class DefaultDraftRepository(
     override suspend fun create(
         model: DraftModel,
         accountId: Long,
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         db.draftsQueries.create(
             type = model.type.toLong(),
             body = model.body,
@@ -52,7 +52,7 @@ class DefaultDraftRepository(
         )
     }
 
-    override suspend fun update(model: DraftModel) =
+    override suspend fun update(model: DraftModel): Unit =
         withContext(Dispatchers.IO) {
             db.draftsQueries.update(
                 id = model.id ?: 0,
@@ -67,7 +67,7 @@ class DefaultDraftRepository(
             )
         }
 
-    override suspend fun delete(id: Long) =
+    override suspend fun delete(id: Long): Unit =
         withContext(Dispatchers.IO) {
             db.draftsQueries.delete(id)
         }

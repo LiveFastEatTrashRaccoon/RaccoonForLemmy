@@ -62,7 +62,7 @@ internal class DefaultAccountRepository(
     override suspend fun setActive(
         id: Long,
         active: Boolean,
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         if (active) {
             db.accountsQueries.setActive(id)
         } else {
@@ -80,7 +80,7 @@ internal class DefaultAccountRepository(
         id: Long,
         avatar: String?,
         jwt: String?,
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         db.accountsQueries.update(
             jwt = jwt,
             avatar = avatar,
@@ -88,7 +88,7 @@ internal class DefaultAccountRepository(
         )
     }
 
-    override suspend fun delete(id: Long) =
+    override suspend fun delete(id: Long): Unit =
         withContext(Dispatchers.IO) {
             db.accountsQueries.delete(id)
         }

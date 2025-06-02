@@ -47,7 +47,7 @@ internal class DefaultMultiCommunityRepository(
             id ?: 0L
         }
 
-    override suspend fun update(model: MultiCommunityModel) =
+    override suspend fun update(model: MultiCommunityModel): Unit =
         withContext(Dispatchers.IO) {
             db.multicommunitiesQueries.update(
                 name = model.name,
@@ -57,7 +57,7 @@ internal class DefaultMultiCommunityRepository(
             )
         }
 
-    override suspend fun delete(model: MultiCommunityModel) =
+    override suspend fun delete(model: MultiCommunityModel): Unit =
         withContext(Dispatchers.IO) {
             db.multicommunitiesQueries.delete(model.id ?: 0)
         }
