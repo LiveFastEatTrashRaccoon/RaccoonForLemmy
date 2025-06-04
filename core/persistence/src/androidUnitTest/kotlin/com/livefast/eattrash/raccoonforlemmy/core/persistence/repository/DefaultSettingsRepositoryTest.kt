@@ -4,6 +4,7 @@ import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toLong
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.SettingsQueries
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.SettingsDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toInt
@@ -30,22 +31,15 @@ class DefaultSettingsRepositoryTest {
     val dispatcherTestRule = DispatcherTestRule()
 
     private val query = mockk<Query<GetBy>>()
-    private val queries =
-        mockk<SettingsQueries>(relaxUnitFun = true) {
+    private val dao =
+        mockk<SettingsDao>(relaxUnitFun = true) {
             every { getBy(any()) } returns query
-        }
-    private val provider =
-        mockk<DatabaseProvider> {
-            every { getDatabase() } returns
-                mockk<AppDatabase> {
-                    every { settingsQueries } returns queries
-                }
         }
     private val keyStore = mockk<TemporaryKeyStore>(relaxUnitFun = true)
 
     private val sut =
         DefaultSettingsRepository(
-            provider = provider,
+            dao = dao,
             keyStore = keyStore,
         )
 
@@ -60,7 +54,7 @@ class DefaultSettingsRepositoryTest {
             assertEquals(2, res.id)
 
             verify {
-                queries.getBy(account_id = 1)
+                dao.getBy(accountId = 1)
             }
         }
 
@@ -79,7 +73,7 @@ class DefaultSettingsRepositoryTest {
             assertNotNull(res)
 
             verify {
-                queries wasNot Called
+                dao wasNot Called
             }
         }
 
@@ -108,7 +102,7 @@ class DefaultSettingsRepositoryTest {
             sut.createSettings(model, 1)
 
             verify {
-                queries.create(
+                dao.create(
                     theme = model.theme.toLong(),
                     uiFontScale = model.uiFontScale.toDouble(),
                     uiFontFamily = model.uiFontFamily.toLong(),
@@ -168,7 +162,7 @@ class DefaultSettingsRepositoryTest {
                     showUnreadComments = if (model.showUnreadComments) 1 else 0,
                     commentIndentAmount = model.commentIndentAmount.toLong(),
                     enableToggleFavoriteInNavDrawer = if (model.enableToggleFavoriteInNavDrawer) 1 else 0,
-                    account_id = 1,
+                    accountId = 1,
                     inboxPreviewMaxLines = model.inboxPreviewMaxLines?.toLong(),
                     defaultExploreResultType = model.defaultExploreResultType.toLong(),
                     useAvatarAsProfileNavigationIcon = if (model.useAvatarAsProfileNavigationIcon) 1 else 0,
@@ -187,7 +181,7 @@ class DefaultSettingsRepositoryTest {
             sut.updateSettings(model, 1)
 
             verify {
-                queries.update(
+                dao.update(
                     theme = model.theme.toLong(),
                     uiFontScale = model.uiFontScale.toDouble(),
                     uiFontFamily = model.uiFontFamily.toLong(),
@@ -247,7 +241,7 @@ class DefaultSettingsRepositoryTest {
                     showUnreadComments = if (model.showUnreadComments) 1 else 0,
                     commentIndentAmount = model.commentIndentAmount.toLong(),
                     enableToggleFavoriteInNavDrawer = if (model.enableToggleFavoriteInNavDrawer) 1 else 0,
-                    account_id = 1,
+                    accountId = 1,
                     inboxPreviewMaxLines = model.inboxPreviewMaxLines?.toLong(),
                     defaultExploreResultType = model.defaultExploreResultType.toLong(),
                     useAvatarAsProfileNavigationIcon = if (model.useAvatarAsProfileNavigationIcon) 1 else 0,

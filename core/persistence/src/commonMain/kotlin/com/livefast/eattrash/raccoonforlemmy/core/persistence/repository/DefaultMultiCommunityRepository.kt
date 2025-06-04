@@ -1,6 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.MultiCommunityEntity
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.MultiCommunityDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.MultiCommunityModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import kotlinx.coroutines.Dispatchers
@@ -8,13 +9,12 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 internal class DefaultMultiCommunityRepository(
-    provider: DatabaseProvider,
+    private val dao: MultiCommunityDao,
 ) : MultiCommunityRepository {
-    private val db = provider.getDatabase()
 
     override suspend fun getAll(accountId: Long): List<MultiCommunityModel> =
         withContext(Dispatchers.IO) {
-            db.multicommunitiesQueries
+            dao
                 .getAll(accountId)
                 .executeAsList()
                 .map { it.toModel() }
@@ -22,7 +22,7 @@ internal class DefaultMultiCommunityRepository(
 
     override suspend fun getById(id: Long): MultiCommunityModel? =
         withContext(Dispatchers.IO) {
-            db.multicommunitiesQueries
+            dao
                 .getById(id)
                 .executeAsOneOrNull()
                 ?.toModel()
@@ -33,23 +33,23 @@ internal class DefaultMultiCommunityRepository(
         accountId: Long,
     ): Long =
         withContext(Dispatchers.IO) {
-            db.multicommunitiesQueries.create(
+            dao.create(
                 name = model.name,
                 icon = model.icon,
                 communityIds = model.communityIds.joinToString(","),
-                account_id = accountId,
+                accountId = accountId,
             )
             val id =
-                db.multicommunitiesQueries
-                    .getBy(name = model.name, account_id = accountId)
+                dao
+                    .getBy(name = model.name, accountId = accountId)
                     .executeAsOneOrNull()
                     ?.id
             id ?: 0L
         }
 
-    override suspend fun update(model: MultiCommunityModel) =
+    override suspend fun update(model: MultiCommunityModel): Unit =
         withContext(Dispatchers.IO) {
-            db.multicommunitiesQueries.update(
+            dao.update(
                 name = model.name,
                 icon = model.icon,
                 communityIds = model.communityIds.joinToString(","),
@@ -57,9 +57,9 @@ internal class DefaultMultiCommunityRepository(
             )
         }
 
-    override suspend fun delete(model: MultiCommunityModel) =
+    override suspend fun delete(model: MultiCommunityModel): Unit =
         withContext(Dispatchers.IO) {
-            db.multicommunitiesQueries.delete(model.id ?: 0)
+            dao.delete(model.id ?: 0)
         }
 }
 

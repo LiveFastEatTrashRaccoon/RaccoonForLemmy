@@ -7,6 +7,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagMemberEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UsertagmembersQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UsertagsQueries
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.UserTagDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.UserTagMemberDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagMemberModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
@@ -31,8 +33,8 @@ class DefaultUserTagRepositoryTest {
     val dispatcherTestRule = DispatcherTestRule()
 
     private val tagQuery = mockk<Query<UserTagEntity>>()
-    private val tagQueries =
-        mockk<UsertagsQueries>(relaxUnitFun = true) {
+    private val dao =
+        mockk<UserTagDao>(relaxUnitFun = true) {
             every { getBy(any()) } returns tagQuery
             every { getAllBy(any()) } returns tagQuery
             every { create(any(), any(), any(), any()) } returns mockk(relaxUnitFun = true)
@@ -41,23 +43,19 @@ class DefaultUserTagRepositoryTest {
         }
     private val memberQuery = mockk<Query<UserTagMemberEntity>>()
     private val memberGetByQuery = mockk<Query<GetBy>>()
-    private val memberQueries =
-        mockk<UsertagmembersQueries>(relaxUnitFun = true) {
+    private val memberDao =
+        mockk<UserTagMemberDao>(relaxUnitFun = true) {
             every { create(any(), any()) } returns mockk(relaxUnitFun = true)
             every { delete(any(), any()) } returns mockk(relaxUnitFun = true)
             every { getMembers(any()) } returns memberQuery
             every { getBy(any(), any()) } returns memberGetByQuery
             every { getBy(any(), any()) } returns memberGetByQuery
         }
-    private val provider =
-        mockk<DatabaseProvider> {
-            every { getDatabase() } returns
-                mockk<AppDatabase> {
-                    every { usertagsQueries } returns tagQueries
-                    every { usertagmembersQueries } returns memberQueries
-                }
-        }
-    private val sut = DefaultUserTagRepository(provider)
+
+    private val sut = DefaultUserTagRepository(
+        dao = dao,
+        membersDao = memberDao,
+    )
 
     @Test
     fun whenGetAll_thenResultAndInteractionsAreAsExpected() =
@@ -66,15 +64,15 @@ class DefaultUserTagRepositoryTest {
             val tagId = 2L
             val model = UserTagModel(id = tagId, name = "tag")
             every { tagQuery.executeAsList() } returns
-                listOf(
-                    UserTagEntity(
-                        id = tagId,
-                        name = model.name,
-                        account_id = accountId,
-                        color = model.color?.toLong(),
-                        type = model.type.toInt().toLong(),
-                    ),
-                )
+                    listOf(
+                        UserTagEntity(
+                            id = tagId,
+                            name = model.name,
+                            account_id = accountId,
+                            color = model.color?.toLong(),
+                            type = model.type.toInt().toLong(),
+                        ),
+                    )
 
             val res = sut.getAll(accountId)
 
@@ -82,7 +80,7 @@ class DefaultUserTagRepositoryTest {
             assertEquals(model, res.first())
             assertFalse(res.first().isSpecial)
             verify {
-                tagQueries.getAllBy(accountId)
+                dao.getAllBy(accountId)
             }
         }
 
@@ -92,20 +90,20 @@ class DefaultUserTagRepositoryTest {
             val tagId = 1L
             val model = UserTagModel(id = tagId, name = "tag")
             every { tagQuery.executeAsOneOrNull() } returns
-                UserTagEntity(
-                    id = tagId,
-                    name = model.name,
-                    account_id = 0L,
-                    color = model.color?.toLong(),
-                    type = model.type.toInt().toLong(),
-                )
+                    UserTagEntity(
+                        id = tagId,
+                        name = model.name,
+                        account_id = 0L,
+                        color = model.color?.toLong(),
+                        type = model.type.toInt().toLong(),
+                    )
 
             val res = sut.getById(tagId)
 
             assertNotNull(res)
             assertEquals(model, res)
             verify {
-                tagQueries.getBy(tagId)
+                dao.getBy(tagId)
             }
         }
 
@@ -115,20 +113,20 @@ class DefaultUserTagRepositoryTest {
             val tagId = 1L
             val model = UserTagMemberModel(userTagId = tagId, username = "user-name")
             every { memberQuery.executeAsList() } returns
-                listOf(
-                    UserTagMemberEntity(
-                        id = 0L,
-                        username = model.username,
-                        user_tag_id = tagId,
-                    ),
-                )
+                    listOf(
+                        UserTagMemberEntity(
+                            id = 0L,
+                            username = model.username,
+                            user_tag_id = tagId,
+                        ),
+                    )
 
             val res = sut.getMembers(tagId)
 
             assertEquals(1, res.size)
             assertEquals(model, res.first())
             verify {
-                memberQueries.getMembers(tagId)
+                memberDao.getMembers(tagId)
             }
         }
 
@@ -140,18 +138,18 @@ class DefaultUserTagRepositoryTest {
             val model = UserTagModel(id = tagId, name = "tag")
             val username = "user-name"
             every { memberGetByQuery.executeAsList() } returns
-                listOf(
-                    GetBy(
-                        id = 0L,
-                        name = model.name,
-                        username = username,
-                        user_tag_id = tagId,
-                        account_id = accountId,
-                        color = model.color?.toLong(),
-                        id_ = tagId,
-                        type = model.type.toInt().toLong(),
-                    ),
-                )
+                    listOf(
+                        GetBy(
+                            id = 0L,
+                            name = model.name,
+                            username = username,
+                            user_tag_id = tagId,
+                            account_id = accountId,
+                            color = model.color?.toLong(),
+                            id_ = tagId,
+                            type = model.type.toInt().toLong(),
+                        ),
+                    )
 
             val res =
                 sut.getTags(
@@ -162,9 +160,9 @@ class DefaultUserTagRepositoryTest {
             assertEquals(1, res.size)
             assertEquals(model, res.first())
             verify {
-                memberQueries.getBy(
+                memberDao.getBy(
                     username = username,
-                    account_id = accountId,
+                    accountId = accountId,
                 )
             }
         }
@@ -178,9 +176,9 @@ class DefaultUserTagRepositoryTest {
             sut.create(model = model, accountId = accountId)
 
             verify {
-                tagQueries.create(
+                dao.create(
                     name = model.name,
-                    account_id = accountId,
+                    accountId = accountId,
                     color = model.color?.toLong(),
                     type = model.type.toInt().toLong(),
                 )
@@ -203,7 +201,7 @@ class DefaultUserTagRepositoryTest {
             )
 
             verify {
-                tagQueries.update(
+                dao.update(
                     id = tagId,
                     name = newName,
                     color = color.toLong(),
@@ -220,7 +218,7 @@ class DefaultUserTagRepositoryTest {
             sut.delete(id = tagId)
 
             verify {
-                tagQueries.delete(id = tagId)
+                dao.delete(id = tagId)
             }
         }
 
@@ -233,7 +231,7 @@ class DefaultUserTagRepositoryTest {
             sut.addMember(username = username, userTagId = tagId)
 
             verify {
-                memberQueries.create(username = username, user_tag_id = tagId)
+                memberDao.create(username = username, tagId = tagId)
             }
         }
 
@@ -246,7 +244,7 @@ class DefaultUserTagRepositoryTest {
             sut.removeMember(username = username, userTagId = tagId)
 
             verify {
-                memberQueries.delete(username = username, user_tag_id = tagId)
+                memberDao.delete(username = username, tagId = tagId)
             }
         }
 
@@ -258,25 +256,25 @@ class DefaultUserTagRepositoryTest {
             val username = "user-name"
             val model = UserTagModel(name = "tag", id = tagId)
             every { memberGetByQuery.executeAsList() } returns
-                listOf(
-                    GetBy(
-                        id = 0L,
-                        name = model.name,
-                        username = username,
-                        user_tag_id = tagId,
-                        account_id = accountId,
-                        color = model.color?.toLong(),
-                        id_ = tagId,
-                        type = model.type.toInt().toLong(),
-                    ),
-                )
+                    listOf(
+                        GetBy(
+                            id = 0L,
+                            name = model.name,
+                            username = username,
+                            user_tag_id = tagId,
+                            account_id = accountId,
+                            color = model.color?.toLong(),
+                            id_ = tagId,
+                            type = model.type.toInt().toLong(),
+                        ),
+                    )
 
             val res = sut.getBelonging(username = username, accountId = accountId)
 
             assertEquals(1, res.size)
             assertEquals(model, res.first())
             verify {
-                memberQueries.getBy(username = username, account_id = accountId)
+                memberDao.getBy(username = username, accountId = accountId)
             }
         }
 
@@ -286,28 +284,28 @@ class DefaultUserTagRepositoryTest {
             val accountId = 1L
             val color = Color.Red.toArgb()
             every { tagQuery.executeAsList() } returns
-                listOf(
-                    UserTagEntity(
-                        id = 2L,
-                        name = "me",
-                        account_id = accountId,
-                        color = color.toLong(),
-                        type = UserTagType.Me.toInt().toLong(),
-                    ),
-                    UserTagEntity(
-                        id = 3L,
-                        name = "mod",
-                        account_id = accountId,
-                        color = Color.Green.toArgb().toLong(),
-                        type = UserTagType.Moderator.toInt().toLong(),
-                    ),
-                )
+                    listOf(
+                        UserTagEntity(
+                            id = 2L,
+                            name = "me",
+                            account_id = accountId,
+                            color = color.toLong(),
+                            type = UserTagType.Me.toInt().toLong(),
+                        ),
+                        UserTagEntity(
+                            id = 3L,
+                            name = "mod",
+                            account_id = accountId,
+                            color = Color.Green.toArgb().toLong(),
+                            type = UserTagType.Moderator.toInt().toLong(),
+                        ),
+                    )
 
             val res = sut.getSpecialTagColor(type = UserTagType.Me, accountId = accountId)
 
             assertEquals(color, res)
             verify {
-                tagQueries.getAllBy(accountId)
+                dao.getAllBy(accountId)
             }
         }
 }

@@ -2,7 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.AccountEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.AccountDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.delay
@@ -13,13 +13,12 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 
 internal class DefaultAccountRepository(
-    provider: DatabaseProvider,
+    private val dao: AccountDao,
 ) : AccountRepository {
-    private val db = provider.getDatabase()
 
     override suspend fun getAll(): List<AccountModel> =
         withContext(Dispatchers.IO) {
-            db.accountsQueries
+            dao
                 .getAll()
                 .executeAsList()
                 .map { it.toModel() }
@@ -37,7 +36,7 @@ internal class DefaultAccountRepository(
         username: String,
         instance: String,
     ) = withContext(Dispatchers.IO) {
-        db.accountsQueries
+        dao
             .getBy(username.lowercase(), instance.lowercase())
             .executeAsOneOrNull()
             ?.toModel()
@@ -45,14 +44,14 @@ internal class DefaultAccountRepository(
 
     override suspend fun createAccount(account: AccountModel) =
         withContext(Dispatchers.IO) {
-            db.accountsQueries.create(
+            dao.create(
                 username = account.username,
                 instance = account.instance,
                 jwt = account.jwt,
                 avatar = account.avatar,
             )
             val entity =
-                db.accountsQueries
+                dao
                     .getAll()
                     .executeAsList()
                     .firstOrNull { it.jwt == account.jwt }
@@ -62,17 +61,17 @@ internal class DefaultAccountRepository(
     override suspend fun setActive(
         id: Long,
         active: Boolean,
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         if (active) {
-            db.accountsQueries.setActive(id)
+            dao.setActive(id)
         } else {
-            db.accountsQueries.setInactive(id)
+            dao.setInactive(id)
         }
     }
 
     override suspend fun getActive() =
         withContext(Dispatchers.IO) {
-            val entity = db.accountsQueries.getActive().executeAsOneOrNull()
+            val entity = dao.getActive().executeAsOneOrNull()
             entity?.toModel()
         }
 
@@ -80,17 +79,17 @@ internal class DefaultAccountRepository(
         id: Long,
         avatar: String?,
         jwt: String?,
-    ) = withContext(Dispatchers.IO) {
-        db.accountsQueries.update(
+    ): Unit = withContext(Dispatchers.IO) {
+        dao.update(
             jwt = jwt,
             avatar = avatar,
             id = id,
         )
     }
 
-    override suspend fun delete(id: Long) =
+    override suspend fun delete(id: Long): Unit =
         withContext(Dispatchers.IO) {
-            db.accountsQueries.delete(id)
+            dao.delete(id)
         }
 }
 

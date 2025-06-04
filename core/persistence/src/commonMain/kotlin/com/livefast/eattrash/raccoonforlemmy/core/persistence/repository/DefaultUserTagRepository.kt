@@ -2,6 +2,8 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagMemberEntity
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.UserTagDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.UserTagMemberDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagMemberModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
@@ -13,13 +15,13 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 internal class DefaultUserTagRepository(
-    provider: DatabaseProvider,
+    private val dao: UserTagDao,
+    private val membersDao: UserTagMemberDao,
 ) : UserTagRepository {
-    private val db = provider.getDatabase()
 
     override suspend fun getAll(accountId: Long): List<UserTagModel> =
         withContext(Dispatchers.IO) {
-            db.usertagsQueries
+            dao
                 .getAllBy(accountId)
                 .executeAsList()
                 .map { it.toModel() }
@@ -27,7 +29,7 @@ internal class DefaultUserTagRepository(
 
     override suspend fun getById(tagId: Long): UserTagModel? =
         withContext(Dispatchers.IO) {
-            db.usertagsQueries
+            dao
                 .getBy(tagId)
                 .executeAsOneOrNull()
                 ?.toModel()
@@ -35,7 +37,7 @@ internal class DefaultUserTagRepository(
 
     override suspend fun getMembers(tagId: Long): List<UserTagMemberModel> =
         withContext(Dispatchers.IO) {
-            db.usertagmembersQueries
+            membersDao
                 .getMembers(tagId)
                 .executeAsList()
                 .map { it.toModel() }
@@ -46,7 +48,7 @@ internal class DefaultUserTagRepository(
         accountId: Long,
     ): List<UserTagModel> =
         withContext(Dispatchers.IO) {
-            db.usertagmembersQueries
+            membersDao
                 .getBy(username, accountId)
                 .executeAsList()
                 .map { e ->
@@ -62,11 +64,11 @@ internal class DefaultUserTagRepository(
     override suspend fun create(
         model: UserTagModel,
         accountId: Long,
-    ) = withContext(Dispatchers.IO) {
-        db.usertagsQueries.create(
+    ): Unit = withContext(Dispatchers.IO) {
+        dao.create(
             name = model.name,
             color = model.color?.toLong(),
-            account_id = accountId,
+            accountId = accountId,
             type = model.type.toInt().toLong(),
         )
     }
@@ -76,8 +78,8 @@ internal class DefaultUserTagRepository(
         name: String,
         color: Int?,
         type: Int,
-    ) = withContext(Dispatchers.IO) {
-        db.usertagsQueries.update(
+    ): Unit = withContext(Dispatchers.IO) {
+        dao.update(
             id = id,
             name = name,
             color = color?.toLong(),
@@ -85,28 +87,28 @@ internal class DefaultUserTagRepository(
         )
     }
 
-    override suspend fun delete(id: Long) =
+    override suspend fun delete(id: Long): Unit =
         withContext(Dispatchers.IO) {
-            db.usertagsQueries.delete(id)
+            dao.delete(id)
         }
 
     override suspend fun addMember(
         username: String,
         userTagId: Long,
-    ) = withContext(Dispatchers.IO) {
-        db.usertagmembersQueries.create(
+    ): Unit = withContext(Dispatchers.IO) {
+        membersDao.create(
             username = username,
-            user_tag_id = userTagId,
+            tagId = userTagId,
         )
     }
 
     override suspend fun removeMember(
         username: String,
         userTagId: Long,
-    ) = withContext(Dispatchers.IO) {
-        db.usertagmembersQueries.delete(
+    ): Unit = withContext(Dispatchers.IO) {
+        membersDao.delete(
             username = username,
-            user_tag_id = userTagId,
+            tagId = userTagId,
         )
     }
 
@@ -115,10 +117,10 @@ internal class DefaultUserTagRepository(
         username: String,
     ): List<UserTagModel> =
         withContext(Dispatchers.IO) {
-            db.usertagmembersQueries
+            membersDao
                 .getBy(
                     username = username,
-                    account_id = accountId,
+                    accountId = accountId,
                 ).executeAsList()
                 .map { e ->
                     UserTagModel(

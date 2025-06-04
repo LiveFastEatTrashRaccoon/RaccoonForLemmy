@@ -1,6 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.FavoriteCommunityEntity
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.FavoriteCommunityDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.FavoriteCommunityModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import kotlinx.coroutines.Dispatchers
@@ -8,13 +9,12 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 internal class DefaultFavoriteCommunityRepository(
-    provider: DatabaseProvider,
+    private val dao: FavoriteCommunityDao,
 ) : FavoriteCommunityRepository {
-    private val db = provider.getDatabase()
 
     override suspend fun getAll(accountId: Long?): List<FavoriteCommunityModel> =
         withContext(Dispatchers.IO) {
-            db.favoritecommunitiesQueries
+            dao
                 .getAll(accountId)
                 .executeAsList()
                 .map { it.toModel() }
@@ -25,10 +25,10 @@ internal class DefaultFavoriteCommunityRepository(
         communityId: Long,
     ): FavoriteCommunityModel? =
         withContext(Dispatchers.IO) {
-            db.favoritecommunitiesQueries
+            dao
                 .getBy(
                     communityId = communityId,
-                    account_id = accountId,
+                    accountId = accountId,
                 ).executeAsOneOrNull()
                 ?.toModel()
         }
@@ -39,15 +39,15 @@ internal class DefaultFavoriteCommunityRepository(
     ): Long =
         withContext(Dispatchers.IO) {
             val communityId = model.communityId ?: return@withContext 0L
-            db.favoritecommunitiesQueries.create(
+            dao.create(
                 communityId = communityId,
-                account_id = accountId,
+                accountId = accountId,
             )
             val id =
-                db.favoritecommunitiesQueries
+                dao
                     .getBy(
                         communityId = communityId,
-                        account_id = accountId,
+                        accountId = accountId,
                     ).executeAsOneOrNull()
                     ?.id
             id ?: 0L
@@ -59,13 +59,13 @@ internal class DefaultFavoriteCommunityRepository(
     ) = withContext(Dispatchers.IO) {
         val communityId = model.communityId ?: return@withContext
         val id =
-            db.favoritecommunitiesQueries
+            dao
                 .getBy(
                     communityId = communityId,
-                    account_id = accountId,
+                    accountId = accountId,
                 ).executeAsOneOrNull()
                 ?.id ?: return@withContext
-        db.favoritecommunitiesQueries.delete(id)
+        dao.delete(id)
     }
 }
 
