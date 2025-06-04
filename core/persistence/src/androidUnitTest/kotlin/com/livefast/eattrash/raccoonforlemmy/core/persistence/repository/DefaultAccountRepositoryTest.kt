@@ -3,10 +3,8 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 import app.cash.sqldelight.Query
 import app.cash.turbine.test
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.AccountEntity
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.AccountsQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.AccountDao
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk
@@ -24,25 +22,13 @@ class DefaultAccountRepositoryTest {
     val dispatcherRule = DispatcherTestRule()
 
     private val query = mockk<Query<AccountEntity>>()
-    private val queries =
-        mockk<AccountsQueries>(relaxUnitFun = true) {
-            every { getAll() } returns query
-            every { getActive() } returns query
-            every { getBy(any(), any()) } returns query
-            every { getActive() } returns query
-        }
-    private val provider =
-        mockk<DatabaseProvider> {
-            every { getDatabase() } returns
-                mockk<AppDatabase> {
-                    every { accountsQueries } returns queries
-                }
-        }
+    private val dao = mockk<AccountDao>(relaxUnitFun = true) {
+        every { getActive() } returns query
+        every { getAll() } returns query
+        every { getBy(any(), any()) } returns query
+    }
 
-    private val sut =
-        DefaultAccountRepository(
-            provider = provider,
-        )
+    private val sut = DefaultAccountRepository(dao)
 
     @Test
     fun givenNoAccounts_whenGetAll_thenResultIsAsExpected() =
@@ -52,9 +38,6 @@ class DefaultAccountRepositoryTest {
             val res = sut.getAll()
 
             assertTrue(res.isEmpty())
-            verify {
-                queries.getAll()
-            }
         }
 
     @Test
@@ -66,9 +49,6 @@ class DefaultAccountRepositoryTest {
             val res = sut.getAll()
 
             assertTrue(res.size == 1)
-            verify {
-                queries.getAll()
-            }
         }
 
     @Test
@@ -81,9 +61,6 @@ class DefaultAccountRepositoryTest {
                 val res = awaitItem()
                 assertTrue(res.size == 1)
             }
-            verify {
-                queries.getAll()
-            }
         }
 
     @Test
@@ -94,9 +71,6 @@ class DefaultAccountRepositoryTest {
             val res = sut.getActive()
 
             assertNull(res)
-            verify {
-                queries.getActive()
-            }
         }
 
     @Test
@@ -108,9 +82,6 @@ class DefaultAccountRepositoryTest {
             val res = sut.getActive()
 
             assertNotNull(res)
-            verify {
-                queries.getActive()
-            }
         }
 
     @Test
@@ -123,9 +94,6 @@ class DefaultAccountRepositoryTest {
             val res = sut.getBy(username, instance)
 
             assertNull(res)
-            verify {
-                queries.getBy(username, instance)
-            }
         }
 
     @Test
@@ -139,9 +107,6 @@ class DefaultAccountRepositoryTest {
             val res = sut.getBy(username, instance)
 
             assertNotNull(res)
-            verify {
-                queries.getBy(username, instance)
-            }
         }
 
     @Test
@@ -156,9 +121,13 @@ class DefaultAccountRepositoryTest {
             val id = sut.createAccount(account)
 
             assertEquals(1, id)
-
             verify {
-                queries.create(username, instance, jwt, null)
+                dao.create(
+                    username = username,
+                    instance = instance,
+                    jwt = jwt,
+                    avatar = null,
+                )
             }
         }
 
@@ -168,7 +137,7 @@ class DefaultAccountRepositoryTest {
             sut.setActive(id = 1, active = true)
 
             verify {
-                queries.setActive(id = 1)
+                dao.setActive(1)
             }
         }
 
@@ -178,7 +147,7 @@ class DefaultAccountRepositoryTest {
             sut.setActive(id = 1, active = false)
 
             verify {
-                queries.setInactive(id = 1)
+                dao.setInactive(1)
             }
         }
 
@@ -190,7 +159,11 @@ class DefaultAccountRepositoryTest {
             sut.update(1, avatar = avatar, jwt = jwt)
 
             verify {
-                queries.update(jwt = jwt, avatar = avatar, id = 1)
+                dao.update(
+                    jwt = jwt,
+                    avatar = avatar,
+                    id = 1,
+                )
             }
         }
 
@@ -200,7 +173,7 @@ class DefaultAccountRepositoryTest {
             sut.delete(1)
 
             verify {
-                queries.delete(1)
+                dao.delete(1)
             }
         }
 

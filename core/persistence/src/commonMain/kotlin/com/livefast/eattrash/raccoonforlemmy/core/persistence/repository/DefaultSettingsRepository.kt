@@ -3,6 +3,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toLong
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toVoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontScales
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.SettingsDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toActionOnSwipe
@@ -73,10 +74,9 @@ private object KeyStoreKeys {
 }
 
 internal class DefaultSettingsRepository(
-    provider: DatabaseProvider,
+    private val dao: SettingsDao,
     private val keyStore: TemporaryKeyStore,
 ) : SettingsRepository {
-    private val db = provider.getDatabase()
 
     override val currentSettings = MutableStateFlow(SettingsModel())
     override val currentBottomBarSections = MutableStateFlow<List<Int>>(emptyList())
@@ -85,7 +85,7 @@ internal class DefaultSettingsRepository(
         settings: SettingsModel,
         accountId: Long,
     ): Unit = withContext(Dispatchers.IO) {
-        db.settingsQueries.create(
+        dao.create(
             theme = settings.theme.toLong(),
             uiFontScale = settings.uiFontScale.toDouble(),
             uiFontFamily = settings.uiFontFamily.toLong(),
@@ -106,7 +106,7 @@ internal class DefaultSettingsRepository(
             enableSwipeActions = if (settings.enableSwipeActions) 1L else 0L,
             enableDoubleTapAction = if (settings.enableDoubleTapAction) 1L else 0L,
             customSeedColor = settings.customSeedColor?.toLong(),
-            account_id = accountId,
+            accountId = accountId,
             postLayout = settings.postLayout.toLong(),
             separateUpAndDownVotes = settings.voteFormat.toLong(),
             autoLoadImages = if (settings.autoLoadImages) 1 else 0,
@@ -251,7 +251,7 @@ internal class DefaultSettingsRepository(
                     restrictLocalUserSearch = keyStore[KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH, false],
                 )
             } else {
-                val entity = db.settingsQueries.getBy(accountId).executeAsOneOrNull()
+                val entity = dao.getBy(accountId).executeAsOneOrNull()
                 val result = entity?.toModel() ?: SettingsModel()
                 result.copy(
                     enableAlternateMarkdownRendering = keyStore[KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING, false],
@@ -378,7 +378,7 @@ internal class DefaultSettingsRepository(
             )
             keyStore.save(KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH, settings.restrictLocalUserSearch)
         } else {
-            db.settingsQueries.update(
+            dao.update(
                 theme = settings.theme.toLong(),
                 uiFontScale = settings.uiFontScale.toDouble(),
                 uiFontFamily = settings.uiFontFamily.toLong(),
@@ -404,7 +404,7 @@ internal class DefaultSettingsRepository(
                 autoLoadImages = if (settings.autoLoadImages) 1L else 0L,
                 autoExpandComments = if (settings.autoExpandComments) 1L else 0L,
                 fullHeightImages = if (settings.fullHeightImages) 1L else 0L,
-                account_id = accountId,
+                accountId = accountId,
                 upvoteColor = settings.upVoteColor?.toLong(),
                 downvoteColor = settings.downVoteColor?.toLong(),
                 hideNavigationBarWhileScrolling = if (settings.hideNavigationBarWhileScrolling) 1L else 0L,

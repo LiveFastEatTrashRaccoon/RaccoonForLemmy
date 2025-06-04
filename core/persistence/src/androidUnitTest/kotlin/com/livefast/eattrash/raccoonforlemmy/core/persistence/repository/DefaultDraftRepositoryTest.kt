@@ -2,11 +2,9 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.DraftEntity
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.DraftsQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftType
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DraftDao
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk
@@ -24,20 +22,13 @@ class DefaultDraftRepositoryTest {
     val dispatcherTestRule = DispatcherTestRule()
 
     private val query = mockk<Query<DraftEntity>>()
-    private val queries =
-        mockk<DraftsQueries>(relaxUnitFun = true) {
+    private val dao =
+        mockk<DraftDao>(relaxUnitFun = true) {
             every { getBy(any()) } returns query
-            every { getAllBy(type = any(), account_id = any()) } returns query
-        }
-    private val provider =
-        mockk<DatabaseProvider> {
-            every { getDatabase() } returns
-                mockk<AppDatabase> {
-                    every { draftsQueries } returns queries
-                }
+            every { getAllBy(type = any(), accountId = any()) } returns query
         }
 
-    private val sut = DefaultDraftRepository(provider)
+    private val sut = DefaultDraftRepository(dao)
 
     @Test
     fun givenNotExisting_whenGetBy_thenResultIsAsExpected() =
@@ -48,7 +39,7 @@ class DefaultDraftRepositoryTest {
 
             assertNull(res)
             verify {
-                queries.getBy(1)
+                dao.getBy(1)
             }
         }
 
@@ -62,7 +53,7 @@ class DefaultDraftRepositoryTest {
             assertNotNull(res)
             assertEquals(1, res.id)
             verify {
-                queries.getBy(1)
+                dao.getBy(1)
             }
         }
 
@@ -75,7 +66,7 @@ class DefaultDraftRepositoryTest {
 
             assertTrue(res.isEmpty())
             verify {
-                queries.getAllBy(0, 1)
+                dao.getAllBy(0, 1)
             }
         }
 
@@ -88,7 +79,7 @@ class DefaultDraftRepositoryTest {
 
             assertTrue(res.isEmpty())
             verify {
-                queries.getAllBy(1, 1)
+                dao.getAllBy(1, 1)
             }
         }
 
@@ -102,7 +93,7 @@ class DefaultDraftRepositoryTest {
             assertTrue(res.isNotEmpty())
             assertEquals(2, res.first().id)
             verify {
-                queries.getAllBy(0, 1)
+                dao.getAllBy(0, 1)
             }
         }
 
@@ -120,7 +111,7 @@ class DefaultDraftRepositoryTest {
             sut.create(model, 1)
 
             verify {
-                queries.create(
+                dao.create(
                     type = 0,
                     body = text,
                     title = null,
@@ -132,7 +123,7 @@ class DefaultDraftRepositoryTest {
                     nsfw = null,
                     date = null,
                     info = null,
-                    account_id = 1,
+                    accountId = 1,
                 )
             }
         }
@@ -152,7 +143,7 @@ class DefaultDraftRepositoryTest {
             sut.update(model)
 
             verify {
-                queries.update(
+                dao.update(
                     id = 1,
                     body = text,
                     title = null,
@@ -172,7 +163,7 @@ class DefaultDraftRepositoryTest {
             sut.delete(1)
 
             verify {
-                queries.delete(1)
+                dao.delete(1)
             }
         }
 

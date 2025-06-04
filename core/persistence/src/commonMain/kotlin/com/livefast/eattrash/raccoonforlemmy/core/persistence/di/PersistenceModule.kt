@@ -2,6 +2,20 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.di
 
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DefaultDatabaseProvider
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.AccountDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DefaultAccountDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DefaultDraftDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DefaultFavoriteCommunityDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DefaultMultiCommunityDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DefaultSettingsDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DefaultUserTagDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DefaultUserTagMemberDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DraftDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.FavoriteCommunityDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.MultiCommunityDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.SettingsDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.UserTagDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.UserTagMemberDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunityPreferredLanguageRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository
@@ -41,6 +55,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.ImportSett
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.instance
+import org.kodein.di.provider
 import org.kodein.di.singleton
 
 val persistenceModule =
@@ -53,10 +68,17 @@ val persistenceModule =
                 )
             }
         }
+        bind<AccountDao> {
+            provider {
+                val dbProvider: DatabaseProvider = instance()
+                val queries = dbProvider.getDatabase().accountsQueries
+                DefaultAccountDao(queries)
+            }
+        }
         bind<AccountRepository> {
             singleton {
                 DefaultAccountRepository(
-                    provider = instance(),
+                    dao = instance()
                 )
             }
         }
@@ -95,17 +117,31 @@ val persistenceModule =
                 )
             }
         }
+        bind<DraftDao> {
+            provider {
+                val dbProvider: DatabaseProvider = instance()
+                val queries = dbProvider.getDatabase().draftsQueries
+                DefaultDraftDao(queries)
+            }
+        }
         bind<DraftRepository> {
             singleton {
                 DefaultDraftRepository(
-                    provider = instance(),
+                    dao = instance(),
                 )
+            }
+        }
+        bind<FavoriteCommunityDao> {
+            provider {
+                val dbProvider: DatabaseProvider = instance()
+                val queries = dbProvider.getDatabase().favoritecommunitiesQueries
+                DefaultFavoriteCommunityDao(queries)
             }
         }
         bind<FavoriteCommunityRepository> {
             singleton {
                 DefaultFavoriteCommunityRepository(
-                    provider = instance(),
+                    dao = instance(),
                 )
             }
         }
@@ -116,17 +152,31 @@ val persistenceModule =
                 )
             }
         }
+        bind<MultiCommunityDao> {
+            provider {
+                val dbProvider: DatabaseProvider = instance()
+                val queries = dbProvider.getDatabase().multicommunitiesQueries
+                DefaultMultiCommunityDao(queries)
+            }
+        }
         bind<MultiCommunityRepository> {
             singleton {
                 DefaultMultiCommunityRepository(
-                    provider = instance(),
+                    dao = instance(),
                 )
+            }
+        }
+        bind<SettingsDao> {
+            provider {
+                val dbProvider: DatabaseProvider = instance()
+                val queries = dbProvider.getDatabase().settingsQueries
+                DefaultSettingsDao(queries)
             }
         }
         bind<SettingsRepository> {
             singleton {
                 DefaultSettingsRepository(
-                    provider = instance(),
+                    dao = instance(),
                     keyStore = instance(),
                 )
             }
@@ -138,10 +188,25 @@ val persistenceModule =
                 )
             }
         }
+        bind<UserTagDao> {
+            provider {
+                val dbProvider: DatabaseProvider = instance()
+                val queries = dbProvider.getDatabase().usertagsQueries
+                DefaultUserTagDao(queries)
+            }
+        }
+        bind<UserTagMemberDao> {
+            provider {
+                val dbProvider: DatabaseProvider = instance()
+                val queries = dbProvider.getDatabase().usertagmembersQueries
+                DefaultUserTagMemberDao(queries)
+            }
+        }
         bind<UserTagRepository> {
             singleton {
                 DefaultUserTagRepository(
-                    provider = instance(),
+                    dao = instance(),
+                    membersDao = instance(),
                 )
             }
         }
