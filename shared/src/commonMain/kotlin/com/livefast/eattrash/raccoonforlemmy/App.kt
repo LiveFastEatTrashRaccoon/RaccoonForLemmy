@@ -29,9 +29,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.toSize
+import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import cafe.adriel.voyager.transitions.SlideTransition
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toCommentBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toPostLayout
@@ -103,7 +103,7 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
     val fallbackUriHandler = LocalUriHandler.current
     val customUriHandler = remember { getCustomUriHandler(fallbackUriHandler) }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(settingsRepository) {
         val lastActiveAccount = accountRepository.getActive()
         val lastInstance = lastActiveAccount?.instance?.takeIf { it.isNotEmpty() }
         val accountId = lastActiveAccount?.id
@@ -256,10 +256,10 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
             ProvideCustomUriHandler {
                 CompositionLocalProvider(
                     LocalDensity provides
-                        Density(
-                            density = LocalDensity.current.density,
-                            fontScale = uiFontScale,
-                        ),
+                            Density(
+                                density = LocalDensity.current.density,
+                                fontScale = uiFontScale,
+                            ),
                 ) {
                     Navigator(
                         screen = MainScreen,
@@ -282,10 +282,9 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
                             callback?.let { it() } ?: true
                         },
                     ) { navigator ->
-                        LaunchedEffect(Unit) {
+                        LaunchedEffect(navigationCoordinator) {
                             navigationCoordinator.setRootNavigator(navigator)
                         }
-
                         ModalNavigationDrawer(
                             modifier =
                                 Modifier
@@ -301,16 +300,7 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
                                 }
                             },
                         ) {
-                            if (hasBeenInitialized) {
-                                SlideTransition(
-                                    animationSpec =
-                                        tween(
-                                            durationMillis = 250,
-                                            easing = FastOutSlowInEasing,
-                                        ),
-                                    navigator = navigator,
-                                )
-                            }
+                            CurrentScreen()
                         }
 
                         // scrim for draggable side menu
