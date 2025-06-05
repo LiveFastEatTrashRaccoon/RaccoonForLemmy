@@ -16,7 +16,6 @@ kotlin {
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.screenmodel)
                 implementation(libs.voyager.kodein)
-                implementation(libs.voyager.transition)
                 implementation(libs.voyager.tab)
 
                 implementation(projects.core.api)
