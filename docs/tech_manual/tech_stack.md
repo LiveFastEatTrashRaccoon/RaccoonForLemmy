@@ -16,7 +16,7 @@ can include each other and all top-level modules are included in the shared modu
 Initially the project started using another very popular DI library, 
 <a href="https://github.com/InsertKoinIO/koin">Koin</a>, but after discovering that, if you use their
 annotation processor to generate modules by reading annotations, builds are not reproducible any
-more (which is written nowhere in the documentation), I decided to make a U-turn and move to a more
+more (which is written <b>nowhere</b> in the documentation), I decided to make a U-turn and move to a more
 reliable library and I don't want to hear about Koin ever (ever!) again in my life as a developer.
 </dd>
 
@@ -48,11 +48,13 @@ Initially the project used the <a href="https://github.com/icerockdev/moko-resou
 library to load fonts, icons and all the localized messages used in the UI. It worked great, since in those areas
 Compose multiplatform missed the needed functionalities. But as long as the project grew in size and 
 more complex KSP configurations were needed, having all modules depend on resources became unmaintainable.
-This is why I migrated drawable and font loading to Compose build-in system. For localization, the choice was the
-<a href="https://github.com/adrielcafe/lyricist">Lyricist</a> library, which better handles dynamic language changes
-but it had a couple of issues: its XML processor made builds non-reproducible which was a huge issue in order
-to publish on F-Droid and it did not manage plurals correctly; if using pure Kotlin files its format is non-standard
-and therefore incompatible with tools like Weblate.
+This is why I migrated drawable and font loading to Compose built-in system for all kinds of resources.
+For localization, after using Moko resources, for some period the project used the 
+<a href="https://github.com/adrielcafe/lyricist">Lyricist</a> library, which offered flexibility but
+at the price of either using XML processors (which do not play well with reproducible builds) to 
+generate resource files or using non-standard resource formats (e.g. Kotlin files) which are not
+easily recognized by third-party translation platforms such as
+<a href="https://hosted.weblate.org/engage/raccoonforlemmy/">Weblate</a>.
 </dd>
 
 <dt>Image loading</dt>
@@ -70,7 +72,9 @@ been completely migrated.
 <dt>Preference storage</dt>
 <dd>
 Here the choice was the <a href="https://github.com/russhwolf/multiplatform-settings">Multiplatform settings</a>
-libary which not only works great but also offers support for encryption.
+libary which not only works great but also offers support for a lot of customization (if you are wondering,
+I am aware that <code>EncryptedSharedPreferences</code> is going to be deprecated in the next version
+of <code>androidx.security:security-crypto</code> and I am working on a replacement for it).
 </dd>
 
 <dt>Primary persistence</dt>
@@ -79,18 +83,22 @@ This project was a chance to experiment with <a href="https://github.com/cashapp
 (in other multiplatform projects other libraries were tested like Exposed), whereas database encryption
 is obtained through <a href="https://www.zetetic.net/sqlcipher/sqlcipher-for-android">SQLCipher Android</a>, 
 formerly <a href="https://github.com/sqlcipher/android-database-sqlcipher">Android Database SQLCipher</a>.
+Since over time Room has become stable even for multiplatform, there is "room" for improvement in the
+future to migrate the project to using it, because SQLDelight is a third-party library whereas Room is
+the officially recommended and Google-backed persistence solution for KMP apps.
 </dd>
 
 <dt>Markdown rendering</dt>
 <dd>
-This was another part, like image loading, where KMP was at the beginning quite lacky. After having given
+This was another part, like image loading, where KMP was at the beginning quite poor. After having given
 up for some time and used Markwon (Java + Views) on the Android part of the app, I decided to give a 
-second chance to <a href="https://github.com/mikepenz/multiplatform-markdown-renderer">Multiplatform Markdown Renderer</a>
-which was initially user for the multiplatform source set. The project grew and matured over time and 
-it made it possible to add custom handlers (like modular plug-ins) which made possible to support 
-Lemmy's custom features like spoilers. The migration from multiplatform renderer to Markwon and back to 
-multiplatform renderer was not easy, but this project is about KMP so, as a consequence, a pure Kotlin and 
-pure Compose solution <em>had to</em> be preferred. Even if it implies to sacrifice some functionality.
+second chance to <a href="https://github.com/mikepenz/multiplatform-markdown-renderer">Multiplatform
+Markdown Renderer</a> which was initially user for the multiplatform source set. The project grew 
+and matured over time and it made it possible to add custom handlers (like modular plug-ins) which
+made possible to support Lemmy's custom features like spoilers. The migration from multiplatform
+renderer to Markwon and back to multiplatform renderer was not easy at all, but this project is about
+KMP so, as a consequence, a pure Kotlin and pure Compose solution <em>had to</em> be preferred, even
+if it implies to sacrifice some functionality for the time being.
 </dd>
 
 <dt>Video playback</dt>
@@ -98,8 +106,9 @@ pure Compose solution <em>had to</em> be preferred. Even if it implies to sacrif
 The initial choice was to write a custom native implementation based on <code>Exoplayer</code> on Android 
 and on <code>AVPlayer</code> on iOS. This solution kind of worked but had some issues and with later
 updates of Compose Multiplatform it was using deprecated functions on iOS. This is why the video player
-was eventually migrated to 
-<a href="https://github.com/Chaintech-Network/ComposeMultiplatformMediaPlayer">ComposeMultiplatformMediaPlayer</a>.
+was eventually migrated to use the
+<a href="https://github.com/Chaintech-Network/ComposeMultiplatformMediaPlayer">ComposeMultiplatformMediaPlayer</a>
+library.
 </dd>
 
 <dt>Theme generation</dt>
@@ -119,8 +128,8 @@ experimental and is used only in the instance selection bottom sheet for anonymo
 
 <dt>Web view</dt>
 <dd>
-Initially a custom web view was implemented, relying on native views (WebView on Android and WKWebView
-on iOS), but in the end the project was migrated to <a href="https://github.com/MohamedRejeb/Calf">Calf</a>
-component to display portions of the Web.
+Initially a custom web view was implemented, relying on native views (<code>WebView</code> on Android 
+and <code>WKWebView</code> on iOS), but in the end the project was migrated to a component relying on
+the <a href="https://github.com/MohamedRejeb/Calf">Calf</a> library to display portions of the Web.
 </dd>
 </dl>
