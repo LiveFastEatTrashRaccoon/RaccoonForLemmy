@@ -208,10 +208,10 @@ internal object MainScreen : Screen {
                 bottomBar = {
                     CompositionLocalProvider(
                         LocalDensity provides
-                            Density(
-                                density = LocalDensity.current.density,
-                                fontScale = uiFontScale,
-                            ),
+                                Density(
+                                    density = LocalDensity.current.density,
+                                    fontScale = uiFontScale,
+                                ),
                     ) {
                         val titleVisible by themeRepository.navItemTitles.collectAsState()
                         var uiFontSizeWorkaround by remember { mutableStateOf(true) }

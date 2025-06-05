@@ -1,6 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.appearance.theme
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
@@ -49,11 +50,13 @@ internal class DefaultBarColorProvider :
                     isAppearanceLightStatusBars =
                         when (theme) {
                             UiTheme.Light -> true
+                            UiTheme.Default -> !isSystemInDarkTheme
                             else -> false
                         }
                     isAppearanceLightNavigationBars =
                         when (theme) {
                             UiTheme.Light -> true
+                            UiTheme.Default -> !isSystemInDarkTheme
                             else -> false
                         }
                 }
@@ -66,15 +69,9 @@ internal class DefaultBarColorProvider :
         theme: UiTheme,
         barTheme: UiBarTheme,
     ) {
-        if (barTheme == UiBarTheme.Transparent) {
-            return
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            return
-        }
-
         val decorView = activity.window.decorView
-        val isSystemInDarkTheme = activity.resources.configuration.isNightModeActive
+        val uiMode = activity.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isSystemInDarkTheme = uiMode == Configuration.UI_MODE_NIGHT_YES
         val baseColor = theme.getBaseColor(isSystemInDarkTheme)
         val barColor = barTheme.getBarColor(baseColor).toArgb()
 
