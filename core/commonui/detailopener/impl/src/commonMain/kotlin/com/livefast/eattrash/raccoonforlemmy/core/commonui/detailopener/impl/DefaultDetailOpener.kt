@@ -20,10 +20,8 @@ import com.livefast.eattrash.raccoonforlemmy.unit.web.WebViewScreen
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private const val MAX_PAGE_NUMBER_IN_COMMUNITY_REC_SEARCH = 10
 private const val PAGE_SIZE_IN_COMMUNITY_REC_SEARCH = 50
@@ -71,9 +69,7 @@ class DefaultDetailOpener(
         otherInstance: String,
     ) {
         scope.launch {
-            withContext(Dispatchers.IO) {
-                itemCache.putUser(user)
-            }
+            itemCache.putUser(user)
             navigationCoordinator.pushScreen(
                 UserDetailScreen(
                     userId = user.id,
@@ -90,9 +86,7 @@ class DefaultDetailOpener(
         isMod: Boolean,
     ) {
         scope.launch {
-            withContext(Dispatchers.IO) {
-                itemCache.putPost(post)
-            }
+            itemCache.putPost(post)
             navigationCoordinator.pushScreen(
                 PostDetailScreen(
                     postId = post.id,
@@ -112,14 +106,12 @@ class DefaultDetailOpener(
         initialText: String?,
     ) {
         scope.launch {
-            withContext(Dispatchers.IO) {
-                itemCache.putPost(originalPost)
-                if (originalComment != null) {
-                    itemCache.putComment(originalComment)
-                }
-                if (editedComment != null) {
-                    itemCache.putComment(editedComment)
-                }
+            itemCache.putPost(originalPost)
+            if (originalComment != null) {
+                itemCache.putComment(originalComment)
+            }
+            if (editedComment != null) {
+                itemCache.putComment(editedComment)
             }
             val screen =
                 CreateCommentScreen(
@@ -145,13 +137,11 @@ class DefaultDetailOpener(
         forceCommunitySelection: Boolean,
     ) {
         scope.launch {
-            withContext(Dispatchers.IO) {
-                if (editedPost != null) {
-                    itemCache.putPost(editedPost)
-                }
-                if (crossPost != null) {
-                    itemCache.putPost(crossPost)
-                }
+            if (editedPost != null) {
+                itemCache.putPost(editedPost)
+            }
+            if (crossPost != null) {
+                itemCache.putPost(crossPost)
             }
             val screen =
                 CreatePostScreen(

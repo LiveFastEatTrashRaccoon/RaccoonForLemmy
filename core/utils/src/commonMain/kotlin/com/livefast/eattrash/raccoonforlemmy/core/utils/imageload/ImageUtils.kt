@@ -2,7 +2,6 @@ package com.livefast.eattrash.raccoonforlemmy.core.utils.imageload
 
 import androidx.compose.ui.graphics.ImageBitmap
 import coil3.decode.Decoder
-import coil3.fetch.Fetcher
 import coil3.network.NetworkFetcher
 
 expect fun ByteArray.toComposeImageBitmap(): ImageBitmap

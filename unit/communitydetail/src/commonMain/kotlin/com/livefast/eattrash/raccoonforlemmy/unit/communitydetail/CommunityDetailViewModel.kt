@@ -32,11 +32,11 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostNavigat
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostPaginationManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSortTypesUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyItemCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSortTypesUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
