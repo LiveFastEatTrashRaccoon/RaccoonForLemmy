@@ -3,109 +3,142 @@ package com.livefast.eattrash.raccoonforlemmy.core.preferences.store
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
 import com.russhwolf.settings.set
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 
 internal class DefaultTemporaryKeyStore(
     private val settings: Settings,
 ) : TemporaryKeyStore {
-    override fun containsKey(key: String): Boolean = settings.keys.contains(key)
+    override suspend fun containsKey(key: String): Boolean = settings.keys.contains(key)
 
-    override fun save(
+    override suspend fun save(
         key: String,
         value: Boolean,
     ) {
-        settings[key] = value
+        withContext(Dispatchers.IO) {
+            settings[key] = value
+        }
     }
 
-    override fun get(
+    override suspend fun get(
         key: String,
         default: Boolean,
-    ): Boolean = settings[key, default]
+    ): Boolean = withContext(Dispatchers.IO) {
+        settings[key, default]
+    }
 
-    override fun save(
+    override suspend fun save(
         key: String,
         value: String,
     ) {
-        settings[key] = value
+        withContext(Dispatchers.IO) {
+            settings[key] = value
+        }
     }
 
-    override fun get(
+    override suspend fun get(
         key: String,
         default: String,
-    ): String = settings[key, default]
+    ): String = withContext(Dispatchers.IO) {
+        settings[key, default]
+    }
 
-    override fun save(
+    override suspend fun save(
         key: String,
         value: Int,
     ) {
-        settings[key] = value
+        withContext(Dispatchers.IO) {
+            settings[key] = value
+        }
     }
 
-    override fun get(
+    override suspend fun get(
         key: String,
         default: Int,
-    ): Int = settings[key, default]
+    ): Int = withContext(Dispatchers.IO) {
+        settings[key, default]
+    }
 
-    override fun save(
+    override suspend fun save(
         key: String,
         value: Float,
     ) {
-        settings[key] = value
+        withContext(Dispatchers.IO) {
+            settings[key] = value
+        }
     }
 
-    override fun get(
+    override suspend fun get(
         key: String,
         default: Float,
-    ): Float = settings[key, default]
+    ): Float = withContext(Dispatchers.IO) {
+        settings[key, default]
+    }
 
-    override fun save(
+    override suspend fun save(
         key: String,
         value: Double,
     ) {
-        settings[key] = value
+        withContext(Dispatchers.IO) {
+            settings[key] = value
+        }
     }
 
-    override fun get(
+    override suspend fun get(
         key: String,
         default: Double,
-    ): Double = settings[key, default]
+    ): Double = withContext(Dispatchers.IO) {
+        settings[key, default]
+    }
 
-    override fun save(
+    override suspend fun save(
         key: String,
         value: Long,
     ) {
-        settings[key] = value
+        withContext(Dispatchers.IO) {
+            settings[key] = value
+        }
     }
 
-    override fun get(
+    override suspend fun get(
         key: String,
         default: Long,
-    ): Long = settings[key, default]
+    ): Long = withContext(Dispatchers.IO) {
+        settings[key, default]
+    }
 
-    override fun get(
+    override suspend fun get(
         key: String,
         default: List<String>,
         delimiter: String,
-    ): List<String> {
+    ): List<String> = withContext(Dispatchers.IO) {
         if (!settings.hasKey(key)) {
-            return default
+            return@withContext default
         }
         val joined = settings[key, ""]
-        return joined.split(delimiter)
+        joined.split(delimiter)
     }
 
-    override fun save(
+    override suspend fun save(
         key: String,
         value: List<String>,
         delimiter: String,
     ) {
-        settings[key] = value.joinToString(delimiter)
+        withContext(Dispatchers.IO) {
+            settings[key] = value.joinToString(delimiter)
+        }
     }
 
-    override fun remove(key: String) {
-        settings.remove(key)
+    override suspend fun remove(key: String) {
+        withContext(Dispatchers.IO) {
+            settings.remove(key)
+        }
     }
 
-    override fun removeAll() {
-        settings.clear()
+    override suspend fun removeAll() {
+        withContext(Dispatchers.IO) {
+            settings.clear()
+        }
     }
 }

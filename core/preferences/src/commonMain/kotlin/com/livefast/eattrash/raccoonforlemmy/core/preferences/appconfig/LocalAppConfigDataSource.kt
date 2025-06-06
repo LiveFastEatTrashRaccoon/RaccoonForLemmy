@@ -21,24 +21,24 @@ internal class LocalAppConfigDataSource(
         )
     }
 
-    private fun read(
+    private suspend fun read(
         name: String,
         default: Boolean,
-    ): Boolean = keyStore[getKey(name), default]
+    ): Boolean = keyStore.get(getKey(name), default)
 
-    private fun write(
+    private suspend fun write(
         name: String,
         value: Boolean,
     ) {
         keyStore.save(getKey(name), value)
     }
 
-    private fun read(
+    private suspend fun read(
         name: String,
         default: String,
-    ): String = keyStore[getKey(name), default]
+    ): String = keyStore.get(getKey(name), default)
 
-    private fun write(
+    private suspend fun write(
         name: String,
         value: String,
     ) {
