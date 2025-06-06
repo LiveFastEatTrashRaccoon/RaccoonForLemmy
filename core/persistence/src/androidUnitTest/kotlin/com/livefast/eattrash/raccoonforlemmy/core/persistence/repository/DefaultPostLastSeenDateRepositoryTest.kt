@@ -2,9 +2,10 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -42,10 +43,10 @@ class DefaultPostLastSeenDateRepositoryTest {
     @Test
     fun givenEmptyInitialState_whenSave_thenValueIsStored() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf()
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf()
             sut.save(1L, 2L)
 
-            verify {
+            coVerify {
                 keyStore.save(KEY, listOf("1:2"))
             }
         }
@@ -53,11 +54,11 @@ class DefaultPostLastSeenDateRepositoryTest {
     @Test
     fun givenEntryAlreadyExisting_whenSave_thenValueIsStored() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("1:2")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
 
             sut.save(1, 3)
 
-            verify {
+            coVerify {
                 keyStore.save(KEY, listOf("1:3"))
             }
         }
@@ -65,11 +66,11 @@ class DefaultPostLastSeenDateRepositoryTest {
     @Test
     fun givenOtherEntryAlreadyExisting_whenSave_thenBothValuesAreStored() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("1:2")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
 
             sut.save(3, 4)
 
-            verify {
+            coVerify {
                 keyStore.save(KEY, listOf("1:2", "3:4"))
             }
         }
@@ -77,7 +78,7 @@ class DefaultPostLastSeenDateRepositoryTest {
     @Test
     fun givenEmptyInitialState_whenGet_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf()
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf()
 
             val res = sut.get(1L)
 
@@ -87,7 +88,7 @@ class DefaultPostLastSeenDateRepositoryTest {
     @Test
     fun givenCommunityExists_whenGet_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("1:2")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
 
             val res = sut.get(1L)
 
@@ -97,7 +98,7 @@ class DefaultPostLastSeenDateRepositoryTest {
     @Test
     fun givenCommunityDoesNotExist_whenGet_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("1:2")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
 
             val res = sut.get(3L)
 

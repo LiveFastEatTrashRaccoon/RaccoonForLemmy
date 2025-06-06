@@ -3,9 +3,10 @@ package com.livefast.eattrash.raccoonforlemmy.domain.identity.repository
 import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import org.junit.Rule
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -20,7 +21,7 @@ class DefaultApiConfigurationRepositoryTest {
         }
     private val keyStore =
         mockk<TemporaryKeyStore>(relaxUnitFun = true) {
-            every { get(any(), any<String>()) } returns ""
+            coEvery { get(any(), any<String>()) } returns ""
         }
     private val sut =
         DefaultApiConfigurationRepository(
@@ -36,7 +37,7 @@ class DefaultApiConfigurationRepositoryTest {
 
         sut.changeInstance("feddit.it")
 
-        verify {
+        coVerify {
             serviceProvider.changeInstance("feddit.it")
             keyStore.save(any(), "feddit.it")
         }

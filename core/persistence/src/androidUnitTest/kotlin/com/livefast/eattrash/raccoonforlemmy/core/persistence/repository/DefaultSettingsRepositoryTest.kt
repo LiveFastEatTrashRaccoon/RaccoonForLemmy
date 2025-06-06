@@ -3,17 +3,15 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toLong
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.SettingsQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.SettingsDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toInt
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.settings.GetBy
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.Called
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -47,7 +45,7 @@ class DefaultSettingsRepositoryTest {
     fun givenAccount_whenGetSettings_thenResultIsAsExpected() =
         runTest {
             every { query.executeAsOneOrNull() } returns createFake(id = 2)
-            every { keyStore[any(), any<Boolean>()] } returns false
+            coEvery { keyStore.get(any(), any<Boolean>()) } returns false
 
             val res = sut.getSettings(1)
 
@@ -61,12 +59,12 @@ class DefaultSettingsRepositoryTest {
     @Test
     fun givenNoAccount_whenGetSettings_thenResultIsAsExpected() =
         runTest {
-            every { keyStore[any(), any<Long>()] } returns 0
-            every { keyStore[any(), any<Int>()] } returns 0
-            every { keyStore[any(), any<Float>()] } returns 1f
-            every { keyStore[any(), any<String>()] } returns ""
-            every { keyStore[any(), any<Boolean>()] } returns false
-            every { keyStore.containsKey(any()) } returns true
+            coEvery { keyStore.get(any(), any<Long>()) } returns 0
+            coEvery { keyStore.get(any(), any<Int>()) } returns 0
+            coEvery { keyStore.get(any(), any<Float>()) } returns 1f
+            coEvery { keyStore.get(any(), any<String>()) } returns ""
+            coEvery { keyStore.get(any(), any<Boolean>()) } returns false
+            coEvery { keyStore.containsKey(any()) } returns true
 
             val res = sut.getSettings(null)
 

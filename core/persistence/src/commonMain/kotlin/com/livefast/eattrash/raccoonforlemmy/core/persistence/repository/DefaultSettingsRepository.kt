@@ -8,14 +8,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toInt
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.settings.GetBy
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
@@ -84,7 +80,7 @@ internal class DefaultSettingsRepository(
     override suspend fun createSettings(
         settings: SettingsModel,
         accountId: Long,
-    ): Unit = withContext(Dispatchers.IO) {
+    ) {
         dao.create(
             theme = settings.theme.toLong(),
             uiFontScale = settings.uiFontScale.toDouble(),
@@ -175,94 +171,111 @@ internal class DefaultSettingsRepository(
     }
 
     override suspend fun getSettings(accountId: Long?): SettingsModel =
-        withContext(Dispatchers.IO) {
-            if (accountId == null) {
-                // anonymous user, reading from keystore
-                val contentFontScale =
-                    ContentFontScales(
-                        title = keyStore[KeyStoreKeys.CONTENT_TITLE_FONT_SCALE, 1f],
-                        body = keyStore[KeyStoreKeys.CONTENT_BODY_FONT_SCALE, 1f],
-                        comment = keyStore[KeyStoreKeys.CONTENT_COMMENT_FONT_SCALE, 1f],
-                        ancillary = keyStore[KeyStoreKeys.CONTENT_ANCILLARY_FONT_SCALE, 1f],
-                    )
-                SettingsModel(
-                    theme = keyStore[KeyStoreKeys.UI_THEME, 0],
-                    uiFontScale = keyStore[KeyStoreKeys.UI_FONT_SCALE, 1f],
-                    uiFontFamily = keyStore[KeyStoreKeys.UI_FONT_FAMILY, 0],
-                    contentFontScale = contentFontScale,
-                    locale = keyStore[KeyStoreKeys.LOCALE, ""].takeIf { it.isNotEmpty() },
-                    defaultListingType = keyStore[KeyStoreKeys.DEFAULT_LISTING_TYPE, 2],
-                    defaultPostSortType = keyStore[KeyStoreKeys.DEFAULT_POST_SORT_TYPE, 1],
-                    defaultCommentSortType = keyStore[KeyStoreKeys.DEFAULT_COMMENT_SORT_TYPE, 3],
-                    defaultInboxType = keyStore[KeyStoreKeys.DEFAULT_INBOX_TYPE, 0],
-                    defaultExploreType = keyStore[KeyStoreKeys.DEFAULT_EXPLORE_TYPE, 2],
-                    includeNsfw = keyStore[KeyStoreKeys.INCLUDE_NSFW, false],
-                    blurNsfw = keyStore[KeyStoreKeys.BLUR_NSFW, true],
-                    navigationTitlesVisible = keyStore[KeyStoreKeys.NAV_ITEM_TITLES_VISIBLE, true],
-                    dynamicColors = keyStore[KeyStoreKeys.DYNAMIC_COLORS, false],
-                    urlOpeningMode = keyStore[KeyStoreKeys.OPEN_URLS_IN_EXTERNAL_BROWSER, 1],
-                    enableSwipeActions = keyStore[KeyStoreKeys.ENABLE_SWIPE_ACTIONS, true],
-                    enableDoubleTapAction = keyStore[KeyStoreKeys.ENABLE_DOUBLE_TAP_ACTION, false],
-                    customSeedColor =
-                        if (!keyStore.containsKey(KeyStoreKeys.CUSTOM_SEED_COLOR)) {
-                            null
-                        } else {
-                            keyStore[KeyStoreKeys.CUSTOM_SEED_COLOR, 0]
-                        },
-                    postLayout = keyStore[KeyStoreKeys.POST_LAYOUT, 0],
-                    voteFormat = keyStore[KeyStoreKeys.SEPARATE_UP_AND_DOWN_VOTES, 0L].toVoteFormat(),
-                    autoLoadImages = keyStore[KeyStoreKeys.AUTO_LOAD_IMAGES, true],
-                    autoExpandComments = keyStore[KeyStoreKeys.AUTO_EXPAND_COMMENTS, true],
-                    fullHeightImages = keyStore[KeyStoreKeys.FULL_HEIGHT_IMAGES, true],
-                    hideNavigationBarWhileScrolling = keyStore[KeyStoreKeys.HIDE_NAVIGATION_BAR_WHILE_SCROLLING, true],
-                    zombieModeInterval = keyStore[KeyStoreKeys.ZOMBIE_MODE_INTERVAL, 1000].milliseconds,
-                    zombieModeScrollAmount = keyStore[KeyStoreKeys.ZOMBIE_MODE_SCROLL_AMOUNT, 55f],
-                    markAsReadWhileScrolling = keyStore[KeyStoreKeys.MARK_AS_READ_WHILE_SCROLLING, false],
-                    commentBarTheme = keyStore[KeyStoreKeys.COMMENT_BAR_THEME, 0],
-                    searchPostTitleOnly = keyStore[KeyStoreKeys.SEARCH_POST_TITLE_ONLY, false],
-                    contentFontFamily = keyStore[KeyStoreKeys.CONTENT_FONT_FAMILY, 0],
-                    edgeToEdge = keyStore[KeyStoreKeys.EDGE_TO_EDGE, true],
-                    postBodyMaxLines =
-                        if (keyStore.containsKey(KeyStoreKeys.POST_BODY_MAX_LINES)) {
-                            keyStore[KeyStoreKeys.POST_BODY_MAX_LINES, 0]
-                        } else {
-                            null
-                        },
-                    infiniteScrollEnabled = keyStore[KeyStoreKeys.INFINITE_SCROLL_ENABLED, true],
-                    systemBarTheme = keyStore[KeyStoreKeys.OPAQUE_SYSTEM_BARS, 0],
-                    showScores = keyStore[KeyStoreKeys.SHOW_SCORES, true],
-                    preferUserNicknames = keyStore[KeyStoreKeys.PREFER_USER_NICKNAMES, true],
-                    commentBarThickness = keyStore[KeyStoreKeys.COMMENT_BAR_THICKNESS, 1],
-                    commentIndentAmount = keyStore[KeyStoreKeys.COMMENT_INDENT_AMOUNT, 2],
-                    imageSourcePath = keyStore[KeyStoreKeys.IMAGE_SOURCE_PATH, false],
-                    defaultLanguageId =
-                        if (keyStore.containsKey(KeyStoreKeys.DEFAULT_LANGUAGE_ID)) {
-                            keyStore[KeyStoreKeys.DEFAULT_LANGUAGE_ID, 0L]
-                        } else {
-                            null
-                        },
-                    fadeReadPosts = keyStore[KeyStoreKeys.FADE_READ_POSTS, false],
-                    enableButtonsToScrollBetweenComments = keyStore[KeyStoreKeys.ENABLE_BUTTONS_TO_SCROLL_BETWEEN_COMMENTS, false],
-                    fullWidthImages = keyStore[KeyStoreKeys.FULL_WIDTH_IMAGES, false],
-                    defaultExploreResultType = keyStore[KeyStoreKeys.DEFAULT_EXPLORE_RESULT_TYPE, 2],
-                    randomThemeColor = keyStore[KeyStoreKeys.RANDOM_THEME_COLOR, true],
-                    openPostWebPageOnImageClick = keyStore[KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK, true],
-                    enableAlternateMarkdownRendering = keyStore[KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING, false],
-                    restrictLocalUserSearch = keyStore[KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH, false],
+        if (accountId == null) {
+            // anonymous user, reading from keystore
+            val contentFontScale =
+                ContentFontScales(
+                    title = keyStore.get(KeyStoreKeys.CONTENT_TITLE_FONT_SCALE, 1f),
+                    body = keyStore.get(KeyStoreKeys.CONTENT_BODY_FONT_SCALE, 1f),
+                    comment = keyStore.get(KeyStoreKeys.CONTENT_COMMENT_FONT_SCALE, 1f),
+                    ancillary = keyStore.get(KeyStoreKeys.CONTENT_ANCILLARY_FONT_SCALE, 1f),
                 )
-            } else {
-                val entity = dao.getBy(accountId).executeAsOneOrNull()
-                val result = entity?.toModel() ?: SettingsModel()
-                result.copy(
-                    enableAlternateMarkdownRendering = keyStore[KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING, false],
-                )
-            }
+            SettingsModel(
+                theme = keyStore.get(KeyStoreKeys.UI_THEME, 0),
+                uiFontScale = keyStore.get(KeyStoreKeys.UI_FONT_SCALE, 1f),
+                uiFontFamily = keyStore.get(KeyStoreKeys.UI_FONT_FAMILY, 0),
+                contentFontScale = contentFontScale,
+                locale = keyStore.get(KeyStoreKeys.LOCALE, "").takeIf { it.isNotEmpty() },
+                defaultListingType = keyStore.get(KeyStoreKeys.DEFAULT_LISTING_TYPE, 2),
+                defaultPostSortType = keyStore.get(KeyStoreKeys.DEFAULT_POST_SORT_TYPE, 1),
+                defaultCommentSortType = keyStore.get(KeyStoreKeys.DEFAULT_COMMENT_SORT_TYPE, 3),
+                defaultInboxType = keyStore.get(KeyStoreKeys.DEFAULT_INBOX_TYPE, 0),
+                defaultExploreType = keyStore.get(KeyStoreKeys.DEFAULT_EXPLORE_TYPE, 2),
+                includeNsfw = keyStore.get(KeyStoreKeys.INCLUDE_NSFW, false),
+                blurNsfw = keyStore.get(KeyStoreKeys.BLUR_NSFW, true),
+                navigationTitlesVisible = keyStore.get(KeyStoreKeys.NAV_ITEM_TITLES_VISIBLE, true),
+                dynamicColors = keyStore.get(KeyStoreKeys.DYNAMIC_COLORS, false),
+                urlOpeningMode = keyStore.get(KeyStoreKeys.OPEN_URLS_IN_EXTERNAL_BROWSER, 1),
+                enableSwipeActions = keyStore.get(KeyStoreKeys.ENABLE_SWIPE_ACTIONS, true),
+                enableDoubleTapAction = keyStore.get(KeyStoreKeys.ENABLE_DOUBLE_TAP_ACTION, false),
+                customSeedColor =
+                    if (!keyStore.containsKey(KeyStoreKeys.CUSTOM_SEED_COLOR)) {
+                        keyStore.get(KeyStoreKeys.CUSTOM_SEED_COLOR, 0)
+                    } else {
+                        null
+                    },
+                postLayout = keyStore.get(KeyStoreKeys.POST_LAYOUT, 0),
+                voteFormat = keyStore.get(KeyStoreKeys.SEPARATE_UP_AND_DOWN_VOTES, 0L)
+                    .toVoteFormat(),
+                autoLoadImages = keyStore.get(KeyStoreKeys.AUTO_LOAD_IMAGES, true),
+                autoExpandComments = keyStore.get(KeyStoreKeys.AUTO_EXPAND_COMMENTS, true),
+                fullHeightImages = keyStore.get(KeyStoreKeys.FULL_HEIGHT_IMAGES, true),
+                hideNavigationBarWhileScrolling =
+                    keyStore.get(KeyStoreKeys.HIDE_NAVIGATION_BAR_WHILE_SCROLLING, true),
+                zombieModeInterval = keyStore.get(
+                    KeyStoreKeys.ZOMBIE_MODE_INTERVAL,
+                    1000
+                ).milliseconds,
+                zombieModeScrollAmount = keyStore.get(KeyStoreKeys.ZOMBIE_MODE_SCROLL_AMOUNT, 55f),
+                markAsReadWhileScrolling =
+                    keyStore.get(KeyStoreKeys.MARK_AS_READ_WHILE_SCROLLING, false),
+                commentBarTheme = keyStore.get(KeyStoreKeys.COMMENT_BAR_THEME, 0),
+                searchPostTitleOnly = keyStore.get(KeyStoreKeys.SEARCH_POST_TITLE_ONLY, false),
+                contentFontFamily = keyStore.get(KeyStoreKeys.CONTENT_FONT_FAMILY, 0),
+                edgeToEdge = keyStore.get(KeyStoreKeys.EDGE_TO_EDGE, true),
+                postBodyMaxLines =
+                    if (keyStore.containsKey(KeyStoreKeys.POST_BODY_MAX_LINES)) {
+                        keyStore.get(KeyStoreKeys.POST_BODY_MAX_LINES, 0)
+                    } else {
+                        null
+                    },
+                infiniteScrollEnabled = keyStore.get(KeyStoreKeys.INFINITE_SCROLL_ENABLED, true),
+                systemBarTheme = keyStore.get(KeyStoreKeys.OPAQUE_SYSTEM_BARS, 0),
+                showScores = keyStore.get(KeyStoreKeys.SHOW_SCORES, true),
+                preferUserNicknames = keyStore.get(KeyStoreKeys.PREFER_USER_NICKNAMES, true),
+                commentBarThickness = keyStore.get(KeyStoreKeys.COMMENT_BAR_THICKNESS, 1),
+                commentIndentAmount = keyStore.get(KeyStoreKeys.COMMENT_INDENT_AMOUNT, 2),
+                imageSourcePath = keyStore.get(KeyStoreKeys.IMAGE_SOURCE_PATH, false),
+                defaultLanguageId =
+                    if (keyStore.containsKey(KeyStoreKeys.DEFAULT_LANGUAGE_ID)) {
+                        keyStore.get(KeyStoreKeys.DEFAULT_LANGUAGE_ID, 0L)
+                    } else {
+                        null
+                    },
+                fadeReadPosts = keyStore.get(KeyStoreKeys.FADE_READ_POSTS, false),
+                enableButtonsToScrollBetweenComments =
+                    keyStore.get(KeyStoreKeys.ENABLE_BUTTONS_TO_SCROLL_BETWEEN_COMMENTS, false),
+                fullWidthImages = keyStore.get(KeyStoreKeys.FULL_WIDTH_IMAGES, false),
+                defaultExploreResultType = keyStore.get(
+                    KeyStoreKeys.DEFAULT_EXPLORE_RESULT_TYPE,
+                    2
+                ),
+                randomThemeColor = keyStore.get(KeyStoreKeys.RANDOM_THEME_COLOR, true),
+                openPostWebPageOnImageClick =
+                    keyStore.get(KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK, true),
+                enableAlternateMarkdownRendering =
+                    keyStore.get(KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING, false),
+                restrictLocalUserSearch = keyStore.get(
+                    KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH,
+                    false
+                ),
+            )
+        } else {
+            val entity = dao.getBy(accountId).executeAsOneOrNull()
+            val result = entity?.toModel() ?: SettingsModel()
+            result.copy(
+                enableAlternateMarkdownRendering = keyStore.get(
+                    KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING,
+                    false
+                ),
+            )
         }
+
 
     override suspend fun updateSettings(
         settings: SettingsModel,
         accountId: Long?,
-    ): Unit = withContext(Dispatchers.IO) {
+    ) {
         keyStore.save(
             KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING,
             settings.enableAlternateMarkdownRendering,
@@ -376,7 +389,10 @@ internal class DefaultSettingsRepository(
                 KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK,
                 settings.openPostWebPageOnImageClick,
             )
-            keyStore.save(KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH, settings.restrictLocalUserSearch)
+            keyStore.save(
+                KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH,
+                settings.restrictLocalUserSearch
+            )
         } else {
             dao.update(
                 theme = settings.theme.toLong(),

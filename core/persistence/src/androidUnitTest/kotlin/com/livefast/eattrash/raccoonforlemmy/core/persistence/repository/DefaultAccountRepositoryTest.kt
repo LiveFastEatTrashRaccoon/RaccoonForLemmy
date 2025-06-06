@@ -3,8 +3,8 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 import app.cash.sqldelight.Query
 import app.cash.turbine.test
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.AccountEntity
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.AccountDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk

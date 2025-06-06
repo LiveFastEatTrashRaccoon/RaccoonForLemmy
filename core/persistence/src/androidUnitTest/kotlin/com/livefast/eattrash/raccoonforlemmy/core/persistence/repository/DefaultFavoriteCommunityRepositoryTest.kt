@@ -2,11 +2,8 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.FavoriteCommunityEntity
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.FavoritecommunitiesQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.FavoriteCommunityDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.FavoriteCommunityModel
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk

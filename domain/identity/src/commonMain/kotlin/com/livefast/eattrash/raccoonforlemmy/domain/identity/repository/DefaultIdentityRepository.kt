@@ -4,10 +4,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Account
 import com.livefast.eattrash.raccoonforlemmy.core.utils.network.NetworkManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.withContext
 
 internal class DefaultIdentityRepository(
     private val accountRepository: AccountRepository,
@@ -19,8 +16,7 @@ internal class DefaultIdentityRepository(
     override var cachedUser: UserModel? = null
         private set
 
-    override suspend fun startup() =
-        withContext(Dispatchers.IO) {
+    override suspend fun startup() {
             val account = accountRepository.getActive()
             if (account != null) {
                 authToken.value = account.jwt
@@ -40,8 +36,7 @@ internal class DefaultIdentityRepository(
         isLogged.value = false
     }
 
-    override suspend fun refreshLoggedState() =
-        withContext(Dispatchers.IO) {
+    override suspend fun refreshLoggedState() {
             val auth = authToken.value.orEmpty()
             isLogged.value = null
             if (auth.isNotEmpty()) {

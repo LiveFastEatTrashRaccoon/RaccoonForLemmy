@@ -2,9 +2,10 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -42,10 +43,10 @@ class DefaultCommunitySortRepositoryTest {
     @Test
     fun givenEmptyInitialState_whenSave_thenValueIsStored() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf()
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf()
             sut.save(HANDLE, 1)
 
-            verify {
+            coVerify {
                 keyStore.save(KEY, listOf("$HANDLE:1"))
             }
         }
@@ -53,11 +54,11 @@ class DefaultCommunitySortRepositoryTest {
     @Test
     fun givenCommunityAlreadyExisting_whenSave_thenValueIsStored() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("$HANDLE:0")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("$HANDLE:0")
 
             sut.save(HANDLE, 1)
 
-            verify {
+            coVerify {
                 keyStore.save(KEY, listOf("$HANDLE:1"))
             }
         }
@@ -65,11 +66,11 @@ class DefaultCommunitySortRepositoryTest {
     @Test
     fun givenOtherCommunityAlreadyExisting_whenSave_thenBothValuesAreStored() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
 
             sut.save(HANDLE, 1)
 
-            verify {
+            coEvery {
                 keyStore.save(KEY, listOf("!test@lemmy.world:1", "$HANDLE:1"))
             }
         }
@@ -77,7 +78,7 @@ class DefaultCommunitySortRepositoryTest {
     @Test
     fun givenEmptyInitialState_whenGet_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf()
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf()
 
             val res = sut.get(HANDLE)
 
@@ -87,7 +88,7 @@ class DefaultCommunitySortRepositoryTest {
     @Test
     fun givenCommunityExists_whenGet_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("$HANDLE:2")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("$HANDLE:2")
 
             val res = sut.get(HANDLE)
 
@@ -97,7 +98,7 @@ class DefaultCommunitySortRepositoryTest {
     @Test
     fun givenCommunityDoesNotExist_whenGet_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:2")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:2")
 
             val res = sut.get(HANDLE)
 

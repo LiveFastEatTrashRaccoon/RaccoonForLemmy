@@ -2,9 +2,8 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
-import io.mockk.verify
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -22,11 +21,11 @@ class DefaultCommunityPreferredLanguageRepositoryTest {
     @Test
     fun givenEmptyInitialState_whenSave_thenValueIsStored() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf()
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf()
 
             sut.save("!raccoonforlemmy@lemmy.world", 1)
 
-            verify {
+            coEvery {
                 keyStore.save(KEY, listOf("!raccoonforlemmy@lemmy.world:1"))
             }
         }
@@ -34,11 +33,11 @@ class DefaultCommunityPreferredLanguageRepositoryTest {
     @Test
     fun givenCommunityAlreadyExisting_whenSave_thenValueIsStored() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("!raccoonforlemmy@lemmy.world:0")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("!raccoonforlemmy@lemmy.world:0")
 
             sut.save("!raccoonforlemmy@lemmy.world", 1)
 
-            verify {
+            coEvery {
                 keyStore.save(KEY, listOf("!raccoonforlemmy@lemmy.world:1"))
             }
         }
@@ -46,11 +45,11 @@ class DefaultCommunityPreferredLanguageRepositoryTest {
     @Test
     fun givenCommunityAlreadyExisting_whenSaveNull_thenValueIsRemoved() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("!raccoonforlemmy@lemmy.world:0")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("!raccoonforlemmy@lemmy.world:0")
 
             sut.save("!raccoonforlemmy@lemmy.world", null)
 
-            verify {
+            coEvery {
                 keyStore.save(KEY, emptyList())
             }
         }
@@ -58,11 +57,11 @@ class DefaultCommunityPreferredLanguageRepositoryTest {
     @Test
     fun givenOtherCommunityAlreadyExisting_whenSave_thenBothValuesAreStored() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
 
             sut.save("!raccoonforlemmy@lemmy.world", 1)
 
-            verify {
+            coEvery {
                 keyStore.save(KEY, listOf("!test@lemmy.world:1", "!raccoonforlemmy@lemmy.world:1"))
             }
         }
@@ -70,11 +69,11 @@ class DefaultCommunityPreferredLanguageRepositoryTest {
     @Test
     fun givenOtherCommunityAlreadyExisting_whenSaveNull_thenValueIsRemovedButTheOtherIsNot() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
 
             sut.save("!raccoonforlemmy@lemmy.world", null)
 
-            verify {
+            coEvery {
                 keyStore.save(KEY, listOf("!test@lemmy.world:1"))
             }
         }
@@ -82,7 +81,7 @@ class DefaultCommunityPreferredLanguageRepositoryTest {
     @Test
     fun givenEmptyInitialState_whenGet_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf()
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf()
 
             val res = sut.get("!raccoonforlemmy@lemmy.world")
 
@@ -92,7 +91,7 @@ class DefaultCommunityPreferredLanguageRepositoryTest {
     @Test
     fun givenCommunityExists_whenGet_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("!raccoonforlemmy@lemmy.world:2")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("!raccoonforlemmy@lemmy.world:2")
 
             val res = sut.get("!raccoonforlemmy@lemmy.world")
 
@@ -102,7 +101,7 @@ class DefaultCommunityPreferredLanguageRepositoryTest {
     @Test
     fun givenCommunityDoesNotExist_whenGet_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:2")
+            coEvery { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:2")
 
             val res = sut.get("!raccoonforlemmy@lemmy.world")
 

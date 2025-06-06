@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.navigation
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -23,7 +24,7 @@ class DefaultBottomNavItemsRepositoryTest {
     @Test
     fun givenNoData_whenGetForAnonymousUser_thenResultAndInteractionsIsAsExpected() =
         runTest {
-            every { keyStore.get(any(), any<List<String>>()) } returns emptyList()
+            coEvery { keyStore.get(any(), any<List<String>>()) } returns emptyList()
 
             val res = sut.get(null)
 
@@ -36,7 +37,7 @@ class DefaultBottomNavItemsRepositoryTest {
     @Test
     fun givenData_whenGetForAnonymousUser_thenResultAndInteractionsIsAsExpected() =
         runTest {
-            every { keyStore.get(any(), any<List<String>>()) } returns ITEMS_IDS
+            coEvery { keyStore.get(any(), any<List<String>>()) } returns ITEMS_IDS
 
             val res = sut.get(null)
 
@@ -50,7 +51,7 @@ class DefaultBottomNavItemsRepositoryTest {
     fun givenNoData_whenGetForLoggedUser_thenResultAndInteractionsIsAsExpected() =
         runTest {
             val accountId = 1L
-            every { keyStore.get(any(), any<List<String>>()) } returns emptyList()
+            coEvery { keyStore.get(any(), any<List<String>>()) } returns emptyList()
 
             val res = sut.get(accountId)
 
@@ -64,7 +65,7 @@ class DefaultBottomNavItemsRepositoryTest {
     fun givenData_whenGetForLoggedUser_thenResultAndInteractionsIsAsExpected() =
         runTest {
             val accountId = 1L
-            every { keyStore.get(any(), any<List<String>>()) } returns ITEMS_IDS
+            coEvery { keyStore.get(any(), any<List<String>>()) } returns ITEMS_IDS
 
             val res = sut.get(accountId)
 
@@ -79,13 +80,13 @@ class DefaultBottomNavItemsRepositoryTest {
         runTest {
             val otherAccountId = 1L
             val accountId = 2L
-            every {
+            coEvery {
                 keyStore.get(
                     "$KEY_PREFIX.$otherAccountId.items",
                     any<List<String>>(),
                 )
             } returns ITEMS_IDS
-            every {
+            coEvery {
                 keyStore.get(
                     "$KEY_PREFIX.$accountId.items",
                     any<List<String>>(),
@@ -104,13 +105,13 @@ class DefaultBottomNavItemsRepositoryTest {
     fun givenDataForOtherUser_whenGetForAnonymousAccount_thenResultAndInteractionsIsAsExpected() =
         runTest {
             val otherAccountId = 1
-            every {
+            coEvery {
                 keyStore.get(
                     "$KEY_PREFIX.$otherAccountId.items",
                     any<List<String>>(),
                 )
             } returns ITEMS_IDS
-            every {
+            coEvery {
                 keyStore.get(
                     "$KEY_PREFIX.items",
                     any<List<String>>(),

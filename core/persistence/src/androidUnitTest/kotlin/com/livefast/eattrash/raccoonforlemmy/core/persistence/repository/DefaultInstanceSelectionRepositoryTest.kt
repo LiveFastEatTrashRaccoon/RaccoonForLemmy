@@ -2,9 +2,9 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import kotlin.test.Test
@@ -17,7 +17,7 @@ class DefaultInstanceSelectionRepositoryTest {
 
     private val keyStore =
         mockk<TemporaryKeyStore>(relaxUnitFun = true) {
-            every { containsKey("customInstances") } returns true
+            coEvery { containsKey("customInstances") } returns true
         }
 
     private val sut = DefaultInstanceSelectionRepository(keyStore)
@@ -25,7 +25,7 @@ class DefaultInstanceSelectionRepositoryTest {
     @Test
     fun givenEmpty_whenGetAll_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get("customInstances", any<List<String>>()) } returns listOf()
+            coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf()
 
             val res = sut.getAll()
 
@@ -35,7 +35,7 @@ class DefaultInstanceSelectionRepositoryTest {
     @Test
     fun givenNotEmpty_whenGetAll_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
+            coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
 
             val res = sut.getAll()
 
@@ -49,7 +49,7 @@ class DefaultInstanceSelectionRepositoryTest {
             val values = listOf("lemmy.world", "lemmy.ml")
             sut.updateAll(values)
 
-            verify {
+            coVerify {
                 keyStore.save("customInstances", values)
             }
         }
@@ -57,11 +57,11 @@ class DefaultInstanceSelectionRepositoryTest {
     @Test
     fun givenNotAlreadyPresent_whenAdd_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
+            coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
 
             sut.add("lemmy.ml")
 
-            verify {
+            coVerify {
                 keyStore.save("customInstances", listOf("lemmy.ml", "lemmy.world"))
             }
         }
@@ -69,11 +69,11 @@ class DefaultInstanceSelectionRepositoryTest {
     @Test
     fun givenAlreadyPresent_whenAdd_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
+            coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
 
             sut.add("lemmy.world")
 
-            verify {
+            coVerify {
                 keyStore.save("customInstances", listOf("lemmy.world"))
             }
         }
@@ -81,11 +81,11 @@ class DefaultInstanceSelectionRepositoryTest {
     @Test
     fun whenRemove_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world", "lemmy.ml")
+            coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world", "lemmy.ml")
 
             sut.remove("lemmy.ml")
 
-            verify {
+            coVerify {
                 keyStore.save("customInstances", listOf("lemmy.world"))
             }
         }

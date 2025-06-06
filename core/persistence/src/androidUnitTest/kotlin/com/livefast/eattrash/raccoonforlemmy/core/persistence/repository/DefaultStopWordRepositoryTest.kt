@@ -2,8 +2,8 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -23,7 +23,7 @@ class DefaultStopWordRepositoryTest {
     @Test
     fun givenNoData_whenGetForAnonymousUser_thenResultAndInteractionsIsAsExpected() =
         runTest {
-            every { keyStore.get(any(), any<List<String>>()) } returns emptyList()
+            coEvery { keyStore.get(any(), any<List<String>>()) } returns emptyList()
 
             val res = sut.get(null)
 
@@ -37,7 +37,7 @@ class DefaultStopWordRepositoryTest {
     fun givenData_whenGetForAnonymousUser_thenResultAndInteractionsIsAsExpected() =
         runTest {
             val fakeList = listOf("word")
-            every { keyStore.get(any(), any<List<String>>()) } returns fakeList
+            coEvery { keyStore.get(any(), any<List<String>>()) } returns fakeList
 
             val res = sut.get(null)
 
@@ -51,7 +51,7 @@ class DefaultStopWordRepositoryTest {
     fun givenNoData_whenGetForLoggedUser_thenResultAndInteractionsIsAsExpected() =
         runTest {
             val accountId = 1L
-            every { keyStore.get(any(), any<List<String>>()) } returns emptyList()
+            coEvery { keyStore.get(any(), any<List<String>>()) } returns emptyList()
 
             val res = sut.get(accountId)
 
@@ -66,7 +66,7 @@ class DefaultStopWordRepositoryTest {
         runTest {
             val accountId = 1L
             val fakeList = listOf("word")
-            every { keyStore.get(any(), any<List<String>>()) } returns fakeList
+            coEvery { keyStore.get(any(), any<List<String>>()) } returns fakeList
 
             val res = sut.get(accountId)
 
@@ -82,13 +82,13 @@ class DefaultStopWordRepositoryTest {
             val otherAccountId = 1L
             val accountId = 2L
             val fakeList = listOf("word")
-            every {
+            coEvery {
                 keyStore.get(
                     "$KEY_PREFIX.$otherAccountId.items",
                     any<List<String>>(),
                 )
             } returns fakeList
-            every {
+            coEvery {
                 keyStore.get(
                     "$KEY_PREFIX.$accountId.items",
                     any<List<String>>(),
@@ -108,13 +108,13 @@ class DefaultStopWordRepositoryTest {
         runTest {
             val otherAccountId = 1
             val fakeList = listOf("word")
-            every {
+            coEvery {
                 keyStore.get(
                     "$KEY_PREFIX.$otherAccountId.items",
                     any<List<String>>(),
                 )
             } returns fakeList
-            every {
+            coEvery {
                 keyStore.get(
                     "$KEY_PREFIX.items",
                     any<List<String>>(),

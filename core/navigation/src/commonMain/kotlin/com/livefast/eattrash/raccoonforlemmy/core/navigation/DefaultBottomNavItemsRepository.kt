@@ -1,9 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.navigation
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
 
 internal class DefaultBottomNavItemsRepository(
     private val keyStore: TemporaryKeyStore,

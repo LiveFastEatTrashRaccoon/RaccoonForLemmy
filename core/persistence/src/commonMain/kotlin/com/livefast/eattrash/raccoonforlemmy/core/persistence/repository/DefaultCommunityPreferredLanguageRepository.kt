@@ -1,25 +1,21 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
 
 private const val SETTINGS_KEY = "communityPreferredLanguage"
 
 internal class DefaultCommunityPreferredLanguageRepository(
     private val keyStore: TemporaryKeyStore,
 ) : CommunityPreferredLanguageRepository {
-    override suspend fun get(handle: String): Long? =
-        withContext(Dispatchers.IO) {
-            val map = deserializeMap()
-            map[handle]
-        }
+    override suspend fun get(handle: String): Long? {
+        val map = deserializeMap()
+        return map[handle]
+    }
 
     override suspend fun save(
         handle: String,
         value: Long?,
-    ) = withContext(Dispatchers.IO) {
+    ) {
         val map = deserializeMap()
         if (value != null) {
             map[handle] = value
@@ -30,7 +26,7 @@ internal class DefaultCommunityPreferredLanguageRepository(
         keyStore.save(SETTINGS_KEY, newValue)
     }
 
-    private fun deserializeMap(): MutableMap<String, Long> =
+    private suspend fun deserializeMap(): MutableMap<String, Long> =
         keyStore
             .get(SETTINGS_KEY, listOf())
             .mapNotNull {
@@ -48,8 +44,7 @@ internal class DefaultCommunityPreferredLanguageRepository(
             e.key + ":" + e.value
         }
 
-    override suspend fun clear() =
-        withContext(Dispatchers.IO) {
-            keyStore.remove(SETTINGS_KEY)
-        }
+    override suspend fun clear() {
+        keyStore.remove(SETTINGS_KEY)
+    }
 }
