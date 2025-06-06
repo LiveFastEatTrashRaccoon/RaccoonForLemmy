@@ -14,9 +14,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRe
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
 
 class DefaultExplorePaginationManager(
     private val identityRepository: IdentityRepository,
@@ -47,9 +44,8 @@ class DefaultExplorePaginationManager(
         stopWords = null
     }
 
-    override suspend fun loadNextPage(): List<SearchResult> =
-        withContext(Dispatchers.IO) {
-            val specification = specification ?: return@withContext emptyList()
+    override suspend fun loadNextPage(): List<SearchResult>  {
+            val specification = specification ?: return emptyList()
             val auth = identityRepository.authToken.value.orEmpty()
             val accountId = accountRepository.getActive()?.id
             if (blockedDomains == null) {
@@ -163,7 +159,7 @@ class DefaultExplorePaginationManager(
 
             history.addAll(result)
             // returns a copy of the whole history
-            history.map { it }
+            return history.map { it }
         }
 
     private fun List<SearchResult>.deduplicate(): List<SearchResult> =
