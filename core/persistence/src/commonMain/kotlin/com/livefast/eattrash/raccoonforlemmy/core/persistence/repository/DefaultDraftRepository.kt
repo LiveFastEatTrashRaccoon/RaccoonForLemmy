@@ -1,12 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.DraftEntity
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DraftDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftType
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DraftDao
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
 
 class DefaultDraftRepository(
     private val dao: DraftDao
@@ -16,25 +13,21 @@ class DefaultDraftRepository(
         type: DraftType,
         accountId: Long,
     ): List<DraftModel> =
-        withContext(Dispatchers.IO) {
-            dao
-                .getAllBy(type = type.toLong(), accountId = accountId)
-                .executeAsList()
-                .map { it.toModel() }
-        }
+        dao
+            .getAllBy(type = type.toLong(), accountId = accountId)
+            .executeAsList()
+            .map { it.toModel() }
 
     override suspend fun getBy(id: Long): DraftModel? =
-        withContext(Dispatchers.IO) {
-            dao
-                .getBy(id)
-                .executeAsOneOrNull()
-                ?.toModel()
-        }
+        dao
+            .getBy(id)
+            .executeAsOneOrNull()
+            ?.toModel()
 
     override suspend fun create(
         model: DraftModel,
         accountId: Long,
-    ): Unit = withContext(Dispatchers.IO) {
+    ) {
         dao.create(
             type = model.type.toLong(),
             body = model.body,
@@ -51,25 +44,23 @@ class DefaultDraftRepository(
         )
     }
 
-    override suspend fun update(model: DraftModel): Unit =
-        withContext(Dispatchers.IO) {
-            dao.update(
-                id = model.id ?: 0,
-                body = model.body,
-                title = model.title,
-                url = model.url,
-                communityId = model.communityId,
-                languageId = model.languageId,
-                date = model.date,
-                info = model.reference,
-                nsfw = model.nsfw?.let { if (it) 0L else 1L },
-            )
-        }
+    override suspend fun update(model: DraftModel) {
+        dao.update(
+            id = model.id ?: 0,
+            body = model.body,
+            title = model.title,
+            url = model.url,
+            communityId = model.communityId,
+            languageId = model.languageId,
+            date = model.date,
+            info = model.reference,
+            nsfw = model.nsfw?.let { if (it) 0L else 1L },
+        )
+    }
 
-    override suspend fun delete(id: Long): Unit =
-        withContext(Dispatchers.IO) {
-            dao.delete(id)
-        }
+    override suspend fun delete(id: Long) {
+        dao.delete(id)
+    }
 }
 
 private fun DraftType.toLong(): Long =

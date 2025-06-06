@@ -22,9 +22,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
 
 internal class DefaultPostRepository(
     private val services: ServiceProvider,
@@ -41,59 +38,55 @@ internal class DefaultPostRepository(
         communityName: String?,
         otherInstance: String?,
     ): Pair<List<PostModel>, String?>? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val response =
-                    if (otherInstance.isNullOrEmpty()) {
-                        services.v3.post.getAll(
-                            authHeader = auth.toAuthHeader(),
-                            auth = auth,
-                            communityId = communityId,
-                            page = if (pageCursor.isNullOrEmpty()) page else null,
-                            pageCursor = pageCursor,
-                            limit = limit,
-                            type = type.toDto(),
-                            sort = sort.toDto(),
-                        )
-                    } else {
-                        customServices.changeInstance(otherInstance)
-                        customServices.v3.post.getAll(
-                            communityName = communityName,
-                            page = if (pageCursor.isNullOrEmpty()) page else null,
-                            pageCursor = pageCursor,
-                            limit = limit,
-                            type = type.toDto(),
-                            sort = sort.toDto(),
-                        )
-                    }
-                val posts = response.posts.map { it.toModel() }
-                posts to response.nextPage
-            }.getOrNull()
-        }
+        runCatching {
+            val response =
+                if (otherInstance.isNullOrEmpty()) {
+                    services.v3.post.getAll(
+                        authHeader = auth.toAuthHeader(),
+                        auth = auth,
+                        communityId = communityId,
+                        page = if (pageCursor.isNullOrEmpty()) page else null,
+                        pageCursor = pageCursor,
+                        limit = limit,
+                        type = type.toDto(),
+                        sort = sort.toDto(),
+                    )
+                } else {
+                    customServices.changeInstance(otherInstance)
+                    customServices.v3.post.getAll(
+                        communityName = communityName,
+                        page = if (pageCursor.isNullOrEmpty()) page else null,
+                        pageCursor = pageCursor,
+                        limit = limit,
+                        type = type.toDto(),
+                        sort = sort.toDto(),
+                    )
+                }
+            val posts = response.posts.map { it.toModel() }
+            posts to response.nextPage
+        }.getOrNull()
 
     override suspend fun get(
         id: Long,
         auth: String?,
         instance: String?,
     ): PostModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val response =
-                    if (instance.isNullOrEmpty()) {
-                        services.v3.post.get(
-                            authHeader = auth.toAuthHeader(),
-                            auth = auth,
-                            id = id,
-                        )
-                    } else {
-                        customServices.changeInstance(instance)
-                        customServices.v3.post.get(id = id)
-                    }
-                response.postView.toModel().copy(
-                    crossPosts = response.crossPosts.map { it.toModel() },
-                )
-            }.getOrNull()
-        }
+        runCatching {
+            val response =
+                if (instance.isNullOrEmpty()) {
+                    services.v3.post.get(
+                        authHeader = auth.toAuthHeader(),
+                        auth = auth,
+                        id = id,
+                    )
+                } else {
+                    customServices.changeInstance(instance)
+                    customServices.v3.post.get(id = id)
+                }
+            response.postView.toModel().copy(
+                crossPosts = response.crossPosts.map { it.toModel() },
+            )
+        }.getOrNull()
 
     override fun asUpVoted(
         post: PostModel,
@@ -123,20 +116,18 @@ internal class DefaultPostRepository(
         post: PostModel,
         auth: String,
         voted: Boolean,
-    ) = withContext(Dispatchers.IO) {
-        runCatching {
-            val data =
-                CreatePostLikeForm(
-                    postId = post.id,
-                    score = if (voted) 1 else 0,
-                    auth = auth,
-                )
-            services.v3.post.like(
-                authHeader = auth.toAuthHeader(),
-                form = data,
+    ) = runCatching {
+        val data =
+            CreatePostLikeForm(
+                postId = post.id,
+                score = if (voted) 1 else 0,
+                auth = auth,
             )
-            Unit
-        }
+        services.v3.post.like(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+        Unit
     }
 
     override fun asDownVoted(
@@ -167,20 +158,18 @@ internal class DefaultPostRepository(
         post: PostModel,
         auth: String,
         downVoted: Boolean,
-    ) = withContext(Dispatchers.IO) {
-        runCatching {
-            val data =
-                CreatePostLikeForm(
-                    postId = post.id,
-                    score = if (downVoted) -1 else 0,
-                    auth = auth,
-                )
-            services.v3.post.like(
-                authHeader = auth.toAuthHeader(),
-                form = data,
+    ) = runCatching {
+        val data =
+            CreatePostLikeForm(
+                postId = post.id,
+                score = if (downVoted) -1 else 0,
+                auth = auth,
             )
-            Unit
-        }
+        services.v3.post.like(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+        Unit
     }
 
     override fun asSaved(
@@ -192,20 +181,18 @@ internal class DefaultPostRepository(
         post: PostModel,
         auth: String,
         saved: Boolean,
-    ) = withContext(Dispatchers.IO) {
-        runCatching {
-            val data =
-                SavePostForm(
-                    postId = post.id,
-                    save = saved,
-                    auth = auth,
-                )
-            services.v3.post.save(
-                authHeader = auth.toAuthHeader(),
-                form = data,
+    ) = runCatching {
+        val data =
+            SavePostForm(
+                postId = post.id,
+                save = saved,
+                auth = auth,
             )
-            Unit
-        }
+        services.v3.post.save(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+        Unit
     }
 
     override suspend fun create(
@@ -216,23 +203,22 @@ internal class DefaultPostRepository(
         nsfw: Boolean,
         languageId: Long?,
         auth: String,
-    ): Unit =
-        withContext(Dispatchers.IO) {
-            val data =
-                CreatePostForm(
-                    communityId = communityId,
-                    name = title,
-                    body = body,
-                    url = url,
-                    nsfw = nsfw,
-                    languageId = languageId,
-                    auth = auth,
-                )
-            services.v3.post.create(
-                authHeader = auth.toAuthHeader(),
-                form = data,
+    ) {
+        val data =
+            CreatePostForm(
+                communityId = communityId,
+                name = title,
+                body = body,
+                url = url,
+                nsfw = nsfw,
+                languageId = languageId,
+                auth = auth,
             )
-        }
+        services.v3.post.create(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+    }
 
     override suspend fun edit(
         postId: Long,
@@ -242,72 +228,84 @@ internal class DefaultPostRepository(
         nsfw: Boolean,
         languageId: Long?,
         auth: String,
-    ): Unit =
-        withContext(Dispatchers.IO) {
-            val data =
-                EditPostForm(
-                    postId = postId,
-                    name = title,
-                    body = body,
-                    url = url,
-                    nsfw = nsfw,
-                    languageId = languageId,
-                    auth = auth,
-                )
-            services.v3.post.edit(
-                authHeader = auth.toAuthHeader(),
-                form = data,
+    ) {
+        val data =
+            EditPostForm(
+                postId = postId,
+                name = title,
+                body = body,
+                url = url,
+                nsfw = nsfw,
+                languageId = languageId,
+                auth = auth,
             )
-        }
+        services.v3.post.edit(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+    }
 
     override suspend fun setRead(
         read: Boolean,
         postId: Long,
         auth: String?,
-    ) = withContext(Dispatchers.IO) {
-        runCatching {
-            val data =
-                MarkPostAsReadForm(
-                    postId = postId,
-                    read = read,
-                    auth = auth.orEmpty(),
-                )
-            services.v3.post.markAsRead(
-                authHeader = auth.toAuthHeader(),
-                form = data,
+    ) = runCatching {
+        val data =
+            MarkPostAsReadForm(
+                postId = postId,
+                read = read,
+                auth = auth.orEmpty(),
             )
-            Unit
-        }
+        services.v3.post.markAsRead(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+        Unit
     }
 
     override suspend fun hide(
         hidden: Boolean,
         postId: Long,
         auth: String?,
-    ) = withContext(Dispatchers.IO) {
-        runCatching {
-            val data =
-                HidePostForm(
-                    postIds = listOf(postId),
-                    hidden = hidden,
-                )
-            services.v3.post.hide(
-                authHeader = auth.toAuthHeader(),
-                form = data,
+    ) = runCatching {
+        val data =
+            HidePostForm(
+                postIds = listOf(postId),
+                hidden = hidden,
             )
-            Unit
-        }
+        services.v3.post.hide(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+        Unit
     }
 
     override suspend fun delete(
         id: Long,
         auth: String,
-    ) = withContext(Dispatchers.IO) {
+    ) = runCatching {
+        val data =
+            DeletePostForm(
+                postId = id,
+                deleted = true,
+            )
+        val res =
+            services.v3.post.delete(
+                authHeader = auth.toAuthHeader(),
+                form = data,
+            )
+        res.postView.toModel()
+    }.getOrNull()
+
+    override suspend fun restore(
+        id: Long,
+        auth: String,
+    ): PostModel? =
         runCatching {
             val data =
                 DeletePostForm(
                     postId = id,
-                    deleted = true,
+                    deleted = false,
                 )
             val res =
                 services.v3.post.delete(
@@ -316,115 +314,86 @@ internal class DefaultPostRepository(
                 )
             res.postView.toModel()
         }.getOrNull()
-    }
-
-    override suspend fun restore(
-        id: Long,
-        auth: String,
-    ): PostModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    DeletePostForm(
-                        postId = id,
-                        deleted = false,
-                    )
-                val res =
-                    services.v3.post.delete(
-                        authHeader = auth.toAuthHeader(),
-                        form = data,
-                    )
-                res.postView.toModel()
-            }.getOrNull()
-        }
 
     override suspend fun report(
         postId: Long,
         reason: String,
         auth: String,
-    ): Unit =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    CreatePostReportForm(
-                        postId = postId,
-                        reason = reason,
-                        auth = auth,
-                    )
-                services.v3.post.createReport(
-                    form = data,
-                    authHeader = auth.toAuthHeader(),
-                )
-            }
-        }
+    ) = runCatching {
+        val data =
+            CreatePostReportForm(
+                postId = postId,
+                reason = reason,
+                auth = auth,
+            )
+        services.v3.post.createReport(
+            form = data,
+            authHeader = auth.toAuthHeader(),
+        )
+        Unit
+    }.getOrDefault(Unit)
 
     override suspend fun featureInCommunity(
         postId: Long,
         auth: String,
         featured: Boolean,
     ): PostModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    FeaturePostForm(
-                        postId = postId,
-                        auth = auth,
-                        featured = featured,
-                        featureType = PostFeatureType.Community,
-                    )
-                val response =
-                    services.v3.post.feature(
-                        form = data,
-                        authHeader = auth.toAuthHeader(),
-                    )
-                response.postView.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val data =
+                FeaturePostForm(
+                    postId = postId,
+                    auth = auth,
+                    featured = featured,
+                    featureType = PostFeatureType.Community,
+                )
+            val response =
+                services.v3.post.feature(
+                    form = data,
+                    authHeader = auth.toAuthHeader(),
+                )
+            response.postView.toModel()
+        }.getOrNull()
 
     override suspend fun featureInInstance(
         postId: Long,
         auth: String,
         featured: Boolean,
     ): PostModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    FeaturePostForm(
-                        postId = postId,
-                        auth = auth,
-                        featured = featured,
-                        featureType = PostFeatureType.Local,
-                    )
-                val response =
-                    services.v3.post.feature(
-                        form = data,
-                        authHeader = auth.toAuthHeader(),
-                    )
-                response.postView.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val data =
+                FeaturePostForm(
+                    postId = postId,
+                    auth = auth,
+                    featured = featured,
+                    featureType = PostFeatureType.Local,
+                )
+            val response =
+                services.v3.post.feature(
+                    form = data,
+                    authHeader = auth.toAuthHeader(),
+                )
+            response.postView.toModel()
+        }.getOrNull()
 
     override suspend fun lock(
         postId: Long,
         auth: String,
         locked: Boolean,
     ): PostModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    LockPostForm(
-                        postId = postId,
-                        auth = auth,
-                        locked = locked,
-                    )
-                val response =
-                    services.v3.post.lock(
-                        form = data,
-                        authHeader = auth.toAuthHeader(),
-                    )
-                response.postView.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val data =
+                LockPostForm(
+                    postId = postId,
+                    auth = auth,
+                    locked = locked,
+                )
+            val response =
+                services.v3.post.lock(
+                    form = data,
+                    authHeader = auth.toAuthHeader(),
+                )
+            response.postView.toModel()
+        }.getOrNull()
 
     override suspend fun remove(
         postId: Long,
@@ -455,50 +424,46 @@ internal class DefaultPostRepository(
         limit: Int,
         unresolvedOnly: Boolean,
     ): List<PostReportModel>? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val response =
-                    services.v3.post.listReports(
-                        authHeader = auth.toAuthHeader(),
-                        auth = auth,
-                        communityId = communityId,
-                        page = page,
-                        limit = limit,
-                        unresolvedOnly = unresolvedOnly,
-                    )
-                response.postReports.map {
-                    it.toModel()
-                }
-            }.getOrNull()
-        }
+        runCatching {
+            val response =
+                services.v3.post.listReports(
+                    authHeader = auth.toAuthHeader(),
+                    auth = auth,
+                    communityId = communityId,
+                    page = page,
+                    limit = limit,
+                    unresolvedOnly = unresolvedOnly,
+                )
+            response.postReports.map {
+                it.toModel()
+            }
+        }.getOrNull()
 
     override suspend fun resolveReport(
         reportId: Long,
         auth: String,
         resolved: Boolean,
     ): PostReportModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    ResolvePostReportForm(
-                        reportId = reportId,
-                        auth = auth,
-                        resolved = resolved,
-                    )
-                val response =
-                    services.v3.post.resolveReport(
-                        form = data,
-                        authHeader = auth.toAuthHeader(),
-                    )
-                response.postReportView.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val data =
+                ResolvePostReportForm(
+                    reportId = reportId,
+                    auth = auth,
+                    resolved = resolved,
+                )
+            val response =
+                services.v3.post.resolveReport(
+                    form = data,
+                    authHeader = auth.toAuthHeader(),
+                )
+            response.postReportView.toModel()
+        }.getOrNull()
 
     override suspend fun purge(
         auth: String?,
         postId: Long,
         reason: String?,
-    ) = withContext(Dispatchers.IO) {
+    ) {
         val data =
             PurgePostForm(
                 postId = postId,
@@ -516,14 +481,12 @@ internal class DefaultPostRepository(
         query: String,
         auth: String?,
     ): PostModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val response =
-                    services.v3.search.resolveObject(
-                        authHeader = auth.toAuthHeader(),
-                        q = query,
-                    )
-                response.post?.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val response =
+                services.v3.search.resolveObject(
+                    authHeader = auth.toAuthHeader(),
+                    q = query,
+                )
+            response.post?.toModel()
+        }.getOrNull()
 }

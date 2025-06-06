@@ -2,9 +2,10 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -43,10 +44,10 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenEmptyInitialState_whenSaveForPosts_thenValueIsStored() =
         runTest {
-            every { keyStore.get(KEY_POSTS, listOf()) } returns listOf()
+            coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf()
             sut.saveForPosts(HANDLE, 1)
 
-            verify {
+            coVerify {
                 keyStore.save(KEY_POSTS, listOf("$HANDLE:1"))
             }
         }
@@ -54,7 +55,7 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenUserAlreadyExisting_whenSaveForPosts_thenValueIsStored() =
         runTest {
-            every {
+            coEvery {
                 keyStore.get(
                     KEY_POSTS,
                     listOf(),
@@ -63,7 +64,7 @@ class DefaultUserSortRepositoryTest {
 
             sut.saveForPosts(HANDLE, 1)
 
-            verify {
+            coVerify {
                 keyStore.save(KEY_POSTS, listOf("$HANDLE:1"))
             }
         }
@@ -71,11 +72,11 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenOtherUserAlreadyExisting_whenSaveForPosts_thenBothValuesAreStored() =
         runTest {
-            every { keyStore.get(KEY_POSTS, listOf()) } returns listOf("test@lemmy.world:1")
+            coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf("test@lemmy.world:1")
 
             sut.saveForPosts(HANDLE, 1)
 
-            verify {
+            coVerify {
                 keyStore.save(
                     KEY_POSTS,
                     listOf("test@lemmy.world:1", "$HANDLE:1"),
@@ -86,7 +87,7 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenEmptyInitialState_whenGetForPosts_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY_POSTS, listOf()) } returns listOf()
+            coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf()
 
             val res = sut.getForPosts(HANDLE)
 
@@ -96,7 +97,7 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenUserExists_whenGetForPosts_thenResultIsAsExpected() =
         runTest {
-            every {
+            coEvery {
                 keyStore.get(
                     KEY_POSTS,
                     listOf(),
@@ -111,7 +112,7 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenUserDoesNotExist_whenGetForPosts_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY_POSTS, listOf()) } returns listOf("test@lemmy.world:2")
+            coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf("test@lemmy.world:2")
 
             val res = sut.getForPosts(HANDLE)
 
@@ -123,10 +124,10 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenEmptyInitialState_whenSaveForComments_thenValueIsStored() =
         runTest {
-            every { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf()
+            coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf()
             sut.saveForComments(HANDLE, 1)
 
-            verify {
+            coVerify {
                 keyStore.save(KEY_COMMENTS, listOf("$HANDLE:1"))
             }
         }
@@ -134,7 +135,7 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenUserAlreadyExisting_whenSaveForComments_thenValueIsStored() =
         runTest {
-            every {
+            coEvery {
                 keyStore.get(
                     KEY_COMMENTS,
                     listOf(),
@@ -143,7 +144,7 @@ class DefaultUserSortRepositoryTest {
 
             sut.saveForComments(HANDLE, 1)
 
-            verify {
+            coVerify {
                 keyStore.save(KEY_COMMENTS, listOf("$HANDLE:1"))
             }
         }
@@ -151,11 +152,11 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenOtherUserAlreadyExisting_whenSaveForComments_thenBothValuesAreStored() =
         runTest {
-            every { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf("test@lemmy.world:1")
+            coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf("test@lemmy.world:1")
 
             sut.saveForComments(HANDLE, 1)
 
-            verify {
+            coVerify {
                 keyStore.save(
                     KEY_COMMENTS,
                     listOf("test@lemmy.world:1", "$HANDLE:1"),
@@ -166,7 +167,7 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenEmptyInitialState_whenGetForComments_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf()
+            coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf()
 
             val res = sut.getForComments(HANDLE)
 
@@ -176,7 +177,7 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenUserExists_whenGetForComments_thenResultIsAsExpected() =
         runTest {
-            every {
+            coEvery {
                 keyStore.get(
                     KEY_COMMENTS,
                     listOf(),
@@ -191,7 +192,7 @@ class DefaultUserSortRepositoryTest {
     @Test
     fun givenUserDoesNotExist_whenGetForComments_thenResultIsAsExpected() =
         runTest {
-            every { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf("test@lemmy.world:2")
+            coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf("test@lemmy.world:2")
 
             val res = sut.getForComments(HANDLE)
 

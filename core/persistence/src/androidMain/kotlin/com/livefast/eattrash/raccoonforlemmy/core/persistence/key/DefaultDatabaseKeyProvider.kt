@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.key
 
 import android.util.Base64
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
+import kotlinx.coroutines.runBlocking
 import java.security.SecureRandom
 
 internal class DefaultDatabaseKeyProvider(
@@ -28,13 +29,17 @@ internal class DefaultDatabaseKeyProvider(
         }
     }
 
-    override fun removeKey() {
+    override fun removeKey() = runBlocking {
         keyStore.remove(DATABASE_KEY)
     }
 
-    private fun retrieveStoreKey(): String = keyStore[DATABASE_KEY, ""]
+    private fun retrieveStoreKey(): String = runBlocking {
+        keyStore.get(DATABASE_KEY, "")
+    }
 
-    private fun storeKey(key: String) = keyStore.save(DATABASE_KEY, key)
+    private fun storeKey(key: String) = runBlocking {
+        keyStore.save(DATABASE_KEY, key)
+    }
 
     private fun generateKey(): ByteArray {
         val key = ByteArray(64)

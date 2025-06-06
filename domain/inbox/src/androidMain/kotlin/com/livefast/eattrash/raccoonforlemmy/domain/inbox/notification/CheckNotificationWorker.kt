@@ -12,8 +12,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.L10nManager
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.getStrings
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.kodein.di.instance
 import java.util.Collections.max
 
@@ -24,15 +22,14 @@ internal class CheckNotificationWorker(
     private val inboxCoordinator by RootDI.di.instance<InboxCoordinator>()
     private val l10nManager by RootDI.di.instance<L10nManager>()
 
-    override suspend fun doWork() =
-        withContext(Dispatchers.IO) {
-            inboxCoordinator.updateUnreadCount()
-            val unread = inboxCoordinator.totalUnread.value
-            if (unread > 0) {
-                sendNotification(unread)
-            }
-            Result.success()
+    override suspend fun doWork(): Result {
+        inboxCoordinator.updateUnreadCount()
+        val unread = inboxCoordinator.totalUnread.value
+        if (unread > 0) {
+            sendNotification(unread)
         }
+        return Result.success()
+    }
 
     private suspend fun sendNotification(count: Int) {
         val lang = l10nManager.lang.value

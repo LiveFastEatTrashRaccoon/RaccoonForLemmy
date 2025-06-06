@@ -8,7 +8,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.encodeToString
 import kotlin.test.Test
 
 class DefaultImportSettingsUseCaseTest {

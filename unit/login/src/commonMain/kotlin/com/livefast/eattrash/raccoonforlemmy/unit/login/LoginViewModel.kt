@@ -11,9 +11,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.Identity
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.usecase.LoginUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LoginViewModel(
     apiConfigurationRepository: ApiConfigurationRepository,
@@ -156,9 +154,7 @@ class LoginViewModel(
             if (result.isFailure) {
                 result.exceptionOrNull()?.also {
                     val message = it.message
-                    withContext(Dispatchers.Main) {
-                        emitEffect(LoginMviModel.Effect.LoginError(message))
-                    }
+                    emitEffect(LoginMviModel.Effect.LoginError(message))
                 }
                 return@launch
             }
@@ -175,9 +171,7 @@ class LoginViewModel(
             }
             notificationCenter.send(NotificationCenterEvent.ResetExplore)
             notificationCenter.send(NotificationCenterEvent.ResetHome)
-            withContext(Dispatchers.Main) {
-                emitEffect(LoginMviModel.Effect.LoginSuccess)
-            }
+            emitEffect(LoginMviModel.Effect.LoginSuccess)
         }
     }
 }

@@ -6,7 +6,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import com.livefast.eattrash.raccoonforlemmy.core.utils.network.NetworkManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -24,10 +23,6 @@ class DefaultIdentityRepositoryTest {
     val dispatcherTestRule = DispatcherTestRule()
 
     private val accountRepository = mockk<AccountRepository>()
-    private val userRepository =
-        mockk<UserRepository> {
-            coEvery { getModeratedCommunities(any(), any()) } returns emptyList()
-        }
     private val siteRepository = mockk<SiteRepository>()
     private val networkManager =
         mockk<NetworkManager> {

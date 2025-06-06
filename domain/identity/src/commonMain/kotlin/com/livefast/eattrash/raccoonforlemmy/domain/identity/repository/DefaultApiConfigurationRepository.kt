@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 internal class DefaultApiConfigurationRepository(
     private val serviceProvider: ServiceProvider,
@@ -21,10 +22,12 @@ internal class DefaultApiConfigurationRepository(
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
 
     init {
-        val instance =
-            keyStore[KEY_LAST_INSTANCE, ""]
-                .takeIf { it.isNotEmpty() } ?: serviceProvider.currentInstance
-        changeInstance(instance)
+        scope.launch {
+            val instance =
+                keyStore.get(KEY_LAST_INSTANCE, "")
+                    .takeIf { it.isNotEmpty() } ?: serviceProvider.currentInstance
+            changeInstance(instance)
+        }
     }
 
     override val instance =
@@ -41,8 +44,10 @@ internal class DefaultApiConfigurationRepository(
         )
 
     override fun changeInstance(value: String) {
-        serviceProvider.changeInstance(value)
-        keyStore.save(KEY_LAST_INSTANCE, value)
+        scope.launch {
+            serviceProvider.changeInstance(value)
+            keyStore.save(KEY_LAST_INSTANCE, value)
+        }
     }
 
     companion object {

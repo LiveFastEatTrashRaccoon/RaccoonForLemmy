@@ -21,7 +21,6 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withContext
 
 internal class DefaultPostPaginationManager(
     private val identityRepository: IdentityRepository,
@@ -68,203 +67,202 @@ internal class DefaultPostPaginationManager(
         }
     }
 
-    override suspend fun loadNextPage(): List<PostModel> =
-        withContext(Dispatchers.IO) {
-            val specification = specification ?: return@withContext emptyList()
-            val auth = identityRepository.authToken.value.orEmpty()
-            val accountId = accountRepository.getActive()?.id
-            if (blockedDomains == null) {
-                blockedDomains = domainBlocklistRepository.get(accountId)
-            }
-            if (stopWords == null) {
-                stopWords = stopWordRepository.get(accountId)
-            }
+    override suspend fun loadNextPage(): List<PostModel> {
+        val specification = specification ?: return emptyList()
+        val auth = identityRepository.authToken.value.orEmpty()
+        val accountId = accountRepository.getActive()?.id
+        if (blockedDomains == null) {
+            blockedDomains = domainBlocklistRepository.get(accountId)
+        }
+        if (stopWords == null) {
+            stopWords = stopWordRepository.get(accountId)
+        }
 
-            val result =
-                when (specification) {
-                    is PostPaginationSpecification.Listing -> {
-                        val (itemList, nextPage) =
-                            postRepository.getAll(
-                                auth = auth,
-                                page = currentPage,
-                                pageCursor = pageCursor,
-                                type = specification.listingType,
-                                sort = specification.sortType,
-                            ) ?: (null to null)
-                        if (!itemList.isNullOrEmpty()) {
-                            currentPage++
-                        }
-                        if (nextPage != null) {
-                            pageCursor = nextPage
-                        }
-                        canFetchMore = itemList?.isEmpty() != true
-                        itemList
-                            .orEmpty()
-                            .deduplicate()
-                            .filterNsfw(specification.includeNsfw)
-                            .filterDeleted()
-                            .filterByUrlDomain()
-                            .filterByStopWords()
-                            .withUserTags()
+        val result =
+            when (specification) {
+                is PostPaginationSpecification.Listing -> {
+                    val (itemList, nextPage) =
+                        postRepository.getAll(
+                            auth = auth,
+                            page = currentPage,
+                            pageCursor = pageCursor,
+                            type = specification.listingType,
+                            sort = specification.sortType,
+                        ) ?: (null to null)
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
                     }
-
-                    is PostPaginationSpecification.Community -> {
-                        val searching = !specification.query.isNullOrEmpty()
-                        val (itemList, nextPage) =
-                            if (searching) {
-                                communityRepository
-                                    .search(
-                                        auth = auth,
-                                        communityId = specification.id,
-                                        page = currentPage,
-                                        sortType = specification.sortType,
-                                        resultType = SearchResultType.Posts,
-                                        query = specification.query.orEmpty(),
-                                    ).mapNotNull {
-                                        (it as? SearchResult.Post)?.model
-                                    } to null
-                            } else {
-                                postRepository.getAll(
-                                    auth = auth,
-                                    otherInstance = specification.otherInstance,
-                                    communityId = specification.id,
-                                    communityName = specification.name,
-                                    page = currentPage,
-                                    pageCursor = pageCursor,
-                                    sort = specification.sortType,
-                                ) ?: (null to null)
-                            }
-                        if (!itemList.isNullOrEmpty()) {
-                            currentPage++
-                        }
-                        if (nextPage != null) {
-                            pageCursor = nextPage
-                        }
-                        canFetchMore = itemList?.isEmpty() != true
-                        itemList
-                            .orEmpty()
-                            .deduplicate()
-                            .filterNsfw(specification.includeNsfw)
-                            .filterDeleted(includeCurrentCreator = true)
-                            .filterByUrlDomain()
-                            .filterByStopWords()
-                            .withUserTags()
+                    if (nextPage != null) {
+                        pageCursor = nextPage
                     }
-
-                    is PostPaginationSpecification.MultiCommunity -> {
-                        val itemList =
-                            multiCommunityPaginator.loadNextPage(
-                                auth = auth,
-                                sort = specification.sortType,
-                            )
-                        canFetchMore = multiCommunityPaginator.canFetchMore
-                        itemList
-                            .deduplicate()
-                            .filterNsfw(specification.includeNsfw)
-                            .filterDeleted(includeCurrentCreator = true)
-                            .filterByUrlDomain()
-                            .filterByStopWords()
-                            .withUserTags()
-                    }
-
-                    is PostPaginationSpecification.User -> {
-                        val itemList =
-                            userRepository.getPosts(
-                                auth = auth,
-                                id = specification.id,
-                                username = specification.name,
-                                otherInstance = specification.otherInstance,
-                                page = currentPage,
-                                sort = SortType.New,
-                            )
-                        if (!itemList.isNullOrEmpty()) {
-                            currentPage++
-                        }
-                        canFetchMore = itemList?.isEmpty() != true
-                        itemList
-                            .orEmpty()
-                            .deduplicate()
-                            .filterNsfw(specification.includeNsfw)
-                            .filterDeleted(includeCurrentCreator = specification.includeDeleted)
-                            .filterByUrlDomain()
-                            .filterByStopWords()
-                    }
-
-                    is PostPaginationSpecification.Votes -> {
-                        val (itemList, nextPage) =
-                            userRepository.getLikedPosts(
-                                auth = auth,
-                                page = currentPage,
-                                pageCursor = pageCursor,
-                                liked = specification.liked,
-                                sort = SortType.New,
-                            ) ?: (null to null)
-                        if (!itemList.isNullOrEmpty()) {
-                            currentPage++
-                        }
-                        if (nextPage != null) {
-                            pageCursor = nextPage
-                        }
-                        canFetchMore = itemList?.isEmpty() != true
-                        itemList
-                            .orEmpty()
-                            .deduplicate()
-                            .filterDeleted(includeCurrentCreator = true)
-                            .filterByUrlDomain()
-                            .filterByStopWords()
-                            .withUserTags()
-                    }
-
-                    is PostPaginationSpecification.Saved -> {
-                        val itemList =
-                            userRepository.getSavedPosts(
-                                auth = auth,
-                                page = currentPage,
-                                sort = specification.sortType,
-                                id = identityRepository.cachedUser?.id ?: 0,
-                            )
-                        if (!itemList.isNullOrEmpty()) {
-                            currentPage++
-                        }
-                        canFetchMore = itemList?.isEmpty() != true
-                        itemList
-                            .orEmpty()
-                            .deduplicate()
-                            .filterDeleted()
-                            .filterByUrlDomain()
-                            .filterByStopWords()
-                            .withUserTags()
-                    }
-
-                    is PostPaginationSpecification.Hidden -> {
-                        val (itemList, nextPage) =
-                            userRepository.getHiddenPosts(
-                                auth = auth,
-                                page = currentPage,
-                                pageCursor = pageCursor,
-                                sort = SortType.New,
-                            ) ?: (null to null)
-                        if (!itemList.isNullOrEmpty()) {
-                            currentPage++
-                        }
-                        if (nextPage != null) {
-                            pageCursor = nextPage
-                        }
-                        canFetchMore = itemList?.isEmpty() != true
-                        itemList
-                            .orEmpty()
-                            .deduplicate()
-                            .filterDeleted()
-                            .filterByUrlDomain()
-                            .filterByStopWords()
-                            .withUserTags()
-                    }
+                    canFetchMore = itemList?.isEmpty() != true
+                    itemList
+                        .orEmpty()
+                        .deduplicate()
+                        .filterNsfw(specification.includeNsfw)
+                        .filterDeleted()
+                        .filterByUrlDomain()
+                        .filterByStopWords()
+                        .withUserTags()
                 }
 
-            history.addAll(result)
-            // returns a copy of the whole history
-            history.map { it }
-        }
+                is PostPaginationSpecification.Community -> {
+                    val searching = !specification.query.isNullOrEmpty()
+                    val (itemList, nextPage) =
+                        if (searching) {
+                            communityRepository
+                                .search(
+                                    auth = auth,
+                                    communityId = specification.id,
+                                    page = currentPage,
+                                    sortType = specification.sortType,
+                                    resultType = SearchResultType.Posts,
+                                    query = specification.query.orEmpty(),
+                                ).mapNotNull {
+                                    (it as? SearchResult.Post)?.model
+                                } to null
+                        } else {
+                            postRepository.getAll(
+                                auth = auth,
+                                otherInstance = specification.otherInstance,
+                                communityId = specification.id,
+                                communityName = specification.name,
+                                page = currentPage,
+                                pageCursor = pageCursor,
+                                sort = specification.sortType,
+                            ) ?: (null to null)
+                        }
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
+                    }
+                    if (nextPage != null) {
+                        pageCursor = nextPage
+                    }
+                    canFetchMore = itemList?.isEmpty() != true
+                    itemList
+                        .orEmpty()
+                        .deduplicate()
+                        .filterNsfw(specification.includeNsfw)
+                        .filterDeleted(includeCurrentCreator = true)
+                        .filterByUrlDomain()
+                        .filterByStopWords()
+                        .withUserTags()
+                }
+
+                is PostPaginationSpecification.MultiCommunity -> {
+                    val itemList =
+                        multiCommunityPaginator.loadNextPage(
+                            auth = auth,
+                            sort = specification.sortType,
+                        )
+                    canFetchMore = multiCommunityPaginator.canFetchMore
+                    itemList
+                        .deduplicate()
+                        .filterNsfw(specification.includeNsfw)
+                        .filterDeleted(includeCurrentCreator = true)
+                        .filterByUrlDomain()
+                        .filterByStopWords()
+                        .withUserTags()
+                }
+
+                is PostPaginationSpecification.User -> {
+                    val itemList =
+                        userRepository.getPosts(
+                            auth = auth,
+                            id = specification.id,
+                            username = specification.name,
+                            otherInstance = specification.otherInstance,
+                            page = currentPage,
+                            sort = SortType.New,
+                        )
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
+                    }
+                    canFetchMore = itemList?.isEmpty() != true
+                    itemList
+                        .orEmpty()
+                        .deduplicate()
+                        .filterNsfw(specification.includeNsfw)
+                        .filterDeleted(includeCurrentCreator = specification.includeDeleted)
+                        .filterByUrlDomain()
+                        .filterByStopWords()
+                }
+
+                is PostPaginationSpecification.Votes -> {
+                    val (itemList, nextPage) =
+                        userRepository.getLikedPosts(
+                            auth = auth,
+                            page = currentPage,
+                            pageCursor = pageCursor,
+                            liked = specification.liked,
+                            sort = SortType.New,
+                        ) ?: (null to null)
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
+                    }
+                    if (nextPage != null) {
+                        pageCursor = nextPage
+                    }
+                    canFetchMore = itemList?.isEmpty() != true
+                    itemList
+                        .orEmpty()
+                        .deduplicate()
+                        .filterDeleted(includeCurrentCreator = true)
+                        .filterByUrlDomain()
+                        .filterByStopWords()
+                        .withUserTags()
+                }
+
+                is PostPaginationSpecification.Saved -> {
+                    val itemList =
+                        userRepository.getSavedPosts(
+                            auth = auth,
+                            page = currentPage,
+                            sort = specification.sortType,
+                            id = identityRepository.cachedUser?.id ?: 0,
+                        )
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
+                    }
+                    canFetchMore = itemList?.isEmpty() != true
+                    itemList
+                        .orEmpty()
+                        .deduplicate()
+                        .filterDeleted()
+                        .filterByUrlDomain()
+                        .filterByStopWords()
+                        .withUserTags()
+                }
+
+                is PostPaginationSpecification.Hidden -> {
+                    val (itemList, nextPage) =
+                        userRepository.getHiddenPosts(
+                            auth = auth,
+                            page = currentPage,
+                            pageCursor = pageCursor,
+                            sort = SortType.New,
+                        ) ?: (null to null)
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
+                    }
+                    if (nextPage != null) {
+                        pageCursor = nextPage
+                    }
+                    canFetchMore = itemList?.isEmpty() != true
+                    itemList
+                        .orEmpty()
+                        .deduplicate()
+                        .filterDeleted()
+                        .filterByUrlDomain()
+                        .filterByStopWords()
+                        .withUserTags()
+                }
+            }
+
+        history.addAll(result)
+        // returns a copy of the whole history
+        return history.map { it }
+    }
 
     override fun extractState(): PostPaginationManagerState =
         DefaultPostPaginationManagerState(

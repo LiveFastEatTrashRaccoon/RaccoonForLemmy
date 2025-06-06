@@ -1,7 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.core.persistence.di
 
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DefaultDatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.AccountDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DefaultAccountDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DefaultDraftDao
@@ -16,6 +14,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.MultiCommunity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.SettingsDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.UserTagDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.UserTagMemberDao
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DefaultDatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunityPreferredLanguageRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.CommunitySortRepository

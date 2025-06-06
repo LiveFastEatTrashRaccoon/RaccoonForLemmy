@@ -240,19 +240,17 @@ class ModalDrawerViewModel(
     }
 
     private suspend fun loadCachedSubscriptions() {
-        withContext(Dispatchers.IO) {
-            val cachedValues =
-                subscriptionsCache.state
-                    .filterIsInstance<SubscriptionsCacheState.Loaded>()
-                    .first()
-                    .communities
-            updateState {
-                it.copy(
-                    communities = cachedValues.sortedBy { c -> c.name },
-                    refreshing = false,
-                    loading = false,
-                )
-            }
+        val cachedValues =
+            subscriptionsCache.state
+                .filterIsInstance<SubscriptionsCacheState.Loaded>()
+                .first()
+                .communities
+        updateState {
+            it.copy(
+                communities = cachedValues.sortedBy { c -> c.name },
+                refreshing = false,
+                loading = false,
+            )
         }
     }
 

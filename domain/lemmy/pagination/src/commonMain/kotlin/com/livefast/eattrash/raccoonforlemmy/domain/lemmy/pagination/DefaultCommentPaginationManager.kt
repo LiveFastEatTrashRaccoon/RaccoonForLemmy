@@ -15,7 +15,6 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withContext
 
 internal class DefaultCommentPaginationManager(
     private val identityRepository: IdentityRepository,
@@ -47,9 +46,8 @@ internal class DefaultCommentPaginationManager(
         currentPage = 1
     }
 
-    override suspend fun loadNextPage(): List<CommentModel> =
-        withContext(Dispatchers.IO) {
-            val specification = specification ?: return@withContext emptyList()
+    override suspend fun loadNextPage(): List<CommentModel> {
+            val specification = specification ?: return emptyList()
             val auth = identityRepository.authToken.value.orEmpty()
 
             val result =
@@ -146,7 +144,7 @@ internal class DefaultCommentPaginationManager(
 
             history.addAll(result)
             // returns a copy of the whole history
-            history.map { it }
+            return history.map { it }
         }
 
     private fun List<CommentModel>.deduplicate(): List<CommentModel> =

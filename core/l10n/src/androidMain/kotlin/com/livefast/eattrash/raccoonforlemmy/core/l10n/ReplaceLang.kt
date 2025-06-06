@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.core.l10n
 
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.Locales
 import java.util.Locale
 
 internal actual fun replaceLang(lang: String) {

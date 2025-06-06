@@ -5,8 +5,6 @@ import androidx.compose.ui.graphics.toArgb
 import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagMemberEntity
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.UsertagmembersQueries
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.UsertagsQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.UserTagDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.UserTagMemberDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagMemberModel
@@ -14,8 +12,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.isSpecial
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toInt
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDatabase
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.provider.DatabaseProvider
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usertagmembers.GetBy
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every

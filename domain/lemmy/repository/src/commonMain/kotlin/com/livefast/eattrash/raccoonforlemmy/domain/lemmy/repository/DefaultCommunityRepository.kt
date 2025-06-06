@@ -19,9 +19,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
 
 internal class DefaultCommunityRepository(
     private val services: ServiceProvider,
@@ -38,50 +35,48 @@ internal class DefaultCommunityRepository(
         sortType: SortType,
         resultType: SearchResultType,
     ): List<SearchResult> =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val searchResponse =
-                    if (instance.isNullOrEmpty()) {
-                        services.v3.search.search(
-                            authHeader = auth.toAuthHeader(),
-                            q = query,
-                            auth = auth,
-                            page = page,
-                            limit = limit,
-                            communityId = communityId,
-                            type = resultType.toDto(),
-                            listingType = listingType.toDto(),
-                            sort = sortType.toDto(),
-                        )
-                    } else {
-                        customServices.changeInstance(instance)
-                        customServices.v3.search.search(
-                            authHeader = auth.toAuthHeader(),
-                            q = query,
-                            auth = auth,
-                            page = page,
-                            limit = limit,
-                            communityId = communityId,
-                            type = resultType.toDto(),
-                            listingType = listingType.toDto(),
-                            sort = sortType.toDto(),
-                        )
-                    }
-                buildList<SearchResult> {
-                    val posts = searchResponse.posts.map { it.toModel() }
-                    this += posts.map { SearchResult.Post(it) }
-
-                    val comments = searchResponse.comments.map { it.toModel() }
-                    this += comments.map { SearchResult.Comment(it) }
-
-                    val communities = searchResponse.communities.map { it.toModel() }
-                    this += communities.map { SearchResult.Community(it) }
-
-                    val users = searchResponse.users.map { it.toModel() }
-                    this += users.map { SearchResult.User(it) }
+        runCatching {
+            val searchResponse =
+                if (instance.isNullOrEmpty()) {
+                    services.v3.search.search(
+                        authHeader = auth.toAuthHeader(),
+                        q = query,
+                        auth = auth,
+                        page = page,
+                        limit = limit,
+                        communityId = communityId,
+                        type = resultType.toDto(),
+                        listingType = listingType.toDto(),
+                        sort = sortType.toDto(),
+                    )
+                } else {
+                    customServices.changeInstance(instance)
+                    customServices.v3.search.search(
+                        authHeader = auth.toAuthHeader(),
+                        q = query,
+                        auth = auth,
+                        page = page,
+                        limit = limit,
+                        communityId = communityId,
+                        type = resultType.toDto(),
+                        listingType = listingType.toDto(),
+                        sort = sortType.toDto(),
+                    )
                 }
-            }.getOrElse { emptyList() }
-        }
+            buildList<SearchResult> {
+                val posts = searchResponse.posts.map { it.toModel() }
+                this += posts.map { SearchResult.Post(it) }
+
+                val comments = searchResponse.comments.map { it.toModel() }
+                this += comments.map { SearchResult.Comment(it) }
+
+                val communities = searchResponse.communities.map { it.toModel() }
+                this += communities.map { SearchResult.Community(it) }
+
+                val users = searchResponse.users.map { it.toModel() }
+                this += users.map { SearchResult.User(it) }
+            }
+        }.getOrElse { emptyList() }
 
     override suspend fun getList(
         instance: String,
@@ -89,35 +84,31 @@ internal class DefaultCommunityRepository(
         limit: Int,
         sortType: SortType,
     ): List<CommunityModel> =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                customServices.changeInstance(instance)
-                val response =
-                    customServices.v3.community.getAll(
-                        page = page,
-                        limit = limit,
-                        sort = sortType.toDto(),
-                    )
-                response.communities.map {
-                    it.toModel()
-                }
-            }.getOrElse { emptyList() }
-        }
+        runCatching {
+            customServices.changeInstance(instance)
+            val response =
+                customServices.v3.community.getAll(
+                    page = page,
+                    limit = limit,
+                    sort = sortType.toDto(),
+                )
+            response.communities.map {
+                it.toModel()
+            }
+        }.getOrElse { emptyList() }
 
     override suspend fun getResolved(
         query: String,
         auth: String?,
     ): CommunityModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val resolveResponse =
-                    services.v3.search.resolveObject(
-                        authHeader = auth.toAuthHeader(),
-                        q = query,
-                    )
-                resolveResponse.community?.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val resolveResponse =
+                services.v3.search.resolveObject(
+                    authHeader = auth.toAuthHeader(),
+                    q = query,
+                )
+            resolveResponse.community?.toModel()
+        }.getOrNull()
 
     override suspend fun getSubscribed(
         auth: String?,
@@ -125,21 +116,19 @@ internal class DefaultCommunityRepository(
         limit: Int,
         query: String,
     ): List<CommunityModel> =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val response =
-                    services.v3.search.search(
-                        authHeader = auth.toAuthHeader(),
-                        q = query,
-                        auth = auth,
-                        page = page,
-                        limit = limit,
-                        type = SearchResultType.Communities.toDto(),
-                        listingType = ListingType.Subscribed.toDto(),
-                    )
-                response.communities.map { it.toModel() }
-            }.getOrElse { emptyList() }
-        }
+        runCatching {
+            val response =
+                services.v3.search.search(
+                    authHeader = auth.toAuthHeader(),
+                    q = query,
+                    auth = auth,
+                    page = page,
+                    limit = limit,
+                    type = SearchResultType.Communities.toDto(),
+                    listingType = ListingType.Subscribed.toDto(),
+                )
+            response.communities.map { it.toModel() }
+        }.getOrElse { emptyList() }
 
     override suspend fun get(
         auth: String?,
@@ -147,101 +136,92 @@ internal class DefaultCommunityRepository(
         name: String?,
         instance: String?,
     ): CommunityModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val response =
-                    if (instance.isNullOrEmpty()) {
-                        services.v3.community.get(
-                            authHeader = auth.toAuthHeader(),
-                            auth = auth,
-                            id = id,
-                            name = name,
-                        )
-                    } else {
-                        customServices.changeInstance(instance)
-                        customServices.v3.community.get(name = name)
-                    }
-                response.communityView.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val response =
+                if (instance.isNullOrEmpty()) {
+                    services.v3.community.get(
+                        authHeader = auth.toAuthHeader(),
+                        auth = auth,
+                        id = id,
+                        name = name,
+                    )
+                } else {
+                    customServices.changeInstance(instance)
+                    customServices.v3.community.get(name = name)
+                }
+            response.communityView.toModel()
+        }.getOrNull()
 
     override suspend fun getModerators(
         auth: String?,
         id: Long?,
     ): List<UserModel> =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val response =
-                    services.v3.community.get(
-                        authHeader = auth.toAuthHeader(),
-                        auth = auth,
-                        id = id,
-                    )
-                response.moderators.map {
-                    it.moderator.toModel()
-                }
-            }.getOrElse { emptyList() }
-        }
+        runCatching {
+            val response =
+                services.v3.community.get(
+                    authHeader = auth.toAuthHeader(),
+                    auth = auth,
+                    id = id,
+                )
+            response.moderators.map {
+                it.moderator.toModel()
+            }
+        }.getOrElse { emptyList() }
 
     override suspend fun subscribe(
         auth: String?,
         id: Long,
     ): CommunityModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    FollowCommunityForm(
-                        auth = auth.orEmpty(),
-                        communityId = id,
-                        follow = true,
-                    )
-                val response =
-                    services.v3.community.follow(
-                        authHeader = auth.toAuthHeader(),
-                        form = data,
-                    )
-                response.communityView.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val data =
+                FollowCommunityForm(
+                    auth = auth.orEmpty(),
+                    communityId = id,
+                    follow = true,
+                )
+            val response =
+                services.v3.community.follow(
+                    authHeader = auth.toAuthHeader(),
+                    form = data,
+                )
+            response.communityView.toModel()
+        }.getOrNull()
 
     override suspend fun unsubscribe(
         auth: String?,
         id: Long,
     ): CommunityModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    FollowCommunityForm(
-                        auth = auth.orEmpty(),
-                        communityId = id,
-                        follow = false,
-                    )
-                val response =
-                    services.v3.community.follow(
-                        authHeader = auth.toAuthHeader(),
-                        form = data,
-                    )
-                response.communityView.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val data =
+                FollowCommunityForm(
+                    auth = auth.orEmpty(),
+                    communityId = id,
+                    follow = false,
+                )
+            val response =
+                services.v3.community.follow(
+                    authHeader = auth.toAuthHeader(),
+                    form = data,
+                )
+            response.communityView.toModel()
+        }.getOrNull()
 
     override suspend fun block(
         id: Long,
         blocked: Boolean,
         auth: String?,
-    ): Unit =
-        withContext(Dispatchers.IO) {
-            val data =
-                BlockCommunityForm(
-                    communityId = id,
-                    block = blocked,
-                    auth = auth.orEmpty(),
-                )
-            services.v3.community.block(
-                authHeader = auth.toAuthHeader(),
-                form = data,
+    ) {
+        val data =
+            BlockCommunityForm(
+                communityId = id,
+                block = blocked,
+                auth = auth.orEmpty(),
             )
-        }
+        services.v3.community.block(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+    }
 
     override suspend fun banUser(
         auth: String?,
@@ -252,26 +232,24 @@ internal class DefaultCommunityRepository(
         reason: String?,
         expires: Long?,
     ): UserModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    BanFromCommunityForm(
-                        auth = auth.orEmpty(),
-                        ban = ban,
-                        removeData = removeData,
-                        personId = userId,
-                        communityId = communityId,
-                        reason = reason,
-                        expires = expires,
-                    )
-                val response =
-                    services.v3.community.ban(
-                        authHeader = auth.toAuthHeader(),
-                        form = data,
-                    )
-                response.personView.toModel().copy(banned = ban)
-            }.getOrNull()
-        }
+        runCatching {
+            val data =
+                BanFromCommunityForm(
+                    auth = auth.orEmpty(),
+                    ban = ban,
+                    removeData = removeData,
+                    personId = userId,
+                    communityId = communityId,
+                    reason = reason,
+                    expires = expires,
+                )
+            val response =
+                services.v3.community.ban(
+                    authHeader = auth.toAuthHeader(),
+                    form = data,
+                )
+            response.personView.toModel().copy(banned = ban)
+        }.getOrNull()
 
     override suspend fun addModerator(
         auth: String?,
@@ -279,93 +257,88 @@ internal class DefaultCommunityRepository(
         userId: Long,
         added: Boolean,
     ): List<UserModel> =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    AddModToCommunityForm(
-                        auth = auth.orEmpty(),
-                        added = added,
-                        personId = userId,
-                        communityId = communityId,
-                    )
-                val response =
-                    services.v3.community.addMod(
-                        authHeader = auth.toAuthHeader(),
-                        form = data,
-                    )
-                response.moderators
-                    ?.map {
-                        it.moderator.toModel()
-                    }.orEmpty()
-            }.getOrElse { emptyList() }
-        }
+        runCatching {
+            val data =
+                AddModToCommunityForm(
+                    auth = auth.orEmpty(),
+                    added = added,
+                    personId = userId,
+                    communityId = communityId,
+                )
+            val response =
+                services.v3.community.addMod(
+                    authHeader = auth.toAuthHeader(),
+                    form = data,
+                )
+            response.moderators
+                ?.map {
+                    it.moderator.toModel()
+                }.orEmpty()
+        }.getOrElse { emptyList() }
 
     override suspend fun create(
         auth: String?,
         community: CommunityModel,
-    ): CommunityModel =
-        withContext(Dispatchers.IO) {
-            val data =
-                CreateCommunityForm(
-                    name = community.name,
-                    icon = community.icon,
-                    banner = community.banner,
-                    title = community.name,
-                    description = community.description,
-                    nsfw = community.nsfw,
-                    postingRestrictedToMods = community.postingRestrictedToMods,
-                )
-            val res =
-                services.v3.community.create(
-                    authHeader = auth.toAuthHeader(),
-                    form = data,
-                )
-            res.communityView.toModel()
-        }
+    ): CommunityModel {
+        val data =
+            CreateCommunityForm(
+                name = community.name,
+                icon = community.icon,
+                banner = community.banner,
+                title = community.name,
+                description = community.description,
+                nsfw = community.nsfw,
+                postingRestrictedToMods = community.postingRestrictedToMods,
+            )
+        val res =
+            services.v3.community.create(
+                authHeader = auth.toAuthHeader(),
+                form = data,
+            )
+        return res.communityView.toModel()
+    }
 
     override suspend fun update(
         auth: String?,
         community: CommunityModel,
-    ): Unit =
-        withContext(Dispatchers.IO) {
-            val data =
-                EditCommunityForm(
-                    communityId = community.id,
-                    icon = community.icon,
-                    banner = community.banner,
-                    title = community.title,
-                    description = community.description,
-                    nsfw = community.nsfw,
-                    postingRestrictedToMods = community.postingRestrictedToMods,
-                )
-            services.v3.community.edit(
-                authHeader = auth.toAuthHeader(),
-                form = data,
+    ) {
+        val data =
+            EditCommunityForm(
+                communityId = community.id,
+                icon = community.icon,
+                banner = community.banner,
+                title = community.title,
+                description = community.description,
+                nsfw = community.nsfw,
+                postingRestrictedToMods = community.postingRestrictedToMods,
             )
-        }
+        services.v3.community.edit(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+    }
 
     override suspend fun delete(
         auth: String,
         communityId: Long,
-    ): Unit =
-        withContext(Dispatchers.IO) {
-            val data =
-                DeleteCommunityForm(
-                    communityId = communityId,
-                    deleted = true,
-                )
-            services.v3.community.delete(
-                form = data,
-                authHeader = auth.toAuthHeader(),
+    ) {
+        val data =
+            DeleteCommunityForm(
+                communityId = communityId,
+                deleted = true,
             )
-        }
+        services.v3.community.delete(
+            form = data,
+            authHeader = auth.toAuthHeader(),
+        )
+    }
 
     override suspend fun hide(
         auth: String?,
         communityId: Long,
         hidden: Boolean,
         reason: String?,
-    ) = withContext(Dispatchers.IO) {
+    ) {
         val data =
             HideCommunityForm(
                 communityId = communityId,
@@ -384,7 +357,7 @@ internal class DefaultCommunityRepository(
         auth: String?,
         communityId: Long,
         reason: String?,
-    ) = withContext(Dispatchers.IO) {
+    ) {
         val data =
             PurgeCommunityForm(
                 communityId = communityId,

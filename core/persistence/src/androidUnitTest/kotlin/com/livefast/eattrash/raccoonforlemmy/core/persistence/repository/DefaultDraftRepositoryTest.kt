@@ -2,9 +2,9 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 
 import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.DraftEntity
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DraftDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftType
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DraftDao
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk

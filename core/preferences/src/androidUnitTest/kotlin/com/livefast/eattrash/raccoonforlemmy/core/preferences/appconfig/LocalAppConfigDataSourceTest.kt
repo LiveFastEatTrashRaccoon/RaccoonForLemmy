@@ -2,9 +2,9 @@ package com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig
 
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKeyStore
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import kotlin.test.Test
@@ -23,16 +23,16 @@ class LocalAppConfigDataSourceTest {
     @Test
     fun whenGet_thenResultAndInteractionsAreAsExpected() =
         runTest {
-            every {
-                keyStore[any<String>(), any<Boolean>()]
+            coEvery {
+                keyStore.get(any<String>(), any<Boolean>())
             } returns true
 
             val res = sut.get()
 
             assertTrue(res.alternateMarkdownRenderingSettingsItemEnabled)
 
-            verify {
-                keyStore["AppConfig.alternateMarkdownRenderingSettingsItemEnabled", false]
+            coVerify {
+                keyStore.get("AppConfig.alternateMarkdownRenderingSettingsItemEnabled", false)
             }
         }
 
@@ -41,7 +41,7 @@ class LocalAppConfigDataSourceTest {
         runTest {
             sut.update(AppConfig(alternateMarkdownRenderingSettingsItemEnabled = true))
 
-            verify {
+            coVerify {
                 keyStore.save("AppConfig.alternateMarkdownRenderingSettingsItemEnabled", true)
             }
         }

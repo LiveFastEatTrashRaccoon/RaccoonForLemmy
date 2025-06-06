@@ -25,12 +25,12 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommentPagi
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.PostNavigationManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSortTypesUseCase
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyItemCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSortTypesUseCase
 import com.livefast.eattrash.raccoonforlemmy.unit.postdetail.utils.populateLoadMoreComments
 import com.livefast.eattrash.raccoonforlemmy.unit.postdetail.utils.sortToNestedOrder
 import kotlinx.coroutines.Dispatchers

@@ -8,9 +8,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
 
 internal class DefaultPrivateMessageRepository(
     private val services: ServiceProvider,
@@ -22,42 +19,38 @@ internal class DefaultPrivateMessageRepository(
         limit: Int,
         unreadOnly: Boolean,
     ): List<PrivateMessageModel>? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val response =
-                    services.v3.privateMessages.getAll(
-                        authHeader = auth.toAuthHeader(),
-                        auth = auth,
-                        creatorId = creatorId,
-                        limit = limit,
-                        page = page,
-                        unreadOnly = unreadOnly,
-                    )
-                response.privateMessages.map { it.toModel() }
-            }.getOrNull()
-        }
+        runCatching {
+            val response =
+                services.v3.privateMessages.getAll(
+                    authHeader = auth.toAuthHeader(),
+                    auth = auth,
+                    creatorId = creatorId,
+                    limit = limit,
+                    page = page,
+                    unreadOnly = unreadOnly,
+                )
+            response.privateMessages.map { it.toModel() }
+        }.getOrNull()
 
     override suspend fun create(
         message: String,
         auth: String?,
         recipientId: Long,
     ): PrivateMessageModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    CreatePrivateMessageForm(
-                        content = message,
-                        auth = auth.orEmpty(),
-                        recipientId = recipientId,
-                    )
-                val response =
-                    services.v3.privateMessages.create(
-                        authHeader = auth.toAuthHeader(),
-                        form = data,
-                    )
-                response.privateMessageView.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val data =
+                CreatePrivateMessageForm(
+                    content = message,
+                    auth = auth.orEmpty(),
+                    recipientId = recipientId,
+                )
+            val response =
+                services.v3.privateMessages.create(
+                    authHeader = auth.toAuthHeader(),
+                    form = data,
+                )
+            response.privateMessageView.toModel()
+        }.getOrNull()
 
     override suspend fun edit(
         messageId: Long,
@@ -84,39 +77,36 @@ internal class DefaultPrivateMessageRepository(
         auth: String?,
         read: Boolean,
     ): PrivateMessageModel? =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    MarkPrivateMessageAsReadForm(
-                        privateMessageId = messageId,
-                        auth = auth.orEmpty(),
-                        read = read,
-                    )
-                val response =
-                    services.v3.privateMessages.markAsRead(
-                        authHeader = auth.toAuthHeader(),
-                        form = data,
-                    )
-                response.privateMessageView.toModel()
-            }.getOrNull()
-        }
+        runCatching {
+            val data =
+                MarkPrivateMessageAsReadForm(
+                    privateMessageId = messageId,
+                    auth = auth.orEmpty(),
+                    read = read,
+                )
+            val response =
+                services.v3.privateMessages.markAsRead(
+                    authHeader = auth.toAuthHeader(),
+                    form = data,
+                )
+            response.privateMessageView.toModel()
+        }.getOrNull()
 
     override suspend fun delete(
         messageId: Long,
         auth: String?,
-    ): Unit =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val data =
-                    DeletePrivateMessageForm(
-                        auth = auth.orEmpty(),
-                        privateMessageId = messageId,
-                        deleted = true,
-                    )
-                services.v3.privateMessages.delete(
-                    authHeader = auth.toAuthHeader(),
-                    form = data,
+    ) {
+        runCatching {
+            val data =
+                DeletePrivateMessageForm(
+                    auth = auth.orEmpty(),
+                    privateMessageId = messageId,
+                    deleted = true,
                 )
-            }.getOrDefault(Unit)
+            services.v3.privateMessages.delete(
+                authHeader = auth.toAuthHeader(),
+                form = data,
+            )
         }
+    }
 }
