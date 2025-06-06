@@ -80,6 +80,8 @@ fun SwipeActionCard(
                     // return false to stay dismissed
                     false
                 },
+                // increase swipe positional threshold
+                positionalThreshold = { totalDistance -> totalDistance * 0.7f },
             )
         LaunchedEffect(dismissState, swipeToEndActions, swipeToEndActions) {
             snapshotFlow { dismissState.progress }
