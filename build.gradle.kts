@@ -11,10 +11,7 @@ plugins {
     alias(libs.plugins.ktorfit).apply(false)
     alias(libs.plugins.sqldelight).apply(false)
     alias(libs.plugins.kotlinx.kover).apply(false)
-}
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.layout.buildDirectory)
+    alias(libs.plugins.spotless).apply(false)
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach {

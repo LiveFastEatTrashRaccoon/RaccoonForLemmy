@@ -12,9 +12,10 @@ repositories {
 
 dependencies {
     compileOnly(libs.gradle)
-    compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
+    compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.spotless.gradlePlugin)
 }
 
 gradlePlugin {
@@ -37,6 +38,11 @@ gradlePlugin {
         register("androidTestPlugin") {
             id = "com.livefast.eattrash.androidTest"
             implementationClass = "plugins.AndroidTestPlugin"
+        }
+
+        register("spotlessPlugin") {
+            id = "com.livefast.eattrash.spotless"
+            implementationClass = "plugins.SpotlessPlugin"
         }
     }
 }
