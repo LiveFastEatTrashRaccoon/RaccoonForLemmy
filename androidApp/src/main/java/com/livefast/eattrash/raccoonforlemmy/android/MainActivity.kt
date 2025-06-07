@@ -91,20 +91,19 @@ class MainActivity : ComponentActivity() {
         applyWorkaroundForSolidStatusBar()
     }
 
-    private fun handleIntent(intent: Intent?) =
-        intent?.apply {
-            when (action) {
-                Intent.ACTION_SEND ->
-                    intent.getStringExtra(Intent.EXTRA_TEXT)?.let { content ->
-                        handleCreatePost(content)
-                    }
+    private fun handleIntent(intent: Intent?) = intent?.apply {
+        when (action) {
+            Intent.ACTION_SEND ->
+                intent.getStringExtra(Intent.EXTRA_TEXT)?.let { content ->
+                    handleCreatePost(content)
+                }
 
-                else ->
-                    data.toString().takeUnless { it.isEmpty() }?.also { url ->
-                        handleDeeplink(url)
-                    }
-            }
+            else ->
+                data.toString().takeUnless { it.isEmpty() }?.also { url ->
+                    handleDeeplink(url)
+                }
         }
+    }
 
     private fun handleDeeplink(url: String) {
         val navigationCoordinator = getNavigationCoordinator()
