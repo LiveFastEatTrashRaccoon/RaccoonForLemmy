@@ -254,10 +254,10 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
             ProvideCustomUriHandler {
                 CompositionLocalProvider(
                     LocalDensity provides
-                            Density(
-                                density = LocalDensity.current.density,
-                                fontScale = uiFontScale,
-                            ),
+                        Density(
+                            density = LocalDensity.current.density,
+                            fontScale = uiFontScale,
+                        ),
                 ) {
                     Navigator(
                         screen = MainScreen,

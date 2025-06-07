@@ -16,6 +16,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -70,7 +71,7 @@ internal object MainScreen : Screen {
         val exitMessage = LocalStrings.current.messageConfirmExit
         val drawerCoordinator = remember { getDrawerCoordinator() }
         val notificationCenter = remember { getNotificationCenter() }
-        var bottomBarHeightPx by remember { mutableStateOf(0f) }
+        var bottomBarHeightPx by remember { mutableFloatStateOf(0f) }
         val bottomNavigationInsetPx = WindowInsets.navigationBars.getBottom(LocalDensity.current)
         val scope = rememberCoroutineScope()
         val inboxReadAllSuccessMessage = LocalStrings.current.messageReadAllInboxSuccess
