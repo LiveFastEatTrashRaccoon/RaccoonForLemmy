@@ -44,7 +44,7 @@ fun MultiCommunityItem(
     small: Boolean = false,
     autoLoadImages: Boolean = true,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     val title = community.name
     val communityIcon = community.icon.orEmpty()
@@ -62,10 +62,10 @@ fun MultiCommunityItem(
         if (communityIcon.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier =
-                    Modifier
-                        .padding(Spacing.xxxs)
-                        .size(iconSize)
-                        .clip(RoundedCornerShape(iconSize / 2)),
+                Modifier
+                    .padding(Spacing.xxxs)
+                    .size(iconSize)
+                    .clip(RoundedCornerShape(iconSize / 2)),
                 url = communityIcon,
                 autoload = autoLoadImages,
                 contentScale = ContentScale.FillBounds,
@@ -83,9 +83,9 @@ fun MultiCommunityItem(
             Text(
                 modifier = Modifier.padding(vertical = Spacing.s),
                 text =
-                    buildString {
-                        append(title)
-                    },
+                buildString {
+                    append(title)
+                },
                 color = fullColor,
                 style = MaterialTheme.typography.bodyLarge,
             )
@@ -95,12 +95,12 @@ fun MultiCommunityItem(
             Box {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        },
                     onClick = {
                         optionsMenuOpen = true
                     },
@@ -118,10 +118,10 @@ fun MultiCommunityItem(
                         optionsMenuOpen = false
                     },
                     offset =
-                        DpOffset(
-                            x = optionsOffset.x.toLocalDp(),
-                            y = optionsOffset.y.toLocalDp(),
-                        ),
+                    DpOffset(
+                        x = optionsOffset.x.toLocalDp(),
+                        y = optionsOffset.y.toLocalDp(),
+                    ),
                 ) {
                     options.forEach { option ->
                         DropdownMenuItem(
@@ -130,7 +130,7 @@ fun MultiCommunityItem(
                             },
                             onClick = {
                                 optionsMenuOpen = false
-                                onOptionSelected?.invoke(option.id)
+                                onSelectOption?.invoke(option.id)
                             },
                         )
                     }

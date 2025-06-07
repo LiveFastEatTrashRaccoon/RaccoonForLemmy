@@ -22,160 +22,149 @@ class DefaultAccountRepositoryTest {
     val dispatcherRule = DispatcherTestRule()
 
     private val query = mockk<Query<AccountEntity>>()
-    private val dao = mockk<AccountDao>(relaxUnitFun = true) {
-        every { getActive() } returns query
-        every { getAll() } returns query
-        every { getBy(any(), any()) } returns query
-    }
+    private val dao =
+        mockk<AccountDao>(relaxUnitFun = true) {
+            every { getActive() } returns query
+            every { getAll() } returns query
+            every { getBy(any(), any()) } returns query
+        }
 
     private val sut = DefaultAccountRepository(dao)
 
     @Test
-    fun givenNoAccounts_whenGetAll_thenResultIsAsExpected() =
-        runTest {
-            every { query.executeAsList() } returns listOf()
+    fun givenNoAccounts_whenGetAll_thenResultIsAsExpected() = runTest {
+        every { query.executeAsList() } returns listOf()
 
-            val res = sut.getAll()
+        val res = sut.getAll()
 
-            assertTrue(res.isEmpty())
-        }
+        assertTrue(res.isEmpty())
+    }
 
     @Test
-    fun givenExitingAccounts_whenGetAll_thenResultIsAsExpected() =
-        runTest {
-            val accounts = listOf(createFakeEntity())
-            every { query.executeAsList() } returns accounts
+    fun givenExitingAccounts_whenGetAll_thenResultIsAsExpected() = runTest {
+        val accounts = listOf(createFakeEntity())
+        every { query.executeAsList() } returns accounts
 
-            val res = sut.getAll()
+        val res = sut.getAll()
 
+        assertTrue(res.size == 1)
+    }
+
+    @Test
+    fun givenExitingAccounts_whenObserveAll_thenResultIsAsExpected() = runTest {
+        val accounts = listOf(createFakeEntity())
+        every { query.executeAsList() } returns accounts
+
+        sut.observeAll().test {
+            val res = awaitItem()
             assertTrue(res.size == 1)
         }
+    }
 
     @Test
-    fun givenExitingAccounts_whenObserveAll_thenResultIsAsExpected() =
-        runTest {
-            val accounts = listOf(createFakeEntity())
-            every { query.executeAsList() } returns accounts
+    fun givenNoActiveAccount_whenGetActive_thenResultIsAsExpected() = runTest {
+        every { query.executeAsOneOrNull() } returns null
 
-            sut.observeAll().test {
-                val res = awaitItem()
-                assertTrue(res.size == 1)
-            }
-        }
+        val res = sut.getActive()
+
+        assertNull(res)
+    }
 
     @Test
-    fun givenNoActiveAccount_whenGetActive_thenResultIsAsExpected() =
-        runTest {
-            every { query.executeAsOneOrNull() } returns null
+    fun givenActiveAccount_whenGetActive_thenResultIsAsExpected() = runTest {
+        val account = createFakeEntity(active = true)
+        every { query.executeAsOneOrNull() } returns account
 
-            val res = sut.getActive()
+        val res = sut.getActive()
 
-            assertNull(res)
-        }
-
-    @Test
-    fun givenActiveAccount_whenGetActive_thenResultIsAsExpected() =
-        runTest {
-            val account = createFakeEntity(active = true)
-            every { query.executeAsOneOrNull() } returns account
-
-            val res = sut.getActive()
-
-            assertNotNull(res)
-        }
+        assertNotNull(res)
+    }
 
     @Test
-    fun givenNoAccount_whenGetBy_thenResultIsAsExpected() =
-        runTest {
-            val username = "username"
-            val instance = "instance"
-            every { query.executeAsOneOrNull() } returns null
+    fun givenNoAccount_whenGetBy_thenResultIsAsExpected() = runTest {
+        val username = "username"
+        val instance = "instance"
+        every { query.executeAsOneOrNull() } returns null
 
-            val res = sut.getBy(username, instance)
+        val res = sut.getBy(username, instance)
 
-            assertNull(res)
-        }
-
-    @Test
-    fun givenAccount_whenGetBy_thenResultIsAsExpected() =
-        runTest {
-            val username = "username"
-            val instance = "instance"
-            val account = createFakeEntity(active = true, username = username, instance = instance)
-            every { query.executeAsOneOrNull() } returns account
-
-            val res = sut.getBy(username, instance)
-
-            assertNotNull(res)
-        }
+        assertNull(res)
+    }
 
     @Test
-    fun whenCreate_thenIdIsReturned() =
-        runTest {
-            val username = "username"
-            val instance = "instance"
-            val jwt = "jwt"
-            val account = AccountModel(username = username, instance = instance, jwt = jwt)
-            every { query.executeAsList() } returns listOf(createFakeEntity(id = 1, jwt = jwt))
+    fun givenAccount_whenGetBy_thenResultIsAsExpected() = runTest {
+        val username = "username"
+        val instance = "instance"
+        val account = createFakeEntity(active = true, username = username, instance = instance)
+        every { query.executeAsOneOrNull() } returns account
 
-            val id = sut.createAccount(account)
+        val res = sut.getBy(username, instance)
 
-            assertEquals(1, id)
-            verify {
-                dao.create(
-                    username = username,
-                    instance = instance,
-                    jwt = jwt,
-                    avatar = null,
-                )
-            }
-        }
+        assertNotNull(res)
+    }
 
     @Test
-    fun whenSetActive_thenResultIsAsExpected() =
-        runTest {
-            sut.setActive(id = 1, active = true)
+    fun whenCreate_thenIdIsReturned() = runTest {
+        val username = "username"
+        val instance = "instance"
+        val jwt = "jwt"
+        val account = AccountModel(username = username, instance = instance, jwt = jwt)
+        every { query.executeAsList() } returns listOf(createFakeEntity(id = 1, jwt = jwt))
 
-            verify {
-                dao.setActive(1)
-            }
+        val id = sut.createAccount(account)
+
+        assertEquals(1, id)
+        verify {
+            dao.create(
+                username = username,
+                instance = instance,
+                jwt = jwt,
+                avatar = null,
+            )
         }
+    }
 
     @Test
-    fun whenSetInactive_thenInteractionsAreAsExpected() =
-        runTest {
-            sut.setActive(id = 1, active = false)
+    fun whenSetActive_thenResultIsAsExpected() = runTest {
+        sut.setActive(id = 1, active = true)
 
-            verify {
-                dao.setInactive(1)
-            }
+        verify {
+            dao.setActive(1)
         }
+    }
 
     @Test
-    fun whenUpdate_thenInteractionsAreAsExpected() =
-        runTest {
-            val jwt = "jwt"
-            val avatar = "avatar"
-            sut.update(1, avatar = avatar, jwt = jwt)
+    fun whenSetInactive_thenInteractionsAreAsExpected() = runTest {
+        sut.setActive(id = 1, active = false)
 
-            verify {
-                dao.update(
-                    jwt = jwt,
-                    avatar = avatar,
-                    id = 1,
-                )
-            }
+        verify {
+            dao.setInactive(1)
         }
+    }
 
     @Test
-    fun whenDelete_thenInteractionsAreAsExpected() =
-        runTest {
-            sut.delete(1)
+    fun whenUpdate_thenInteractionsAreAsExpected() = runTest {
+        val jwt = "jwt"
+        val avatar = "avatar"
+        sut.update(1, avatar = avatar, jwt = jwt)
 
-            verify {
-                dao.delete(1)
-            }
+        verify {
+            dao.update(
+                jwt = jwt,
+                avatar = avatar,
+                id = 1,
+            )
         }
+    }
+
+    @Test
+    fun whenDelete_thenInteractionsAreAsExpected() = runTest {
+        sut.delete(1)
+
+        verify {
+            dao.delete(1)
+        }
+    }
 
     private fun createFakeEntity(
         id: Long = 0,

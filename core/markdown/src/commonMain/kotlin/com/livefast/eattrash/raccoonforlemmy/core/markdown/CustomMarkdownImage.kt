@@ -27,8 +27,8 @@ internal fun CustomMarkdownImage(
     node: ASTNode,
     content: String,
     blurred: Boolean = false,
-    autoLoadImages: Boolean,
-    onOpenImage: ((String) -> Unit)?,
+    autoLoadImages: Boolean = true,
+    onOpenImage: ((String) -> Unit)? = null,
 ) {
     val link =
         runCatching {
@@ -61,13 +61,13 @@ internal fun CustomMarkdownImage(
 
     CustomImage(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .onClick(
-                    onClick = {
-                        onOpenImage?.invoke(url)
-                    },
-                ),
+        Modifier
+            .fillMaxWidth()
+            .onClick(
+                onClick = {
+                    onOpenImage?.invoke(url)
+                },
+            ),
         url = url,
         autoload = autoLoadImages,
         blurred = blurred,
@@ -91,9 +91,9 @@ internal fun CustomMarkdownImage(
                         initialValue = 0f,
                         targetValue = 1f,
                         animationSpec =
-                            InfiniteRepeatableSpec(
-                                animation = tween(LOADING_ANIMATION_DURATION),
-                            ),
+                        InfiniteRepeatableSpec(
+                            animation = tween(LOADING_ANIMATION_DURATION),
+                        ),
                     )
                     res
                 }

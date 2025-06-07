@@ -5,9 +5,8 @@ import kotlinx.coroutines.flow.Flow
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
-class MviModelTestRule<Intent, State, Effect>(
-    private val initBlock: () -> MviModel<Intent, State, Effect>,
-) : TestWatcher() {
+class MviModelTestRule<Intent, State, Effect>(private val initBlock: () -> MviModel<Intent, State, Effect>) :
+    TestWatcher() {
     private lateinit var model: MviModel<Intent, State, Effect>
 
     override fun starting(description: Description) {

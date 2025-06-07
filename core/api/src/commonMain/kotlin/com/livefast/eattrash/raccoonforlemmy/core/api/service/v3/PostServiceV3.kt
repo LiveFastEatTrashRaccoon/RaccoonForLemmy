@@ -71,31 +71,19 @@ interface PostServiceV3 {
 
     @PUT("v3/post/save")
     @Headers("Content-Type: application/json")
-    suspend fun save(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: SavePostForm,
-    ): PostResponse
+    suspend fun save(@Header("Authorization") authHeader: String? = null, @Body form: SavePostForm): PostResponse
 
     @POST("v3/post/like")
     @Headers("Content-Type: application/json")
-    suspend fun like(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: CreatePostLikeForm,
-    ): PostResponse
+    suspend fun like(@Header("Authorization") authHeader: String? = null, @Body form: CreatePostLikeForm): PostResponse
 
     @POST("v3/post")
     @Headers("Content-Type: application/json")
-    suspend fun create(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: CreatePostForm,
-    ): PostResponse
+    suspend fun create(@Header("Authorization") authHeader: String? = null, @Body form: CreatePostForm): PostResponse
 
     @PUT("v3/post")
     @Headers("Content-Type: application/json")
-    suspend fun edit(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: EditPostForm,
-    ): PostResponse
+    suspend fun edit(@Header("Authorization") authHeader: String? = null, @Body form: EditPostForm): PostResponse
 
     @POST("v3/post/mark_as_read")
     @Headers("Content-Type: application/json")
@@ -106,17 +94,11 @@ interface PostServiceV3 {
 
     @POST("v3/post/hide")
     @Headers("Content-Type: application/json")
-    suspend fun hide(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: HidePostForm,
-    ): PostResponse
+    suspend fun hide(@Header("Authorization") authHeader: String? = null, @Body form: HidePostForm): PostResponse
 
     @POST("v3/post/delete")
     @Headers("Content-Type: application/json")
-    suspend fun delete(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: DeletePostForm,
-    ): PostResponse
+    suspend fun delete(@Header("Authorization") authHeader: String? = null, @Body form: DeletePostForm): PostResponse
 
     @POST
     suspend fun uploadImage(
@@ -142,24 +124,15 @@ interface PostServiceV3 {
 
     @POST("v3/post/feature")
     @Headers("Content-Type: application/json")
-    suspend fun feature(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: FeaturePostForm,
-    ): PostResponse
+    suspend fun feature(@Header("Authorization") authHeader: String? = null, @Body form: FeaturePostForm): PostResponse
 
     @POST("v3/post/remove")
     @Headers("Content-Type: application/json")
-    suspend fun remove(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: RemovePostForm,
-    ): PostResponse
+    suspend fun remove(@Header("Authorization") authHeader: String? = null, @Body form: RemovePostForm): PostResponse
 
     @POST("v3/post/lock")
     @Headers("Content-Type: application/json")
-    suspend fun lock(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: LockPostForm,
-    ): PostResponse
+    suspend fun lock(@Header("Authorization") authHeader: String? = null, @Body form: LockPostForm): PostResponse
 
     @GET("v3/post/report/list")
     @Headers("Content-Type: application/json")
@@ -181,8 +154,5 @@ interface PostServiceV3 {
 
     @POST("v3/admin/purge/post")
     @Headers("Content-Type: application/json")
-    suspend fun purge(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: PurgePostForm,
-    ): SuccessResponse
+    suspend fun purge(@Header("Authorization") authHeader: String? = null, @Body form: PurgePostForm): SuccessResponse
 }

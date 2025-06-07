@@ -58,25 +58,25 @@ private const val LINK_DELAY = 250L
 @Composable
 fun CustomMarkdownWrapperController(
     content: String,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
+    autoLoadImages: Boolean = true,
     colors: MarkdownColors = markdownColor(),
     typography: MarkdownTypography = markdownTypography(),
     padding: MarkdownPadding = markdownPadding(),
-    autoLoadImages: Boolean,
     maxLines: Int? = null,
-    highlightText: String?,
+    highlightText: String? = null,
     enableAlternateRendering: Boolean = false,
     blurImages: Boolean = false,
-    onOpenUrl: ((String) -> Unit)?,
-    onOpenImage: ((String) -> Unit)?,
-    onClick: (() -> Unit)?,
-    onDoubleClick: (() -> Unit)?,
-    onLongClick: (() -> Unit)?,
+    onOpenUrl: ((String) -> Unit)? = null,
+    onOpenImage: ((String) -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+    onDoubleClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
 ) {
     if (SpoilerRegex.spoilerOpening.containsMatchIn(content)) {
         val codeBlockMatches = Regex("`{3,}(.|\\n)+?(`{3,})").findAll(content)
         var previousIndex = 0
-        Column {
+        Column(modifier = Modifier) {
             SpoilerRegex.spoilerFull
                 .findAll(content)
                 .filter { spoiler ->
@@ -87,7 +87,6 @@ fun CustomMarkdownWrapperController(
                     if (previousIndex < matchRes.range.first) {
                         CustomMarkdownWrapper(
                             content = content.substring(previousIndex, matchRes.range.first),
-                            modifier = modifier,
                             colors = colors,
                             typography = typography,
                             padding = padding,
@@ -103,9 +102,8 @@ fun CustomMarkdownWrapperController(
                             onLongClick = onLongClick,
                         )
                     }
-                    markdownSpoilerBlock(
+                    MarkdownSpoilerBlock(
                         content = content.substring(matchRes.range.first, matchRes.range.last),
-                        modifier = modifier,
                         colors = colors,
                         typography = typography,
                         padding = padding,
@@ -125,7 +123,6 @@ fun CustomMarkdownWrapperController(
             if (previousIndex < content.length - 1) {
                 CustomMarkdownWrapper(
                     content = content.substring(previousIndex, content.length),
-                    modifier = modifier,
                     colors = colors,
                     typography = typography,
                     padding = padding,
@@ -166,20 +163,20 @@ fun CustomMarkdownWrapperController(
 @Composable
 fun CustomMarkdownWrapper(
     content: String,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     colors: MarkdownColors = markdownColor(),
     typography: MarkdownTypography = markdownTypography(),
     padding: MarkdownPadding = markdownPadding(),
-    autoLoadImages: Boolean,
+    autoLoadImages: Boolean = true,
     maxLines: Int? = null,
-    highlightText: String?,
+    highlightText: String? = null,
     enableAlternateRendering: Boolean = false,
     blurImages: Boolean = false,
-    onOpenUrl: ((String) -> Unit)?,
-    onOpenImage: ((String) -> Unit)?,
-    onClick: (() -> Unit)?,
-    onDoubleClick: (() -> Unit)?,
-    onLongClick: (() -> Unit)?,
+    onOpenUrl: ((String) -> Unit)? = null,
+    onOpenImage: ((String) -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+    onDoubleClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
 ) {
     val maxHeightDp =
         with(LocalDensity.current) {
@@ -237,7 +234,7 @@ fun CustomMarkdownWrapper(
                     }
 
                     else -> {
-                        markdownParagraphWithHighlights(
+                        MarkdownParagraphWithHighlights(
                             content = model.content,
                             node = model.node,
                             highlightText = highlightText,
@@ -266,22 +263,22 @@ fun CustomMarkdownWrapper(
     ) {
         Markdown(
             modifier =
-                modifier
-                    .heightIn(min = 0.dp, max = maxHeightDp)
-                    .onClick(
-                        indication = null,
-                        onClick = {
-                            if (!isOpeningUrl) {
-                                onClick?.invoke()
-                            }
-                        },
-                        onLongClick = {
-                            onLongClick?.invoke()
-                        },
-                        onDoubleClick = {
-                            onDoubleClick?.invoke()
-                        },
-                    ),
+            modifier
+                .heightIn(min = 0.dp, max = maxHeightDp)
+                .onClick(
+                    indication = null,
+                    onClick = {
+                        if (!isOpeningUrl) {
+                            onClick?.invoke()
+                        }
+                    },
+                    onLongClick = {
+                        onLongClick?.invoke()
+                    },
+                    onDoubleClick = {
+                        onDoubleClick?.invoke()
+                    },
+                ),
             content = content.sanitize(),
             colors = colors,
             typography = typography,
@@ -293,7 +290,7 @@ fun CustomMarkdownWrapper(
 }
 
 @Composable
-internal fun markdownParagraphWithHighlights(
+internal fun MarkdownParagraphWithHighlights(
     content: String,
     node: ASTNode,
     modifier: Modifier = Modifier,
@@ -309,11 +306,11 @@ internal fun markdownParagraphWithHighlights(
                 content = content,
                 node = node,
                 annotatorSettings =
-                    annotatorSettings(
-                        linkTextSpanStyle = typography.textLink,
-                        codeSpanStyle = typography.codeSpanStyle,
-                        annotator = annotator,
-                    ),
+                annotatorSettings(
+                    linkTextSpanStyle = typography.textLink,
+                    codeSpanStyle = typography.codeSpanStyle,
+                    annotator = annotator,
+                ),
             )
             pop()
         }
@@ -333,29 +330,29 @@ internal fun markdownParagraphWithHighlights(
     }
 
     MarkdownText(
-        styledText,
+        content = styledText,
         modifier = modifier,
         style = typography.paragraph,
     )
 }
 
 @Composable
-private fun markdownSpoilerBlock(
+private fun MarkdownSpoilerBlock(
     content: String,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     colors: MarkdownColors = markdownColor(),
     typography: MarkdownTypography = markdownTypography(),
     padding: MarkdownPadding = markdownPadding(),
-    autoLoadImages: Boolean,
+    autoLoadImages: Boolean = true,
     maxLines: Int? = null,
-    highlightText: String?,
+    highlightText: String? = null,
     enableAlternateRendering: Boolean = false,
     blurImages: Boolean = false,
-    onOpenUrl: ((String) -> Unit)?,
-    onOpenImage: ((String) -> Unit)?,
-    onClick: (() -> Unit)?,
-    onDoubleClick: (() -> Unit)?,
-    onLongClick: (() -> Unit)?,
+    onOpenUrl: ((String) -> Unit)? = null,
+    onOpenImage: ((String) -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+    onDoubleClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
 ) {
     val matches = SpoilerRegex.spoilerOpening.findAll(content)
     val spoilerTitle =
@@ -374,28 +371,28 @@ private fun markdownSpoilerBlock(
     var isExpanded by remember { mutableStateOf(false) }
     Column(
         modifier =
-            Modifier
-                .clickable {
-                    isExpanded = !isExpanded
-                },
+        modifier
+            .clickable {
+                isExpanded = !isExpanded
+            },
     ) {
         Text(
             modifier =
-                Modifier
-                    .fillMaxWidth(),
+            Modifier
+                .fillMaxWidth(),
             text =
-                buildAnnotatedString {
-                    withStyle(SpanStyle(fontSize = 20.sp)) {
-                        append(
-                            if (isExpanded) {
-                                "▼︎ "
-                            } else {
-                                "▶︎ "
-                            },
-                        )
-                    }
-                    append(spoilerTitle)
-                },
+            buildAnnotatedString {
+                withStyle(SpanStyle(fontSize = 20.sp)) {
+                    append(
+                        if (isExpanded) {
+                            "▼︎ "
+                        } else {
+                            "▶︎ "
+                        },
+                    )
+                }
+                append(spoilerTitle)
+            },
         )
         if (isExpanded) {
             if (matches.count() > 1) {
@@ -407,7 +404,6 @@ private fun markdownSpoilerBlock(
                         if (previousIndex < matchRes.range.first) {
                             CustomMarkdownWrapper(
                                 content = spoilerBody.substring(previousIndex, matchRes.range.first),
-                                modifier = modifier,
                                 colors = colors,
                                 typography = typography,
                                 padding = padding,
@@ -423,9 +419,8 @@ private fun markdownSpoilerBlock(
                                 onLongClick = onLongClick,
                             )
                         }
-                        markdownSpoilerBlock(
+                        MarkdownSpoilerBlock(
                             content = spoilerBody.substring(matchRes.range.first, matchRes.range.last),
-                            modifier = modifier,
                             colors = colors,
                             typography = typography,
                             padding = padding,
@@ -449,7 +444,6 @@ private fun markdownSpoilerBlock(
                 ) {
                     CustomMarkdownWrapper(
                         content = spoilerBody.trimEnd(':'),
-                        modifier = modifier,
                         colors = colors,
                         typography = typography,
                         padding = padding,

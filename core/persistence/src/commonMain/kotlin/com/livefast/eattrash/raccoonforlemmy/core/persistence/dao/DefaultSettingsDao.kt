@@ -4,12 +4,8 @@ import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.SettingsQueries
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.settings.GetBy
 
-internal class DefaultSettingsDao(
-    private val queries: SettingsQueries,
-) : SettingsDao {
-    override fun getBy(accountId: Long?): Query<GetBy> {
-        return queries.getBy(accountId)
-    }
+internal class DefaultSettingsDao(private val queries: SettingsQueries) : SettingsDao {
+    override fun getBy(accountId: Long?): Query<GetBy> = queries.getBy(accountId)
 
     override fun create(
         theme: Long?,
@@ -78,7 +74,7 @@ internal class DefaultSettingsDao(
         openPostWebPageOnImageClick: Long,
         accountId: Long?,
         restrictLocalUserSearch: Long,
-        markAsReadOnInteraction: Long
+        markAsReadOnInteraction: Long,
     ) {
         queries.create(
             theme = theme,
@@ -218,7 +214,7 @@ internal class DefaultSettingsDao(
         openPostWebPageOnImageClick: Long,
         restrictLocalUserSearch: Long,
         markAsReadOnInteraction: Long,
-        accountId: Long?
+        accountId: Long?,
     ) {
         queries.update(
             theme = theme,

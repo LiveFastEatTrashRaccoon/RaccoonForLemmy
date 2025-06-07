@@ -4,16 +4,10 @@ import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UserTagEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.UsertagsQueries
 
-internal class DefaultUserTagDao(
-    private val queries: UsertagsQueries
-) : UserTagDao {
-    override fun getAllBy(accountId: Long?): Query<UserTagEntity> {
-        return queries.getAllBy(accountId)
-    }
+internal class DefaultUserTagDao(private val queries: UsertagsQueries) : UserTagDao {
+    override fun getAllBy(accountId: Long?): Query<UserTagEntity> = queries.getAllBy(accountId)
 
-    override fun getBy(id: Long): Query<UserTagEntity> {
-        return queries.getBy(id)
-    }
+    override fun getBy(id: Long): Query<UserTagEntity> = queries.getBy(id)
 
     override fun create(name: String, color: Long?, accountId: Long?, type: Long) {
         queries.create(name, color, accountId, type)

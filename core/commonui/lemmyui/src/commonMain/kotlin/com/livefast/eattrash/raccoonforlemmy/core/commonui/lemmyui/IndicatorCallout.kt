@@ -10,10 +10,7 @@ import androidx.compose.ui.text.font.FontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 
 @Composable
-fun IndicatorCallout(
-    text: String,
-    modifier: Modifier = Modifier,
-) {
+fun IndicatorCallout(text: String, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier,
     ) {

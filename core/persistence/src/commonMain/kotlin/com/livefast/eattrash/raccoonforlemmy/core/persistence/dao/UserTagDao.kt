@@ -8,19 +8,9 @@ interface UserTagDao {
 
     fun getBy(id: Long): Query<UserTagEntity>
 
-    fun create(
-        name: String,
-        color: Long?,
-        accountId: Long?,
-        type: Long,
-    )
+    fun create(name: String, color: Long?, accountId: Long?, type: Long)
 
-    fun update(
-        name: String,
-        color: Long?,
-        type: Long,
-        id: Long,
-    )
+    fun update(name: String, color: Long?, type: Long, id: Long)
 
     fun delete(id: Long)
 }

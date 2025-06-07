@@ -70,19 +70,19 @@ fun CommunityHeader(
                 )
                 Box(
                     modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .background(
-                                brush =
-                                    Brush.horizontalGradient(
-                                        colors =
-                                            listOf(
-                                                MaterialTheme.colorScheme.background.copy(alpha = 0.95f),
-                                                Color.Transparent,
-                                                MaterialTheme.colorScheme.background.copy(alpha = 0.75f),
-                                            ),
-                                    ),
+                    Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush =
+                            Brush.horizontalGradient(
+                                colors =
+                                listOf(
+                                    MaterialTheme.colorScheme.background.copy(alpha = 0.95f),
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.background.copy(alpha = 0.75f),
+                                ),
                             ),
+                        ),
                 )
             }
         }
@@ -98,15 +98,15 @@ fun CommunityHeader(
             if (communityIcon.isNotEmpty() && autoLoadImages) {
                 CustomImage(
                     modifier =
-                        Modifier
-                            .padding(Spacing.xxxs)
-                            .size(IconSize.xxl)
-                            .clip(RoundedCornerShape(IconSize.xxl / 2))
-                            .onClick(
-                                onClick = {
-                                    onOpenImage?.invoke(communityIcon)
-                                },
-                            ),
+                    Modifier
+                        .padding(Spacing.xxxs)
+                        .size(IconSize.xxl)
+                        .clip(RoundedCornerShape(IconSize.xxl / 2))
+                        .onClick(
+                            onClick = {
+                                onOpenImage?.invoke(communityIcon)
+                            },
+                        ),
                     url = communityIcon,
                     autoload = autoLoadImages,
                     quality = FilterQuality.Low,
@@ -152,10 +152,10 @@ fun CommunityHeader(
                         )
                         Text(
                             text =
-                                community.subscribers.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
+                            community.subscribers.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground,
                         )
@@ -168,10 +168,10 @@ fun CommunityHeader(
                         )
                         Text(
                             text =
-                                community.monthlyActiveUsers.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
+                            community.monthlyActiveUsers.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground,
                         )

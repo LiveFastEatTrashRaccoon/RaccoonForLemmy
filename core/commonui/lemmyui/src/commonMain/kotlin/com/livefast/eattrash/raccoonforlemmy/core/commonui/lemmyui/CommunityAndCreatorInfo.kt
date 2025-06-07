@@ -79,7 +79,7 @@ fun CommunityAndCreatorInfo(
     modTagColor: Int? = null,
     onOpenCommunity: ((CommunityModel) -> Unit)? = null,
     onOpenCreator: ((UserModel) -> Unit)? = null,
-    onToggleExpanded: (() -> Unit)? = null,
+    onToggleExpand: (() -> Unit)? = null,
     onDoubleClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
 ) {
@@ -101,18 +101,18 @@ fun CommunityAndCreatorInfo(
                 if (autoLoadImages) {
                     CustomImage(
                         modifier =
-                            Modifier
-                                .size(iconSize)
-                                .padding(Spacing.xxxs)
-                                .clip(RoundedCornerShape(iconSize / 2))
-                                .onClick(
-                                    onClick = {
-                                        if (community != null) {
-                                            onOpenCommunity?.invoke(community)
-                                        }
-                                    },
-                                    onDoubleClick = onDoubleClick ?: {},
-                                ).clearAndSetSemantics { },
+                        Modifier
+                            .size(iconSize)
+                            .padding(Spacing.xxxs)
+                            .clip(RoundedCornerShape(iconSize / 2))
+                            .onClick(
+                                onClick = {
+                                    if (community != null) {
+                                        onOpenCommunity?.invoke(community)
+                                    }
+                                },
+                                onDoubleClick = onDoubleClick ?: {},
+                            ).clearAndSetSemantics { },
                         url = communityIcon,
                         autoload = autoLoadImages,
                         quality = FilterQuality.Low,
@@ -134,18 +134,18 @@ fun CommunityAndCreatorInfo(
                 if (autoLoadImages) {
                     CustomImage(
                         modifier =
-                            Modifier
-                                .size(iconSize)
-                                .padding(Spacing.xxxs)
-                                .clip(RoundedCornerShape(iconSize / 2))
-                                .onClick(
-                                    onClick = {
-                                        if (creator != null) {
-                                            onOpenCreator?.invoke(creator)
-                                        }
-                                    },
-                                    onDoubleClick = onDoubleClick ?: {},
-                                ).clearAndSetSemantics { },
+                        Modifier
+                            .size(iconSize)
+                            .padding(Spacing.xxxs)
+                            .clip(RoundedCornerShape(iconSize / 2))
+                            .onClick(
+                                onClick = {
+                                    if (creator != null) {
+                                        onOpenCreator?.invoke(creator)
+                                    }
+                                },
+                                onDoubleClick = onDoubleClick ?: {},
+                            ).clearAndSetSemantics { },
                         url = creatorAvatar,
                         quality = FilterQuality.Low,
                         autoload = autoLoadImages,
@@ -170,34 +170,34 @@ fun CommunityAndCreatorInfo(
                 if (community != null) {
                     Text(
                         modifier =
-                            Modifier
-                                .onClick(
-                                    indication = null,
-                                    onDoubleClick = onDoubleClick ?: {},
-                                    onLongClick = onLongClick ?: {},
-                                ).clearAndSetSemantics { },
+                        Modifier
+                            .onClick(
+                                indication = null,
+                                onDoubleClick = onDoubleClick ?: {},
+                                onLongClick = onLongClick ?: {},
+                            ).clearAndSetSemantics { },
                         text =
-                            buildAnnotatedString {
+                        buildAnnotatedString {
+                            pushLink(
+                                LinkAnnotation.Clickable("click-community") {
+                                    onOpenCommunity?.invoke(community)
+                                },
+                            )
+                            append(communityName)
+                            pop()
+                            if (compact && creator != null) {
+                                append(" • ")
                                 pushLink(
-                                    LinkAnnotation.Clickable("click-community") {
-                                        onOpenCommunity?.invoke(community)
+                                    LinkAnnotation.Clickable("click-user") {
+                                        onOpenCreator?.invoke(creator)
                                     },
                                 )
-                                append(communityName)
+                                pushStyle(SpanStyle(color = ancillaryColor))
+                                append(creatorName)
                                 pop()
-                                if (compact && creator != null) {
-                                    append(" • ")
-                                    pushLink(
-                                        LinkAnnotation.Clickable("click-user") {
-                                            onOpenCreator?.invoke(creator)
-                                        },
-                                    )
-                                    pushStyle(SpanStyle(color = ancillaryColor))
-                                    append(creatorName)
-                                    pop()
-                                    pop()
-                                }
-                            },
+                                pop()
+                            }
+                        },
                         style = MaterialTheme.typography.bodySmall,
                         color = if (creator == null) ancillaryColor else fullColor,
                         maxLines = 1,
@@ -210,23 +210,23 @@ fun CommunityAndCreatorInfo(
                     ) {
                         Text(
                             modifier =
-                                Modifier
-                                    .onClick(
-                                        indication = null,
-                                        onClick = {
-                                            onOpenCreator?.invoke(creator)
-                                        },
-                                        onDoubleClick = onDoubleClick ?: {},
-                                        onLongClick = onLongClick ?: {},
-                                    ).clearAndSetSemantics { },
+                            Modifier
+                                .onClick(
+                                    indication = null,
+                                    onClick = {
+                                        onOpenCreator?.invoke(creator)
+                                    },
+                                    onDoubleClick = onDoubleClick ?: {},
+                                    onLongClick = onLongClick ?: {},
+                                ).clearAndSetSemantics { },
                             text = creatorName,
                             style = MaterialTheme.typography.bodySmall,
                             color =
-                                when {
-                                    isCurrentUser && meTagColor != null -> Color(meTagColor)
-                                    isOp && opTagColor != null -> Color(opTagColor)
-                                    else -> ancillaryColor
-                                },
+                            when {
+                                isCurrentUser && meTagColor != null -> Color(meTagColor)
+                                isOp && opTagColor != null -> Color(opTagColor)
+                                else -> ancillaryColor
+                            },
                             maxLines = 1,
                         )
 
@@ -310,7 +310,7 @@ fun CommunityAndCreatorInfo(
                 IconButton(
                     modifier = Modifier.clearAndSetSemantics { },
                     onClick = {
-                        onToggleExpanded?.invoke()
+                        onToggleExpand?.invoke()
                     },
                 ) {
                     if (indicatorExpanded) {

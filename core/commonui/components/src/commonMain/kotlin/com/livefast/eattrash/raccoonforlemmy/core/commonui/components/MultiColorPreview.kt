@@ -6,10 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun MultiColorPreview(
-    colors: List<Color>,
-    modifier: Modifier = Modifier,
-) {
+fun MultiColorPreview(colors: List<Color>, modifier: Modifier = Modifier) {
     Canvas(
         modifier = modifier,
     ) {

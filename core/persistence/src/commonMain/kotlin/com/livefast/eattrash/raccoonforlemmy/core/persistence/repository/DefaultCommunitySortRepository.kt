@@ -6,18 +6,15 @@ internal class DefaultCommunitySortRepository(
     private val keyStore: TemporaryKeyStore,
     private val serializer: SortSerializer,
 ) : CommunitySortRepository {
-    override suspend fun get(handle: String): Int?   {
-            val map =
-                keyStore.get(SETTINGS_KEY, listOf()).let {
-                    serializer.deserializeMap(it)
-                }
-            return map[handle]
-        }
+    override suspend fun get(handle: String): Int? {
+        val map =
+            keyStore.get(SETTINGS_KEY, listOf()).let {
+                serializer.deserializeMap(it)
+            }
+        return map[handle]
+    }
 
-    override suspend fun save(
-        handle: String,
-        value: Int,
-    ) {
+    override suspend fun save(handle: String, value: Int) {
         val map =
             keyStore.get(SETTINGS_KEY, listOf()).let {
                 serializer.deserializeMap(it)

@@ -21,10 +21,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.shimmerEffect
 
 @Composable
-fun CommentCardPlaceholder(
-    modifier: Modifier = Modifier,
-    hideAuthor: Boolean = false,
-) {
+fun CommentCardPlaceholder(modifier: Modifier = Modifier, hideAuthor: Boolean = false) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
@@ -36,10 +33,10 @@ fun CommentCardPlaceholder(
             ) {
                 Box(
                     modifier =
-                        Modifier
-                            .size(IconSize.s)
-                            .clip(CircleShape)
-                            .shimmerEffect(),
+                    Modifier
+                        .size(IconSize.s)
+                        .clip(CircleShape)
+                        .shimmerEffect(),
                 )
                 Column(
                     modifier = Modifier.padding(vertical = Spacing.xxxs),
@@ -47,38 +44,38 @@ fun CommentCardPlaceholder(
                 ) {
                     Box(
                         modifier =
-                            Modifier
-                                .height(IconSize.s)
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(CornerSize.m))
-                                .shimmerEffect(),
+                        Modifier
+                            .height(IconSize.s)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(CornerSize.m))
+                            .shimmerEffect(),
                     )
                     Box(
                         modifier =
-                            Modifier
-                                .height(IconSize.s)
-                                .fillMaxWidth(0.5f)
-                                .clip(RoundedCornerShape(CornerSize.m))
-                                .shimmerEffect(),
+                        Modifier
+                            .height(IconSize.s)
+                            .fillMaxWidth(0.5f)
+                            .clip(RoundedCornerShape(CornerSize.m))
+                            .shimmerEffect(),
                     )
                 }
             }
         }
         Box(
             modifier =
-                Modifier
-                    .height(80.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(CornerSize.s))
-                    .shimmerEffect(),
+            Modifier
+                .height(80.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(CornerSize.s))
+                .shimmerEffect(),
         )
         Box(
             modifier =
-                Modifier
-                    .height(IconSize.l)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(CornerSize.m))
-                    .shimmerEffect(),
+            Modifier
+                .height(IconSize.l)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(CornerSize.m))
+                .shimmerEffect(),
         )
     }
 }

@@ -11,7 +11,7 @@ internal class CustomTextToolbar(
     private val shareActionLabel: String,
     private val quoteActionLabel: String?,
     private val cancelActionLabel: String?,
-    private val onShare: () -> Unit,
+    private val onShare: (() -> Unit)? = null,
     private val onQuote: (() -> Unit)? = null,
     private val onCancel: (() -> Unit)? = null,
 ) : TextToolbar {
@@ -47,7 +47,7 @@ internal class CustomTextToolbar(
                         },
                         onShare = {
                             onCopyRequested?.invoke()
-                            onShare()
+                            onShare?.invoke()
                         },
                         onQuote = {
                             onCopyRequested?.invoke()

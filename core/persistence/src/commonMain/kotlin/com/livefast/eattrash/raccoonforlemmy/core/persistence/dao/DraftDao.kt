@@ -4,7 +4,6 @@ import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.DraftEntity
 
 interface DraftDao {
-
     fun getAllBy(type: Long, accountId: Long?): Query<DraftEntity>
 
     fun getBy(id: Long): Query<DraftEntity>

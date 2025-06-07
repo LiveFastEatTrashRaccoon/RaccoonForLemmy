@@ -24,9 +24,8 @@ private val DEFAULT_INSTANCES =
         "sopuli.xyz",
     )
 
-internal class DefaultInstanceSelectionRepository(
-    private val keyStore: TemporaryKeyStore,
-) : InstanceSelectionRepository {
+internal class DefaultInstanceSelectionRepository(private val keyStore: TemporaryKeyStore) :
+    InstanceSelectionRepository {
     override suspend fun getAll(): List<String> {
         val isVersion1 = keyStore.get(CUSTOM_INSTANCES_KEY, listOf()).contains("feddit.de")
         if (!keyStore.containsKey(CUSTOM_INSTANCES_KEY) || isVersion1) {

@@ -16,12 +16,7 @@ import androidx.compose.ui.text.withStyle
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 
 @Composable
-fun DetailInfoItem(
-    modifier: Modifier = Modifier,
-    icon: ImageVector? = null,
-    title: String = "",
-    value: String = "",
-) {
+fun DetailInfoItem(modifier: Modifier = Modifier, icon: ImageVector? = null, title: String = "", value: String = "") {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
@@ -35,18 +30,18 @@ fun DetailInfoItem(
         }
         Text(
             text =
-                buildAnnotatedString {
-                    withStyle(
-                        SpanStyle(
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
-                        ),
-                    ) {
-                        append(value)
-                    }
-                    append(" ")
-                    append(title)
-                },
+            buildAnnotatedString {
+                withStyle(
+                    SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                    ),
+                ) {
+                    append(value)
+                }
+                append(" ")
+                append(title)
+            },
         )
     }
 }

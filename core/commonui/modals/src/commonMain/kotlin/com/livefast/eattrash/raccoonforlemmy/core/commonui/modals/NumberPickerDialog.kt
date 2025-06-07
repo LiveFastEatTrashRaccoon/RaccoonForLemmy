@@ -30,6 +30,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NumberPickerDialog(
+    modifier: Modifier = Modifier,
     title: String = "",
     initialValue: Int = 0,
     minValue: Int = 0,
@@ -40,15 +41,16 @@ fun NumberPickerDialog(
     var currentValue by remember { mutableStateOf(initialValue.toString()) }
     var isOnError by remember { mutableStateOf(false) }
     BasicAlertDialog(
+        modifier = modifier,
         onDismissRequest = {
             onClose?.invoke()
         },
     ) {
         Column(
             modifier =
-                Modifier
-                    .background(color = MaterialTheme.colorScheme.surface)
-                    .padding(Spacing.s),
+            Modifier
+                .background(color = MaterialTheme.colorScheme.surface)
+                .padding(Spacing.s),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
@@ -61,18 +63,18 @@ fun NumberPickerDialog(
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 colors =
-                    TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                    ),
+                TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                ),
                 isError = isOnError,
                 textStyle = MaterialTheme.typography.bodyMedium,
                 value = currentValue,
                 keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.NumberPassword,
-                    ),
+                KeyboardOptions(
+                    keyboardType = KeyboardType.NumberPassword,
+                ),
                 onValueChange = { value ->
                     currentValue = value
                 },

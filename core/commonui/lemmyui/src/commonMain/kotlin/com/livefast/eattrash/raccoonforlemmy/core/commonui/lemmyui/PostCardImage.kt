@@ -41,8 +41,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
 fun PostCardImage(
-    modifier: Modifier = Modifier,
     imageUrl: String,
+    modifier: Modifier = Modifier,
     autoLoadImages: Boolean = true,
     contentScale: ContentScale = ContentScale.FillWidth,
     loadButtonContent: @Composable (() -> Unit)? = null,
@@ -59,26 +59,26 @@ fun PostCardImage(
 
     Box(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .heightIn(min = minHeight, max = maxHeight)
-                .onClick(
-                    onDoubleClick = onDoubleClick ?: {},
-                ),
+        modifier
+            .fillMaxWidth()
+            .heightIn(min = minHeight, max = maxHeight)
+            .onClick(
+                onDoubleClick = onDoubleClick ?: {},
+            ),
     ) {
         CustomImage(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .then(
-                        if (onImageClick != null) {
-                            Modifier.clickable {
-                                onImageClick(imageUrl)
-                            }
-                        } else {
-                            Modifier
-                        },
-                    ),
+            Modifier
+                .fillMaxSize()
+                .then(
+                    if (onImageClick != null) {
+                        Modifier.clickable {
+                            onImageClick(imageUrl)
+                        }
+                    } else {
+                        Modifier
+                    },
+                ),
             url = imageUrl,
             quality = FilterQuality.Low,
             autoload = autoLoadImages,
@@ -103,9 +103,9 @@ fun PostCardImage(
                             initialValue = 0f,
                             targetValue = 1f,
                             animationSpec =
-                                InfiniteRepeatableSpec(
-                                    animation = tween(1000),
-                                ),
+                            InfiniteRepeatableSpec(
+                                animation = tween(1000),
+                            ),
                         )
                         res
                     }
@@ -117,10 +117,10 @@ fun PostCardImage(
         )
         Row(
             modifier =
-                Modifier.align(Alignment.BottomEnd).padding(
-                    bottom = Spacing.xxs,
-                    end = Spacing.xs,
-                ),
+            Modifier.align(Alignment.BottomEnd).padding(
+                bottom = Spacing.xxs,
+                end = Spacing.xs,
+            ),
         ) {
             val iconModifier =
                 Modifier
@@ -139,11 +139,11 @@ fun PostCardImage(
                     Icon(
                         modifier = iconModifier,
                         imageVector =
-                            if (revealing) {
-                                Icons.Default.VisibilityOff
-                            } else {
-                                Icons.Default.Visibility
-                            },
+                        if (revealing) {
+                            Icons.Default.VisibilityOff
+                        } else {
+                            Icons.Default.Visibility
+                        },
                         contentDescription = LocalStrings.current.actionToggleVisibility,
                         tint = MaterialTheme.colorScheme.onBackground,
                     )

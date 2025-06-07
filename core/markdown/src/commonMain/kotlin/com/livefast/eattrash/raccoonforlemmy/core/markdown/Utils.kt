@@ -17,80 +17,76 @@ internal fun ASTNode.findChildOfTypeRecursive(type: IElementType): ASTNode? {
     return null
 }
 
-internal fun String.sanitize(): String =
-    this
-        .removeHtmlEntities()
-        .spoilerFixUp()
-        .quoteFixUp()
-        .expandLemmyHandles()
-        .expandLemmyMentions()
-        .dollarSignFixUp()
-        .unescapeMarkdown()
-        .imageBeforeFixup()
-        .imageAfterFixup()
+internal fun String.sanitize(): String = this
+    .removeHtmlEntities()
+    .spoilerFixUp()
+    .quoteFixUp()
+    .expandLemmyHandles()
+    .expandLemmyMentions()
+    .dollarSignFixUp()
+    .unescapeMarkdown()
+    .imageBeforeFixup()
+    .imageAfterFixup()
 
-private fun String.removeHtmlEntities(): String =
-    replace("&amp;", "&")
-        .replace("&nbsp;", " ")
-        .replace("&hellip;", "…")
+private fun String.removeHtmlEntities(): String = replace("&amp;", "&")
+    .replace("&nbsp;", " ")
+    .replace("&hellip;", "…")
 
-private fun String.spoilerFixUp(): String =
-    run {
-        val finalLines = mutableListOf<String>()
-        var isInsideSpoiler = false
-        lines().forEach { line ->
-            if (line.contains(SpoilerRegex.spoilerOpening)) {
-                if (finalLines.lastOrNull()?.isEmpty() == false) {
-                    finalLines += ""
-                }
-                finalLines += line
-                isInsideSpoiler = true
-            } else if (line.contains(SpoilerRegex.spoilerClosing)) {
-                isInsideSpoiler = false
-            } else if (line.isNotBlank()) {
-                if (isInsideSpoiler) {
-                    // spoilers must be treated as a single paragraph, so if inside spoilers it is necessary to remove
-                    // all bulleted lists, numbered lists and blank lines in general
-                    val cleanLine =
-                        line
-                            .replace(Regex("^\\s*?-\\s*?"), "")
-                            .replace(Regex("^\\s*?\\d?\\.\\s*?"), "")
-                            .trim()
-                    if (cleanLine.isNotBlank()) {
-                        finalLines += cleanLine
-                    }
-                } else {
-                    finalLines += line
-                }
-            } else if (!isInsideSpoiler) {
+private fun String.spoilerFixUp(): String = run {
+    val finalLines = mutableListOf<String>()
+    var isInsideSpoiler = false
+    lines().forEach { line ->
+        if (line.contains(SpoilerRegex.spoilerOpening)) {
+            if (finalLines.lastOrNull()?.isEmpty() == false) {
                 finalLines += ""
             }
+            finalLines += line
+            isInsideSpoiler = true
+        } else if (line.contains(SpoilerRegex.spoilerClosing)) {
+            isInsideSpoiler = false
+        } else if (line.isNotBlank()) {
+            if (isInsideSpoiler) {
+                // spoilers must be treated as a single paragraph, so if inside spoilers it is necessary to remove
+                // all bulleted lists, numbered lists and blank lines in general
+                val cleanLine =
+                    line
+                        .replace(Regex("^\\s*?-\\s*?"), "")
+                        .replace(Regex("^\\s*?\\d?\\.\\s*?"), "")
+                        .trim()
+                if (cleanLine.isNotBlank()) {
+                    finalLines += cleanLine
+                }
+            } else {
+                finalLines += line
+            }
+        } else if (!isInsideSpoiler) {
+            finalLines += ""
         }
-        finalLines.joinToString("\n")
     }
+    finalLines.joinToString("\n")
+}
 
-private fun String.quoteFixUp(): String =
-    run {
-        val finalLines = mutableListOf<String>()
-        lines().forEach { originalLine ->
-            val cleanLine =
-                originalLine
-                    // fix bug due to which list inside quotes are not rendered correctly
-                    .replace(Regex("^>-"), "> •")
-                    .replace(Regex("^> -"), "> •")
-                    .replace(Regex("^> \\*"), "> •")
-                    // fix bug due to which only first paragraph is shown in quote if "> \n" occurs
-                    .replace(Regex("^>\\s*$"), "> ")
-            if (cleanLine.isNotEmpty()) {
-                finalLines += cleanLine
-            }
-            if (originalLine.isBlank()) {
-                // blank lines to better isolate paragraphs
-                finalLines += "\n\n"
-            }
+private fun String.quoteFixUp(): String = run {
+    val finalLines = mutableListOf<String>()
+    lines().forEach { originalLine ->
+        val cleanLine =
+            originalLine
+                // fix bug due to which list inside quotes are not rendered correctly
+                .replace(Regex("^>-"), "> •")
+                .replace(Regex("^> -"), "> •")
+                .replace(Regex("^> \\*"), "> •")
+                // fix bug due to which only first paragraph is shown in quote if "> \n" occurs
+                .replace(Regex("^>\\s*$"), "> ")
+        if (cleanLine.isNotEmpty()) {
+            finalLines += cleanLine
         }
-        finalLines.joinToString("\n")
+        if (originalLine.isBlank()) {
+            // blank lines to better isolate paragraphs
+            finalLines += "\n\n"
+        }
     }
+    finalLines.joinToString("\n")
+}
 
 private fun String.expandLemmyHandles(): String = LemmyLinkRegex.handle.replace(this, "[$1@$2](!$1@$2)")
 

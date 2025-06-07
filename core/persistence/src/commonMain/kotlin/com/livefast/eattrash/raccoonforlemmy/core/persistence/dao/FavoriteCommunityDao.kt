@@ -4,7 +4,6 @@ import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.FavoriteCommunityEntity
 
 interface FavoriteCommunityDao {
-
     fun getAll(accountId: Long?): Query<FavoriteCommunityEntity>
 
     fun getBy(communityId: Long, accountId: Long?): Query<FavoriteCommunityEntity>

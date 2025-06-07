@@ -28,13 +28,13 @@ fun SettingsMultiColorRow(
 ) {
     Row(
         modifier =
-            modifier
-                .clip(RoundedCornerShape(CornerSize.xxl))
-                .onClick(
-                    onClick = {
-                        onTap?.invoke()
-                    },
-                ).padding(vertical = Spacing.s, horizontal = Spacing.m),
+        modifier
+            .clip(RoundedCornerShape(CornerSize.xxl))
+            .onClick(
+                onClick = {
+                    onTap?.invoke()
+                },
+            ).padding(vertical = Spacing.s, horizontal = Spacing.m),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
@@ -55,9 +55,9 @@ fun SettingsMultiColorRow(
         }
         MultiColorPreview(
             modifier =
-                Modifier
-                    .padding(start = Spacing.xs)
-                    .size(36.dp),
+            Modifier
+                .padding(start = Spacing.xs)
+                .size(36.dp),
             colors = values,
         )
     }

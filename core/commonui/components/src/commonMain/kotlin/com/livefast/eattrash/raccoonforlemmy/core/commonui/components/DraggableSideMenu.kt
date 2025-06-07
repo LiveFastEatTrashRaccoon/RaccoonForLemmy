@@ -53,10 +53,10 @@ fun DraggableSideMenu(
             AnchoredDraggableState(
                 initialValue = SlideAnchorPosition.Closed,
                 anchors =
-                    DraggableAnchors<SlideAnchorPosition> {
-                        SlideAnchorPosition.Closed at with(density) { availableWidth.toPx() }
-                        SlideAnchorPosition.Opened at with(density) { (availableWidth - maxWidth).toPx() }
-                    },
+                DraggableAnchors<SlideAnchorPosition> {
+                    SlideAnchorPosition.Closed at with(density) { availableWidth.toPx() }
+                    SlideAnchorPosition.Opened at with(density) { (availableWidth - maxWidth).toPx() }
+                },
                 positionalThreshold = { distance: Float -> distance * 0.5f },
                 velocityThreshold = { with(density) { 100.dp.toPx() } },
                 snapAnimationSpec = tween(),
@@ -85,21 +85,21 @@ fun DraggableSideMenu(
 
     Box(
         modifier =
-            modifier
-                .width(maxWidth)
-                .fillMaxHeight()
-                .offset {
-                    IntOffset(
-                        x = draggableState.requireOffset().roundToInt(),
-                        y = 0,
-                    )
-                }.anchoredDraggable(
-                    state = draggableState,
-                    orientation = Orientation.Horizontal,
-                ).background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
-                .padding(
-                    bottom = Spacing.m,
-                ),
+        modifier
+            .width(maxWidth)
+            .fillMaxHeight()
+            .offset {
+                IntOffset(
+                    x = draggableState.requireOffset().roundToInt(),
+                    y = 0,
+                )
+            }.anchoredDraggable(
+                state = draggableState,
+                orientation = Orientation.Horizontal,
+            ).background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
+            .padding(
+                bottom = Spacing.m,
+            ),
     ) {
         content()
     }

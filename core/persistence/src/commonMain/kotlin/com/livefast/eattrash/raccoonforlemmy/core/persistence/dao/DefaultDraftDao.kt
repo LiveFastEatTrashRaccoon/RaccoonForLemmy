@@ -4,16 +4,10 @@ import app.cash.sqldelight.Query
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.DraftEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.DraftsQueries
 
-internal class DefaultDraftDao(
-    private val queries: DraftsQueries,
-) : DraftDao {
-    override fun getAllBy(type: Long, accountId: Long?): Query<DraftEntity> {
-        return queries.getAllBy(type, accountId)
-    }
+internal class DefaultDraftDao(private val queries: DraftsQueries) : DraftDao {
+    override fun getAllBy(type: Long, accountId: Long?): Query<DraftEntity> = queries.getAllBy(type, accountId)
 
-    override fun getBy(id: Long): Query<DraftEntity> {
-        return queries.getBy(id)
-    }
+    override fun getBy(id: Long): Query<DraftEntity> = queries.getBy(id)
 
     override fun create(
         type: Long,
@@ -27,7 +21,7 @@ internal class DefaultDraftDao(
         nsfw: Long?,
         date: Long?,
         info: String?,
-        accountId: Long?
+        accountId: Long?,
     ) {
         queries.create(
             type = type,
@@ -54,7 +48,7 @@ internal class DefaultDraftDao(
         nsfw: Long?,
         date: Long?,
         info: String?,
-        id: Long
+        id: Long,
     ) {
         queries.update(
             body = body,
@@ -65,7 +59,7 @@ internal class DefaultDraftDao(
             nsfw = nsfw,
             date = date,
             info = info,
-            id = id
+            id = id,
         )
     }
 

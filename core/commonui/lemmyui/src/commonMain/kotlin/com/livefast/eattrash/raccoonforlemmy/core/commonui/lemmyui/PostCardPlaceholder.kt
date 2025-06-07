@@ -27,10 +27,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.shimmerEffect
 
 @Composable
-fun PostCardPlaceholder(
-    modifier: Modifier = Modifier,
-    postLayout: PostLayout = PostLayout.Card,
-) {
+fun PostCardPlaceholder(modifier: Modifier = Modifier, postLayout: PostLayout = PostLayout.Card) {
     when (postLayout) {
         PostLayout.Compact -> {
             Column(
@@ -43,10 +40,10 @@ fun PostCardPlaceholder(
                 ) {
                     Box(
                         modifier =
-                            Modifier
-                                .size(IconSize.s)
-                                .clip(CircleShape)
-                                .shimmerEffect(),
+                        Modifier
+                            .size(IconSize.s)
+                            .clip(CircleShape)
+                            .shimmerEffect(),
                     )
                     Column(
                         modifier = Modifier.padding(vertical = Spacing.xxxs),
@@ -54,11 +51,11 @@ fun PostCardPlaceholder(
                     ) {
                         Box(
                             modifier =
-                                Modifier
-                                    .height(IconSize.s)
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(CornerSize.m))
-                                    .shimmerEffect(),
+                            Modifier
+                                .height(IconSize.s)
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(CornerSize.m))
+                                .shimmerEffect(),
                         )
                     }
                 }
@@ -68,28 +65,28 @@ fun PostCardPlaceholder(
                 ) {
                     Box(
                         modifier =
-                            Modifier
-                                .weight(0.2f)
-                                .aspectRatio(1.33f)
-                                .clip(RoundedCornerShape(CornerSize.s))
-                                .shimmerEffect(),
+                        Modifier
+                            .weight(0.2f)
+                            .aspectRatio(1.33f)
+                            .clip(RoundedCornerShape(CornerSize.s))
+                            .shimmerEffect(),
                     )
                     Box(
                         modifier =
-                            Modifier
-                                .height(40.dp)
-                                .weight(1f)
-                                .clip(RoundedCornerShape(CornerSize.m))
-                                .shimmerEffect(),
+                        Modifier
+                            .height(40.dp)
+                            .weight(1f)
+                            .clip(RoundedCornerShape(CornerSize.m))
+                            .shimmerEffect(),
                     )
                 }
                 Box(
                     modifier =
-                        Modifier
-                            .height(IconSize.l)
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(CornerSize.s))
-                            .shimmerEffect(),
+                    Modifier
+                        .height(IconSize.l)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(CornerSize.s))
+                        .shimmerEffect(),
                 )
             }
         }
@@ -97,12 +94,12 @@ fun PostCardPlaceholder(
         PostLayout.Card -> {
             Column(
                 modifier =
-                    Modifier
-                        .shadow(elevation = 5.dp, shape = RoundedCornerShape(CornerSize.l))
-                        .clip(RoundedCornerShape(CornerSize.l))
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                        ).padding(Spacing.s),
+                Modifier
+                    .shadow(elevation = 5.dp, shape = RoundedCornerShape(CornerSize.l))
+                    .clip(RoundedCornerShape(CornerSize.l))
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                    ).padding(Spacing.s),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
                 Row(
@@ -111,10 +108,10 @@ fun PostCardPlaceholder(
                 ) {
                     Box(
                         modifier =
-                            Modifier
-                                .size(IconSize.l)
-                                .clip(CircleShape)
-                                .shimmerEffect(),
+                        Modifier
+                            .size(IconSize.l)
+                            .clip(CircleShape)
+                            .shimmerEffect(),
                     )
                     Column(
                         modifier = Modifier.padding(vertical = Spacing.xxxs),
@@ -122,45 +119,45 @@ fun PostCardPlaceholder(
                     ) {
                         Box(
                             modifier =
-                                Modifier
-                                    .height(IconSize.s)
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(CornerSize.m))
-                                    .shimmerEffect(),
+                            Modifier
+                                .height(IconSize.s)
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(CornerSize.m))
+                                .shimmerEffect(),
                         )
                         Box(
                             modifier =
-                                Modifier
-                                    .height(IconSize.s)
-                                    .fillMaxWidth(0.5f)
-                                    .clip(RoundedCornerShape(CornerSize.m))
-                                    .shimmerEffect(),
+                            Modifier
+                                .height(IconSize.s)
+                                .fillMaxWidth(0.5f)
+                                .clip(RoundedCornerShape(CornerSize.m))
+                                .shimmerEffect(),
                         )
                     }
                 }
                 Box(
                     modifier =
-                        Modifier
-                            .height(IconSize.l)
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(CornerSize.m))
-                            .shimmerEffect(),
+                    Modifier
+                        .height(IconSize.l)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(CornerSize.m))
+                        .shimmerEffect(),
                 )
                 Box(
                     modifier =
-                        Modifier
-                            .height(EXTENDED_POST_MAX_HEIGHT)
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(CornerSize.s))
-                            .shimmerEffect(),
+                    Modifier
+                        .height(EXTENDED_POST_MAX_HEIGHT)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(CornerSize.s))
+                        .shimmerEffect(),
                 )
                 Box(
                     modifier =
-                        Modifier
-                            .height(IconSize.l)
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(CornerSize.m))
-                            .shimmerEffect(),
+                    Modifier
+                        .height(IconSize.l)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(CornerSize.m))
+                        .shimmerEffect(),
                 )
             }
         }
@@ -175,10 +172,10 @@ fun PostCardPlaceholder(
                 ) {
                     Box(
                         modifier =
-                            Modifier
-                                .size(IconSize.l)
-                                .clip(CircleShape)
-                                .shimmerEffect(),
+                        Modifier
+                            .size(IconSize.l)
+                            .clip(CircleShape)
+                            .shimmerEffect(),
                     )
                     Column(
                         modifier = Modifier.padding(vertical = Spacing.xxxs),
@@ -186,50 +183,48 @@ fun PostCardPlaceholder(
                     ) {
                         Box(
                             modifier =
-                                Modifier
-                                    .height(IconSize.s)
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(CornerSize.m))
-                                    .shimmerEffect(),
+                            Modifier
+                                .height(IconSize.s)
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(CornerSize.m))
+                                .shimmerEffect(),
                         )
                         Box(
                             modifier =
-                                Modifier
-                                    .height(IconSize.s)
-                                    .fillMaxWidth(0.5f)
-                                    .clip(RoundedCornerShape(CornerSize.m))
-                                    .shimmerEffect(),
+                            Modifier
+                                .height(IconSize.s)
+                                .fillMaxWidth(0.5f)
+                                .clip(RoundedCornerShape(CornerSize.m))
+                                .shimmerEffect(),
                         )
                     }
                 }
                 Box(
                     modifier =
-                        Modifier
-                            .height(IconSize.l)
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(CornerSize.m))
-                            .shimmerEffect(),
+                    Modifier
+                        .height(IconSize.l)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(CornerSize.m))
+                        .shimmerEffect(),
                 )
                 Box(
                     modifier =
-                        Modifier
-                            .height(EXTENDED_POST_MAX_HEIGHT)
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(CornerSize.s))
-                            .shimmerEffect(),
+                    Modifier
+                        .height(EXTENDED_POST_MAX_HEIGHT)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(CornerSize.s))
+                        .shimmerEffect(),
                 )
                 Box(
                     modifier =
-                        Modifier
-                            .height(IconSize.l)
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(CornerSize.m))
-                            .shimmerEffect(),
+                    Modifier
+                        .height(IconSize.l)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(CornerSize.m))
+                        .shimmerEffect(),
                 )
             }
         }
-
-        else -> Unit
     }
 }
 

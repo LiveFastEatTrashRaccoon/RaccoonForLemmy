@@ -17,9 +17,7 @@ import kotlinx.coroutines.sync.withLock
  *
  * @param initialState initial UI state
  */
-abstract class DefaultMviModel<Intent, State, Effect>(
-    initialState: State,
-) : MviModel<Intent, State, Effect> {
+abstract class DefaultMviModel<Intent, State, Effect>(initialState: State) : MviModel<Intent, State, Effect> {
     override val uiState = MutableStateFlow(initialState)
     override val effects = MutableSharedFlow<Effect>()
     private val mutex = Mutex()

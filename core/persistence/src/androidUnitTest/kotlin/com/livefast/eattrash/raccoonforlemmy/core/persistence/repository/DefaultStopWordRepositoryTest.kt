@@ -21,137 +21,129 @@ class DefaultStopWordRepositoryTest {
         )
 
     @Test
-    fun givenNoData_whenGetForAnonymousUser_thenResultAndInteractionsIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(any(), any<List<String>>()) } returns emptyList()
+    fun givenNoData_whenGetForAnonymousUser_thenResultAndInteractionsIsAsExpected() = runTest {
+        coEvery { keyStore.get(any(), any<List<String>>()) } returns emptyList()
 
-            val res = sut.get(null)
+        val res = sut.get(null)
 
-            assertEquals(emptyList(), res)
-            coVerify {
-                keyStore.get("$KEY_PREFIX.items", emptyList())
-            }
+        assertEquals(emptyList(), res)
+        coVerify {
+            keyStore.get("$KEY_PREFIX.items", emptyList())
         }
+    }
 
     @Test
-    fun givenData_whenGetForAnonymousUser_thenResultAndInteractionsIsAsExpected() =
-        runTest {
-            val fakeList = listOf("word")
-            coEvery { keyStore.get(any(), any<List<String>>()) } returns fakeList
+    fun givenData_whenGetForAnonymousUser_thenResultAndInteractionsIsAsExpected() = runTest {
+        val fakeList = listOf("word")
+        coEvery { keyStore.get(any(), any<List<String>>()) } returns fakeList
 
-            val res = sut.get(null)
+        val res = sut.get(null)
 
-            assertEquals(fakeList, res)
-            coVerify {
-                keyStore.get("$KEY_PREFIX.items", emptyList())
-            }
+        assertEquals(fakeList, res)
+        coVerify {
+            keyStore.get("$KEY_PREFIX.items", emptyList())
         }
+    }
 
     @Test
-    fun givenNoData_whenGetForLoggedUser_thenResultAndInteractionsIsAsExpected() =
-        runTest {
-            val accountId = 1L
-            coEvery { keyStore.get(any(), any<List<String>>()) } returns emptyList()
+    fun givenNoData_whenGetForLoggedUser_thenResultAndInteractionsIsAsExpected() = runTest {
+        val accountId = 1L
+        coEvery { keyStore.get(any(), any<List<String>>()) } returns emptyList()
 
-            val res = sut.get(accountId)
+        val res = sut.get(accountId)
 
-            assertEquals(emptyList(), res)
-            coVerify {
-                keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
-            }
+        assertEquals(emptyList(), res)
+        coVerify {
+            keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
         }
+    }
 
     @Test
-    fun givenData_whenGetForLoggedUser_thenResultAndInteractionsIsAsExpected() =
-        runTest {
-            val accountId = 1L
-            val fakeList = listOf("word")
-            coEvery { keyStore.get(any(), any<List<String>>()) } returns fakeList
+    fun givenData_whenGetForLoggedUser_thenResultAndInteractionsIsAsExpected() = runTest {
+        val accountId = 1L
+        val fakeList = listOf("word")
+        coEvery { keyStore.get(any(), any<List<String>>()) } returns fakeList
 
-            val res = sut.get(accountId)
+        val res = sut.get(accountId)
 
-            assertEquals(fakeList, res)
-            coVerify {
-                keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
-            }
+        assertEquals(fakeList, res)
+        coVerify {
+            keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
         }
+    }
 
     @Test
-    fun givenDataForOtherUser_whenGetForLoggedAccount_thenResultAndInteractionsIsAsExpected() =
-        runTest {
-            val otherAccountId = 1L
-            val accountId = 2L
-            val fakeList = listOf("word")
-            coEvery {
-                keyStore.get(
-                    "$KEY_PREFIX.$otherAccountId.items",
-                    any<List<String>>(),
-                )
-            } returns fakeList
-            coEvery {
-                keyStore.get(
-                    "$KEY_PREFIX.$accountId.items",
-                    any<List<String>>(),
-                )
-            } returns emptyList()
+    fun givenDataForOtherUser_whenGetForLoggedAccount_thenResultAndInteractionsIsAsExpected() = runTest {
+        val otherAccountId = 1L
+        val accountId = 2L
+        val fakeList = listOf("word")
+        coEvery {
+            keyStore.get(
+                "$KEY_PREFIX.$otherAccountId.items",
+                any<List<String>>(),
+            )
+        } returns fakeList
+        coEvery {
+            keyStore.get(
+                "$KEY_PREFIX.$accountId.items",
+                any<List<String>>(),
+            )
+        } returns emptyList()
 
-            val res = sut.get(accountId)
+        val res = sut.get(accountId)
 
-            assertEquals(emptyList(), res)
-            coVerify {
-                keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
-            }
+        assertEquals(emptyList(), res)
+        coVerify {
+            keyStore.get("$KEY_PREFIX.$accountId.items", emptyList())
         }
+    }
 
     @Test
-    fun givenDataForOtherUser_whenGetForAnonymousAccount_thenResultAndInteractionsIsAsExpected() =
-        runTest {
-            val otherAccountId = 1
-            val fakeList = listOf("word")
-            coEvery {
-                keyStore.get(
-                    "$KEY_PREFIX.$otherAccountId.items",
-                    any<List<String>>(),
-                )
-            } returns fakeList
-            coEvery {
-                keyStore.get(
-                    "$KEY_PREFIX.items",
-                    any<List<String>>(),
-                )
-            } returns emptyList()
+    fun givenDataForOtherUser_whenGetForAnonymousAccount_thenResultAndInteractionsIsAsExpected() = runTest {
+        val otherAccountId = 1
+        val fakeList = listOf("word")
+        coEvery {
+            keyStore.get(
+                "$KEY_PREFIX.$otherAccountId.items",
+                any<List<String>>(),
+            )
+        } returns fakeList
+        coEvery {
+            keyStore.get(
+                "$KEY_PREFIX.items",
+                any<List<String>>(),
+            )
+        } returns emptyList()
 
-            val res = sut.get(null)
+        val res = sut.get(null)
 
-            assertEquals(emptyList(), res)
-            coVerify {
-                keyStore.get("$KEY_PREFIX.items", emptyList())
-            }
+        assertEquals(emptyList(), res)
+        coVerify {
+            keyStore.get("$KEY_PREFIX.items", emptyList())
         }
+    }
 
     @Test
-    fun whenUpdateAnonymousUser_thenInteractionsAreAsExpected() =
-        runTest {
-            val fakeList = listOf("word")
-            sut.update(accountId = null, items = fakeList)
+    fun whenUpdateAnonymousUser_thenInteractionsAreAsExpected() = runTest {
+        val fakeList = listOf("word")
+        sut.update(accountId = null, items = fakeList)
 
-            coVerify {
-                keyStore.save("$KEY_PREFIX.items", fakeList)
-            }
+        coVerify {
+            keyStore.save("$KEY_PREFIX.items", fakeList)
         }
+    }
 
     @Test
-    fun whenUpdateLoggedUser_thenInteractionsAreAsExpected() =
-        runTest {
-            val accountId = 1L
-            val fakeList = listOf("word")
+    fun whenUpdateLoggedUser_thenInteractionsAreAsExpected() = runTest {
+        val accountId = 1L
+        val fakeList = listOf("word")
 
-            sut.update(accountId = accountId, items = fakeList)
+        sut.update(accountId = accountId, items = fakeList)
 
-            coVerify {
-                keyStore.save("$KEY_PREFIX.$accountId.items", fakeList)
-            }
+        coVerify {
+            keyStore.save("$KEY_PREFIX.$accountId.items", fakeList)
         }
+    }
 
     companion object {
         private const val KEY_PREFIX = "StopWordRepository"

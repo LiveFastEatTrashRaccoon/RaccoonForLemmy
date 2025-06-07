@@ -7,124 +7,79 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
-internal class DefaultTemporaryKeyStore(
-    private val settings: Settings,
-) : TemporaryKeyStore {
+internal class DefaultTemporaryKeyStore(private val settings: Settings) : TemporaryKeyStore {
     override suspend fun containsKey(key: String): Boolean = settings.keys.contains(key)
 
-    override suspend fun save(
-        key: String,
-        value: Boolean,
-    ) {
+    override suspend fun save(key: String, value: Boolean) {
         withContext(Dispatchers.IO) {
             settings[key] = value
         }
     }
 
-    override suspend fun get(
-        key: String,
-        default: Boolean,
-    ): Boolean = withContext(Dispatchers.IO) {
+    override suspend fun get(key: String, default: Boolean): Boolean = withContext(Dispatchers.IO) {
         settings[key, default]
     }
 
-    override suspend fun save(
-        key: String,
-        value: String,
-    ) {
+    override suspend fun save(key: String, value: String) {
         withContext(Dispatchers.IO) {
             settings[key] = value
         }
     }
 
-    override suspend fun get(
-        key: String,
-        default: String,
-    ): String = withContext(Dispatchers.IO) {
+    override suspend fun get(key: String, default: String): String = withContext(Dispatchers.IO) {
         settings[key, default]
     }
 
-    override suspend fun save(
-        key: String,
-        value: Int,
-    ) {
+    override suspend fun save(key: String, value: Int) {
         withContext(Dispatchers.IO) {
             settings[key] = value
         }
     }
 
-    override suspend fun get(
-        key: String,
-        default: Int,
-    ): Int = withContext(Dispatchers.IO) {
+    override suspend fun get(key: String, default: Int): Int = withContext(Dispatchers.IO) {
         settings[key, default]
     }
 
-    override suspend fun save(
-        key: String,
-        value: Float,
-    ) {
+    override suspend fun save(key: String, value: Float) {
         withContext(Dispatchers.IO) {
             settings[key] = value
         }
     }
 
-    override suspend fun get(
-        key: String,
-        default: Float,
-    ): Float = withContext(Dispatchers.IO) {
+    override suspend fun get(key: String, default: Float): Float = withContext(Dispatchers.IO) {
         settings[key, default]
     }
 
-    override suspend fun save(
-        key: String,
-        value: Double,
-    ) {
+    override suspend fun save(key: String, value: Double) {
         withContext(Dispatchers.IO) {
             settings[key] = value
         }
     }
 
-    override suspend fun get(
-        key: String,
-        default: Double,
-    ): Double = withContext(Dispatchers.IO) {
+    override suspend fun get(key: String, default: Double): Double = withContext(Dispatchers.IO) {
         settings[key, default]
     }
 
-    override suspend fun save(
-        key: String,
-        value: Long,
-    ) {
+    override suspend fun save(key: String, value: Long) {
         withContext(Dispatchers.IO) {
             settings[key] = value
         }
     }
 
-    override suspend fun get(
-        key: String,
-        default: Long,
-    ): Long = withContext(Dispatchers.IO) {
+    override suspend fun get(key: String, default: Long): Long = withContext(Dispatchers.IO) {
         settings[key, default]
     }
 
-    override suspend fun get(
-        key: String,
-        default: List<String>,
-        delimiter: String,
-    ): List<String> = withContext(Dispatchers.IO) {
-        if (!settings.hasKey(key)) {
-            return@withContext default
+    override suspend fun get(key: String, default: List<String>, delimiter: String): List<String> =
+        withContext(Dispatchers.IO) {
+            if (!settings.hasKey(key)) {
+                return@withContext default
+            }
+            val joined = settings[key, ""]
+            joined.split(delimiter)
         }
-        val joined = settings[key, ""]
-        joined.split(delimiter)
-    }
 
-    override suspend fun save(
-        key: String,
-        value: List<String>,
-        delimiter: String,
-    ) {
+    override suspend fun save(key: String, value: List<String>, delimiter: String) {
         withContext(Dispatchers.IO) {
             settings[key] = value.joinToString(delimiter)
         }

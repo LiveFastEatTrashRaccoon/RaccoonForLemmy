@@ -1,5 +1,6 @@
 plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
+    id("com.livefast.eattrash.spotless")
 }
 
 kotlin {

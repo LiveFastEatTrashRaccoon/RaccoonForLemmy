@@ -44,9 +44,9 @@ fun UserTagItem(
     tag: UserTagModel,
     modifier: Modifier = Modifier,
     checked: Boolean? = null,
-    onCheckedChange: ((Boolean) -> Unit)? = null,
+    onCheck: ((Boolean) -> Unit)? = null,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     val title = tag.name
     val color = tag.color?.let { Color(it) } ?: Color.Transparent
@@ -62,22 +62,22 @@ fun UserTagItem(
     ) {
         Box(
             modifier =
-                Modifier
-                    .size(IconSize.m)
-                    .background(
-                        color = color,
-                        shape = CircleShape,
-                    ).then(
-                        if (color == Color.Transparent) {
-                            Modifier.border(
-                                color = MaterialTheme.colorScheme.onBackground,
-                                width = Dp.Hairline,
-                                shape = CircleShape,
-                            )
-                        } else {
-                            Modifier
-                        },
-                    ),
+            Modifier
+                .size(IconSize.m)
+                .background(
+                    color = color,
+                    shape = CircleShape,
+                ).then(
+                    if (color == Color.Transparent) {
+                        Modifier.border(
+                            color = MaterialTheme.colorScheme.onBackground,
+                            width = Dp.Hairline,
+                            shape = CircleShape,
+                        )
+                    } else {
+                        Modifier
+                    },
+                ),
         )
         Column(
             modifier = Modifier.weight(1f).padding(start = Spacing.xs),
@@ -94,7 +94,7 @@ fun UserTagItem(
         if (checked != null) {
             Checkbox(
                 checked = checked,
-                onCheckedChange = onCheckedChange,
+                onCheckedChange = onCheck,
             )
         }
 
@@ -102,12 +102,12 @@ fun UserTagItem(
             Box {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        },
                     onClick = {
                         optionsMenuOpen = true
                     },
@@ -125,10 +125,10 @@ fun UserTagItem(
                         optionsMenuOpen = false
                     },
                     offset =
-                        DpOffset(
-                            x = optionsOffset.x.toLocalDp(),
-                            y = optionsOffset.y.toLocalDp(),
-                        ),
+                    DpOffset(
+                        x = optionsOffset.x.toLocalDp(),
+                        y = optionsOffset.y.toLocalDp(),
+                    ),
                 ) {
                     options.forEach { option ->
                         DropdownMenuItem(
@@ -137,7 +137,7 @@ fun UserTagItem(
                             },
                             onClick = {
                                 optionsMenuOpen = false
-                                onOptionSelected?.invoke(option.id)
+                                onSelectOption?.invoke(option.id)
                             },
                         )
                     }

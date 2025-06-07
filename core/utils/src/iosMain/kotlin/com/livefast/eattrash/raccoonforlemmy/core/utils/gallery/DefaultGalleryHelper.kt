@@ -69,7 +69,9 @@ internal class DefaultGalleryHelper : GalleryHelper {
                     ) {
                         picker.dismissViewControllerAnimated(flag = false, completion = {})
                         val pickerResult = didFinishPicking.firstOrNull() as? PHPickerResult
-                        if (pickerResult?.itemProvider?.hasItemConformingToTypeIdentifier(UTTypeImage.identifier) == true) {
+                        if (pickerResult?.itemProvider?.hasItemConformingToTypeIdentifier(UTTypeImage.identifier) ==
+                            true
+                        ) {
                             pickerResult.itemProvider.loadDataRepresentationForTypeIdentifier(
                                 typeIdentifier = UTTypeImage.identifier,
                             ) { data, _ ->

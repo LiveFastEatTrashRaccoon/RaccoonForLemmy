@@ -28,21 +28,21 @@ fun IndicatorChip(
     val shape = RoundedCornerShape(CornerSize.m)
     Box(
         modifier =
-            modifier
-                .border(
-                    color = color,
-                    width = Dp.Hairline,
-                    shape = shape,
-                ).then(
-                    if (full) {
-                        Modifier.background(color, shape)
-                    } else {
-                        Modifier
-                    },
-                ).padding(
-                    vertical = Spacing.xxxs,
-                    horizontal = Spacing.xs,
-                ),
+        modifier
+            .border(
+                color = color,
+                width = Dp.Hairline,
+                shape = shape,
+            ).then(
+                if (full) {
+                    Modifier.background(color, shape)
+                } else {
+                    Modifier
+                },
+            ).padding(
+                vertical = Spacing.xxxs,
+                horizontal = Spacing.xs,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -52,11 +52,11 @@ fun IndicatorChip(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.SemiBold,
             color =
-                if (full) {
-                    getReadableColorFor(color)
-                } else {
-                    color
-                },
+            if (full) {
+                getReadableColorFor(color)
+            } else {
+                color
+            },
         )
     }
 }

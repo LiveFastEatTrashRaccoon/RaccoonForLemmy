@@ -5,29 +5,18 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.DraftDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftType
 
-class DefaultDraftRepository(
-    private val dao: DraftDao
-) : DraftRepository {
+class DefaultDraftRepository(private val dao: DraftDao) : DraftRepository {
+    override suspend fun getAll(type: DraftType, accountId: Long): List<DraftModel> = dao
+        .getAllBy(type = type.toLong(), accountId = accountId)
+        .executeAsList()
+        .map { it.toModel() }
 
-    override suspend fun getAll(
-        type: DraftType,
-        accountId: Long,
-    ): List<DraftModel> =
-        dao
-            .getAllBy(type = type.toLong(), accountId = accountId)
-            .executeAsList()
-            .map { it.toModel() }
+    override suspend fun getBy(id: Long): DraftModel? = dao
+        .getBy(id)
+        .executeAsOneOrNull()
+        ?.toModel()
 
-    override suspend fun getBy(id: Long): DraftModel? =
-        dao
-            .getBy(id)
-            .executeAsOneOrNull()
-            ?.toModel()
-
-    override suspend fun create(
-        model: DraftModel,
-        accountId: Long,
-    ) {
+    override suspend fun create(model: DraftModel, accountId: Long) {
         dao.create(
             type = model.type.toLong(),
             body = model.body,
@@ -63,30 +52,27 @@ class DefaultDraftRepository(
     }
 }
 
-private fun DraftType.toLong(): Long =
-    when (this) {
-        DraftType.Comment -> 1L
-        DraftType.Post -> 0L
-    }
+private fun DraftType.toLong(): Long = when (this) {
+    DraftType.Comment -> 1L
+    DraftType.Post -> 0L
+}
 
-private fun Long.toDraftType(): DraftType =
-    when (this) {
-        1L -> DraftType.Comment
-        else -> DraftType.Post
-    }
+private fun Long.toDraftType(): DraftType = when (this) {
+    1L -> DraftType.Comment
+    else -> DraftType.Post
+}
 
-private fun DraftEntity.toModel() =
-    DraftModel(
-        id = id,
-        type = type.toDraftType(),
-        title = title,
-        body = body,
-        url = url,
-        communityId = communityId,
-        languageId = languageId,
-        postId = postId,
-        parentId = parentId,
-        nsfw = nsfw?.let { it != 0L },
-        date = date,
-        reference = info,
-    )
+private fun DraftEntity.toModel() = DraftModel(
+    id = id,
+    type = type.toDraftType(),
+    title = title,
+    body = body,
+    url = url,
+    communityId = communityId,
+    languageId = languageId,
+    postId = postId,
+    parentId = parentId,
+    nsfw = nsfw?.let { it != 0L },
+    date = date,
+    reference = info,
+)

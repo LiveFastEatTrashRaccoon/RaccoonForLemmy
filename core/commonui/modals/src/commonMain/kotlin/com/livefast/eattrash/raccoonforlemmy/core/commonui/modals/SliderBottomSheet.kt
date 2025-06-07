@@ -17,7 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -32,23 +32,25 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SliderBottomSheet(
-    sheetScope: CoroutineScope = rememberCoroutineScope(),
-    state: SheetState = rememberModalBottomSheetState(),
     title: String,
     min: Float,
     max: Float,
     initial: Float,
-    onSelected: ((Float?) -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    state: SheetState = rememberModalBottomSheetState(),
+    onSelect: ((Float?) -> Unit)? = null,
+    sheetScope: CoroutineScope = rememberCoroutineScope(),
 ) {
     var value by remember {
-        mutableStateOf(initial)
+        mutableFloatStateOf(initial)
     }
 
     ModalBottomSheet(
+        modifier = modifier,
         contentWindowInsets = { WindowInsets.navigationBars },
         sheetState = state,
         onDismissRequest = {
-            onSelected?.invoke(null)
+            onSelect?.invoke(null)
         },
     ) {
         Column(
@@ -80,7 +82,7 @@ fun SliderBottomSheet(
                         .launch {
                             state.hide()
                         }.invokeOnCompletion {
-                            onSelected?.invoke(value)
+                            onSelect?.invoke(value)
                         }
                 },
             ) {

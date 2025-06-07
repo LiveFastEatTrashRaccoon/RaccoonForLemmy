@@ -39,9 +39,9 @@ data class SwipeAction(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwipeActionCard(
+    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    content: @Composable () -> Unit,
     onGestureBegin: (() -> Unit)? = null,
     swipeToStartActions: List<SwipeAction> = emptyList(),
     swipeToEndActions: List<SwipeAction> = emptyList(),

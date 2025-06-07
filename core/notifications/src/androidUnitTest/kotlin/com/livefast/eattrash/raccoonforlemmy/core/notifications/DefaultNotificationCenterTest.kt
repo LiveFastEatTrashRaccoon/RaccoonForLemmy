@@ -18,19 +18,18 @@ class DefaultNotificationCenterTest {
         )
 
     @Test
-    fun givenSubscription_whenSendEvent_thenEventIsReceivedJustOnce() =
-        runTest {
-            launch {
-                sut.send(NotificationCenterEvent.Logout)
-            }
-
-            sut.subscribe(NotificationCenterEvent.Logout::class).test {
-                val evt = awaitItem()
-                assertEquals(NotificationCenterEvent.Logout, evt)
-            }
-
-            sut.subscribe(NotificationCenterEvent.Logout::class).test {
-                expectNoEvents()
-            }
+    fun givenSubscription_whenSendEvent_thenEventIsReceivedJustOnce() = runTest {
+        launch {
+            sut.send(NotificationCenterEvent.Logout)
         }
+
+        sut.subscribe(NotificationCenterEvent.Logout::class).test {
+            val evt = awaitItem()
+            assertEquals(NotificationCenterEvent.Logout, evt)
+        }
+
+        sut.subscribe(NotificationCenterEvent.Logout::class).test {
+            expectNoEvents()
+        }
+    }
 }

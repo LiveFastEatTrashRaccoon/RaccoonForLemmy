@@ -3,6 +3,7 @@ plugins {
     id("com.livefast.eattrash.composeMultiplatform")
     id("com.livefast.eattrash.androidTest")
     id("com.livefast.eattrash.serialization")
+    id("com.livefast.eattrash.spotless")
     alias(libs.plugins.kotlinx.kover)
 }
 

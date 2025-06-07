@@ -27,12 +27,12 @@ fun SettingsHeader(
     val fullColor = MaterialTheme.colorScheme.onBackground
     Row(
         modifier =
-            modifier.padding(
-                top = Spacing.s,
-                bottom = Spacing.xxs,
-                start = Spacing.s,
-                end = Spacing.s,
-            ),
+        modifier.padding(
+            top = Spacing.s,
+            bottom = Spacing.xxs,
+            start = Spacing.s,
+            end = Spacing.s,
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
     ) {

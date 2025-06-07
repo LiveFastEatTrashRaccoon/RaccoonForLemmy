@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -87,11 +88,11 @@ fun CommentCard(
     onReply: (() -> Unit)? = null,
     onOpenCommunity: ((CommunityModel, String) -> Unit)? = null,
     onOpenCreator: ((UserModel, String) -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
-    onToggleExpanded: (() -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
+    onToggleExpand: (() -> Unit)? = null,
 ) {
     val themeRepository = remember { getThemeRepository() }
-    var commentHeight by remember { mutableStateOf(0f) }
+    var commentHeight by remember { mutableFloatStateOf(0f) }
     val commentBarTheme by themeRepository.commentBarTheme.collectAsState()
     var textSelection by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
@@ -174,75 +175,75 @@ fun CommentCard(
     ) {
         Row(
             modifier =
-                modifier.semantics(mergeDescendants = true) {
-                    val helperActions =
-                        buildList {
-                            val community = comment.community
-                            if (community != null && onOpenCommunity != null) {
-                                this +=
-                                    CustomAccessibilityAction(openCommunityActionLabel) {
-                                        onOpenCommunity(community, "")
-                                        true
-                                    }
-                            }
-                            val user = comment.creator
-                            if (user != null && onOpenCreator != null) {
-                                this +=
-                                    CustomAccessibilityAction(openUserActionLabel) {
-                                        onOpenCreator(user, "")
-                                        true
-                                    }
-                            }
-                            if (onUpVote != null) {
-                                this +=
-                                    CustomAccessibilityAction(upVoteActionLabel) {
-                                        onUpVote()
-                                        true
-                                    }
-                            }
-                            if (onDownVote != null) {
-                                this +=
-                                    CustomAccessibilityAction(downVoteActionLabel) {
-                                        onDownVote()
-                                        true
-                                    }
-                            }
-                            if (onSave != null) {
-                                this +=
-                                    CustomAccessibilityAction(saveActionLabel) {
-                                        onSave()
-                                        true
-                                    }
-                            }
-                            if (onReply != null) {
-                                this +=
-                                    CustomAccessibilityAction(replyActionLabel) {
-                                        onReply()
-                                        true
-                                    }
-                            }
-                            if (onToggleExpanded != null) {
-                                this +=
-                                    CustomAccessibilityAction(toggleExpandedActionLabel) {
-                                        onToggleExpanded()
-                                        true
-                                    }
-                            }
-                            if (options.isNotEmpty()) {
-                                this +=
-                                    CustomAccessibilityAction(
-                                        label = optionsActionLabel,
-                                        action = {
-                                            optionsMenuOpen = true
-                                            true
-                                        },
-                                    )
-                            }
+            modifier.semantics(mergeDescendants = true) {
+                val helperActions =
+                    buildList {
+                        val community = comment.community
+                        if (community != null && onOpenCommunity != null) {
+                            this +=
+                                CustomAccessibilityAction(openCommunityActionLabel) {
+                                    onOpenCommunity(community, "")
+                                    true
+                                }
                         }
-                    if (helperActions.isNotEmpty()) {
-                        customActions = helperActions
+                        val user = comment.creator
+                        if (user != null && onOpenCreator != null) {
+                            this +=
+                                CustomAccessibilityAction(openUserActionLabel) {
+                                    onOpenCreator(user, "")
+                                    true
+                                }
+                        }
+                        if (onUpVote != null) {
+                            this +=
+                                CustomAccessibilityAction(upVoteActionLabel) {
+                                    onUpVote()
+                                    true
+                                }
+                        }
+                        if (onDownVote != null) {
+                            this +=
+                                CustomAccessibilityAction(downVoteActionLabel) {
+                                    onDownVote()
+                                    true
+                                }
+                        }
+                        if (onSave != null) {
+                            this +=
+                                CustomAccessibilityAction(saveActionLabel) {
+                                    onSave()
+                                    true
+                                }
+                        }
+                        if (onReply != null) {
+                            this +=
+                                CustomAccessibilityAction(replyActionLabel) {
+                                    onReply()
+                                    true
+                                }
+                        }
+                        if (onToggleExpand != null) {
+                            this +=
+                                CustomAccessibilityAction(toggleExpandedActionLabel) {
+                                    onToggleExpand()
+                                    true
+                                }
+                        }
+                        if (options.isNotEmpty()) {
+                            this +=
+                                CustomAccessibilityAction(
+                                    label = optionsActionLabel,
+                                    action = {
+                                        optionsMenuOpen = true
+                                        true
+                                    },
+                                )
+                        }
                     }
-                },
+                if (helperActions.isNotEmpty()) {
+                    customActions = helperActions
+                }
+            },
         ) {
             Box(
                 modifier = Modifier.width((indentAmount * comment.depth).dp),
@@ -250,40 +251,40 @@ fun CommentCard(
             if (indentAmount > 0 && comment.depth > 0) {
                 Box(
                     modifier =
-                        Modifier
-                            .padding(top = Spacing.xxs)
-                            .width(barWidth)
-                            .height(commentHeight.toLocalDp())
-                            .background(color = barColor, shape = RoundedCornerShape(indentAmount / 2)),
+                    Modifier
+                        .padding(top = Spacing.xxs)
+                        .width(barWidth)
+                        .height(commentHeight.toLocalDp())
+                        .background(color = barColor, shape = RoundedCornerShape(indentAmount / 2)),
                 )
             }
             Box(
                 modifier =
-                    Modifier
-                        .onClick(
-                            indication = null,
-                            onClick = {
-                                if (textSelection) {
-                                    focusManager.clearFocus()
-                                    textSelection = false
-                                } else {
-                                    onClick?.invoke()
-                                }
-                            },
-                            onDoubleClick = onDoubleClick ?: {},
-                        ),
+                Modifier
+                    .onClick(
+                        indication = null,
+                        onClick = {
+                            if (textSelection) {
+                                focusManager.clearFocus()
+                                textSelection = false
+                            } else {
+                                onClick?.invoke()
+                            }
+                        },
+                        onDoubleClick = onDoubleClick ?: {},
+                    ),
             ) {
                 Column(
                     modifier =
-                        Modifier
-                            .padding(start = barWidth)
-                            .fillMaxWidth()
-                            .padding(
-                                vertical = Spacing.xxs,
-                                horizontal = Spacing.s,
-                            ).onGloballyPositioned {
-                                commentHeight = it.size.toSize().height
-                            },
+                    Modifier
+                        .padding(start = barWidth)
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = Spacing.xxs,
+                            horizontal = Spacing.s,
+                        ).onGloballyPositioned {
+                            commentHeight = it.size.toSize().height
+                        },
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     CommunityAndCreatorInfo(
@@ -311,7 +312,7 @@ fun CommentCard(
                         onOpenCommunity = { community ->
                             onOpenCommunity?.invoke(community, "")
                         },
-                        onToggleExpanded = onToggleExpanded,
+                        onToggleExpand = onToggleExpand,
                     )
                     if (comment.removed) {
                         Text(
@@ -379,9 +380,9 @@ fun CommentCard(
                         publishDate = comment.publishDate,
                         updateDate = comment.updateDate,
                         options = options,
-                        onOptionSelected = onOptionSelected,
+                        onSelectOption = onSelectOption,
                         optionsMenuOpen = optionsMenuOpen,
-                        onOptionsMenuToggled = {
+                        onToggleOptionsMenu = {
                             optionsMenuOpen = it
                         },
                     )

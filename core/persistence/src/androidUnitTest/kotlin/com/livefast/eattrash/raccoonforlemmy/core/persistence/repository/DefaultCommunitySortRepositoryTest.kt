@@ -41,69 +41,63 @@ class DefaultCommunitySortRepositoryTest {
         )
 
     @Test
-    fun givenEmptyInitialState_whenSave_thenValueIsStored() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf()
-            sut.save(HANDLE, 1)
+    fun givenEmptyInitialState_whenSave_thenValueIsStored() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf()
+        sut.save(HANDLE, 1)
 
-            coVerify {
-                keyStore.save(KEY, listOf("$HANDLE:1"))
-            }
+        coVerify {
+            keyStore.save(KEY, listOf("$HANDLE:1"))
         }
+    }
 
     @Test
-    fun givenCommunityAlreadyExisting_whenSave_thenValueIsStored() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf("$HANDLE:0")
+    fun givenCommunityAlreadyExisting_whenSave_thenValueIsStored() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf("$HANDLE:0")
 
-            sut.save(HANDLE, 1)
+        sut.save(HANDLE, 1)
 
-            coVerify {
-                keyStore.save(KEY, listOf("$HANDLE:1"))
-            }
+        coVerify {
+            keyStore.save(KEY, listOf("$HANDLE:1"))
         }
+    }
 
     @Test
-    fun givenOtherCommunityAlreadyExisting_whenSave_thenBothValuesAreStored() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
+    fun givenOtherCommunityAlreadyExisting_whenSave_thenBothValuesAreStored() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:1")
 
-            sut.save(HANDLE, 1)
+        sut.save(HANDLE, 1)
 
-            coEvery {
-                keyStore.save(KEY, listOf("!test@lemmy.world:1", "$HANDLE:1"))
-            }
+        coEvery {
+            keyStore.save(KEY, listOf("!test@lemmy.world:1", "$HANDLE:1"))
         }
+    }
 
     @Test
-    fun givenEmptyInitialState_whenGet_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf()
+    fun givenEmptyInitialState_whenGet_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf()
 
-            val res = sut.get(HANDLE)
+        val res = sut.get(HANDLE)
 
-            assertNull(res)
-        }
-
-    @Test
-    fun givenCommunityExists_whenGet_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf("$HANDLE:2")
-
-            val res = sut.get(HANDLE)
-
-            assertEquals(2, res)
-        }
+        assertNull(res)
+    }
 
     @Test
-    fun givenCommunityDoesNotExist_whenGet_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:2")
+    fun givenCommunityExists_whenGet_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf("$HANDLE:2")
 
-            val res = sut.get(HANDLE)
+        val res = sut.get(HANDLE)
 
-            assertNull(res)
-        }
+        assertEquals(2, res)
+    }
+
+    @Test
+    fun givenCommunityDoesNotExist_whenGet_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf("!test@lemmy.world:2")
+
+        val res = sut.get(HANDLE)
+
+        assertNull(res)
+    }
 
     companion object {
         private const val KEY = "communitySort"

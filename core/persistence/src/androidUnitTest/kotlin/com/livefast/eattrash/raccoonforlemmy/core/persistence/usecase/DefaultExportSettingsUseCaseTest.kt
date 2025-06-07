@@ -15,15 +15,14 @@ class DefaultExportSettingsUseCaseTest {
     private val sut = DefaultExportSettingsUseCase(settingsRepository)
 
     @Test
-    fun whenInvoked_thenResultIsAsExpected() =
-        runTest {
-            val originalSettings = SettingsModel()
-            every { settingsRepository.currentSettings } returns MutableStateFlow(originalSettings)
+    fun whenInvoked_thenResultIsAsExpected() = runTest {
+        val originalSettings = SettingsModel()
+        every { settingsRepository.currentSettings } returns MutableStateFlow(originalSettings)
 
-            val res = sut()
+        val res = sut()
 
-            val expected = jsonSerializationStrategy.encodeToString(originalSettings.toData())
-            assertEquals(expected, res)
-            verify { settingsRepository.currentSettings }
-        }
+        val expected = jsonSerializationStrategy.encodeToString(originalSettings.toData())
+        assertEquals(expected, res)
+        verify { settingsRepository.currentSettings }
+    }
 }

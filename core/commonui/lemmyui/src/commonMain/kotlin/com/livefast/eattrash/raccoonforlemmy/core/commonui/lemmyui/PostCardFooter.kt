@@ -79,8 +79,8 @@ fun PostCardFooter(
     onDownVote: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
-    onOptionsMenuToggled: ((Boolean) -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onToggleOptionsMenu: ((Boolean) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val themeRepository = remember { getThemeRepository() }
@@ -95,17 +95,17 @@ fun PostCardFooter(
     CustomizedContent(ContentFontClass.AncillaryText) {
         Box(
             modifier =
-                modifier.onClick(
-                    indication = null,
-                    onClick = {
-                        onClick?.invoke()
-                    },
-                    onLongClick = {
-                        if (!optionsMenuOpen) {
-                            onOptionsMenuToggled?.invoke(true)
-                        }
-                    },
-                ),
+            modifier.onClick(
+                indication = null,
+                onClick = {
+                    onClick?.invoke()
+                },
+                onLongClick = {
+                    if (!optionsMenuOpen) {
+                        onToggleOptionsMenu?.invoke(true)
+                    }
+                },
+            ),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -118,12 +118,12 @@ fun PostCardFooter(
                     ) {
                         IconButton(
                             modifier =
-                                buttonModifier
-                                    .padding(
-                                        top = 3.5.dp,
-                                        end = 3.5.dp,
-                                        bottom = 3.5.dp,
-                                    ),
+                            buttonModifier
+                                .padding(
+                                    top = 3.5.dp,
+                                    end = 3.5.dp,
+                                    bottom = 3.5.dp,
+                                ),
                             enabled = actionButtonsActive,
                             onClick = {
                                 onReply?.invoke()
@@ -146,12 +146,12 @@ fun PostCardFooter(
                 if (unreadComments != null) {
                     Text(
                         modifier =
-                            Modifier
-                                .padding(start = Spacing.xxs)
-                                .background(
-                                    color = MaterialTheme.colorScheme.secondary,
-                                    shape = RoundedCornerShape(CornerSize.s),
-                                ).padding(horizontal = Spacing.xxs),
+                        Modifier
+                            .padding(start = Spacing.xxs)
+                            .background(
+                                color = MaterialTheme.colorScheme.secondary,
+                                shape = RoundedCornerShape(CornerSize.s),
+                            ).padding(horizontal = Spacing.xxs),
                         text = "+$unreadComments",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSecondary,
@@ -170,19 +170,19 @@ fun PostCardFooter(
                         val isShowingUpdateDate = !updateDate.isNullOrBlank()
                         Icon(
                             modifier =
-                                Modifier.size(IconSize.m).then(
-                                    if (!isShowingUpdateDate) {
-                                        Modifier.padding(1.5.dp)
-                                    } else {
-                                        Modifier.padding(0.25.dp)
-                                    },
-                                ),
-                            imageVector =
-                                if (isShowingUpdateDate) {
-                                    Icons.Default.Update
+                            Modifier.size(IconSize.m).then(
+                                if (!isShowingUpdateDate) {
+                                    Modifier.padding(1.5.dp)
                                 } else {
-                                    Icons.Default.Schedule
+                                    Modifier.padding(0.25.dp)
                                 },
+                            ),
+                            imageVector =
+                            if (isShowingUpdateDate) {
+                                Icons.Default.Update
+                            } else {
+                                Icons.Default.Schedule
+                            },
                             contentDescription = LocalStrings.current.creationDate,
                             tint = ancillaryColor,
                         )
@@ -197,14 +197,14 @@ fun PostCardFooter(
                 if (options.isNotEmpty()) {
                     IconButton(
                         modifier =
-                            Modifier
-                                .size(IconSize.m)
-                                .padding(Spacing.xs)
-                                .onGloballyPositioned {
-                                    optionsOffset = it.positionInParent()
-                                }.clearAndSetSemantics { },
+                        Modifier
+                            .size(IconSize.m)
+                            .padding(Spacing.xs)
+                            .onGloballyPositioned {
+                                optionsOffset = it.positionInParent()
+                            }.clearAndSetSemantics { },
                         onClick = {
-                            onOptionsMenuToggled?.invoke(true)
+                            onToggleOptionsMenu?.invoke(true)
                         },
                     ) {
                         Icon(
@@ -218,23 +218,23 @@ fun PostCardFooter(
                 if (actionButtonsActive) {
                     FeedbackButton(
                         modifier =
-                            buttonModifier.padding(
-                                top = 2.5.dp,
-                                bottom = 2.5.dp,
-                                end = 2.5.dp,
-                            ),
+                        buttonModifier.padding(
+                            top = 2.5.dp,
+                            bottom = 2.5.dp,
+                            end = 2.5.dp,
+                        ),
                         imageVector =
-                            if (!saved) {
-                                Icons.Default.BookmarkBorder
-                            } else {
-                                Icons.Default.Bookmark
-                            },
+                        if (!saved) {
+                            Icons.Default.BookmarkBorder
+                        } else {
+                            Icons.Default.Bookmark
+                        },
                         tintColor =
-                            if (saved) {
-                                MaterialTheme.colorScheme.secondary
-                            } else {
-                                ancillaryColor
-                            },
+                        if (saved) {
+                            MaterialTheme.colorScheme.secondary
+                        } else {
+                            ancillaryColor
+                        },
                         enabled = actionButtonsActive,
                         contentDescription = LocalStrings.current.actionAddToBookmarks,
                         onClick = {
@@ -244,16 +244,16 @@ fun PostCardFooter(
                 }
                 FeedbackButton(
                     modifier =
-                        buttonModifier
-                            .padding(all = 2.5.dp)
-                            .then(VoteAction.UpVote.toModifier()),
+                    buttonModifier
+                        .padding(all = 2.5.dp)
+                        .then(VoteAction.UpVote.toModifier()),
                     imageVector = VoteAction.UpVote.toIcon(),
                     tintColor =
-                        if (upVoted) {
-                            upVoteColor ?: defaultUpvoteColor
-                        } else {
-                            ancillaryColor
-                        },
+                    if (upVoted) {
+                        upVoteColor ?: defaultUpvoteColor
+                    } else {
+                        ancillaryColor
+                    },
                     enabled = actionButtonsActive,
                     contentDescription = LocalStrings.current.actionUpvote,
                     onClick = {
@@ -263,16 +263,16 @@ fun PostCardFooter(
                 if (showScores) {
                     Text(
                         text =
-                            formatToReadableValue(
-                                voteFormat = voteFormat,
-                                score = score,
-                                upVotes = upVotes,
-                                downVotes = downVotes,
-                                upVoteColor = upVoteColor ?: defaultUpvoteColor,
-                                downVoteColor = downVoteColor ?: defaultDownVoteColor,
-                                upVoted = upVoted,
-                                downVoted = downVoted,
-                            ),
+                        formatToReadableValue(
+                            voteFormat = voteFormat,
+                            score = score,
+                            upVotes = upVotes,
+                            downVotes = downVotes,
+                            upVoteColor = upVoteColor ?: defaultUpvoteColor,
+                            downVoteColor = downVoteColor ?: defaultDownVoteColor,
+                            upVoted = upVoted,
+                            downVoted = downVoted,
+                        ),
                         style = MaterialTheme.typography.labelMedium,
                         color = ancillaryColor,
                     )
@@ -280,19 +280,19 @@ fun PostCardFooter(
                 if (downVoteEnabled) {
                     FeedbackButton(
                         modifier =
-                            buttonModifier
-                                .padding(
-                                    top = 2.5.dp,
-                                    bottom = 2.5.dp,
-                                    end = 2.5.dp,
-                                ).then(VoteAction.DownVote.toModifier()),
+                        buttonModifier
+                            .padding(
+                                top = 2.5.dp,
+                                bottom = 2.5.dp,
+                                end = 2.5.dp,
+                            ).then(VoteAction.DownVote.toModifier()),
                         imageVector = VoteAction.DownVote.toIcon(),
                         tintColor =
-                            if (downVoted) {
-                                downVoteColor ?: defaultDownVoteColor
-                            } else {
-                                ancillaryColor
-                            },
+                        if (downVoted) {
+                            downVoteColor ?: defaultDownVoteColor
+                        } else {
+                            ancillaryColor
+                        },
                         enabled = actionButtonsActive,
                         contentDescription = LocalStrings.current.actionDownvote,
                         onClick = {
@@ -305,13 +305,13 @@ fun PostCardFooter(
             CustomDropDown(
                 expanded = optionsMenuOpen,
                 onDismiss = {
-                    onOptionsMenuToggled?.invoke(false)
+                    onToggleOptionsMenu?.invoke(false)
                 },
                 offset =
-                    DpOffset(
-                        x = optionsOffset.x.toLocalDp(),
-                        y = optionsOffset.y.toLocalDp(),
-                    ),
+                DpOffset(
+                    x = optionsOffset.x.toLocalDp(),
+                    y = optionsOffset.y.toLocalDp(),
+                ),
             ) {
                 options.forEach { option ->
                     DropdownMenuItem(
@@ -319,8 +319,8 @@ fun PostCardFooter(
                             Text(option.text)
                         },
                         onClick = {
-                            onOptionsMenuToggled?.invoke(false)
-                            onOptionSelected?.invoke(option.id)
+                            onToggleOptionsMenu?.invoke(false)
+                            onSelectOption?.invoke(option.id)
                         },
                     )
                 }

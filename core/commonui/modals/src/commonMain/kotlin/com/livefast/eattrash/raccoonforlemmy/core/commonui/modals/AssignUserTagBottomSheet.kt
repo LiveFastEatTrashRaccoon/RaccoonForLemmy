@@ -97,7 +97,7 @@ fun AssignUserTagBottomSheet(
                     UserTagItem(
                         tag = tag,
                         checked = selectedIds.contains(tag.id),
-                        onCheckedChange = { checked ->
+                        onCheck = { checked ->
                             tag.id?.also {
                                 if (checked) {
                                     selectedIds.add(it)

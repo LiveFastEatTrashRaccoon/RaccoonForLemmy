@@ -44,21 +44,23 @@ data class CustomModalBottomSheetItem(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CustomModalBottomSheet(
+    modifier: Modifier = Modifier,
     sheetScope: CoroutineScope = rememberCoroutineScope(),
     sheetState: SheetState = rememberModalBottomSheetState(),
     title: String = "",
     items: List<CustomModalBottomSheetItem> = emptyList(),
-    onSelected: ((Int?) -> Unit)? = null,
+    onSelect: ((Int?) -> Unit)? = null,
     onLongPress: ((Int) -> Unit)? = null,
 ) {
     val fullColor = MaterialTheme.colorScheme.onBackground
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(ancillaryTextAlpha)
 
     ModalBottomSheet(
+        modifier = modifier,
         contentWindowInsets = { WindowInsets.navigationBars },
         sheetState = sheetState,
         onDismissRequest = {
-            onSelected?.invoke(null)
+            onSelect?.invoke(null)
         },
     ) {
         Column(
@@ -76,35 +78,35 @@ fun CustomModalBottomSheet(
                 itemsIndexed(items = items) { idx, item ->
                     Row(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .clip(shape = RoundedCornerShape(CornerSize.xl))
-                                .combinedClickable(
-                                    onClick = {
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(shape = RoundedCornerShape(CornerSize.xl))
+                            .combinedClickable(
+                                onClick = {
+                                    sheetScope
+                                        .launch {
+                                            sheetState.hide()
+                                        }.invokeOnCompletion {
+                                            onSelect?.invoke(idx)
+                                        }
+                                },
+                                onLongClick =
+                                if (onLongPress != null) {
+                                    {
                                         sheetScope
                                             .launch {
                                                 sheetState.hide()
                                             }.invokeOnCompletion {
-                                                onSelected?.invoke(idx)
+                                                onLongPress(idx)
                                             }
-                                    },
-                                    onLongClick =
-                                        if (onLongPress != null) {
-                                            {
-                                                sheetScope
-                                                    .launch {
-                                                        sheetState.hide()
-                                                    }.invokeOnCompletion {
-                                                        onLongPress(idx)
-                                                    }
-                                            }
-                                        } else {
-                                            null
-                                        },
-                                ).padding(
-                                    horizontal = Spacing.m,
-                                    vertical = Spacing.s,
-                                ),
+                                    }
+                                } else {
+                                    null
+                                },
+                            ).padding(
+                                horizontal = Spacing.m,
+                                vertical = Spacing.s,
+                            ),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
                     ) {
@@ -116,8 +118,8 @@ fun CustomModalBottomSheet(
                             Text(
                                 text = item.label,
                                 style =
-                                    item.customLabelStyle
-                                        ?: MaterialTheme.typography.bodyLarge,
+                                item.customLabelStyle
+                                    ?: MaterialTheme.typography.bodyLarge,
                                 color = fullColor,
                             )
                             if (!item.subtitle.isNullOrEmpty()) {

@@ -52,6 +52,11 @@ sealed interface InboxCardType {
 fun InboxCard(
     mention: PersonMentionModel,
     type: InboxCardType,
+    onImageClick: (String) -> Unit,
+    onClick: (PostModel) -> Unit,
+    onOpenCreator: (UserModel, String) -> Unit,
+    onOpenCommunity: (CommunityModel) -> Unit,
+    modifier: Modifier = Modifier,
     autoLoadImages: Boolean = true,
     preferNicknames: Boolean = true,
     showScores: Boolean = true,
@@ -60,13 +65,9 @@ fun InboxCard(
     voteFormat: VoteFormat = VoteFormat.Aggregated,
     postLayout: PostLayout = PostLayout.Card,
     options: List<Option> = emptyList(),
-    onImageClick: (String) -> Unit,
-    onClick: (PostModel) -> Unit,
-    onOpenCreator: (UserModel, String) -> Unit,
-    onOpenCommunity: (CommunityModel) -> Unit,
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
     onReply: (() -> Unit)? = null,
 ) {
     var textSelection by remember { mutableStateOf(false) }
@@ -115,79 +116,79 @@ fun InboxCard(
 
     Box(
         modifier =
-            Modifier
-                .then(
-                    if (postLayout == PostLayout.Card) {
-                        Modifier
-                            .padding(horizontal = Spacing.xs)
-                            .shadow(
-                                elevation = 5.dp,
-                                shape = RoundedCornerShape(CornerSize.l),
-                            ).clip(RoundedCornerShape(CornerSize.l))
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                            ).padding(vertical = Spacing.s)
+        modifier
+            .then(
+                if (postLayout == PostLayout.Card) {
+                    Modifier
+                        .padding(horizontal = Spacing.xs)
+                        .shadow(
+                            elevation = 5.dp,
+                            shape = RoundedCornerShape(CornerSize.l),
+                        ).clip(RoundedCornerShape(CornerSize.l))
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                        ).padding(vertical = Spacing.s)
+                } else {
+                    Modifier.background(MaterialTheme.colorScheme.background)
+                },
+            ).onClick(
+                onClick = {
+                    if (textSelection) {
+                        focusManager.clearFocus()
+                        textSelection = false
                     } else {
-                        Modifier.background(MaterialTheme.colorScheme.background)
-                    },
-                ).onClick(
-                    onClick = {
-                        if (textSelection) {
-                            focusManager.clearFocus()
-                            textSelection = false
-                        } else {
-                            onClickPost()
-                        }
-                    },
-                ).semantics(mergeDescendants = true) {
-                    val helperActions =
-                        buildList {
-                            this +=
-                                CustomAccessibilityAction(openCommunityActionLabel) {
-                                    onOpenCommunity(mention.community)
-                                    true
-                                }
-                            this +=
-                                CustomAccessibilityAction(openUserActionLabel) {
-                                    onOpenCreator(mention.creator, "")
-                                    true
-                                }
-                            if (onUpVote != null) {
-                                this +=
-                                    CustomAccessibilityAction(upVoteActionLabel) {
-                                        onUpVote()
-                                        true
-                                    }
-                            }
-                            if (onDownVote != null) {
-                                this +=
-                                    CustomAccessibilityAction(downVoteActionLabel) {
-                                        onDownVote()
-                                        true
-                                    }
-                            }
-                            if (onReply != null) {
-                                this +=
-                                    CustomAccessibilityAction(replyActionLabel) {
-                                        onReply()
-                                        true
-                                    }
-                            }
-                            if (options.isNotEmpty()) {
-                                this +=
-                                    CustomAccessibilityAction(
-                                        label = optionsActionLabel,
-                                        action = {
-                                            optionsMenuOpen = true
-                                            true
-                                        },
-                                    )
-                            }
-                        }
-                    if (helperActions.isNotEmpty()) {
-                        customActions = helperActions
+                        onClickPost()
                     }
                 },
+            ).semantics(mergeDescendants = true) {
+                val helperActions =
+                    buildList {
+                        this +=
+                            CustomAccessibilityAction(openCommunityActionLabel) {
+                                onOpenCommunity(mention.community)
+                                true
+                            }
+                        this +=
+                            CustomAccessibilityAction(openUserActionLabel) {
+                                onOpenCreator(mention.creator, "")
+                                true
+                            }
+                        if (onUpVote != null) {
+                            this +=
+                                CustomAccessibilityAction(upVoteActionLabel) {
+                                    onUpVote()
+                                    true
+                                }
+                        }
+                        if (onDownVote != null) {
+                            this +=
+                                CustomAccessibilityAction(downVoteActionLabel) {
+                                    onDownVote()
+                                    true
+                                }
+                        }
+                        if (onReply != null) {
+                            this +=
+                                CustomAccessibilityAction(replyActionLabel) {
+                                    onReply()
+                                    true
+                                }
+                        }
+                        if (options.isNotEmpty()) {
+                            this +=
+                                CustomAccessibilityAction(
+                                    label = optionsActionLabel,
+                                    action = {
+                                        optionsMenuOpen = true
+                                        true
+                                    },
+                                )
+                        }
+                    }
+                if (helperActions.isNotEmpty()) {
+                    customActions = helperActions
+                }
+            },
     ) {
         CompositionLocalProvider(
             LocalTextToolbar provides
@@ -205,11 +206,11 @@ fun InboxCard(
             ) {
                 InboxCardHeader(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .onClick(
-                                onClick = onClickPost,
-                            ).padding(horizontal = Spacing.s),
+                    Modifier
+                        .fillMaxWidth()
+                        .onClick(
+                            onClick = onClickPost,
+                        ).padding(horizontal = Spacing.s),
                     mention = mention,
                     type = type,
                 )
@@ -234,11 +235,11 @@ fun InboxCard(
                     CustomizedContent(ContentFontClass.Body) {
                         PostCardBody(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        horizontal = Spacing.s,
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = Spacing.s,
+                                ),
                             text = previewText,
                             autoLoadImages = autoLoadImages,
                             onOpenImage = onImageClick,
@@ -258,13 +259,13 @@ fun InboxCard(
                 }
                 InboxReplySubtitle(
                     modifier =
-                        Modifier
-                            .onClick(onClick = onClickPost)
-                            .padding(
-                                start = Spacing.s,
-                                end = Spacing.s,
-                                top = Spacing.s,
-                            ),
+                    Modifier
+                        .onClick(onClick = onClickPost)
+                        .padding(
+                            start = Spacing.s,
+                            end = Spacing.s,
+                            top = Spacing.s,
+                        ),
                     creator = mention.creator,
                     community = mention.community,
                     autoLoadImages = autoLoadImages,
@@ -286,10 +287,10 @@ fun InboxCard(
                     },
                     onUpVote = onUpVote,
                     onDownVote = onDownVote,
-                    onOptionsMenuToggled = {
+                    onToggleOptionsMenu = {
                         optionsMenuOpen = it
                     },
-                    onOptionSelected = onOptionSelected,
+                    onSelectOption = onSelectOption,
                     onReply = onReply,
                 )
             }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -60,12 +61,12 @@ fun CollapsedCommentCard(
     onDownVote: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onReply: (() -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
-    onToggleExpanded: (() -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
+    onToggleExpand: (() -> Unit)? = null,
 ) {
     val themeRepository = remember { getThemeRepository() }
     val commentBarTheme by themeRepository.commentBarTheme.collectAsState()
-    var commentHeight by remember { mutableStateOf(0f) }
+    var commentHeight by remember { mutableFloatStateOf(0f) }
     val barColor =
         themeRepository.getCommentBarColor(
             depth = comment.depth,
@@ -120,70 +121,70 @@ fun CollapsedCommentCard(
 
     Row(
         modifier =
-            modifier
-                .onClick(
-                    onClick = onClick ?: {},
-                ).semantics(mergeDescendants = true) {
-                    val helperActions =
-                        buildList {
-                            val user = comment.creator
-                            if (user != null && onOpenCreator != null) {
-                                this +=
-                                    CustomAccessibilityAction(openUserActionLabel) {
-                                        onOpenCreator(user)
-                                        true
-                                    }
-                            }
-                            if (onUpVote != null) {
-                                this +=
-                                    CustomAccessibilityAction(upVoteActionLabel) {
-                                        onUpVote()
-                                        true
-                                    }
-                            }
-                            if (onDownVote != null) {
-                                this +=
-                                    CustomAccessibilityAction(downVoteActionLabel) {
-                                        onDownVote()
-                                        true
-                                    }
-                            }
-                            if (onSave != null) {
-                                this +=
-                                    CustomAccessibilityAction(saveActionLabel) {
-                                        onSave()
-                                        true
-                                    }
-                            }
-                            if (onReply != null) {
-                                this +=
-                                    CustomAccessibilityAction(replyActionLabel) {
-                                        onReply()
-                                        true
-                                    }
-                            }
-                            if (onToggleExpanded != null) {
-                                this +=
-                                    CustomAccessibilityAction(toggleExpandedActionLabel) {
-                                        onToggleExpanded()
-                                        true
-                                    }
-                            }
-                            if (options.isNotEmpty()) {
-                                this +=
-                                    CustomAccessibilityAction(
-                                        label = optionsActionLabel,
-                                        action = {
-                                            optionsMenuOpen = true
-                                            true
-                                        },
-                                    )
-                            }
+        modifier
+            .onClick(
+                onClick = onClick ?: {},
+            ).semantics(mergeDescendants = true) {
+                val helperActions =
+                    buildList {
+                        val user = comment.creator
+                        if (user != null && onOpenCreator != null) {
+                            this +=
+                                CustomAccessibilityAction(openUserActionLabel) {
+                                    onOpenCreator(user)
+                                    true
+                                }
                         }
-                    if (helperActions.isNotEmpty()) {
-                        customActions = helperActions
+                        if (onUpVote != null) {
+                            this +=
+                                CustomAccessibilityAction(upVoteActionLabel) {
+                                    onUpVote()
+                                    true
+                                }
+                        }
+                        if (onDownVote != null) {
+                            this +=
+                                CustomAccessibilityAction(downVoteActionLabel) {
+                                    onDownVote()
+                                    true
+                                }
+                        }
+                        if (onSave != null) {
+                            this +=
+                                CustomAccessibilityAction(saveActionLabel) {
+                                    onSave()
+                                    true
+                                }
+                        }
+                        if (onReply != null) {
+                            this +=
+                                CustomAccessibilityAction(replyActionLabel) {
+                                    onReply()
+                                    true
+                                }
+                        }
+                        if (onToggleExpand != null) {
+                            this +=
+                                CustomAccessibilityAction(toggleExpandedActionLabel) {
+                                    onToggleExpand()
+                                    true
+                                }
+                        }
+                        if (options.isNotEmpty()) {
+                            this +=
+                                CustomAccessibilityAction(
+                                    label = optionsActionLabel,
+                                    action = {
+                                        optionsMenuOpen = true
+                                        true
+                                    },
+                                )
+                        }
                     }
-                },
+                if (helperActions.isNotEmpty()) {
+                    customActions = helperActions
+                }
+            },
     ) {
         Box(
             modifier = Modifier.width((indentAmount * comment.depth).dp),
@@ -191,24 +192,24 @@ fun CollapsedCommentCard(
         if (comment.depth > 0) {
             Box(
                 modifier =
-                    Modifier
-                        .padding(top = Spacing.xxs)
-                        .width(barWidth)
-                        .height(commentHeight.toLocalDp())
-                        .background(color = barColor),
+                Modifier
+                    .padding(top = Spacing.xxs)
+                    .width(barWidth)
+                    .height(commentHeight.toLocalDp())
+                    .background(color = barColor),
             )
         }
         Column(
             modifier =
-                Modifier
-                    .padding(start = barWidth)
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = Spacing.xxs,
-                        horizontal = Spacing.s,
-                    ).onGloballyPositioned {
-                        commentHeight = it.size.toSize().height
-                    },
+            Modifier
+                .padding(start = barWidth)
+                .fillMaxWidth()
+                .padding(
+                    vertical = Spacing.xxs,
+                    horizontal = Spacing.s,
+                ).onGloballyPositioned {
+                    commentHeight = it.size.toSize().height
+                },
         ) {
             CommunityAndCreatorInfo(
                 modifier = Modifier.padding(top = Spacing.xxs),
@@ -227,8 +228,8 @@ fun CollapsedCommentCard(
                 modTagColor = modTagColor,
                 autoLoadImages = autoLoadImages,
                 preferNicknames = preferNicknames,
-                onToggleExpanded = {
-                    onToggleExpanded?.invoke()
+                onToggleExpand = {
+                    onToggleExpand?.invoke()
                 },
                 onOpenCreator = onOpenCreator,
             )
@@ -252,9 +253,9 @@ fun CollapsedCommentCard(
                 updateDate = comment.updateDate,
                 actionButtonsActive = actionButtonsActive,
                 options = options,
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
                 optionsMenuOpen = optionsMenuOpen,
-                onOptionsMenuToggled = {
+                onToggleOptionsMenu = {
                     optionsMenuOpen = it
                 },
             )

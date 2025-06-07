@@ -7,10 +7,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.entities.AppDataba
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.key.DatabaseKeyProvider
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
-internal class DefaultDriverFactory(
-    private val context: Context,
-    private val keyProvider: DatabaseKeyProvider,
-) : DriverFactory {
+internal class DefaultDriverFactory(private val context: Context, private val keyProvider: DatabaseKeyProvider) :
+    DriverFactory {
     companion object {
         private const val DATABASE_NAME = "raccoonforlemmy.db"
     }

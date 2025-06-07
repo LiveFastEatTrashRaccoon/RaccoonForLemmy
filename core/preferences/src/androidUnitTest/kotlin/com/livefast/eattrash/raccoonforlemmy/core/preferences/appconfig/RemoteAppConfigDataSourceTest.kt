@@ -37,10 +37,9 @@ class RemoteAppConfigDataSourceTest {
         )
 
     @Test
-    fun whenGet_thenResultIsAsExpected() =
-        runTest {
-            val res = sut.get()
+    fun whenGet_thenResultIsAsExpected() = runTest {
+        val res = sut.get()
 
-            assertTrue(res.alternateMarkdownRenderingSettingsItemEnabled)
-        }
+        assertTrue(res.alternateMarkdownRenderingSettingsItemEnabled)
+    }
 }

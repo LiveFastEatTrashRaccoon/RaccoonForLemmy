@@ -24,8 +24,8 @@ import kotlinx.coroutines.flow.map
 
 @Composable
 fun PostCardBody(
-    modifier: Modifier = Modifier,
     text: String,
+    modifier: Modifier = Modifier,
     maxLines: Int? = null,
     autoLoadImages: Boolean = true,
     blurImages: Boolean = false,
@@ -54,34 +54,34 @@ fun PostCardBody(
                 maxLines = maxLines,
                 autoLoadImages = autoLoadImages,
                 typography =
-                    markdownTypography(
-                        h1 = typography.titleLarge,
-                        h2 = typography.titleLarge,
-                        h3 = typography.titleMedium,
-                        h4 = typography.titleMedium,
-                        h5 = typography.titleSmall,
-                        h6 = typography.titleSmall,
-                        text = typography.bodyMedium,
-                        paragraph = typography.bodyMedium,
-                        quote = typography.bodyMedium,
-                        bullet = typography.bodyMedium,
-                        list = typography.bodyMedium,
-                        ordered = typography.bodyMedium,
-                        code = typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
-                        link =
-                            typography.bodyMedium.copy(
-                                fontWeight = FontWeight.Bold,
-                                textDecoration = TextDecoration.Underline,
-                            ),
+                markdownTypography(
+                    h1 = typography.titleLarge,
+                    h2 = typography.titleLarge,
+                    h3 = typography.titleMedium,
+                    h4 = typography.titleMedium,
+                    h5 = typography.titleSmall,
+                    h6 = typography.titleSmall,
+                    text = typography.bodyMedium,
+                    paragraph = typography.bodyMedium,
+                    quote = typography.bodyMedium,
+                    bullet = typography.bodyMedium,
+                    list = typography.bodyMedium,
+                    ordered = typography.bodyMedium,
+                    code = typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
+                    link =
+                    typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = TextDecoration.Underline,
                     ),
+                ),
                 colors =
-                    markdownColor(
-                        text = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
-                        linkText = MaterialTheme.colorScheme.primary.copy(alpha = additionalAlphaFactor),
-                        codeText = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
-                        codeBackground = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                        dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                    ),
+                markdownColor(
+                    text = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
+                    linkText = MaterialTheme.colorScheme.primary.copy(alpha = additionalAlphaFactor),
+                    codeText = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
+                    codeBackground = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
+                    dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                ),
                 highlightText = highlightText,
                 enableAlternateRendering = enableAlternateMarkdownRendering,
                 blurImages = blurImages,

@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,13 +37,13 @@ private const val LOADING_ANIMATION_DURATION = 1000
 
 @Composable
 fun ZoomableImage(
-    contentScale: ContentScale = ContentScale.Fit,
-    modifier: Modifier = Modifier,
     url: String,
+    modifier: Modifier = Modifier,
+    contentScale: ContentScale = ContentScale.Fit,
     autoLoadImages: Boolean = false,
 ) {
     var scale by remember {
-        mutableStateOf(1f)
+        mutableFloatStateOf(1f)
     }
     var offset by remember {
         mutableStateOf(Offset.Zero)
@@ -59,51 +60,51 @@ fun ZoomableImage(
 
     BoxWithConstraints(
         modifier =
-            modifier
-                .fillMaxSize()
-                .background(Color.Black),
+        modifier
+            .fillMaxSize()
+            .background(Color.Black),
         contentAlignment = Alignment.Center,
     ) {
         AnimatedVisibility(visible = visible) {
             CustomImage(
                 modifier =
-                    Modifier
-                        .onClick(
-                            onDoubleClick = {
-                                if (scale > 1f) {
-                                    scale = 1f
-                                    offset = Offset.Zero
-                                } else {
-                                    scale *= 2.5f
-                                }
+                Modifier
+                    .onClick(
+                        onDoubleClick = {
+                            if (scale > 1f) {
+                                scale = 1f
+                                offset = Offset.Zero
+                            } else {
+                                scale *= 2.5f
+                            }
+                        },
+                    ).pointerInput(Unit) {
+                        detectTransformGestures(
+                            onGesture = { _, pan, gestureZoom, _ ->
+                                val extraWidth = (scale - 1) * constraints.maxWidth
+                                val extraHeight = (scale - 1) * constraints.maxHeight
+                                val maxX = extraWidth / 2
+                                val maxY = extraHeight / 2
+
+                                scale = (scale * gestureZoom).coerceIn(1f, 16f)
+
+                                offset =
+                                    if (scale > 1) {
+                                        Offset(
+                                            x = (offset.x + pan.x * scale).coerceIn(-maxX, maxX),
+                                            y = (offset.y + pan.y * scale).coerceIn(-maxY, maxY),
+                                        )
+                                    } else {
+                                        Offset.Zero
+                                    }
                             },
-                        ).pointerInput(Unit) {
-                            detectTransformGestures(
-                                onGesture = { _, pan, gestureZoom, _ ->
-                                    val extraWidth = (scale - 1) * constraints.maxWidth
-                                    val extraHeight = (scale - 1) * constraints.maxHeight
-                                    val maxX = extraWidth / 2
-                                    val maxY = extraHeight / 2
-
-                                    scale = (scale * gestureZoom).coerceIn(1f, 16f)
-
-                                    offset =
-                                        if (scale > 1) {
-                                            Offset(
-                                                x = (offset.x + pan.x * scale).coerceIn(-maxX, maxX),
-                                                y = (offset.y + pan.y * scale).coerceIn(-maxY, maxY),
-                                            )
-                                        } else {
-                                            Offset.Zero
-                                        }
-                                },
-                            )
-                        }.graphicsLayer(
-                            scaleX = scale,
-                            scaleY = scale,
-                            translationX = offset.x,
-                            translationY = offset.y,
-                        ),
+                        )
+                    }.graphicsLayer(
+                        scaleX = scale,
+                        scaleY = scale,
+                        translationX = offset.x,
+                        translationY = offset.y,
+                    ),
                 url = url,
                 contentScale = contentScale,
                 quality = FilterQuality.High,
@@ -126,9 +127,9 @@ fun ZoomableImage(
                                 initialValue = 0f,
                                 targetValue = 1f,
                                 animationSpec =
-                                    InfiniteRepeatableSpec(
-                                        animation = tween(LOADING_ANIMATION_DURATION),
-                                    ),
+                                InfiniteRepeatableSpec(
+                                    animation = tween(LOADING_ANIMATION_DURATION),
+                                ),
                             )
                             res
                         }

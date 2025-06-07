@@ -38,7 +38,7 @@ fun UserTagMemberItem(
     member: UserTagMemberModel,
     modifier: Modifier = Modifier,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     val title = member.username
     val fullColor = MaterialTheme.colorScheme.onBackground
@@ -67,12 +67,12 @@ fun UserTagMemberItem(
             Box {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        },
                     onClick = {
                         optionsMenuOpen = true
                     },
@@ -90,10 +90,10 @@ fun UserTagMemberItem(
                         optionsMenuOpen = false
                     },
                     offset =
-                        DpOffset(
-                            x = optionsOffset.x.toLocalDp(),
-                            y = optionsOffset.y.toLocalDp(),
-                        ),
+                    DpOffset(
+                        x = optionsOffset.x.toLocalDp(),
+                        y = optionsOffset.y.toLocalDp(),
+                    ),
                 ) {
                     options.forEach { option ->
                         DropdownMenuItem(
@@ -102,7 +102,7 @@ fun UserTagMemberItem(
                             },
                             onClick = {
                                 optionsMenuOpen = false
-                                onOptionSelected?.invoke(option.id)
+                                onSelectOption?.invoke(option.id)
                             },
                         )
                     }

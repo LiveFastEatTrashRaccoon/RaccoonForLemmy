@@ -69,18 +69,12 @@ private object KeyStoreKeys {
     const val RESTRICT_LOCAL_USER_SEARCH = "restrictLocalUserSearch"
 }
 
-internal class DefaultSettingsRepository(
-    private val dao: SettingsDao,
-    private val keyStore: TemporaryKeyStore,
-) : SettingsRepository {
-
+internal class DefaultSettingsRepository(private val dao: SettingsDao, private val keyStore: TemporaryKeyStore) :
+    SettingsRepository {
     override val currentSettings = MutableStateFlow(SettingsModel())
     override val currentBottomBarSections = MutableStateFlow<List<Int>>(emptyList())
 
-    override suspend fun createSettings(
-        settings: SettingsModel,
-        accountId: Long,
-    ) {
+    override suspend fun createSettings(settings: SettingsModel, accountId: Long) {
         dao.create(
             theme = settings.theme.toLong(),
             uiFontScale = settings.uiFontScale.toDouble(),
@@ -123,29 +117,29 @@ internal class DefaultSettingsRepository(
             postBodyMaxLines = settings.postBodyMaxLines?.toLong(),
             infiniteScrollEnabled = if (settings.infiniteScrollEnabled) 1 else 0,
             actionsOnSwipeToStartPosts =
-                settings.actionsOnSwipeToStartPosts
-                    .map { it.toInt() }
-                    .joinToString(","),
+            settings.actionsOnSwipeToStartPosts
+                .map { it.toInt() }
+                .joinToString(","),
             actionsOnSwipeToEndPosts =
-                settings.actionsOnSwipeToEndPosts
-                    .map { it.toInt() }
-                    .joinToString(","),
+            settings.actionsOnSwipeToEndPosts
+                .map { it.toInt() }
+                .joinToString(","),
             actionsOnSwipeToStartComments =
-                settings.actionsOnSwipeToStartComments
-                    .map { it.toInt() }
-                    .joinToString(","),
+            settings.actionsOnSwipeToStartComments
+                .map { it.toInt() }
+                .joinToString(","),
             actionsOnSwipeToEndComments =
-                settings.actionsOnSwipeToEndComments
-                    .map { it.toInt() }
-                    .joinToString(","),
+            settings.actionsOnSwipeToEndComments
+                .map { it.toInt() }
+                .joinToString(","),
             actionsOnSwipeToStartInbox =
-                settings.actionsOnSwipeToStartInbox
-                    .map { it.toInt() }
-                    .joinToString(","),
+            settings.actionsOnSwipeToStartInbox
+                .map { it.toInt() }
+                .joinToString(","),
             actionsOnSwipeToEndInbox =
-                settings.actionsOnSwipeToEndInbox
-                    .map { it.toInt() }
-                    .joinToString(","),
+            settings.actionsOnSwipeToEndInbox
+                .map { it.toInt() }
+                .joinToString(","),
             opaqueSystemBars = settings.systemBarTheme.toLong(),
             showScores = if (settings.showScores) 1L else 0L,
             preferUserNicknames = if (settings.preferUserNicknames) 1L else 0L,
@@ -170,112 +164,114 @@ internal class DefaultSettingsRepository(
         )
     }
 
-    override suspend fun getSettings(accountId: Long?): SettingsModel =
-        if (accountId == null) {
-            // anonymous user, reading from keystore
-            val contentFontScale =
-                ContentFontScales(
-                    title = keyStore.get(KeyStoreKeys.CONTENT_TITLE_FONT_SCALE, 1f),
-                    body = keyStore.get(KeyStoreKeys.CONTENT_BODY_FONT_SCALE, 1f),
-                    comment = keyStore.get(KeyStoreKeys.CONTENT_COMMENT_FONT_SCALE, 1f),
-                    ancillary = keyStore.get(KeyStoreKeys.CONTENT_ANCILLARY_FONT_SCALE, 1f),
-                )
-            SettingsModel(
-                theme = keyStore.get(KeyStoreKeys.UI_THEME, 0),
-                uiFontScale = keyStore.get(KeyStoreKeys.UI_FONT_SCALE, 1f),
-                uiFontFamily = keyStore.get(KeyStoreKeys.UI_FONT_FAMILY, 0),
-                contentFontScale = contentFontScale,
-                locale = keyStore.get(KeyStoreKeys.LOCALE, "").takeIf { it.isNotEmpty() },
-                defaultListingType = keyStore.get(KeyStoreKeys.DEFAULT_LISTING_TYPE, 2),
-                defaultPostSortType = keyStore.get(KeyStoreKeys.DEFAULT_POST_SORT_TYPE, 1),
-                defaultCommentSortType = keyStore.get(KeyStoreKeys.DEFAULT_COMMENT_SORT_TYPE, 3),
-                defaultInboxType = keyStore.get(KeyStoreKeys.DEFAULT_INBOX_TYPE, 0),
-                defaultExploreType = keyStore.get(KeyStoreKeys.DEFAULT_EXPLORE_TYPE, 2),
-                includeNsfw = keyStore.get(KeyStoreKeys.INCLUDE_NSFW, false),
-                blurNsfw = keyStore.get(KeyStoreKeys.BLUR_NSFW, true),
-                navigationTitlesVisible = keyStore.get(KeyStoreKeys.NAV_ITEM_TITLES_VISIBLE, true),
-                dynamicColors = keyStore.get(KeyStoreKeys.DYNAMIC_COLORS, false),
-                urlOpeningMode = keyStore.get(KeyStoreKeys.OPEN_URLS_IN_EXTERNAL_BROWSER, 1),
-                enableSwipeActions = keyStore.get(KeyStoreKeys.ENABLE_SWIPE_ACTIONS, true),
-                enableDoubleTapAction = keyStore.get(KeyStoreKeys.ENABLE_DOUBLE_TAP_ACTION, false),
-                customSeedColor =
-                    if (!keyStore.containsKey(KeyStoreKeys.CUSTOM_SEED_COLOR)) {
-                        keyStore.get(KeyStoreKeys.CUSTOM_SEED_COLOR, 0)
-                    } else {
-                        null
-                    },
-                postLayout = keyStore.get(KeyStoreKeys.POST_LAYOUT, 0),
-                voteFormat = keyStore.get(KeyStoreKeys.SEPARATE_UP_AND_DOWN_VOTES, 0L)
-                    .toVoteFormat(),
-                autoLoadImages = keyStore.get(KeyStoreKeys.AUTO_LOAD_IMAGES, true),
-                autoExpandComments = keyStore.get(KeyStoreKeys.AUTO_EXPAND_COMMENTS, true),
-                fullHeightImages = keyStore.get(KeyStoreKeys.FULL_HEIGHT_IMAGES, true),
-                hideNavigationBarWhileScrolling =
-                    keyStore.get(KeyStoreKeys.HIDE_NAVIGATION_BAR_WHILE_SCROLLING, true),
-                zombieModeInterval = keyStore.get(
+    override suspend fun getSettings(accountId: Long?): SettingsModel = if (accountId == null) {
+        // anonymous user, reading from keystore
+        val contentFontScale =
+            ContentFontScales(
+                title = keyStore.get(KeyStoreKeys.CONTENT_TITLE_FONT_SCALE, 1f),
+                body = keyStore.get(KeyStoreKeys.CONTENT_BODY_FONT_SCALE, 1f),
+                comment = keyStore.get(KeyStoreKeys.CONTENT_COMMENT_FONT_SCALE, 1f),
+                ancillary = keyStore.get(KeyStoreKeys.CONTENT_ANCILLARY_FONT_SCALE, 1f),
+            )
+        SettingsModel(
+            theme = keyStore.get(KeyStoreKeys.UI_THEME, 0),
+            uiFontScale = keyStore.get(KeyStoreKeys.UI_FONT_SCALE, 1f),
+            uiFontFamily = keyStore.get(KeyStoreKeys.UI_FONT_FAMILY, 0),
+            contentFontScale = contentFontScale,
+            locale = keyStore.get(KeyStoreKeys.LOCALE, "").takeIf { it.isNotEmpty() },
+            defaultListingType = keyStore.get(KeyStoreKeys.DEFAULT_LISTING_TYPE, 2),
+            defaultPostSortType = keyStore.get(KeyStoreKeys.DEFAULT_POST_SORT_TYPE, 1),
+            defaultCommentSortType = keyStore.get(KeyStoreKeys.DEFAULT_COMMENT_SORT_TYPE, 3),
+            defaultInboxType = keyStore.get(KeyStoreKeys.DEFAULT_INBOX_TYPE, 0),
+            defaultExploreType = keyStore.get(KeyStoreKeys.DEFAULT_EXPLORE_TYPE, 2),
+            includeNsfw = keyStore.get(KeyStoreKeys.INCLUDE_NSFW, false),
+            blurNsfw = keyStore.get(KeyStoreKeys.BLUR_NSFW, true),
+            navigationTitlesVisible = keyStore.get(KeyStoreKeys.NAV_ITEM_TITLES_VISIBLE, true),
+            dynamicColors = keyStore.get(KeyStoreKeys.DYNAMIC_COLORS, false),
+            urlOpeningMode = keyStore.get(KeyStoreKeys.OPEN_URLS_IN_EXTERNAL_BROWSER, 1),
+            enableSwipeActions = keyStore.get(KeyStoreKeys.ENABLE_SWIPE_ACTIONS, true),
+            enableDoubleTapAction = keyStore.get(KeyStoreKeys.ENABLE_DOUBLE_TAP_ACTION, false),
+            customSeedColor =
+            if (!keyStore.containsKey(KeyStoreKeys.CUSTOM_SEED_COLOR)) {
+                keyStore.get(KeyStoreKeys.CUSTOM_SEED_COLOR, 0)
+            } else {
+                null
+            },
+            postLayout = keyStore.get(KeyStoreKeys.POST_LAYOUT, 0),
+            voteFormat =
+            keyStore
+                .get(KeyStoreKeys.SEPARATE_UP_AND_DOWN_VOTES, 0L)
+                .toVoteFormat(),
+            autoLoadImages = keyStore.get(KeyStoreKeys.AUTO_LOAD_IMAGES, true),
+            autoExpandComments = keyStore.get(KeyStoreKeys.AUTO_EXPAND_COMMENTS, true),
+            fullHeightImages = keyStore.get(KeyStoreKeys.FULL_HEIGHT_IMAGES, true),
+            hideNavigationBarWhileScrolling =
+            keyStore.get(KeyStoreKeys.HIDE_NAVIGATION_BAR_WHILE_SCROLLING, true),
+            zombieModeInterval =
+            keyStore
+                .get(
                     KeyStoreKeys.ZOMBIE_MODE_INTERVAL,
-                    1000
+                    1000,
                 ).milliseconds,
-                zombieModeScrollAmount = keyStore.get(KeyStoreKeys.ZOMBIE_MODE_SCROLL_AMOUNT, 55f),
-                markAsReadWhileScrolling =
-                    keyStore.get(KeyStoreKeys.MARK_AS_READ_WHILE_SCROLLING, false),
-                commentBarTheme = keyStore.get(KeyStoreKeys.COMMENT_BAR_THEME, 0),
-                searchPostTitleOnly = keyStore.get(KeyStoreKeys.SEARCH_POST_TITLE_ONLY, false),
-                contentFontFamily = keyStore.get(KeyStoreKeys.CONTENT_FONT_FAMILY, 0),
-                edgeToEdge = keyStore.get(KeyStoreKeys.EDGE_TO_EDGE, true),
-                postBodyMaxLines =
-                    if (keyStore.containsKey(KeyStoreKeys.POST_BODY_MAX_LINES)) {
-                        keyStore.get(KeyStoreKeys.POST_BODY_MAX_LINES, 0)
-                    } else {
-                        null
-                    },
-                infiniteScrollEnabled = keyStore.get(KeyStoreKeys.INFINITE_SCROLL_ENABLED, true),
-                systemBarTheme = keyStore.get(KeyStoreKeys.OPAQUE_SYSTEM_BARS, 0),
-                showScores = keyStore.get(KeyStoreKeys.SHOW_SCORES, true),
-                preferUserNicknames = keyStore.get(KeyStoreKeys.PREFER_USER_NICKNAMES, true),
-                commentBarThickness = keyStore.get(KeyStoreKeys.COMMENT_BAR_THICKNESS, 1),
-                commentIndentAmount = keyStore.get(KeyStoreKeys.COMMENT_INDENT_AMOUNT, 2),
-                imageSourcePath = keyStore.get(KeyStoreKeys.IMAGE_SOURCE_PATH, false),
-                defaultLanguageId =
-                    if (keyStore.containsKey(KeyStoreKeys.DEFAULT_LANGUAGE_ID)) {
-                        keyStore.get(KeyStoreKeys.DEFAULT_LANGUAGE_ID, 0L)
-                    } else {
-                        null
-                    },
-                fadeReadPosts = keyStore.get(KeyStoreKeys.FADE_READ_POSTS, false),
-                enableButtonsToScrollBetweenComments =
-                    keyStore.get(KeyStoreKeys.ENABLE_BUTTONS_TO_SCROLL_BETWEEN_COMMENTS, false),
-                fullWidthImages = keyStore.get(KeyStoreKeys.FULL_WIDTH_IMAGES, false),
-                defaultExploreResultType = keyStore.get(
-                    KeyStoreKeys.DEFAULT_EXPLORE_RESULT_TYPE,
-                    2
-                ),
-                randomThemeColor = keyStore.get(KeyStoreKeys.RANDOM_THEME_COLOR, true),
-                openPostWebPageOnImageClick =
-                    keyStore.get(KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK, true),
-                enableAlternateMarkdownRendering =
-                    keyStore.get(KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING, false),
-                restrictLocalUserSearch = keyStore.get(
-                    KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH,
-                    false
-                ),
-            )
-        } else {
-            val entity = dao.getBy(accountId).executeAsOneOrNull()
-            val result = entity?.toModel() ?: SettingsModel()
-            result.copy(
-                enableAlternateMarkdownRendering = keyStore.get(
-                    KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING,
-                    false
-                ),
-            )
-        }
+            zombieModeScrollAmount = keyStore.get(KeyStoreKeys.ZOMBIE_MODE_SCROLL_AMOUNT, 55f),
+            markAsReadWhileScrolling =
+            keyStore.get(KeyStoreKeys.MARK_AS_READ_WHILE_SCROLLING, false),
+            commentBarTheme = keyStore.get(KeyStoreKeys.COMMENT_BAR_THEME, 0),
+            searchPostTitleOnly = keyStore.get(KeyStoreKeys.SEARCH_POST_TITLE_ONLY, false),
+            contentFontFamily = keyStore.get(KeyStoreKeys.CONTENT_FONT_FAMILY, 0),
+            edgeToEdge = keyStore.get(KeyStoreKeys.EDGE_TO_EDGE, true),
+            postBodyMaxLines =
+            if (keyStore.containsKey(KeyStoreKeys.POST_BODY_MAX_LINES)) {
+                keyStore.get(KeyStoreKeys.POST_BODY_MAX_LINES, 0)
+            } else {
+                null
+            },
+            infiniteScrollEnabled = keyStore.get(KeyStoreKeys.INFINITE_SCROLL_ENABLED, true),
+            systemBarTheme = keyStore.get(KeyStoreKeys.OPAQUE_SYSTEM_BARS, 0),
+            showScores = keyStore.get(KeyStoreKeys.SHOW_SCORES, true),
+            preferUserNicknames = keyStore.get(KeyStoreKeys.PREFER_USER_NICKNAMES, true),
+            commentBarThickness = keyStore.get(KeyStoreKeys.COMMENT_BAR_THICKNESS, 1),
+            commentIndentAmount = keyStore.get(KeyStoreKeys.COMMENT_INDENT_AMOUNT, 2),
+            imageSourcePath = keyStore.get(KeyStoreKeys.IMAGE_SOURCE_PATH, false),
+            defaultLanguageId =
+            if (keyStore.containsKey(KeyStoreKeys.DEFAULT_LANGUAGE_ID)) {
+                keyStore.get(KeyStoreKeys.DEFAULT_LANGUAGE_ID, 0L)
+            } else {
+                null
+            },
+            fadeReadPosts = keyStore.get(KeyStoreKeys.FADE_READ_POSTS, false),
+            enableButtonsToScrollBetweenComments =
+            keyStore.get(KeyStoreKeys.ENABLE_BUTTONS_TO_SCROLL_BETWEEN_COMMENTS, false),
+            fullWidthImages = keyStore.get(KeyStoreKeys.FULL_WIDTH_IMAGES, false),
+            defaultExploreResultType =
+            keyStore.get(
+                KeyStoreKeys.DEFAULT_EXPLORE_RESULT_TYPE,
+                2,
+            ),
+            randomThemeColor = keyStore.get(KeyStoreKeys.RANDOM_THEME_COLOR, true),
+            openPostWebPageOnImageClick =
+            keyStore.get(KeyStoreKeys.OPEN_POST_WEB_PAGE_ON_IMAGE_CLICK, true),
+            enableAlternateMarkdownRendering =
+            keyStore.get(KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING, false),
+            restrictLocalUserSearch =
+            keyStore.get(
+                KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH,
+                false,
+            ),
+        )
+    } else {
+        val entity = dao.getBy(accountId).executeAsOneOrNull()
+        val result = entity?.toModel() ?: SettingsModel()
+        result.copy(
+            enableAlternateMarkdownRendering =
+            keyStore.get(
+                KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING,
+                false,
+            ),
+        )
+    }
 
-
-    override suspend fun updateSettings(
-        settings: SettingsModel,
-        accountId: Long?,
-    ) {
+    override suspend fun updateSettings(settings: SettingsModel, accountId: Long?) {
         keyStore.save(
             KeyStoreKeys.ENABLE_ALTERNATE_MARKDOWN_RENDERING,
             settings.enableAlternateMarkdownRendering,
@@ -391,7 +387,7 @@ internal class DefaultSettingsRepository(
             )
             keyStore.save(
                 KeyStoreKeys.RESTRICT_LOCAL_USER_SEARCH,
-                settings.restrictLocalUserSearch
+                settings.restrictLocalUserSearch,
             )
         } else {
             dao.update(
@@ -436,29 +432,29 @@ internal class DefaultSettingsRepository(
                 postBodyMaxLines = settings.postBodyMaxLines?.toLong(),
                 infiniteScrollEnabled = if (settings.infiniteScrollEnabled) 1L else 0L,
                 actionsOnSwipeToStartPosts =
-                    settings.actionsOnSwipeToStartPosts
-                        .map { it.toInt() }
-                        .joinToString(","),
+                settings.actionsOnSwipeToStartPosts
+                    .map { it.toInt() }
+                    .joinToString(","),
                 actionsOnSwipeToEndPosts =
-                    settings.actionsOnSwipeToEndPosts
-                        .map { it.toInt() }
-                        .joinToString(","),
+                settings.actionsOnSwipeToEndPosts
+                    .map { it.toInt() }
+                    .joinToString(","),
                 actionsOnSwipeToStartComments =
-                    settings.actionsOnSwipeToStartComments
-                        .map { it.toInt() }
-                        .joinToString(","),
+                settings.actionsOnSwipeToStartComments
+                    .map { it.toInt() }
+                    .joinToString(","),
                 actionsOnSwipeToEndComments =
-                    settings.actionsOnSwipeToEndComments
-                        .map { it.toInt() }
-                        .joinToString(","),
+                settings.actionsOnSwipeToEndComments
+                    .map { it.toInt() }
+                    .joinToString(","),
                 actionsOnSwipeToStartInbox =
-                    settings.actionsOnSwipeToStartInbox
-                        .map { it.toInt() }
-                        .joinToString(","),
+                settings.actionsOnSwipeToStartInbox
+                    .map { it.toInt() }
+                    .joinToString(","),
                 actionsOnSwipeToEndInbox =
-                    settings.actionsOnSwipeToEndInbox
-                        .map { it.toInt() }
-                        .joinToString(","),
+                settings.actionsOnSwipeToEndInbox
+                    .map { it.toInt() }
+                    .joinToString(","),
                 opaqueSystemBars = settings.systemBarTheme.toLong(),
                 showScores = if (settings.showScores) 1L else 0L,
                 preferUserNicknames = if (settings.preferUserNicknames) 1L else 0L,
@@ -493,100 +489,99 @@ internal class DefaultSettingsRepository(
     }
 }
 
-private fun GetBy.toModel() =
-    SettingsModel(
-        id = id,
-        theme = theme?.toInt() ?: 0,
-        uiFontScale = uiFontScale.toFloat(),
-        uiFontFamily = uiFontFamily.toInt(),
-        contentFontScale =
-            ContentFontScales(
-                title = titleFontScale.toFloat(),
-                body = contentFontScale.toFloat(),
-                comment = commentFontScale.toFloat(),
-                ancillary = ancillaryFontScale.toFloat(),
-            ),
-        locale = locale,
-        defaultListingType = defaultListingType.toInt(),
-        defaultPostSortType = defaultPostSortType.toInt(),
-        defaultCommentSortType = defaultCommentSortType.toInt(),
-        defaultInboxType = defaultInboxType.toInt(),
-        includeNsfw = includeNsfw != 0L,
-        blurNsfw = blurNsfw != 0L,
-        navigationTitlesVisible = navigationTitlesVisible != 0L,
-        dynamicColors = dynamicColors != 0L,
-        urlOpeningMode = openUrlsInExternalBrowser.toInt(),
-        enableSwipeActions = enableSwipeActions != 0L,
-        enableDoubleTapAction = enableDoubleTapAction != 0L,
-        customSeedColor = customSeedColor?.toInt(),
-        postLayout = postLayout.toInt(),
-        voteFormat = separateUpAndDownVotes.toVoteFormat(),
-        autoLoadImages = autoLoadImages != 0L,
-        autoExpandComments = autoExpandComments != 0L,
-        fullHeightImages = fullHeightImages != 0L,
-        upVoteColor = upvoteColor?.toInt(),
-        downVoteColor = downvoteColor?.toInt(),
-        hideNavigationBarWhileScrolling = hideNavigationBarWhileScrolling != 0L,
-        zombieModeInterval = zombieModeInterval.milliseconds,
-        zombieModeScrollAmount = zombieModeScrollAmount.toFloat(),
-        markAsReadWhileScrolling = markAsReadWhileScrolling != 0L,
-        commentBarTheme = commentBarTheme.toInt(),
-        replyColor = replyColor?.toInt(),
-        saveColor = saveColor?.toInt(),
-        searchPostTitleOnly = searchPostTitleOnly != 0L,
-        contentFontFamily = contentFontFamily.toInt(),
-        edgeToEdge = edgeToEdge != 0L,
-        postBodyMaxLines = postBodyMaxLines?.toInt(),
-        infiniteScrollEnabled = infiniteScrollEnabled != 0L,
-        actionsOnSwipeToStartPosts =
-            actionsOnSwipeToStartPosts
-                ?.split(",")
-                ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
-                ?: ActionOnSwipe.DEFAULT_SWIPE_TO_START_POSTS,
-        actionsOnSwipeToEndPosts =
-            actionsOnSwipeToEndPosts
-                ?.split(",")
-                ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
-                ?: ActionOnSwipe.DEFAULT_SWIPE_TO_END_POSTS,
-        actionsOnSwipeToStartComments =
-            actionsOnSwipeToStartComments
-                ?.split(",")
-                ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
-                ?: ActionOnSwipe.DEFAULT_SWIPE_TO_START_COMMENTS,
-        actionsOnSwipeToEndComments =
-            actionsOnSwipeToEndComments
-                ?.split(",")
-                ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
-                ?: ActionOnSwipe.DEFAULT_SWIPE_TO_END_COMMENTS,
-        actionsOnSwipeToStartInbox =
-            actionsOnSwipeToStartInbox
-                ?.split(",")
-                ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
-                ?: ActionOnSwipe.DEFAULT_SWIPE_TO_START_INBOX,
-        actionsOnSwipeToEndInbox =
-            actionsOnSwipeToEndInbox
-                ?.split(",")
-                ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
-                ?: ActionOnSwipe.DEFAULT_SWIPE_TO_END_INBOX,
-        systemBarTheme = opaqueSystemBars?.toInt() ?: 0,
-        showScores = showScores == 1L,
-        preferUserNicknames = preferUserNicknames == 1L,
-        commentBarThickness = commentBarThickness.toInt(),
-        commentIndentAmount = commentIndentAmount.toInt(),
-        imageSourcePath = imageSourcePath == 1L,
-        defaultExploreType = defaultExploreType.toInt(),
-        defaultLanguageId = defaultLanguageId,
-        inboxBackgroundCheckPeriod = inboxBackgroundCheckPeriod?.minutes,
-        fadeReadPosts = fadeReadPosts == 1L,
-        showUnreadComments = showUnreadComments == 1L,
-        enableButtonsToScrollBetweenComments = enableButtonsToScrollBetweenComments == 1L,
-        fullWidthImages = fullWidthImages == 1L,
-        enableToggleFavoriteInNavDrawer = enableToggleFavoriteInNavDrawer == 1L,
-        inboxPreviewMaxLines = inboxPreviewMaxLines?.toInt(),
-        defaultExploreResultType = defaultExploreResultType.toInt(),
-        useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon == 1L,
-        randomThemeColor = randomThemeColor == 1L,
-        openPostWebPageOnImageClick = openPostWebPageOnImageClick == 1L,
-        restrictLocalUserSearch = restrictLocalUserSearch == 1L,
-        markAsReadOnInteraction = markAsReadOnInteraction == 1L,
-    )
+private fun GetBy.toModel() = SettingsModel(
+    id = id,
+    theme = theme?.toInt() ?: 0,
+    uiFontScale = uiFontScale.toFloat(),
+    uiFontFamily = uiFontFamily.toInt(),
+    contentFontScale =
+    ContentFontScales(
+        title = titleFontScale.toFloat(),
+        body = contentFontScale.toFloat(),
+        comment = commentFontScale.toFloat(),
+        ancillary = ancillaryFontScale.toFloat(),
+    ),
+    locale = locale,
+    defaultListingType = defaultListingType.toInt(),
+    defaultPostSortType = defaultPostSortType.toInt(),
+    defaultCommentSortType = defaultCommentSortType.toInt(),
+    defaultInboxType = defaultInboxType.toInt(),
+    includeNsfw = includeNsfw != 0L,
+    blurNsfw = blurNsfw != 0L,
+    navigationTitlesVisible = navigationTitlesVisible != 0L,
+    dynamicColors = dynamicColors != 0L,
+    urlOpeningMode = openUrlsInExternalBrowser.toInt(),
+    enableSwipeActions = enableSwipeActions != 0L,
+    enableDoubleTapAction = enableDoubleTapAction != 0L,
+    customSeedColor = customSeedColor?.toInt(),
+    postLayout = postLayout.toInt(),
+    voteFormat = separateUpAndDownVotes.toVoteFormat(),
+    autoLoadImages = autoLoadImages != 0L,
+    autoExpandComments = autoExpandComments != 0L,
+    fullHeightImages = fullHeightImages != 0L,
+    upVoteColor = upvoteColor?.toInt(),
+    downVoteColor = downvoteColor?.toInt(),
+    hideNavigationBarWhileScrolling = hideNavigationBarWhileScrolling != 0L,
+    zombieModeInterval = zombieModeInterval.milliseconds,
+    zombieModeScrollAmount = zombieModeScrollAmount.toFloat(),
+    markAsReadWhileScrolling = markAsReadWhileScrolling != 0L,
+    commentBarTheme = commentBarTheme.toInt(),
+    replyColor = replyColor?.toInt(),
+    saveColor = saveColor?.toInt(),
+    searchPostTitleOnly = searchPostTitleOnly != 0L,
+    contentFontFamily = contentFontFamily.toInt(),
+    edgeToEdge = edgeToEdge != 0L,
+    postBodyMaxLines = postBodyMaxLines?.toInt(),
+    infiniteScrollEnabled = infiniteScrollEnabled != 0L,
+    actionsOnSwipeToStartPosts =
+    actionsOnSwipeToStartPosts
+        ?.split(",")
+        ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
+        ?: ActionOnSwipe.DEFAULT_SWIPE_TO_START_POSTS,
+    actionsOnSwipeToEndPosts =
+    actionsOnSwipeToEndPosts
+        ?.split(",")
+        ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
+        ?: ActionOnSwipe.DEFAULT_SWIPE_TO_END_POSTS,
+    actionsOnSwipeToStartComments =
+    actionsOnSwipeToStartComments
+        ?.split(",")
+        ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
+        ?: ActionOnSwipe.DEFAULT_SWIPE_TO_START_COMMENTS,
+    actionsOnSwipeToEndComments =
+    actionsOnSwipeToEndComments
+        ?.split(",")
+        ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
+        ?: ActionOnSwipe.DEFAULT_SWIPE_TO_END_COMMENTS,
+    actionsOnSwipeToStartInbox =
+    actionsOnSwipeToStartInbox
+        ?.split(",")
+        ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
+        ?: ActionOnSwipe.DEFAULT_SWIPE_TO_START_INBOX,
+    actionsOnSwipeToEndInbox =
+    actionsOnSwipeToEndInbox
+        ?.split(",")
+        ?.mapNotNull { it.toIntOrNull()?.toActionOnSwipe() }
+        ?: ActionOnSwipe.DEFAULT_SWIPE_TO_END_INBOX,
+    systemBarTheme = opaqueSystemBars?.toInt() ?: 0,
+    showScores = showScores == 1L,
+    preferUserNicknames = preferUserNicknames == 1L,
+    commentBarThickness = commentBarThickness.toInt(),
+    commentIndentAmount = commentIndentAmount.toInt(),
+    imageSourcePath = imageSourcePath == 1L,
+    defaultExploreType = defaultExploreType.toInt(),
+    defaultLanguageId = defaultLanguageId,
+    inboxBackgroundCheckPeriod = inboxBackgroundCheckPeriod?.minutes,
+    fadeReadPosts = fadeReadPosts == 1L,
+    showUnreadComments = showUnreadComments == 1L,
+    enableButtonsToScrollBetweenComments = enableButtonsToScrollBetweenComments == 1L,
+    fullWidthImages = fullWidthImages == 1L,
+    enableToggleFavoriteInNavDrawer = enableToggleFavoriteInNavDrawer == 1L,
+    inboxPreviewMaxLines = inboxPreviewMaxLines?.toInt(),
+    defaultExploreResultType = defaultExploreResultType.toInt(),
+    useAvatarAsProfileNavigationIcon = useAvatarAsProfileNavigationIcon == 1L,
+    randomThemeColor = randomThemeColor == 1L,
+    openPostWebPageOnImageClick = openPostWebPageOnImageClick == 1L,
+    restrictLocalUserSearch = restrictLocalUserSearch == 1L,
+    markAsReadOnInteraction = markAsReadOnInteraction == 1L,
+)

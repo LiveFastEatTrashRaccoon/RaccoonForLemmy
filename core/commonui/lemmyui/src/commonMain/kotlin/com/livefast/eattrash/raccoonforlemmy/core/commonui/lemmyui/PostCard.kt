@@ -95,7 +95,7 @@ fun PostCard(
     onReply: (() -> Unit)? = null,
     onOpenImage: ((String) -> Unit)? = null,
     onOpenVideo: ((String) -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
     onClick: (() -> Unit)? = null,
     onDoubleClick: (() -> Unit)? = null,
 ) {
@@ -142,82 +142,82 @@ fun PostCard(
 
     Box(
         modifier =
-            modifier
-                .then(
-                    if (postLayout == PostLayout.Card) {
-                        Modifier
-                            .padding(horizontal = Spacing.xs)
-                            .shadow(
-                                elevation = 5.dp,
-                                shape = RoundedCornerShape(CornerSize.l),
-                            ).clip(RoundedCornerShape(CornerSize.l))
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                            ).padding(vertical = Spacing.s)
-                    } else {
-                        Modifier
-                    },
-                ).onClick(
-                    onDoubleClick = onDoubleClick ?: {},
-                ).semantics(mergeDescendants = true) {
-                    val helperActions =
-                        buildList {
-                            val community = post.community
-                            if (community != null && onOpenCommunity != null) {
-                                this +=
-                                    CustomAccessibilityAction(openCommunityActionLabel) {
-                                        onOpenCommunity(community, "")
-                                        true
-                                    }
-                            }
-                            val user = post.creator
-                            if (user != null && onOpenCreator != null) {
-                                this +=
-                                    CustomAccessibilityAction(openUserActionLabel) {
-                                        onOpenCreator(user, "")
-                                        true
-                                    }
-                            }
-                            if (onUpVote != null) {
-                                this +=
-                                    CustomAccessibilityAction(upVoteActionLabel) {
-                                        onUpVote()
-                                        true
-                                    }
-                            }
-                            if (onDownVote != null) {
-                                this +=
-                                    CustomAccessibilityAction(downVoteActionLabel) {
-                                        onDownVote()
-                                        true
-                                    }
-                            }
-                            if (onSave != null) {
-                                this +=
-                                    CustomAccessibilityAction(saveActionLabel) {
-                                        onSave()
-                                        true
-                                    }
-                            }
-                            if (onReply != null) {
-                                this +=
-                                    CustomAccessibilityAction(replyActionLabel) {
-                                        onReply()
-                                        true
-                                    }
-                            }
-                            if (options.isNotEmpty()) {
-                                this +=
-                                    CustomAccessibilityAction(optionsActionLabel) {
-                                        optionsMenuOpen = true
-                                        true
-                                    }
-                            }
-                        }
-                    if (helperActions.isNotEmpty()) {
-                        customActions = helperActions
-                    }
+        modifier
+            .then(
+                if (postLayout == PostLayout.Card) {
+                    Modifier
+                        .padding(horizontal = Spacing.xs)
+                        .shadow(
+                            elevation = 5.dp,
+                            shape = RoundedCornerShape(CornerSize.l),
+                        ).clip(RoundedCornerShape(CornerSize.l))
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                        ).padding(vertical = Spacing.s)
+                } else {
+                    Modifier
                 },
+            ).onClick(
+                onDoubleClick = onDoubleClick ?: {},
+            ).semantics(mergeDescendants = true) {
+                val helperActions =
+                    buildList {
+                        val community = post.community
+                        if (community != null && onOpenCommunity != null) {
+                            this +=
+                                CustomAccessibilityAction(openCommunityActionLabel) {
+                                    onOpenCommunity(community, "")
+                                    true
+                                }
+                        }
+                        val user = post.creator
+                        if (user != null && onOpenCreator != null) {
+                            this +=
+                                CustomAccessibilityAction(openUserActionLabel) {
+                                    onOpenCreator(user, "")
+                                    true
+                                }
+                        }
+                        if (onUpVote != null) {
+                            this +=
+                                CustomAccessibilityAction(upVoteActionLabel) {
+                                    onUpVote()
+                                    true
+                                }
+                        }
+                        if (onDownVote != null) {
+                            this +=
+                                CustomAccessibilityAction(downVoteActionLabel) {
+                                    onDownVote()
+                                    true
+                                }
+                        }
+                        if (onSave != null) {
+                            this +=
+                                CustomAccessibilityAction(saveActionLabel) {
+                                    onSave()
+                                    true
+                                }
+                        }
+                        if (onReply != null) {
+                            this +=
+                                CustomAccessibilityAction(replyActionLabel) {
+                                    onReply()
+                                    true
+                                }
+                        }
+                        if (options.isNotEmpty()) {
+                            this +=
+                                CustomAccessibilityAction(optionsActionLabel) {
+                                    optionsMenuOpen = true
+                                    true
+                                }
+                        }
+                    }
+                if (helperActions.isNotEmpty()) {
+                    customActions = helperActions
+                }
+            },
     ) {
         if (postLayout != PostLayout.Compact) {
             ExtendedPost(
@@ -227,10 +227,10 @@ fun PostCard(
                 showBot = showBot,
                 hideAuthor = hideAuthor,
                 backgroundColor =
-                    when (postLayout) {
-                        PostLayout.Card -> MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
-                        else -> MaterialTheme.colorScheme.background
-                    },
+                when (postLayout) {
+                    PostLayout.Card -> MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
+                    else -> MaterialTheme.colorScheme.background
+                },
                 showBody = includeFullBody || postLayout == PostLayout.Full,
                 limitBodyHeight = limitBodyHeight,
                 voteFormat = voteFormat,
@@ -257,11 +257,11 @@ fun PostCard(
                 onReply = onReply,
                 onOpenImage = onOpenImage,
                 onOpenVideo = onOpenVideo,
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
                 onClick = onClick,
                 onDoubleClick = onDoubleClick,
                 optionsMenuOpen = optionsMenuOpen,
-                onOptionsMenuToggled = {
+                onToggleOptionsMenu = {
                     optionsMenuOpen = it
                 },
             )
@@ -293,11 +293,11 @@ fun PostCard(
                 onReply = onReply,
                 onOpenImage = onOpenImage,
                 onOpenVideo = onOpenVideo,
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
                 onClick = onClick,
                 onDoubleClick = onDoubleClick,
                 optionsMenuOpen = optionsMenuOpen,
-                onOptionsMenuToggled = {
+                onToggleOptionsMenu = {
                     optionsMenuOpen = it
                 },
             )
@@ -307,7 +307,6 @@ fun PostCard(
 
 @Composable
 private fun CompactPost(
-    modifier: Modifier = Modifier,
     post: PostModel,
     isFromModerator: Boolean,
     isCurrentUser: Boolean,
@@ -323,8 +322,6 @@ private fun CompactPost(
     voteFormat: VoteFormat,
     showUnreadComments: Boolean,
     downVoteEnabled: Boolean,
-    botTagColor: Int? = null,
-    meTagColor: Int? = null,
     optionsMenuOpen: Boolean,
     options: List<Option>,
     onOpenCommunity: ((CommunityModel, String) -> Unit)?,
@@ -335,10 +332,13 @@ private fun CompactPost(
     onReply: (() -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
     onOpenVideo: ((String) -> Unit)?,
-    onOptionsMenuToggled: ((Boolean) -> Unit)?,
-    onOptionSelected: ((OptionId) -> Unit)?,
+    onToggleOptionsMenu: ((Boolean) -> Unit)?,
+    onSelectOption: ((OptionId) -> Unit)?,
     onClick: (() -> Unit)?,
     onDoubleClick: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+    botTagColor: Int? = null,
+    meTagColor: Int? = null,
 ) {
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
@@ -372,21 +372,21 @@ private fun CompactPost(
     ) {
         Column(
             modifier =
-                modifier
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(horizontal = Spacing.xs)
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onTap = {
-                                if (textSelection) {
-                                    focusManager.clearFocus()
-                                    textSelection = false
-                                } else {
-                                    onClick?.invoke()
-                                }
-                            },
-                        )
-                    },
+            modifier
+                .background(MaterialTheme.colorScheme.background)
+                .padding(horizontal = Spacing.xs)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = {
+                            if (textSelection) {
+                                focusManager.clearFocus()
+                                textSelection = false
+                            } else {
+                                onClick?.invoke()
+                            }
+                        },
+                    )
+                },
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
             CommunityAndCreatorInfo(
@@ -457,20 +457,13 @@ private fun CompactPost(
                     if (post.videoUrl.isNotEmpty()) {
                         PostCardVideo(
                             modifier =
-                                Modifier
-                                    .weight(1 - COMPACT_POST_TITLE_WEIGHT)
-                                    .padding(vertical = Spacing.xxs)
-                                    .aspectRatio(1f),
+                            Modifier
+                                .weight(1 - COMPACT_POST_TITLE_WEIGHT)
+                                .padding(vertical = Spacing.xxs)
+                                .aspectRatio(1f),
                             url = post.videoUrl,
                             blurred = blurNsfw && post.nsfw,
                             autoLoadImages = autoLoadImages,
-                            onOpen = {
-                                if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
-                                    uriHandler.openUri(postLinkUrl)
-                                } else {
-                                    onClick?.invoke()
-                                }
-                            },
                             onOpenFullScreen = {
                                 onOpenVideo?.invoke(post.videoUrl)
                             },
@@ -478,11 +471,11 @@ private fun CompactPost(
                     } else {
                         PostCardImage(
                             modifier =
-                                Modifier
-                                    .weight(1 - COMPACT_POST_TITLE_WEIGHT)
-                                    .padding(vertical = Spacing.xs)
-                                    .clip(RoundedCornerShape(CornerSize.l))
-                                    .aspectRatio(1f),
+                            Modifier
+                                .weight(1 - COMPACT_POST_TITLE_WEIGHT)
+                                .padding(vertical = Spacing.xs)
+                                .clip(RoundedCornerShape(CornerSize.l))
+                                .aspectRatio(1f),
                             imageUrl = post.imageUrl,
                             contentScale = ContentScale.Crop,
                             autoLoadImages = autoLoadImages,
@@ -508,20 +501,20 @@ private fun CompactPost(
             }
             PostCardFooter(
                 modifier =
-                    Modifier.padding(
-                        top = Spacing.xxs,
-                        start = Spacing.xs,
-                        end = Spacing.xs,
-                    ),
+                Modifier.padding(
+                    top = Spacing.xxs,
+                    start = Spacing.xs,
+                    end = Spacing.xs,
+                ),
                 markRead = markRead,
                 comments = post.comments,
                 voteFormat = voteFormat,
                 score = post.score,
                 showScores = showScores,
                 unreadComments =
-                    post.unreadComments.takeIf {
-                        it != null && it > 0 && showUnreadComments && it != post.comments
-                    },
+                post.unreadComments.takeIf {
+                    it != null && it > 0 && showUnreadComments && it != post.comments
+                },
                 upVotes = post.upvotes,
                 downVotes = post.downvotes,
                 upVoted = post.myVote > 0,
@@ -536,10 +529,10 @@ private fun CompactPost(
                 publishDate = post.publishDate,
                 updateDate = post.updateDate,
                 options = options,
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
                 actionButtonsActive = actionButtonsActive,
                 optionsMenuOpen = optionsMenuOpen,
-                onOptionsMenuToggled = onOptionsMenuToggled,
+                onToggleOptionsMenu = onToggleOptionsMenu,
             )
         }
     }
@@ -547,7 +540,6 @@ private fun CompactPost(
 
 @Composable
 private fun ExtendedPost(
-    modifier: Modifier = Modifier,
     post: PostModel,
     isFromModerator: Boolean,
     isCurrentUser: Boolean,
@@ -559,7 +551,6 @@ private fun ExtendedPost(
     blurNsfw: Boolean,
     markRead: Boolean,
     highlightText: String?,
-    voteFormat: VoteFormat = VoteFormat.Aggregated,
     showBody: Boolean,
     limitBodyHeight: Boolean,
     fullHeightImage: Boolean,
@@ -569,8 +560,6 @@ private fun ExtendedPost(
     backgroundColor: Color,
     showUnreadComments: Boolean,
     downVoteEnabled: Boolean,
-    botTagColor: Int? = null,
-    meTagColor: Int? = null,
     optionsMenuOpen: Boolean,
     options: List<Option>,
     onOpenCommunity: ((CommunityModel, String) -> Unit)?,
@@ -581,10 +570,14 @@ private fun ExtendedPost(
     onReply: (() -> Unit)?,
     onOpenImage: ((String) -> Unit)?,
     onOpenVideo: ((String) -> Unit)?,
-    onOptionsMenuToggled: ((Boolean) -> Unit)?,
-    onOptionSelected: ((OptionId) -> Unit)?,
+    onToggleOptionsMenu: ((Boolean) -> Unit)?,
+    onSelectOption: ((OptionId) -> Unit)?,
     onClick: (() -> Unit)?,
     onDoubleClick: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+    voteFormat: VoteFormat = VoteFormat.Aggregated,
+    botTagColor: Int? = null,
+    meTagColor: Int? = null,
 ) {
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
@@ -623,19 +616,19 @@ private fun ExtendedPost(
     ) {
         Column(
             modifier =
-                modifier
-                    .background(backgroundColor)
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onTap = {
-                                if (textSelection) {
-                                    textSelection = false
-                                } else {
-                                    onClick?.invoke()
-                                }
-                            },
-                        )
-                    },
+            modifier
+                .background(backgroundColor)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = {
+                            if (textSelection) {
+                                textSelection = false
+                            } else {
+                                onClick?.invoke()
+                            }
+                        },
+                    )
+                },
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
             CommunityAndCreatorInfo(
@@ -664,9 +657,9 @@ private fun ExtendedPost(
             if (post.deleted) {
                 Text(
                     modifier =
-                        Modifier.fillMaxWidth().padding(
-                            all = Spacing.s,
-                        ),
+                    Modifier.fillMaxWidth().padding(
+                        all = Spacing.s,
+                    ),
                     text = LocalStrings.current.messageContentDeleted,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium,
@@ -676,12 +669,12 @@ private fun ExtendedPost(
                 CustomizedContent(ContentFontClass.Title) {
                     PostCardTitle(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    vertical = Spacing.xs,
-                                    horizontal = Spacing.s,
-                                ),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = Spacing.xs,
+                                horizontal = Spacing.s,
+                            ),
                         text = post.title,
                         markRead = markRead,
                         highlightText = highlightText,
@@ -706,21 +699,14 @@ private fun ExtendedPost(
                 if (post.videoUrl.isNotEmpty()) {
                     PostCardVideo(
                         modifier =
-                            Modifier
-                                .padding(
-                                    vertical = Spacing.xxs,
-                                    horizontal = if (fullWidthImage) 0.dp else Spacing.s,
-                                ),
+                        Modifier
+                            .padding(
+                                vertical = Spacing.xxs,
+                                horizontal = if (fullWidthImage) 0.dp else Spacing.s,
+                            ),
                         url = post.videoUrl,
                         blurred = blurNsfw && post.nsfw,
                         autoLoadImages = autoLoadImages,
-                        onOpen = {
-                            if (postLinkUrl.isNotEmpty() && settings.openPostWebPageOnImageClick) {
-                                uriHandler.openUri(postLinkUrl)
-                            } else {
-                                onClick?.invoke()
-                            }
-                        },
                         onOpenFullScreen = {
                             onOpenVideo?.invoke(post.videoUrl)
                         },
@@ -728,17 +714,17 @@ private fun ExtendedPost(
                 } else {
                     PostCardImage(
                         modifier =
-                            Modifier
-                                .padding(
-                                    vertical = Spacing.xs,
-                                    horizontal = if (fullWidthImage) 0.dp else Spacing.s,
-                                ).then(
-                                    if (roundedCornerImage && !fullWidthImage) {
-                                        Modifier.clip(RoundedCornerShape(CornerSize.xl))
-                                    } else {
-                                        Modifier
-                                    },
-                                ),
+                        Modifier
+                            .padding(
+                                vertical = Spacing.xs,
+                                horizontal = if (fullWidthImage) 0.dp else Spacing.s,
+                            ).then(
+                                if (roundedCornerImage && !fullWidthImage) {
+                                    Modifier.clip(RoundedCornerShape(CornerSize.xl))
+                                } else {
+                                    Modifier
+                                },
+                            ),
                         imageUrl = post.imageUrl,
                         autoLoadImages = autoLoadImages,
                         blurred = blurNsfw && post.nsfw,
@@ -767,13 +753,13 @@ private fun ExtendedPost(
                         CustomizedContent(ContentFontClass.Body) {
                             PostCardBody(
                                 modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .padding(
-                                            top = Spacing.xxs,
-                                            start = Spacing.s,
-                                            end = Spacing.s,
-                                        ),
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        top = Spacing.xxs,
+                                        start = Spacing.s,
+                                        end = Spacing.s,
+                                    ),
                                 text = post.text,
                                 maxLines = settings.postBodyMaxLines.takeIf { limitBodyHeight },
                                 autoLoadImages = autoLoadImages,
@@ -800,13 +786,13 @@ private fun ExtendedPost(
                 if (postLinkUrl.isNotEmpty()) {
                     PostLinkBanner(
                         modifier =
-                            Modifier
-                                .padding(
-                                    top = Spacing.s,
-                                    bottom = Spacing.xxs,
-                                    start = Spacing.s,
-                                    end = Spacing.s,
-                                ),
+                        Modifier
+                            .padding(
+                                top = Spacing.s,
+                                bottom = Spacing.xxs,
+                                start = Spacing.s,
+                                end = Spacing.s,
+                            ),
                         url = postLinkUrl,
                         onClick = {
                             uriHandler.openUri(postLinkUrl)
@@ -816,20 +802,20 @@ private fun ExtendedPost(
             }
             PostCardFooter(
                 modifier =
-                    Modifier.padding(
-                        top = Spacing.xs,
-                        start = Spacing.s,
-                        end = Spacing.s,
-                    ),
+                Modifier.padding(
+                    top = Spacing.xs,
+                    start = Spacing.s,
+                    end = Spacing.s,
+                ),
                 markRead = markRead,
                 comments = post.comments,
                 voteFormat = voteFormat,
                 score = post.score,
                 showScores = showScores,
                 unreadComments =
-                    post.unreadComments.takeIf {
-                        it != null && it > 0 && showUnreadComments && it != post.comments
-                    },
+                post.unreadComments.takeIf {
+                    it != null && it > 0 && showUnreadComments && it != post.comments
+                },
                 upVotes = post.upvotes,
                 downVotes = post.downvotes,
                 upVoted = post.myVote > 0,
@@ -844,10 +830,10 @@ private fun ExtendedPost(
                 publishDate = post.publishDate,
                 updateDate = post.updateDate,
                 options = options,
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
                 actionButtonsActive = actionButtonsActive,
                 optionsMenuOpen = optionsMenuOpen,
-                onOptionsMenuToggled = onOptionsMenuToggled,
+                onToggleOptionsMenu = onToggleOptionsMenu,
             )
         }
     }

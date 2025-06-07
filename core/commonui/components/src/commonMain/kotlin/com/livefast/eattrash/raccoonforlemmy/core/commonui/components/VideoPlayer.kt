@@ -26,13 +26,13 @@ fun VideoPlayer(
                 mediaUrl = url,
                 isMuted = muted,
                 initialVideoFitMode =
-                    if (contentScale == ContentScale.Fit) {
-                        ScreenResize.FIT
-                    } else {
-                        ScreenResize.FILL
-            },
-        )
-    }
+                if (contentScale == ContentScale.Fit) {
+                    ScreenResize.FIT
+                } else {
+                    ScreenResize.FILL
+                },
+            )
+        }
     VideoPlayerComposable(
         modifier = modifier,
         playerHost = playerHost,
@@ -41,10 +41,7 @@ fun VideoPlayer(
 }
 
 @Composable
-fun VideoPlayerPreview(
-    url: String,
-    modifier: Modifier = Modifier,
-) {
+fun VideoPlayerPreview(url: String, modifier: Modifier = Modifier) {
     Box(modifier = modifier) {
         VideoPreviewComposable(
             url = url,

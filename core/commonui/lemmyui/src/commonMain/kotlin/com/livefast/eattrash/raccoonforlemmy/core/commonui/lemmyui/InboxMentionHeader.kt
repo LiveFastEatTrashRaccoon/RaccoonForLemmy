@@ -22,11 +22,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 
 @Composable
-fun InboxCardHeader(
-    mention: PersonMentionModel,
-    type: InboxCardType,
-    modifier: Modifier = Modifier,
-) {
+fun InboxCardHeader(mention: PersonMentionModel, type: InboxCardType, modifier: Modifier = Modifier) {
     val fullColor = MaterialTheme.colorScheme.onBackground
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
     val header =
@@ -62,12 +58,12 @@ fun InboxCardHeader(
     ) {
         Text(
             modifier =
-                Modifier
-                    .weight(1f)
-                    .padding(
-                        vertical = Spacing.xs,
-                        horizontal = Spacing.xs,
-                    ),
+            Modifier
+                .weight(1f)
+                .padding(
+                    vertical = Spacing.xs,
+                    horizontal = Spacing.xs,
+                ),
             text = header,
             style = MaterialTheme.typography.bodySmall,
             color = fullColor,
@@ -75,9 +71,9 @@ fun InboxCardHeader(
         if (!mention.read) {
             Icon(
                 modifier =
-                    Modifier
-                        .padding(end = Spacing.s)
-                        .size(IconSize.xs),
+                Modifier
+                    .padding(end = Spacing.s)
+                    .size(IconSize.xs),
                 imageVector = Icons.Filled.FiberManualRecord,
                 contentDescription = LocalStrings.current.itemUnread,
                 tint = ancillaryColor,

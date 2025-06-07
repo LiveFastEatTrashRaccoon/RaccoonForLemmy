@@ -41,69 +41,63 @@ class DefaultPostLastSeenDateRepositoryTest {
         )
 
     @Test
-    fun givenEmptyInitialState_whenSave_thenValueIsStored() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf()
-            sut.save(1L, 2L)
+    fun givenEmptyInitialState_whenSave_thenValueIsStored() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf()
+        sut.save(1L, 2L)
 
-            coVerify {
-                keyStore.save(KEY, listOf("1:2"))
-            }
+        coVerify {
+            keyStore.save(KEY, listOf("1:2"))
         }
+    }
 
     @Test
-    fun givenEntryAlreadyExisting_whenSave_thenValueIsStored() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
+    fun givenEntryAlreadyExisting_whenSave_thenValueIsStored() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
 
-            sut.save(1, 3)
+        sut.save(1, 3)
 
-            coVerify {
-                keyStore.save(KEY, listOf("1:3"))
-            }
+        coVerify {
+            keyStore.save(KEY, listOf("1:3"))
         }
+    }
 
     @Test
-    fun givenOtherEntryAlreadyExisting_whenSave_thenBothValuesAreStored() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
+    fun givenOtherEntryAlreadyExisting_whenSave_thenBothValuesAreStored() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
 
-            sut.save(3, 4)
+        sut.save(3, 4)
 
-            coVerify {
-                keyStore.save(KEY, listOf("1:2", "3:4"))
-            }
+        coVerify {
+            keyStore.save(KEY, listOf("1:2", "3:4"))
         }
+    }
 
     @Test
-    fun givenEmptyInitialState_whenGet_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf()
+    fun givenEmptyInitialState_whenGet_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf()
 
-            val res = sut.get(1L)
+        val res = sut.get(1L)
 
-            assertNull(res)
-        }
-
-    @Test
-    fun givenCommunityExists_whenGet_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
-
-            val res = sut.get(1L)
-
-            assertEquals(2, res)
-        }
+        assertNull(res)
+    }
 
     @Test
-    fun givenCommunityDoesNotExist_whenGet_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
+    fun givenCommunityExists_whenGet_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
 
-            val res = sut.get(3L)
+        val res = sut.get(1L)
 
-            assertNull(res)
-        }
+        assertEquals(2, res)
+    }
+
+    @Test
+    fun givenCommunityDoesNotExist_whenGet_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get(KEY, listOf()) } returns listOf("1:2")
+
+        val res = sut.get(3L)
+
+        assertNull(res)
+    }
 
     companion object {
         private const val KEY = "postLastSeenDate"

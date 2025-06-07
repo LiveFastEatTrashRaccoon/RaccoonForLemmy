@@ -4,7 +4,4 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ModTransferCommunity(
-    @SerialName("id") val id: ModlogItemId,
-    @SerialName("when_") val date: String? = null,
-)
+data class ModTransferCommunity(@SerialName("id") val id: ModlogItemId, @SerialName("when_") val date: String? = null)

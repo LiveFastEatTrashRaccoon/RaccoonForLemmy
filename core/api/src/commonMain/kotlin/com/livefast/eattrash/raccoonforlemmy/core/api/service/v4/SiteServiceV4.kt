@@ -6,7 +6,5 @@ import de.jensklingenberg.ktorfit.http.Header
 
 interface SiteServiceV4 {
     @GET("v4/site")
-    suspend fun get(
-        @Header("Authorization") authHeader: String? = null,
-    ): GetSiteResponse
+    suspend fun get(@Header("Authorization") authHeader: String? = null): GetSiteResponse
 }

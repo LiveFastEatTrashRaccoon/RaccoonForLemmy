@@ -73,17 +73,17 @@ fun UserHeader(
                 )
                 Box(
                     modifier =
-                        Modifier.fillMaxSize().background(
-                            brush =
-                                Brush.horizontalGradient(
-                                    colors =
-                                        listOf(
-                                            MaterialTheme.colorScheme.background.copy(alpha = 0.95f),
-                                            Color.Transparent,
-                                            MaterialTheme.colorScheme.background.copy(alpha = 0.75f),
-                                        ),
-                                ),
+                    Modifier.fillMaxSize().background(
+                        brush =
+                        Brush.horizontalGradient(
+                            colors =
+                            listOf(
+                                MaterialTheme.colorScheme.background.copy(alpha = 0.95f),
+                                Color.Transparent,
+                                MaterialTheme.colorScheme.background.copy(alpha = 0.75f),
+                            ),
                         ),
+                    ),
                 )
             }
         }
@@ -98,15 +98,15 @@ fun UserHeader(
             if (userAvatar.isNotEmpty() && autoLoadImages) {
                 CustomImage(
                     modifier =
-                        Modifier
-                            .padding(Spacing.xxxs)
-                            .size(IconSize.xxl)
-                            .clip(RoundedCornerShape(IconSize.xxl / 2))
-                            .onClick(
-                                onClick = {
-                                    onOpenImage?.invoke(userAvatar)
-                                },
-                            ),
+                    Modifier
+                        .padding(Spacing.xxxs)
+                        .size(IconSize.xxl)
+                        .clip(RoundedCornerShape(IconSize.xxl / 2))
+                        .onClick(
+                            onClick = {
+                                onOpenImage?.invoke(userAvatar)
+                            },
+                        ),
                     url = userAvatar,
                     autoload = autoLoadImages,
                     quality = FilterQuality.Low,
@@ -154,10 +154,10 @@ fun UserHeader(
                         )
                         Text(
                             text =
-                                postScore.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
+                            postScore.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground,
                         )
@@ -173,10 +173,10 @@ fun UserHeader(
                         )
                         Text(
                             text =
-                                commentScore.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
+                            commentScore.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground,
                         )

@@ -14,10 +14,7 @@ internal class DefaultPostLastSeenDateRepository(
         return map[postId]
     }
 
-    override suspend fun save(
-        postId: Long,
-        timestamp: Long,
-    ) {
+    override suspend fun save(postId: Long, timestamp: Long) {
         val map =
             keyStore.get(SETTINGS_KEY, listOf()).let {
                 serializer.deserializeMap(it)
@@ -28,8 +25,8 @@ internal class DefaultPostLastSeenDateRepository(
     }
 
     override suspend fun clear() {
-            keyStore.remove(SETTINGS_KEY)
-        }
+        keyStore.remove(SETTINGS_KEY)
+    }
 
     companion object {
         private const val SETTINGS_KEY = "postLastSeenDate"

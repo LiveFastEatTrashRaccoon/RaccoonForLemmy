@@ -11,10 +11,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeReposito
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 
 @Composable
-fun CustomizedContent(
-    contentClass: ContentFontClass,
-    content: @Composable () -> Unit,
-) {
+fun CustomizedContent(contentClass: ContentFontClass, content: @Composable () -> Unit) {
     val themeRepository = remember { getThemeRepository() }
     val fontScale by themeRepository.contentFontScale.collectAsState()
     val uiFontScale by themeRepository.uiFontScale.collectAsState()

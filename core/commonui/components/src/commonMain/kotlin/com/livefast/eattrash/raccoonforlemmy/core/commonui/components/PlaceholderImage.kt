@@ -16,27 +16,22 @@ import androidx.compose.ui.unit.Dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 
 @Composable
-fun PlaceholderImage(
-    size: Dp,
-    title: String,
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
-) {
+fun PlaceholderImage(size: Dp, title: String, modifier: Modifier = Modifier, onClick: (() -> Unit)? = null) {
     Box(
         modifier =
-            modifier
-                .then(
-                    if (onClick != null) {
-                        Modifier.clickable(onClick = onClick)
-                    } else {
-                        Modifier
-                    },
-                ).padding(Spacing.xxxs)
-                .size(size)
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(size / 2),
-                ),
+        modifier
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable(onClick = onClick)
+                } else {
+                    Modifier
+                },
+            ).padding(Spacing.xxxs)
+            .size(size)
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(size / 2),
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Text(

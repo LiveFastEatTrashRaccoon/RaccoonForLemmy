@@ -35,10 +35,7 @@ class DefaultDetailOpener(
 ) : DetailOpener {
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
 
-    override fun openCommunityDetail(
-        community: CommunityModel,
-        otherInstance: String,
-    ) {
+    override fun openCommunityDetail(community: CommunityModel, otherInstance: String) {
         scope.launch {
             val (actualCommunity, actualInstance) =
                 run {
@@ -64,10 +61,7 @@ class DefaultDetailOpener(
         }
     }
 
-    override fun openUserDetail(
-        user: UserModel,
-        otherInstance: String,
-    ) {
+    override fun openUserDetail(user: UserModel, otherInstance: String) {
         scope.launch {
             itemCache.putUser(user)
             navigationCoordinator.pushScreen(
@@ -79,12 +73,7 @@ class DefaultDetailOpener(
         }
     }
 
-    override fun openPostDetail(
-        post: PostModel,
-        otherInstance: String,
-        highlightCommentId: Long?,
-        isMod: Boolean,
-    ) {
+    override fun openPostDetail(post: PostModel, otherInstance: String, highlightCommentId: Long?, isMod: Boolean) {
         scope.launch {
             itemCache.putPost(post)
             navigationCoordinator.pushScreen(
@@ -159,10 +148,7 @@ class DefaultDetailOpener(
         }
     }
 
-    private suspend fun searchCommunity(
-        name: String,
-        host: String,
-    ): CommunityModel? {
+    private suspend fun searchCommunity(name: String, host: String): CommunityModel? {
         val auth = identityRepository.authToken.value
 
         tailrec suspend fun searchRec(page: Int = 0): CommunityModel? {

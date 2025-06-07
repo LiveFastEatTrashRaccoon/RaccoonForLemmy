@@ -59,10 +59,7 @@ interface CommentServiceV3 {
 
     @PUT("v3/comment/save")
     @Headers("Content-Type: application/json")
-    suspend fun save(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: SaveCommentForm,
-    ): CommentResponse
+    suspend fun save(@Header("Authorization") authHeader: String? = null, @Body form: SaveCommentForm): CommentResponse
 
     @POST("v3/comment/like")
     @Headers("Content-Type: application/json")
@@ -80,10 +77,7 @@ interface CommentServiceV3 {
 
     @PUT("v3/comment")
     @Headers("Content-Type: application/json")
-    suspend fun edit(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: EditCommentForm,
-    ): CommentResponse
+    suspend fun edit(@Header("Authorization") authHeader: String? = null, @Body form: EditCommentForm): CommentResponse
 
     @POST("v3/comment/mark_as_read")
     @Headers("Content-Type: application/json")

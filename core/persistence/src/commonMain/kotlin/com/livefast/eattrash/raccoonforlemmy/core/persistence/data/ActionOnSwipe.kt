@@ -80,56 +80,51 @@ sealed interface ActionOnSwipe {
     }
 }
 
-internal fun ActionOnSwipe.toInt(): Int =
-    when (this) {
-        ActionOnSwipe.None -> 0
-        ActionOnSwipe.UpVote -> 1
-        ActionOnSwipe.DownVote -> 2
-        ActionOnSwipe.Reply -> 3
-        ActionOnSwipe.Save -> 4
-        ActionOnSwipe.ToggleRead -> 5
-        ActionOnSwipe.Edit -> 6
-    }
+internal fun ActionOnSwipe.toInt(): Int = when (this) {
+    ActionOnSwipe.None -> 0
+    ActionOnSwipe.UpVote -> 1
+    ActionOnSwipe.DownVote -> 2
+    ActionOnSwipe.Reply -> 3
+    ActionOnSwipe.Save -> 4
+    ActionOnSwipe.ToggleRead -> 5
+    ActionOnSwipe.Edit -> 6
+}
 
-internal fun Int.toActionOnSwipe(): ActionOnSwipe =
-    when (this) {
-        1 -> ActionOnSwipe.UpVote
-        2 -> ActionOnSwipe.DownVote
-        3 -> ActionOnSwipe.Reply
-        4 -> ActionOnSwipe.Save
-        5 -> ActionOnSwipe.ToggleRead
-        6 -> ActionOnSwipe.Edit
-        else -> ActionOnSwipe.None
-    }
+internal fun Int.toActionOnSwipe(): ActionOnSwipe = when (this) {
+    1 -> ActionOnSwipe.UpVote
+    2 -> ActionOnSwipe.DownVote
+    3 -> ActionOnSwipe.Reply
+    4 -> ActionOnSwipe.Save
+    5 -> ActionOnSwipe.ToggleRead
+    6 -> ActionOnSwipe.Edit
+    else -> ActionOnSwipe.None
+}
 
 @Composable
-fun ActionOnSwipe.toReadableName(): String =
-    when (this) {
-        ActionOnSwipe.DownVote -> LocalStrings.current.actionDownvote
-        ActionOnSwipe.None -> ""
-        ActionOnSwipe.Reply -> LocalStrings.current.actionReply
-        ActionOnSwipe.Save -> LocalStrings.current.actionSave
-        ActionOnSwipe.ToggleRead -> LocalStrings.current.actionToggleRead
-        ActionOnSwipe.UpVote -> LocalStrings.current.actionUpvote
-        ActionOnSwipe.Edit -> LocalStrings.current.postActionEdit
-    }
+fun ActionOnSwipe.toReadableName(): String = when (this) {
+    ActionOnSwipe.DownVote -> LocalStrings.current.actionDownvote
+    ActionOnSwipe.None -> ""
+    ActionOnSwipe.Reply -> LocalStrings.current.actionReply
+    ActionOnSwipe.Save -> LocalStrings.current.actionSave
+    ActionOnSwipe.ToggleRead -> LocalStrings.current.actionToggleRead
+    ActionOnSwipe.UpVote -> LocalStrings.current.actionUpvote
+    ActionOnSwipe.Edit -> LocalStrings.current.postActionEdit
+}
 
 @Composable
-fun ActionOnSwipe.toIcon(): ImageVector? =
-    when (this) {
-        ActionOnSwipe.DownVote -> VoteAction.DownVote.toIcon()
-        ActionOnSwipe.None -> null
-        ActionOnSwipe.Reply -> Icons.AutoMirrored.Default.Reply
-        ActionOnSwipe.Save -> Icons.Default.Bookmark
-        ActionOnSwipe.ToggleRead -> Icons.Default.MarkChatUnread
-        ActionOnSwipe.UpVote -> VoteAction.UpVote.toIcon()
-        ActionOnSwipe.Edit -> Icons.Default.Edit
-    }
+fun ActionOnSwipe.toIcon(): ImageVector? = when (this) {
+    ActionOnSwipe.DownVote -> VoteAction.DownVote.toIcon()
+    ActionOnSwipe.None -> null
+    ActionOnSwipe.Reply -> Icons.AutoMirrored.Default.Reply
+    ActionOnSwipe.Save -> Icons.Default.Bookmark
+    ActionOnSwipe.ToggleRead -> Icons.Default.MarkChatUnread
+    ActionOnSwipe.UpVote -> VoteAction.UpVote.toIcon()
+    ActionOnSwipe.Edit -> Icons.Default.Edit
+}
 
 @Composable
-fun ActionOnSwipe.toModifier(): Modifier =
-    when (this) {
-        ActionOnSwipe.DownVote -> VoteAction.DownVote.toModifier()
-        ActionOnSwipe.UpVote -> VoteAction.UpVote.toModifier()
-        else -> Modifier
-    }
+fun ActionOnSwipe.toModifier(): Modifier = when (this) {
+    ActionOnSwipe.DownVote -> VoteAction.DownVote.toModifier()
+    ActionOnSwipe.UpVote -> VoteAction.UpVote.toModifier()
+    else -> Modifier
+}

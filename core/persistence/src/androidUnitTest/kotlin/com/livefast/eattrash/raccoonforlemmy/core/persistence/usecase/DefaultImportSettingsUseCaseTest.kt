@@ -16,24 +16,23 @@ class DefaultImportSettingsUseCaseTest {
     private val sut = DefaultImportSettingsUseCase(settingsRepository, accountRepository)
 
     @Test
-    fun whenInvoked_thenInteractionsAreAsExpected() =
-        runTest {
-            coEvery { accountRepository.getActive() } returns
-                AccountModel(
-                    id = 1,
-                    username = "",
-                    instance = "",
-                    jwt = "",
-                )
-            val originalSettings = SettingsModel()
-            val input = jsonSerializationStrategy.encodeToString(originalSettings.toData())
+    fun whenInvoked_thenInteractionsAreAsExpected() = runTest {
+        coEvery { accountRepository.getActive() } returns
+            AccountModel(
+                id = 1,
+                username = "",
+                instance = "",
+                jwt = "",
+            )
+        val originalSettings = SettingsModel()
+        val input = jsonSerializationStrategy.encodeToString(originalSettings.toData())
 
-            sut.invoke(input)
+        sut.invoke(input)
 
-            coVerify {
-                accountRepository.getActive()
-                settingsRepository.updateSettings(settings = originalSettings, accountId = 1)
-                settingsRepository.changeCurrentSettings(originalSettings)
-            }
+        coVerify {
+            accountRepository.getActive()
+            settingsRepository.updateSettings(settings = originalSettings, accountId = 1)
+            settingsRepository.changeCurrentSettings(originalSettings)
         }
+    }
 }

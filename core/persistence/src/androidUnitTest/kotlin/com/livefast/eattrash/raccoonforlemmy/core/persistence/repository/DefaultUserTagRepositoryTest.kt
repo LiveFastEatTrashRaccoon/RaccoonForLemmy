@@ -48,260 +48,250 @@ class DefaultUserTagRepositoryTest {
             every { getBy(any(), any()) } returns memberGetByQuery
         }
 
-    private val sut = DefaultUserTagRepository(
-        dao = dao,
-        membersDao = memberDao,
-    )
+    private val sut =
+        DefaultUserTagRepository(
+            dao = dao,
+            membersDao = memberDao,
+        )
 
     @Test
-    fun whenGetAll_thenResultAndInteractionsAreAsExpected() =
-        runTest {
-            val accountId = 1L
-            val tagId = 2L
-            val model = UserTagModel(id = tagId, name = "tag")
-            every { tagQuery.executeAsList() } returns
-                    listOf(
-                        UserTagEntity(
-                            id = tagId,
-                            name = model.name,
-                            account_id = accountId,
-                            color = model.color?.toLong(),
-                            type = model.type.toInt().toLong(),
-                        ),
-                    )
-
-            val res = sut.getAll(accountId)
-
-            assertEquals(1, res.size)
-            assertEquals(model, res.first())
-            assertFalse(res.first().isSpecial)
-            verify {
-                dao.getAllBy(accountId)
-            }
-        }
-
-    @Test
-    fun whenGetById_thenResultAndInteractionsAreAsExpected() =
-        runTest {
-            val tagId = 1L
-            val model = UserTagModel(id = tagId, name = "tag")
-            every { tagQuery.executeAsOneOrNull() } returns
-                    UserTagEntity(
-                        id = tagId,
-                        name = model.name,
-                        account_id = 0L,
-                        color = model.color?.toLong(),
-                        type = model.type.toInt().toLong(),
-                    )
-
-            val res = sut.getById(tagId)
-
-            assertNotNull(res)
-            assertEquals(model, res)
-            verify {
-                dao.getBy(tagId)
-            }
-        }
-
-    @Test
-    fun whenGetMembers_thenResultAndInteractionsAreAsExpected() =
-        runTest {
-            val tagId = 1L
-            val model = UserTagMemberModel(userTagId = tagId, username = "user-name")
-            every { memberQuery.executeAsList() } returns
-                    listOf(
-                        UserTagMemberEntity(
-                            id = 0L,
-                            username = model.username,
-                            user_tag_id = tagId,
-                        ),
-                    )
-
-            val res = sut.getMembers(tagId)
-
-            assertEquals(1, res.size)
-            assertEquals(model, res.first())
-            verify {
-                memberDao.getMembers(tagId)
-            }
-        }
-
-    @Test
-    fun whenGetTags_thenResultAndInteractionsAreAsExpected() =
-        runTest {
-            val accountId = 1L
-            val tagId = 2L
-            val model = UserTagModel(id = tagId, name = "tag")
-            val username = "user-name"
-            every { memberGetByQuery.executeAsList() } returns
-                    listOf(
-                        GetBy(
-                            id = 0L,
-                            name = model.name,
-                            username = username,
-                            user_tag_id = tagId,
-                            account_id = accountId,
-                            color = model.color?.toLong(),
-                            id_ = tagId,
-                            type = model.type.toInt().toLong(),
-                        ),
-                    )
-
-            val res =
-                sut.getTags(
-                    username = username,
-                    accountId = accountId,
-                )
-
-            assertEquals(1, res.size)
-            assertEquals(model, res.first())
-            verify {
-                memberDao.getBy(
-                    username = username,
-                    accountId = accountId,
-                )
-            }
-        }
-
-    @Test
-    fun whenCreate_thenInteractionsAreAsExpected() =
-        runTest {
-            val model = UserTagModel(name = "tag")
-            val accountId = 1L
-
-            sut.create(model = model, accountId = accountId)
-
-            verify {
-                dao.create(
+    fun whenGetAll_thenResultAndInteractionsAreAsExpected() = runTest {
+        val accountId = 1L
+        val tagId = 2L
+        val model = UserTagModel(id = tagId, name = "tag")
+        every { tagQuery.executeAsList() } returns
+            listOf(
+                UserTagEntity(
+                    id = tagId,
                     name = model.name,
-                    accountId = accountId,
+                    account_id = accountId,
                     color = model.color?.toLong(),
                     type = model.type.toInt().toLong(),
-                )
-            }
-        }
-
-    @Test
-    fun whenUpdate_thenInteractionsAreAsExpected() =
-        runTest {
-            val tagId = 1L
-            val newName = "new-tag"
-            val color = Color.Red.toArgb()
-            val type = UserTagType.Regular
-
-            sut.update(
-                id = tagId,
-                name = newName,
-                color = color,
-                type = type.toInt(),
+                ),
             )
 
-            verify {
-                dao.update(
-                    id = tagId,
-                    name = newName,
+        val res = sut.getAll(accountId)
+
+        assertEquals(1, res.size)
+        assertEquals(model, res.first())
+        assertFalse(res.first().isSpecial)
+        verify {
+            dao.getAllBy(accountId)
+        }
+    }
+
+    @Test
+    fun whenGetById_thenResultAndInteractionsAreAsExpected() = runTest {
+        val tagId = 1L
+        val model = UserTagModel(id = tagId, name = "tag")
+        every { tagQuery.executeAsOneOrNull() } returns
+            UserTagEntity(
+                id = tagId,
+                name = model.name,
+                account_id = 0L,
+                color = model.color?.toLong(),
+                type = model.type.toInt().toLong(),
+            )
+
+        val res = sut.getById(tagId)
+
+        assertNotNull(res)
+        assertEquals(model, res)
+        verify {
+            dao.getBy(tagId)
+        }
+    }
+
+    @Test
+    fun whenGetMembers_thenResultAndInteractionsAreAsExpected() = runTest {
+        val tagId = 1L
+        val model = UserTagMemberModel(userTagId = tagId, username = "user-name")
+        every { memberQuery.executeAsList() } returns
+            listOf(
+                UserTagMemberEntity(
+                    id = 0L,
+                    username = model.username,
+                    user_tag_id = tagId,
+                ),
+            )
+
+        val res = sut.getMembers(tagId)
+
+        assertEquals(1, res.size)
+        assertEquals(model, res.first())
+        verify {
+            memberDao.getMembers(tagId)
+        }
+    }
+
+    @Test
+    fun whenGetTags_thenResultAndInteractionsAreAsExpected() = runTest {
+        val accountId = 1L
+        val tagId = 2L
+        val model = UserTagModel(id = tagId, name = "tag")
+        val username = "user-name"
+        every { memberGetByQuery.executeAsList() } returns
+            listOf(
+                GetBy(
+                    id = 0L,
+                    name = model.name,
+                    username = username,
+                    user_tag_id = tagId,
+                    account_id = accountId,
+                    color = model.color?.toLong(),
+                    id_ = tagId,
+                    type = model.type.toInt().toLong(),
+                ),
+            )
+
+        val res =
+            sut.getTags(
+                username = username,
+                accountId = accountId,
+            )
+
+        assertEquals(1, res.size)
+        assertEquals(model, res.first())
+        verify {
+            memberDao.getBy(
+                username = username,
+                accountId = accountId,
+            )
+        }
+    }
+
+    @Test
+    fun whenCreate_thenInteractionsAreAsExpected() = runTest {
+        val model = UserTagModel(name = "tag")
+        val accountId = 1L
+
+        sut.create(model = model, accountId = accountId)
+
+        verify {
+            dao.create(
+                name = model.name,
+                accountId = accountId,
+                color = model.color?.toLong(),
+                type = model.type.toInt().toLong(),
+            )
+        }
+    }
+
+    @Test
+    fun whenUpdate_thenInteractionsAreAsExpected() = runTest {
+        val tagId = 1L
+        val newName = "new-tag"
+        val color = Color.Red.toArgb()
+        val type = UserTagType.Regular
+
+        sut.update(
+            id = tagId,
+            name = newName,
+            color = color,
+            type = type.toInt(),
+        )
+
+        verify {
+            dao.update(
+                id = tagId,
+                name = newName,
+                color = color.toLong(),
+                type = type.toInt().toLong(),
+            )
+        }
+    }
+
+    @Test
+    fun whenDelete_thenInteractionsAreAsExpected() = runTest {
+        val tagId = 1L
+
+        sut.delete(id = tagId)
+
+        verify {
+            dao.delete(id = tagId)
+        }
+    }
+
+    @Test
+    fun whenAddMember_thenInteractionsAreAsExpected() = runTest {
+        val tagId = 1L
+        val username = "user-name"
+
+        sut.addMember(username = username, userTagId = tagId)
+
+        verify {
+            memberDao.create(username = username, tagId = tagId)
+        }
+    }
+
+    @Test
+    fun whenRemoveMember_thenInteractionsAreAsExpected() = runTest {
+        val tagId = 1L
+        val username = "user-name"
+
+        sut.removeMember(username = username, userTagId = tagId)
+
+        verify {
+            memberDao.delete(username = username, tagId = tagId)
+        }
+    }
+
+    @Test
+    fun whenGetBelonging_thenInteractionsAreAsExpected() = runTest {
+        val accountId = 1L
+        val tagId = 2L
+        val username = "user-name"
+        val model = UserTagModel(name = "tag", id = tagId)
+        every { memberGetByQuery.executeAsList() } returns
+            listOf(
+                GetBy(
+                    id = 0L,
+                    name = model.name,
+                    username = username,
+                    user_tag_id = tagId,
+                    account_id = accountId,
+                    color = model.color?.toLong(),
+                    id_ = tagId,
+                    type = model.type.toInt().toLong(),
+                ),
+            )
+
+        val res = sut.getBelonging(username = username, accountId = accountId)
+
+        assertEquals(1, res.size)
+        assertEquals(model, res.first())
+        verify {
+            memberDao.getBy(username = username, accountId = accountId)
+        }
+    }
+
+    @Test
+    fun whenGetSpecialTagColor_thenInteractionsAreAsExpected() = runTest {
+        val accountId = 1L
+        val color = Color.Red.toArgb()
+        every { tagQuery.executeAsList() } returns
+            listOf(
+                UserTagEntity(
+                    id = 2L,
+                    name = "me",
+                    account_id = accountId,
                     color = color.toLong(),
-                    type = type.toInt().toLong(),
-                )
-            }
+                    type = UserTagType.Me.toInt().toLong(),
+                ),
+                UserTagEntity(
+                    id = 3L,
+                    name = "mod",
+                    account_id = accountId,
+                    color = Color.Green.toArgb().toLong(),
+                    type = UserTagType.Moderator.toInt().toLong(),
+                ),
+            )
+
+        val res = sut.getSpecialTagColor(type = UserTagType.Me, accountId = accountId)
+
+        assertEquals(color, res)
+        verify {
+            dao.getAllBy(accountId)
         }
-
-    @Test
-    fun whenDelete_thenInteractionsAreAsExpected() =
-        runTest {
-            val tagId = 1L
-
-            sut.delete(id = tagId)
-
-            verify {
-                dao.delete(id = tagId)
-            }
-        }
-
-    @Test
-    fun whenAddMember_thenInteractionsAreAsExpected() =
-        runTest {
-            val tagId = 1L
-            val username = "user-name"
-
-            sut.addMember(username = username, userTagId = tagId)
-
-            verify {
-                memberDao.create(username = username, tagId = tagId)
-            }
-        }
-
-    @Test
-    fun whenRemoveMember_thenInteractionsAreAsExpected() =
-        runTest {
-            val tagId = 1L
-            val username = "user-name"
-
-            sut.removeMember(username = username, userTagId = tagId)
-
-            verify {
-                memberDao.delete(username = username, tagId = tagId)
-            }
-        }
-
-    @Test
-    fun whenGetBelonging_thenInteractionsAreAsExpected() =
-        runTest {
-            val accountId = 1L
-            val tagId = 2L
-            val username = "user-name"
-            val model = UserTagModel(name = "tag", id = tagId)
-            every { memberGetByQuery.executeAsList() } returns
-                    listOf(
-                        GetBy(
-                            id = 0L,
-                            name = model.name,
-                            username = username,
-                            user_tag_id = tagId,
-                            account_id = accountId,
-                            color = model.color?.toLong(),
-                            id_ = tagId,
-                            type = model.type.toInt().toLong(),
-                        ),
-                    )
-
-            val res = sut.getBelonging(username = username, accountId = accountId)
-
-            assertEquals(1, res.size)
-            assertEquals(model, res.first())
-            verify {
-                memberDao.getBy(username = username, accountId = accountId)
-            }
-        }
-
-    @Test
-    fun whenGetSpecialTagColor_thenInteractionsAreAsExpected() =
-        runTest {
-            val accountId = 1L
-            val color = Color.Red.toArgb()
-            every { tagQuery.executeAsList() } returns
-                    listOf(
-                        UserTagEntity(
-                            id = 2L,
-                            name = "me",
-                            account_id = accountId,
-                            color = color.toLong(),
-                            type = UserTagType.Me.toInt().toLong(),
-                        ),
-                        UserTagEntity(
-                            id = 3L,
-                            name = "mod",
-                            account_id = accountId,
-                            color = Color.Green.toArgb().toLong(),
-                            type = UserTagType.Moderator.toInt().toLong(),
-                        ),
-                    )
-
-            val res = sut.getSpecialTagColor(type = UserTagType.Me, accountId = accountId)
-
-            assertEquals(color, res)
-            verify {
-                dao.getAllBy(accountId)
-            }
-        }
+    }
 }

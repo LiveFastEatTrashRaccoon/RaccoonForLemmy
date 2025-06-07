@@ -30,11 +30,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 
 @Composable
 fun PostCardVideo(
-    modifier: Modifier = Modifier,
     url: String,
+    modifier: Modifier = Modifier,
     blurred: Boolean = false,
     autoLoadImages: Boolean = true,
-    onOpen: (() -> Unit)? = null,
     onOpenFullScreen: (() -> Unit)? = null,
 ) {
     if (url.isEmpty()) {
@@ -43,33 +42,33 @@ fun PostCardVideo(
 
     Box(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .aspectRatio(16 / 9f)
-                .clipToBounds(),
+        modifier
+            .fillMaxWidth()
+            .aspectRatio(16 / 9f)
+            .clipToBounds(),
         contentAlignment = Alignment.Center,
     ) {
         var shouldBeRendered by remember(autoLoadImages) { mutableStateOf(autoLoadImages) }
         if (shouldBeRendered) {
             VideoPlayerPreview(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .blur(radius = if (blurred) 60.dp else 0.dp),
+                Modifier
+                    .fillMaxSize()
+                    .blur(radius = if (blurred) 60.dp else 0.dp),
                 url = url,
             )
 
             FilledIconButton(
                 colors =
-                    IconButtonDefaults.filledIconButtonColors().copy(
-                        containerColor = MaterialTheme.colorScheme.onBackground,
-                    ),
+                IconButtonDefaults.filledIconButtonColors().copy(
+                    containerColor = MaterialTheme.colorScheme.onBackground,
+                ),
                 modifier =
-                    Modifier
-                        .align(Alignment.Center)
-                        .padding(
-                            start = Spacing.xs,
-                        ),
+                Modifier
+                    .align(Alignment.Center)
+                    .padding(
+                        start = Spacing.xs,
+                    ),
                 onClick = {
                     onOpenFullScreen?.invoke()
                 },
