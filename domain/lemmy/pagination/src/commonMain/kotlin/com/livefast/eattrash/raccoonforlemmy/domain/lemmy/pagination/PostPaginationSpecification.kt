@@ -34,16 +34,9 @@ sealed interface PostPaginationSpecification {
         val includeDeleted: Boolean = false,
     ) : PostPaginationSpecification
 
-    data class Votes(
-        val liked: Boolean = true,
-        val sortType: SortType = SortType.New,
-    ) : PostPaginationSpecification
+    data class Votes(val liked: Boolean = true, val sortType: SortType = SortType.New) : PostPaginationSpecification
 
-    data class Saved(
-        val sortType: SortType = SortType.Active,
-    ) : PostPaginationSpecification
+    data class Saved(val sortType: SortType = SortType.Active) : PostPaginationSpecification
 
-    data class Hidden(
-        val sortType: SortType = SortType.Active,
-    ) : PostPaginationSpecification
+    data class Hidden(val sortType: SortType = SortType.Active) : PostPaginationSpecification
 }

@@ -33,59 +33,58 @@ class DefaultLemmyValueCacheTest {
         )
 
     @Test
-    fun whenRefresh_thenInteractionsAreAsExpected() =
-        runTest {
-            val userId = 1L
-            coEvery { siteServiceV3.get(any(), any()) } returns
-                mockk(relaxed = true) {
-                    every { myUser } returns
-                        mockk(relaxed = true) {
-                            every { localUserView } returns
-                                mockk(relaxed = true) {
-                                    every { person } returns
-                                        mockk(relaxed = true) {
-                                            every { id } returns userId
-                                        }
-                                }
-                            every { moderates } returns listOf(mockk(relaxed = true))
-                        }
-                    every { admins } returns
-                        listOf(
+    fun whenRefresh_thenInteractionsAreAsExpected() = runTest {
+        val userId = 1L
+        coEvery { siteServiceV3.get(any(), any()) } returns
+            mockk(relaxed = true) {
+                every { myUser } returns
+                    mockk(relaxed = true) {
+                        every { localUserView } returns
                             mockk(relaxed = true) {
                                 every { person } returns
                                     mockk(relaxed = true) {
                                         every { id } returns userId
                                     }
-                            },
-                        )
-                    every { siteView } returns
+                            }
+                        every { moderates } returns listOf(mockk(relaxed = true))
+                    }
+                every { admins } returns
+                    listOf(
                         mockk(relaxed = true) {
-                            every { localSite } returns
+                            every { person } returns
                                 mockk(relaxed = true) {
-                                    every { communityCreationAdminOnly } returns true
-                                    every { enableDownvotes } returns false
+                                    every { id } returns userId
                                 }
-                        }
-                }
-
-            sut.refresh(auth = AUTH_TOKEN)
-
-            val isAdmin = sut.isCurrentUserAdmin.value
-            val isCommunityCreationAdminOnly = sut.isCommunityCreationAdminOnly.value
-            val isDownVoteEnabled = sut.isDownVoteEnabled.value
-            val isCurrentUserModerator = sut.isCurrentUserModerator.value
-            assertTrue(isAdmin)
-            assertTrue(isCommunityCreationAdminOnly)
-            assertFalse(isDownVoteEnabled)
-            assertTrue(isCurrentUserModerator)
-
-            coVerify {
-                siteServiceV3.get(
-                    auth = AUTH_TOKEN,
-                    authHeader = AUTH_TOKEN.toAuthHeader(),
-                )
+                        },
+                    )
+                every { siteView } returns
+                    mockk(relaxed = true) {
+                        every { localSite } returns
+                            mockk(relaxed = true) {
+                                every { communityCreationAdminOnly } returns true
+                                every { enableDownvotes } returns false
+                            }
+                    }
             }
+
+        sut.refresh(auth = AUTH_TOKEN)
+
+        val isAdmin = sut.isCurrentUserAdmin.value
+        val isCommunityCreationAdminOnly = sut.isCommunityCreationAdminOnly.value
+        val isDownVoteEnabled = sut.isDownVoteEnabled.value
+        val isCurrentUserModerator = sut.isCurrentUserModerator.value
+        assertTrue(isAdmin)
+        assertTrue(isCommunityCreationAdminOnly)
+        assertFalse(isDownVoteEnabled)
+        assertTrue(isCurrentUserModerator)
+
+        coVerify {
+            siteServiceV3.get(
+                auth = AUTH_TOKEN,
+                authHeader = AUTH_TOKEN.toAuthHeader(),
+            )
         }
+    }
 
     companion object {
         private const val AUTH_TOKEN = "fake-auth-token"

@@ -11,29 +11,28 @@ internal class DefaultCommunityProcessor(
     private val detailOpener: DetailOpener,
     private val urlDecoder: UrlDecoder,
 ) : CommunityProcessor {
-    override suspend fun process(url: String): Boolean =
-        withTimeoutOrNull(2500) {
-            val auth = identityRepository.authToken.value
-            val resolved =
-                communityRepository.getResolved(
-                    query = url,
-                    auth = auth,
-                )
+    override suspend fun process(url: String): Boolean = withTimeoutOrNull(2500) {
+        val auth = identityRepository.authToken.value
+        val resolved =
+            communityRepository.getResolved(
+                query = url,
+                auth = auth,
+            )
 
-            if (resolved != null) {
-                detailOpener.openCommunityDetail(community = resolved)
+        if (resolved != null) {
+            detailOpener.openCommunityDetail(community = resolved)
+            true
+        } else {
+            val community = urlDecoder.getCommunity(url)
+            if (community != null) {
+                detailOpener.openCommunityDetail(
+                    community = community,
+                    otherInstance = community.host,
+                )
                 true
             } else {
-                val community = urlDecoder.getCommunity(url)
-                if (community != null) {
-                    detailOpener.openCommunityDetail(
-                        community = community,
-                        otherInstance = community.host,
-                    )
-                    true
-                } else {
-                    false
-                }
+                false
             }
-        } ?: false
+        }
+    } ?: false
 }

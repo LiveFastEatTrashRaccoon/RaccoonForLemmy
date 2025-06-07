@@ -28,12 +28,10 @@ data class CommunityModel(
     val currentlyBanned: Boolean = false,
 )
 
-fun CommunityModel.readableName(preferNickname: Boolean): String {
-    return if (preferNickname) {
-        title.takeIf { it.isNotEmpty() }?.replace("&amp;", "&") ?: readableHandle
-    } else {
-        readableHandle
-    }
+fun CommunityModel.readableName(preferNickname: Boolean): String = if (preferNickname) {
+    title.takeIf { it.isNotEmpty() }?.replace("&amp;", "&") ?: readableHandle
+} else {
+    readableHandle
 }
 
 val CommunityModel.readableHandle: String

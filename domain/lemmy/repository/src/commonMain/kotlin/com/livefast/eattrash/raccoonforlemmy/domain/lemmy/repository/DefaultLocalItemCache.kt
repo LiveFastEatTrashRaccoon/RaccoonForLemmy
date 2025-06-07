@@ -5,10 +5,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.cache.LruCache
 internal class DefaultLocalItemCache<T> : LocalItemCache<T> {
     private val cache = LruCache<Long, T>(MAX_SIZE)
 
-    override suspend fun put(
-        key: Long,
-        value: T,
-    ) {
+    override suspend fun put(key: Long, value: T) {
         cache.put(key, value)
     }
 

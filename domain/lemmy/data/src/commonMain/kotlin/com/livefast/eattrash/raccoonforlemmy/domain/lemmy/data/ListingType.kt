@@ -17,32 +17,28 @@ sealed interface ListingType {
     data object ModeratorView : ListingType
 }
 
-fun ListingType.toInt() =
-    when (this) {
-        ListingType.All -> 2
-        ListingType.Subscribed -> 1
-        else -> 0
-    }
+fun ListingType.toInt() = when (this) {
+    ListingType.All -> 2
+    ListingType.Subscribed -> 1
+    else -> 0
+}
 
-fun Int.toListingType() =
-    when (this) {
-        1 -> ListingType.Subscribed
-        2 -> ListingType.All
-        else -> ListingType.Local
-    }
+fun Int.toListingType() = when (this) {
+    1 -> ListingType.Subscribed
+    2 -> ListingType.All
+    else -> ListingType.Local
+}
 
-fun ListingType.toIcon() =
-    when (this) {
-        ListingType.Local -> Icons.Default.Cottage
-        ListingType.Subscribed -> Icons.Default.Book
-        else -> Icons.Default.Public
-    }
+fun ListingType.toIcon() = when (this) {
+    ListingType.Local -> Icons.Default.Cottage
+    ListingType.Subscribed -> Icons.Default.Book
+    else -> Icons.Default.Public
+}
 
 @Composable
-fun ListingType.toReadableName(): String =
-    when (this) {
-        ListingType.All -> LocalStrings.current.homeListingTypeAll
-        ListingType.Local -> LocalStrings.current.homeListingTypeLocal
-        ListingType.Subscribed -> LocalStrings.current.homeListingTypeSubscribed
-        else -> ""
-    }
+fun ListingType.toReadableName(): String = when (this) {
+    ListingType.All -> LocalStrings.current.homeListingTypeAll
+    ListingType.Local -> LocalStrings.current.homeListingTypeLocal
+    ListingType.Subscribed -> LocalStrings.current.homeListingTypeSubscribed
+    else -> ""
+}

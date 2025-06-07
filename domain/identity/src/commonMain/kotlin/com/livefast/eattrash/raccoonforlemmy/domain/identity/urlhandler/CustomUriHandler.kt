@@ -10,10 +10,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getCustomUriHand
 
 @Stable
 interface CustomUriHandler : UriHandler {
-    fun openUri(
-        uri: String,
-        allowOpenExternal: Boolean,
-    )
+    fun openUri(uri: String, allowOpenExternal: Boolean)
 }
 
 @Composable

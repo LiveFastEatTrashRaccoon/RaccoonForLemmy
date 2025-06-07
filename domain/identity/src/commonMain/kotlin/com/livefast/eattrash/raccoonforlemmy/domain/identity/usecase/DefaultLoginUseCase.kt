@@ -82,19 +82,23 @@ internal class DefaultLoginUseCase(
                                 showScores = accountSettings?.showScores ?: true,
                                 includeNsfw = accountSettings?.showNsfw ?: false,
                                 voteFormat =
-                                    accountSettings?.let { settings ->
-                                        val showPercentage = settings.showUpVotePercentage == true
-                                        val separate =
-                                            settings.showUpVotes == true && settings.showDownVotes == true && settings.showScores == false
-                                        val hidden =
-                                            settings.showUpVotes == false && settings.showDownVotes == false && settings.showScores == false
-                                        when {
-                                            showPercentage -> VoteFormat.Percentage
-                                            separate -> VoteFormat.Separated
-                                            hidden -> VoteFormat.Hidden
-                                            else -> VoteFormat.Aggregated
-                                        }
-                                    } ?: VoteFormat.Aggregated,
+                                accountSettings?.let { settings ->
+                                    val showPercentage = settings.showUpVotePercentage == true
+                                    val separate =
+                                        settings.showUpVotes == true &&
+                                            settings.showDownVotes == true &&
+                                            settings.showScores == false
+                                    val hidden =
+                                        settings.showUpVotes == false &&
+                                            settings.showDownVotes == false &&
+                                            settings.showScores == false
+                                    when {
+                                        showPercentage -> VoteFormat.Percentage
+                                        separate -> VoteFormat.Separated
+                                        hidden -> VoteFormat.Hidden
+                                        else -> VoteFormat.Aggregated
+                                    }
+                                } ?: VoteFormat.Aggregated,
                             )
                     settingsRepository.createSettings(
                         settings = anonymousSettings,

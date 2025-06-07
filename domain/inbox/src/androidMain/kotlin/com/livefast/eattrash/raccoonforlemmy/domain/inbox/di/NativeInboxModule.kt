@@ -14,6 +14,6 @@ internal actual val nativeInboxModule =
                 DefaultInboxNotificationChecker(
                     context = instance(),
                 )
+            }
         }
     }
-}

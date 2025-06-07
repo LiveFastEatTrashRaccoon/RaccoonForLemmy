@@ -3,9 +3,8 @@ package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
-internal class DefaultPostNavigationManager(
-    private val postPaginationManager: PostPaginationManager,
-) : PostNavigationManager {
+internal class DefaultPostNavigationManager(private val postPaginationManager: PostPaginationManager) :
+    PostNavigationManager {
     override val canNavigate = MutableStateFlow(false)
 
     private var states: MutableList<PostPaginationManagerState> = mutableListOf()

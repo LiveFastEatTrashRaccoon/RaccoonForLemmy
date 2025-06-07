@@ -30,93 +30,86 @@ class DefaultSiteVersionDataSourceTest {
         )
 
     @Test
-    fun givenSameVersion_whenInvoke_thenResultIsAsExpected() =
-        runTest {
-            coEvery { services.getApiVersion() } returns "0.19.2"
+    fun givenSameVersion_whenInvoke_thenResultIsAsExpected() = runTest {
+        coEvery { services.getApiVersion() } returns "0.19.2"
 
-            val res = sut.isAtLeast(major = 0, minor = 19, patch = 2)
+        val res = sut.isAtLeast(major = 0, minor = 19, patch = 2)
 
-            assertTrue(res)
-            verify {
-                customServices wasNot Called
-            }
+        assertTrue(res)
+        verify {
+            customServices wasNot Called
         }
+    }
 
     @Test
-    fun givenPatchLessThanThreshold_whenInvoke_thenResultIsAsExpected() =
-        runTest {
-            coEvery { services.getApiVersion() } returns "0.19.2"
+    fun givenPatchLessThanThreshold_whenInvoke_thenResultIsAsExpected() = runTest {
+        coEvery { services.getApiVersion() } returns "0.19.2"
 
-            val res = sut.isAtLeast(major = 0, minor = 19, patch = 3)
+        val res = sut.isAtLeast(major = 0, minor = 19, patch = 3)
 
-            assertFalse(res)
-            verify {
-                customServices wasNot Called
-            }
+        assertFalse(res)
+        verify {
+            customServices wasNot Called
         }
+    }
 
     @Test
-    fun givenPatchGreaterThanThreshold_whenInvoke_thenResultIsAsExpected() =
-        runTest {
-            coEvery { services.getApiVersion() } returns "0.19.2"
+    fun givenPatchGreaterThanThreshold_whenInvoke_thenResultIsAsExpected() = runTest {
+        coEvery { services.getApiVersion() } returns "0.19.2"
 
-            val res = sut.isAtLeast(major = 0, minor = 19, patch = 1)
+        val res = sut.isAtLeast(major = 0, minor = 19, patch = 1)
 
-            assertTrue(res)
-            verify {
-                customServices wasNot Called
-            }
+        assertTrue(res)
+        verify {
+            customServices wasNot Called
         }
+    }
 
     @Test
-    fun givenMinorLessThanThreshold_whenInvoke_thenResultIsAsExpected() =
-        runTest {
-            coEvery { services.getApiVersion() } returns "0.18.2"
+    fun givenMinorLessThanThreshold_whenInvoke_thenResultIsAsExpected() = runTest {
+        coEvery { services.getApiVersion() } returns "0.18.2"
 
-            val res = sut.isAtLeast(major = 0, minor = 19, patch = 2)
+        val res = sut.isAtLeast(major = 0, minor = 19, patch = 2)
 
-            assertFalse(res)
-            verify {
-                customServices wasNot Called
-            }
+        assertFalse(res)
+        verify {
+            customServices wasNot Called
         }
+    }
 
     @Test
-    fun givenMinorGreaterThanThreshold_whenInvoke_thenResultIsAsExpected() =
-        runTest {
-            coEvery { services.getApiVersion() } returns "0.20.2"
+    fun givenMinorGreaterThanThreshold_whenInvoke_thenResultIsAsExpected() = runTest {
+        coEvery { services.getApiVersion() } returns "0.20.2"
 
-            val res = sut.isAtLeast(major = 0, minor = 19, patch = 2)
+        val res = sut.isAtLeast(major = 0, minor = 19, patch = 2)
 
-            assertTrue(res)
-            verify {
-                customServices wasNot Called
-            }
+        assertTrue(res)
+        verify {
+            customServices wasNot Called
         }
+    }
 
     @Test
-    fun givenMajorLessThanThreshold_whenInvoke_thenResultIsAsExpected() =
-        runTest {
-            coEvery { services.getApiVersion() } returns "0.19.2"
+    fun givenMajorLessThanThreshold_whenInvoke_thenResultIsAsExpected() = runTest {
+        coEvery { services.getApiVersion() } returns "0.19.2"
 
-            val res = sut.isAtLeast(major = 1, minor = 0, patch = 0)
+        val res = sut.isAtLeast(major = 1, minor = 0, patch = 0)
 
-            assertFalse(res)
-            verify {
-                customServices wasNot Called
-            }
+        assertFalse(res)
+        verify {
+            customServices wasNot Called
         }
+    }
 
     @Test
-    fun givenMajorGreaterThanThreshold_whenInvoke_thenResultIsAsExpected() =
-        runTest {
-            coEvery { services.getApiVersion() } returns "1.0.0"
+    fun givenMajorGreaterThanThreshold_whenInvoke_thenResultIsAsExpected() = runTest {
+        coEvery { services.getApiVersion() } returns "1.0.0"
 
-            val res = sut.isAtLeast(major = 0, minor = 19, patch = 2)
+        val res = sut.isAtLeast(major = 0, minor = 19, patch = 2)
 
-            assertTrue(res)
-            verify {
-                customServices wasNot Called
-            }
+        assertTrue(res)
+        verify {
+            customServices wasNot Called
         }
+    }
 }

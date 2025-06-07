@@ -10,9 +10,8 @@ data class PrivateMessageModel(
     val read: Boolean = false,
 )
 
-fun PrivateMessageModel.otherUser(currentUserId: Long): UserModel? =
-    when (currentUserId) {
-        creator?.id -> recipient
-        recipient?.id -> creator
-        else -> null
-    }
+fun PrivateMessageModel.otherUser(currentUserId: Long): UserModel? = when (currentUserId) {
+    creator?.id -> recipient
+    recipient?.id -> creator
+    else -> null
+}

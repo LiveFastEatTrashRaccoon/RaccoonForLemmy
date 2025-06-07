@@ -15,10 +15,8 @@ import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoord
 import org.kodein.di.instance
 import java.util.Collections.max
 
-internal class CheckNotificationWorker(
-    private val context: Context,
-    parameters: WorkerParameters,
-) : CoroutineWorker(context, parameters) {
+internal class CheckNotificationWorker(private val context: Context, parameters: WorkerParameters) :
+    CoroutineWorker(context, parameters) {
     private val inboxCoordinator by RootDI.di.instance<InboxCoordinator>()
     private val l10nManager by RootDI.di.instance<L10nManager>()
 

@@ -39,58 +39,55 @@ class DefaultPostProcessorTest {
         )
 
     @Test
-    fun givenResolve_whenProcess_thenResultIsAsExpected() =
-        runTest {
-            val item = PostModel(id = 1)
-            coEvery { postRepository.getResolved(any(), any()) } returns item
+    fun givenResolve_whenProcess_thenResultIsAsExpected() = runTest {
+        val item = PostModel(id = 1)
+        coEvery { postRepository.getResolved(any(), any()) } returns item
 
-            val res = sut.process(URL)
+        val res = sut.process(URL)
 
-            assertTrue(res)
-            coVerify {
-                postRepository.getResolved(URL, FAKE_AUTH)
-            }
-            verify {
-                identityRepository.authToken
-                urlDecoder wasNot Called
-                detailOpener.openPostDetail(item)
-            }
+        assertTrue(res)
+        coVerify {
+            postRepository.getResolved(URL, FAKE_AUTH)
         }
+        verify {
+            identityRepository.authToken
+            urlDecoder wasNot Called
+            detailOpener.openPostDetail(item)
+        }
+    }
 
     @Test
-    fun givenNotResolveAndValidUrl_whenProcess_thenResultIsAsExpected() =
-        runTest {
-            val item = PostModel(id = 1)
-            coEvery { urlDecoder.getPost(any()) } returns (item to "")
+    fun givenNotResolveAndValidUrl_whenProcess_thenResultIsAsExpected() = runTest {
+        val item = PostModel(id = 1)
+        coEvery { urlDecoder.getPost(any()) } returns (item to "")
 
-            val res = sut.process(URL)
+        val res = sut.process(URL)
 
-            assertTrue(res)
-            coVerify {
-                postRepository.getResolved(URL, FAKE_AUTH)
-                urlDecoder.getPost(URL)
-            }
-            verify {
-                identityRepository.authToken
-                detailOpener.openPostDetail(item)
-            }
+        assertTrue(res)
+        coVerify {
+            postRepository.getResolved(URL, FAKE_AUTH)
+            urlDecoder.getPost(URL)
         }
+        verify {
+            identityRepository.authToken
+            detailOpener.openPostDetail(item)
+        }
+    }
 
     @Test
-    fun givenNotResolveAndInvalidUrl_whenProcess_thenResultIsAsExpected() =
-        runTest {
-            val res = sut.process(URL)
+    fun givenNotResolveAndInvalidUrl_whenProcess_thenResultIsAsExpected() = runTest {
+        val res = sut.process(URL)
 
-            assertFalse(res)
-            coVerify {
-                postRepository.getResolved(URL, FAKE_AUTH)
-                urlDecoder.getPost(URL)
-            }
-            verify {
-                identityRepository.authToken
-                detailOpener wasNot Called
-            }
+        assertFalse(res)
+        coVerify {
+            postRepository.getResolved(URL, FAKE_AUTH)
+            urlDecoder.getPost(URL)
         }
+        verify {
+            identityRepository.authToken
+            detailOpener wasNot Called
+        }
+    }
 
     companion object {
         private const val URL = "https://example.com"

@@ -38,400 +38,391 @@ class DefaultCommunityPaginationManagerTest {
         )
 
     @Test
-    fun whenReset_thenHistoryIsClearedAndCanFetchMore() =
-        runTest {
-            val specification = CommunityPaginationSpecification.Subscribed()
-            sut.reset(specification)
+    fun whenReset_thenHistoryIsClearedAndCanFetchMore() = runTest {
+        val specification = CommunityPaginationSpecification.Subscribed()
+        sut.reset(specification)
 
-            assertTrue(sut.canFetchMore)
-            assertTrue(sut.history.isEmpty())
-        }
-
-    @Test
-    fun givenSubscribedSpecAndNoResults_whenLoadNextPage_thenResultIsAsExpected() =
-        runTest {
-            coEvery {
-                communityRepository.search(
-                    auth = any(),
-                    page = any(),
-                    limit = any(),
-                    resultType = any(),
-                    sortType = any(),
-                    query = any(),
-                    communityId = any(),
-                    instance = any(),
-                    listingType = any(),
-                )
-            } returns emptyList()
-            val specification = CommunityPaginationSpecification.Subscribed()
-            sut.reset(specification)
-
-            val items = sut.loadNextPage()
-
-            assertTrue(items.isEmpty())
-            coVerify {
-                communityRepository.search(
-                    auth = AUTH_TOKEN,
-                    page = 1,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Subscribed,
-                )
-            }
-        }
+        assertTrue(sut.canFetchMore)
+        assertTrue(sut.history.isEmpty())
+    }
 
     @Test
-    fun givenSubscribedSpecAndResults_whenLoadNextPage_thenResultIsAsExpected() =
-        runTest {
-            val page = slot<Int>()
-            coEvery {
-                communityRepository.search(
-                    auth = any(),
-                    page = capture(page),
-                    limit = any(),
-                    resultType = any(),
-                    sortType = any(),
-                    query = any(),
-                    communityId = any(),
-                    instance = any(),
-                    listingType = any(),
-                )
-            } answers {
-                val pageNumber = page.captured
-                if (pageNumber == 1) {
-                    (0..<20).map { idx ->
-                        SearchResult.Community(model = CommunityModel(id = idx.toLong()))
-                    }
-                } else {
-                    emptyList()
+    fun givenSubscribedSpecAndNoResults_whenLoadNextPage_thenResultIsAsExpected() = runTest {
+        coEvery {
+            communityRepository.search(
+                auth = any(),
+                page = any(),
+                limit = any(),
+                resultType = any(),
+                sortType = any(),
+                query = any(),
+                communityId = any(),
+                instance = any(),
+                listingType = any(),
+            )
+        } returns emptyList()
+        val specification = CommunityPaginationSpecification.Subscribed()
+        sut.reset(specification)
+
+        val items = sut.loadNextPage()
+
+        assertTrue(items.isEmpty())
+        coVerify {
+            communityRepository.search(
+                auth = AUTH_TOKEN,
+                page = 1,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Subscribed,
+            )
+        }
+    }
+
+    @Test
+    fun givenSubscribedSpecAndResults_whenLoadNextPage_thenResultIsAsExpected() = runTest {
+        val page = slot<Int>()
+        coEvery {
+            communityRepository.search(
+                auth = any(),
+                page = capture(page),
+                limit = any(),
+                resultType = any(),
+                sortType = any(),
+                query = any(),
+                communityId = any(),
+                instance = any(),
+                listingType = any(),
+            )
+        } answers {
+            val pageNumber = page.captured
+            if (pageNumber == 1) {
+                (0..<20).map { idx ->
+                    SearchResult.Community(model = CommunityModel(id = idx.toLong()))
                 }
-            }
-            val specification = CommunityPaginationSpecification.Subscribed()
-            sut.reset(specification)
-
-            val items = sut.loadNextPage()
-
-            assertEquals(20, items.size)
-            assertTrue(sut.canFetchMore)
-
-            coVerify {
-                communityRepository.search(
-                    auth = AUTH_TOKEN,
-                    page = 1,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Subscribed,
-                )
+            } else {
+                emptyList()
             }
         }
+        val specification = CommunityPaginationSpecification.Subscribed()
+        sut.reset(specification)
+
+        val items = sut.loadNextPage()
+
+        assertEquals(20, items.size)
+        assertTrue(sut.canFetchMore)
+
+        coVerify {
+            communityRepository.search(
+                auth = AUTH_TOKEN,
+                page = 1,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Subscribed,
+            )
+        }
+    }
 
     @Test
-    fun givenSubscribedSpecAndResults_whenSecondLoadNextPage_thenResultIsAsExpected() =
-        runTest {
-            val page = slot<Int>()
-            coEvery {
-                communityRepository.search(
-                    auth = any(),
-                    page = capture(page),
-                    limit = any(),
-                    resultType = any(),
-                    sortType = any(),
-                    query = any(),
-                    communityId = any(),
-                    instance = any(),
-                    listingType = any(),
-                )
-            } answers {
-                val pageNumber = page.captured
-                if (pageNumber == 1) {
-                    (0..<20).map { idx ->
-                        SearchResult.Community(model = CommunityModel(id = idx.toLong()))
-                    }
-                } else {
-                    emptyList()
+    fun givenSubscribedSpecAndResults_whenSecondLoadNextPage_thenResultIsAsExpected() = runTest {
+        val page = slot<Int>()
+        coEvery {
+            communityRepository.search(
+                auth = any(),
+                page = capture(page),
+                limit = any(),
+                resultType = any(),
+                sortType = any(),
+                query = any(),
+                communityId = any(),
+                instance = any(),
+                listingType = any(),
+            )
+        } answers {
+            val pageNumber = page.captured
+            if (pageNumber == 1) {
+                (0..<20).map { idx ->
+                    SearchResult.Community(model = CommunityModel(id = idx.toLong()))
                 }
-            }
-            val specification = CommunityPaginationSpecification.Subscribed()
-            sut.reset(specification)
-
-            sut.loadNextPage()
-            val items = sut.loadNextPage()
-
-            assertEquals(20, items.size)
-            assertFalse(sut.canFetchMore)
-
-            coVerifySequence {
-                communityRepository.search(
-                    auth = AUTH_TOKEN,
-                    page = 1,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Subscribed,
-                )
-                communityRepository.search(
-                    auth = AUTH_TOKEN,
-                    page = 2,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Subscribed,
-                )
+            } else {
+                emptyList()
             }
         }
+        val specification = CommunityPaginationSpecification.Subscribed()
+        sut.reset(specification)
+
+        sut.loadNextPage()
+        val items = sut.loadNextPage()
+
+        assertEquals(20, items.size)
+        assertFalse(sut.canFetchMore)
+
+        coVerifySequence {
+            communityRepository.search(
+                auth = AUTH_TOKEN,
+                page = 1,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Subscribed,
+            )
+            communityRepository.search(
+                auth = AUTH_TOKEN,
+                page = 2,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Subscribed,
+            )
+        }
+    }
 
     @Test
-    fun givenSubscribedSpec_whenFetchAll_thenResultIsAsExpected() =
-        runTest {
-            val page = slot<Int>()
-            coEvery {
-                communityRepository.search(
-                    auth = any(),
-                    page = capture(page),
-                    limit = any(),
-                    resultType = any(),
-                    sortType = any(),
-                    query = any(),
-                    communityId = any(),
-                    instance = any(),
-                    listingType = any(),
-                )
-            } answers {
-                val pageNumber = page.captured
-                if (pageNumber == 1) {
-                    (0..<20).map { idx ->
-                        SearchResult.Community(model = CommunityModel(id = idx.toLong()))
-                    }
-                } else {
-                    emptyList()
+    fun givenSubscribedSpec_whenFetchAll_thenResultIsAsExpected() = runTest {
+        val page = slot<Int>()
+        coEvery {
+            communityRepository.search(
+                auth = any(),
+                page = capture(page),
+                limit = any(),
+                resultType = any(),
+                sortType = any(),
+                query = any(),
+                communityId = any(),
+                instance = any(),
+                listingType = any(),
+            )
+        } answers {
+            val pageNumber = page.captured
+            if (pageNumber == 1) {
+                (0..<20).map { idx ->
+                    SearchResult.Community(model = CommunityModel(id = idx.toLong()))
                 }
-            }
-            val specification = CommunityPaginationSpecification.Subscribed()
-            sut.reset(specification)
-
-            val items = sut.fetchAll()
-
-            assertEquals(20, items.size)
-            assertFalse(sut.canFetchMore)
-
-            coVerifySequence {
-                communityRepository.search(
-                    auth = AUTH_TOKEN,
-                    page = 1,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Subscribed,
-                )
-                communityRepository.search(
-                    auth = AUTH_TOKEN,
-                    page = 2,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Subscribed,
-                )
+            } else {
+                emptyList()
             }
         }
+        val specification = CommunityPaginationSpecification.Subscribed()
+        sut.reset(specification)
 
-    @Test
-    fun givenInstanceSpecAndNoResults_whenLoadNextPage_thenResultIsAsExpected() =
-        runTest {
-            coEvery {
-                communityRepository.search(
-                    auth = any(),
-                    page = any(),
-                    limit = any(),
-                    resultType = any(),
-                    sortType = any(),
-                    query = any(),
-                    communityId = any(),
-                    instance = any(),
-                    listingType = any(),
-                )
-            } returns emptyList()
-            val otherInstance = "fake-instance"
-            val specification =
-                CommunityPaginationSpecification.Instance(otherInstance = otherInstance)
-            sut.reset(specification)
+        val items = sut.fetchAll()
 
-            val items = sut.loadNextPage()
+        assertEquals(20, items.size)
+        assertFalse(sut.canFetchMore)
 
-            assertTrue(items.isEmpty())
-            coVerify {
-                communityRepository.search(
-                    page = 1,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Local,
-                    instance = otherInstance,
-                )
-            }
+        coVerifySequence {
+            communityRepository.search(
+                auth = AUTH_TOKEN,
+                page = 1,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Subscribed,
+            )
+            communityRepository.search(
+                auth = AUTH_TOKEN,
+                page = 2,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Subscribed,
+            )
         }
+    }
 
     @Test
-    fun givenInstanceSpecAndResults_whenLoadNextPage_thenResultIsAsExpected() =
-        runTest {
-            val page = slot<Int>()
-            coEvery {
-                communityRepository.search(
-                    auth = any(),
-                    page = capture(page),
-                    limit = any(),
-                    resultType = any(),
-                    sortType = any(),
-                    query = any(),
-                    communityId = any(),
-                    instance = any(),
-                    listingType = any(),
-                )
-            } answers {
-                val pageNumber = page.captured
-                if (pageNumber == 1) {
-                    (0..<20).map { idx ->
-                        SearchResult.Community(model = CommunityModel(id = idx.toLong()))
-                    }
-                } else {
-                    emptyList()
+    fun givenInstanceSpecAndNoResults_whenLoadNextPage_thenResultIsAsExpected() = runTest {
+        coEvery {
+            communityRepository.search(
+                auth = any(),
+                page = any(),
+                limit = any(),
+                resultType = any(),
+                sortType = any(),
+                query = any(),
+                communityId = any(),
+                instance = any(),
+                listingType = any(),
+            )
+        } returns emptyList()
+        val otherInstance = "fake-instance"
+        val specification =
+            CommunityPaginationSpecification.Instance(otherInstance = otherInstance)
+        sut.reset(specification)
+
+        val items = sut.loadNextPage()
+
+        assertTrue(items.isEmpty())
+        coVerify {
+            communityRepository.search(
+                page = 1,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Local,
+                instance = otherInstance,
+            )
+        }
+    }
+
+    @Test
+    fun givenInstanceSpecAndResults_whenLoadNextPage_thenResultIsAsExpected() = runTest {
+        val page = slot<Int>()
+        coEvery {
+            communityRepository.search(
+                auth = any(),
+                page = capture(page),
+                limit = any(),
+                resultType = any(),
+                sortType = any(),
+                query = any(),
+                communityId = any(),
+                instance = any(),
+                listingType = any(),
+            )
+        } answers {
+            val pageNumber = page.captured
+            if (pageNumber == 1) {
+                (0..<20).map { idx ->
+                    SearchResult.Community(model = CommunityModel(id = idx.toLong()))
                 }
-            }
-            val otherInstance = "fake-instance"
-            val specification =
-                CommunityPaginationSpecification.Instance(otherInstance = otherInstance)
-            sut.reset(specification)
-
-            val items = sut.loadNextPage()
-
-            assertEquals(20, items.size)
-            assertTrue(sut.canFetchMore)
-
-            coVerify {
-                communityRepository.search(
-                    instance = otherInstance,
-                    page = 1,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Local,
-                )
+            } else {
+                emptyList()
             }
         }
+        val otherInstance = "fake-instance"
+        val specification =
+            CommunityPaginationSpecification.Instance(otherInstance = otherInstance)
+        sut.reset(specification)
+
+        val items = sut.loadNextPage()
+
+        assertEquals(20, items.size)
+        assertTrue(sut.canFetchMore)
+
+        coVerify {
+            communityRepository.search(
+                instance = otherInstance,
+                page = 1,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Local,
+            )
+        }
+    }
 
     @Test
-    fun givenInstanceSpecAndResults_whenSecondLoadNextPage_thenResultIsAsExpected() =
-        runTest {
-            val page = slot<Int>()
-            coEvery {
-                communityRepository.search(
-                    auth = any(),
-                    page = capture(page),
-                    limit = any(),
-                    resultType = any(),
-                    sortType = any(),
-                    query = any(),
-                    communityId = any(),
-                    instance = any(),
-                    listingType = any(),
-                )
-            } answers {
-                val pageNumber = page.captured
-                if (pageNumber == 1) {
-                    (0..<20).map { idx ->
-                        SearchResult.Community(model = CommunityModel(id = idx.toLong()))
-                    }
-                } else {
-                    emptyList()
+    fun givenInstanceSpecAndResults_whenSecondLoadNextPage_thenResultIsAsExpected() = runTest {
+        val page = slot<Int>()
+        coEvery {
+            communityRepository.search(
+                auth = any(),
+                page = capture(page),
+                limit = any(),
+                resultType = any(),
+                sortType = any(),
+                query = any(),
+                communityId = any(),
+                instance = any(),
+                listingType = any(),
+            )
+        } answers {
+            val pageNumber = page.captured
+            if (pageNumber == 1) {
+                (0..<20).map { idx ->
+                    SearchResult.Community(model = CommunityModel(id = idx.toLong()))
                 }
-            }
-            val otherInstance = "fake-instance"
-            val specification =
-                CommunityPaginationSpecification.Instance(otherInstance = otherInstance)
-            sut.reset(specification)
-
-            sut.loadNextPage()
-            val items = sut.loadNextPage()
-
-            assertEquals(20, items.size)
-            assertFalse(sut.canFetchMore)
-
-            coVerifySequence {
-                communityRepository.search(
-                    instance = otherInstance,
-                    page = 1,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Local,
-                )
-                communityRepository.search(
-                    instance = otherInstance,
-                    page = 2,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Local,
-                )
+            } else {
+                emptyList()
             }
         }
+        val otherInstance = "fake-instance"
+        val specification =
+            CommunityPaginationSpecification.Instance(otherInstance = otherInstance)
+        sut.reset(specification)
+
+        sut.loadNextPage()
+        val items = sut.loadNextPage()
+
+        assertEquals(20, items.size)
+        assertFalse(sut.canFetchMore)
+
+        coVerifySequence {
+            communityRepository.search(
+                instance = otherInstance,
+                page = 1,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Local,
+            )
+            communityRepository.search(
+                instance = otherInstance,
+                page = 2,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Local,
+            )
+        }
+    }
 
     @Test
-    fun givenInstanceSpec_whenFetchAll_thenResultIsAsExpected() =
-        runTest {
-            val page = slot<Int>()
-            coEvery {
-                communityRepository.search(
-                    auth = any(),
-                    page = capture(page),
-                    limit = any(),
-                    resultType = any(),
-                    sortType = any(),
-                    query = any(),
-                    communityId = any(),
-                    instance = any(),
-                    listingType = any(),
-                )
-            } answers {
-                val pageNumber = page.captured
-                if (pageNumber == 1) {
-                    (0..<20).map { idx ->
-                        SearchResult.Community(model = CommunityModel(id = idx.toLong()))
-                    }
-                } else {
-                    emptyList()
+    fun givenInstanceSpec_whenFetchAll_thenResultIsAsExpected() = runTest {
+        val page = slot<Int>()
+        coEvery {
+            communityRepository.search(
+                auth = any(),
+                page = capture(page),
+                limit = any(),
+                resultType = any(),
+                sortType = any(),
+                query = any(),
+                communityId = any(),
+                instance = any(),
+                listingType = any(),
+            )
+        } answers {
+            val pageNumber = page.captured
+            if (pageNumber == 1) {
+                (0..<20).map { idx ->
+                    SearchResult.Community(model = CommunityModel(id = idx.toLong()))
                 }
-            }
-            val otherInstance = "fake-instance"
-            val specification =
-                CommunityPaginationSpecification.Instance(otherInstance = otherInstance)
-            sut.reset(specification)
-
-            val items = sut.fetchAll()
-
-            assertEquals(20, items.size)
-            assertFalse(sut.canFetchMore)
-
-            coVerifySequence {
-                communityRepository.search(
-                    instance = otherInstance,
-                    page = 1,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Local,
-                )
-                communityRepository.search(
-                    instance = otherInstance,
-                    page = 2,
-                    limit = 50,
-                    resultType = SearchResultType.Communities,
-                    sortType = specification.sortType,
-                    listingType = ListingType.Local,
-                )
+            } else {
+                emptyList()
             }
         }
+        val otherInstance = "fake-instance"
+        val specification =
+            CommunityPaginationSpecification.Instance(otherInstance = otherInstance)
+        sut.reset(specification)
+
+        val items = sut.fetchAll()
+
+        assertEquals(20, items.size)
+        assertFalse(sut.canFetchMore)
+
+        coVerifySequence {
+            communityRepository.search(
+                instance = otherInstance,
+                page = 1,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Local,
+            )
+            communityRepository.search(
+                instance = otherInstance,
+                page = 2,
+                limit = 50,
+                resultType = SearchResultType.Communities,
+                sortType = specification.sortType,
+                listingType = ListingType.Local,
+            )
+        }
+    }
 
     companion object {
         private const val AUTH_TOKEN = "fake-token"

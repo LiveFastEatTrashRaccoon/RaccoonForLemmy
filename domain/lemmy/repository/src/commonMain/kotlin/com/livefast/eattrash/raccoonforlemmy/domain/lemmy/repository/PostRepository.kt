@@ -22,44 +22,19 @@ interface PostRepository {
         otherInstance: String? = null,
     ): Pair<List<PostModel>, String?>?
 
-    suspend fun get(
-        id: Long,
-        auth: String? = null,
-        instance: String? = null,
-    ): PostModel?
+    suspend fun get(id: Long, auth: String? = null, instance: String? = null): PostModel?
 
-    fun asUpVoted(
-        post: PostModel,
-        voted: Boolean,
-    ): PostModel
+    fun asUpVoted(post: PostModel, voted: Boolean): PostModel
 
-    suspend fun upVote(
-        post: PostModel,
-        auth: String,
-        voted: Boolean,
-    ): Result<Unit>
+    suspend fun upVote(post: PostModel, auth: String, voted: Boolean): Result<Unit>
 
-    fun asDownVoted(
-        post: PostModel,
-        downVoted: Boolean,
-    ): PostModel
+    fun asDownVoted(post: PostModel, downVoted: Boolean): PostModel
 
-    suspend fun downVote(
-        post: PostModel,
-        auth: String,
-        downVoted: Boolean,
-    ): Result<Unit>
+    suspend fun downVote(post: PostModel, auth: String, downVoted: Boolean): Result<Unit>
 
-    fun asSaved(
-        post: PostModel,
-        saved: Boolean,
-    ): PostModel
+    fun asSaved(post: PostModel, saved: Boolean): PostModel
 
-    suspend fun save(
-        post: PostModel,
-        auth: String,
-        saved: Boolean,
-    ): Result<Unit>
+    suspend fun save(post: PostModel, auth: String, saved: Boolean): Result<Unit>
 
     suspend fun create(
         communityId: Long,
@@ -81,58 +56,23 @@ interface PostRepository {
         auth: String,
     )
 
-    suspend fun setRead(
-        read: Boolean,
-        postId: Long,
-        auth: String? = null,
-    ): Result<Unit>
+    suspend fun setRead(read: Boolean, postId: Long, auth: String? = null): Result<Unit>
 
-    suspend fun hide(
-        hidden: Boolean,
-        postId: Long,
-        auth: String? = null,
-    ): Result<Unit>
+    suspend fun hide(hidden: Boolean, postId: Long, auth: String? = null): Result<Unit>
 
-    suspend fun delete(
-        id: Long,
-        auth: String,
-    ): PostModel?
+    suspend fun delete(id: Long, auth: String): PostModel?
 
-    suspend fun restore(
-        id: Long,
-        auth: String,
-    ): PostModel?
+    suspend fun restore(id: Long, auth: String): PostModel?
 
-    suspend fun report(
-        postId: Long,
-        reason: String,
-        auth: String,
-    )
+    suspend fun report(postId: Long, reason: String, auth: String)
 
-    suspend fun featureInCommunity(
-        postId: Long,
-        auth: String,
-        featured: Boolean,
-    ): PostModel?
+    suspend fun featureInCommunity(postId: Long, auth: String, featured: Boolean): PostModel?
 
-    suspend fun featureInInstance(
-        postId: Long,
-        auth: String,
-        featured: Boolean,
-    ): PostModel?
+    suspend fun featureInInstance(postId: Long, auth: String, featured: Boolean): PostModel?
 
-    suspend fun lock(
-        postId: Long,
-        auth: String,
-        locked: Boolean,
-    ): PostModel?
+    suspend fun lock(postId: Long, auth: String, locked: Boolean): PostModel?
 
-    suspend fun remove(
-        postId: Long,
-        auth: String,
-        reason: String,
-        removed: Boolean,
-    ): PostModel?
+    suspend fun remove(postId: Long, auth: String, reason: String, removed: Boolean): PostModel?
 
     suspend fun getReports(
         auth: String,
@@ -142,20 +82,9 @@ interface PostRepository {
         unresolvedOnly: Boolean = true,
     ): List<PostReportModel>?
 
-    suspend fun resolveReport(
-        reportId: Long,
-        auth: String,
-        resolved: Boolean,
-    ): PostReportModel?
+    suspend fun resolveReport(reportId: Long, auth: String, resolved: Boolean): PostReportModel?
 
-    suspend fun purge(
-        auth: String?,
-        postId: Long,
-        reason: String? = null,
-    )
+    suspend fun purge(auth: String?, postId: Long, reason: String? = null)
 
-    suspend fun getResolved(
-        query: String,
-        auth: String?,
-    ): PostModel?
+    suspend fun getResolved(query: String, auth: String?): PostModel?
 }

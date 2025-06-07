@@ -41,54 +41,52 @@ class DefaultCommentProcessorTest {
         )
 
     @Test
-    fun givenResolve_whenProcess_thenResultIsAsExpected() =
-        runTest {
-            val item =
-                CommentModel(
-                    id = 1,
-                    postId = 2,
-                )
-            coEvery { commentRepository.getResolved(any(), any()) } returns item
-            val postItem = PostModel(id = 2)
-            coEvery { postRepository.get(id = any(), auth = any()) } returns postItem
+    fun givenResolve_whenProcess_thenResultIsAsExpected() = runTest {
+        val item =
+            CommentModel(
+                id = 1,
+                postId = 2,
+            )
+        coEvery { commentRepository.getResolved(any(), any()) } returns item
+        val postItem = PostModel(id = 2)
+        coEvery { postRepository.get(id = any(), auth = any()) } returns postItem
 
-            val res = sut.process(URL)
+        val res = sut.process(URL)
 
-            assertTrue(res)
-            coVerify {
-                commentRepository.getResolved(URL, FAKE_AUTH)
-                postRepository.get(id = 2, auth = FAKE_AUTH)
-            }
-            verify {
-                identityRepository.authToken
-                detailOpener.openPostDetail(
-                    post = postItem,
-                    highlightCommentId = item.id,
-                )
-            }
+        assertTrue(res)
+        coVerify {
+            commentRepository.getResolved(URL, FAKE_AUTH)
+            postRepository.get(id = 2, auth = FAKE_AUTH)
         }
+        verify {
+            identityRepository.authToken
+            detailOpener.openPostDetail(
+                post = postItem,
+                highlightCommentId = item.id,
+            )
+        }
+    }
 
     @Test
-    fun givenResolveAndInvalidParent_whenProcess_thenResultIsAsExpected() =
-        runTest {
-            val item =
-                CommentModel(
-                    id = 1,
-                    postId = 2,
-                )
-            coEvery { commentRepository.getResolved(any(), any()) } returns item
+    fun givenResolveAndInvalidParent_whenProcess_thenResultIsAsExpected() = runTest {
+        val item =
+            CommentModel(
+                id = 1,
+                postId = 2,
+            )
+        coEvery { commentRepository.getResolved(any(), any()) } returns item
 
-            val res = sut.process(URL)
+        val res = sut.process(URL)
 
-            assertFalse(res)
-            coVerify {
-                commentRepository.getResolved(URL, FAKE_AUTH)
-            }
-            verify {
-                identityRepository.authToken
-                detailOpener wasNot Called
-            }
+        assertFalse(res)
+        coVerify {
+            commentRepository.getResolved(URL, FAKE_AUTH)
         }
+        verify {
+            identityRepository.authToken
+            detailOpener wasNot Called
+        }
+    }
 
     companion object {
         private const val URL = "https://example.com"

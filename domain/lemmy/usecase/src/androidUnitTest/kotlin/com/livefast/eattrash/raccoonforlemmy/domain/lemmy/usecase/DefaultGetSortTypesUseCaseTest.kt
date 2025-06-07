@@ -23,139 +23,132 @@ class DefaultGetSortTypesUseCaseTest {
         )
 
     @Test
-    fun givenVersionEqualToThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any(),
-                )
-            } returns true
+    fun givenVersionEqualToThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns true
 
-            val res = sut.getTypesForPosts()
+        val res = sut.getTypesForPosts()
 
-            assertTrue(res.contains(SortType.Controversial))
-            assertTrue(res.contains(SortType.Scaled))
-            assertTrue(res.contains(SortType.Active))
-            assertTrue(res.contains(SortType.Hot))
-            assertTrue(res.contains(SortType.New))
-            assertTrue(res.contains(SortType.Old))
-            assertTrue(res.contains(SortType.MostComments))
-            assertTrue(res.contains(SortType.NewComments))
-            assertTrue(res.contains(SortType.Top.Generic))
-        }
-
-    @Test
-    fun givenVersionGreaterThanThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any(),
-                )
-            } returns true
-
-            val res = sut.getTypesForPosts()
-
-            assertTrue(res.contains(SortType.Controversial))
-            assertTrue(res.contains(SortType.Scaled))
-            assertTrue(res.contains(SortType.Active))
-            assertTrue(res.contains(SortType.Hot))
-            assertTrue(res.contains(SortType.New))
-            assertTrue(res.contains(SortType.Old))
-            assertTrue(res.contains(SortType.MostComments))
-            assertTrue(res.contains(SortType.NewComments))
-            assertTrue(res.contains(SortType.Top.Generic))
-        }
+        assertTrue(res.contains(SortType.Controversial))
+        assertTrue(res.contains(SortType.Scaled))
+        assertTrue(res.contains(SortType.Active))
+        assertTrue(res.contains(SortType.Hot))
+        assertTrue(res.contains(SortType.New))
+        assertTrue(res.contains(SortType.Old))
+        assertTrue(res.contains(SortType.MostComments))
+        assertTrue(res.contains(SortType.NewComments))
+        assertTrue(res.contains(SortType.Top.Generic))
+    }
 
     @Test
-    fun givenVersionLessThanThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any(),
-                )
-            } returns false
+    fun givenVersionGreaterThanThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns true
 
-            val res = sut.getTypesForPosts()
+        val res = sut.getTypesForPosts()
 
-            assertFalse(res.contains(SortType.Controversial))
-            assertFalse(res.contains(SortType.Scaled))
-            assertTrue(res.contains(SortType.Active))
-            assertTrue(res.contains(SortType.Hot))
-            assertTrue(res.contains(SortType.New))
-            assertTrue(res.contains(SortType.Old))
-            assertTrue(res.contains(SortType.MostComments))
-            assertTrue(res.contains(SortType.NewComments))
-            assertTrue(res.contains(SortType.Top.Generic))
-        }
-
-    @Test
-    fun givenVersionGreaterThanThreshold_whenGetTypesForComments_thenResultsIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any(),
-                )
-            } returns true
-
-            val res = sut.getTypesForComments()
-
-            assertTrue(res.contains(SortType.Controversial))
-            assertTrue(res.contains(SortType.Hot))
-            assertTrue(res.contains(SortType.New))
-            assertTrue(res.contains(SortType.Old))
-            assertTrue(res.contains(SortType.Top.Generic))
-        }
+        assertTrue(res.contains(SortType.Controversial))
+        assertTrue(res.contains(SortType.Scaled))
+        assertTrue(res.contains(SortType.Active))
+        assertTrue(res.contains(SortType.Hot))
+        assertTrue(res.contains(SortType.New))
+        assertTrue(res.contains(SortType.Old))
+        assertTrue(res.contains(SortType.MostComments))
+        assertTrue(res.contains(SortType.NewComments))
+        assertTrue(res.contains(SortType.Top.Generic))
+    }
 
     @Test
-    fun givenVersionLessThanThreshold_whenGetTypesForComments_thenResultsIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any(),
-                )
-            } returns false
+    fun givenVersionLessThanThreshold_whenGetTypesForPosts_thenResultsIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns false
 
-            val res = sut.getTypesForComments()
+        val res = sut.getTypesForPosts()
 
-            assertFalse(res.contains(SortType.Controversial))
-            assertTrue(res.contains(SortType.Hot))
-            assertTrue(res.contains(SortType.New))
-            assertTrue(res.contains(SortType.Old))
-            assertTrue(res.contains(SortType.Top.Generic))
-        }
-
-    @Test
-    fun whenGetTypesForCommunities_thenResultsIsAsExpected() =
-        runTest {
-            val res = sut.getTypesForCommunities()
-
-            assertTrue(res.contains(SortType.Active))
-            assertTrue(res.contains(SortType.New))
-            assertTrue(res.contains(SortType.MostComments))
-        }
+        assertFalse(res.contains(SortType.Controversial))
+        assertFalse(res.contains(SortType.Scaled))
+        assertTrue(res.contains(SortType.Active))
+        assertTrue(res.contains(SortType.Hot))
+        assertTrue(res.contains(SortType.New))
+        assertTrue(res.contains(SortType.Old))
+        assertTrue(res.contains(SortType.MostComments))
+        assertTrue(res.contains(SortType.NewComments))
+        assertTrue(res.contains(SortType.Top.Generic))
+    }
 
     @Test
-    fun whenGetTypesForSavedItems_thenResultsIsAsExpected() =
-        runTest {
-            val res = sut.getTypesForSavedItems()
+    fun givenVersionGreaterThanThreshold_whenGetTypesForComments_thenResultsIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns true
 
-            assertTrue(res.contains(SortType.Hot))
-            assertTrue(res.contains(SortType.New))
-            assertTrue(res.contains(SortType.Old))
-        }
+        val res = sut.getTypesForComments()
+
+        assertTrue(res.contains(SortType.Controversial))
+        assertTrue(res.contains(SortType.Hot))
+        assertTrue(res.contains(SortType.New))
+        assertTrue(res.contains(SortType.Old))
+        assertTrue(res.contains(SortType.Top.Generic))
+    }
+
+    @Test
+    fun givenVersionLessThanThreshold_whenGetTypesForComments_thenResultsIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns false
+
+        val res = sut.getTypesForComments()
+
+        assertFalse(res.contains(SortType.Controversial))
+        assertTrue(res.contains(SortType.Hot))
+        assertTrue(res.contains(SortType.New))
+        assertTrue(res.contains(SortType.Old))
+        assertTrue(res.contains(SortType.Top.Generic))
+    }
+
+    @Test
+    fun whenGetTypesForCommunities_thenResultsIsAsExpected() = runTest {
+        val res = sut.getTypesForCommunities()
+
+        assertTrue(res.contains(SortType.Active))
+        assertTrue(res.contains(SortType.New))
+        assertTrue(res.contains(SortType.MostComments))
+    }
+
+    @Test
+    fun whenGetTypesForSavedItems_thenResultsIsAsExpected() = runTest {
+        val res = sut.getTypesForSavedItems()
+
+        assertTrue(res.contains(SortType.Hot))
+        assertTrue(res.contains(SortType.New))
+        assertTrue(res.contains(SortType.Old))
+    }
 }

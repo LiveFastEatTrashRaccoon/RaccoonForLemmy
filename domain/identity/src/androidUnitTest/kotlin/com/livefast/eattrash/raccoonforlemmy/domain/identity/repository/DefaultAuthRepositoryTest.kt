@@ -50,171 +50,163 @@ class DefaultAuthRepositoryTest {
 
     // region V3
     @Test
-    fun givenV3AndSuccess_whenLogin_thenResultIsAsExpected() =
-        runTest {
-            val loginData = LoginResponse(token = "")
-            coEvery { authServiceV3.login(any()) } returns loginData
+    fun givenV3AndSuccess_whenLogin_thenResultIsAsExpected() = runTest {
+        val loginData = LoginResponse(token = "")
+        coEvery { authServiceV3.login(any()) } returns loginData
 
-            val res = sut.login("username", "password")
+        val res = sut.login("username", "password")
 
-            assertTrue(res.isSuccess)
-            val resultData = res.getOrThrow()
-            assertEquals(loginData, resultData)
-            coVerify {
-                siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
-                authServiceV3.login(LoginForm("username", "password"))
-                accountServiceV4 wasNot Called
-            }
+        assertTrue(res.isSuccess)
+        val resultData = res.getOrThrow()
+        assertEquals(loginData, resultData)
+        coVerify {
+            siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
+            authServiceV3.login(LoginForm("username", "password"))
+            accountServiceV4 wasNot Called
         }
+    }
 
     @Test
-    fun givenV3AndFailure_whenLogin_thenResultIsAsExpected() =
-        runTest {
-            val loginData = LoginResponse(error = "fake-error-message")
-            coEvery { authServiceV3.login(any()) } returns loginData
+    fun givenV3AndFailure_whenLogin_thenResultIsAsExpected() = runTest {
+        val loginData = LoginResponse(error = "fake-error-message")
+        coEvery { authServiceV3.login(any()) } returns loginData
 
-            val res = sut.login("username", "password")
+        val res = sut.login("username", "password")
 
-            val resultData = res.getOrThrow()
-            assertEquals(loginData, resultData)
-            coVerify {
-                siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
-                authServiceV3.login(LoginForm("username", "password"))
-                accountServiceV4 wasNot Called
-            }
+        val resultData = res.getOrThrow()
+        assertEquals(loginData, resultData)
+        coVerify {
+            siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
+            authServiceV3.login(LoginForm("username", "password"))
+            accountServiceV4 wasNot Called
         }
+    }
 
     @Test
-    fun givenV3AndSuccess_whenLogout_thenResultIsAsExpected() =
-        runTest {
-            val response = SuccessResponse(success = true)
-            coEvery { authServiceV3.logout() } returns response
+    fun givenV3AndSuccess_whenLogout_thenResultIsAsExpected() = runTest {
+        val response = SuccessResponse(success = true)
+        coEvery { authServiceV3.logout() } returns response
 
-            val res = sut.logout()
+        val res = sut.logout()
 
-            assertTrue(res.isSuccess)
-            coVerify {
-                siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
-                authServiceV3.logout()
-                accountServiceV4 wasNot Called
-            }
+        assertTrue(res.isSuccess)
+        coVerify {
+            siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
+            authServiceV3.logout()
+            accountServiceV4 wasNot Called
         }
+    }
 
     @Test
-    fun givenV3AndFailure_whenLogout_thenResultIsAsExpected() =
-        runTest {
-            val response = SuccessResponse(success = false)
-            coEvery { authServiceV3.logout() } returns response
+    fun givenV3AndFailure_whenLogout_thenResultIsAsExpected() = runTest {
+        val response = SuccessResponse(success = false)
+        coEvery { authServiceV3.logout() } returns response
 
-            val res = sut.logout()
+        val res = sut.logout()
 
-            assertTrue(res.isFailure)
-            coVerify {
-                siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
-                authServiceV3.logout()
-                accountServiceV4 wasNot Called
-            }
+        assertTrue(res.isFailure)
+        coVerify {
+            siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
+            authServiceV3.logout()
+            accountServiceV4 wasNot Called
         }
+    }
     // endregion
 
     // region V4
     @Test
-    fun givenV4AndSuccess_whenLogin_thenResultIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any()
-                )
-            } returns true
-            val loginData = LoginResponse(token = "")
-            coEvery { accountServiceV4.login(any()) } returns loginData
+    fun givenV4AndSuccess_whenLogin_thenResultIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns true
+        val loginData = LoginResponse(token = "")
+        coEvery { accountServiceV4.login(any()) } returns loginData
 
-            val res = sut.login("username", "password")
+        val res = sut.login("username", "password")
 
-            assertTrue(res.isSuccess)
-            val resultData = res.getOrThrow()
-            assertEquals(loginData, resultData)
-            coVerify {
-                siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
-                accountServiceV4.login(LoginForm("username", "password"))
-                authServiceV3 wasNot Called
-            }
+        assertTrue(res.isSuccess)
+        val resultData = res.getOrThrow()
+        assertEquals(loginData, resultData)
+        coVerify {
+            siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
+            accountServiceV4.login(LoginForm("username", "password"))
+            authServiceV3 wasNot Called
         }
+    }
 
     @Test
-    fun givenV4AndFailure_whenLogin_thenResultIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any()
-                )
-            } returns true
-            val loginData = LoginResponse(error = "fake-error-message")
-            coEvery { accountServiceV4.login(any()) } returns loginData
+    fun givenV4AndFailure_whenLogin_thenResultIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns true
+        val loginData = LoginResponse(error = "fake-error-message")
+        coEvery { accountServiceV4.login(any()) } returns loginData
 
-            val res = sut.login("username", "password")
+        val res = sut.login("username", "password")
 
-            val resultData = res.getOrThrow()
-            assertEquals(loginData, resultData)
-            coVerify {
-                siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
-                accountServiceV4.login(LoginForm("username", "password"))
-                authServiceV3 wasNot Called
-            }
+        val resultData = res.getOrThrow()
+        assertEquals(loginData, resultData)
+        coVerify {
+            siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
+            accountServiceV4.login(LoginForm("username", "password"))
+            authServiceV3 wasNot Called
         }
+    }
 
     @Test
-    fun givenV4AndSuccess_whenLogout_thenResultIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any()
-                )
-            } returns true
-            val response = SuccessResponse(success = true)
-            coEvery { accountServiceV4.logout() } returns response
+    fun givenV4AndSuccess_whenLogout_thenResultIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns true
+        val response = SuccessResponse(success = true)
+        coEvery { accountServiceV4.logout() } returns response
 
-            val res = sut.logout()
+        val res = sut.logout()
 
-            assertTrue(res.isSuccess)
-            coVerify {
-                siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
-                accountServiceV4.logout()
-                authServiceV3 wasNot Called
-            }
+        assertTrue(res.isSuccess)
+        coVerify {
+            siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
+            accountServiceV4.logout()
+            authServiceV3 wasNot Called
         }
+    }
 
     @Test
-    fun givenV4AndFailure_whenLogout_thenResultIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any()
-                )
-            } returns true
-            val response = SuccessResponse(success = false)
-            coEvery { accountServiceV4.logout() } returns response
+    fun givenV4AndFailure_whenLogout_thenResultIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns true
+        val response = SuccessResponse(success = false)
+        coEvery { accountServiceV4.logout() } returns response
 
-            val res = sut.logout()
+        val res = sut.logout()
 
-            assertTrue(res.isFailure)
-            coVerify {
-                siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
-                accountServiceV4.logout()
-                authServiceV3 wasNot Called
-            }
+        assertTrue(res.isFailure)
+        coVerify {
+            siteVersionDataSource.isAtLeast(major = 1, minor = 0, patch = 0)
+            accountServiceV4.logout()
+            authServiceV3 wasNot Called
         }
+    }
     // endregion
 }

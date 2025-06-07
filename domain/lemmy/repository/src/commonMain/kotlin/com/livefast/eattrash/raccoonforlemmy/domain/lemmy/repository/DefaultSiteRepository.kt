@@ -18,44 +18,35 @@ internal class DefaultSiteRepository(
     private val customServices: ServiceProvider,
     private val siteVersionDataSource: SiteVersionDataSource,
 ) : SiteRepository {
-    override suspend fun getCurrentUser(auth: String): UserModel? =
-        runCatching {
-            val remoteUser =
-                if (siteVersionDataSource.shouldUseV4()) {
-                    services.v4.account.get(authHeader = auth.toAuthHeader())
-                } else {
-                    services.v3.site.get(
-                        auth = auth,
-                        authHeader = auth.toAuthHeader(),
-                    ).myUser
-                }
-            remoteUser?.let {
-                val user = it.localUserView?.person
-                val counts = it.localUserView?.counts
-                user?.toModel()?.copy(score = counts?.toModel())
-            }
-        }.getOrNull()
-
-    override suspend fun getSiteVersion(
-        auth: String?,
-        otherInstance: String?,
-    ): String? =
-        runCatching {
-            if (otherInstance.isNullOrEmpty()) {
-                val response = services.v3.site.get(authHeader = auth.toAuthHeader())
-                response.version.takeIf { !it.isNullOrEmpty() }
+    override suspend fun getCurrentUser(auth: String): UserModel? = runCatching {
+        val remoteUser =
+            if (siteVersionDataSource.shouldUseV4()) {
+                services.v4.account.get(authHeader = auth.toAuthHeader())
             } else {
-                customServices.changeInstance(otherInstance)
-                val response = customServices.v3.site.get(authHeader = "")
-                response.version.takeIf { !it.isNullOrEmpty() }
+                services.v3.site.get(
+                    auth = auth,
+                    authHeader = auth.toAuthHeader(),
+                ).myUser
             }
-        }.getOrNull()
+        remoteUser?.let {
+            val user = it.localUserView?.person
+            val counts = it.localUserView?.counts
+            user?.toModel()?.copy(score = counts?.toModel())
+        }
+    }.getOrNull()
 
-    override suspend fun block(
-        id: Long,
-        blocked: Boolean,
-        auth: String?,
-    ) {
+    override suspend fun getSiteVersion(auth: String?, otherInstance: String?): String? = runCatching {
+        if (otherInstance.isNullOrEmpty()) {
+            val response = services.v3.site.get(authHeader = auth.toAuthHeader())
+            response.version.takeIf { !it.isNullOrEmpty() }
+        } else {
+            customServices.changeInstance(otherInstance)
+            val response = customServices.v3.site.get(authHeader = "")
+            response.version.takeIf { !it.isNullOrEmpty() }
+        }
+    }.getOrNull()
+
+    override suspend fun block(id: Long, blocked: Boolean, auth: String?) {
         val data =
             BlockInstanceForm(
                 instanceId = id,
@@ -67,36 +58,30 @@ internal class DefaultSiteRepository(
         )
     }
 
-    override suspend fun getMetadata(url: String): MetadataModel? =
-        runCatching {
-            val response = services.v3.post.getSiteMetadata(url = url)
-            response.metadata.toModel()
-        }.getOrNull()
+    override suspend fun getMetadata(url: String): MetadataModel? = runCatching {
+        val response = services.v3.post.getSiteMetadata(url = url)
+        response.metadata.toModel()
+    }.getOrNull()
 
-    override suspend fun getLanguages(auth: String?): List<LanguageModel> =
-        runCatching {
-            val response =
-                services.v3.site.get(
-                    auth = auth,
-                    authHeader = auth.toAuthHeader(),
-                )
-            response.allLanguages.map { it.toModel() }
-        }.getOrElse { emptyList() }
+    override suspend fun getLanguages(auth: String?): List<LanguageModel> = runCatching {
+        val response =
+            services.v3.site.get(
+                auth = auth,
+                authHeader = auth.toAuthHeader(),
+            )
+        response.allLanguages.map { it.toModel() }
+    }.getOrElse { emptyList() }
 
-    override suspend fun getAccountSettings(auth: String): AccountSettingsModel? =
-        runCatching {
-            val response =
-                services.v3.site.get(
-                    auth = auth,
-                    authHeader = auth.toAuthHeader(),
-                )
-            response.myUser?.localUserView?.toModel()
-        }.getOrNull()
+    override suspend fun getAccountSettings(auth: String): AccountSettingsModel? = runCatching {
+        val response =
+            services.v3.site.get(
+                auth = auth,
+                authHeader = auth.toAuthHeader(),
+            )
+        response.myUser?.localUserView?.toModel()
+    }.getOrNull()
 
-    override suspend fun updateAccountSettings(
-        auth: String,
-        value: AccountSettingsModel,
-    ) {
+    override suspend fun updateAccountSettings(auth: String, value: AccountSettingsModel) {
         val formData = value.toDto().copy(auth = auth)
         services.v3.user.saveUserSettings(
             authHeader = auth.toAuthHeader(),
@@ -104,31 +89,29 @@ internal class DefaultSiteRepository(
         )
     }
 
-    override suspend fun getBans(auth: String): AccountBansModel? =
-        runCatching {
-            val response =
-                services.v3.site.get(
-                    auth = auth,
-                    authHeader = auth.toAuthHeader(),
-                )
-            response.myUser?.run {
-                AccountBansModel(
-                    users = personBlocks.map { it.target.toModel() },
-                    communities = communityBlocks.map { it.community.toModel() },
-                    instances = instanceBlocks.map { it.instance.toModel() },
-                )
-            }
-        }.getOrNull()
+    override suspend fun getBans(auth: String): AccountBansModel? = runCatching {
+        val response =
+            services.v3.site.get(
+                auth = auth,
+                authHeader = auth.toAuthHeader(),
+            )
+        response.myUser?.run {
+            AccountBansModel(
+                users = personBlocks.map { it.target.toModel() },
+                communities = communityBlocks.map { it.community.toModel() },
+                instances = instanceBlocks.map { it.instance.toModel() },
+            )
+        }
+    }.getOrNull()
 
-    override suspend fun getAdmins(otherInstance: String?): List<UserModel> =
-        runCatching {
-            if (otherInstance.isNullOrEmpty()) {
-                val response = services.v3.site.get()
-                response.admins.map { it.toModel() }
-            } else {
-                customServices.changeInstance(otherInstance)
-                val response = customServices.v3.site.get()
-                response.admins.map { it.toModel() }
-            }
-        }.getOrElse { emptyList() }
+    override suspend fun getAdmins(otherInstance: String?): List<UserModel> = runCatching {
+        if (otherInstance.isNullOrEmpty()) {
+            val response = services.v3.site.get()
+            response.admins.map { it.toModel() }
+        } else {
+            customServices.changeInstance(otherInstance)
+            val response = customServices.v3.site.get()
+            response.admins.map { it.toModel() }
+        }
+    }.getOrElse { emptyList() }
 }

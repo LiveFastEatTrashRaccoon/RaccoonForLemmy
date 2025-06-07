@@ -12,12 +12,7 @@ internal class DefaultSiteVersionDataSource(
 
     private val cache = mutableMapOf<String, String>()
 
-    override suspend fun isAtLeast(
-        major: Int,
-        minor: Int,
-        patch: Int,
-        otherInstance: String?,
-    ): Boolean {
+    override suspend fun isAtLeast(major: Int, minor: Int, patch: Int, otherInstance: String?): Boolean {
         val instance = otherInstance ?: services.currentInstance
         val version =
             if (cache.contains(instance)) {
@@ -36,19 +31,13 @@ internal class DefaultSiteVersionDataSource(
         )
     }
 
-    private suspend fun retrieveVersion(otherInstance: String?): String =
-        if (otherInstance.isNullOrEmpty()) {
-            services.getApiVersion()
-        } else {
-            customServices.getApiVersion()
-        }
+    private suspend fun retrieveVersion(otherInstance: String?): String = if (otherInstance.isNullOrEmpty()) {
+        services.getApiVersion()
+    } else {
+        customServices.getApiVersion()
+    }
 
-    private fun determine(
-        actualVersion: String,
-        major: Int,
-        minor: Int,
-        patch: Int,
-    ): Boolean {
+    private fun determine(actualVersion: String, major: Int, minor: Int, patch: Int): Boolean {
         val matchResult = LEMMY_VERSION_REGEX.find(actualVersion)
         val actualMajor =
             matchResult

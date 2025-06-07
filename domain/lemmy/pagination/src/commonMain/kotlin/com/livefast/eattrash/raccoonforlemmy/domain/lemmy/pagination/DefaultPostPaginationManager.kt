@@ -264,15 +264,14 @@ internal class DefaultPostPaginationManager(
         return history.map { it }
     }
 
-    override fun extractState(): PostPaginationManagerState =
-        DefaultPostPaginationManagerState(
-            specification = specification,
-            currentPage = currentPage,
-            pageCursor = pageCursor,
-            blockedDomains = blockedDomains,
-            stopWords = stopWords,
-            history = history,
-        )
+    override fun extractState(): PostPaginationManagerState = DefaultPostPaginationManagerState(
+        specification = specification,
+        currentPage = currentPage,
+        pageCursor = pageCursor,
+        blockedDomains = blockedDomains,
+        stopWords = stopWords,
+        history = history,
+    )
 
     override fun restoreState(state: PostPaginationManagerState) {
         (state as? DefaultPostPaginationManagerState)?.also {
@@ -286,18 +285,16 @@ internal class DefaultPostPaginationManager(
         }
     }
 
-    private fun List<PostModel>.deduplicate(): List<PostModel> =
-        filter { p1 ->
-            // prevents accidental duplication
-            history.none { p2 -> p2.id == p1.id }
-        }
+    private fun List<PostModel>.deduplicate(): List<PostModel> = filter { p1 ->
+        // prevents accidental duplication
+        history.none { p2 -> p2.id == p1.id }
+    }
 
-    private fun List<PostModel>.filterNsfw(includeNsfw: Boolean): List<PostModel> =
-        if (includeNsfw) {
-            this
-        } else {
-            filter { post -> !post.nsfw }
-        }
+    private fun List<PostModel>.filterNsfw(includeNsfw: Boolean): List<PostModel> = if (includeNsfw) {
+        this
+    } else {
+        filter { post -> !post.nsfw }
+    }
 
     private fun List<PostModel>.filterDeleted(includeCurrentCreator: Boolean = false): List<PostModel> {
         val currentUserId = identityRepository.cachedUser?.id
@@ -306,33 +303,30 @@ internal class DefaultPostPaginationManager(
         }
     }
 
-    private fun List<PostModel>.filterByUrlDomain(): List<PostModel> =
-        filter { post ->
-            blockedDomains?.takeIf { it.isNotEmpty() }?.let { blockList ->
-                blockList.none { domain -> post.url?.contains(domain) ?: true }
-            } ?: true
-        }
+    private fun List<PostModel>.filterByUrlDomain(): List<PostModel> = filter { post ->
+        blockedDomains?.takeIf { it.isNotEmpty() }?.let { blockList ->
+            blockList.none { domain -> post.url?.contains(domain) ?: true }
+        } ?: true
+    }
 
-    private fun List<PostModel>.filterByStopWords(): List<PostModel> =
-        filter { post ->
-            stopWords?.takeIf { it.isNotEmpty() }?.let { stopWordList ->
-                stopWordList.none { domain ->
-                    post.title.contains(
-                        other = domain,
-                        ignoreCase = true,
-                    )
-                }
-            } ?: true
-        }
-
-    private suspend fun List<PostModel>.withUserTags(): List<PostModel> =
-        map {
-            with(userTagHelper) {
-                it.copy(
-                    creator = it.creator.withTags(),
+    private fun List<PostModel>.filterByStopWords(): List<PostModel> = filter { post ->
+        stopWords?.takeIf { it.isNotEmpty() }?.let { stopWordList ->
+            stopWordList.none { domain ->
+                post.title.contains(
+                    other = domain,
+                    ignoreCase = true,
                 )
             }
+        } ?: true
+    }
+
+    private suspend fun List<PostModel>.withUserTags(): List<PostModel> = map {
+        with(userTagHelper) {
+            it.copy(
+                creator = it.creator.withTags(),
+            )
         }
+    }
 
     private fun handlePostUpdate(post: PostModel) {
         val index = history.indexOfFirst { it.id == post.id }.takeIf { it >= 0 } ?: return

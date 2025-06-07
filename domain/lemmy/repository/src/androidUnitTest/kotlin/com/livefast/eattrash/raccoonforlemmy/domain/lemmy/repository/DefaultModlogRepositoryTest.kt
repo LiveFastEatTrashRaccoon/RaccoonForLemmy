@@ -35,85 +35,83 @@ class DefaultModlogRepositoryTest {
         )
 
     @Test
-    fun givenEmptyResponse_whenGetItems_thenResultAndInteractionsAreAsExpected() =
-        runTest {
-            coEvery {
-                modLogServiceV3.getItems(
-                    authHeader = any(),
-                    auth = any(),
-                    page = any(),
-                    communityId = any(),
-                    limit = any(),
-                    modId = any(),
-                    otherId = any(),
-                    type = any(),
-                )
-            } returns GetModlogResponse()
+    fun givenEmptyResponse_whenGetItems_thenResultAndInteractionsAreAsExpected() = runTest {
+        coEvery {
+            modLogServiceV3.getItems(
+                authHeader = any(),
+                auth = any(),
+                page = any(),
+                communityId = any(),
+                limit = any(),
+                modId = any(),
+                otherId = any(),
+                type = any(),
+            )
+        } returns GetModlogResponse()
 
-            val communityId = 1L
-            val res =
-                sut.getItems(
-                    auth = AUTH_TOKEN,
-                    communityId = communityId,
-                    page = 1,
-                    type = ModlogItemType.All,
-                )
+        val communityId = 1L
+        val res =
+            sut.getItems(
+                auth = AUTH_TOKEN,
+                communityId = communityId,
+                page = 1,
+                type = ModlogItemType.All,
+            )
 
-            assertNotNull(res)
-            assertEquals(0, res.size)
-            coVerify {
-                modLogServiceV3.getItems(
-                    authHeader = AUTH_TOKEN.toAuthHeader(),
-                    auth = AUTH_TOKEN,
-                    communityId = communityId,
-                    limit = 20,
-                    page = 1,
-                    type = ModlogItemType.All.toDto(),
-                )
-            }
+        assertNotNull(res)
+        assertEquals(0, res.size)
+        coVerify {
+            modLogServiceV3.getItems(
+                authHeader = AUTH_TOKEN.toAuthHeader(),
+                auth = AUTH_TOKEN,
+                communityId = communityId,
+                limit = 20,
+                page = 1,
+                type = ModlogItemType.All.toDto(),
+            )
         }
+    }
 
     @Test
-    fun givenNonEmptyResponse_whenGetItems_thenResultAndInteractionsAreAsExpected() =
-        runTest {
-            coEvery {
-                modLogServiceV3.getItems(
-                    authHeader = any(),
-                    auth = any(),
-                    page = any(),
-                    communityId = any(),
-                    limit = any(),
-                    modId = any(),
-                    otherId = any(),
-                    type = any(),
-                )
-            } returns
-                GetModlogResponse(
-                    removedComments = listOf(mockk(relaxed = true)),
-                    removedPosts = listOf(mockk(relaxed = true)),
-                )
+    fun givenNonEmptyResponse_whenGetItems_thenResultAndInteractionsAreAsExpected() = runTest {
+        coEvery {
+            modLogServiceV3.getItems(
+                authHeader = any(),
+                auth = any(),
+                page = any(),
+                communityId = any(),
+                limit = any(),
+                modId = any(),
+                otherId = any(),
+                type = any(),
+            )
+        } returns
+            GetModlogResponse(
+                removedComments = listOf(mockk(relaxed = true)),
+                removedPosts = listOf(mockk(relaxed = true)),
+            )
 
-            val communityId = 1L
-            val res =
-                sut.getItems(
-                    auth = AUTH_TOKEN,
-                    communityId = communityId,
-                    page = 1,
-                )
+        val communityId = 1L
+        val res =
+            sut.getItems(
+                auth = AUTH_TOKEN,
+                communityId = communityId,
+                page = 1,
+            )
 
-            assertNotNull(res)
-            assertEquals(2, res.size)
-            coVerify {
-                modLogServiceV3.getItems(
-                    authHeader = AUTH_TOKEN.toAuthHeader(),
-                    auth = AUTH_TOKEN,
-                    communityId = communityId,
-                    limit = 20,
-                    page = 1,
-                    type = ModlogItemType.All.toDto(),
-                )
-            }
+        assertNotNull(res)
+        assertEquals(2, res.size)
+        coVerify {
+            modLogServiceV3.getItems(
+                authHeader = AUTH_TOKEN.toAuthHeader(),
+                auth = AUTH_TOKEN,
+                communityId = communityId,
+                limit = 20,
+                page = 1,
+                type = ModlogItemType.All.toDto(),
+            )
         }
+    }
 
     companion object {
         private const val AUTH_TOKEN = "fake-token"

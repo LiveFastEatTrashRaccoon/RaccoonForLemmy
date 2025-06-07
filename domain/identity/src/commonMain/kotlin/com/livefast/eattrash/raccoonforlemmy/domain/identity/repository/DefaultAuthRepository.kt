@@ -10,11 +10,7 @@ internal class DefaultAuthRepository(
     private val services: ServiceProvider,
     private val siteVersionDataSource: SiteVersionDataSource,
 ) : AuthRepository {
-    override suspend fun login(
-        username: String,
-        password: String,
-        totp2faToken: String?,
-    ): Result<LoginResponse> =
+    override suspend fun login(username: String, password: String, totp2faToken: String?): Result<LoginResponse> =
         runCatching {
             val data =
                 LoginForm(
@@ -29,15 +25,13 @@ internal class DefaultAuthRepository(
             }
         }
 
-    override suspend fun logout() =
-        runCatching {
-            val response =
-                if (siteVersionDataSource.shouldUseV4()) {
-                    services.v4.account.logout()
-                } else {
-                    services.v3.auth.logout()
-                }
-            require(response.success)
-        }
-
+    override suspend fun logout() = runCatching {
+        val response =
+            if (siteVersionDataSource.shouldUseV4()) {
+                services.v4.account.logout()
+            } else {
+                services.v3.auth.logout()
+            }
+        require(response.success)
+    }
 }

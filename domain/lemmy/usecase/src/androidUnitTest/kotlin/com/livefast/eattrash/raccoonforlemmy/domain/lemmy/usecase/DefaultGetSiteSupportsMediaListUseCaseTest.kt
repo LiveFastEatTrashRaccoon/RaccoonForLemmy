@@ -31,13 +31,12 @@ class DefaultGetSiteSupportsMediaListUseCaseTest {
         )
 
     @Test
-    fun whenInvoked_thenResultAndInteractionsAreAsExpected() =
-        runTest {
-            val res = sut()
+    fun whenInvoked_thenResultAndInteractionsAreAsExpected() = runTest {
+        val res = sut()
 
-            assertTrue(res)
-            coVerify {
-                siteVersionDataSource.isAtLeast(major = 0, minor = 19, patch = 4)
-            }
+        assertTrue(res)
+        coVerify {
+            siteVersionDataSource.isAtLeast(major = 0, minor = 19, patch = 4)
         }
+    }
 }

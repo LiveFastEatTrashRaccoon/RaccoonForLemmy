@@ -14,15 +14,13 @@ sealed interface CommunityVisibilityType {
 }
 
 @Composable
-fun CommunityVisibilityType.toIcon(): ImageVector =
-    when (this) {
-        CommunityVisibilityType.LocalOnly -> Icons.Default.Cottage
-        else -> Icons.Default.Public
-    }
+fun CommunityVisibilityType.toIcon(): ImageVector = when (this) {
+    CommunityVisibilityType.LocalOnly -> Icons.Default.Cottage
+    else -> Icons.Default.Public
+}
 
 @Composable
-fun CommunityVisibilityType.toReadableName(): String =
-    when (this) {
-        CommunityVisibilityType.LocalOnly -> LocalStrings.current.communityVisibilityLocalOnly
-        else -> LocalStrings.current.communityVisibilityPublic
-    }
+fun CommunityVisibilityType.toReadableName(): String = when (this) {
+    CommunityVisibilityType.LocalOnly -> LocalStrings.current.communityVisibilityLocalOnly
+    else -> LocalStrings.current.communityVisibilityPublic
+}

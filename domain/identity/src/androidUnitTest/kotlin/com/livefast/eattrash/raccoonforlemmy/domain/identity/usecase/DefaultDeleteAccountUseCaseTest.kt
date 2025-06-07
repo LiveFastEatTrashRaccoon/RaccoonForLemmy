@@ -20,11 +20,10 @@ class DefaultDeleteAccountUseCaseTest {
         )
 
     @Test
-    fun whenExecute_thenInteractionsAreAsExpected() =
-        runTest {
-            val account = AccountModel(id = 1, username = "test", jwt = "fake-token", instance = "test")
-            sut(account)
+    fun whenExecute_thenInteractionsAreAsExpected() = runTest {
+        val account = AccountModel(id = 1, username = "test", jwt = "fake-token", instance = "test")
+        sut(account)
 
-            coVerify { accountRepository.delete(1) }
-        }
+        coVerify { accountRepository.delete(1) }
+    }
 }
