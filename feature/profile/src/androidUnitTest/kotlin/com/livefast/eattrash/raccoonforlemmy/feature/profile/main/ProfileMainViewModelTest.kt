@@ -44,35 +44,32 @@ class ProfileMainViewModelTest {
     private val user = UserModel(id = 1L)
 
     @Test
-    fun givenNotLogged_whenInitialized_thenStateIsAsExpected() =
-        runTest {
-            with(unloggedRule) {
-                onState { state ->
-                    assertEquals(false, state.logged)
-                }
+    fun givenNotLogged_whenInitialized_thenStateIsAsExpected() = runTest {
+        with(unloggedRule) {
+            onState { state ->
+                assertEquals(false, state.logged)
             }
         }
+    }
 
     @Test
-    fun givenLogged_whenInitialized_thenStateIsAsExpected() =
-        runTest {
-            with(loggedRule) {
-                onState { state ->
-                    assertEquals(true, state.logged)
-                    assertEquals(user, state.user)
-                }
+    fun givenLogged_whenInitialized_thenStateIsAsExpected() = runTest {
+        with(loggedRule) {
+            onState { state ->
+                assertEquals(true, state.logged)
+                assertEquals(user, state.user)
             }
         }
+    }
 
     @Test
-    fun whenLogoutIntentReceived_thenInteractionsAreAsExpected() =
-        runTest {
-            with(loggedRule) {
-                send(ProfileMainMviModel.Intent.Logout)
+    fun whenLogoutIntentReceived_thenInteractionsAreAsExpected() = runTest {
+        with(loggedRule) {
+            send(ProfileMainMviModel.Intent.Logout)
 
-                coVerify {
-                    logoutUseCase()
-                }
+            coVerify {
+                logoutUseCase()
             }
         }
+    }
 }

@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -97,7 +98,7 @@ class AdvancedSettingsScreen : Screen {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val scrollState = rememberScrollState()
         val notificationCenter = remember { getNotificationCenter() }
-        var screenWidth by remember { mutableStateOf(0f) }
+        var screenWidth by remember { mutableFloatStateOf(0f) }
         val snackbarHostState = remember { SnackbarHostState() }
         val successMessage = LocalStrings.current.messageOperationSuccessful
         val errorMessage = LocalStrings.current.messageGenericError
@@ -131,10 +132,10 @@ class AdvancedSettingsScreen : Screen {
         Scaffold(
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             modifier =
-                Modifier
-                    .onGloballyPositioned {
-                        screenWidth = it.size.toSize().width
-                    },
+            Modifier
+                .onGloballyPositioned {
+                    screenWidth = it.size.toSize().width
+                },
             topBar = {
                 TopAppBar(
                     windowInsets = topAppBarState.toWindowInsets(),
@@ -174,11 +175,11 @@ class AdvancedSettingsScreen : Screen {
         ) { padding ->
             Box(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                            bottom = padding.calculateBottomPadding(),
-                        ).nestedScroll(scrollBehavior.nestedScrollConnection),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                        bottom = padding.calculateBottomPadding(),
+                    ).nestedScroll(scrollBehavior.nestedScrollConnection),
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
@@ -191,7 +192,7 @@ class AdvancedSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsNavigationBarTitlesVisible,
                         value = uiState.navBarTitlesVisible,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeNavBarTitlesVisible(value),
                             )
@@ -213,7 +214,7 @@ class AdvancedSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsHideNavigationBar,
                         value = uiState.hideNavigationBarWhileScrolling,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeHideNavigationBarWhileScrolling(
                                     value,
@@ -231,7 +232,7 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsFadeReadPosts,
                             value = uiState.fadeReadPosts,
-                            onValueChanged = { value ->
+                            onChangeValue = { value ->
                                 model.reduce(
                                     AdvancedSettingsMviModel.Intent.ChangeFadeReadPosts(value),
                                 )
@@ -242,7 +243,7 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsShowUnreadComments,
                             value = uiState.showUnreadComments,
-                            onValueChanged = { value ->
+                            onChangeValue = { value ->
                                 model.reduce(
                                     AdvancedSettingsMviModel.Intent.ChangeShowUnreadComments(value),
                                 )
@@ -272,11 +273,11 @@ class AdvancedSettingsScreen : Screen {
                         SettingsRow(
                             title = LocalStrings.current.settingsDefaultInboxType,
                             value =
-                                if (uiState.defaultInboxUnreadOnly) {
-                                    LocalStrings.current.inboxListingTypeUnread
-                                } else {
-                                    LocalStrings.current.inboxListingTypeAll
-                                },
+                            if (uiState.defaultInboxUnreadOnly) {
+                                LocalStrings.current.inboxListingTypeUnread
+                            } else {
+                                LocalStrings.current.inboxListingTypeAll
+                            },
                             onTap = {
                                 inboxTypeBottomSheetOpened = true
                             },
@@ -286,11 +287,11 @@ class AdvancedSettingsScreen : Screen {
                         SettingsRow(
                             title = LocalStrings.current.settingsInboxPreviewMaxLines,
                             value =
-                                if (uiState.inboxPreviewMaxLines == null) {
-                                    LocalStrings.current.settingsPostBodyMaxLinesUnlimited
-                                } else {
-                                    uiState.inboxPreviewMaxLines.toString()
-                                },
+                            if (uiState.inboxPreviewMaxLines == null) {
+                                LocalStrings.current.settingsPostBodyMaxLinesUnlimited
+                            } else {
+                                uiState.inboxPreviewMaxLines.toString()
+                            },
                             onTap = {
                                 selectInboxPreviewMaxLinesBottomSheetOpened = true
                             },
@@ -318,7 +319,7 @@ class AdvancedSettingsScreen : Screen {
                         title = LocalStrings.current.settingsItemOpenPostWebPageOnImageClick,
                         subtitle = LocalStrings.current.settingsSubtitleOpenPostWebPageOnImageClick,
                         value = uiState.openPostWebPageOnImageClick,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeOpenPostWebPageOnImageClick(
                                     value,
@@ -331,7 +332,7 @@ class AdvancedSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsInfiniteScrollDisabled,
                         value = uiState.infiniteScrollDisabled,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeInfiniteScrollDisabled(value),
                             )
@@ -342,7 +343,7 @@ class AdvancedSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsAutoExpandComments,
                         value = uiState.autoExpandComments,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeAutoExpandComments(value),
                             )
@@ -354,7 +355,7 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsMarkAsReadWhileScrolling,
                             value = uiState.markAsReadWhileScrolling,
-                            onValueChanged = { value ->
+                            onChangeValue = { value ->
                                 model.reduce(
                                     AdvancedSettingsMviModel.Intent.ChangeMarkAsReadWhileScrolling(
                                         value,
@@ -367,7 +368,7 @@ class AdvancedSettingsScreen : Screen {
                             title = LocalStrings.current.settingsMarkAsReadOnInteraction,
                             subtitle = LocalStrings.current.settingsMarkAsReadOnInteractionSubtitle,
                             value = uiState.markAsReadOnInteraction,
-                            onValueChanged = { value ->
+                            onChangeValue = { value ->
                                 model.reduce(
                                     AdvancedSettingsMviModel.Intent.ChangeMarkAsReadOnInteraction(
                                         value,
@@ -381,12 +382,12 @@ class AdvancedSettingsScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.settingsZombieModeInterval,
                         value =
-                            uiState.zombieModeInterval.getPrettyDuration(
-                                secondsLabel = LocalStrings.current.postSecondShort,
-                                minutesLabel = LocalStrings.current.postMinuteShort,
-                                hoursLabel = LocalStrings.current.homeSortTypeTop6Hours,
-                                daysLabel = LocalStrings.current.profileDayShort,
-                            ),
+                        uiState.zombieModeInterval.getPrettyDuration(
+                            secondsLabel = LocalStrings.current.postSecondShort,
+                            minutesLabel = LocalStrings.current.postMinuteShort,
+                            hoursLabel = LocalStrings.current.homeSortTypeTop6Hours,
+                            daysLabel = LocalStrings.current.profileDayShort,
+                        ),
                         onTap = {
                             zombieModeDurationBottomSheetOpened = true
                         },
@@ -396,15 +397,15 @@ class AdvancedSettingsScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.settingsZombieModeScrollAmount,
                         value =
-                            buildString {
-                                val pt =
-                                    uiState.zombieModeScrollAmount
-                                        .toLocalDp()
-                                        .value
-                                        .roundToInt()
-                                append(pt)
-                                append(LocalStrings.current.settingsPointsShort)
-                            },
+                        buildString {
+                            val pt =
+                                uiState.zombieModeScrollAmount
+                                    .toLocalDp()
+                                    .value
+                                    .roundToInt()
+                            append(pt)
+                            append(LocalStrings.current.settingsPointsShort)
+                        },
                         onTap = {
                             selectZombieModeAmount = true
                         },
@@ -414,7 +415,7 @@ class AdvancedSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsEnableButtonsToScrollBetweenComments,
                         value = uiState.enableButtonsToScrollBetweenComments,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeEnableButtonsToScrollBetweenComments(
                                     value,
@@ -431,7 +432,7 @@ class AdvancedSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsAutoLoadImages,
                         value = uiState.autoLoadImages,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeAutoLoadImages(value),
                             )
@@ -444,7 +445,7 @@ class AdvancedSettingsScreen : Screen {
                             title = LocalStrings.current.settingsItemImageSourcePath,
                             subtitle = LocalStrings.current.settingsSubtitleImageSourcePath,
                             value = uiState.imageSourcePath,
-                            onValueChanged = { value ->
+                            onChangeValue = { value ->
                                 model.reduce(
                                     AdvancedSettingsMviModel.Intent.ChangeImageSourcePath(value),
                                 )
@@ -468,7 +469,7 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsItemAlternateMarkdownRendering,
                             value = uiState.enableAlternateMarkdownRendering,
-                            onValueChanged = { value ->
+                            onChangeValue = { value ->
                                 model.reduce(
                                     AdvancedSettingsMviModel.Intent.ChangeEnableAlternateMarkdownRendering(
                                         value,
@@ -482,7 +483,7 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsEnableToggleFavoriteInNavDrawer,
                             value = uiState.enableToggleFavoriteInNavDrawer,
-                            onValueChanged = { value ->
+                            onChangeValue = { value ->
                                 model.reduce(
                                     AdvancedSettingsMviModel.Intent.ChangeEnableToggleFavoriteInNavDrawer(
                                         value,
@@ -495,7 +496,7 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsEnableDoubleTap,
                             value = uiState.enableDoubleTapAction,
-                            onValueChanged = { value ->
+                            onChangeValue = { value ->
                                 model.reduce(
                                     AdvancedSettingsMviModel.Intent.ChangeEnableDoubleTapAction(
                                         value,
@@ -509,7 +510,7 @@ class AdvancedSettingsScreen : Screen {
                         title = LocalStrings.current.settingsSearchPostsTitleOnly,
                         subtitle = LocalStrings.current.settingsSearchPostsTitleOnlySubtitle,
                         value = uiState.searchPostTitleOnly,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeSearchPostTitleOnly(value),
                             )
@@ -520,7 +521,7 @@ class AdvancedSettingsScreen : Screen {
                         title = LocalStrings.current.settingsSearchRestrictLocalUserSearch,
                         subtitle = LocalStrings.current.settingsSearchRestrictLocalUserSearchSubtitle,
                         value = uiState.restrictLocalUserSearch,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AdvancedSettingsMviModel.Intent.ChangeRestrictLocalUserSearch(value),
                             )
@@ -531,18 +532,18 @@ class AdvancedSettingsScreen : Screen {
                         // check inbox unread items
                         SettingsRow(
                             title =
-                                buildString {
-                                    append(LocalStrings.current.settingsInboxBackgroundCheckPeriod)
-                                },
+                            buildString {
+                                append(LocalStrings.current.settingsInboxBackgroundCheckPeriod)
+                            },
                             value =
-                                uiState.inboxBackgroundCheckPeriod.let { value ->
-                                    value?.getPrettyDuration(
-                                        secondsLabel = LocalStrings.current.postSecondShort,
-                                        minutesLabel = LocalStrings.current.postMinuteShort,
-                                        hoursLabel = LocalStrings.current.postHourShort,
-                                        daysLabel = LocalStrings.current.profileDayShort,
-                                    ) ?: LocalStrings.current.never
-                                },
+                            uiState.inboxBackgroundCheckPeriod.let { value ->
+                                value?.getPrettyDuration(
+                                    secondsLabel = LocalStrings.current.postSecondShort,
+                                    minutesLabel = LocalStrings.current.postMinuteShort,
+                                    hoursLabel = LocalStrings.current.postHourShort,
+                                    daysLabel = LocalStrings.current.profileDayShort,
+                                ) ?: LocalStrings.current.never
+                            },
                             onTap = {
                                 inboxCheckDurationBottomSheetOpened = true
                             },
@@ -553,11 +554,11 @@ class AdvancedSettingsScreen : Screen {
                     if (uiState.appIconChangeSupported) {
                         SettingsRow(
                             title =
-                                buildString {
-                                    append(LocalStrings.current.settingsAppIcon)
-                                    append(" ")
-                                    append(LocalStrings.current.requiresRestart)
-                                },
+                            buildString {
+                                append(LocalStrings.current.settingsAppIcon)
+                                append(" ")
+                                append(LocalStrings.current.requiresRestart)
+                            },
                             onTap = {
                                 appIconBottomSheetOpened = true
                             },
@@ -584,7 +585,7 @@ class AdvancedSettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsUseAvatarAsProfileNavigationIcon,
                             value = uiState.useAvatarAsProfileNavigationIcon,
-                            onValueChanged = { value ->
+                            onChangeValue = { value ->
                                 model.reduce(
                                     AdvancedSettingsMviModel.Intent.ChangeUseAvatarAsProfileNavigationIcon(
                                         value,
@@ -634,24 +635,24 @@ class AdvancedSettingsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsAppIcon,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            leadingContent = {
-                                val painter =
-                                    when (value) {
-                                        AppIconVariant.Classical -> coreResources.appIconClassical
-                                        else -> coreResources.appIconDefault
-                                    }
-                                Image(
-                                    modifier = Modifier.size(IconSize.m),
-                                    painter = painter,
-                                    contentDescription = null,
-                                )
-                            },
-                            label = value.toReadableName(),
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        leadingContent = {
+                            val painter =
+                                when (value) {
+                                    AppIconVariant.Classical -> coreResources.appIconClassical
+                                    else -> coreResources.appIconDefault
+                                }
+                            Image(
+                                modifier = Modifier.size(IconSize.m),
+                                painter = painter,
+                                contentDescription = null,
+                            )
+                        },
+                        label = value.toReadableName(),
+                    )
+                },
+                onSelect = { index ->
                     appIconBottomSheetOpened = false
                     if (index != null) {
                         val value = values[index]
@@ -675,10 +676,10 @@ class AdvancedSettingsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsBarTheme,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(label = value.toReadableName())
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(label = value.toReadableName())
+                },
+                onSelect = { index ->
                     barThemeBottomSheetOpened = false
                     if (index != null) {
                         val value = values[index]
@@ -702,18 +703,18 @@ class AdvancedSettingsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsZombieModeInterval,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            label =
-                                value.getPrettyDuration(
-                                    secondsLabel = LocalStrings.current.postSecondShort,
-                                    minutesLabel = LocalStrings.current.postMinuteShort,
-                                    hoursLabel = LocalStrings.current.postHourShort,
-                                    daysLabel = LocalStrings.current.profileDayShort,
-                                ),
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        label =
+                        value.getPrettyDuration(
+                            secondsLabel = LocalStrings.current.postSecondShort,
+                            minutesLabel = LocalStrings.current.postMinuteShort,
+                            hoursLabel = LocalStrings.current.postHourShort,
+                            daysLabel = LocalStrings.current.profileDayShort,
+                        ),
+                    )
+                },
+                onSelect = { index ->
                     zombieModeDurationBottomSheetOpened = false
                     if (index != null) {
                         val value = values[index]
@@ -738,18 +739,18 @@ class AdvancedSettingsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsInboxBackgroundCheckPeriod,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            label =
-                                value?.getPrettyDuration(
-                                    secondsLabel = LocalStrings.current.postSecondShort,
-                                    minutesLabel = LocalStrings.current.postMinuteShort,
-                                    hoursLabel = LocalStrings.current.postHourShort,
-                                    daysLabel = LocalStrings.current.profileDayShort,
-                                ) ?: LocalStrings.current.never,
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        label =
+                        value?.getPrettyDuration(
+                            secondsLabel = LocalStrings.current.postSecondShort,
+                            minutesLabel = LocalStrings.current.postMinuteShort,
+                            hoursLabel = LocalStrings.current.postHourShort,
+                            daysLabel = LocalStrings.current.profileDayShort,
+                        ) ?: LocalStrings.current.never,
+                    )
+                },
+                onSelect = { index ->
                     inboxCheckDurationBottomSheetOpened = false
                     if (index != null) {
                         val value = values[index]
@@ -770,10 +771,10 @@ class AdvancedSettingsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.inboxListingTypeTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(label = value)
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(label = value)
+                },
+                onSelect = { index ->
                     inboxTypeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -796,20 +797,20 @@ class AdvancedSettingsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.inboxListingTypeTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            label = value.toReadableName(),
-                            trailingContent = {
-                                Icon(
-                                    modifier = Modifier.size(IconSize.m),
-                                    imageVector = value.toIcon(),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            },
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        label = value.toReadableName(),
+                        trailingContent = {
+                            Icon(
+                                modifier = Modifier.size(IconSize.m),
+                                imageVector = value.toIcon(),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        },
+                    )
+                },
+                onSelect = { index ->
                     exploreListingTypeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -835,20 +836,20 @@ class AdvancedSettingsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.inboxListingTypeTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            label = value.toReadableName(),
-                            trailingContent = {
-                                Icon(
-                                    modifier = Modifier.size(IconSize.m),
-                                    imageVector = value.toIcon(),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            },
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        label = value.toReadableName(),
+                        trailingContent = {
+                            Icon(
+                                modifier = Modifier.size(IconSize.m),
+                                imageVector = value.toIcon(),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        },
+                    )
+                },
+                onSelect = { index ->
                     exploreResultTypeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -885,7 +886,7 @@ class AdvancedSettingsScreen : Screen {
             SelectNumberBottomSheet(
                 type = SelectNumberBottomSheetType.InboxPreviewMaxLines,
                 initialValue = uiState.inboxPreviewMaxLines,
-                onSelected = { value ->
+                onSelect = { value ->
                     selectInboxPreviewMaxLinesBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(
@@ -905,7 +906,7 @@ class AdvancedSettingsScreen : Screen {
                 min = 0f,
                 max = screenWidth,
                 initial = uiState.zombieModeScrollAmount,
-                onSelected = { value ->
+                onSelect = { value ->
                     selectZombieModeAmount = false
                     if (value != null) {
                         notificationCenter.send(

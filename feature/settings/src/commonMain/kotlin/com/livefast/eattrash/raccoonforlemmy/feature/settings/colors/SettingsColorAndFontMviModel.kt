@@ -6,18 +6,17 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.CommentBarThem
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
+import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsColorAndFontMviModel.Effect
+import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsColorAndFontMviModel.Intent
+import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsColorAndFontMviModel.UiState
 
 interface SettingsColorAndFontMviModel :
-    MviModel<SettingsColorAndFontMviModel.Intent, SettingsColorAndFontMviModel.UiState, SettingsColorAndFontMviModel.Effect>,
+    MviModel<Intent, UiState, Effect>,
     ScreenModel {
     sealed interface Intent {
-        data class ChangeDynamicColors(
-            val value: Boolean,
-        ) : Intent
+        data class ChangeDynamicColors(val value: Boolean) : Intent
 
-        data class ChangeRandomColor(
-            val value: Boolean,
-        ) : Intent
+        data class ChangeRandomColor(val value: Boolean) : Intent
     }
 
     data class UiState(

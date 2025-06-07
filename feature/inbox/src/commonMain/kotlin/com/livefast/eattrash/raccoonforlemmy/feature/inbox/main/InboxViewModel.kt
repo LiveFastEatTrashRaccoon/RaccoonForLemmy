@@ -20,8 +20,8 @@ class InboxViewModel(
     private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect>(
-        initialState = InboxMviModel.UiState(),
-    ),
+    initialState = InboxMviModel.UiState(),
+),
     InboxMviModel {
     init {
         screenModelScope.launch {

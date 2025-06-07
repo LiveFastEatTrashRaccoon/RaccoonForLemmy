@@ -211,23 +211,23 @@ internal object ProfileMainScreen : Tab {
         ) { padding ->
             Box(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).nestedScroll(fabNestedScrollConnection)
-                        .then(
-                            if (connection != null && settings.hideNavigationBarWhileScrolling) {
-                                Modifier.nestedScroll(connection)
-                            } else {
-                                Modifier
-                            },
-                        ).then(
-                            if (settings.hideNavigationBarWhileScrolling) {
-                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                            } else {
-                                Modifier
-                            },
-                        ),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).nestedScroll(fabNestedScrollConnection)
+                    .then(
+                        if (connection != null && settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(connection)
+                        } else {
+                            Modifier
+                        },
+                    ).then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        },
+                    ),
                 contentAlignment = Alignment.Center,
             ) {
                 // wait until logging status is determined
@@ -309,29 +309,29 @@ internal object ProfileMainScreen : Tab {
             CustomModalBottomSheet(
                 title = LocalStrings.current.moderatorZoneTitle,
                 items =
-                    values.map {
-                        CustomModalBottomSheetItem(
-                            label = it.toReadableName(),
-                            trailingContent = {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(Spacing.s),
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.size(IconSize.m),
-                                        imageVector = it.toIcon(),
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                    Icon(
-                                        imageVector = Icons.Default.ChevronRight,
-                                        tint = MaterialTheme.colorScheme.onBackground,
-                                        contentDescription = null,
-                                    )
-                                }
-                            },
-                        )
-                    },
-                onSelected = { index ->
+                values.map {
+                    CustomModalBottomSheetItem(
+                        label = it.toReadableName(),
+                        trailingContent = {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                            ) {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m),
+                                    imageVector = it.toIcon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                                Icon(
+                                    imageVector = Icons.Default.ChevronRight,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                    contentDescription = null,
+                                )
+                            }
+                        },
+                    )
+                },
+                onSelect = { index ->
                     moderatorZoneBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(

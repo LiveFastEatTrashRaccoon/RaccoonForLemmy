@@ -11,10 +11,7 @@ interface ProfileMainMviModel :
         data object Logout : Intent
     }
 
-    data class UiState(
-        val logged: Boolean? = null,
-        val user: UserModel? = null,
-    )
+    data class UiState(val logged: Boolean? = null, val user: UserModel? = null)
 
     sealed interface Effect
 }

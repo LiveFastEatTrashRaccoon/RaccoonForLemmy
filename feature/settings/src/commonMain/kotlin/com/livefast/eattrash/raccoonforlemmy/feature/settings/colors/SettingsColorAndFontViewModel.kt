@@ -16,6 +16,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
+import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsColorAndFontMviModel.Effect
+import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsColorAndFontMviModel.Intent
+import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsColorAndFontMviModel.UiState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -27,9 +30,9 @@ class SettingsColorAndFontViewModel(
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<SettingsColorAndFontMviModel.Intent, SettingsColorAndFontMviModel.UiState, SettingsColorAndFontMviModel.Effect>(
-        initialState = SettingsColorAndFontMviModel.UiState(),
-    ),
+) : DefaultMviModel<Intent, UiState, Effect>(
+    initialState = UiState(),
+),
     SettingsColorAndFontMviModel {
     init {
         screenModelScope.launch {
@@ -126,10 +129,10 @@ class SettingsColorAndFontViewModel(
         }
     }
 
-    override fun reduce(intent: SettingsColorAndFontMviModel.Intent) {
+    override fun reduce(intent: Intent) {
         when (intent) {
-            is SettingsColorAndFontMviModel.Intent.ChangeDynamicColors -> changeDynamicColors(intent.value)
-            is SettingsColorAndFontMviModel.Intent.ChangeRandomColor -> changeRandomColor(intent.value)
+            is Intent.ChangeDynamicColors -> changeDynamicColors(intent.value)
+            is Intent.ChangeRandomColor -> changeRandomColor(intent.value)
         }
     }
 

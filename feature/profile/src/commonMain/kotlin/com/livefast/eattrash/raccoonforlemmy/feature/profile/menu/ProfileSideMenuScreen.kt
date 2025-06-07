@@ -38,9 +38,9 @@ class ProfileSideMenuScreen : Screen {
             topBar = {
                 TopAppBar(
                     colors =
-                        TopAppBarDefaults.topAppBarColors().copy(
-                            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-                        ),
+                    TopAppBarDefaults.topAppBarColors().copy(
+                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+                    ),
                     title = {},
                     actions = {
                         IconButton(
@@ -59,13 +59,13 @@ class ProfileSideMenuScreen : Screen {
         ) { padding ->
             ProfileMenuContent(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                            start = Spacing.m,
-                            end = Spacing.m,
-                        ),
+                Modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                        start = Spacing.m,
+                        end = Spacing.m,
+                    ),
                 isModerator = uiState.isModerator,
                 canCreateCommunity = uiState.canCreateCommunity,
                 isBookmarksVisible = uiState.isBookmarksVisible,

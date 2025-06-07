@@ -55,8 +55,8 @@ class AdvancedSettingsViewModel(
     private val appInfoRepository: AppInfoRepository,
     private val barColorProvider: BarColorProvider,
 ) : DefaultMviModel<AdvancedSettingsMviModel.Intent, AdvancedSettingsMviModel.UiState, AdvancedSettingsMviModel.Effect>(
-        initialState = AdvancedSettingsMviModel.UiState(),
-    ),
+    initialState = AdvancedSettingsMviModel.UiState(),
+),
     AdvancedSettingsMviModel {
     init {
         screenModelScope.launch {
