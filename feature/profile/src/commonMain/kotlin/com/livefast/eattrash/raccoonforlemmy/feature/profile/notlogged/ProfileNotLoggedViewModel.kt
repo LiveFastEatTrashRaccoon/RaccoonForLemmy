@@ -7,9 +7,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ProfileNotLoggedViewModel(
-    private val identityRepository: IdentityRepository,
-) : DefaultMviModel<ProfileNotLoggedMviModel.Intent, ProfileNotLoggedMviModel.State, ProfileNotLoggedMviModel.Effect>(
+class ProfileNotLoggedViewModel(private val identityRepository: IdentityRepository) :
+    DefaultMviModel<ProfileNotLoggedMviModel.Intent, ProfileNotLoggedMviModel.State, ProfileNotLoggedMviModel.Effect>(
         initialState = ProfileNotLoggedMviModel.State(),
     ),
     ProfileNotLoggedMviModel {

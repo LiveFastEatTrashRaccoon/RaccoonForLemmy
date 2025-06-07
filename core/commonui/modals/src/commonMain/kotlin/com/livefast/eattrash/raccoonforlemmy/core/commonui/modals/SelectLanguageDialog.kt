@@ -31,19 +31,21 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.LanguageModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectLanguageDialog(
+    modifier: Modifier = Modifier,
     currentLanguageId: Long? = null,
     languages: List<LanguageModel> = emptyList(),
     onSelect: ((Long?) -> Unit)? = null,
     onDismiss: (() -> Unit)? = null,
 ) {
     BasicAlertDialog(
+        modifier = modifier,
         onDismissRequest = { onDismiss?.invoke() },
     ) {
         Column(
             modifier =
-                Modifier
-                    .background(color = MaterialTheme.colorScheme.surface)
-                    .padding(vertical = Spacing.s),
+            Modifier
+                .background(color = MaterialTheme.colorScheme.surface)
+                .padding(vertical = Spacing.s),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -59,7 +61,7 @@ fun SelectLanguageDialog(
                     LanguageItem(
                         name = lang.name,
                         selected = (currentLanguageId ?: 0L) == lang.id,
-                        onSelected = {
+                        onSelect = {
                             onSelect?.invoke(lang.id)
                         },
                     )
@@ -82,21 +84,21 @@ private fun LanguageItem(
     name: String,
     modifier: Modifier = Modifier,
     selected: Boolean = false,
-    onSelected: (() -> Unit)? = null,
+    onSelect: (() -> Unit)? = null,
 ) {
     Row(
         modifier =
-            modifier
-                .clip(RoundedCornerShape(CornerSize.xxl))
-                .fillMaxWidth()
-                .onClick(
-                    onClick = {
-                        onSelected?.invoke()
-                    },
-                ).padding(
-                    horizontal = Spacing.m,
-                    vertical = Spacing.s,
-                ),
+        modifier
+            .clip(RoundedCornerShape(CornerSize.xxl))
+            .fillMaxWidth()
+            .onClick(
+                onClick = {
+                    onSelect?.invoke()
+                },
+            ).padding(
+                horizontal = Spacing.m,
+                vertical = Spacing.s,
+            ),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
         verticalAlignment = Alignment.CenterVertically,
     ) {

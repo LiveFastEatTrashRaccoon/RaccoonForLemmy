@@ -22,63 +22,33 @@ interface UserDetailMviModel :
 
         data object LoadNextPage : Intent
 
-        data class ChangeSection(
-            val section: UserDetailSection,
-        ) : Intent
+        data class ChangeSection(val section: UserDetailSection) : Intent
 
-        data class UpVotePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class UpVotePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class DownVotePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class DownVotePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class SavePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class SavePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class UpVoteComment(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class UpVoteComment(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class DownVoteComment(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class DownVoteComment(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class SaveComment(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class SaveComment(val id: Long, val feedback: Boolean = false) : Intent
 
         data object HapticIndication : Intent
 
-        data class Share(
-            val url: String,
-        ) : Intent
+        data class Share(val url: String) : Intent
 
         data object Block : Intent
 
         data object BlockInstance : Intent
 
-        data class WillOpenDetail(
-            val postId: Long,
-            val commentId: Long? = null,
-        ) : Intent
+        data class WillOpenDetail(val postId: Long, val commentId: Long? = null) : Intent
 
-        data class UpdateTags(
-            val ids: List<Long>,
-        ) : Intent
+        data class UpdateTags(val ids: List<Long>) : Intent
 
-        data class AddUserTag(
-            val name: String,
-            val color: Int? = null,
-        ) : Intent
+        data class AddUserTag(val name: String, val color: Int? = null) : Intent
     }
 
     data class UiState(
@@ -120,15 +90,10 @@ interface UserDetailMviModel :
     sealed interface Effect {
         data object Success : Effect
 
-        data class Error(
-            val message: String?,
-        ) : Effect
+        data class Error(val message: String?) : Effect
 
         data object BackToTop : Effect
 
-        data class OpenDetail(
-            val postId: Long,
-            val commentId: Long? = null,
-        ) : Effect
+        data class OpenDetail(val postId: Long, val commentId: Long? = null) : Effect
     }
 }

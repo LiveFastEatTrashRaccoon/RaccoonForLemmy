@@ -20,13 +20,12 @@ internal class DefaultAcknowledgementsRemoteDataSource(
             }
         }
 
-    override suspend fun getAcknowledgements(): List<Acknowledgement>? =
-        runCatching {
-            client.request(JSON_URL).run {
-                val text = bodyAsText()
-                Json.decodeFromString<List<Acknowledgement>>(text)
-            }
-        }.getOrNull()
+    override suspend fun getAcknowledgements(): List<Acknowledgement>? = runCatching {
+        client.request(JSON_URL).run {
+            val text = bodyAsText()
+            Json.decodeFromString<List<Acknowledgement>>(text)
+        }
+    }.getOrNull()
 
     companion object {
         private const val JSON_URL =

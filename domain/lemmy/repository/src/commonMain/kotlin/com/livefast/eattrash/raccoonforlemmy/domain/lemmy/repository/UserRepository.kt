@@ -8,10 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 interface UserRepository {
-    suspend fun getResolved(
-        query: String,
-        auth: String? = null,
-    ): UserModel?
+    suspend fun getResolved(query: String, auth: String? = null): UserModel?
 
     suspend fun get(
         id: Long,
@@ -74,28 +71,13 @@ interface UserRepository {
 
     suspend fun readAll(auth: String? = null)
 
-    suspend fun setMentionRead(
-        read: Boolean,
-        mentionId: Long,
-        auth: String? = null,
-    )
+    suspend fun setMentionRead(read: Boolean, mentionId: Long, auth: String? = null)
 
-    suspend fun setReplyRead(
-        read: Boolean,
-        replyId: Long,
-        auth: String? = null,
-    )
+    suspend fun setReplyRead(read: Boolean, replyId: Long, auth: String? = null)
 
-    suspend fun block(
-        id: Long,
-        blocked: Boolean,
-        auth: String? = null,
-    )
+    suspend fun block(id: Long, blocked: Boolean, auth: String? = null)
 
-    suspend fun getModeratedCommunities(
-        auth: String? = null,
-        id: Long?,
-    ): List<CommunityModel>
+    suspend fun getModeratedCommunities(auth: String? = null, id: Long?): List<CommunityModel>
 
     suspend fun getLikedPosts(
         auth: String? = null,
@@ -114,11 +96,7 @@ interface UserRepository {
         liked: Boolean = true,
     ): List<CommentModel>?
 
-    suspend fun purge(
-        auth: String?,
-        id: Long,
-        reason: String? = null,
-    )
+    suspend fun purge(auth: String?, id: Long, reason: String? = null)
 
     suspend fun getHiddenPosts(
         auth: String?,
@@ -128,9 +106,5 @@ interface UserRepository {
         sort: SortType = SortType.New,
     ): Pair<List<PostModel>, String?>?
 
-    suspend fun deleteAccount(
-        auth: String?,
-        password: String,
-        deleteContent: Boolean = false,
-    ): Boolean
+    suspend fun deleteAccount(auth: String?, password: String, deleteContent: Boolean = false): Boolean
 }

@@ -12,30 +12,29 @@ internal class DefaultCommentProcessor(
     private val commentRepository: CommentRepository,
     private val detailOpener: DetailOpener,
 ) : CommentProcessor {
-    override suspend fun process(url: String): Boolean =
-        withTimeoutOrNull(2500) {
-            val auth = identityRepository.authToken.value
-            val resolved =
-                commentRepository.getResolved(
-                    query = url,
+    override suspend fun process(url: String): Boolean = withTimeoutOrNull(2500) {
+        val auth = identityRepository.authToken.value
+        val resolved =
+            commentRepository.getResolved(
+                query = url,
+                auth = auth,
+            )
+        val parentId = resolved?.postId
+        val post =
+            parentId?.let {
+                postRepository.get(
+                    id = it,
                     auth = auth,
                 )
-            val parentId = resolved?.postId
-            val post =
-                parentId?.let {
-                    postRepository.get(
-                        id = it,
-                        auth = auth,
-                    )
-                }
-            if (post != null) {
-                detailOpener.openPostDetail(
-                    post = post,
-                    highlightCommentId = resolved.id,
-                )
-                true
-            } else {
-                false
             }
-        } ?: false
+        if (post != null) {
+            detailOpener.openPostDetail(
+                post = post,
+                highlightCommentId = resolved.id,
+            )
+            true
+        } else {
+            false
+        }
+    } ?: false
 }

@@ -24,8 +24,8 @@ internal class ConfigureNavBarViewModel(
     private val hapticFeedback: HapticFeedback,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<ConfigureNavBarMviModel.Intent, ConfigureNavBarMviModel.UiState, ConfigureNavBarMviModel.Effect>(
-        initialState = ConfigureNavBarMviModel.UiState(),
-    ),
+    initialState = ConfigureNavBarMviModel.UiState(),
+),
     ConfigureNavBarMviModel {
     init {
         screenModelScope.launch {
@@ -62,7 +62,9 @@ internal class ConfigureNavBarViewModel(
         }
     }
 
-    private fun getAvailableSections(excludeSections: List<TabNavigationSection> = emptyList()): List<TabNavigationSection> {
+    private fun getAvailableSections(
+        excludeSections: List<TabNavigationSection> = emptyList(),
+    ): List<TabNavigationSection> {
         val availableSections =
             buildList {
                 this += TabNavigationSection.Home
@@ -117,10 +119,7 @@ internal class ConfigureNavBarViewModel(
         }
     }
 
-    private fun handleSwap(
-        from: Int,
-        to: Int,
-    ) {
+    private fun handleSwap(from: Int, to: Int) {
         val newSections =
             uiState.value.sections.toMutableList().apply {
                 val element = removeAt(from)

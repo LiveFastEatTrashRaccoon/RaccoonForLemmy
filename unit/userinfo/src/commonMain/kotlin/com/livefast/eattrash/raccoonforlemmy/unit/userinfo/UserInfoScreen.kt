@@ -56,11 +56,8 @@ import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.di.UserInfoMMviModelP
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.launch
 
-class UserInfoScreen(
-    private val userId: Long,
-    private val username: String,
-    private val otherInstance: String,
-) : Screen {
+class UserInfoScreen(private val userId: Long, private val username: String, private val otherInstance: String) :
+    Screen {
     override val key: ScreenKey
         get() = super.key + userId.toString()
 
@@ -70,11 +67,11 @@ class UserInfoScreen(
         val model: UserInfoMviModel =
             rememberScreenModel(
                 arg =
-                    UserInfoMMviModelParams(
-                        userId = userId,
-                        username = username,
-                        otherInstance = otherInstance,
-                    ),
+                UserInfoMMviModelParams(
+                    userId = userId,
+                    username = username,
+                    otherInstance = otherInstance,
+                ),
             )
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
@@ -91,9 +88,9 @@ class UserInfoScreen(
                 val title = uiState.user.readableName(uiState.preferNicknames)
                 TopAppBar(
                     colors =
-                        TopAppBarDefaults.topAppBarColors().copy(
-                            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-                        ),
+                    TopAppBarDefaults.topAppBarColors().copy(
+                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+                    ),
                     title = {
                         Text(
                             text = title,
@@ -104,11 +101,11 @@ class UserInfoScreen(
                     actions = {
                         Icon(
                             modifier =
-                                Modifier.padding(end = Spacing.s).onClick(
-                                    onClick = {
-                                        navigationCoordinator.closeSideMenu()
-                                    },
-                                ),
+                            Modifier.padding(end = Spacing.s).onClick(
+                                onClick = {
+                                    navigationCoordinator.closeSideMenu()
+                                },
+                            ),
                             imageVector = Icons.Default.Close,
                             contentDescription = LocalStrings.current.actionCloseSideMenu,
                             tint = MaterialTheme.colorScheme.onBackground,
@@ -119,13 +116,13 @@ class UserInfoScreen(
         ) { padding ->
             LazyColumn(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                            start = Spacing.m,
-                            end = Spacing.m,
-                        ),
+                Modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                        start = Spacing.m,
+                        end = Spacing.m,
+                    ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
                 item {
@@ -150,20 +147,20 @@ class UserInfoScreen(
                                 icon = Icons.AutoMirrored.Default.Article,
                                 title = LocalStrings.current.communityInfoPosts,
                                 value =
-                                    score.postScore.getPrettyNumber(
-                                        thousandLabel = LocalStrings.current.profileThousandShort,
-                                        millionLabel = LocalStrings.current.profileMillionShort,
-                                    ),
+                                score.postScore.getPrettyNumber(
+                                    thousandLabel = LocalStrings.current.profileThousandShort,
+                                    millionLabel = LocalStrings.current.profileMillionShort,
+                                ),
                             )
                             DetailInfoItem(
                                 modifier = Modifier.fillMaxWidth(),
                                 icon = Icons.AutoMirrored.Default.Reply,
                                 title = LocalStrings.current.communityInfoComments,
                                 value =
-                                    score.commentScore.getPrettyNumber(
-                                        thousandLabel = LocalStrings.current.profileThousandShort,
-                                        millionLabel = LocalStrings.current.profileMillionShort,
-                                    ),
+                                score.commentScore.getPrettyNumber(
+                                    thousandLabel = LocalStrings.current.profileThousandShort,
+                                    millionLabel = LocalStrings.current.profileMillionShort,
+                                ),
                             )
                         }
                         if (uiState.isAdmin) {
@@ -230,9 +227,9 @@ class UserInfoScreen(
                                     Text(
                                         text = matrixUserId,
                                         style =
-                                            MaterialTheme.typography.bodyMedium.copy(
-                                                fontFamily = FontFamily.Monospace,
-                                            ),
+                                        MaterialTheme.typography.bodyMedium.copy(
+                                            fontFamily = FontFamily.Monospace,
+                                        ),
                                         color = MaterialTheme.colorScheme.onBackground,
                                     )
                                 }
@@ -245,12 +242,12 @@ class UserInfoScreen(
                     item {
                         Text(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        top = Spacing.s,
-                                        bottom = Spacing.xs,
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    top = Spacing.s,
+                                    bottom = Spacing.xs,
+                                ),
                             text = LocalStrings.current.userInfoModerates,
                         )
                         LazyRow(

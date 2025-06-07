@@ -22,7 +22,7 @@ internal actual val nativePreferencesModule =
             singleton {
                 DefaultSettingsProvider(
                     sharedPreferencesProvider = instance(),
-            )
+                )
+            }
         }
     }
-}

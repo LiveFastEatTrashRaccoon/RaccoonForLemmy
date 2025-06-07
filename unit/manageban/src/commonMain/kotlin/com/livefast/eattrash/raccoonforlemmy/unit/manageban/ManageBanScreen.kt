@@ -87,10 +87,7 @@ class ManageBanScreen : Screen {
         val keyboardScrollConnection =
             remember {
                 object : NestedScrollConnection {
-                    override fun onPreScroll(
-                        available: Offset,
-                        source: NestedScrollSource,
-                    ): Offset {
+                    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                         focusManager.clearFocus()
                         return Offset.Zero
                     }
@@ -167,80 +164,80 @@ class ManageBanScreen : Screen {
                 AnimatedVisibility(
                     visible = isFabVisible,
                     enter =
-                        slideInVertically(
-                            initialOffsetY = { it * 2 },
-                        ),
+                    slideInVertically(
+                        initialOffsetY = { it * 2 },
+                    ),
                     exit =
-                        slideOutVertically(
-                            targetOffsetY = { it * 2 },
-                        ),
+                    slideOutVertically(
+                        targetOffsetY = { it * 2 },
+                    ),
                 ) {
                     FloatingActionButtonMenu(
                         items =
-                            buildList {
-                                this +=
-                                    FloatingActionButtonMenuItem(
-                                        icon = Icons.Default.ExpandLess,
-                                        text = LocalStrings.current.actionBackToTop,
-                                        onSelected = {
-                                            scope.launch {
-                                                runCatching {
-                                                    lazyListState.scrollToItem(0)
-                                                    topAppBarState.heightOffset = 0f
-                                                    topAppBarState.contentOffset = 0f
-                                                }
+                        buildList {
+                            this +=
+                                FloatingActionButtonMenuItem(
+                                    icon = Icons.Default.ExpandLess,
+                                    text = LocalStrings.current.actionBackToTop,
+                                    onSelected = {
+                                        scope.launch {
+                                            runCatching {
+                                                lazyListState.scrollToItem(0)
+                                                topAppBarState.heightOffset = 0f
+                                                topAppBarState.contentOffset = 0f
                                             }
-                                        },
-                                    )
-                                when (uiState.section) {
-                                    ManageBanSection.Domains ->
-                                        this +=
-                                            FloatingActionButtonMenuItem(
-                                                icon = Icons.Default.AddCircle,
-                                                text = LocalStrings.current.buttonAdd,
-                                                onSelected = {
-                                                    addDomainDialogOpen = true
-                                                },
-                                            )
+                                        }
+                                    },
+                                )
+                            when (uiState.section) {
+                                ManageBanSection.Domains ->
+                                    this +=
+                                        FloatingActionButtonMenuItem(
+                                            icon = Icons.Default.AddCircle,
+                                            text = LocalStrings.current.buttonAdd,
+                                            onSelected = {
+                                                addDomainDialogOpen = true
+                                            },
+                                        )
 
-                                    ManageBanSection.StopWords ->
-                                        this +=
-                                            FloatingActionButtonMenuItem(
-                                                icon = Icons.Default.AddCircle,
-                                                text = LocalStrings.current.buttonAdd,
-                                                onSelected = {
-                                                    addStopWordDialogOpen = true
-                                                },
-                                            )
+                                ManageBanSection.StopWords ->
+                                    this +=
+                                        FloatingActionButtonMenuItem(
+                                            icon = Icons.Default.AddCircle,
+                                            text = LocalStrings.current.buttonAdd,
+                                            onSelected = {
+                                                addStopWordDialogOpen = true
+                                            },
+                                        )
 
-                                    else -> Unit
-                                }
-                            },
+                                else -> Unit
+                            }
+                        },
                     )
                 }
             },
         ) { padding ->
             Column(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).then(
-                            if (settings.hideNavigationBarWhileScrolling) {
-                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                            } else {
-                                Modifier
-                            },
-                        ),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        },
+                    ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
                 SearchField(
                     modifier =
-                        Modifier
-                            .padding(
-                                horizontal = Spacing.xs,
-                                vertical = Spacing.s,
-                            ).fillMaxWidth(),
+                    Modifier
+                        .padding(
+                            horizontal = Spacing.xs,
+                            vertical = Spacing.s,
+                        ).fillMaxWidth(),
                     hint = LocalStrings.current.exploreSearchPlaceholder,
                     value = uiState.searchText,
                     onValueChange = { value ->
@@ -254,13 +251,13 @@ class ManageBanScreen : Screen {
                 SectionSelector(
                     modifier = Modifier.padding(vertical = Spacing.xs),
                     titles =
-                        listOf(
-                            LocalStrings.current.exploreResultTypeUsers,
-                            LocalStrings.current.exploreResultTypeCommunities,
-                            LocalStrings.current.settingsManageBanSectionInstances,
-                            LocalStrings.current.settingsManageBanSectionDomains,
-                            LocalStrings.current.settingsManageBanSectionStopWords,
-                        ),
+                    listOf(
+                        LocalStrings.current.exploreResultTypeUsers,
+                        LocalStrings.current.exploreResultTypeCommunities,
+                        LocalStrings.current.settingsManageBanSectionInstances,
+                        LocalStrings.current.settingsManageBanSectionDomains,
+                        LocalStrings.current.settingsManageBanSectionStopWords,
+                    ),
                     scrollable = true,
                     currentSection = uiState.section.toInt(),
                     onSectionSelected = { idx ->
@@ -271,14 +268,14 @@ class ManageBanScreen : Screen {
 
                 PullToRefreshBox(
                     modifier =
-                        Modifier
-                            .then(
-                                if (settings.hideNavigationBarWhileScrolling) {
-                                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                                } else {
-                                    Modifier
-                                },
-                            ).nestedScroll(keyboardScrollConnection),
+                    Modifier
+                        .then(
+                            if (settings.hideNavigationBarWhileScrolling) {
+                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                            } else {
+                                Modifier
+                            },
+                        ).nestedScroll(keyboardScrollConnection),
                     isRefreshing = uiState.refreshing,
                     onRefresh = {
                         model.reduce(ManageBanMviModel.Intent.Refresh)
@@ -300,9 +297,9 @@ class ManageBanScreen : Screen {
                                         item {
                                             Text(
                                                 modifier =
-                                                    Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(top = Spacing.xs),
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(top = Spacing.xs),
                                                 textAlign = TextAlign.Center,
                                                 text = LocalStrings.current.messageEmptyList,
                                                 style = MaterialTheme.typography.bodyLarge,
@@ -320,14 +317,14 @@ class ManageBanScreen : Screen {
                                             autoLoadImages = uiState.autoLoadImages,
                                             preferNicknames = uiState.preferNicknames,
                                             options =
-                                                buildList {
-                                                    this +=
-                                                        Option(
-                                                            OptionId.Unban,
-                                                            LocalStrings.current.settingsManageBanActionUnban,
-                                                        )
-                                                },
-                                            onOptionSelected = { optionId ->
+                                            buildList {
+                                                this +=
+                                                    Option(
+                                                        OptionId.Unban,
+                                                        LocalStrings.current.settingsManageBanActionUnban,
+                                                    )
+                                            },
+                                            onSelectOption = { optionId ->
                                                 when (optionId) {
                                                     OptionId.Unban -> {
                                                         model.reduce(
@@ -355,9 +352,9 @@ class ManageBanScreen : Screen {
                                         item {
                                             Text(
                                                 modifier =
-                                                    Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(top = Spacing.xs),
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(top = Spacing.xs),
                                                 textAlign = TextAlign.Center,
                                                 text = LocalStrings.current.messageEmptyList,
                                                 style = MaterialTheme.typography.bodyLarge,
@@ -375,14 +372,14 @@ class ManageBanScreen : Screen {
                                             autoLoadImages = uiState.autoLoadImages,
                                             preferNicknames = uiState.preferNicknames,
                                             options =
-                                                buildList {
-                                                    this +=
-                                                        Option(
-                                                            OptionId.Unban,
-                                                            LocalStrings.current.settingsManageBanActionUnban,
-                                                        )
-                                                },
-                                            onOptionSelected = { optionId ->
+                                            buildList {
+                                                this +=
+                                                    Option(
+                                                        OptionId.Unban,
+                                                        LocalStrings.current.settingsManageBanActionUnban,
+                                                    )
+                                            },
+                                            onSelectOption = { optionId ->
                                                 when (optionId) {
                                                     OptionId.Unban -> {
                                                         model.reduce(
@@ -410,9 +407,9 @@ class ManageBanScreen : Screen {
                                         item {
                                             Text(
                                                 modifier =
-                                                    Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(top = Spacing.xs),
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(top = Spacing.xs),
                                                 textAlign = TextAlign.Center,
                                                 text = LocalStrings.current.messageEmptyList,
                                                 style = MaterialTheme.typography.bodyLarge,
@@ -428,14 +425,14 @@ class ManageBanScreen : Screen {
                                         ManageBanItem(
                                             title = instance.domain,
                                             options =
-                                                buildList {
-                                                    this +=
-                                                        Option(
-                                                            OptionId.Unban,
-                                                            LocalStrings.current.settingsManageBanActionUnban,
-                                                        )
-                                                },
-                                            onOptionSelected = { optionId ->
+                                            buildList {
+                                                this +=
+                                                    Option(
+                                                        OptionId.Unban,
+                                                        LocalStrings.current.settingsManageBanActionUnban,
+                                                    )
+                                            },
+                                            onSelectOption = { optionId ->
                                                 when (optionId) {
                                                     OptionId.Unban -> {
                                                         model.reduce(
@@ -463,9 +460,9 @@ class ManageBanScreen : Screen {
                                         item {
                                             Text(
                                                 modifier =
-                                                    Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(top = Spacing.xs),
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(top = Spacing.xs),
                                                 textAlign = TextAlign.Center,
                                                 text = LocalStrings.current.messageEmptyList,
                                                 style = MaterialTheme.typography.bodyLarge,
@@ -481,14 +478,14 @@ class ManageBanScreen : Screen {
                                         ManageBanItem(
                                             title = domain,
                                             options =
-                                                buildList {
-                                                    this +=
-                                                        Option(
-                                                            OptionId.Unban,
-                                                            LocalStrings.current.settingsManageBanActionUnban,
-                                                        )
-                                                },
-                                            onOptionSelected = { optionId ->
+                                            buildList {
+                                                this +=
+                                                    Option(
+                                                        OptionId.Unban,
+                                                        LocalStrings.current.settingsManageBanActionUnban,
+                                                    )
+                                            },
+                                            onSelectOption = { optionId ->
                                                 when (optionId) {
                                                     OptionId.Unban -> {
                                                         model.reduce(
@@ -516,9 +513,9 @@ class ManageBanScreen : Screen {
                                         item {
                                             Text(
                                                 modifier =
-                                                    Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(top = Spacing.xs),
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(top = Spacing.xs),
                                                 textAlign = TextAlign.Center,
                                                 text = LocalStrings.current.messageEmptyList,
                                                 style = MaterialTheme.typography.bodyLarge,
@@ -534,14 +531,14 @@ class ManageBanScreen : Screen {
                                         ManageBanItem(
                                             title = domain,
                                             options =
-                                                buildList {
-                                                    this +=
-                                                        Option(
-                                                            OptionId.Unban,
-                                                            LocalStrings.current.settingsManageBanActionUnban,
-                                                        )
-                                                },
-                                            onOptionSelected = { optionId ->
+                                            buildList {
+                                                this +=
+                                                    Option(
+                                                        OptionId.Unban,
+                                                        LocalStrings.current.settingsManageBanActionUnban,
+                                                    )
+                                            },
+                                            onSelectOption = { optionId ->
                                                 when (optionId) {
                                                     OptionId.Unban -> {
                                                         model.reduce(

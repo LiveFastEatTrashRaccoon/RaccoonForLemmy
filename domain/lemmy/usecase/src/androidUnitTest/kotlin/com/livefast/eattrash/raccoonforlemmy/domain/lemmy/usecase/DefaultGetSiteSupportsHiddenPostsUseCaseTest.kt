@@ -22,36 +22,34 @@ class DefaultGetSiteSupportsHiddenPostsUseCaseTest {
         )
 
     @Test
-    fun givenVersionAboveThreshold_whenInvoke_thenResultsIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any(),
-                )
-            } returns true
+    fun givenVersionAboveThreshold_whenInvoke_thenResultsIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns true
 
-            val res = sut.invoke()
+        val res = sut.invoke()
 
-            assertTrue(res)
-        }
+        assertTrue(res)
+    }
 
     @Test
-    fun givenVersionBelowThreshold_whenInvoke_thenResultsIsAsExpected() =
-        runTest {
-            coEvery {
-                siteVersionDataSource.isAtLeast(
-                    major = any(),
-                    minor = any(),
-                    patch = any(),
-                    otherInstance = any(),
-                )
-            } returns false
+    fun givenVersionBelowThreshold_whenInvoke_thenResultsIsAsExpected() = runTest {
+        coEvery {
+            siteVersionDataSource.isAtLeast(
+                major = any(),
+                minor = any(),
+                patch = any(),
+                otherInstance = any(),
+            )
+        } returns false
 
-            val res = sut.invoke()
+        val res = sut.invoke()
 
-            assertFalse(res)
-        }
+        assertFalse(res)
+    }
 }

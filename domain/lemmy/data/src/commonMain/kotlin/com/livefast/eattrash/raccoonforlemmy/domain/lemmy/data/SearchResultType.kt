@@ -25,43 +25,39 @@ sealed interface SearchResultType {
     data object Urls : SearchResultType
 }
 
-fun SearchResultType.toIcon(): ImageVector =
-    when (this) {
-        SearchResultType.All -> Icons.Default.AllInclusive
-        SearchResultType.Comments -> Icons.AutoMirrored.Default.Message
-        SearchResultType.Communities -> Icons.Default.Groups
-        SearchResultType.Posts -> Icons.AutoMirrored.Default.Article
-        SearchResultType.Users -> Icons.Default.Person
-        SearchResultType.Urls -> Icons.Default.AlternateEmail
-    }
+fun SearchResultType.toIcon(): ImageVector = when (this) {
+    SearchResultType.All -> Icons.Default.AllInclusive
+    SearchResultType.Comments -> Icons.AutoMirrored.Default.Message
+    SearchResultType.Communities -> Icons.Default.Groups
+    SearchResultType.Posts -> Icons.AutoMirrored.Default.Article
+    SearchResultType.Users -> Icons.Default.Person
+    SearchResultType.Urls -> Icons.Default.AlternateEmail
+}
 
 @Composable
-fun SearchResultType.toReadableName(): String =
-    when (this) {
-        SearchResultType.All -> LocalStrings.current.exploreResultTypeAll
-        SearchResultType.Comments -> LocalStrings.current.exploreResultTypeComments
-        SearchResultType.Communities -> LocalStrings.current.exploreResultTypeCommunities
-        SearchResultType.Posts -> LocalStrings.current.exploreResultTypePosts
-        SearchResultType.Users -> LocalStrings.current.exploreResultTypeUsers
-        SearchResultType.Urls -> LocalStrings.current.createPostUrl
-    }
+fun SearchResultType.toReadableName(): String = when (this) {
+    SearchResultType.All -> LocalStrings.current.exploreResultTypeAll
+    SearchResultType.Comments -> LocalStrings.current.exploreResultTypeComments
+    SearchResultType.Communities -> LocalStrings.current.exploreResultTypeCommunities
+    SearchResultType.Posts -> LocalStrings.current.exploreResultTypePosts
+    SearchResultType.Users -> LocalStrings.current.exploreResultTypeUsers
+    SearchResultType.Urls -> LocalStrings.current.createPostUrl
+}
 
-fun SearchResultType.toInt(): Int =
-    when (this) {
-        SearchResultType.Posts -> 1
-        SearchResultType.Communities -> 2
-        SearchResultType.Users -> 3
-        SearchResultType.Comments -> 4
-        SearchResultType.Urls -> 5
-        else -> 0
-    }
+fun SearchResultType.toInt(): Int = when (this) {
+    SearchResultType.Posts -> 1
+    SearchResultType.Communities -> 2
+    SearchResultType.Users -> 3
+    SearchResultType.Comments -> 4
+    SearchResultType.Urls -> 5
+    else -> 0
+}
 
-fun Int.toSearchResultType(): SearchResultType =
-    when (this) {
-        1 -> SearchResultType.Posts
-        2 -> SearchResultType.Communities
-        3 -> SearchResultType.Users
-        4 -> SearchResultType.Comments
-        5 -> SearchResultType.Urls
-        else -> SearchResultType.All
-    }
+fun Int.toSearchResultType(): SearchResultType = when (this) {
+    1 -> SearchResultType.Posts
+    2 -> SearchResultType.Communities
+    3 -> SearchResultType.Users
+    4 -> SearchResultType.Comments
+    5 -> SearchResultType.Urls
+    else -> SearchResultType.All
+}

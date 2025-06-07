@@ -25,8 +25,8 @@ class InboxChatViewModel(
     private val mediaRepository: MediaRepository,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.Effect>(
-        initialState = InboxChatMviModel.UiState(),
-    ),
+    initialState = InboxChatMviModel.UiState(),
+),
     InboxChatMviModel {
     private var currentPage: Int = 1
 
@@ -166,10 +166,7 @@ class InboxChatViewModel(
         }
     }
 
-    private suspend fun markAsRead(
-        read: Boolean,
-        messageId: Long,
-    ) {
+    private suspend fun markAsRead(read: Boolean, messageId: Long) {
         val auth = identityRepository.authToken.value
         val newMessage =
             messageRepository.markAsRead(
@@ -187,13 +184,13 @@ class InboxChatViewModel(
             updateState {
                 it.copy(
                     messages =
-                        it.messages.map { msg ->
-                            if (msg.id == newMessage.id) {
-                                newMessage
-                            } else {
-                                msg
-                            }
-                        },
+                    it.messages.map { msg ->
+                        if (msg.id == newMessage.id) {
+                            newMessage
+                        } else {
+                            msg
+                        }
+                    },
                 )
             }
         }

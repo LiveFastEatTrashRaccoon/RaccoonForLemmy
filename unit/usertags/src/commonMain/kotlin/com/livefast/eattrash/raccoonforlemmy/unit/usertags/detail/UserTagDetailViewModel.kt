@@ -5,10 +5,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import kotlinx.coroutines.launch
 
-internal class UserTagDetailViewModel(
-    private val tagId: Long,
-    private val userTagRepository: UserTagRepository,
-) : DefaultMviModel<UserTagDetailMviModel.Intent, UserTagDetailMviModel.UiState, UserTagDetailMviModel.Effect>(
+internal class UserTagDetailViewModel(private val tagId: Long, private val userTagRepository: UserTagRepository) :
+    DefaultMviModel<UserTagDetailMviModel.Intent, UserTagDetailMviModel.UiState, UserTagDetailMviModel.Effect>(
         initialState = UserTagDetailMviModel.UiState(),
     ),
     UserTagDetailMviModel {

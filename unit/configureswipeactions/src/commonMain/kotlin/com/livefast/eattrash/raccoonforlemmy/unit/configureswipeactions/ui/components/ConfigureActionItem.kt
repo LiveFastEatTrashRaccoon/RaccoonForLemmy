@@ -43,7 +43,7 @@ internal fun ConfigureActionItem(
     iconContentDescription: String?,
     modifier: Modifier = Modifier,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
@@ -71,12 +71,12 @@ internal fun ConfigureActionItem(
             if (options.isNotEmpty()) {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        },
                     onClick = {
                         optionsExpanded = true
                     },
@@ -96,10 +96,10 @@ internal fun ConfigureActionItem(
                 optionsExpanded = false
             },
             offset =
-                DpOffset(
-                    x = optionsOffset.x.toLocalDp(),
-                    y = optionsOffset.y.toLocalDp(),
-                ),
+            DpOffset(
+                x = optionsOffset.x.toLocalDp(),
+                y = optionsOffset.y.toLocalDp(),
+            ),
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
@@ -108,7 +108,7 @@ internal fun ConfigureActionItem(
                     },
                     onClick = {
                         optionsExpanded = false
-                        onOptionSelected?.invoke(option.id)
+                        onSelectOption?.invoke(option.id)
                     },
                 )
             }

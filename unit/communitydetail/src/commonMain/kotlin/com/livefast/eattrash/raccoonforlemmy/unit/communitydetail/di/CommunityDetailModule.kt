@@ -7,10 +7,7 @@ import org.kodein.di.bind
 import org.kodein.di.factory
 import org.kodein.di.instance
 
-internal data class CommunityDetailMviModelParams(
-    val communityId: Long,
-    val otherInstance: String,
-)
+internal data class CommunityDetailMviModelParams(val communityId: Long, val otherInstance: String)
 
 val communityDetailModule =
     DI.Module("CommunityDetailModule") {

@@ -38,16 +38,18 @@ internal fun ExploreTopBar(
     topAppBarState: TopAppBarState,
     listingType: ListingType,
     sortType: SortType,
-    scrollBehavior: TopAppBarScrollBehavior? = null,
     resultType: SearchResultType,
+    modifier: Modifier = Modifier,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
     otherInstance: String = "",
     onSelectListingType: (() -> Unit)? = null,
     onSelectSortType: (() -> Unit)? = null,
     onSelectResultTypeType: (() -> Unit)? = null,
-    onHamburgerTapped: (() -> Unit)? = null,
+    onTapHamburger: (() -> Unit)? = null,
     onBack: (() -> Unit)? = null,
 ) {
     TopAppBar(
+        modifier = modifier,
         windowInsets = topAppBarState.toWindowInsets(),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
@@ -65,10 +67,10 @@ internal fun ExploreTopBar(
                     }
                 }
 
-                onHamburgerTapped != null -> {
+                onTapHamburger != null -> {
                     IconButton(
                         onClick = {
-                            onHamburgerTapped()
+                            onTapHamburger()
                         },
                     ) {
                         Icon(
@@ -95,29 +97,29 @@ internal fun ExploreTopBar(
         title = {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(CornerSize.xl))
-                        .then(
-                            if (otherInstance.isEmpty()) {
-                                Modifier.clickable {
-                                    onSelectListingType?.invoke()
-                                }
-                            } else {
-                                Modifier
-                            },
-                        ).padding(horizontal = Spacing.s),
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(CornerSize.xl))
+                    .then(
+                        if (otherInstance.isEmpty()) {
+                            Modifier.clickable {
+                                onSelectListingType?.invoke()
+                            }
+                        } else {
+                            Modifier
+                        },
+                    ).padding(horizontal = Spacing.s),
             ) {
                 Text(
                     text =
-                        buildString {
-                            append(LocalStrings.current.navigationSearch)
-                            if (otherInstance.isNotEmpty()) {
-                                append(" (")
-                                append(otherInstance)
-                                append(")")
-                            }
-                        },
+                    buildString {
+                        append(LocalStrings.current.navigationSearch)
+                        if (otherInstance.isNotEmpty()) {
+                            append(" (")
+                            append(otherInstance)
+                            append(")")
+                        }
+                    },
                     style = MaterialTheme.typography.titleMedium,
                 )
                 if (otherInstance.isEmpty()) {
@@ -144,11 +146,11 @@ internal fun ExploreTopBar(
             if (additionalLabel.isNotEmpty()) {
                 Text(
                     text =
-                        buildString {
-                            append("(")
-                            append(additionalLabel)
-                            append(")")
-                        },
+                    buildString {
+                        append("(")
+                        append(additionalLabel)
+                        append(")")
+                    },
                 )
                 Spacer(modifier = Modifier.width(Spacing.xs))
             }

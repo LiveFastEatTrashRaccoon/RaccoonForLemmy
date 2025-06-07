@@ -18,7 +18,7 @@ val instanceInfoModule =
                     notificationCenter = instance(),
                     getSortTypesUseCase = instance(),
                     communityPaginationManager = instance(),
-            )
+                )
+            }
         }
     }
-}

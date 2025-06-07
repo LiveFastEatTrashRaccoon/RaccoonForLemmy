@@ -56,37 +56,36 @@ class DefaultLogoutUseCaseTest {
         )
 
     @Test
-    fun givenSuccess_whenExecute_thenInteractionsAreAsExpected() =
-        runTest {
-            coEvery { authRepository.logout() } returns Result.success(Unit)
-            val accountId = 1L
-            coEvery {
-                accountRepository.getActive()
-            } returns
-                    AccountModel(
-                        id = accountId,
-                        instance = "fake-instance",
-                        username = "fake-username",
-                        jwt = "fake-token",
-                    )
-            val anonymousSettings = SettingsModel()
-            coEvery {
-                settingsRepository.getSettings(any())
-            } returns anonymousSettings
+    fun givenSuccess_whenExecute_thenInteractionsAreAsExpected() = runTest {
+        coEvery { authRepository.logout() } returns Result.success(Unit)
+        val accountId = 1L
+        coEvery {
+            accountRepository.getActive()
+        } returns
+            AccountModel(
+                id = accountId,
+                instance = "fake-instance",
+                username = "fake-username",
+                jwt = "fake-token",
+            )
+        val anonymousSettings = SettingsModel()
+        coEvery {
+            settingsRepository.getSettings(any())
+        } returns anonymousSettings
 
-            sut()
+        sut()
 
-            coVerify {
-                authRepository.logout()
-                notificationCenter.send(ofType(NotificationCenterEvent.ResetHome::class))
-                notificationCenter.send(ofType(NotificationCenterEvent.ResetExplore::class))
-                notificationCenter.send(ofType(NotificationCenterEvent.Logout::class))
-                identityRepository.clearToken()
-                accountRepository.setActive(accountId, false)
-                settingsRepository.changeCurrentSettings(anonymousSettings)
-                userTagHelper.clear()
-                userSortRepository.clear()
-                postLastSeenDateRepository.clear()
-            }
+        coVerify {
+            authRepository.logout()
+            notificationCenter.send(ofType(NotificationCenterEvent.ResetHome::class))
+            notificationCenter.send(ofType(NotificationCenterEvent.ResetExplore::class))
+            notificationCenter.send(ofType(NotificationCenterEvent.Logout::class))
+            identityRepository.clearToken()
+            accountRepository.setActive(accountId, false)
+            settingsRepository.changeCurrentSettings(anonymousSettings)
+            userTagHelper.clear()
+            userSortRepository.clear()
+            postLastSeenDateRepository.clear()
         }
+    }
 }

@@ -11,8 +11,7 @@ internal class DefaultLemmyItemCache(
     private val commentCache: LocalItemCache<CommentModel>,
     private val userCache: LocalItemCache<UserModel>,
 ) : LemmyItemCache {
-    override suspend fun putPost(value: PostModel) =
-        postCache.put(value = value, key = value.id)
+    override suspend fun putPost(value: PostModel) = postCache.put(value = value, key = value.id)
 
     override suspend fun getPost(id: Long): PostModel? = postCache.get(id)
 

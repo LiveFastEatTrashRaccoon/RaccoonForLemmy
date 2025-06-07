@@ -7,9 +7,7 @@ interface InboxMviModel :
     MviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect>,
     ScreenModel {
     sealed interface Intent {
-        data class ChangeSection(
-            val value: InboxSection,
-        ) : Intent
+        data class ChangeSection(val value: InboxSection) : Intent
 
         data object ReadAll : Intent
     }

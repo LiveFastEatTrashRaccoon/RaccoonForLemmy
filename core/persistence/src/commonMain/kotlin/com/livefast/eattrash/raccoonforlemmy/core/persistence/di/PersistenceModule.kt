@@ -78,7 +78,7 @@ val persistenceModule =
         bind<AccountRepository> {
             singleton {
                 DefaultAccountRepository(
-                    dao = instance()
+                    dao = instance(),
                 )
             }
         }

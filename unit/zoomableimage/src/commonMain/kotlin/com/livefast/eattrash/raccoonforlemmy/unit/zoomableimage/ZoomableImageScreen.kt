@@ -147,10 +147,10 @@ class ZoomableImageScreen(
                             if (!isVideo) {
                                 IconButton(
                                     modifier =
-                                        Modifier
-                                            .onGloballyPositioned {
-                                                optionsOffset = it.positionInParent()
-                                            },
+                                    Modifier
+                                        .onGloballyPositioned {
+                                            optionsOffset = it.positionInParent()
+                                        },
                                     onClick = {
                                         optionsExpanded = true
                                     },
@@ -167,18 +167,22 @@ class ZoomableImageScreen(
                                         optionsExpanded = false
                                     },
                                     offset =
-                                        DpOffset(
-                                            x = optionsOffset.x.toLocalDp(),
-                                            y = optionsOffset.y.toLocalDp(),
-                                        ),
+                                    DpOffset(
+                                        x = optionsOffset.x.toLocalDp(),
+                                        y = optionsOffset.y.toLocalDp(),
+                                    ),
                                 ) {
                                     options.forEach { option ->
                                         DropdownMenuItem(
                                             text = {
                                                 val text =
                                                     when (option) {
-                                                        ContentScale.FillHeight -> LocalStrings.current.contentScaleFillHeight
-                                                        ContentScale.FillWidth -> LocalStrings.current.contentScaleFillWidth
+                                                        ContentScale.FillHeight ->
+                                                            LocalStrings.current.contentScaleFillHeight
+
+                                                        ContentScale.FillWidth ->
+                                                            LocalStrings.current.contentScaleFillWidth
+
                                                         else -> LocalStrings.current.contentScaleFit
                                                     }
                                                 Text(text)
@@ -209,30 +213,30 @@ class ZoomableImageScreen(
                 }
             },
             content =
-                { padding ->
-                    Box(
-                        modifier =
-                            Modifier
-                                .padding(top = padding.calculateTopPadding())
-                                .fillMaxSize()
-                                .background(Color.Black),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        if (isVideo) {
-                            VideoPlayer(
-                                url = url,
-                                muted = false,
-                                contentScale = ContentScale.Fit,
-                            )
-                        } else {
-                            ZoomableImage(
-                                url = url,
-                                autoLoadImages = uiState.autoLoadImages,
-                                contentScale = uiState.contentScale,
-                            )
-                        }
+            { padding ->
+                Box(
+                    modifier =
+                    Modifier
+                        .padding(top = padding.calculateTopPadding())
+                        .fillMaxSize()
+                        .background(Color.Black),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    if (isVideo) {
+                        VideoPlayer(
+                            url = url,
+                            muted = false,
+                            contentScale = ContentScale.Fit,
+                        )
+                    } else {
+                        ZoomableImage(
+                            url = url,
+                            autoLoadImages = uiState.autoLoadImages,
+                            contentScale = uiState.contentScale,
+                        )
                     }
-                },
+                }
+            },
         )
 
         if (uiState.loading) {
@@ -248,7 +252,7 @@ class ZoomableImageScreen(
             CustomModalBottomSheet(
                 title = LocalStrings.current.postActionShare,
                 items = items.map { CustomModalBottomSheetItem(label = it) },
-                onSelected = { index ->
+                onSelect = { index ->
                     imageShareBottomSheetOpened = false
                     if (index != null) {
                         if (index == 0) {

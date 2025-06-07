@@ -26,9 +26,7 @@ interface EditCommunityMviModel :
                 return value.contentEquals(other.value)
             }
 
-            override fun hashCode(): Int {
-                return value.contentHashCode()
-            }
+            override fun hashCode(): Int = value.contentHashCode()
         }
 
         data class BannerSelected(val value: ByteArray) : Intent {
@@ -41,9 +39,7 @@ interface EditCommunityMviModel :
                 return value.contentEquals(other.value)
             }
 
-            override fun hashCode(): Int {
-                return value.contentHashCode()
-            }
+            override fun hashCode(): Int = value.contentHashCode()
         }
 
         data class ChangeNsfw(val value: Boolean) : Intent

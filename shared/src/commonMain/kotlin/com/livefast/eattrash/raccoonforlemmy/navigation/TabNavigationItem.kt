@@ -135,12 +135,11 @@ internal fun RowScope.TabNavigationItem(
     )
 }
 
-internal fun TabNavigationSection.toTab(): Tab =
-    when (this) {
-        TabNavigationSection.Explore -> ExploreTab
-        TabNavigationSection.Profile -> ProfileTab
-        TabNavigationSection.Inbox -> InboxTab
-        TabNavigationSection.Settings -> SettingsTab
-        TabNavigationSection.Bookmarks -> BookmarksTab
-        else -> HomeTab
-    }
+internal fun TabNavigationSection.toTab(): Tab = when (this) {
+    TabNavigationSection.Explore -> ExploreTab
+    TabNavigationSection.Profile -> ProfileTab
+    TabNavigationSection.Inbox -> InboxTab
+    TabNavigationSection.Settings -> SettingsTab
+    TabNavigationSection.Bookmarks -> BookmarksTab
+    else -> HomeTab
+}

@@ -54,7 +54,7 @@ internal fun MessageCard(
     date: String = "",
     onOpenImage: ((String) -> Unit)? = null,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     val color =
         if (isMyMessage) {
@@ -70,22 +70,22 @@ internal fun MessageCard(
 
     Box(
         modifier =
-            modifier.padding(
-                horizontal = Spacing.xs,
-                vertical = Spacing.xs,
-            ),
+        modifier.padding(
+            horizontal = Spacing.xs,
+            vertical = Spacing.xs,
+        ),
     ) {
         Canvas(
             modifier =
-                Modifier
-                    .size(mediumDistance)
-                    .then(
-                        if (isMyMessage) {
-                            Modifier.align(Alignment.TopEnd)
-                        } else {
-                            Modifier.align(Alignment.TopStart)
-                        },
-                    ),
+            Modifier
+                .size(mediumDistance)
+                .then(
+                    if (isMyMessage) {
+                        Modifier.align(Alignment.TopEnd)
+                    } else {
+                        Modifier.align(Alignment.TopStart)
+                    },
+                ),
         ) {
             if (isMyMessage) {
                 val path =
@@ -109,24 +109,24 @@ internal fun MessageCard(
         }
         Box(
             modifier =
-                Modifier
-                    .then(
-                        if (isMyMessage) {
-                            Modifier.padding(start = longDistance, end = mediumDistance)
-                        } else {
-                            Modifier.padding(end = longDistance, start = mediumDistance)
-                        },
-                    ).background(
-                        color = color,
-                        shape =
-                            RoundedCornerShape(
-                                topStart = if (isMyMessage) CornerSize.m else 0.dp,
-                                topEnd = if (isMyMessage) 0.dp else CornerSize.m,
-                                bottomStart = CornerSize.m,
-                                bottomEnd = CornerSize.m,
-                            ),
-                    ).fillMaxWidth()
-                    .padding(Spacing.s),
+            Modifier
+                .then(
+                    if (isMyMessage) {
+                        Modifier.padding(start = longDistance, end = mediumDistance)
+                    } else {
+                        Modifier.padding(end = longDistance, start = mediumDistance)
+                    },
+                ).background(
+                    color = color,
+                    shape =
+                    RoundedCornerShape(
+                        topStart = if (isMyMessage) CornerSize.m else 0.dp,
+                        topEnd = if (isMyMessage) 0.dp else CornerSize.m,
+                        bottomStart = CornerSize.m,
+                        bottomEnd = CornerSize.m,
+                    ),
+                ).fillMaxWidth()
+                .padding(Spacing.s),
         ) {
             CustomizedContent(ContentFontClass.Body) {
                 Column {
@@ -142,12 +142,12 @@ internal fun MessageCard(
                             if (options.isNotEmpty()) {
                                 IconButton(
                                     modifier =
-                                        Modifier
-                                            .size(IconSize.m)
-                                            .padding(Spacing.xs)
-                                            .onGloballyPositioned {
-                                                optionsOffset = it.positionInParent()
-                                            },
+                                    Modifier
+                                        .size(IconSize.m)
+                                        .padding(Spacing.xs)
+                                        .onGloballyPositioned {
+                                            optionsOffset = it.positionInParent()
+                                        },
                                     onClick = {
                                         optionsExpanded = true
                                     },
@@ -191,10 +191,10 @@ internal fun MessageCard(
                                 optionsExpanded = false
                             },
                             offset =
-                                DpOffset(
-                                    x = optionsOffset.x.toLocalDp(),
-                                    y = optionsOffset.y.toLocalDp(),
-                                ),
+                            DpOffset(
+                                x = optionsOffset.x.toLocalDp(),
+                                y = optionsOffset.y.toLocalDp(),
+                            ),
                         ) {
                             options.forEach { option ->
                                 DropdownMenuItem(
@@ -203,7 +203,7 @@ internal fun MessageCard(
                                     },
                                     onClick = {
                                         optionsExpanded = false
-                                        onOptionSelected?.invoke(option.id)
+                                        onSelectOption?.invoke(option.id)
                                     },
                                 )
                             }

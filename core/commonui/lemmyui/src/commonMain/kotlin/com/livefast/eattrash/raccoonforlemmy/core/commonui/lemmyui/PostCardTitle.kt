@@ -62,39 +62,39 @@ fun PostCardTitle(
     SelectionContainer {
         CustomMarkdownWrapper(
             modifier =
-                modifier
-                    .padding(horizontal = Spacing.xxs)
-                    .semantics { heading() },
+            modifier
+                .padding(horizontal = Spacing.xxs)
+                .semantics { heading() },
             content = text,
             autoLoadImages = autoLoadImages,
             typography =
-                markdownTypography(
-                    h1 = typography.titleLarge.copy(fontWeight = weightNormalOrLight),
-                    h2 = typography.titleLarge.copy(fontWeight = weightNormalOrLight),
-                    h3 = typography.titleMedium.copy(fontWeight = weightMediumOrNormal),
-                    h4 = typography.titleMedium.copy(fontWeight = weightMediumOrNormal),
-                    h5 = typography.titleSmall.copy(fontWeight = weightMediumOrNormal),
-                    h6 = typography.titleSmall,
-                    text = typography.bodyMedium.copy(fontWeight = weightMediumOrNormal),
-                    paragraph = typography.bodyMedium.copy(fontWeight = weightMediumOrNormal),
-                    quote = typography.bodyMedium,
-                    bullet = typography.bodyMedium,
-                    list = typography.bodyMedium,
-                    ordered = typography.bodyMedium,
-                    code = typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
-                    link =
-                        typography.bodyMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                            textDecoration = TextDecoration.Underline,
-                        ),
+            markdownTypography(
+                h1 = typography.titleLarge.copy(fontWeight = weightNormalOrLight),
+                h2 = typography.titleLarge.copy(fontWeight = weightNormalOrLight),
+                h3 = typography.titleMedium.copy(fontWeight = weightMediumOrNormal),
+                h4 = typography.titleMedium.copy(fontWeight = weightMediumOrNormal),
+                h5 = typography.titleSmall.copy(fontWeight = weightMediumOrNormal),
+                h6 = typography.titleSmall,
+                text = typography.bodyMedium.copy(fontWeight = weightMediumOrNormal),
+                paragraph = typography.bodyMedium.copy(fontWeight = weightMediumOrNormal),
+                quote = typography.bodyMedium,
+                bullet = typography.bodyMedium,
+                list = typography.bodyMedium,
+                ordered = typography.bodyMedium,
+                code = typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
+                link =
+                typography.bodyMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    textDecoration = TextDecoration.Underline,
                 ),
+            ),
             colors =
-                markdownColor(
-                    text = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
-                    codeText = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
-                    codeBackground = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                    dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                ),
+            markdownColor(
+                text = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
+                codeText = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
+                codeBackground = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
+                dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+            ),
             highlightText = highlightText,
             enableAlternateRendering = enableAlternateMarkdownRendering,
             onOpenUrl = { url ->

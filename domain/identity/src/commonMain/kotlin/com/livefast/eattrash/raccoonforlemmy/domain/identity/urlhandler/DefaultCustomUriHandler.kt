@@ -26,10 +26,7 @@ internal class DefaultCustomUriHandler(
 ) : CustomUriHandler {
     private val scope = CoroutineScope(SupervisorJob() + dispatcher)
 
-    override fun openUri(
-        uri: String,
-        allowOpenExternal: Boolean,
-    ) {
+    override fun openUri(uri: String, allowOpenExternal: Boolean) {
         scope.launch {
             val processors =
                 listOf(

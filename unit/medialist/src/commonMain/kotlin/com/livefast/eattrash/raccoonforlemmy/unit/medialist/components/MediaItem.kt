@@ -67,7 +67,7 @@ internal fun MediaItem(
     fullHeightImage: Boolean = true,
     fullWidthImage: Boolean = false,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
     onOpenFullScreen: ((String) -> Unit)? = null,
 ) {
     val url = media.getUrl(instance)
@@ -81,49 +81,49 @@ internal fun MediaItem(
 
     Box(
         modifier =
-            modifier
-                .then(
-                    if (postLayout == PostLayout.Card) {
-                        Modifier
-                            .padding(horizontal = Spacing.xs)
-                            .shadow(
-                                elevation = 5.dp,
-                                shape = RoundedCornerShape(CornerSize.l),
-                            ).clip(RoundedCornerShape(CornerSize.l))
-                            .background(backgroundColor)
-                            .padding(vertical = Spacing.s)
-                    } else {
-                        Modifier
-                    },
-                ).semantics(mergeDescendants = true) {
-                    val helperActions =
-                        buildList {
-                            if (options.isNotEmpty()) {
-                                this +=
-                                    CustomAccessibilityAction(optionsActionLabel) {
-                                        optionsMenuOpen = true
-                                        true
-                                    }
-                            }
-                        }
-                    customActions = helperActions
+        modifier
+            .then(
+                if (postLayout == PostLayout.Card) {
+                    Modifier
+                        .padding(horizontal = Spacing.xs)
+                        .shadow(
+                            elevation = 5.dp,
+                            shape = RoundedCornerShape(CornerSize.l),
+                        ).clip(RoundedCornerShape(CornerSize.l))
+                        .background(backgroundColor)
+                        .padding(vertical = Spacing.s)
+                } else {
+                    Modifier
                 },
+            ).semantics(mergeDescendants = true) {
+                val helperActions =
+                    buildList {
+                        if (options.isNotEmpty()) {
+                            this +=
+                                CustomAccessibilityAction(optionsActionLabel) {
+                                    optionsMenuOpen = true
+                                    true
+                                }
+                        }
+                    }
+                customActions = helperActions
+            },
     ) {
         Column(
             modifier =
-                modifier
-                    .background(backgroundColor)
-                    .padding(top = Spacing.s),
+            Modifier
+                .background(backgroundColor)
+                .padding(top = Spacing.s),
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
             if (media.alias.looksLikeAVideo) {
                 PostCardVideo(
                     modifier =
-                        Modifier
-                            .padding(
-                                vertical = Spacing.xxs,
-                                horizontal = if (fullWidthImage) 0.dp else Spacing.s,
-                            ),
+                    Modifier
+                        .padding(
+                            vertical = Spacing.xxs,
+                            horizontal = if (fullWidthImage) 0.dp else Spacing.s,
+                        ),
                     url = url,
                     onOpenFullScreen = {
                         onOpenFullScreen?.invoke(url)
@@ -132,17 +132,17 @@ internal fun MediaItem(
             } else {
                 PostCardImage(
                     modifier =
-                        Modifier
-                            .padding(
-                                vertical = Spacing.xs,
-                                horizontal = if (fullWidthImage) 0.dp else Spacing.s,
-                            ).then(
-                                if (postLayout == PostLayout.Card && !fullWidthImage) {
-                                    Modifier.clip(RoundedCornerShape(CornerSize.xl))
-                                } else {
-                                    Modifier
-                                },
-                            ),
+                    Modifier
+                        .padding(
+                            vertical = Spacing.xs,
+                            horizontal = if (fullWidthImage) 0.dp else Spacing.s,
+                        ).then(
+                            if (postLayout == PostLayout.Card && !fullWidthImage) {
+                                Modifier.clip(RoundedCornerShape(CornerSize.xl))
+                            } else {
+                                Modifier
+                            },
+                        ),
                     imageUrl = url,
                     autoLoadImages = autoloadImages,
                     contentScale = if (fullHeightImage) ContentScale.FillWidth else ContentScale.Crop,
@@ -158,17 +158,17 @@ internal fun MediaItem(
 
             MediaFooter(
                 modifier =
-                    Modifier.padding(
-                        vertical = Spacing.xs,
-                        horizontal = Spacing.s,
-                    ),
+                Modifier.padding(
+                    vertical = Spacing.xs,
+                    horizontal = Spacing.s,
+                ),
                 date = media.date,
                 options = options,
                 optionsMenuOpen = optionsMenuOpen,
-                onOptionsMenuToggled = {
+                onToggleOptionsMenu = {
                     optionsMenuOpen = it
                 },
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
             )
         }
     }
@@ -181,8 +181,8 @@ private fun MediaFooter(
     optionsMenuOpen: Boolean = false,
     options: List<Option> = emptyList(),
     onOpen: (() -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
-    onOptionsMenuToggled: ((Boolean) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
+    onToggleOptionsMenu: ((Boolean) -> Unit)? = null,
 ) {
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
@@ -213,15 +213,15 @@ private fun MediaFooter(
             if (options.isNotEmpty()) {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .padding(top = Spacing.xxs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            }.clearAndSetSemantics { },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .padding(top = Spacing.xxs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        }.clearAndSetSemantics { },
                     onClick = {
-                        onOptionsMenuToggled?.invoke(true)
+                        onToggleOptionsMenu?.invoke(true)
                     },
                 ) {
                     Icon(
@@ -249,13 +249,13 @@ private fun MediaFooter(
         CustomDropDown(
             expanded = optionsMenuOpen,
             onDismiss = {
-                onOptionsMenuToggled?.invoke(false)
+                onToggleOptionsMenu?.invoke(false)
             },
             offset =
-                DpOffset(
-                    x = optionsOffset.x.toLocalDp(),
-                    y = optionsOffset.y.toLocalDp(),
-                ),
+            DpOffset(
+                x = optionsOffset.x.toLocalDp(),
+                y = optionsOffset.y.toLocalDp(),
+            ),
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
@@ -263,8 +263,8 @@ private fun MediaFooter(
                         Text(option.text)
                     },
                     onClick = {
-                        onOptionsMenuToggled?.invoke(false)
-                        onOptionSelected?.invoke(option.id)
+                        onToggleOptionsMenu?.invoke(false)
+                        onSelectOption?.invoke(option.id)
                     },
                 )
             }

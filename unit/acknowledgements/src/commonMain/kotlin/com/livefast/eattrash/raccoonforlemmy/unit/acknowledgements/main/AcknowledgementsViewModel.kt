@@ -5,9 +5,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
 import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.repository.AcknowledgementsRepository
 import kotlinx.coroutines.launch
 
-internal class AcknowledgementsViewModel(
-    private val acknowledgementsRepository: AcknowledgementsRepository,
-) : DefaultMviModel<AcknowledgementsMviModel.Intent, AcknowledgementsMviModel.State, AcknowledgementsMviModel.Effect>(
+internal class AcknowledgementsViewModel(private val acknowledgementsRepository: AcknowledgementsRepository) :
+    DefaultMviModel<AcknowledgementsMviModel.Intent, AcknowledgementsMviModel.State, AcknowledgementsMviModel.Effect>(
         initialState = AcknowledgementsMviModel.State(),
     ),
     AcknowledgementsMviModel {

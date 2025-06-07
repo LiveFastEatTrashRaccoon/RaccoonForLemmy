@@ -56,67 +56,65 @@ internal class DefaultUrlDecoder : UrlDecoder {
         return res to instance
     }
 
-    private fun extractCommunity(url: String): CommunityModel? =
-        when {
-            url.startsWith("/c/") -> {
-                val cleanString = url.substring(3)
-                if (cleanString.count { it == '@' } == 1) {
-                    val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
-                    CommunityModel(
-                        name = name,
-                        host = host,
-                    )
-                } else {
-                    CommunityModel(name = cleanString)
-                }
+    private fun extractCommunity(url: String): CommunityModel? = when {
+        url.startsWith("/c/") -> {
+            val cleanString = url.substring(3)
+            if (cleanString.count { it == '@' } == 1) {
+                val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
+                CommunityModel(
+                    name = name,
+                    host = host,
+                )
+            } else {
+                CommunityModel(name = cleanString)
             }
-
-            url.startsWith("!") -> {
-                val cleanString = url.substring(1)
-                if (cleanString.count { it == '@' } == 1) {
-                    val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
-                    CommunityModel(
-                        name = name,
-                        host = host,
-                    )
-                } else {
-                    CommunityModel(name = cleanString)
-                }
-            }
-
-            else -> null
         }
 
-    private fun extractUser(url: String): UserModel? =
-        when {
-            url.startsWith("@") -> {
-                val cleanString = url.substring(1)
-                if (cleanString.count { it == '@' } == 1) {
-                    val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
-                    UserModel(
-                        name = name,
-                        host = host,
-                    )
-                } else {
-                    UserModel(name = cleanString)
-                }
+        url.startsWith("!") -> {
+            val cleanString = url.substring(1)
+            if (cleanString.count { it == '@' } == 1) {
+                val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
+                CommunityModel(
+                    name = name,
+                    host = host,
+                )
+            } else {
+                CommunityModel(name = cleanString)
             }
-
-            url.startsWith("/u/") -> {
-                val cleanString = url.substring(3)
-                if (cleanString.count { it == '@' } == 1) {
-                    val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
-                    UserModel(
-                        name = name,
-                        host = host,
-                    )
-                } else {
-                    UserModel(name = cleanString)
-                }
-            }
-
-            else -> null
         }
+
+        else -> null
+    }
+
+    private fun extractUser(url: String): UserModel? = when {
+        url.startsWith("@") -> {
+            val cleanString = url.substring(1)
+            if (cleanString.count { it == '@' } == 1) {
+                val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
+                UserModel(
+                    name = name,
+                    host = host,
+                )
+            } else {
+                UserModel(name = cleanString)
+            }
+        }
+
+        url.startsWith("/u/") -> {
+            val cleanString = url.substring(3)
+            if (cleanString.count { it == '@' } == 1) {
+                val (name, host) = cleanString.split("@", limit = 2).let { l -> l[0] to l[1] }
+                UserModel(
+                    name = name,
+                    host = host,
+                )
+            } else {
+                UserModel(name = cleanString)
+            }
+        }
+
+        else -> null
+    }
 
     private fun extractPost(url: String): PostModel? {
         val regex = Regex("/post/(?<postId>.*$)")

@@ -65,9 +65,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class MultiCommunityEditorScreen(
-    private val communityId: Long? = null,
-) : Screen {
+class MultiCommunityEditorScreen(private val communityId: Long? = null) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
@@ -130,10 +128,7 @@ class MultiCommunityEditorScreen(
             val keyboardScrollConnection =
                 remember {
                     object : NestedScrollConnection {
-                        override fun onPreScroll(
-                            available: Offset,
-                            source: NestedScrollSource,
-                        ): Offset {
+                        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                             focusManager.clearFocus()
                             return Offset.Zero
                         }
@@ -141,20 +136,20 @@ class MultiCommunityEditorScreen(
                 }
             Column(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).nestedScroll(keyboardScrollConnection),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).nestedScroll(keyboardScrollConnection),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     colors =
-                        TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                        ),
+                    TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                    ),
                     maxLines = 1,
                     label = {
                         Text(text = LocalStrings.current.multiCommunityEditorName)
@@ -162,11 +157,11 @@ class MultiCommunityEditorScreen(
                     textStyle = MaterialTheme.typography.bodyMedium,
                     value = uiState.name,
                     keyboardOptions =
-                        KeyboardOptions(
-                            autoCorrectEnabled = false,
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next,
-                        ),
+                    KeyboardOptions(
+                        autoCorrectEnabled = false,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next,
+                    ),
                     onValueChange = { value ->
                         model.reduce(MultiCommunityEditorMviModel.Intent.SetName(value))
                     },
@@ -196,56 +191,10 @@ class MultiCommunityEditorScreen(
                                 val selected = url == uiState.icon
                                 CustomImage(
                                     modifier =
-                                        Modifier
-                                            .size(iconSize)
-                                            .clip(RoundedCornerShape(iconSize / 2))
-                                            .let {
-                                                if (selected) {
-                                                    it
-                                                        .border(
-                                                            width = 1.dp,
-                                                            color = MaterialTheme.colorScheme.primary,
-                                                            shape = CircleShape,
-                                                        ).padding(1.dp)
-                                                        .border(
-                                                            width = 1.dp,
-                                                            color = MaterialTheme.colorScheme.onPrimary,
-                                                            shape = CircleShape,
-                                                        ).padding(1.dp)
-                                                        .border(
-                                                            width = 1.dp,
-                                                            color = MaterialTheme.colorScheme.primary,
-                                                            shape = CircleShape,
-                                                        )
-                                                } else {
-                                                    it
-                                                }
-                                            }.onClick(
-                                                onClick = {
-                                                    model.reduce(
-                                                        MultiCommunityEditorMviModel.Intent.SelectImage(
-                                                            idx,
-                                                        ),
-                                                    )
-                                                },
-                                            ),
-                                    url = url,
-                                    autoload = uiState.autoLoadImages,
-                                    contentScale = ContentScale.FillBounds,
-                                )
-                            }
-                        }
-                        item {
-                            val selected = uiState.icon == null
-                            Box(
-                                modifier =
                                     Modifier
-                                        .padding(Spacing.xxxs)
                                         .size(iconSize)
-                                        .background(
-                                            color = MaterialTheme.colorScheme.primary,
-                                            shape = RoundedCornerShape(iconSize / 2),
-                                        ).let {
+                                        .clip(RoundedCornerShape(iconSize / 2))
+                                        .let {
                                             if (selected) {
                                                 it
                                                     .border(
@@ -270,20 +219,66 @@ class MultiCommunityEditorScreen(
                                             onClick = {
                                                 model.reduce(
                                                     MultiCommunityEditorMviModel.Intent.SelectImage(
-                                                        null,
+                                                        idx,
                                                     ),
                                                 )
                                             },
                                         ),
+                                    url = url,
+                                    autoload = uiState.autoLoadImages,
+                                    contentScale = ContentScale.FillBounds,
+                                )
+                            }
+                        }
+                        item {
+                            val selected = uiState.icon == null
+                            Box(
+                                modifier =
+                                Modifier
+                                    .padding(Spacing.xxxs)
+                                    .size(iconSize)
+                                    .background(
+                                        color = MaterialTheme.colorScheme.primary,
+                                        shape = RoundedCornerShape(iconSize / 2),
+                                    ).let {
+                                        if (selected) {
+                                            it
+                                                .border(
+                                                    width = 1.dp,
+                                                    color = MaterialTheme.colorScheme.primary,
+                                                    shape = CircleShape,
+                                                ).padding(1.dp)
+                                                .border(
+                                                    width = 1.dp,
+                                                    color = MaterialTheme.colorScheme.onPrimary,
+                                                    shape = CircleShape,
+                                                ).padding(1.dp)
+                                                .border(
+                                                    width = 1.dp,
+                                                    color = MaterialTheme.colorScheme.primary,
+                                                    shape = CircleShape,
+                                                )
+                                        } else {
+                                            it
+                                        }
+                                    }.onClick(
+                                        onClick = {
+                                            model.reduce(
+                                                MultiCommunityEditorMviModel.Intent.SelectImage(
+                                                    null,
+                                                ),
+                                            )
+                                        },
+                                    ),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text =
-                                        uiState.name
-                                            .firstOrNull()
-                                            ?.toString()
-                                            .orEmpty()
-                                            .uppercase(),
+                                    uiState.name
+                                        .firstOrNull()
+                                        ?.toString()
+                                        .orEmpty()
+                                        .uppercase(),
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onPrimary,
                                 )
@@ -295,9 +290,9 @@ class MultiCommunityEditorScreen(
                 Spacer(modifier = Modifier.height(Spacing.s))
                 Column(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = Spacing.s),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Spacing.s),
                 ) {
                     Text(
                         text = LocalStrings.current.multiCommunityEditorCommunities,
@@ -318,10 +313,10 @@ class MultiCommunityEditorScreen(
                 }
                 LazyColumn(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = Spacing.s)
-                            .weight(1f),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Spacing.s)
+                        .weight(1f),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                 ) {
                     items(uiState.communities) { community ->
@@ -331,9 +326,9 @@ class MultiCommunityEditorScreen(
                         ) {
                             CommunityItem(
                                 modifier =
-                                    Modifier
-                                        .weight(1f)
-                                        .background(MaterialTheme.colorScheme.background),
+                                Modifier
+                                    .weight(1f)
+                                    .background(MaterialTheme.colorScheme.background),
                                 noPadding = true,
                                 community = community,
                                 preferNicknames = uiState.preferNicknames,

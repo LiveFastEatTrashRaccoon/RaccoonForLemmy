@@ -1,6 +1,7 @@
 plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
     id("com.livefast.eattrash.composeMultiplatform")
+    id("com.livefast.eattrash.spotless")
     alias(libs.plugins.kotlinx.kover)
 }
 
@@ -110,4 +111,19 @@ kotlin {
 
 customKotlinMultiplatformExtension {
     baseName = "shared"
+}
+
+spotless {
+    kotlin {
+        target("**/App.kt")
+        suppressLintsFor {
+            step = "ktlint"
+            shortCode = "compose:modifier-missing-check"
+        }
+        target("**/main.kt", "**/main.ios.kt")
+        suppressLintsFor {
+            step = "ktlint"
+            shortCode = "standard:filename"
+        }
+    }
 }

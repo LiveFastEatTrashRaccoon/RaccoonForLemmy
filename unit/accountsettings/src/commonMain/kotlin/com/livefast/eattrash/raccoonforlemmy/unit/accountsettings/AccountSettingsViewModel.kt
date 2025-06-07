@@ -29,8 +29,8 @@ class AccountSettingsViewModel(
     private val logoutUseCase: LogoutUseCase,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<AccountSettingsMviModel.Intent, AccountSettingsMviModel.UiState, AccountSettingsMviModel.Effect>(
-        initialState = AccountSettingsMviModel.UiState(),
-    ),
+    initialState = AccountSettingsMviModel.UiState(),
+),
     AccountSettingsMviModel {
     private var accountSettings: AccountSettingsModel? = null
 
@@ -273,10 +273,7 @@ class AccountSettingsViewModel(
         }
     }
 
-    private fun deleteAccount(
-        deleteContent: Boolean,
-        password: String,
-    ) {
+    private fun deleteAccount(deleteContent: Boolean, password: String) {
         screenModelScope.launch {
             if (password.isEmpty()) {
                 emitEffect(

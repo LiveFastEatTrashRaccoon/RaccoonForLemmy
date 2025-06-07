@@ -11,21 +11,13 @@ interface SettingsMviModel :
     MviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect>,
     ScreenModel {
     sealed interface Intent {
-        data class ChangeIncludeNsfw(
-            val value: Boolean,
-        ) : Intent
+        data class ChangeIncludeNsfw(val value: Boolean) : Intent
 
-        data class ChangeBlurNsfw(
-            val value: Boolean,
-        ) : Intent
+        data class ChangeBlurNsfw(val value: Boolean) : Intent
 
-        data class ChangeEnableSwipeActions(
-            val value: Boolean,
-        ) : Intent
+        data class ChangeEnableSwipeActions(val value: Boolean) : Intent
 
-        data class ChangeCrashReportEnabled(
-            val value: Boolean,
-        ) : Intent
+        data class ChangeCrashReportEnabled(val value: Boolean) : Intent
     }
 
     data class UiState(

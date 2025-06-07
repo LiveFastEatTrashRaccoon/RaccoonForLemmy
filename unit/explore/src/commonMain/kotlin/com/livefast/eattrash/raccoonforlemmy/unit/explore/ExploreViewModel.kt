@@ -61,8 +61,8 @@ class ExploreViewModel(
     private val imagePreloadManager: ImagePreloadManager,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect>(
-        initialState = ExploreMviModel.UiState(),
-    ),
+    initialState = ExploreMviModel.UiState(),
+),
     ExploreMviModel {
     private val isOnOtherInstance: Boolean get() = otherInstance.isNotEmpty()
     private val notificationEventKey: String
@@ -458,13 +458,13 @@ class ExploreViewModel(
             updateState {
                 it.copy(
                     results =
-                        it.results.map { r ->
-                            if (r is SearchResult.Post && r.model.id == post.id) {
-                                r.copy(model = post)
-                            } else {
-                                r
-                            }
-                        },
+                    it.results.map { r ->
+                        if (r is SearchResult.Post && r.model.id == post.id) {
+                            r.copy(model = post)
+                        } else {
+                            r
+                        }
+                    },
                 )
             }
         }
@@ -475,13 +475,13 @@ class ExploreViewModel(
             updateState {
                 it.copy(
                     results =
-                        it.results.map { r ->
-                            if (r is SearchResult.Comment && r.model.id == comment.id) {
-                                r.copy(model = comment)
-                            } else {
-                                r
-                            }
-                        },
+                    it.results.map { r ->
+                        if (r is SearchResult.Comment && r.model.id == comment.id) {
+                            r.copy(model = comment)
+                        } else {
+                            r
+                        }
+                    },
                 )
             }
         }
@@ -498,14 +498,14 @@ class ExploreViewModel(
             updateState {
                 it.copy(
                     results =
-                        it.results.map { res ->
-                            if (res !is SearchResult.Post) return@map res
-                            if (res.model.id == post.id) {
-                                res.copy(model = newPost)
-                            } else {
-                                res
-                            }
-                        },
+                    it.results.map { res ->
+                        if (res !is SearchResult.Post) return@map res
+                        if (res.model.id == post.id) {
+                            res.copy(model = newPost)
+                        } else {
+                            res
+                        }
+                    },
                 )
             }
             try {
@@ -520,14 +520,14 @@ class ExploreViewModel(
                 updateState {
                     it.copy(
                         results =
-                            it.results.map { res ->
-                                if (res !is SearchResult.Post) return@map res
-                                if (res.model.id == post.id) {
-                                    res.copy(model = post)
-                                } else {
-                                    res
-                                }
-                            },
+                        it.results.map { res ->
+                            if (res !is SearchResult.Post) return@map res
+                            if (res.model.id == post.id) {
+                                res.copy(model = post)
+                            } else {
+                                res
+                            }
+                        },
                     )
                 }
             }
@@ -545,14 +545,14 @@ class ExploreViewModel(
             updateState {
                 it.copy(
                     results =
-                        it.results.map { res ->
-                            if (res !is SearchResult.Post) return@map res
-                            if (res.model.id == post.id) {
-                                res.copy(model = newPost)
-                            } else {
-                                res
-                            }
-                        },
+                    it.results.map { res ->
+                        if (res !is SearchResult.Post) return@map res
+                        if (res.model.id == post.id) {
+                            res.copy(model = newPost)
+                        } else {
+                            res
+                        }
+                    },
                 )
             }
             try {
@@ -567,14 +567,14 @@ class ExploreViewModel(
                 updateState {
                     it.copy(
                         results =
-                            it.results.map { res ->
-                                if (res !is SearchResult.Post) return@map res
-                                if (res.model.id == post.id) {
-                                    res.copy(model = post)
-                                } else {
-                                    res
-                                }
-                            },
+                        it.results.map { res ->
+                            if (res !is SearchResult.Post) return@map res
+                            if (res.model.id == post.id) {
+                                res.copy(model = post)
+                            } else {
+                                res
+                            }
+                        },
                     )
                 }
             }
@@ -592,14 +592,14 @@ class ExploreViewModel(
             updateState {
                 it.copy(
                     results =
-                        it.results.map { res ->
-                            if (res !is SearchResult.Post) return@map res
-                            if (res.model.id == post.id) {
-                                res.copy(model = newPost)
-                            } else {
-                                res
-                            }
-                        },
+                    it.results.map { res ->
+                        if (res !is SearchResult.Post) return@map res
+                        if (res.model.id == post.id) {
+                            res.copy(model = newPost)
+                        } else {
+                            res
+                        }
+                    },
                 )
             }
             try {
@@ -614,14 +614,14 @@ class ExploreViewModel(
                 updateState {
                     it.copy(
                         results =
-                            it.results.map { res ->
-                                if (res !is SearchResult.Post) return@map res
-                                if (res.model.id == post.id) {
-                                    res.copy(model = post)
-                                } else {
-                                    res
-                                }
-                            },
+                        it.results.map { res ->
+                            if (res !is SearchResult.Post) return@map res
+                            if (res.model.id == post.id) {
+                                res.copy(model = post)
+                            } else {
+                                res
+                            }
+                        },
                     )
                 }
             }
@@ -639,14 +639,14 @@ class ExploreViewModel(
             updateState {
                 it.copy(
                     results =
-                        it.results.map { res ->
-                            if (res !is SearchResult.Comment) return@map res
-                            if (res.model.id == comment.id) {
-                                res.copy(model = newComment)
-                            } else {
-                                res
-                            }
-                        },
+                    it.results.map { res ->
+                        if (res !is SearchResult.Comment) return@map res
+                        if (res.model.id == comment.id) {
+                            res.copy(model = newComment)
+                        } else {
+                            res
+                        }
+                    },
                 )
             }
             try {
@@ -661,14 +661,14 @@ class ExploreViewModel(
                 updateState {
                     it.copy(
                         results =
-                            it.results.map { res ->
-                                if (res !is SearchResult.Comment) return@map res
-                                if (res.model.id == comment.id) {
-                                    res.copy(model = comment)
-                                } else {
-                                    res
-                                }
-                            },
+                        it.results.map { res ->
+                            if (res !is SearchResult.Comment) return@map res
+                            if (res.model.id == comment.id) {
+                                res.copy(model = comment)
+                            } else {
+                                res
+                            }
+                        },
                     )
                 }
             }
@@ -682,14 +682,14 @@ class ExploreViewModel(
             updateState {
                 it.copy(
                     results =
-                        it.results.map { res ->
-                            if (res !is SearchResult.Comment) return@map res
-                            if (res.model.id == comment.id) {
-                                res.copy(model = newComment)
-                            } else {
-                                res
-                            }
-                        },
+                    it.results.map { res ->
+                        if (res !is SearchResult.Comment) return@map res
+                        if (res.model.id == comment.id) {
+                            res.copy(model = newComment)
+                        } else {
+                            res
+                        }
+                    },
                 )
             }
             try {
@@ -704,14 +704,14 @@ class ExploreViewModel(
                 updateState {
                     it.copy(
                         results =
-                            it.results.map { res ->
-                                if (res !is SearchResult.Comment) return@map res
-                                if (res.model.id == comment.id) {
-                                    res.copy(model = comment)
-                                } else {
-                                    res
-                                }
-                            },
+                        it.results.map { res ->
+                            if (res !is SearchResult.Comment) return@map res
+                            if (res.model.id == comment.id) {
+                                res.copy(model = comment)
+                            } else {
+                                res
+                            }
+                        },
                     )
                 }
             }
@@ -729,14 +729,14 @@ class ExploreViewModel(
             updateState {
                 it.copy(
                     results =
-                        it.results.map { res ->
-                            if (res !is SearchResult.Comment) return@map res
-                            if (res.model.id == comment.id) {
-                                res.copy(model = newComment)
-                            } else {
-                                res
-                            }
-                        },
+                    it.results.map { res ->
+                        if (res !is SearchResult.Comment) return@map res
+                        if (res.model.id == comment.id) {
+                            res.copy(model = newComment)
+                        } else {
+                            res
+                        }
+                    },
                 )
             }
             try {
@@ -751,14 +751,14 @@ class ExploreViewModel(
                 updateState {
                     it.copy(
                         results =
-                            it.results.map { res ->
-                                if (res !is SearchResult.Comment) return@map res
-                                if (res.model.id == comment.id) {
-                                    res.copy(model = comment)
-                                } else {
-                                    res
-                                }
-                            },
+                        it.results.map { res ->
+                            if (res !is SearchResult.Comment) return@map res
+                            if (res.model.id == comment.id) {
+                                res.copy(model = comment)
+                            } else {
+                                res
+                            }
+                        },
                     )
                 }
             }
@@ -805,14 +805,14 @@ class ExploreViewModel(
             updateState {
                 it.copy(
                     results =
-                        it.results.map { res ->
-                            if (res !is SearchResult.Community) return@map res
-                            if (res.model.id == community.id) {
-                                res.copy(model = community)
-                            } else {
-                                res
-                            }
-                        },
+                    it.results.map { res ->
+                        if (res !is SearchResult.Community) return@map res
+                        if (res.model.id == community.id) {
+                            res.copy(model = community)
+                        } else {
+                            res
+                        }
+                    },
                 )
             }
         }

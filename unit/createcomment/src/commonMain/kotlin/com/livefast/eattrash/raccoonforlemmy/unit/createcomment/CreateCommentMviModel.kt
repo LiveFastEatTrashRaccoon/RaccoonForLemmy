@@ -29,9 +29,7 @@ interface CreateCommentMviModel :
                 return value.contentEquals(other.value)
             }
 
-            override fun hashCode(): Int {
-                return value.contentHashCode()
-            }
+            override fun hashCode(): Int = value.contentHashCode()
         }
 
         data class ChangeLanguage(val value: Long?) : Intent

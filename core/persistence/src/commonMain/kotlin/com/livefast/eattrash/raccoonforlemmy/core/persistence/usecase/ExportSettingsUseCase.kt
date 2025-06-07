@@ -6,9 +6,8 @@ interface ExportSettingsUseCase {
     suspend operator fun invoke(): String
 }
 
-internal class DefaultExportSettingsUseCase(
-    private val settingsRepository: SettingsRepository,
-) : ExportSettingsUseCase {
+internal class DefaultExportSettingsUseCase(private val settingsRepository: SettingsRepository) :
+    ExportSettingsUseCase {
     override suspend fun invoke(): String {
         val settings = settingsRepository.currentSettings.value
         val data = settings.toData()

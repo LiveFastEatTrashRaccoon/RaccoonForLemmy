@@ -10,19 +10,9 @@ interface MultiCommunityDao {
 
     fun getById(id: Long): Query<MultiCommunityEntity>
 
-    fun create(
-        name: String,
-        icon: String?,
-        communityIds: String,
-        accountId: Long?,
-    )
+    fun create(name: String, icon: String?, communityIds: String, accountId: Long?)
 
-    fun update(
-        name: String,
-        icon: String?,
-        communityIds: String,
-        id: Long,
-    )
+    fun update(name: String, icon: String?, communityIds: String, id: Long)
 
     fun delete(id: Long)
 }

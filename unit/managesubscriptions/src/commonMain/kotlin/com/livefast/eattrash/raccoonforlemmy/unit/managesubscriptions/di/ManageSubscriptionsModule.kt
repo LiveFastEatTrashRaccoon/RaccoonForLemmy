@@ -21,7 +21,7 @@ val manageSubscriptionsModule =
                     communityPaginationManager = instance(),
                     hapticFeedback = instance(),
                     notificationCenter = instance(),
-            )
+                )
+            }
         }
     }
-}

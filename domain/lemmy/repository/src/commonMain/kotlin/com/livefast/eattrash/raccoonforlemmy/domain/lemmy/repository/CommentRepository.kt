@@ -23,11 +23,7 @@ interface CommentRepository {
         maxDepth: Int = MAX_COMMENT_DEPTH,
     ): List<CommentModel>?
 
-    suspend fun getBy(
-        id: Long,
-        auth: String?,
-        instance: String? = null,
-    ): CommentModel?
+    suspend fun getBy(id: Long, auth: String?, instance: String? = null): CommentModel?
 
     suspend fun getChildren(
         parentId: Long,
@@ -39,92 +35,35 @@ interface CommentRepository {
         maxDepth: Int = MAX_COMMENT_DEPTH,
     ): List<CommentModel>?
 
-    fun asUpVoted(
-        comment: CommentModel,
-        voted: Boolean,
-    ): CommentModel
+    fun asUpVoted(comment: CommentModel, voted: Boolean): CommentModel
 
-    fun asUpVoted(
-        mention: PersonMentionModel,
-        voted: Boolean,
-    ): PersonMentionModel
+    fun asUpVoted(mention: PersonMentionModel, voted: Boolean): PersonMentionModel
 
-    suspend fun upVote(
-        comment: CommentModel,
-        auth: String,
-        voted: Boolean,
-    ): Result<Unit>
+    suspend fun upVote(comment: CommentModel, auth: String, voted: Boolean): Result<Unit>
 
-    fun asDownVoted(
-        comment: CommentModel,
-        downVoted: Boolean,
-    ): CommentModel
+    fun asDownVoted(comment: CommentModel, downVoted: Boolean): CommentModel
 
-    fun asDownVoted(
-        mention: PersonMentionModel,
-        downVoted: Boolean,
-    ): PersonMentionModel
+    fun asDownVoted(mention: PersonMentionModel, downVoted: Boolean): PersonMentionModel
 
-    suspend fun downVote(
-        comment: CommentModel,
-        auth: String,
-        downVoted: Boolean,
-    ): Result<Unit>
+    suspend fun downVote(comment: CommentModel, auth: String, downVoted: Boolean): Result<Unit>
 
-    fun asSaved(
-        comment: CommentModel,
-        saved: Boolean,
-    ): CommentModel
+    fun asSaved(comment: CommentModel, saved: Boolean): CommentModel
 
-    suspend fun save(
-        comment: CommentModel,
-        auth: String,
-        saved: Boolean,
-    ): Result<Unit>
+    suspend fun save(comment: CommentModel, auth: String, saved: Boolean): Result<Unit>
 
-    suspend fun create(
-        postId: Long,
-        parentId: Long?,
-        text: String,
-        languageId: Long? = null,
-        auth: String,
-    )
+    suspend fun create(postId: Long, parentId: Long?, text: String, languageId: Long? = null, auth: String)
 
-    suspend fun edit(
-        commentId: Long,
-        text: String,
-        languageId: Long? = null,
-        auth: String,
-    )
+    suspend fun edit(commentId: Long, text: String, languageId: Long? = null, auth: String)
 
-    suspend fun delete(
-        commentId: Long,
-        auth: String,
-    ): CommentModel?
+    suspend fun delete(commentId: Long, auth: String): CommentModel?
 
-    suspend fun restore(
-        commentId: Long,
-        auth: String,
-    ): CommentModel?
+    suspend fun restore(commentId: Long, auth: String): CommentModel?
 
-    suspend fun report(
-        commentId: Long,
-        reason: String,
-        auth: String,
-    )
+    suspend fun report(commentId: Long, reason: String, auth: String)
 
-    suspend fun remove(
-        commentId: Long,
-        auth: String,
-        removed: Boolean,
-        reason: String,
-    ): CommentModel?
+    suspend fun remove(commentId: Long, auth: String, removed: Boolean, reason: String): CommentModel?
 
-    suspend fun distinguish(
-        commentId: Long,
-        auth: String,
-        distinguished: Boolean,
-    ): CommentModel?
+    suspend fun distinguish(commentId: Long, auth: String, distinguished: Boolean): CommentModel?
 
     suspend fun getReports(
         auth: String,
@@ -134,20 +73,9 @@ interface CommentRepository {
         unresolvedOnly: Boolean = true,
     ): List<CommentReportModel>?
 
-    suspend fun resolveReport(
-        reportId: Long,
-        auth: String,
-        resolved: Boolean,
-    ): CommentReportModel?
+    suspend fun resolveReport(reportId: Long, auth: String, resolved: Boolean): CommentReportModel?
 
-    suspend fun purge(
-        auth: String?,
-        commentId: Long,
-        reason: String? = null,
-    )
+    suspend fun purge(auth: String?, commentId: Long, reason: String? = null)
 
-    suspend fun getResolved(
-        query: String,
-        auth: String?,
-    ): CommentModel?
+    suspend fun getResolved(query: String, auth: String?): CommentModel?
 }

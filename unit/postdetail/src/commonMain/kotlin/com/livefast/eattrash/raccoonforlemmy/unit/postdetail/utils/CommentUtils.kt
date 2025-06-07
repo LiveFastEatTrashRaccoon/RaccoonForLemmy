@@ -2,13 +2,12 @@ package com.livefast.eattrash.raccoonforlemmy.unit.postdetail.utils
 
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 
-internal fun List<CommentModel>.populateLoadMoreComments() =
-    mapIndexed { idx, comment ->
-        val hasMoreComments = (comment.comments ?: 0) > 0
-        val isNextCommentNotChild =
-            (idx < lastIndex && this[idx + 1].depth <= comment.depth) || idx == lastIndex
-        comment.copy(loadMoreButtonVisible = hasMoreComments && isNextCommentNotChild)
-    }
+internal fun List<CommentModel>.populateLoadMoreComments() = mapIndexed { idx, comment ->
+    val hasMoreComments = (comment.comments ?: 0) > 0
+    val isNextCommentNotChild =
+        (idx < lastIndex && this[idx + 1].depth <= comment.depth) || idx == lastIndex
+    comment.copy(loadMoreButtonVisible = hasMoreComments && isNextCommentNotChild)
+}
 
 /*
  * CREDITS:
@@ -63,10 +62,7 @@ internal fun List<CommentModel>.sortToNestedOrder(ancestorId: Long? = null): Lis
         }
 }
 
-data class PlaceholderComment(
-    val id: Long,
-    val path: String,
-)
+data class PlaceholderComment(val id: Long, val path: String)
 
 private sealed interface CommentNode {
     val children: MutableList<CommentNode>
@@ -144,28 +140,21 @@ private fun connectNodesAndGeneratePlaceholders(
     }
 }
 
-private fun joinForestUnderSingleRoot(
-    ancestorId: Long?,
-    memo: Map<Long, CommentNode>,
-): CommentNode =
-    CommentNode
-        .Placeholder(
-            missingComment =
-                PlaceholderComment(
-                    id = 0,
-                    path = "",
-                ),
-        ).apply {
-            children +=
-                memo.values.filter { node ->
-                    node.parent?.id == ancestorId
-                }
-        }
+private fun joinForestUnderSingleRoot(ancestorId: Long?, memo: Map<Long, CommentNode>): CommentNode = CommentNode
+    .Placeholder(
+        missingComment =
+        PlaceholderComment(
+            id = 0,
+            path = "",
+        ),
+    ).apply {
+        children +=
+            memo.values.filter { node ->
+                node.parent?.id == ancestorId
+            }
+    }
 
-private fun linearize(
-    node: CommentNode,
-    list: MutableList<CommentNode>,
-) {
+private fun linearize(node: CommentNode, list: MutableList<CommentNode>) {
     if (node.id != 0L) {
         list.add(node)
     }

@@ -24,8 +24,8 @@ class ManageAccountsViewModel(
     private val deleteAccount: DeleteAccountUseCase,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect>(
-        initialState = ManageAccountsMviModel.UiState(),
-    ),
+    initialState = ManageAccountsMviModel.UiState(),
+),
     ManageAccountsMviModel {
     init {
         if (uiState.value.accounts.isEmpty()) {

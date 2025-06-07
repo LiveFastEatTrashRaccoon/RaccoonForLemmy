@@ -22,14 +22,11 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration
 
 private sealed interface NavigationEvent {
-    data class Show(
-        val screen: Screen,
-    ) : NavigationEvent
+    data class Show(val screen: Screen) : NavigationEvent
 }
 
-internal class DefaultNavigationCoordinator(
-    dispatcher: CoroutineDispatcher = Dispatchers.Main,
-) : NavigationCoordinator {
+internal class DefaultNavigationCoordinator(dispatcher: CoroutineDispatcher = Dispatchers.Main) :
+    NavigationCoordinator {
     override val currentSection = MutableStateFlow<TabNavigationSection?>(null)
     override val onDoubleTabSelection = MutableSharedFlow<TabNavigationSection>()
     override val deepLinkUrl = MutableSharedFlow<String>()
@@ -164,10 +161,7 @@ internal class DefaultNavigationCoordinator(
         }
     }
 
-    override fun showGlobalMessage(
-        message: String,
-        delay: Duration,
-    ) {
+    override fun showGlobalMessage(message: String, delay: Duration) {
         scope.launch {
             delay(delay)
             globalMessage.emit(message)

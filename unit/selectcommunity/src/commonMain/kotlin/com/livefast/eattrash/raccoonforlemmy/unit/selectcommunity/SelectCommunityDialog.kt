@@ -53,9 +53,9 @@ class SelectCommunityDialog : Screen {
         ) {
             Column(
                 modifier =
-                    Modifier
-                        .background(color = MaterialTheme.colorScheme.surface)
-                        .padding(vertical = Spacing.s),
+                Modifier
+                    .background(color = MaterialTheme.colorScheme.surface)
+                    .padding(vertical = Spacing.s),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -80,10 +80,10 @@ class SelectCommunityDialog : Screen {
 
                 Box(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 500.dp, max = 500.dp)
-                            .padding(horizontal = Spacing.xs),
+                    Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 500.dp, max = 500.dp)
+                        .padding(horizontal = Spacing.xs),
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -97,17 +97,17 @@ class SelectCommunityDialog : Screen {
                         items(uiState.communities, { it.id }) { community ->
                             CommunityItem(
                                 modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .background(MaterialTheme.colorScheme.background)
-                                        .onClick(
-                                            onClick = {
-                                                notificationCenter.send(
-                                                    NotificationCenterEvent.SelectCommunity(community),
-                                                )
-                                                notificationCenter.send(NotificationCenterEvent.CloseDialog)
-                                            },
-                                        ),
+                                Modifier
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colorScheme.background)
+                                    .onClick(
+                                        onClick = {
+                                            notificationCenter.send(
+                                                NotificationCenterEvent.SelectCommunity(community),
+                                            )
+                                            notificationCenter.send(NotificationCenterEvent.CloseDialog)
+                                        },
+                                    ),
                                 autoLoadImages = uiState.autoLoadImages,
                                 preferNicknames = uiState.preferNicknames,
                                 community = community,

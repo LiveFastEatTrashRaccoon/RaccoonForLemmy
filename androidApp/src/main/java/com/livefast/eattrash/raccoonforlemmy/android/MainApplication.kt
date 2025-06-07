@@ -11,7 +11,6 @@ import org.kodein.di.instance
 import org.kodein.di.provider
 
 class MainApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
 

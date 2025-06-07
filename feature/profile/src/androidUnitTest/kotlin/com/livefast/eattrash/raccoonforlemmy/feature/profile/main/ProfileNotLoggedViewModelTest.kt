@@ -52,38 +52,35 @@ class ProfileNotLoggedViewModelTest {
     private val identityRepository = mockk<IdentityRepository>(relaxUnitFun = true)
 
     @Test
-    fun givenNotLogged_whenInitialized_thenStateIsAsExpected() =
-        runTest {
-            with(unloggedRule) {
-                onState { state ->
-                    assertFalse(state.authError)
-                }
+    fun givenNotLogged_whenInitialized_thenStateIsAsExpected() = runTest {
+        with(unloggedRule) {
+            onState { state ->
+                assertFalse(state.authError)
             }
         }
+    }
 
     @Test
-    fun givenTokenExpired_whenInitialized_thenStateIsAsExpected() =
-        runTest {
-            with(authErrorRule) {
-                onState { state ->
-                    assertTrue(state.authError)
-                }
+    fun givenTokenExpired_whenInitialized_thenStateIsAsExpected() = runTest {
+        with(authErrorRule) {
+            onState { state ->
+                assertTrue(state.authError)
             }
         }
+    }
 
     @Test
-    fun whenRetry_thenInteractionsAreAsExpected() =
-        runTest {
-            with(loggedRule) {
-                onState { state ->
-                    assertFalse(state.authError)
-                }
+    fun whenRetry_thenInteractionsAreAsExpected() = runTest {
+        with(loggedRule) {
+            onState { state ->
+                assertFalse(state.authError)
+            }
 
-                send(ProfileNotLoggedMviModel.Intent.Retry)
+            send(ProfileNotLoggedMviModel.Intent.Retry)
 
-                coVerify {
-                    identityRepository.refreshLoggedState()
-                }
+            coVerify {
+                identityRepository.refreshLoggedState()
             }
         }
+    }
 }

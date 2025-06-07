@@ -17,7 +17,7 @@ val modlogModule =
                     identityRepository = instance(),
                     modlogRepository = instance(),
                     settingsRepository = instance(),
-            )
+                )
+            }
         }
     }
-}

@@ -20,10 +20,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.Placeholde
 import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.models.AcknowledgementModel
 
 @Composable
-fun AcknowledgementItem(
-    item: AcknowledgementModel,
-    modifier: Modifier = Modifier,
-) {
+fun AcknowledgementItem(item: AcknowledgementModel, modifier: Modifier = Modifier) {
     val title = item.title.orEmpty()
     val fullColor = MaterialTheme.colorScheme.onBackground
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
@@ -31,10 +28,10 @@ fun AcknowledgementItem(
 
     Row(
         modifier =
-            modifier.padding(
-                vertical = Spacing.xs,
-                horizontal = Spacing.s,
-            ),
+        modifier.padding(
+            vertical = Spacing.xs,
+            horizontal = Spacing.s,
+        ),
         horizontalArrangement = Arrangement.spacedBy(Spacing.m),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -42,9 +39,9 @@ fun AcknowledgementItem(
             item.avatar.also { url ->
                 CustomImage(
                     modifier =
-                        Modifier
-                            .size(iconSize)
-                            .clip(RoundedCornerShape(iconSize / 2)),
+                    Modifier
+                        .size(iconSize)
+                        .clip(RoundedCornerShape(iconSize / 2)),
                     contentDescription = null,
                     url = url,
                     autoload = true,

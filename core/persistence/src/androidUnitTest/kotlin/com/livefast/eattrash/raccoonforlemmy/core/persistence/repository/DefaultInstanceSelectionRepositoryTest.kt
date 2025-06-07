@@ -23,70 +23,64 @@ class DefaultInstanceSelectionRepositoryTest {
     private val sut = DefaultInstanceSelectionRepository(keyStore)
 
     @Test
-    fun givenEmpty_whenGetAll_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf()
+    fun givenEmpty_whenGetAll_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf()
 
-            val res = sut.getAll()
+        val res = sut.getAll()
 
-            assertTrue(res.isEmpty())
-        }
-
-    @Test
-    fun givenNotEmpty_whenGetAll_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
-
-            val res = sut.getAll()
-
-            assertTrue(res.isNotEmpty())
-            assertEquals("lemmy.world", res.first())
-        }
+        assertTrue(res.isEmpty())
+    }
 
     @Test
-    fun whenUpdateAll_thenResultIsAsExpected() =
-        runTest {
-            val values = listOf("lemmy.world", "lemmy.ml")
-            sut.updateAll(values)
+    fun givenNotEmpty_whenGetAll_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
 
-            coVerify {
-                keyStore.save("customInstances", values)
-            }
-        }
+        val res = sut.getAll()
 
-    @Test
-    fun givenNotAlreadyPresent_whenAdd_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
-
-            sut.add("lemmy.ml")
-
-            coVerify {
-                keyStore.save("customInstances", listOf("lemmy.ml", "lemmy.world"))
-            }
-        }
+        assertTrue(res.isNotEmpty())
+        assertEquals("lemmy.world", res.first())
+    }
 
     @Test
-    fun givenAlreadyPresent_whenAdd_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
+    fun whenUpdateAll_thenResultIsAsExpected() = runTest {
+        val values = listOf("lemmy.world", "lemmy.ml")
+        sut.updateAll(values)
 
-            sut.add("lemmy.world")
-
-            coVerify {
-                keyStore.save("customInstances", listOf("lemmy.world"))
-            }
+        coVerify {
+            keyStore.save("customInstances", values)
         }
+    }
 
     @Test
-    fun whenRemove_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world", "lemmy.ml")
+    fun givenNotAlreadyPresent_whenAdd_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
 
-            sut.remove("lemmy.ml")
+        sut.add("lemmy.ml")
 
-            coVerify {
-                keyStore.save("customInstances", listOf("lemmy.world"))
-            }
+        coVerify {
+            keyStore.save("customInstances", listOf("lemmy.ml", "lemmy.world"))
         }
+    }
+
+    @Test
+    fun givenAlreadyPresent_whenAdd_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world")
+
+        sut.add("lemmy.world")
+
+        coVerify {
+            keyStore.save("customInstances", listOf("lemmy.world"))
+        }
+    }
+
+    @Test
+    fun whenRemove_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get("customInstances", any<List<String>>()) } returns listOf("lemmy.world", "lemmy.ml")
+
+        sut.remove("lemmy.ml")
+
+        coVerify {
+            keyStore.save("customInstances", listOf("lemmy.world"))
+        }
+    }
 }

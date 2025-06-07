@@ -64,10 +64,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepo
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.components.ConfigureActionItem
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.components.ConfigureAddAction
 
-private data class ActionConfig(
-    val target: ActionOnSwipeTarget,
-    val direction: ActionOnSwipeDirection,
-)
+private data class ActionConfig(val target: ActionOnSwipeTarget, val direction: ActionOnSwipeDirection)
 
 class ConfigureSwipeActionsScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -115,16 +112,16 @@ class ConfigureSwipeActionsScreen : Screen {
         ) { padding ->
             Box(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).then(
-                            if (settings.hideNavigationBarWhileScrolling) {
-                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                            } else {
-                                Modifier
-                            },
-                        ),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        },
+                    ),
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -138,10 +135,10 @@ class ConfigureSwipeActionsScreen : Screen {
                             rightButton = @Composable {
                                 TextButton(
                                     contentPadding =
-                                        PaddingValues(
-                                            horizontal = Spacing.xs,
-                                            vertical = Spacing.xxs,
-                                        ),
+                                    PaddingValues(
+                                        horizontal = Spacing.xs,
+                                        vertical = Spacing.xxs,
+                                    ),
                                     onClick = {
                                         model.reduce(ConfigureSwipeActionsMviModel.Intent.ResetActionsPosts)
                                     },
@@ -157,12 +154,12 @@ class ConfigureSwipeActionsScreen : Screen {
                     item {
                         Row(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        vertical = Spacing.xxs,
-                                        horizontal = Spacing.s,
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    vertical = Spacing.xxs,
+                                    horizontal = Spacing.s,
+                                ),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
@@ -173,25 +170,25 @@ class ConfigureSwipeActionsScreen : Screen {
                     itemsIndexed(uiState.actionsOnSwipeToStartPosts) { idx, action ->
                         ConfigureActionItem(
                             icon =
-                                when (idx) {
-                                    1 -> Icons.Default.KeyboardDoubleArrowLeft
-                                    else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
-                                },
+                            when (idx) {
+                                1 -> Icons.Default.KeyboardDoubleArrowLeft
+                                else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
+                            },
                             iconContentDescription =
-                                when (idx) {
-                                    1 -> LocalStrings.current.swipeActionStartTwo
-                                    else -> LocalStrings.current.swipeActionStartOne
-                                },
+                            when (idx) {
+                                1 -> LocalStrings.current.swipeActionStartTwo
+                                else -> LocalStrings.current.swipeActionStartOne
+                            },
                             action = action,
                             options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            OptionId.Remove,
-                                            LocalStrings.current.commentActionDelete,
-                                        )
-                                },
-                            onOptionSelected = { optionId ->
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.Remove,
+                                        LocalStrings.current.commentActionDelete,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
                                 when (optionId) {
                                     OptionId.Remove -> {
                                         model.reduce(
@@ -221,12 +218,12 @@ class ConfigureSwipeActionsScreen : Screen {
                     item {
                         Row(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        vertical = Spacing.xxs,
-                                        horizontal = Spacing.s,
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    vertical = Spacing.xxs,
+                                    horizontal = Spacing.s,
+                                ),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
@@ -237,25 +234,25 @@ class ConfigureSwipeActionsScreen : Screen {
                     itemsIndexed(uiState.actionsOnSwipeToEndPosts) { idx, action ->
                         ConfigureActionItem(
                             icon =
-                                when (idx) {
-                                    1 -> Icons.Default.KeyboardDoubleArrowRight
-                                    else -> Icons.AutoMirrored.Default.KeyboardArrowRight
-                                },
+                            when (idx) {
+                                1 -> Icons.Default.KeyboardDoubleArrowRight
+                                else -> Icons.AutoMirrored.Default.KeyboardArrowRight
+                            },
                             iconContentDescription =
-                                when (idx) {
-                                    1 -> LocalStrings.current.swipeActionEndTwo
-                                    else -> LocalStrings.current.swipeActionEndOne
-                                },
+                            when (idx) {
+                                1 -> LocalStrings.current.swipeActionEndTwo
+                                else -> LocalStrings.current.swipeActionEndOne
+                            },
                             action = action,
                             options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            OptionId.Remove,
-                                            LocalStrings.current.commentActionDelete,
-                                        )
-                                },
-                            onOptionSelected = { optionId ->
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.Remove,
+                                        LocalStrings.current.commentActionDelete,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
                                 when (optionId) {
                                     OptionId.Remove -> {
                                         model.reduce(
@@ -294,10 +291,10 @@ class ConfigureSwipeActionsScreen : Screen {
                             rightButton = @Composable {
                                 TextButton(
                                     contentPadding =
-                                        PaddingValues(
-                                            horizontal = Spacing.xs,
-                                            vertical = Spacing.xxs,
-                                        ),
+                                    PaddingValues(
+                                        horizontal = Spacing.xs,
+                                        vertical = Spacing.xxs,
+                                    ),
                                     onClick = {
                                         model.reduce(ConfigureSwipeActionsMviModel.Intent.ResetActionsComments)
                                     },
@@ -313,12 +310,12 @@ class ConfigureSwipeActionsScreen : Screen {
                     item {
                         Row(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        vertical = Spacing.xxs,
-                                        horizontal = Spacing.s,
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    vertical = Spacing.xxs,
+                                    horizontal = Spacing.s,
+                                ),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
@@ -329,25 +326,25 @@ class ConfigureSwipeActionsScreen : Screen {
                     itemsIndexed(uiState.actionsOnSwipeToStartComments) { idx, action ->
                         ConfigureActionItem(
                             icon =
-                                when (idx) {
-                                    1 -> Icons.Default.KeyboardDoubleArrowLeft
-                                    else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
-                                },
+                            when (idx) {
+                                1 -> Icons.Default.KeyboardDoubleArrowLeft
+                                else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
+                            },
                             iconContentDescription =
-                                when (idx) {
-                                    1 -> LocalStrings.current.swipeActionStartTwo
-                                    else -> LocalStrings.current.swipeActionStartOne
-                                },
+                            when (idx) {
+                                1 -> LocalStrings.current.swipeActionStartTwo
+                                else -> LocalStrings.current.swipeActionStartOne
+                            },
                             action = action,
                             options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            OptionId.Remove,
-                                            LocalStrings.current.commentActionDelete,
-                                        )
-                                },
-                            onOptionSelected = { optionId ->
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.Remove,
+                                        LocalStrings.current.commentActionDelete,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
                                 when (optionId) {
                                     OptionId.Remove -> {
                                         model.reduce(
@@ -363,7 +360,9 @@ class ConfigureSwipeActionsScreen : Screen {
                             },
                         )
                     }
-                    if (uiState.availableOptionsComments.isNotEmpty() && uiState.actionsOnSwipeToStartComments.size < 2) {
+                    if (uiState.availableOptionsComments.isNotEmpty() &&
+                        uiState.actionsOnSwipeToStartComments.size < 2
+                    ) {
                         item {
                             ConfigureAddAction {
                                 selectActionBottomSheet =
@@ -377,12 +376,12 @@ class ConfigureSwipeActionsScreen : Screen {
                     item {
                         Row(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        vertical = Spacing.xxs,
-                                        horizontal = Spacing.s,
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    vertical = Spacing.xxs,
+                                    horizontal = Spacing.s,
+                                ),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
@@ -393,25 +392,25 @@ class ConfigureSwipeActionsScreen : Screen {
                     itemsIndexed(uiState.actionsOnSwipeToEndComments) { idx, action ->
                         ConfigureActionItem(
                             icon =
-                                when (idx) {
-                                    1 -> Icons.Default.KeyboardDoubleArrowRight
-                                    else -> Icons.AutoMirrored.Default.KeyboardArrowRight
-                                },
+                            when (idx) {
+                                1 -> Icons.Default.KeyboardDoubleArrowRight
+                                else -> Icons.AutoMirrored.Default.KeyboardArrowRight
+                            },
                             iconContentDescription =
-                                when (idx) {
-                                    1 -> LocalStrings.current.swipeActionEndTwo
-                                    else -> LocalStrings.current.swipeActionEndOne
-                                },
+                            when (idx) {
+                                1 -> LocalStrings.current.swipeActionEndTwo
+                                else -> LocalStrings.current.swipeActionEndOne
+                            },
                             action = action,
                             options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            OptionId.Remove,
-                                            LocalStrings.current.commentActionDelete,
-                                        )
-                                },
-                            onOptionSelected = { optionId ->
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.Remove,
+                                        LocalStrings.current.commentActionDelete,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
                                 when (optionId) {
                                     OptionId.Remove -> {
                                         model.reduce(
@@ -450,10 +449,10 @@ class ConfigureSwipeActionsScreen : Screen {
                             rightButton = @Composable {
                                 TextButton(
                                     contentPadding =
-                                        PaddingValues(
-                                            horizontal = Spacing.xs,
-                                            vertical = Spacing.xxs,
-                                        ),
+                                    PaddingValues(
+                                        horizontal = Spacing.xs,
+                                        vertical = Spacing.xxs,
+                                    ),
                                     onClick = {
                                         model.reduce(ConfigureSwipeActionsMviModel.Intent.ResetActionsInbox)
                                     },
@@ -469,12 +468,12 @@ class ConfigureSwipeActionsScreen : Screen {
                     item {
                         Row(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        vertical = Spacing.xxs,
-                                        horizontal = Spacing.s,
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    vertical = Spacing.xxs,
+                                    horizontal = Spacing.s,
+                                ),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
@@ -485,25 +484,25 @@ class ConfigureSwipeActionsScreen : Screen {
                     itemsIndexed(uiState.actionsOnSwipeToStartInbox) { idx, action ->
                         ConfigureActionItem(
                             icon =
-                                when (idx) {
-                                    1 -> Icons.Default.KeyboardDoubleArrowLeft
-                                    else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
-                                },
+                            when (idx) {
+                                1 -> Icons.Default.KeyboardDoubleArrowLeft
+                                else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
+                            },
                             iconContentDescription =
-                                when (idx) {
-                                    1 -> LocalStrings.current.swipeActionStartTwo
-                                    else -> LocalStrings.current.swipeActionStartOne
-                                },
+                            when (idx) {
+                                1 -> LocalStrings.current.swipeActionStartTwo
+                                else -> LocalStrings.current.swipeActionStartOne
+                            },
                             action = action,
                             options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            OptionId.Remove,
-                                            LocalStrings.current.commentActionDelete,
-                                        )
-                                },
-                            onOptionSelected = { optionId ->
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.Remove,
+                                        LocalStrings.current.commentActionDelete,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
                                 when (optionId) {
                                     OptionId.Remove -> {
                                         model.reduce(
@@ -533,12 +532,12 @@ class ConfigureSwipeActionsScreen : Screen {
                     item {
                         Row(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        vertical = Spacing.xxs,
-                                        horizontal = Spacing.s,
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    vertical = Spacing.xxs,
+                                    horizontal = Spacing.s,
+                                ),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
@@ -549,25 +548,25 @@ class ConfigureSwipeActionsScreen : Screen {
                     itemsIndexed(uiState.actionsOnSwipeToEndInbox) { idx, action ->
                         ConfigureActionItem(
                             icon =
-                                when (idx) {
-                                    1 -> Icons.Default.KeyboardDoubleArrowRight
-                                    else -> Icons.AutoMirrored.Default.KeyboardArrowRight
-                                },
+                            when (idx) {
+                                1 -> Icons.Default.KeyboardDoubleArrowRight
+                                else -> Icons.AutoMirrored.Default.KeyboardArrowRight
+                            },
                             iconContentDescription =
-                                when (idx) {
-                                    1 -> LocalStrings.current.swipeActionEndTwo
-                                    else -> LocalStrings.current.swipeActionEndOne
-                                },
+                            when (idx) {
+                                1 -> LocalStrings.current.swipeActionEndTwo
+                                else -> LocalStrings.current.swipeActionEndOne
+                            },
                             action = action,
                             options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            OptionId.Remove,
-                                            LocalStrings.current.commentActionDelete,
-                                        )
-                                },
-                            onOptionSelected = { optionId ->
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.Remove,
+                                        LocalStrings.current.commentActionDelete,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
                                 when (optionId) {
                                     OptionId.Remove -> {
                                         model.reduce(
@@ -612,23 +611,23 @@ class ConfigureSwipeActionsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.selectActionTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            label = value.toReadableName(),
-                            trailingContent = {
-                                val icon = value.toIcon()
-                                if (icon != null) {
-                                    Icon(
-                                        modifier = Modifier.size(IconSize.m).then(value.toModifier()),
-                                        imageVector = icon,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                }
-                            },
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        label = value.toReadableName(),
+                        trailingContent = {
+                            val icon = value.toIcon()
+                            if (icon != null) {
+                                Icon(
+                                    modifier = Modifier.size(IconSize.m).then(value.toModifier()),
+                                    imageVector = icon,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                )
+                            }
+                        },
+                    )
+                },
+                onSelect = { index ->
                     selectActionBottomSheet = null
                     if (index != null) {
                         val value = values[index]

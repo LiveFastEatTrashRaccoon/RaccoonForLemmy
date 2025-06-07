@@ -60,7 +60,7 @@ fun CommunityItem(
     showSubscribeButton: Boolean = false,
     options: List<Option> = emptyList(),
     highlightText: String? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
     onSubscribe: (() -> Unit)? = null,
 ) {
     val title = community.readableName(true)
@@ -75,23 +75,23 @@ fun CommunityItem(
 
     Row(
         modifier =
-            modifier.then(
-                if (noPadding) {
-                    Modifier
-                } else {
-                    Modifier.padding(Spacing.s)
-                },
-            ),
+        modifier.then(
+            if (noPadding) {
+                Modifier
+            } else {
+                Modifier.padding(Spacing.s)
+            },
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
         if (communityIcon.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier =
-                    Modifier
-                        .padding(Spacing.xxxs)
-                        .size(iconSize)
-                        .clip(RoundedCornerShape(iconSize / 2)),
+                Modifier
+                    .padding(Spacing.xxxs)
+                    .size(iconSize)
+                    .clip(RoundedCornerShape(iconSize / 2)),
                 url = communityIcon,
                 autoload = autoLoadImages,
                 contentScale = ContentScale.FillBounds,
@@ -107,11 +107,11 @@ fun CommunityItem(
         ) {
             Text(
                 text =
-                    buildAnnotatedStringWithHighlights(
-                        text = title,
-                        highlightText = highlightText,
-                        highlightColor = highlightColor,
-                    ),
+                buildAnnotatedStringWithHighlights(
+                    text = title,
+                    highlightText = highlightText,
+                    highlightColor = highlightColor,
+                ),
                 style = MaterialTheme.typography.bodyLarge,
                 color = fullColor,
                 maxLines = 1,
@@ -119,15 +119,15 @@ fun CommunityItem(
             )
             Text(
                 text =
-                    buildAnnotatedStringWithHighlights(
-                        text =
-                            buildString {
-                                append("!")
-                                append(communityHandle)
-                            },
-                        highlightText = highlightText,
-                        highlightColor = highlightColor,
-                    ),
+                buildAnnotatedStringWithHighlights(
+                    text =
+                    buildString {
+                        append("!")
+                        append(communityHandle)
+                    },
+                    highlightText = highlightText,
+                    highlightColor = highlightColor,
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = ancillaryColor,
             )
@@ -171,19 +171,19 @@ fun CommunityItem(
                 ) {
                     Icon(
                         imageVector =
-                            when (community.subscribed) {
-                                true -> {
-                                    Icons.Outlined.RemoveCircleOutline
-                                }
+                        when (community.subscribed) {
+                            true -> {
+                                Icons.Outlined.RemoveCircleOutline
+                            }
 
-                                false -> {
-                                    Icons.Outlined.AddCircleOutline
-                                }
+                            false -> {
+                                Icons.Outlined.AddCircleOutline
+                            }
 
-                                else -> {
-                                    Icons.Outlined.Pending
-                                }
-                            },
+                            else -> {
+                                Icons.Outlined.Pending
+                            }
+                        },
                         contentDescription = "",
                         tint = ancillaryColor,
                     )
@@ -195,12 +195,12 @@ fun CommunityItem(
             Box {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        },
                     onClick = {
                         optionsMenuOpen = true
                     },
@@ -218,10 +218,10 @@ fun CommunityItem(
                         optionsMenuOpen = false
                     },
                     offset =
-                        DpOffset(
-                            x = optionsOffset.x.toLocalDp(),
-                            y = optionsOffset.y.toLocalDp(),
-                        ),
+                    DpOffset(
+                        x = optionsOffset.x.toLocalDp(),
+                        y = optionsOffset.y.toLocalDp(),
+                    ),
                 ) {
                     options.forEach { option ->
                         DropdownMenuItem(
@@ -230,7 +230,7 @@ fun CommunityItem(
                             },
                             onClick = {
                                 optionsMenuOpen = false
-                                onOptionSelected?.invoke(option.id)
+                                onSelectOption?.invoke(option.id)
                             },
                         )
                     }

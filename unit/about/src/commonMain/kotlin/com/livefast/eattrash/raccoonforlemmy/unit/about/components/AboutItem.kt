@@ -23,25 +23,26 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
 internal fun AboutItem(
+    text: String,
+    modifier: Modifier = Modifier,
     painter: Painter? = null,
     vector: ImageVector? = null,
-    text: String,
     textDecoration: TextDecoration = TextDecoration.None,
     value: String = "",
     onClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier =
-            Modifier
-                .clip(RoundedCornerShape(CornerSize.xxl))
-                .onClick(
-                    onClick = {
-                        onClick?.invoke()
-                    },
-                ).padding(
-                    horizontal = Spacing.xs,
-                    vertical = Spacing.s,
-                ),
+        modifier
+            .clip(RoundedCornerShape(CornerSize.xxl))
+            .onClick(
+                onClick = {
+                    onClick?.invoke()
+                },
+            ).padding(
+                horizontal = Spacing.xs,
+                vertical = Spacing.s,
+            ),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
         verticalAlignment = Alignment.CenterVertically,
     ) {

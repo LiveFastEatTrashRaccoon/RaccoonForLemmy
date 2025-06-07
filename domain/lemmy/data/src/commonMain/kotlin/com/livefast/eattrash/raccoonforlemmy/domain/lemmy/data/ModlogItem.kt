@@ -1,8 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data
 
-sealed class ModlogItem(
-    val type: ModlogItemType,
-) {
+sealed class ModlogItem(val type: ModlogItemType) {
     abstract val id: Long
     abstract val date: String?
 
@@ -30,8 +28,7 @@ sealed class ModlogItem(
         val featured: Boolean = false,
         val moderator: UserModel? = null,
         val post: PostModel? = null,
-    ) :
-        ModlogItem(type = ModlogItemType.ModFeaturePost)
+    ) : ModlogItem(type = ModlogItemType.ModFeaturePost)
 
     data class ModRemoveComment(
         override val id: Long,
@@ -87,11 +84,8 @@ sealed class ModlogItem(
         val admin: UserModel? = null,
     ) : ModlogItem(type = ModlogItemType.AdminPurgePerson)
 
-    data class AdminPurgePost(
-        override val id: Long,
-        override val date: String? = null,
-        val admin: UserModel? = null,
-    ) : ModlogItem(type = ModlogItemType.AdminPurgePost)
+    data class AdminPurgePost(override val id: Long, override val date: String? = null, val admin: UserModel? = null) :
+        ModlogItem(type = ModlogItemType.AdminPurgePost)
 
     data class ModBan(
         override val id: Long,

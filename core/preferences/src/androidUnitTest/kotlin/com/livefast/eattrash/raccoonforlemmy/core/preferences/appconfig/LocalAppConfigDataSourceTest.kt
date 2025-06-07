@@ -21,28 +21,26 @@ class LocalAppConfigDataSourceTest {
         )
 
     @Test
-    fun whenGet_thenResultAndInteractionsAreAsExpected() =
-        runTest {
-            coEvery {
-                keyStore.get(any<String>(), any<Boolean>())
-            } returns true
+    fun whenGet_thenResultAndInteractionsAreAsExpected() = runTest {
+        coEvery {
+            keyStore.get(any<String>(), any<Boolean>())
+        } returns true
 
-            val res = sut.get()
+        val res = sut.get()
 
-            assertTrue(res.alternateMarkdownRenderingSettingsItemEnabled)
+        assertTrue(res.alternateMarkdownRenderingSettingsItemEnabled)
 
-            coVerify {
-                keyStore.get("AppConfig.alternateMarkdownRenderingSettingsItemEnabled", false)
-            }
+        coVerify {
+            keyStore.get("AppConfig.alternateMarkdownRenderingSettingsItemEnabled", false)
         }
+    }
 
     @Test
-    fun whenUpdate_thenInteractionsAreAsExpected() =
-        runTest {
-            sut.update(AppConfig(alternateMarkdownRenderingSettingsItemEnabled = true))
+    fun whenUpdate_thenInteractionsAreAsExpected() = runTest {
+        sut.update(AppConfig(alternateMarkdownRenderingSettingsItemEnabled = true))
 
-            coVerify {
-                keyStore.save("AppConfig.alternateMarkdownRenderingSettingsItemEnabled", true)
-            }
+        coVerify {
+            keyStore.save("AppConfig.alternateMarkdownRenderingSettingsItemEnabled", true)
         }
+    }
 }

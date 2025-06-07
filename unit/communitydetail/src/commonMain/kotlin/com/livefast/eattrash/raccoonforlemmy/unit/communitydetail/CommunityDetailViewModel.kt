@@ -75,8 +75,8 @@ class CommunityDetailViewModel(
     private val userTagRepository: UserTagRepository,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<CommunityDetailMviModel.Intent, CommunityDetailMviModel.UiState, CommunityDetailMviModel.Effect>(
-        initialState = CommunityDetailMviModel.UiState(),
-    ),
+    initialState = CommunityDetailMviModel.UiState(),
+),
     CommunityDetailMviModel {
     private var hideReadPosts = false
 
@@ -88,8 +88,8 @@ class CommunityDetailViewModel(
                     it.copy(
                         community = community,
                         instance =
-                            otherInstance.takeIf { n -> n.isNotEmpty() }
-                                ?: apiConfigurationRepository.instance.value,
+                        otherInstance.takeIf { n -> n.isNotEmpty() }
+                            ?: apiConfigurationRepository.instance.value,
                     )
                 }
             }
@@ -157,16 +157,16 @@ class CommunityDetailViewModel(
                     updateState {
                         it.copy(
                             posts =
-                                it.posts.map { p ->
-                                    if (p.id == postId) {
-                                        p.copy(
-                                            creator = newUser,
-                                            updateDate = newUser.updateDate,
-                                        )
-                                    } else {
-                                        p
-                                    }
-                                },
+                            it.posts.map { p ->
+                                if (p.id == postId) {
+                                    p.copy(
+                                        creator = newUser,
+                                        updateDate = newUser.updateDate,
+                                    )
+                                } else {
+                                    p
+                                }
+                            },
                         )
                     }
                 }.launchIn(this)
@@ -315,8 +315,8 @@ class CommunityDetailViewModel(
                     zombieModeHelper.start(
                         initialValue = intent.index,
                         interval = settingsRepository.currentSettings.value.zombieModeInterval,
-                )
-            }
+                    )
+                }
 
             is CommunityDetailMviModel.Intent.ModFeaturePost ->
                 uiState.value.posts
@@ -345,9 +345,9 @@ class CommunityDetailViewModel(
                 screenModelScope.launch {
                     updateState { it.copy(searching = intent.value) }
                     if (!intent.value) {
-                    updateSearchText("")
+                        updateSearchText("")
+                    }
                 }
-            }
 
             is CommunityDetailMviModel.Intent.SetSearch -> updateSearchText(intent.value)
             is CommunityDetailMviModel.Intent.WillOpenDetail ->
@@ -553,10 +553,7 @@ class CommunityDetailViewModel(
         setRead(post = post, read = true)
     }
 
-    private suspend fun setRead(
-        post: PostModel,
-        read: Boolean,
-    ) {
+    private suspend fun setRead(post: PostModel, read: Boolean) {
         val newPost = post.copy(read = read)
         try {
             val auth = identityRepository.authToken.value.orEmpty()
@@ -679,13 +676,13 @@ class CommunityDetailViewModel(
             updateState {
                 it.copy(
                     posts =
-                        it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
+                    it.posts.map { p ->
+                        if (p.id == post.id) {
+                            post
+                        } else {
+                            p
+                        }
+                    },
                 )
             }
         }

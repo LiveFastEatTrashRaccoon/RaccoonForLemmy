@@ -8,10 +8,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ProfileMainViewModel(
-    private val identityRepository: IdentityRepository,
-    private val logout: LogoutUseCase,
-) : DefaultMviModel<ProfileMainMviModel.Intent, ProfileMainMviModel.UiState, ProfileMainMviModel.Effect>(
+class ProfileMainViewModel(private val identityRepository: IdentityRepository, private val logout: LogoutUseCase) :
+    DefaultMviModel<ProfileMainMviModel.Intent, ProfileMainMviModel.UiState, ProfileMainMviModel.Effect>(
         initialState = ProfileMainMviModel.UiState(),
     ),
     ProfileMainMviModel {

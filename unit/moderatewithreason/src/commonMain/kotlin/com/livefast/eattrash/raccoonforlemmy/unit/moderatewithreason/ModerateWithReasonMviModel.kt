@@ -25,31 +25,29 @@ sealed interface ModerateWithReasonAction {
     data object ReportPost : ModerateWithReasonAction
 }
 
-fun ModerateWithReasonAction.toInt(): Int =
-    when (this) {
-        ModerateWithReasonAction.HideCommunity -> 0
-        ModerateWithReasonAction.PurgeComment -> 1
-        ModerateWithReasonAction.PurgeCommunity -> 2
-        ModerateWithReasonAction.PurgePost -> 3
-        ModerateWithReasonAction.PurgeUser -> 4
-        ModerateWithReasonAction.RemoveComment -> 5
-        ModerateWithReasonAction.RemovePost -> 6
-        ModerateWithReasonAction.ReportComment -> 7
-        ModerateWithReasonAction.ReportPost -> 8
-    }
+fun ModerateWithReasonAction.toInt(): Int = when (this) {
+    ModerateWithReasonAction.HideCommunity -> 0
+    ModerateWithReasonAction.PurgeComment -> 1
+    ModerateWithReasonAction.PurgeCommunity -> 2
+    ModerateWithReasonAction.PurgePost -> 3
+    ModerateWithReasonAction.PurgeUser -> 4
+    ModerateWithReasonAction.RemoveComment -> 5
+    ModerateWithReasonAction.RemovePost -> 6
+    ModerateWithReasonAction.ReportComment -> 7
+    ModerateWithReasonAction.ReportPost -> 8
+}
 
-internal fun Int.toModerateWithReasonAction(): ModerateWithReasonAction =
-    when (this) {
-        8 -> ModerateWithReasonAction.ReportPost
-        7 -> ModerateWithReasonAction.ReportComment
-        6 -> ModerateWithReasonAction.RemovePost
-        5 -> ModerateWithReasonAction.RemoveComment
-        4 -> ModerateWithReasonAction.PurgeUser
-        3 -> ModerateWithReasonAction.PurgePost
-        2 -> ModerateWithReasonAction.PurgeCommunity
-        1 -> ModerateWithReasonAction.PurgeComment
-        else -> ModerateWithReasonAction.HideCommunity
-    }
+internal fun Int.toModerateWithReasonAction(): ModerateWithReasonAction = when (this) {
+    8 -> ModerateWithReasonAction.ReportPost
+    7 -> ModerateWithReasonAction.ReportComment
+    6 -> ModerateWithReasonAction.RemovePost
+    5 -> ModerateWithReasonAction.RemoveComment
+    4 -> ModerateWithReasonAction.PurgeUser
+    3 -> ModerateWithReasonAction.PurgePost
+    2 -> ModerateWithReasonAction.PurgeCommunity
+    1 -> ModerateWithReasonAction.PurgeComment
+    else -> ModerateWithReasonAction.HideCommunity
+}
 
 @Stable
 interface ModerateWithReasonMviModel :

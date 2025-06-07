@@ -11,19 +11,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Duration
 
 sealed interface ComposeEvent {
-    data class WithUrl(
-        val url: String,
-    ) : ComposeEvent
+    data class WithUrl(val url: String) : ComposeEvent
 
-    data class WithText(
-        val text: String,
-    ) : ComposeEvent
+    data class WithText(val text: String) : ComposeEvent
 }
 
 sealed interface SideMenuEvents {
-    data class Open(
-        val screen: Screen,
-    ) : SideMenuEvents
+    data class Open(val screen: Screen) : SideMenuEvents
 
     data object Close : SideMenuEvents
 }
@@ -73,10 +67,7 @@ interface NavigationCoordinator {
 
     fun closeSideMenu()
 
-    fun showGlobalMessage(
-        message: String,
-        delay: Duration = Duration.ZERO,
-    )
+    fun showGlobalMessage(message: String, delay: Duration = Duration.ZERO)
 
     fun popUntilRoot()
 }

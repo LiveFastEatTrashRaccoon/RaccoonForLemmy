@@ -20,12 +20,7 @@ sealed interface CommentPaginationSpecification {
         val includeDeleted: Boolean = false,
     ) : CommentPaginationSpecification
 
-    data class Votes(
-        val liked: Boolean = true,
-        val sortType: SortType = SortType.New,
-    ) : CommentPaginationSpecification
+    data class Votes(val liked: Boolean = true, val sortType: SortType = SortType.New) : CommentPaginationSpecification
 
-    data class Saved(
-        val sortType: SortType = SortType.Active,
-    ) : CommentPaginationSpecification
+    data class Saved(val sortType: SortType = SortType.Active) : CommentPaginationSpecification
 }

@@ -4,6 +4,4 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetCommentResponse(
-    @SerialName("comment_view") val commentView: CommentView,
-)
+data class GetCommentResponse(@SerialName("comment_view") val commentView: CommentView)

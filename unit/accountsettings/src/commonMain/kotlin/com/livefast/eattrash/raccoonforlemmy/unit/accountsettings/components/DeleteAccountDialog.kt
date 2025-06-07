@@ -61,9 +61,9 @@ internal fun DeleteAccountDialog(
     ) {
         Column(
             modifier =
-                Modifier
-                    .background(color = MaterialTheme.colorScheme.surface)
-                    .padding(Spacing.s),
+            Modifier
+                .background(color = MaterialTheme.colorScheme.surface)
+                .padding(Spacing.s),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
@@ -82,7 +82,7 @@ internal fun DeleteAccountDialog(
             SettingsSwitchRow(
                 title = LocalStrings.current.deleteAccountRemoveContent,
                 value = deleteContent,
-                onValueChanged = {
+                onChangeValue = {
                     deleteContent = it
                 },
             )
@@ -91,11 +91,11 @@ internal fun DeleteAccountDialog(
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 colors =
-                    TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                    ),
+                TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                ),
                 isError = validationError != null,
                 singleLine = true,
                 label = {
@@ -115,10 +115,10 @@ internal fun DeleteAccountDialog(
                 textStyle = MaterialTheme.typography.bodyMedium,
                 value = textFieldValue,
                 keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        autoCorrectEnabled = true,
-                    ),
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    autoCorrectEnabled = true,
+                ),
                 onValueChange = { value ->
                     textFieldValue = value
                 },
@@ -136,11 +136,11 @@ internal fun DeleteAccountDialog(
                     ) {
                         Icon(
                             imageVector =
-                                if (transformation == VisualTransformation.None) {
-                                    Icons.Default.VisibilityOff
-                                } else {
-                                    Icons.Default.Visibility
-                                },
+                            if (transformation == VisualTransformation.None) {
+                                Icons.Default.VisibilityOff
+                            } else {
+                                Icons.Default.Visibility
+                            },
                             contentDescription = LocalStrings.current.actionToggleVisibility,
                         )
                     }

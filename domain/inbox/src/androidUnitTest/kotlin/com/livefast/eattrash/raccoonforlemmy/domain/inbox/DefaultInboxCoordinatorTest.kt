@@ -41,26 +41,24 @@ class DefaultInboxCoordinatorTest {
         )
 
     @Test
-    fun whenSetUnreadOnly_thenValueIsUpdated() =
-        runTest {
-            val resBefore = sut.unreadOnly.value
-            sut.setUnreadOnly(!resBefore)
+    fun whenSetUnreadOnly_thenValueIsUpdated() = runTest {
+        val resBefore = sut.unreadOnly.value
+        sut.setUnreadOnly(!resBefore)
 
-            val resAfter = sut.unreadOnly.value
-            assertNotEquals(resBefore, resAfter)
-        }
+        val resAfter = sut.unreadOnly.value
+        assertNotEquals(resBefore, resAfter)
+    }
 
     @Test
-    fun whenSendEvent_thenValueIsUpdated() =
-        runTest {
-            val evt = InboxCoordinator.Event.Refresh
-            launch {
-                sut.sendEvent(evt)
-            }
-
-            sut.events.test {
-                val item = awaitItem()
-                assertEquals(evt, item)
-            }
+    fun whenSendEvent_thenValueIsUpdated() = runTest {
+        val evt = InboxCoordinator.Event.Refresh
+        launch {
+            sut.sendEvent(evt)
         }
+
+        sut.events.test {
+            val item = awaitItem()
+            assertEquals(evt, item)
+        }
+    }
 }

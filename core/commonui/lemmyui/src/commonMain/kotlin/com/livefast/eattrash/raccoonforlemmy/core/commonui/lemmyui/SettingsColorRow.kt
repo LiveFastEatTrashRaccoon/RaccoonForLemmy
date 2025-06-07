@@ -39,13 +39,13 @@ fun SettingsColorRow(
 ) {
     Row(
         modifier =
-            modifier
-                .clip(RoundedCornerShape(CornerSize.xxl))
-                .onClick(
-                    onClick = {
-                        onTap?.invoke()
-                    },
-                ).padding(vertical = Spacing.s, horizontal = Spacing.m),
+        modifier
+            .clip(RoundedCornerShape(CornerSize.xxl))
+            .onClick(
+                onClick = {
+                    onTap?.invoke()
+                },
+            ).padding(vertical = Spacing.s, horizontal = Spacing.m),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
@@ -80,21 +80,21 @@ fun SettingsColorRow(
         }
         Box(
             modifier =
-                Modifier
-                    .padding(start = Spacing.xs)
-                    .size(36.dp)
-                    .background(color = value, shape = CircleShape)
-                    .then(
-                        if (value == Color.Transparent) {
-                            Modifier.border(
-                                color = MaterialTheme.colorScheme.onBackground,
-                                width = Dp.Hairline,
-                                shape = CircleShape,
-                            )
-                        } else {
-                            Modifier
-                        },
-                    ),
+            Modifier
+                .padding(start = Spacing.xs)
+                .size(36.dp)
+                .background(color = value, shape = CircleShape)
+                .then(
+                    if (value == Color.Transparent) {
+                        Modifier.border(
+                            color = MaterialTheme.colorScheme.onBackground,
+                            width = Dp.Hairline,
+                            shape = CircleShape,
+                        )
+                    } else {
+                        Modifier
+                    },
+                ),
         )
     }
 }

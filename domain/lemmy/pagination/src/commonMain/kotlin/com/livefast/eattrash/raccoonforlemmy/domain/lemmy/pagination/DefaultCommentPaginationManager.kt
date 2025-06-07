@@ -47,111 +47,110 @@ internal class DefaultCommentPaginationManager(
     }
 
     override suspend fun loadNextPage(): List<CommentModel> {
-            val specification = specification ?: return emptyList()
-            val auth = identityRepository.authToken.value.orEmpty()
+        val specification = specification ?: return emptyList()
+        val auth = identityRepository.authToken.value.orEmpty()
 
-            val result =
-                when (specification) {
-                    is CommentPaginationSpecification.Replies -> {
-                        val itemList =
-                            commentRepository.getAll(
-                                postId = specification.postId,
-                                auth = auth,
-                                instance = specification.otherInstance,
-                                page = currentPage,
-                                type = specification.listingType ?: ListingType.All,
-                                sort = specification.sortType,
-                            )
-                        if (!itemList.isNullOrEmpty()) {
-                            currentPage++
-                        }
-                        canFetchMore = itemList?.isEmpty() != true
-                        itemList
-                            .orEmpty()
-                            .deduplicate()
-                            .filterDeleted(includeCurrentCreator = specification.includeDeleted)
-                            .also {
-                                // deleted comments should not be counted
-                                canFetchMore = it.isNotEmpty()
-                            }.withUserTags()
+        val result =
+            when (specification) {
+                is CommentPaginationSpecification.Replies -> {
+                    val itemList =
+                        commentRepository.getAll(
+                            postId = specification.postId,
+                            auth = auth,
+                            instance = specification.otherInstance,
+                            page = currentPage,
+                            type = specification.listingType ?: ListingType.All,
+                            sort = specification.sortType,
+                        )
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
                     }
-
-                    is CommentPaginationSpecification.User -> {
-                        val itemList =
-                            userRepository.getComments(
-                                id = specification.id,
-                                auth = auth,
-                                page = currentPage,
-                                sort = specification.sortType,
-                                username = specification.name,
-                                otherInstance = specification.otherInstance,
-                            )
-                        if (!itemList.isNullOrEmpty()) {
-                            currentPage++
-                        }
-                        canFetchMore = itemList?.isEmpty() != true
-                        itemList
-                            .orEmpty()
-                            .deduplicate()
-                            .filterDeleted(includeCurrentCreator = specification.includeDeleted)
-                            .also {
-                                canFetchMore = it.isNotEmpty()
-                            }.withUserTags()
-                    }
-
-                    is CommentPaginationSpecification.Votes -> {
-                        val itemList =
-                            userRepository.getLikedComments(
-                                auth = auth,
-                                page = currentPage,
-                                sort = specification.sortType,
-                                liked = specification.liked,
-                            )
-                        if (!itemList.isNullOrEmpty()) {
-                            currentPage++
-                        }
-                        canFetchMore = itemList?.isEmpty() != true
-                        itemList
-                            .orEmpty()
-                            .deduplicate()
-                            .filterDeleted(includeCurrentCreator = true)
-                            .also {
-                                canFetchMore = it.isNotEmpty()
-                            }.withUserTags()
-                    }
-
-                    is CommentPaginationSpecification.Saved -> {
-                        val itemList =
-                            userRepository.getSavedComments(
-                                auth = auth,
-                                page = currentPage,
-                                sort = specification.sortType,
-                                id = identityRepository.cachedUser?.id ?: 0,
-                            )
-                        if (!itemList.isNullOrEmpty()) {
-                            currentPage++
-                        }
-                        canFetchMore = itemList?.isEmpty() != true
-                        itemList
-                            .orEmpty()
-                            .deduplicate()
-                            .filterDeleted()
-                            .also {
-                                canFetchMore = it.isNotEmpty()
-                            }.withUserTags()
-                    }
+                    canFetchMore = itemList?.isEmpty() != true
+                    itemList
+                        .orEmpty()
+                        .deduplicate()
+                        .filterDeleted(includeCurrentCreator = specification.includeDeleted)
+                        .also {
+                            // deleted comments should not be counted
+                            canFetchMore = it.isNotEmpty()
+                        }.withUserTags()
                 }
 
-            history.addAll(result)
-            // returns a copy of the whole history
-            return history.map { it }
-        }
+                is CommentPaginationSpecification.User -> {
+                    val itemList =
+                        userRepository.getComments(
+                            id = specification.id,
+                            auth = auth,
+                            page = currentPage,
+                            sort = specification.sortType,
+                            username = specification.name,
+                            otherInstance = specification.otherInstance,
+                        )
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
+                    }
+                    canFetchMore = itemList?.isEmpty() != true
+                    itemList
+                        .orEmpty()
+                        .deduplicate()
+                        .filterDeleted(includeCurrentCreator = specification.includeDeleted)
+                        .also {
+                            canFetchMore = it.isNotEmpty()
+                        }.withUserTags()
+                }
 
-    private fun List<CommentModel>.deduplicate(): List<CommentModel> =
-        filter { c1 ->
-            // prevents accidental duplication
-            history.none { c2 -> c2.id == c1.id }
-        }
+                is CommentPaginationSpecification.Votes -> {
+                    val itemList =
+                        userRepository.getLikedComments(
+                            auth = auth,
+                            page = currentPage,
+                            sort = specification.sortType,
+                            liked = specification.liked,
+                        )
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
+                    }
+                    canFetchMore = itemList?.isEmpty() != true
+                    itemList
+                        .orEmpty()
+                        .deduplicate()
+                        .filterDeleted(includeCurrentCreator = true)
+                        .also {
+                            canFetchMore = it.isNotEmpty()
+                        }.withUserTags()
+                }
+
+                is CommentPaginationSpecification.Saved -> {
+                    val itemList =
+                        userRepository.getSavedComments(
+                            auth = auth,
+                            page = currentPage,
+                            sort = specification.sortType,
+                            id = identityRepository.cachedUser?.id ?: 0,
+                        )
+                    if (!itemList.isNullOrEmpty()) {
+                        currentPage++
+                    }
+                    canFetchMore = itemList?.isEmpty() != true
+                    itemList
+                        .orEmpty()
+                        .deduplicate()
+                        .filterDeleted()
+                        .also {
+                            canFetchMore = it.isNotEmpty()
+                        }.withUserTags()
+                }
+            }
+
+        history.addAll(result)
+        // returns a copy of the whole history
+        return history.map { it }
+    }
+
+    private fun List<CommentModel>.deduplicate(): List<CommentModel> = filter { c1 ->
+        // prevents accidental duplication
+        history.none { c2 -> c2.id == c1.id }
+    }
 
     private fun List<CommentModel>.filterDeleted(includeCurrentCreator: Boolean = false): List<CommentModel> {
         val currentUserId = identityRepository.cachedUser?.id
@@ -160,14 +159,13 @@ internal class DefaultCommentPaginationManager(
         }
     }
 
-    private suspend fun List<CommentModel>.withUserTags(): List<CommentModel> =
-        map {
-            with(userTagHelper) {
-                it.copy(
-                    creator = it.creator.withTags(),
-                )
-            }
+    private suspend fun List<CommentModel>.withUserTags(): List<CommentModel> = map {
+        with(userTagHelper) {
+            it.copy(
+                creator = it.creator.withTags(),
+            )
         }
+    }
 
     private fun handleCommentUpdate(comment: CommentModel) {
         val index = history.indexOfFirst { it.id == comment.id }.takeIf { it >= 0 } ?: return

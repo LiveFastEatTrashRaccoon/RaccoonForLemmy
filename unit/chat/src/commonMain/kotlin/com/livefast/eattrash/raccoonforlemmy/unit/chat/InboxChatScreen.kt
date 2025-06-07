@@ -80,9 +80,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScr
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class InboxChatScreen(
-    private val otherUserId: Long,
-) : Screen {
+class InboxChatScreen(private val otherUserId: Long) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
@@ -140,10 +138,10 @@ class InboxChatScreen(
                             if (avatar.isNotEmpty()) {
                                 CustomImage(
                                     modifier =
-                                        Modifier
-                                            .padding(Spacing.xxxs)
-                                            .size(IconSize.s)
-                                            .clip(RoundedCornerShape(IconSize.s / 2)),
+                                    Modifier
+                                        .padding(Spacing.xxxs)
+                                        .size(IconSize.s)
+                                        .clip(RoundedCornerShape(IconSize.s / 2)),
                                     url = avatar,
                                     autoload = uiState.autoLoadImages,
                                     quality = FilterQuality.Low,
@@ -176,53 +174,53 @@ class InboxChatScreen(
             bottomBar = {
                 Column(
                     modifier =
-                        Modifier
-                            .navigationBarsPadding()
-                            .safeImePadding()
-                            .fillMaxWidth()
-                            .padding(bottom = Spacing.s)
-                            .background(MaterialTheme.colorScheme.background),
+                    Modifier
+                        .navigationBarsPadding()
+                        .safeImePadding()
+                        .fillMaxWidth()
+                        .padding(bottom = Spacing.s)
+                        .background(MaterialTheme.colorScheme.background),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     OutlinedTextField(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .focusRequester(focusRequester)
-                                .heightIn(
-                                    min = 80.dp,
-                                    max = 360.dp,
-                                ),
-                        colors =
-                            TextFieldDefaults.colors(
-                                focusedContainerColor = Color.Transparent,
-                                unfocusedContainerColor = Color.Transparent,
-                                disabledContainerColor = Color.Transparent,
+                        Modifier
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester)
+                            .heightIn(
+                                min = 80.dp,
+                                max = 360.dp,
                             ),
+                        colors =
+                        TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                        ),
                         label = {
                             Text(
                                 text =
-                                    buildString {
-                                        if (uiState.editedMessageId != null) {
-                                            append(LocalStrings.current.inboxChatMessage)
-                                            append(" (")
-                                            append(LocalStrings.current.postActionEdit)
-                                            append(")")
-                                        } else {
-                                            append(LocalStrings.current.actionChat)
-                                        }
-                                    },
+                                buildString {
+                                    if (uiState.editedMessageId != null) {
+                                        append(LocalStrings.current.inboxChatMessage)
+                                        append(" (")
+                                        append(LocalStrings.current.postActionEdit)
+                                        append(")")
+                                    } else {
+                                        append(LocalStrings.current.actionChat)
+                                    }
+                                },
                                 style = typography.bodyMedium,
                             )
                         },
                         textStyle = typography.bodyMedium,
                         value = textFieldValue,
                         keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                                autoCorrectEnabled = true,
-                                capitalization = KeyboardCapitalization.Sentences,
-                            ),
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            autoCorrectEnabled = true,
+                            capitalization = KeyboardCapitalization.Sentences,
+                        ),
                         onValueChange = { value ->
                             textFieldValue = value
                         },
@@ -230,13 +228,13 @@ class InboxChatScreen(
 
                     TextFormattingBar(
                         modifier =
-                            Modifier.padding(
-                                top = Spacing.xs,
-                                start = Spacing.s,
-                                end = Spacing.s,
-                            ),
+                        Modifier.padding(
+                            top = Spacing.xs,
+                            start = Spacing.s,
+                            end = Spacing.s,
+                        ),
                         textFieldValue = textFieldValue,
-                        onTextFieldValueChanged = {
+                        onChangeTextFieldValue = {
                             textFieldValue = it
                         },
                         onSelectImage = {
@@ -259,11 +257,11 @@ class InboxChatScreen(
             if (uiState.currentUserId != null) {
                 Box(
                     modifier =
-                        Modifier
-                            .padding(
-                                top = padding.calculateTopPadding(),
-                                bottom = padding.calculateBottomPadding(),
-                            ).consumeWindowInsets(padding),
+                    Modifier
+                        .padding(
+                            top = padding.calculateTopPadding(),
+                            bottom = padding.calculateBottomPadding(),
+                        ).consumeWindowInsets(padding),
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -300,26 +298,26 @@ class InboxChatScreen(
                                     )
                                 },
                                 options =
-                                    buildList {
+                                buildList {
+                                    this +=
+                                        Option(
+                                            OptionId.SeeRaw,
+                                            LocalStrings.current.postActionSeeRaw,
+                                        )
+                                    if (isMyMessage) {
                                         this +=
                                             Option(
-                                                OptionId.SeeRaw,
-                                                LocalStrings.current.postActionSeeRaw,
+                                                OptionId.Edit,
+                                                LocalStrings.current.postActionEdit,
                                             )
-                                        if (isMyMessage) {
-                                            this +=
-                                                Option(
-                                                    OptionId.Edit,
-                                                    LocalStrings.current.postActionEdit,
-                                                )
-                                            this +=
-                                                Option(
-                                                    OptionId.Delete,
-                                                    LocalStrings.current.commentActionDelete,
-                                                )
-                                        }
-                                    },
-                                onOptionSelected = { optionId ->
+                                        this +=
+                                            Option(
+                                                OptionId.Delete,
+                                                LocalStrings.current.commentActionDelete,
+                                            )
+                                    }
+                                },
+                                onSelectOption = { optionId ->
                                     when (optionId) {
                                         OptionId.Edit -> {
                                             model.reduce(

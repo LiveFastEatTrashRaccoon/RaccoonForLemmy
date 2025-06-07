@@ -33,92 +33,88 @@ class DefaultUserTagHelperTest {
         )
 
     @Test
-    fun giveNoActiveAccountAndCacheMiss_whenGet_thenResultIsAsExpected() =
-        runTest {
-            coEvery { accountRepository.getActive() } returns null
-            coEvery { cache.get(any()) } returns null
-            val user = UserModel(id = 1L, name = "user", host = "host")
+    fun giveNoActiveAccountAndCacheMiss_whenGet_thenResultIsAsExpected() = runTest {
+        coEvery { accountRepository.getActive() } returns null
+        coEvery { cache.get(any()) } returns null
+        val user = UserModel(id = 1L, name = "user", host = "host")
 
-            val res =
-                with(sut) {
-                    user.withTags()
-                }
-
-            assertEquals(user, res)
-            coVerify {
-                cache.get(user.readableHandle)
-                accountRepository.getActive()
-                userTagRepository wasNot Called
+        val res =
+            with(sut) {
+                user.withTags()
             }
+
+        assertEquals(user, res)
+        coVerify {
+            cache.get(user.readableHandle)
+            accountRepository.getActive()
+            userTagRepository wasNot Called
         }
+    }
 
     @Test
-    fun givenCacheMiss_whenGet_thenResultIsAsExpected() =
-        runTest {
-            val tagName = "test"
-            val accountId = 2L
-            coEvery { cache.get(any()) } returns null
-            coEvery {
-                userTagRepository.getTags(any(), any())
-            } returns listOf(UserTagModel(id = 1, name = tagName))
-            coEvery {
-                accountRepository.getActive()
-            } returns
-                AccountModel(
-                    id = accountId,
-                    username = "",
-                    instance = "",
-                    jwt = "",
-                    active = true,
-                )
-            val user = UserModel(id = 1L, name = "user", host = "host")
+    fun givenCacheMiss_whenGet_thenResultIsAsExpected() = runTest {
+        val tagName = "test"
+        val accountId = 2L
+        coEvery { cache.get(any()) } returns null
+        coEvery {
+            userTagRepository.getTags(any(), any())
+        } returns listOf(UserTagModel(id = 1, name = tagName))
+        coEvery {
+            accountRepository.getActive()
+        } returns
+            AccountModel(
+                id = accountId,
+                username = "",
+                instance = "",
+                jwt = "",
+                active = true,
+            )
+        val user = UserModel(id = 1L, name = "user", host = "host")
 
-            val res =
-                with(sut) {
-                    user.withTags()
-                }
-
-            assertNotNull(res)
-            assertEquals(1, res.tags.size)
-            assertEquals(UserTagModel(name = tagName, color = null), res.tags.first())
-
-            coVerify {
-                cache.get(user.readableHandle)
-                accountRepository.getActive()
-                userTagRepository.getTags(username = user.readableHandle, accountId = accountId)
+        val res =
+            with(sut) {
+                user.withTags()
             }
+
+        assertNotNull(res)
+        assertEquals(1, res.tags.size)
+        assertEquals(UserTagModel(name = tagName, color = null), res.tags.first())
+
+        coVerify {
+            cache.get(user.readableHandle)
+            accountRepository.getActive()
+            userTagRepository.getTags(username = user.readableHandle, accountId = accountId)
         }
+    }
 
     @Test
-    fun givenCacheHit_whenGet_thenResultIsAsExpected() =
-        runTest {
-            val tagName = "test"
-            coEvery { cache.get(any()) } returns listOf(UserTagModel(id = 1, name = tagName))
-            val user = UserModel(id = 1L, name = "user", host = "host")
+    fun givenCacheHit_whenGet_thenResultIsAsExpected() = runTest {
+        val tagName = "test"
+        coEvery { cache.get(any()) } returns listOf(UserTagModel(id = 1, name = tagName))
+        val user = UserModel(id = 1L, name = "user", host = "host")
 
-            val res =
-                with(sut) {
-                    user.withTags()
-                }
-
-            assertNotNull(res)
-            assertEquals(1, res.tags.size)
-            assertEquals(UserTagModel(name = tagName, color = null), res.tags.first())
-
-            coVerify {
-                cache.get(user.readableHandle)
-                accountRepository wasNot Called
-                userTagRepository wasNot Called
+        val res =
+            with(sut) {
+                user.withTags()
             }
+
+        assertNotNull(res)
+        assertEquals(1, res.tags.size)
+        assertEquals(UserTagModel(name = tagName, color = null), res.tags.first())
+
+        coVerify {
+            cache.get(user.readableHandle)
+            accountRepository wasNot Called
+            userTagRepository wasNot Called
         }
+    }
 
     @Test
-    fun whenClear_thenInteractionsAreAsExpected() =
-        runTest {
-            sut.clear()
+    fun whenClear_thenInteractionsAreAsExpected() = runTest {
+        sut.clear()
 
-            coVerify {
-                cache.clear()
-            }
+        coVerify {
+            cache.clear()
         }
+    }
 }

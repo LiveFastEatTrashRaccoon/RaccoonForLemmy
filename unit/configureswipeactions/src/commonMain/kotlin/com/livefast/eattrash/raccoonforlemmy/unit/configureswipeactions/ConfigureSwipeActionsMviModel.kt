@@ -5,34 +5,28 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeDirection
+import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Effect
+import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Intent as Intent
+import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.UiState as UiState
 
 @Stable
 interface ConfigureSwipeActionsMviModel :
-    MviModel<ConfigureSwipeActionsMviModel.Intent, ConfigureSwipeActionsMviModel.UiState, ConfigureSwipeActionsMviModel.Effect>,
+    MviModel<Intent, UiState, Effect>,
     ScreenModel {
     sealed interface Intent {
         data object ResetActionsPosts : Intent
 
-        data class DeleteActionPosts(
-            val value: ActionOnSwipe,
-            val direction: ActionOnSwipeDirection,
-        ) :
+        data class DeleteActionPosts(val value: ActionOnSwipe, val direction: ActionOnSwipeDirection) :
             Intent
 
         data object ResetActionsComments : Intent
 
-        data class DeleteActionComments(
-            val value: ActionOnSwipe,
-            val direction: ActionOnSwipeDirection,
-        ) :
+        data class DeleteActionComments(val value: ActionOnSwipe, val direction: ActionOnSwipeDirection) :
             Intent
 
         data object ResetActionsInbox : Intent
 
-        data class DeleteActionInbox(
-            val value: ActionOnSwipe,
-            val direction: ActionOnSwipeDirection,
-        ) :
+        data class DeleteActionInbox(val value: ActionOnSwipe, val direction: ActionOnSwipeDirection) :
             Intent
     }
 

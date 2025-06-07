@@ -25,12 +25,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 @Composable
 internal fun DrawerCommunityItem(
     title: String,
-    subtitle: String? = null,
     modifier: Modifier = Modifier,
+    subtitle: String? = null,
     url: String? = null,
     favorite: Boolean = false,
     autoLoadImages: Boolean = true,
-    onSelected: (() -> Unit)? = null,
+    onSelect: (() -> Unit)? = null,
     onToggleFavorite: (() -> Unit)? = null,
 ) {
     NavigationDrawerItem(
@@ -41,9 +41,9 @@ internal fun DrawerCommunityItem(
             if (!url.isNullOrEmpty() && autoLoadImages) {
                 CustomImage(
                     modifier =
-                        Modifier
-                            .size(iconSize)
-                            .clip(RoundedCornerShape(iconSize / 2)),
+                    Modifier
+                        .size(iconSize)
+                        .clip(RoundedCornerShape(iconSize / 2)),
                     url = url,
                     autoload = autoLoadImages,
                     contentScale = ContentScale.FillBounds,
@@ -77,31 +77,31 @@ internal fun DrawerCommunityItem(
             }
         },
         badge =
-            if (onToggleFavorite != null || favorite) {
-                @Composable {
-                    Icon(
-                        modifier =
-                            Modifier
-                                .size(IconSize.s)
-                                .padding(start = 1.dp)
-                                .onClick(onClick = { onToggleFavorite?.invoke() }),
-                        imageVector = if (favorite) Icons.Default.Star else Icons.Default.StarBorder,
-                        contentDescription = "",
-                        tint =
-                            MaterialTheme.colorScheme.onBackground.let {
-                                if (favorite) {
-                                    it
-                                } else {
-                                    it.copy(alpha = 0.25f)
-                                }
-                            },
-                    )
-                }
-            } else {
-                null
-            },
+        if (onToggleFavorite != null || favorite) {
+            @Composable {
+                Icon(
+                    modifier =
+                    Modifier
+                        .size(IconSize.s)
+                        .padding(start = 1.dp)
+                        .onClick(onClick = { onToggleFavorite?.invoke() }),
+                    imageVector = if (favorite) Icons.Default.Star else Icons.Default.StarBorder,
+                    contentDescription = "",
+                    tint =
+                    MaterialTheme.colorScheme.onBackground.let {
+                        if (favorite) {
+                            it
+                        } else {
+                            it.copy(alpha = 0.25f)
+                        }
+                    },
+                )
+            }
+        } else {
+            null
+        },
         onClick = {
-            onSelected?.invoke()
+            onSelect?.invoke()
         },
     )
 }

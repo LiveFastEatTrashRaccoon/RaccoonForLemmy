@@ -155,10 +155,10 @@ class SettingsScreen : Screen {
         ) { padding ->
             Box(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).nestedScroll(scrollBehavior.nestedScrollConnection),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).nestedScroll(scrollBehavior.nestedScrollConnection),
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
@@ -172,13 +172,13 @@ class SettingsScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.settingsLanguage,
                         annotatedValue =
-                            buildAnnotatedString {
-                                with(uiState.lang) {
-                                    append(toLanguageFlag())
-                                    append("  ")
-                                    append(toLanguageName())
-                                }
-                            },
+                        buildAnnotatedString {
+                            with(uiState.lang) {
+                                append(toLanguageFlag())
+                                append("  ")
+                                append(toLanguageName())
+                            }
+                        },
                         onTap = {
                             languageBottomSheetOpened = true
                         },
@@ -239,7 +239,7 @@ class SettingsScreen : Screen {
                         SettingsSwitchRow(
                             title = LocalStrings.current.settingsEnableSwipeActions,
                             value = uiState.enableSwipeActions,
-                            onValueChanged = { value ->
+                            onChangeValue = { value ->
                                 model.reduce(
                                     SettingsMviModel.Intent.ChangeEnableSwipeActions(value),
                                 )
@@ -344,14 +344,14 @@ class SettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsIncludeNsfw,
                         value = uiState.includeNsfw,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(SettingsMviModel.Intent.ChangeIncludeNsfw(value))
                         },
                     )
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsBlurNsfw,
                         value = uiState.blurNsfw,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(SettingsMviModel.Intent.ChangeBlurNsfw(value))
                         },
                     )
@@ -365,7 +365,7 @@ class SettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsEnableCrashReport,
                         value = uiState.crashReportEnabled,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(SettingsMviModel.Intent.ChangeCrashReportEnabled(value))
                         },
                     )
@@ -411,20 +411,20 @@ class SettingsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.inboxListingTypeTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            label = value.toReadableName(),
-                            trailingContent = {
-                                Icon(
-                                    modifier = Modifier.size(IconSize.m),
-                                    imageVector = value.toIcon(),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            },
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        label = value.toReadableName(),
+                        trailingContent = {
+                            Icon(
+                                modifier = Modifier.size(IconSize.m),
+                                imageVector = value.toIcon(),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        },
+                    )
+                },
+                onSelect = { index ->
                     defaultListingTypeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -450,10 +450,10 @@ class SettingsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsOpenUrlExternal,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(label = value.toReadableName())
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(label = value.toReadableName())
+                },
+                onSelect = { index ->
                     urlOpeningBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -472,19 +472,19 @@ class SettingsScreen : Screen {
                 sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
                 title = LocalStrings.current.settingsLanguage,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            label =
-                                buildString {
-                                    with(value) {
-                                        append(toLanguageFlag())
-                                        append("  ")
-                                        append(toLanguageName())
-                                    }
-                                },
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        label =
+                        buildString {
+                            with(value) {
+                                append(toLanguageFlag())
+                                append("  ")
+                                append(toLanguageName())
+                            }
+                        },
+                    )
+                },
+                onSelect = { index ->
                     languageBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -501,7 +501,7 @@ class SettingsScreen : Screen {
             SortBottomSheet(
                 values = uiState.availableSortTypesForPosts,
                 expandTop = true,
-                onSelected = { value ->
+                onSelect = { value ->
                     sortPostBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(
@@ -519,7 +519,7 @@ class SettingsScreen : Screen {
             SortBottomSheet(
                 values = uiState.availableSortTypesForComments,
                 expandTop = false,
-                onSelected = { value ->
+                onSelect = { value ->
                     sortCommentsBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(

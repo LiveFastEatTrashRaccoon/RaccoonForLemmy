@@ -21,23 +21,23 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.shimmerEffect
 
 @Composable
-fun CommunityItemPlaceholder() {
+fun CommunityItemPlaceholder(modifier: Modifier = Modifier) {
     Row(
         modifier =
-            Modifier.padding(
-                vertical = Spacing.xs,
-                horizontal = Spacing.s,
-            ),
+        modifier.padding(
+            vertical = Spacing.xs,
+            horizontal = Spacing.s,
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
         Box(
             modifier =
-                Modifier
-                    .padding(Spacing.xxxs)
-                    .size(IconSize.l)
-                    .clip(CircleShape)
-                    .shimmerEffect(),
+            Modifier
+                .padding(Spacing.xxxs)
+                .size(IconSize.l)
+                .clip(CircleShape)
+                .shimmerEffect(),
         )
         Column(
             modifier = Modifier.padding(start = Spacing.xs),
@@ -45,19 +45,19 @@ fun CommunityItemPlaceholder() {
         ) {
             Box(
                 modifier =
-                    Modifier
-                        .height(40.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(CornerSize.s))
-                        .shimmerEffect(),
+                Modifier
+                    .height(40.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(CornerSize.s))
+                    .shimmerEffect(),
             )
             Box(
                 modifier =
-                    Modifier
-                        .height(20.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(CornerSize.s))
-                        .shimmerEffect(),
+                Modifier
+                    .height(20.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(CornerSize.s))
+                    .shimmerEffect(),
             )
         }
     }

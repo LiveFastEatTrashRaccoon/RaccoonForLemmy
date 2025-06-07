@@ -39,14 +39,14 @@ internal fun RemoveCommunityItem(
         innerContent = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                            val name = item.community?.readableName(preferNicknames).orEmpty()
-                            append(name)
-                        }
-                        append(" ")
-                        append(LocalStrings.current.modlogItemPostRemoved)
-                    },
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        val name = item.community?.readableName(preferNicknames).orEmpty()
+                        append(name)
+                    }
+                    append(" ")
+                    append(LocalStrings.current.modlogItemPostRemoved)
+                },
                 style = MaterialTheme.typography.bodySmall,
             )
         },

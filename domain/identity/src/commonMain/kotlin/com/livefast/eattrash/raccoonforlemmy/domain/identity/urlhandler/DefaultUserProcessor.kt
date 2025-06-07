@@ -11,28 +11,27 @@ internal class DefaultUserProcessor(
     private val detailOpener: DetailOpener,
     private val urlDecoder: UrlDecoder,
 ) : UserProcessor {
-    override suspend fun process(url: String): Boolean =
-        withTimeoutOrNull(2500) {
-            val auth = identityRepository.authToken.value
-            val resolved =
-                userRepository.getResolved(
-                    query = url,
-                    auth = auth,
+    override suspend fun process(url: String): Boolean = withTimeoutOrNull(2500) {
+        val auth = identityRepository.authToken.value
+        val resolved =
+            userRepository.getResolved(
+                query = url,
+                auth = auth,
+            )
+        if (resolved != null) {
+            detailOpener.openUserDetail(resolved)
+            true
+        } else {
+            val user = urlDecoder.getUser(url)
+            if (user != null) {
+                detailOpener.openUserDetail(
+                    user = user,
+                    otherInstance = user.host,
                 )
-            if (resolved != null) {
-                detailOpener.openUserDetail(resolved)
                 true
             } else {
-                val user = urlDecoder.getUser(url)
-                if (user != null) {
-                    detailOpener.openUserDetail(
-                        user = user,
-                        otherInstance = user.host,
-                    )
-                    true
-                } else {
-                    false
-                }
+                false
             }
-        } ?: false
+        }
+    } ?: false
 }

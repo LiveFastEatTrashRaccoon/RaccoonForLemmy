@@ -16,7 +16,7 @@ val configureSwipeActionsModule =
                     accountRepository = instance(),
                     notificationCenter = instance(),
                     lemmyValueCache = instance(),
-            )
+                )
+            }
         }
     }
-}

@@ -44,6 +44,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 @Composable
 fun CustomColorPickerDialog(
     initialValue: Color,
+    modifier: Modifier = Modifier,
     allowManualSelection: Boolean = false,
     onClose: ((Color?) -> Unit)? = null,
 ) {
@@ -53,16 +54,16 @@ fun CustomColorPickerDialog(
     var manualInputDialogOpen by remember { mutableStateOf(false) }
 
     BasicAlertDialog(
-        modifier = Modifier.clip(RoundedCornerShape(CornerSize.xxl)),
+        modifier = modifier.clip(RoundedCornerShape(CornerSize.xxl)),
         onDismissRequest = {
             onClose?.invoke(null)
         },
     ) {
         Column(
             modifier =
-                Modifier
-                    .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp))
-                    .padding(Spacing.m),
+            Modifier
+                .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp))
+                .padding(Spacing.m),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
@@ -75,10 +76,10 @@ fun CustomColorPickerDialog(
 
             HsvColorPicker(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(250.dp)
-                        .padding(10.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .padding(10.dp),
                 controller = controller,
                 initialColor = initialValue,
                 onColorChanged = { colorEnvelope: ColorEnvelope ->
@@ -93,15 +94,15 @@ fun CustomColorPickerDialog(
             ) {
                 Box(
                     modifier =
-                        Modifier
-                            .border(
-                                color = selectedColor,
-                                width = 1.dp,
-                                shape = RoundedCornerShape(CornerSize.xxl),
-                            ).padding(
-                                horizontal = Spacing.m,
-                                vertical = Spacing.s,
-                            ),
+                    Modifier
+                        .border(
+                            color = selectedColor,
+                            width = 1.dp,
+                            shape = RoundedCornerShape(CornerSize.xxl),
+                        ).padding(
+                            horizontal = Spacing.m,
+                            vertical = Spacing.s,
+                        ),
                 ) {
                     SelectionContainer {
                         Text(

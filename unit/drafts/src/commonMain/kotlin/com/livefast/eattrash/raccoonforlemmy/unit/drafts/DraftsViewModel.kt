@@ -21,8 +21,8 @@ class DraftsViewModel(
     private val draftRepository: DraftRepository,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<DraftsMviModel.Intent, DraftsMviModel.State, DraftsMviModel.Effect>(
-        initialState = DraftsMviModel.State(),
-    ),
+    initialState = DraftsMviModel.State(),
+),
     DraftsMviModel {
     init {
         screenModelScope.launch {

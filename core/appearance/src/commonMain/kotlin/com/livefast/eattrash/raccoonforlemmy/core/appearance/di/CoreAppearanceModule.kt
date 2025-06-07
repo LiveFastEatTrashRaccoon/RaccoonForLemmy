@@ -20,6 +20,6 @@ val appearanceModule =
         bind<AppColorRepository> {
             singleton {
                 DefaultAppColorRepository()
+            }
         }
     }
-}

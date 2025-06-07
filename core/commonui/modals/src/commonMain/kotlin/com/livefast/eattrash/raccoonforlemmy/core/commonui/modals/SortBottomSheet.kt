@@ -54,17 +54,19 @@ internal sealed interface SortBottomSheetLevel {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SortBottomSheet(
+    values: List<SortType>,
+    modifier: Modifier = Modifier,
     sheetScope: CoroutineScope = rememberCoroutineScope(),
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-    values: List<SortType>,
+    onSelect: ((SortType?) -> Unit)? = null,
     expandTop: Boolean = false,
-    onSelected: ((SortType?) -> Unit)? = null,
 ) {
     ModalBottomSheet(
+        modifier = modifier,
         contentWindowInsets = { WindowInsets.navigationBars },
         sheetState = sheetState,
         onDismissRequest = {
-            onSelected?.invoke(null)
+            onSelect?.invoke(null)
         },
     ) {
         Column(
@@ -81,7 +83,7 @@ fun SortBottomSheet(
                             sheetState = sheetState,
                             values = values,
                             expandTop = expandTop,
-                            onSelected = onSelected,
+                            onSelect = onSelect,
                             onNavigateDown = {
                                 level = SortBottomSheetLevel.Top
                             },
@@ -92,7 +94,7 @@ fun SortBottomSheet(
                         SortBottomSheetTop(
                             sheetScope = sheetScope,
                             sheetState = sheetState,
-                            onSelected = onSelected,
+                            onSelect = onSelect,
                             onNavigateUp = {
                                 level = SortBottomSheetLevel.Main
                             },
@@ -107,14 +109,17 @@ fun SortBottomSheet(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SortBottomSheetMain(
+    values: List<SortType>,
+    onNavigateDown: () -> Unit,
+    modifier: Modifier = Modifier,
     sheetScope: CoroutineScope = rememberCoroutineScope(),
     sheetState: SheetState = rememberModalBottomSheetState(),
-    values: List<SortType>,
+    onSelect: ((SortType?) -> Unit)? = null,
     expandTop: Boolean = false,
-    onNavigateDown: () -> Unit,
-    onSelected: ((SortType?) -> Unit)? = null,
 ) {
-    Column {
+    Column(
+        modifier = modifier,
+    ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
@@ -128,7 +133,7 @@ private fun SortBottomSheetMain(
                 SortBottomSheetValueRow(
                     value = value,
                     expandTop = expandTop,
-                    onSelected = {
+                    onSelect = {
                         if (value == SortType.Top.Generic && expandTop) {
                             onNavigateDown()
                         } else {
@@ -136,7 +141,7 @@ private fun SortBottomSheetMain(
                                 .launch {
                                     sheetState.hide()
                                 }.invokeOnCompletion {
-                                    onSelected?.invoke(value)
+                                    onSelect?.invoke(value)
                                 }
                         }
                     },
@@ -149,8 +154,11 @@ private fun SortBottomSheetMain(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SortBottomSheetTop(
+    onNavigateUp: () -> Unit,
+    modifier: Modifier = Modifier,
     sheetScope: CoroutineScope = rememberCoroutineScope(),
     sheetState: SheetState = rememberModalBottomSheetState(),
+    onSelect: ((SortType?) -> Unit)? = null,
     values: List<SortType> =
         listOf(
             SortType.Top.PastHour,
@@ -162,10 +170,10 @@ private fun SortBottomSheetTop(
             SortType.Top.Year,
             SortType.Top.All,
         ),
-    onNavigateUp: () -> Unit,
-    onSelected: ((SortType?) -> Unit)? = null,
 ) {
-    Column {
+    Column(
+        modifier = modifier,
+    ) {
         Box(
             contentAlignment = Alignment.Center,
         ) {
@@ -197,12 +205,12 @@ private fun SortBottomSheetTop(
             items(values) { value ->
                 SortBottomSheetValueRow(
                     value = value,
-                    onSelected = {
+                    onSelect = {
                         sheetScope
                             .launch {
                                 sheetState.hide()
                             }.invokeOnCompletion {
-                                onSelected?.invoke(value)
+                                onSelect?.invoke(value)
                             }
                     },
                 )
@@ -214,19 +222,20 @@ private fun SortBottomSheetTop(
 @Composable
 private fun SortBottomSheetValueRow(
     value: SortType,
+    onSelect: (() -> Unit)?,
+    modifier: Modifier = Modifier,
     expandTop: Boolean = false,
-    onSelected: (() -> Unit)?,
 ) {
     Row(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(CornerSize.xl))
-                .clickable { onSelected?.invoke() }
-                .padding(
-                    horizontal = Spacing.m,
-                    vertical = Spacing.s,
-                ),
+        modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(CornerSize.xl))
+            .clickable { onSelect?.invoke() }
+            .padding(
+                horizontal = Spacing.m,
+                vertical = Spacing.s,
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
     ) {
@@ -245,11 +254,11 @@ private fun SortBottomSheetValueRow(
         )
         Icon(
             imageVector =
-                if (value == SortType.Top.Generic && expandTop) {
-                    Icons.Default.ChevronRight
-                } else {
-                    value.toIcon()
-                },
+            if (value == SortType.Top.Generic && expandTop) {
+                Icons.Default.ChevronRight
+            } else {
+                value.toIcon()
+            },
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onBackground,
         )

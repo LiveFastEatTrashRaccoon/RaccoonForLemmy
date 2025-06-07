@@ -22,8 +22,8 @@ class InstanceInfoViewModel(
     private val getSortTypesUseCase: GetSortTypesUseCase,
     private val communityPaginationManager: CommunityPaginationManager,
 ) : DefaultMviModel<InstanceInfoMviModel.Intent, InstanceInfoMviModel.UiState, InstanceInfoMviModel.Effect>(
-        initialState = InstanceInfoMviModel.UiState(),
-    ),
+    initialState = InstanceInfoMviModel.UiState(),
+),
     InstanceInfoMviModel {
     init {
         screenModelScope.launch {

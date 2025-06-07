@@ -18,9 +18,8 @@ interface FabNestedScrollConnection : NestedScrollConnection {
     val isFabVisible: StateFlow<Boolean>
 }
 
-internal class DefaultFabNestedScrollConnection(
-    private val scope: CoroutineScope = CoroutineScope(SupervisorJob()),
-) : FabNestedScrollConnection {
+internal class DefaultFabNestedScrollConnection(private val scope: CoroutineScope = CoroutineScope(SupervisorJob())) :
+    FabNestedScrollConnection {
     private val fabVisible = MutableStateFlow(true)
 
     override val isFabVisible: StateFlow<Boolean>
@@ -32,10 +31,7 @@ internal class DefaultFabNestedScrollConnection(
                     initialValue = true,
                 )
 
-    override fun onPreScroll(
-        available: Offset,
-        source: NestedScrollSource,
-    ): Offset {
+    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
         if (available.y < -THRESHOLD) {
             fabVisible.value = false
         }

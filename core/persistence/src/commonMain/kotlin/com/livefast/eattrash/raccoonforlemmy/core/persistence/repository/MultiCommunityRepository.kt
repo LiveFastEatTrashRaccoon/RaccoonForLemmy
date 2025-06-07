@@ -7,10 +7,7 @@ interface MultiCommunityRepository {
 
     suspend fun getAll(accountId: Long): List<MultiCommunityModel>
 
-    suspend fun create(
-        model: MultiCommunityModel,
-        accountId: Long,
-    ): Long
+    suspend fun create(model: MultiCommunityModel, accountId: Long): Long
 
     suspend fun update(model: MultiCommunityModel)
 

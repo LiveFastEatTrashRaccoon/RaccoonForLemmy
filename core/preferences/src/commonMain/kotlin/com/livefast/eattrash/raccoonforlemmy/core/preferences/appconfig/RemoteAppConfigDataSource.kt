@@ -9,9 +9,8 @@ import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-internal class RemoteAppConfigDataSource(
-    factory: HttpClientEngineFactory<*> = provideHttpClientEngineFactory(),
-) : AppConfigDataSource {
+internal class RemoteAppConfigDataSource(factory: HttpClientEngineFactory<*> = provideHttpClientEngineFactory()) :
+    AppConfigDataSource {
     private val client: HttpClient =
         HttpClient(factory) {
             install(HttpTimeout) {
@@ -21,18 +20,17 @@ internal class RemoteAppConfigDataSource(
             }
         }
 
-    override suspend fun get(): AppConfig =
-        runCatching {
-            client.request(JSON_URL).run {
-                val text = bodyAsText()
-                val dto = Json.decodeFromString<AppConfigDto>(text)
-                dto.toModel()
-            }
-        }.also {
-            it.exceptionOrNull()?.also { e ->
-                e.printStackTrace()
-            }
-        }.getOrDefault(AppConfig())
+    override suspend fun get(): AppConfig = runCatching {
+        client.request(JSON_URL).run {
+            val text = bodyAsText()
+            val dto = Json.decodeFromString<AppConfigDto>(text)
+            dto.toModel()
+        }
+    }.also {
+        it.exceptionOrNull()?.also { e ->
+            e.printStackTrace()
+        }
+    }.getOrDefault(AppConfig())
 
     override suspend fun update(value: AppConfig): Unit =
         throw UnsupportedOperationException("Remote config can not be updated from the app!")
@@ -44,11 +42,8 @@ internal class RemoteAppConfigDataSource(
 }
 
 @Serializable
-private data class AppConfigDto(
-    val alternateMarkdownRenderingSettingsItemEnabled: Boolean = false,
-)
+private data class AppConfigDto(val alternateMarkdownRenderingSettingsItemEnabled: Boolean = false)
 
-private fun AppConfigDto.toModel() =
-    AppConfig(
-        alternateMarkdownRenderingSettingsItemEnabled = alternateMarkdownRenderingSettingsItemEnabled,
-    )
+private fun AppConfigDto.toModel() = AppConfig(
+    alternateMarkdownRenderingSettingsItemEnabled = alternateMarkdownRenderingSettingsItemEnabled,
+)

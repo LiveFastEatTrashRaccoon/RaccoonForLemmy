@@ -35,6 +35,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 @Composable
 fun EditTextualInfoDialog(
     title: String,
+    modifier: Modifier = Modifier,
     label: String = "",
     isError: Boolean = false,
     singleLine: Boolean = false,
@@ -49,15 +50,16 @@ fun EditTextualInfoDialog(
     val typography = contentFontFamily.toTypography()
 
     BasicAlertDialog(
+        modifier = modifier,
         onDismissRequest = {
             onClose?.invoke(null)
         },
     ) {
         Column(
             modifier =
-                Modifier
-                    .background(color = MaterialTheme.colorScheme.surface)
-                    .padding(Spacing.s),
+            Modifier
+                .background(color = MaterialTheme.colorScheme.surface)
+                .padding(Spacing.s),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
@@ -71,11 +73,11 @@ fun EditTextualInfoDialog(
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 colors =
-                    TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                    ),
+                TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                ),
                 isError = isError,
                 singleLine = singleLine,
                 label = {
@@ -87,10 +89,10 @@ fun EditTextualInfoDialog(
                 textStyle = typography.bodyMedium,
                 value = textFieldValue,
                 keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        autoCorrectEnabled = true,
-                    ),
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    autoCorrectEnabled = true,
+                ),
                 onValueChange = { value ->
                     textFieldValue = value
                 },

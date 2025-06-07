@@ -91,12 +91,12 @@ class CreateCommentScreen(
         val model: CreateCommentMviModel =
             rememberScreenModel(
                 arg =
-                    CreateCommentMviModelParams(
-                        postId = originalPostId ?: 0L,
-                        parentId = originalCommentId ?: 0L,
-                        editedCommentId = editedCommentId ?: 0L,
-                        draftId = draftId ?: 0L,
-                    ),
+                CreateCommentMviModelParams(
+                    postId = originalPostId ?: 0L,
+                    parentId = originalCommentId ?: 0L,
+                    editedCommentId = editedCommentId ?: 0L,
+                    draftId = draftId ?: 0L,
+                ),
             )
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
@@ -133,16 +133,16 @@ class CreateCommentScreen(
                             uiState.originalPost?.also { originalPost ->
                                 notificationCenter.send(
                                     event =
-                                        NotificationCenterEvent.PostUpdated(
-                                            originalPost.copy(
-                                                comments =
-                                                    if (effect.new) {
-                                                        originalPost.comments + 1
-                                                    } else {
-                                                        originalPost.comments
-                                                    },
-                                            ),
+                                    NotificationCenterEvent.PostUpdated(
+                                        originalPost.copy(
+                                            comments =
+                                            if (effect.new) {
+                                                originalPost.comments + 1
+                                            } else {
+                                                originalPost.comments
+                                            },
                                         ),
+                                    ),
                                 )
                             }
                             navigationCoordinator.popScreen()
@@ -161,9 +161,9 @@ class CreateCommentScreen(
         Scaffold(
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             modifier =
-                Modifier
-                    .navigationBarsPadding()
-                    .safeImePadding(),
+            Modifier
+                .navigationBarsPadding()
+                .safeImePadding(),
             topBar = {
                 TopAppBar(
                     windowInsets = topAppBarState.toWindowInsets(),
@@ -183,15 +183,15 @@ class CreateCommentScreen(
                     title = {
                         Text(
                             text =
-                                when {
-                                    uiState.editedComment != null -> {
-                                        LocalStrings.current.editCommentTitle
-                                    }
+                            when {
+                                uiState.editedComment != null -> {
+                                    LocalStrings.current.editCommentTitle
+                                }
 
-                                    else -> {
-                                        LocalStrings.current.createCommentTitle
-                                    }
-                                },
+                                else -> {
+                                    LocalStrings.current.createCommentTitle
+                                }
+                            },
                             color = MaterialTheme.colorScheme.onBackground,
                             style = MaterialTheme.typography.titleMedium,
                         )
@@ -227,31 +227,31 @@ class CreateCommentScreen(
                 // bottom part with user name and toolbar
                 Column(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(bottom = Spacing.xs),
+                    Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(bottom = Spacing.xs),
                 ) {
                     if (uiState.currentUser.isNotEmpty()) {
                         Text(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        start = Spacing.m,
-                                        end = Spacing.m,
-                                        bottom = Spacing.s,
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = Spacing.m,
+                                    end = Spacing.m,
+                                    bottom = Spacing.s,
+                                ),
                             text =
-                                buildString {
-                                    append(LocalStrings.current.postReplySourceAccount)
-                                    append(" ")
-                                    append(uiState.currentUser)
-                                    if (uiState.currentInstance.isNotEmpty()) {
-                                        append("@")
-                                        append(uiState.currentInstance)
-                                    }
-                                },
+                            buildString {
+                                append(LocalStrings.current.postReplySourceAccount)
+                                append(" ")
+                                append(uiState.currentUser)
+                                if (uiState.currentInstance.isNotEmpty()) {
+                                    append("@")
+                                    append(uiState.currentInstance)
+                                }
+                            },
                             color = MaterialTheme.colorScheme.onBackground,
                             style = MaterialTheme.typography.labelSmall,
                             textDecoration = TextDecoration.Underline,
@@ -261,14 +261,14 @@ class CreateCommentScreen(
 
                     TextFormattingBar(
                         modifier =
-                            Modifier
-                                .padding(
-                                    top = Spacing.s,
-                                    start = Spacing.s,
-                                    end = Spacing.s,
-                                ),
+                        Modifier
+                            .padding(
+                                top = Spacing.s,
+                                start = Spacing.s,
+                                end = Spacing.s,
+                            ),
                         textFieldValue = uiState.textValue,
-                        onTextFieldValueChanged = { value ->
+                        onChangeTextFieldValue = { value ->
                             model.reduce(CreateCommentMviModel.Intent.ChangeTextValue(value))
                         },
                         onSelectImage = {
@@ -285,19 +285,19 @@ class CreateCommentScreen(
         ) { padding ->
             Box(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                            bottom = padding.calculateBottomPadding(),
-                        ).consumeWindowInsets(padding),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                        bottom = padding.calculateBottomPadding(),
+                    ).consumeWindowInsets(padding),
             ) {
                 // reference post or comment
                 Box(
                     modifier =
-                        Modifier
-                            .align(Alignment.TopCenter)
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState()),
+                    Modifier
+                        .align(Alignment.TopCenter)
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
                 ) {
                     val referenceModifier =
                         Modifier.padding(
@@ -321,15 +321,15 @@ class CreateCommentScreen(
                                     showScores = uiState.showScores,
                                     downVoteEnabled = uiState.downVoteEnabled,
                                     options =
-                                        buildList {
-                                            add(
-                                                Option(
-                                                    OptionId.SeeRaw,
-                                                    LocalStrings.current.postActionSeeRaw,
-                                                ),
-                                            )
-                                        },
-                                    onOptionSelected = {
+                                    buildList {
+                                        add(
+                                            Option(
+                                                OptionId.SeeRaw,
+                                                LocalStrings.current.postActionSeeRaw,
+                                            ),
+                                        )
+                                    },
+                                    onSelectOption = {
                                         rawContent = originalComment
                                     },
                                 )
@@ -341,11 +341,11 @@ class CreateCommentScreen(
                             PostCard(
                                 modifier = referenceModifier,
                                 postLayout =
-                                    if (uiState.postLayout == PostLayout.Card) {
-                                        uiState.postLayout
-                                    } else {
-                                        PostLayout.Full
-                                    },
+                                if (uiState.postLayout == PostLayout.Card) {
+                                    uiState.postLayout
+                                } else {
+                                    PostLayout.Full
+                                },
                                 fullHeightImage = uiState.fullHeightImages,
                                 fullWidthImage = uiState.fullWidthImages,
                                 post = originalPost,
@@ -357,15 +357,15 @@ class CreateCommentScreen(
                                 showScores = uiState.showScores,
                                 downVoteEnabled = uiState.downVoteEnabled,
                                 options =
-                                    buildList {
-                                        add(
-                                            Option(
-                                                OptionId.SeeRaw,
-                                                LocalStrings.current.postActionSeeRaw,
-                                            ),
-                                        )
-                                    },
-                                onOptionSelected = {
+                                buildList {
+                                    add(
+                                        Option(
+                                            OptionId.SeeRaw,
+                                            LocalStrings.current.postActionSeeRaw,
+                                        ),
+                                    )
+                                },
+                                onSelectOption = {
                                     rawContent = originalPost
                                 },
                             )
@@ -376,22 +376,22 @@ class CreateCommentScreen(
                 // form fields
                 Column(
                     modifier =
-                        Modifier
-                            .align(Alignment.BottomCenter)
-                            .background(MaterialTheme.colorScheme.background),
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .background(MaterialTheme.colorScheme.background),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     SectionSelector(
                         titles =
-                            listOf(
-                                LocalStrings.current.createPostTabEditor,
-                                LocalStrings.current.createPostTabPreview,
-                            ),
+                        listOf(
+                            LocalStrings.current.createPostTabEditor,
+                            LocalStrings.current.createPostTabPreview,
+                        ),
                         currentSection =
-                            when (uiState.section) {
-                                CreatePostSection.Preview -> 1
-                                else -> 0
-                            },
+                        when (uiState.section) {
+                            CreatePostSection.Preview -> 1
+                            else -> 0
+                        },
                         onSectionSelected = { id ->
                             val section =
                                 when (id) {
@@ -405,15 +405,15 @@ class CreateCommentScreen(
                     if (uiState.section == CreatePostSection.Edit) {
                         TextField(
                             modifier =
-                                Modifier
-                                    .height(400.dp)
-                                    .fillMaxWidth(),
+                            Modifier
+                                .height(400.dp)
+                                .fillMaxWidth(),
                             colors =
-                                TextFieldDefaults.colors(
-                                    focusedContainerColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    disabledContainerColor = Color.Transparent,
-                                ),
+                            TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                disabledContainerColor = Color.Transparent,
+                            ),
                             label = {
                                 Text(
                                     text = LocalStrings.current.createCommentBody,
@@ -423,11 +423,11 @@ class CreateCommentScreen(
                             textStyle = typography.bodyMedium,
                             value = uiState.textValue,
                             keyboardOptions =
-                                KeyboardOptions(
-                                    keyboardType = KeyboardType.Text,
-                                    autoCorrectEnabled = true,
-                                    capitalization = KeyboardCapitalization.Sentences,
-                                ),
+                            KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                autoCorrectEnabled = true,
+                                capitalization = KeyboardCapitalization.Sentences,
+                            ),
                             onValueChange = { value ->
                                 model.reduce(CreateCommentMviModel.Intent.ChangeTextValue(value))
                             },
@@ -445,11 +445,11 @@ class CreateCommentScreen(
                     } else {
                         Box(
                             modifier =
-                                Modifier
-                                    .height(400.dp)
-                                    .fillMaxWidth()
-                                    .padding(Spacing.s)
-                                    .verticalScroll(rememberScrollState()),
+                            Modifier
+                                .height(400.dp)
+                                .fillMaxWidth()
+                                .padding(Spacing.s)
+                                .verticalScroll(rememberScrollState()),
                         ) {
                             PostCardBody(
                                 text = uiState.textValue.text,

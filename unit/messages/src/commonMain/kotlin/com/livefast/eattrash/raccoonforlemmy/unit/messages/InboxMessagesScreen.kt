@@ -112,7 +112,7 @@ class InboxMessagesScreen : Tab {
                     key = {
                         it.id.toString() + (
                             it.updateDate ?: it.publishDate
-                        ) + it.read + uiState.unreadOnly
+                            ) + it.read + uiState.unreadOnly
                     },
                 ) { chat ->
                     ChatCard(

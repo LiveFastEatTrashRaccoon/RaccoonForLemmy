@@ -23,13 +23,13 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.imageUrl
 @Composable
 internal fun PostReportCard(
     report: PostReportModel,
-    postLayout: PostLayout = PostLayout.Card,
     modifier: Modifier = Modifier,
+    postLayout: PostLayout = PostLayout.Card,
     autoLoadImages: Boolean = true,
     preferNicknames: Boolean = true,
     onOpen: (() -> Unit)? = null,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -42,7 +42,7 @@ internal fun PostReportCard(
         autoLoadImages = autoLoadImages,
         preferNicknames = preferNicknames,
         options = options,
-        onOptionSelected = onOptionSelected,
+        onSelectOption = onSelectOption,
         onOpen = onOpen,
         originalContent = {
             Column(
@@ -51,10 +51,10 @@ internal fun PostReportCard(
                 report.originalTitle?.also { title ->
                     PostCardTitle(
                         modifier =
-                            Modifier.padding(
-                                vertical = Spacing.xs,
-                                horizontal = Spacing.xs,
-                            ),
+                        Modifier.padding(
+                            vertical = Spacing.xs,
+                            horizontal = Spacing.xs,
+                        ),
                         text = title,
                         autoLoadImages = autoLoadImages,
                     )
@@ -62,9 +62,9 @@ internal fun PostReportCard(
                 report.imageUrl.takeIf { it.isNotEmpty() }?.also { imageUrl ->
                     PostCardImage(
                         modifier =
-                            Modifier
-                                .padding(vertical = Spacing.xs)
-                                .clip(RoundedCornerShape(CornerSize.xl)),
+                        Modifier
+                            .padding(vertical = Spacing.xs)
+                            .clip(RoundedCornerShape(CornerSize.xl)),
                         imageUrl = imageUrl,
                         autoLoadImages = autoLoadImages,
                     )
@@ -72,10 +72,10 @@ internal fun PostReportCard(
                 report.originalText?.also { text ->
                     PostCardBody(
                         modifier =
-                            Modifier.padding(
-                                vertical = Spacing.xs,
-                                horizontal = Spacing.xs,
-                            ),
+                        Modifier.padding(
+                            vertical = Spacing.xs,
+                            horizontal = Spacing.xs,
+                        ),
                         text = text,
                         autoLoadImages = autoLoadImages,
                     )

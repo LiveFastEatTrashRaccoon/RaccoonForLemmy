@@ -26,12 +26,11 @@ data class UserModel(
 
 fun List<UserModel>.containsId(value: Long?): Boolean = any { it.id == value }
 
-fun UserModel.readableName(preferNickname: Boolean): String =
-    if (preferNickname) {
-        displayName.takeIf { it.isNotEmpty() } ?: readableHandle
-    } else {
-        readableHandle
-    }
+fun UserModel.readableName(preferNickname: Boolean): String = if (preferNickname) {
+    displayName.takeIf { it.isNotEmpty() } ?: readableHandle
+} else {
+    readableHandle
+}
 
 val UserModel.readableHandle: String
     get() =
@@ -54,60 +53,59 @@ fun UserModel.populateSpecialTags(
     meColor: Int? = null,
     opColor: Int? = null,
     modColor: Int? = null,
-): UserModel =
-    this.let { user ->
-        user.copy(
-            tags =
-                buildList {
-                    // first add all special tags
-                    if (isAdmin) {
-                        add(
-                            UserTagModel(
-                                type = UserTagType.Admin,
-                                name = LocalStrings.current.defaultTagAdmin,
-                                color = adminColor,
-                            ),
-                        )
-                    }
-                    if (isBot) {
-                        add(
-                            UserTagModel(
-                                type = UserTagType.Bot,
-                                name = LocalStrings.current.defaultTagBot,
-                                color = botColor,
-                            ),
-                        )
-                    }
-                    if (isMe) {
-                        add(
-                            UserTagModel(
-                                type = UserTagType.Me,
-                                name = LocalStrings.current.defaultTagCurrentUser,
-                                color = meColor,
-                            ),
-                        )
-                    }
-                    if (isMod) {
-                        add(
-                            UserTagModel(
-                                type = UserTagType.Moderator,
-                                name = LocalStrings.current.defaultTagModerator,
-                                color = modColor,
-                            ),
-                        )
-                    }
-                    if (isOp) {
-                        add(
-                            UserTagModel(
-                                type = UserTagType.OriginalPoster,
-                                name = LocalStrings.current.defaultTagOriginalPoster,
-                                color = opColor,
-                            ),
-                    )
-                }
+): UserModel = this.let { user ->
+    user.copy(
+        tags =
+        buildList {
+            // first add all special tags
+            if (isAdmin) {
+                add(
+                    UserTagModel(
+                        type = UserTagType.Admin,
+                        name = LocalStrings.current.defaultTagAdmin,
+                        color = adminColor,
+                    ),
+                )
+            }
+            if (isBot) {
+                add(
+                    UserTagModel(
+                        type = UserTagType.Bot,
+                        name = LocalStrings.current.defaultTagBot,
+                        color = botColor,
+                    ),
+                )
+            }
+            if (isMe) {
+                add(
+                    UserTagModel(
+                        type = UserTagType.Me,
+                        name = LocalStrings.current.defaultTagCurrentUser,
+                        color = meColor,
+                    ),
+                )
+            }
+            if (isMod) {
+                add(
+                    UserTagModel(
+                        type = UserTagType.Moderator,
+                        name = LocalStrings.current.defaultTagModerator,
+                        color = modColor,
+                    ),
+                )
+            }
+            if (isOp) {
+                add(
+                    UserTagModel(
+                        type = UserTagType.OriginalPoster,
+                        name = LocalStrings.current.defaultTagOriginalPoster,
+                        color = opColor,
+                    ),
+                )
+            }
 
-                // then add all the regular tags
-                addAll(tags)
-            },
-        )
-    }
+            // then add all the regular tags
+            addAll(tags)
+        },
+    )
+}

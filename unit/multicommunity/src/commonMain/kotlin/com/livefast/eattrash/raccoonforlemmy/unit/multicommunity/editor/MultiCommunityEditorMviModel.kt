@@ -4,9 +4,12 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
+import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorMviModel.Effect
+import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorMviModel.Intent
+import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorMviModel.UiState
 
 interface MultiCommunityEditorMviModel :
-    MviModel<MultiCommunityEditorMviModel.Intent, MultiCommunityEditorMviModel.UiState, MultiCommunityEditorMviModel.Effect>,
+    MviModel<Intent, UiState, Effect>,
     ScreenModel {
     sealed interface Intent {
         data class SetName(val value: String) : Intent

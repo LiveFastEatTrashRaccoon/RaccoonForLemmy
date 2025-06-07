@@ -115,12 +115,12 @@ object InboxScreen : Tab {
                     title = {
                         Column(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(CornerSize.xl))
-                                    .clickable {
-                                        inboxTypeBottomSheetOpened = true
-                                    }.padding(horizontal = Spacing.s),
+                            Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(CornerSize.xl))
+                                .clickable {
+                                    inboxTypeBottomSheetOpened = true
+                                }.padding(horizontal = Spacing.s),
                         ) {
                             Text(
                                 text = LocalStrings.current.navigationInbox,
@@ -158,10 +158,10 @@ object InboxScreen : Tab {
                 false -> {
                     Column(
                         modifier =
-                            Modifier
-                                .padding(
-                                    top = padding.calculateTopPadding(),
-                                ).padding(horizontal = Spacing.m),
+                        Modifier
+                            .padding(
+                                top = padding.calculateTopPadding(),
+                            ).padding(horizontal = Spacing.m),
                     ) {
                         Text(
                             text = LocalStrings.current.inboxNotLoggedMessage,
@@ -172,59 +172,59 @@ object InboxScreen : Tab {
                 true -> {
                     Column(
                         modifier =
-                            Modifier
-                                .padding(
-                                    top = padding.calculateTopPadding(),
-                                ).then(
-                                    if (connection != null && settings.hideNavigationBarWhileScrolling) {
-                                        Modifier.nestedScroll(connection)
-                                    } else {
-                                        Modifier
-                                    },
-                                ).then(
-                                    if (settings.hideNavigationBarWhileScrolling) {
-                                        Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                                    } else {
-                                        Modifier
-                                    },
-                                ),
+                        Modifier
+                            .padding(
+                                top = padding.calculateTopPadding(),
+                            ).then(
+                                if (connection != null && settings.hideNavigationBarWhileScrolling) {
+                                    Modifier.nestedScroll(connection)
+                                } else {
+                                    Modifier
+                                },
+                            ).then(
+                                if (settings.hideNavigationBarWhileScrolling) {
+                                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                                } else {
+                                    Modifier
+                                },
+                            ),
                         verticalArrangement = Arrangement.spacedBy(Spacing.s),
                     ) {
                         SectionSelector(
                             modifier = Modifier.padding(vertical = Spacing.xs),
                             titles =
-                                listOf(
-                                    buildString {
-                                        append(LocalStrings.current.inboxSectionReplies)
-                                        if (uiState.unreadReplies > 0) {
-                                            append(" (")
-                                            append(uiState.unreadReplies)
-                                            append(")")
-                                        }
-                                    },
-                                    buildString {
-                                        append(LocalStrings.current.inboxSectionMentions)
-                                        if (uiState.unreadMentions > 0) {
-                                            append(" (")
-                                            append(uiState.unreadMentions)
-                                            append(")")
-                                        }
-                                    },
-                                    buildString {
-                                        append(LocalStrings.current.inboxSectionMessages)
-                                        if (uiState.unreadMessages > 0) {
-                                            append(" (")
-                                            append(uiState.unreadMessages)
-                                            append(")")
-                                        }
-                                    },
-                                ),
-                            currentSection =
-                                when (uiState.section) {
-                                    InboxSection.Mentions -> 1
-                                    InboxSection.Messages -> 2
-                                    else -> 0
+                            listOf(
+                                buildString {
+                                    append(LocalStrings.current.inboxSectionReplies)
+                                    if (uiState.unreadReplies > 0) {
+                                        append(" (")
+                                        append(uiState.unreadReplies)
+                                        append(")")
+                                    }
                                 },
+                                buildString {
+                                    append(LocalStrings.current.inboxSectionMentions)
+                                    if (uiState.unreadMentions > 0) {
+                                        append(" (")
+                                        append(uiState.unreadMentions)
+                                        append(")")
+                                    }
+                                },
+                                buildString {
+                                    append(LocalStrings.current.inboxSectionMessages)
+                                    if (uiState.unreadMessages > 0) {
+                                        append(" (")
+                                        append(uiState.unreadMessages)
+                                        append(")")
+                                    }
+                                },
+                            ),
+                            currentSection =
+                            when (uiState.section) {
+                                InboxSection.Mentions -> 1
+                                InboxSection.Messages -> 2
+                                else -> 0
+                            },
                             onSectionSelected = {
                                 val section =
                                     when (it) {
@@ -276,10 +276,10 @@ object InboxScreen : Tab {
             CustomModalBottomSheet(
                 title = LocalStrings.current.inboxListingTypeTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(label = value)
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(label = value)
+                },
+                onSelect = { index ->
                     inboxTypeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(

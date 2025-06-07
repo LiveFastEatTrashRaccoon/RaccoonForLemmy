@@ -9,13 +9,8 @@ import io.ktor.client.request.forms.formData
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 
-class DefaultMediaRepository(
-    private val services: ServiceProvider,
-) : MediaRepository {
-    override suspend fun uploadImage(
-        auth: String,
-        bytes: ByteArray,
-    ): String? = runCatching {
+class DefaultMediaRepository(private val services: ServiceProvider) : MediaRepository {
+    override suspend fun uploadImage(auth: String, bytes: ByteArray): String? = runCatching {
         val url = "https://${services.currentInstance}/pictrs/image"
         val multipart =
             MultiPartFormDataContent(
@@ -24,10 +19,10 @@ class DefaultMediaRepository(
                         key = "images[]",
                         value = bytes,
                         headers =
-                            Headers.build {
-                                append(HttpHeaders.ContentType, "image/*")
-                                append(HttpHeaders.ContentDisposition, "filename=image.jpeg")
-                            },
+                        Headers.build {
+                            append(HttpHeaders.ContentType, "image/*")
+                            append(HttpHeaders.ContentDisposition, "filename=image.jpeg")
+                        },
                     )
                 },
             )
@@ -45,25 +40,17 @@ class DefaultMediaRepository(
         }
     }.getOrNull()
 
-    override suspend fun getAll(
-        auth: String?,
-        page: Int,
-        limit: Int,
-    ): List<MediaModel> =
-        runCatching {
-            val response =
-                services.v3.user.listMedia(
-                    authHeader = auth.toAuthHeader(),
-                    page = page,
-                    limit = limit,
-                )
-            response.images.map { it.toModel() }
-        }.getOrElse { emptyList() }
+    override suspend fun getAll(auth: String?, page: Int, limit: Int): List<MediaModel> = runCatching {
+        val response =
+            services.v3.user.listMedia(
+                authHeader = auth.toAuthHeader(),
+                page = page,
+                limit = limit,
+            )
+        response.images.map { it.toModel() }
+    }.getOrElse { emptyList() }
 
-    override suspend fun delete(
-        auth: String?,
-        media: MediaModel,
-    ) {
+    override suspend fun delete(auth: String?, media: MediaModel) {
         val url =
             "https://${services.currentInstance}/pictrs/image/delete/${media.deleteToken}/${media.alias}"
         services.v3.post.deleteImage(

@@ -42,23 +42,20 @@ sealed interface SelectNumberBottomSheetType {
 }
 
 @Composable
-private fun SelectNumberBottomSheetType.toReadableTitle() =
-    when (this) {
-        SelectNumberBottomSheetType.InboxPreviewMaxLines -> LocalStrings.current.settingsInboxPreviewMaxLines
-        SelectNumberBottomSheetType.PostBodyMaxLines -> LocalStrings.current.settingsPostBodyMaxLines
-    }
+private fun SelectNumberBottomSheetType.toReadableTitle() = when (this) {
+    SelectNumberBottomSheetType.InboxPreviewMaxLines -> LocalStrings.current.settingsInboxPreviewMaxLines
+    SelectNumberBottomSheetType.PostBodyMaxLines -> LocalStrings.current.settingsPostBodyMaxLines
+}
 
-fun SelectNumberBottomSheetType.toInt() =
-    when (this) {
-        SelectNumberBottomSheetType.InboxPreviewMaxLines -> 1
-        SelectNumberBottomSheetType.PostBodyMaxLines -> 0
-    }
+fun SelectNumberBottomSheetType.toInt() = when (this) {
+    SelectNumberBottomSheetType.InboxPreviewMaxLines -> 1
+    SelectNumberBottomSheetType.PostBodyMaxLines -> 0
+}
 
-fun Int.toSelectNumberBottomSheetType(): SelectNumberBottomSheetType =
-    when (this) {
-        1 -> SelectNumberBottomSheetType.InboxPreviewMaxLines
-        else -> SelectNumberBottomSheetType.PostBodyMaxLines
-    }
+fun Int.toSelectNumberBottomSheetType(): SelectNumberBottomSheetType = when (this) {
+    1 -> SelectNumberBottomSheetType.InboxPreviewMaxLines
+    else -> SelectNumberBottomSheetType.PostBodyMaxLines
+}
 
 private const val CUSTOM = -1
 private const val UNLIMITED = -2
@@ -66,6 +63,9 @@ private const val UNLIMITED = -2
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectNumberBottomSheet(
+    initialValue: Int?,
+    type: SelectNumberBottomSheetType,
+    modifier: Modifier = Modifier,
     sheetScope: CoroutineScope = rememberCoroutineScope(),
     state: SheetState = rememberModalBottomSheetState(),
     values: List<Int?> =
@@ -76,17 +76,16 @@ fun SelectNumberBottomSheet(
             CUSTOM,
             UNLIMITED,
         ),
-    initialValue: Int?,
-    type: SelectNumberBottomSheetType,
-    onSelected: ((Int?) -> Unit)? = null,
+    onSelect: ((Int?) -> Unit)? = null,
 ) {
     var customDialogOpened by remember { mutableStateOf(false) }
 
     ModalBottomSheet(
+        modifier = modifier,
         contentWindowInsets = { WindowInsets.navigationBars },
         sheetState = state,
         onDismissRequest = {
-            onSelected?.invoke(null)
+            onSelect?.invoke(null)
         },
     ) {
         Column(
@@ -104,19 +103,19 @@ fun SelectNumberBottomSheet(
                 items(values) { value ->
                     Row(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(CornerSize.xl))
-                                .clickable {
-                                    if (value == CUSTOM) {
-                                        customDialogOpened = true
-                                    } else {
-                                        onSelected?.invoke(value)
-                                    }
-                                }.padding(
-                                    horizontal = Spacing.m,
-                                    vertical = Spacing.s,
-                                ),
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(CornerSize.xl))
+                            .clickable {
+                                if (value == CUSTOM) {
+                                    customDialogOpened = true
+                                } else {
+                                    onSelect?.invoke(value)
+                                }
+                            }.padding(
+                                horizontal = Spacing.m,
+                                vertical = Spacing.s,
+                            ),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
                     ) {
@@ -148,7 +147,7 @@ fun SelectNumberBottomSheet(
                         .launch {
                             state.hide()
                         }.invokeOnCompletion {
-                            onSelected?.invoke(value)
+                            onSelect?.invoke(value)
                         }
                 },
             )

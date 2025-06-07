@@ -2,6 +2,7 @@ plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
     id("com.livefast.eattrash.composeMultiplatform")
     id("com.livefast.eattrash.androidTest")
+    id("com.livefast.eattrash.spotless")
 }
 
 kotlin {
@@ -16,6 +17,16 @@ kotlin {
                 implementation(projects.core.resources)
                 implementation(projects.core.utils)
             }
+        }
+    }
+}
+
+spotless {
+    kotlin {
+        target("**/SwipeActionCard.kt")
+        suppressLintsFor {
+            step = "ktlint"
+            shortCode = "compose:content-slot-reused"
         }
     }
 }

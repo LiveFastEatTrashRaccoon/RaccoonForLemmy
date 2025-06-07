@@ -13,9 +13,7 @@ interface UserTagDetailMviModel :
     sealed interface Intent {
         data object Refresh : Intent
 
-        data class Remove(
-            val username: String,
-        ) : Intent
+        data class Remove(val username: String) : Intent
     }
 
     data class UiState(

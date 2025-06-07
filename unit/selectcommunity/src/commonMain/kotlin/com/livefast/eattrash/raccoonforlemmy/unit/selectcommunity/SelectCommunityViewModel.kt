@@ -19,8 +19,8 @@ class SelectCommunityViewModel(
     private val settingsRepository: SettingsRepository,
     private val communityPaginationManager: CommunityPaginationManager,
 ) : DefaultMviModel<SelectCommunityMviModel.Intent, SelectCommunityMviModel.UiState, SelectCommunityMviModel.Effect>(
-        initialState = SelectCommunityMviModel.UiState(),
-    ),
+    initialState = SelectCommunityMviModel.UiState(),
+),
     SelectCommunityMviModel {
     init {
         screenModelScope.launch {

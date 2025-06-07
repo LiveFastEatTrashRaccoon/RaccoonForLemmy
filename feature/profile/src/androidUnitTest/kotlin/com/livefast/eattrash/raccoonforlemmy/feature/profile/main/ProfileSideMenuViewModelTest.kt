@@ -49,12 +49,11 @@ class ProfileSideMenuViewModelTest {
         }
 
     @Test
-    fun givenNotModCommunityNotRestrictedDefaultBottomBarItems_whenInitialized_thenStateIsAsExpected() =
-        runTest {
-            rule.onState {
-                assertTrue(it.isBookmarksVisible)
-                assertTrue(it.canCreateCommunity)
-                assertFalse(it.isModerator)
-            }
+    fun givenNotModCommunityNotRestrictedDefaultBottomBarItems_whenInitialized_thenStateIsAsExpected() = runTest {
+        rule.onState {
+            assertTrue(it.isBookmarksVisible)
+            assertTrue(it.canCreateCommunity)
+            assertFalse(it.isModerator)
         }
+    }
 }

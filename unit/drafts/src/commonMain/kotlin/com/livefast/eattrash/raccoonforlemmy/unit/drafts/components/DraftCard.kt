@@ -58,28 +58,28 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 fun DraftCard(
     draft: DraftModel,
     postLayout: PostLayout,
+    onOpen: () -> Unit,
     modifier: Modifier = Modifier,
     options: List<Option> = emptyList(),
-    onOpen: () -> Unit,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     Box(
         modifier =
-            modifier
-                .then(
-                    if (postLayout == PostLayout.Card) {
-                        Modifier
-                            .padding(horizontal = Spacing.xs)
-                            .shadow(elevation = 5.dp, shape = RoundedCornerShape(CornerSize.l))
-                            .clip(RoundedCornerShape(CornerSize.l))
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                                shape = RoundedCornerShape(CornerSize.l),
-                            ).padding(vertical = Spacing.s)
-                    } else {
-                        Modifier.background(MaterialTheme.colorScheme.background)
-                    },
-                ).onClick(onClick = onOpen),
+        modifier
+            .then(
+                if (postLayout == PostLayout.Card) {
+                    Modifier
+                        .padding(horizontal = Spacing.xs)
+                        .shadow(elevation = 5.dp, shape = RoundedCornerShape(CornerSize.l))
+                        .clip(RoundedCornerShape(CornerSize.l))
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                            shape = RoundedCornerShape(CornerSize.l),
+                        ).padding(vertical = Spacing.s)
+                } else {
+                    Modifier.background(MaterialTheme.colorScheme.background)
+                },
+            ).onClick(onClick = onOpen),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
@@ -99,10 +99,10 @@ fun DraftCard(
                         Icon(
                             imageVector = imageVector,
                             contentDescription =
-                                when (draft.type) {
-                                    DraftType.Comment -> LocalStrings.current.exploreResultTypePosts
-                                    DraftType.Post -> LocalStrings.current.exploreResultTypeComments
-                                },
+                            when (draft.type) {
+                                DraftType.Comment -> LocalStrings.current.exploreResultTypePosts
+                                DraftType.Post -> LocalStrings.current.exploreResultTypeComments
+                            },
                             modifier = Modifier.size(IconSize.s),
                         )
                         Text(
@@ -119,7 +119,7 @@ fun DraftCard(
                 CustomizedContent(ContentFontClass.Title) {
                     PostCardTitle(
                         modifier =
-                            Modifier.padding(horizontal = Spacing.s),
+                        Modifier.padding(horizontal = Spacing.s),
                         text = title,
                         onClick = onOpen,
                     )
@@ -138,7 +138,7 @@ fun DraftCard(
                 modifier = Modifier.padding(horizontal = Spacing.s),
                 date = draft.date?.toIso8601Timestamp(),
                 options = options,
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
             )
         }
     }
@@ -149,7 +149,7 @@ private fun DraftFooter(
     modifier: Modifier = Modifier,
     date: String? = null,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
@@ -182,13 +182,13 @@ private fun DraftFooter(
             if (options.isNotEmpty()) {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .padding(top = Spacing.xxs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .padding(top = Spacing.xxs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        },
                     onClick = {
                         optionsExpanded = true
                     },
@@ -207,10 +207,10 @@ private fun DraftFooter(
                 optionsExpanded = false
             },
             offset =
-                DpOffset(
-                    x = optionsOffset.x.toLocalDp(),
-                    y = optionsOffset.y.toLocalDp(),
-                ),
+            DpOffset(
+                x = optionsOffset.x.toLocalDp(),
+                y = optionsOffset.y.toLocalDp(),
+            ),
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
@@ -219,7 +219,7 @@ private fun DraftFooter(
                     },
                     onClick = {
                         optionsExpanded = false
-                        onOptionSelected?.invoke(option.id)
+                        onSelectOption?.invoke(option.id)
                     },
                 )
             }

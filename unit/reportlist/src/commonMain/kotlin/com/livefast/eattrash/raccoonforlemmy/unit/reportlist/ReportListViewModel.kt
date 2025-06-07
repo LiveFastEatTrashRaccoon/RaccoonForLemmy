@@ -29,8 +29,8 @@ class ReportListViewModel(
     private val hapticFeedback: HapticFeedback,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<ReportListMviModel.Intent, ReportListMviModel.UiState, ReportListMviModel.Effect>(
-        initialState = ReportListMviModel.UiState(),
-    ),
+    initialState = ReportListMviModel.UiState(),
+),
     ReportListMviModel {
     private val currentPage = mutableMapOf<ReportListSection, Int>()
 
@@ -267,13 +267,13 @@ class ReportListViewModel(
             updateState {
                 it.copy(
                     postReports =
-                        it.postReports.map { r ->
-                            if (r.id == report.id) {
-                                report
-                            } else {
-                                r
-                            }
-                        },
+                    it.postReports.map { r ->
+                        if (r.id == report.id) {
+                            report
+                        } else {
+                            r
+                        }
+                    },
                 )
             }
         }
@@ -284,13 +284,13 @@ class ReportListViewModel(
             updateState {
                 it.copy(
                     commentReports =
-                        it.commentReports.map { r ->
-                            if (r.id == report.id) {
-                                report
-                            } else {
-                                r
-                            }
-                        },
+                    it.commentReports.map { r ->
+                        if (r.id == report.id) {
+                            report
+                        } else {
+                            r
+                        }
+                    },
                 )
             }
         }

@@ -5,9 +5,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.preferences.store.TemporaryKey
 import kotlinx.coroutines.runBlocking
 import java.security.SecureRandom
 
-internal class DefaultDatabaseKeyProvider(
-    private val keyStore: TemporaryKeyStore,
-) : DatabaseKeyProvider {
+internal class DefaultDatabaseKeyProvider(private val keyStore: TemporaryKeyStore) : DatabaseKeyProvider {
     override fun getKey(): ByteArray {
         val savedKey = retrieveStoreKey()
         return if (savedKey.isEmpty()) {

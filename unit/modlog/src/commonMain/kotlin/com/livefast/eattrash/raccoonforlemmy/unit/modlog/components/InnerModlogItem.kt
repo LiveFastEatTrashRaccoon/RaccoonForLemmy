@@ -74,7 +74,7 @@ internal fun InnerModlogItem(
     onOpenUser: ((UserModel) -> Unit)? = null,
     onOpen: (() -> Unit)? = null,
     innerContent: (@Composable () -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     var optionsMenuOpen by remember { mutableStateOf(false) }
     val optionsActionLabel = LocalStrings.current.actionOpenOptionMenu
@@ -91,52 +91,52 @@ internal fun InnerModlogItem(
 
     Box(
         modifier =
-            modifier
-                .then(
-                    if (postLayout == PostLayout.Card) {
-                        Modifier
-                            .padding(horizontal = Spacing.xs)
-                            .shadow(
-                                elevation = 5.dp,
-                                shape = RoundedCornerShape(CornerSize.l),
-                            ).clip(RoundedCornerShape(CornerSize.l))
-                            .padding(horizontal = Spacing.xs)
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                                shape = RoundedCornerShape(CornerSize.l),
-                            ).padding(vertical = Spacing.xs)
-                    } else {
-                        Modifier.background(MaterialTheme.colorScheme.background)
-                    },
-                ).semantics {
-                    val helperActions =
-                        buildList {
-                            if (creator != null && onOpenUser != null) {
-                                this +=
-                                    CustomAccessibilityAction(openUserActionLabel) {
-                                        onOpenUser(creator)
-                                        true
-                                    }
-                            }
-                            if (onOpen != null) {
-                                this +=
-                                    CustomAccessibilityAction(openActionLabel) {
-                                        onOpen()
-                                        true
-                                    }
-                            }
-                            if (options.isNotEmpty()) {
-                                this +=
-                                    CustomAccessibilityAction(optionsActionLabel) {
-                                        optionsMenuOpen = true
-                                        true
-                                    }
-                            }
-                        }
-                    if (helperActions.isNotEmpty()) {
-                        customActions = helperActions
-                    }
+        modifier
+            .then(
+                if (postLayout == PostLayout.Card) {
+                    Modifier
+                        .padding(horizontal = Spacing.xs)
+                        .shadow(
+                            elevation = 5.dp,
+                            shape = RoundedCornerShape(CornerSize.l),
+                        ).clip(RoundedCornerShape(CornerSize.l))
+                        .padding(horizontal = Spacing.xs)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                            shape = RoundedCornerShape(CornerSize.l),
+                        ).padding(vertical = Spacing.xs)
+                } else {
+                    Modifier.background(MaterialTheme.colorScheme.background)
                 },
+            ).semantics {
+                val helperActions =
+                    buildList {
+                        if (creator != null && onOpenUser != null) {
+                            this +=
+                                CustomAccessibilityAction(openUserActionLabel) {
+                                    onOpenUser(creator)
+                                    true
+                                }
+                        }
+                        if (onOpen != null) {
+                            this +=
+                                CustomAccessibilityAction(openActionLabel) {
+                                    onOpen()
+                                    true
+                                }
+                        }
+                        if (options.isNotEmpty()) {
+                            this +=
+                                CustomAccessibilityAction(optionsActionLabel) {
+                                    optionsMenuOpen = true
+                                    true
+                                }
+                        }
+                    }
+                if (helperActions.isNotEmpty()) {
+                    customActions = helperActions
+                }
+            },
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
@@ -152,21 +152,21 @@ internal fun InnerModlogItem(
                 if (reason != null) {
                     PostCardBody(
                         modifier =
-                            Modifier.padding(
-                                horizontal = Spacing.xs,
-                            ),
+                        Modifier.padding(
+                            horizontal = Spacing.xs,
+                        ),
                         text = reason,
                     )
                 }
                 if (innerContent != null) {
                     Box(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    vertical = Spacing.xs,
-                                    horizontal = Spacing.xs,
-                                ),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = Spacing.xs,
+                                horizontal = Spacing.xs,
+                            ),
                     ) {
                         innerContent()
                     }
@@ -174,18 +174,18 @@ internal fun InnerModlogItem(
             }
             ModlogFooter(
                 modifier =
-                    Modifier.padding(
-                        vertical = Spacing.xs,
-                        horizontal = Spacing.s,
-                    ),
+                Modifier.padding(
+                    vertical = Spacing.xs,
+                    horizontal = Spacing.s,
+                ),
                 date = date,
                 onOpen = onOpen,
                 options = options,
                 optionsMenuOpen = optionsMenuOpen,
-                onOptionsMenuToggled = {
+                onToggleOptionsMenu = {
                     optionsMenuOpen = it
                 },
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
             )
         }
     }
@@ -205,24 +205,24 @@ private fun ModlogHeader(
     if (creatorName.isNotEmpty()) {
         Row(
             modifier =
-                modifier
-                    .onClick(
-                        onClick = {
-                            if (creator != null) {
-                                onOpenCreator?.invoke(creator)
-                            }
-                        },
-                    ).clearAndSetSemantics { },
+            modifier
+                .onClick(
+                    onClick = {
+                        if (creator != null) {
+                            onOpenCreator?.invoke(creator)
+                        }
+                    },
+                ).clearAndSetSemantics { },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             if (creatorAvatar.isNotEmpty() && autoLoadImages) {
                 CustomImage(
                     modifier =
-                        Modifier
-                            .padding(Spacing.xxxs)
-                            .size(iconSize)
-                            .clip(RoundedCornerShape(iconSize / 2)),
+                    Modifier
+                        .padding(Spacing.xxxs)
+                        .size(iconSize)
+                        .clip(RoundedCornerShape(iconSize / 2)),
                     url = creatorAvatar,
                     quality = FilterQuality.Low,
                     contentScale = ContentScale.FillBounds,
@@ -248,8 +248,8 @@ private fun ModlogFooter(
     optionsMenuOpen: Boolean = false,
     options: List<Option> = emptyList(),
     onOpen: (() -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
-    onOptionsMenuToggled: ((Boolean) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
+    onToggleOptionsMenu: ((Boolean) -> Unit)? = null,
 ) {
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
@@ -280,15 +280,15 @@ private fun ModlogFooter(
             if (options.isNotEmpty()) {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .padding(top = Spacing.xxs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            }.clearAndSetSemantics { },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .padding(top = Spacing.xxs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        }.clearAndSetSemantics { },
                     onClick = {
-                        onOptionsMenuToggled?.invoke(true)
+                        onToggleOptionsMenu?.invoke(true)
                     },
                 ) {
                     Icon(
@@ -316,13 +316,13 @@ private fun ModlogFooter(
         CustomDropDown(
             expanded = optionsMenuOpen,
             onDismiss = {
-                onOptionsMenuToggled?.invoke(false)
+                onToggleOptionsMenu?.invoke(false)
             },
             offset =
-                DpOffset(
-                    x = optionsOffset.x.toLocalDp(),
-                    y = optionsOffset.y.toLocalDp(),
-                ),
+            DpOffset(
+                x = optionsOffset.x.toLocalDp(),
+                y = optionsOffset.y.toLocalDp(),
+            ),
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
@@ -330,8 +330,8 @@ private fun ModlogFooter(
                         Text(option.text)
                     },
                     onClick = {
-                        onOptionsMenuToggled?.invoke(false)
-                        onOptionSelected?.invoke(option.id)
+                        onToggleOptionsMenu?.invoke(false)
+                        onSelectOption?.invoke(option.id)
                     },
                 )
             }

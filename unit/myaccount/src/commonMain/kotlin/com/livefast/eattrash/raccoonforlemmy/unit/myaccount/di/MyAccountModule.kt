@@ -25,7 +25,7 @@ val myAccountModule =
                     hapticFeedback = instance(),
                     postNavigationManager = instance(),
                     lemmyValueCache = instance(),
-            )
+                )
+            }
         }
     }
-}

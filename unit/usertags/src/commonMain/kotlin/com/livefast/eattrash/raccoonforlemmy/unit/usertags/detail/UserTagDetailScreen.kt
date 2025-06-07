@@ -38,9 +38,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserTagMember
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 
-class UserTagDetailScreen(
-    private val id: Long,
-) : Screen {
+class UserTagDetailScreen(private val id: Long) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
@@ -79,11 +77,11 @@ class UserTagDetailScreen(
         ) { padding ->
             PullToRefreshBox(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).fillMaxSize()
-                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).fillMaxSize()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection),
                 isRefreshing = uiState.refreshing,
                 onRefresh = {
                     model.reduce(UserTagDetailMviModel.Intent.Refresh)
@@ -102,14 +100,14 @@ class UserTagDetailScreen(
                         UserTagMemberItem(
                             member = user,
                             options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            id = OptionId.Delete,
-                                            text = LocalStrings.current.commentActionDelete,
-                                        )
-                                },
-                            onOptionSelected = { optionId ->
+                            buildList {
+                                this +=
+                                    Option(
+                                        id = OptionId.Delete,
+                                        text = LocalStrings.current.commentActionDelete,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
                                 when (optionId) {
                                     OptionId.Delete ->
                                         model.reduce(

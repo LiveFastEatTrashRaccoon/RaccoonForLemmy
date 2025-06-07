@@ -61,7 +61,7 @@ fun ModdedCommentCard(
     botTagColor: Int? = null,
     meTagColor: Int? = null,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
     onOpenUser: ((UserModel, String) -> Unit)? = null,
     onOpen: (() -> Unit)? = null,
     onUpVote: (() -> Unit)? = null,
@@ -71,21 +71,21 @@ fun ModdedCommentCard(
 ) {
     Box(
         modifier =
-            modifier
-                .then(
-                    if (postLayout == PostLayout.Card) {
-                        Modifier
-                            .shadow(elevation = 5.dp, shape = RoundedCornerShape(CornerSize.l))
-                            .clip(RoundedCornerShape(CornerSize.l))
-                            .padding(horizontal = Spacing.xs)
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                                shape = RoundedCornerShape(CornerSize.l),
-                            ).padding(vertical = Spacing.xs)
-                    } else {
-                        Modifier.background(MaterialTheme.colorScheme.background)
-                    },
-                ).clickable(onClick = { onOpen?.invoke() }),
+        modifier
+            .then(
+                if (postLayout == PostLayout.Card) {
+                    Modifier
+                        .shadow(elevation = 5.dp, shape = RoundedCornerShape(CornerSize.l))
+                        .clip(RoundedCornerShape(CornerSize.l))
+                        .padding(horizontal = Spacing.xs)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                            shape = RoundedCornerShape(CornerSize.l),
+                        ).padding(vertical = Spacing.xs)
+                } else {
+                    Modifier.background(MaterialTheme.colorScheme.background)
+                },
+            ).clickable(onClick = { onOpen?.invoke() }),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
@@ -115,7 +115,7 @@ fun ModdedCommentCard(
                 communityName = comment.community?.name,
                 postTitle = comment.postTitle,
                 options = options,
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
             )
         }
     }
@@ -127,7 +127,7 @@ private fun ModdedCommentFooter(
     communityName: String? = null,
     postTitle: String? = null,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     var optionsExpanded by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
@@ -141,11 +141,11 @@ private fun ModdedCommentFooter(
         ) {
             Column(
                 modifier =
-                    Modifier.padding(
-                        start = Spacing.xs,
-                        end = Spacing.xs,
-                        bottom = Spacing.xs,
-                    ),
+                Modifier.padding(
+                    start = Spacing.xs,
+                    end = Spacing.xs,
+                    bottom = Spacing.xs,
+                ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
             ) {
                 postTitle?.also { title ->
@@ -167,13 +167,13 @@ private fun ModdedCommentFooter(
             if (options.isNotEmpty()) {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .padding(top = Spacing.xxs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .padding(top = Spacing.xxs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        },
                     onClick = {
                         optionsExpanded = true
                     },
@@ -192,10 +192,10 @@ private fun ModdedCommentFooter(
                 optionsExpanded = false
             },
             offset =
-                DpOffset(
-                    x = optionsOffset.x.toLocalDp(),
-                    y = optionsOffset.y.toLocalDp(),
-                ),
+            DpOffset(
+                x = optionsOffset.x.toLocalDp(),
+                y = optionsOffset.y.toLocalDp(),
+            ),
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
@@ -204,7 +204,7 @@ private fun ModdedCommentFooter(
                     },
                     onClick = {
                         optionsExpanded = false
-                        onOptionSelected?.invoke(option.id)
+                        onSelectOption?.invoke(option.id)
                     },
                 )
             }

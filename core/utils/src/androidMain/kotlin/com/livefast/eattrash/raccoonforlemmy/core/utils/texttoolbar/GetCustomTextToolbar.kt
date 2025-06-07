@@ -9,7 +9,7 @@ actual fun getCustomTextToolbar(
     shareActionLabel: String,
     quoteActionLabel: String?,
     cancelActionLabel: String?,
-    onShare: () -> Unit,
+    onShare: (() -> Unit)?,
     onQuote: (() -> Unit)?,
     onCancel: (() -> Unit)?,
 ): TextToolbar =

@@ -48,8 +48,8 @@ class FilteredContentsViewModel(
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<FilteredContentsMviModel.Intent, FilteredContentsMviModel.State, FilteredContentsMviModel.Effect>(
-        initialState = FilteredContentsMviModel.State(),
-    ),
+    initialState = FilteredContentsMviModel.State(),
+),
     FilteredContentsMviModel {
     init {
         screenModelScope.launch {
@@ -500,13 +500,13 @@ class FilteredContentsViewModel(
             updateState {
                 it.copy(
                     posts =
-                        it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
+                    it.posts.map { p ->
+                        if (p.id == post.id) {
+                            post
+                        } else {
+                            p
+                        }
+                    },
                 )
             }
         }
@@ -597,13 +597,13 @@ class FilteredContentsViewModel(
             updateState {
                 it.copy(
                     comments =
-                        it.comments.map { c ->
-                            if (c.id == comment.id) {
-                                comment
-                            } else {
-                                c
-                            }
-                        },
+                    it.comments.map { c ->
+                        if (c.id == comment.id) {
+                            comment
+                        } else {
+                            c
+                        }
+                    },
                 )
             }
         }

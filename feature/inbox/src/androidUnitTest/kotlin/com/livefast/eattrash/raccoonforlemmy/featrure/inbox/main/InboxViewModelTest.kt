@@ -126,104 +126,97 @@ class InboxViewModelTest {
         }
 
     @Test
-    fun givenNotLogged_whenInitialized_thenStateIsAsExpected() =
-        runTest {
-            with(unloggedRuleRule) {
-                onState { state ->
-                    assertEquals(false, state.isLogged)
-                }
+    fun givenNotLogged_whenInitialized_thenStateIsAsExpected() = runTest {
+        with(unloggedRuleRule) {
+            onState { state ->
+                assertEquals(false, state.isLogged)
             }
         }
+    }
 
     @Test
-    fun givenLoggedAndDefaultUnreadOnly_whenInitialized_thenStateIsAsExpected() =
-        runTest {
-            with(loggedDefaultUnreadOnlyRule) {
-                onState { state ->
-                    assertTrue(state.isLogged == true)
-                    assertTrue(state.unreadOnly)
-                }
+    fun givenLoggedAndDefaultUnreadOnly_whenInitialized_thenStateIsAsExpected() = runTest {
+        with(loggedDefaultUnreadOnlyRule) {
+            onState { state ->
+                assertTrue(state.isLogged == true)
+                assertTrue(state.unreadOnly)
             }
         }
+    }
 
     @Test
-    fun givenLoggedAndDefaultNotUnreadOnly_whenInitialized_thenStateIsAsExpected() =
-        runTest {
-            with(loggedDefaultAllRule) {
-                onState { state ->
-                    assertTrue(state.isLogged == true)
-                    assertFalse(state.unreadOnly)
-                }
+    fun givenLoggedAndDefaultNotUnreadOnly_whenInitialized_thenStateIsAsExpected() = runTest {
+        with(loggedDefaultAllRule) {
+            onState { state ->
+                assertTrue(state.isLogged == true)
+                assertFalse(state.unreadOnly)
             }
         }
+    }
 
     @Test
-    fun givenLoggedWithUnreads_whenInitialized_thenStateIsAsExpected() =
-        runTest {
-            with(loggedWithUnreadsRule) {
-                onState { state ->
-                    assertTrue(state.isLogged == true)
-                    assertEquals(1, state.unreadReplies)
-                    assertEquals(2, state.unreadMentions)
-                    assertEquals(3, state.unreadMessages)
-                }
+    fun givenLoggedWithUnreads_whenInitialized_thenStateIsAsExpected() = runTest {
+        with(loggedWithUnreadsRule) {
+            onState { state ->
+                assertTrue(state.isLogged == true)
+                assertEquals(1, state.unreadReplies)
+                assertEquals(2, state.unreadMentions)
+                assertEquals(3, state.unreadMessages)
             }
         }
+    }
 
     @Test
-    fun whenChangeInboxReadOnlyEventReceived_thenInteractionsAndStateAreAsExpected() =
-        runTest {
-            with(loggedDefaultUnreadOnlyRule) {
-                notificationChannel.send(NotificationCenterEvent.ChangeInboxType(unreadOnly = false))
+    fun whenChangeInboxReadOnlyEventReceived_thenInteractionsAndStateAreAsExpected() = runTest {
+        with(loggedDefaultUnreadOnlyRule) {
+            notificationChannel.send(NotificationCenterEvent.ChangeInboxType(unreadOnly = false))
 
-                onState { state ->
-                    assertFalse(state.unreadOnly)
-                }
+            onState { state ->
+                assertFalse(state.unreadOnly)
+            }
 
-                verify {
-                    inboxCoordinator.setUnreadOnly(false)
-                }
+            verify {
+                inboxCoordinator.setUnreadOnly(false)
             }
         }
+    }
 
     @Test
-    fun whenMarkAllAsReadIntentReceived_thenInteractionsAreAsExpected() =
-        runTest {
-            with(loggedWithUnreadsRule) {
-                every { inboxCoordinator.totalUnread } returns MutableStateFlow(1)
+    fun whenMarkAllAsReadIntentReceived_thenInteractionsAreAsExpected() = runTest {
+        with(loggedWithUnreadsRule) {
+            every { inboxCoordinator.totalUnread } returns MutableStateFlow(1)
 
-                launch {
-                    send(InboxMviModel.Intent.ReadAll)
+            launch {
+                send(InboxMviModel.Intent.ReadAll)
+            }
+
+            onEffects { effects ->
+                effects.test {
+                    val item = awaitItem()
+                    assertEquals(InboxMviModel.Effect.Refresh, item)
+                    val item2 = awaitItem()
+                    assertEquals(InboxMviModel.Effect.ReadAllInboxSuccess, item2)
                 }
 
-                onEffects { effects ->
-                    effects.test {
-                        val item = awaitItem()
-                        assertEquals(InboxMviModel.Effect.Refresh, item)
-                        val item2 = awaitItem()
-                        assertEquals(InboxMviModel.Effect.ReadAllInboxSuccess, item2)
-                    }
-
-                    coVerify {
-                        userRepository.readAll(AUTH_TOKEN)
-                        inboxCoordinator.sendEvent(InboxCoordinator.Event.Refresh)
-                    }
+                coVerify {
+                    userRepository.readAll(AUTH_TOKEN)
+                    inboxCoordinator.sendEvent(InboxCoordinator.Event.Refresh)
                 }
             }
         }
+    }
 
     @Test
-    fun whenChangeSectionIntentReceived_thenStateIsAsExpected() =
-        runTest {
-            with(loggedDefaultAllRule) {
-                val section = InboxSection.Mentions
-                send(InboxMviModel.Intent.ChangeSection(section))
+    fun whenChangeSectionIntentReceived_thenStateIsAsExpected() = runTest {
+        with(loggedDefaultAllRule) {
+            val section = InboxSection.Mentions
+            send(InboxMviModel.Intent.ChangeSection(section))
 
-                onState { state ->
-                    assertEquals(section, state.section)
-                }
+            onState { state ->
+                assertEquals(section, state.section)
             }
         }
+    }
 
     companion object {
         private const val AUTH_TOKEN = "fake-token"

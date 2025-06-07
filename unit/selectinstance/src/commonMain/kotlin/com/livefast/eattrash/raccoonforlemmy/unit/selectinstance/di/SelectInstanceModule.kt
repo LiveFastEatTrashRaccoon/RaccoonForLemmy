@@ -16,7 +16,7 @@ val selectInstanceModule =
                     communityRepository = instance(),
                     apiConfigurationRepository = instance(),
                     hapticFeedback = instance(),
-            )
+                )
+            }
         }
     }
-}

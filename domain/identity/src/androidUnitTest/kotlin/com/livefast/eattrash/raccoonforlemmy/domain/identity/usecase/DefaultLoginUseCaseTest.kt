@@ -70,168 +70,164 @@ class DefaultLoginUseCaseTest {
         )
 
     @Test
-    fun givenNewAccount_whenExecute_thenInteractionsAreAsExpected() =
-        runTest {
-            val accountId = 1L
-            val anonymousSettings = SettingsModel()
-            coEvery {
-                authRepository.login(any(), any())
-            } returns Result.success(LoginResponse("fake-token", registrationCreated = false, verifyEmailSent = true))
-            coEvery {
-                siteRepository.getAccountSettings(any())
-            } returns null
-            coEvery {
-                accountRepository.getBy(any(), any())
-            } returns null
-            coEvery {
-                accountRepository.getActive()
-            } returns null
-            coEvery {
-                accountRepository.createAccount(any())
-            } returns accountId
-            coEvery {
-                settingsRepository.getSettings(any())
-            } returns anonymousSettings
+    fun givenNewAccount_whenExecute_thenInteractionsAreAsExpected() = runTest {
+        val accountId = 1L
+        val anonymousSettings = SettingsModel()
+        coEvery {
+            authRepository.login(any(), any())
+        } returns Result.success(LoginResponse("fake-token", registrationCreated = false, verifyEmailSent = true))
+        coEvery {
+            siteRepository.getAccountSettings(any())
+        } returns null
+        coEvery {
+            accountRepository.getBy(any(), any())
+        } returns null
+        coEvery {
+            accountRepository.getActive()
+        } returns null
+        coEvery {
+            accountRepository.createAccount(any())
+        } returns accountId
+        coEvery {
+            settingsRepository.getSettings(any())
+        } returns anonymousSettings
 
-            val res = sut("fake-instance", "fake-username", "fake-password")
+        val res = sut("fake-instance", "fake-username", "fake-password")
 
-            assertTrue(res.isSuccess)
-            coVerify {
-                apiConfigurationRepository.changeInstance("fake-instance")
-                authRepository.login("fake-username", "fake-password")
-                siteRepository.getAccountSettings("fake-token")
-                accountRepository.getBy("fake-username", "fake-instance")
-                accountRepository.createAccount(
-                    withArg {
-                        assertEquals("fake-username", it.username)
-                    },
-                )
-                accountRepository.setActive(accountId, true)
-                settingsRepository.createSettings(anonymousSettings, accountId)
-                settingsRepository.changeCurrentSettings(anonymousSettings)
-                communitySortRepository.clear()
-                userSortRepository.clear()
-                postLastSeenDateRepository.clear()
-            }
+        assertTrue(res.isSuccess)
+        coVerify {
+            apiConfigurationRepository.changeInstance("fake-instance")
+            authRepository.login("fake-username", "fake-password")
+            siteRepository.getAccountSettings("fake-token")
+            accountRepository.getBy("fake-username", "fake-instance")
+            accountRepository.createAccount(
+                withArg {
+                    assertEquals("fake-username", it.username)
+                },
+            )
+            accountRepository.setActive(accountId, true)
+            settingsRepository.createSettings(anonymousSettings, accountId)
+            settingsRepository.changeCurrentSettings(anonymousSettings)
+            communitySortRepository.clear()
+            userSortRepository.clear()
+            postLastSeenDateRepository.clear()
         }
+    }
 
     @Test
-    fun givenPreviousDifferentAccount_whenExecute_thenInteractionsAreAsExpected() =
-        runTest {
-            val accountId = 2L
-            val oldAccountId = 1L
-            val anonymousSettings = SettingsModel()
-            coEvery {
-                authRepository.login(any(), any())
-            } returns Result.success(LoginResponse("fake-token", registrationCreated = false, verifyEmailSent = true))
-            coEvery {
-                siteRepository.getAccountSettings(any())
-            } returns null
-            coEvery {
-                accountRepository.getBy(any(), any())
-            } returns null
-            coEvery {
-                accountRepository.getActive()
-            } returns
-                AccountModel(
-                    id = oldAccountId,
-                    username = "old-username",
-                    instance = "old-instance",
-                    jwt = "old-token",
-                )
-            coEvery {
-                accountRepository.createAccount(any())
-            } returns accountId
-            coEvery {
-                settingsRepository.getSettings(any())
-            } returns anonymousSettings
+    fun givenPreviousDifferentAccount_whenExecute_thenInteractionsAreAsExpected() = runTest {
+        val accountId = 2L
+        val oldAccountId = 1L
+        val anonymousSettings = SettingsModel()
+        coEvery {
+            authRepository.login(any(), any())
+        } returns Result.success(LoginResponse("fake-token", registrationCreated = false, verifyEmailSent = true))
+        coEvery {
+            siteRepository.getAccountSettings(any())
+        } returns null
+        coEvery {
+            accountRepository.getBy(any(), any())
+        } returns null
+        coEvery {
+            accountRepository.getActive()
+        } returns
+            AccountModel(
+                id = oldAccountId,
+                username = "old-username",
+                instance = "old-instance",
+                jwt = "old-token",
+            )
+        coEvery {
+            accountRepository.createAccount(any())
+        } returns accountId
+        coEvery {
+            settingsRepository.getSettings(any())
+        } returns anonymousSettings
 
-            val res = sut("fake-instance", "fake-username", "fake-password")
+        val res = sut("fake-instance", "fake-username", "fake-password")
 
-            assertTrue(res.isSuccess)
-            coVerify {
-                apiConfigurationRepository.changeInstance("fake-instance")
-                authRepository.login("fake-username", "fake-password")
-                siteRepository.getAccountSettings("fake-token")
-                accountRepository.getBy("fake-username", "fake-instance")
-                accountRepository.createAccount(
-                    withArg {
-                        assertEquals("fake-username", it.username)
-                    },
-                )
-                accountRepository.setActive(oldAccountId, false)
-                accountRepository.setActive(accountId, true)
-                settingsRepository.createSettings(anonymousSettings, accountId)
-                settingsRepository.changeCurrentSettings(anonymousSettings)
-                communitySortRepository.clear()
-                userSortRepository.clear()
-                postLastSeenDateRepository.clear()
-            }
+        assertTrue(res.isSuccess)
+        coVerify {
+            apiConfigurationRepository.changeInstance("fake-instance")
+            authRepository.login("fake-username", "fake-password")
+            siteRepository.getAccountSettings("fake-token")
+            accountRepository.getBy("fake-username", "fake-instance")
+            accountRepository.createAccount(
+                withArg {
+                    assertEquals("fake-username", it.username)
+                },
+            )
+            accountRepository.setActive(oldAccountId, false)
+            accountRepository.setActive(accountId, true)
+            settingsRepository.createSettings(anonymousSettings, accountId)
+            settingsRepository.changeCurrentSettings(anonymousSettings)
+            communitySortRepository.clear()
+            userSortRepository.clear()
+            postLastSeenDateRepository.clear()
         }
+    }
 
     @Test
-    fun givenPreviousExistingAccount_whenExecute_thenInteractionsAreAsExpected() =
-        runTest {
-            val accountId = 2L
-            val oldSettings = SettingsModel(id = 1)
-            coEvery {
-                authRepository.login(any(), any())
-            } returns Result.success(LoginResponse("fake-token", registrationCreated = false, verifyEmailSent = true))
-            coEvery {
-                siteRepository.getAccountSettings(any())
-            } returns null
-            coEvery {
-                accountRepository.getBy(any(), any())
-            } returns
-                AccountModel(
-                    id = accountId,
-                    username = "old-username",
-                    instance = "old-instance",
-                    jwt = "old-token",
-                )
-            coEvery {
-                accountRepository.getActive()
-            } returns null
-            coEvery {
-                accountRepository.createAccount(any())
-            } returns accountId
-            coEvery {
-                settingsRepository.getSettings(accountId)
-            } returns oldSettings
+    fun givenPreviousExistingAccount_whenExecute_thenInteractionsAreAsExpected() = runTest {
+        val accountId = 2L
+        val oldSettings = SettingsModel(id = 1)
+        coEvery {
+            authRepository.login(any(), any())
+        } returns Result.success(LoginResponse("fake-token", registrationCreated = false, verifyEmailSent = true))
+        coEvery {
+            siteRepository.getAccountSettings(any())
+        } returns null
+        coEvery {
+            accountRepository.getBy(any(), any())
+        } returns
+            AccountModel(
+                id = accountId,
+                username = "old-username",
+                instance = "old-instance",
+                jwt = "old-token",
+            )
+        coEvery {
+            accountRepository.getActive()
+        } returns null
+        coEvery {
+            accountRepository.createAccount(any())
+        } returns accountId
+        coEvery {
+            settingsRepository.getSettings(accountId)
+        } returns oldSettings
 
-            val res = sut("fake-instance", "fake-username", "fake-password")
+        val res = sut("fake-instance", "fake-username", "fake-password")
 
-            assertTrue(res.isSuccess)
-            coVerify {
-                apiConfigurationRepository.changeInstance("fake-instance")
-                authRepository.login("fake-username", "fake-password")
-                siteRepository.getAccountSettings("fake-token")
-                accountRepository.getBy("fake-username", "fake-instance")
-                accountRepository.setActive(accountId, true)
-                settingsRepository.changeCurrentSettings(oldSettings)
-                communitySortRepository.clear()
-                communityPreferredLanguageRepository.clear()
-                userSortRepository.clear()
-                postLastSeenDateRepository.clear()
-            }
-            coVerify(inverse = true) {
-                accountRepository.createAccount(any())
-                settingsRepository.createSettings(any(), any())
-            }
+        assertTrue(res.isSuccess)
+        coVerify {
+            apiConfigurationRepository.changeInstance("fake-instance")
+            authRepository.login("fake-username", "fake-password")
+            siteRepository.getAccountSettings("fake-token")
+            accountRepository.getBy("fake-username", "fake-instance")
+            accountRepository.setActive(accountId, true)
+            settingsRepository.changeCurrentSettings(oldSettings)
+            communitySortRepository.clear()
+            communityPreferredLanguageRepository.clear()
+            userSortRepository.clear()
+            postLastSeenDateRepository.clear()
         }
+        coVerify(inverse = true) {
+            accountRepository.createAccount(any())
+            settingsRepository.createSettings(any(), any())
+        }
+    }
 
     @Test
-    fun givenAuthFails_whenExecuted_thenExceptionIsThrown() =
-        runTest {
-            val errorMessage = "fake-error-message"
-            coEvery {
-                authRepository.login(any(), any())
-            } returns Result.failure(Exception(errorMessage))
+    fun givenAuthFails_whenExecuted_thenExceptionIsThrown() = runTest {
+        val errorMessage = "fake-error-message"
+        coEvery {
+            authRepository.login(any(), any())
+        } returns Result.failure(Exception(errorMessage))
 
-            val res = sut("fake-instance", "fake-username", "fake-password")
+        val res = sut("fake-instance", "fake-username", "fake-password")
 
-            assertTrue(res.isFailure)
-            val exc = res.exceptionOrNull()
-            assertEquals(errorMessage, exc?.message)
-        }
+        assertTrue(res.isFailure)
+        val exc = res.exceptionOrNull()
+        assertEquals(errorMessage, exc?.message)
+    }
 }

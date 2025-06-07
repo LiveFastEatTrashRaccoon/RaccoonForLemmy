@@ -10,24 +10,15 @@ interface ZoomableImageMviModel :
     ScreenModel,
     MviModel<ZoomableImageMviModel.Intent, ZoomableImageMviModel.UiState, ZoomableImageMviModel.Effect> {
     sealed interface Intent {
-        data class SaveToGallery(
-            val source: String,
-        ) : Intent
+        data class SaveToGallery(val source: String) : Intent
 
         sealed interface ShareImageModeSelected : Intent {
-            data class ModeUrl(
-                val url: String,
-            ) : ShareImageModeSelected
+            data class ModeUrl(val url: String) : ShareImageModeSelected
 
-            data class ModeFile(
-                val url: String,
-                val source: String,
-            ) : ShareImageModeSelected
+            data class ModeFile(val url: String, val source: String) : ShareImageModeSelected
         }
 
-        data class ChangeContentScale(
-            val contentScale: ContentScale,
-        ) : Intent
+        data class ChangeContentScale(val contentScale: ContentScale) : Intent
     }
 
     data class UiState(

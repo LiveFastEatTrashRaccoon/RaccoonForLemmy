@@ -12,15 +12,11 @@ import de.jensklingenberg.ktorfit.http.POST
 
 interface AccountServiceV4 {
     @GET("v4/account")
-    suspend fun get(
-        @Header("Authorization") authHeader: String? = null,
-    ): MyUserInfo
+    suspend fun get(@Header("Authorization") authHeader: String? = null): MyUserInfo
 
     @POST("v4/account/auth/login")
     @Headers("Content-Type: application/json")
-    suspend fun login(
-        @Body form: LoginForm,
-    ): LoginResponse
+    suspend fun login(@Body form: LoginForm): LoginResponse
 
     @GET("v4/account/auth/logout")
     suspend fun logout(): SuccessResponse

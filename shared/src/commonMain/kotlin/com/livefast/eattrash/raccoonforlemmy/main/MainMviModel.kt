@@ -9,9 +9,7 @@ interface MainMviModel :
     MviModel<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect>,
     ScreenModel {
     sealed interface Intent {
-        data class SetBottomBarOffsetHeightPx(
-            val value: Float,
-        ) : Intent
+        data class SetBottomBarOffsetHeightPx(val value: Float) : Intent
 
         data object ReadAllInbox : Intent
     }
@@ -24,9 +22,7 @@ interface MainMviModel :
     )
 
     sealed interface Effect {
-        data class UnreadItemsDetected(
-            val value: Int,
-        ) : Effect
+        data class UnreadItemsDetected(val value: Int) : Effect
 
         data object ReadAllInboxSuccess : Effect
     }

@@ -11,9 +11,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
-internal class DefaultInboxNotificationChecker(
-    private val context: Context,
-) : InboxNotificationChecker {
+internal class DefaultInboxNotificationChecker(private val context: Context) : InboxNotificationChecker {
     override val isBackgroundCheckSupported = true
     private var intervalMinutes = 15L
 

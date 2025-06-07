@@ -21,7 +21,7 @@ val mentionsModule =
                     coordinator = instance(),
                     notificationCenter = instance(),
                     lemmyValueCache = instance(),
-            )
+                )
+            }
         }
     }
-}

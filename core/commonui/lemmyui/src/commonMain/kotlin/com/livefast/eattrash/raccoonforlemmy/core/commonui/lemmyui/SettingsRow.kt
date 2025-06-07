@@ -27,13 +27,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 
 @Composable
 fun SettingsRow(
+    title: String,
+    modifier: Modifier = Modifier,
+    value: String = "",
     icon: ImageVector? = null,
     painter: Painter? = null,
-    title: String,
-    value: String = "",
     disclosureIndicator: Boolean = false,
     annotatedValue: AnnotatedString = AnnotatedString(""),
-    modifier: Modifier = Modifier,
     subtitle: String? = null,
     onTap: (() -> Unit)? = null,
 ) {
@@ -41,20 +41,20 @@ fun SettingsRow(
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
     Row(
         modifier =
-            modifier
-                .clip(RoundedCornerShape(CornerSize.xxl))
-                .then(
-                    if (onTap != null) {
-                        Modifier.clickable {
-                            onTap.invoke()
-                        }
-                    } else {
-                        Modifier
-                    },
-                ).padding(
-                    vertical = Spacing.s,
-                    horizontal = Spacing.m,
-                ),
+        modifier
+            .clip(RoundedCornerShape(CornerSize.xxl))
+            .then(
+                if (onTap != null) {
+                    Modifier.clickable {
+                        onTap.invoke()
+                    }
+                } else {
+                    Modifier
+                },
+            ).padding(
+                vertical = Spacing.s,
+                horizontal = Spacing.m,
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
     ) {

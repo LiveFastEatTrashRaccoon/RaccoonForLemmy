@@ -18,18 +18,18 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.shimmerEffect
 internal fun MediaItemPlaceholder(modifier: Modifier = Modifier) {
     Column(
         modifier =
-            modifier.padding(
-                vertical = Spacing.xs,
-                horizontal = Spacing.s,
-            ),
+        modifier.padding(
+            vertical = Spacing.xs,
+            horizontal = Spacing.s,
+        ),
     ) {
         Box(
             modifier =
-                Modifier
-                    .height(60.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(CornerSize.s))
-                    .shimmerEffect(),
+            Modifier
+                .height(60.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(CornerSize.s))
+                .shimmerEffect(),
         )
     }
 }

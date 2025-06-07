@@ -1,6 +1,7 @@
 plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
     id("com.livefast.eattrash.serialization")
+    id("com.livefast.eattrash.spotless")
     alias(libs.plugins.ktorfit)
 }
 

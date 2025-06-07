@@ -18,21 +18,19 @@ sealed interface FilteredContentsType {
     data object Hidden : FilteredContentsType
 }
 
-fun FilteredContentsType.toInt(): Int =
-    when (this) {
-        FilteredContentsType.Moderated -> 0
-        FilteredContentsType.Votes -> 1
-        FilteredContentsType.Bookmarks -> 2
-        FilteredContentsType.Hidden -> 3
-    }
+fun FilteredContentsType.toInt(): Int = when (this) {
+    FilteredContentsType.Moderated -> 0
+    FilteredContentsType.Votes -> 1
+    FilteredContentsType.Bookmarks -> 2
+    FilteredContentsType.Hidden -> 3
+}
 
-fun Int.toFilteredContentsType(): FilteredContentsType =
-    when (this) {
-        3 -> FilteredContentsType.Hidden
-        2 -> FilteredContentsType.Bookmarks
-        1 -> FilteredContentsType.Votes
-        else -> FilteredContentsType.Moderated
-    }
+fun Int.toFilteredContentsType(): FilteredContentsType = when (this) {
+    3 -> FilteredContentsType.Hidden
+    2 -> FilteredContentsType.Bookmarks
+    1 -> FilteredContentsType.Votes
+    else -> FilteredContentsType.Moderated
+}
 
 sealed interface FilteredContentsSection {
     data object Posts : FilteredContentsSection
@@ -44,66 +42,35 @@ interface FilteredContentsMviModel :
     ScreenModel,
     MviModel<FilteredContentsMviModel.Intent, FilteredContentsMviModel.State, FilteredContentsMviModel.Effect> {
     sealed interface Intent {
-        data class ChangeSection(
-            val value: FilteredContentsSection,
-        ) : Intent
+        data class ChangeSection(val value: FilteredContentsSection) : Intent
 
         data object Refresh : Intent
 
         data object LoadNextPage : Intent
 
-        data class UpVotePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class UpVotePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class DownVotePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class DownVotePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class SavePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class SavePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class UpVoteComment(
-            val commentId: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class UpVoteComment(val commentId: Long, val feedback: Boolean = false) : Intent
 
-        data class DownVoteComment(
-            val commentId: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class DownVoteComment(val commentId: Long, val feedback: Boolean = false) : Intent
 
-        data class SaveComment(
-            val commentId: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class SaveComment(val commentId: Long, val feedback: Boolean = false) : Intent
 
         data object HapticIndication : Intent
 
-        data class ModFeaturePost(
-            val id: Long,
-        ) : Intent
+        data class ModFeaturePost(val id: Long) : Intent
 
-        data class AdminFeaturePost(
-            val id: Long,
-        ) : Intent
+        data class AdminFeaturePost(val id: Long) : Intent
 
-        data class ModLockPost(
-            val id: Long,
-        ) : Intent
+        data class ModLockPost(val id: Long) : Intent
 
-        data class ModDistinguishComment(
-            val commentId: Long,
-        ) : Intent
+        data class ModDistinguishComment(val commentId: Long) : Intent
 
-        data class WillOpenDetail(
-            val postId: Long,
-            val commentId: Long? = null,
-        ) : Intent
+        data class WillOpenDetail(val postId: Long, val commentId: Long? = null) : Intent
     }
 
     data class State(
@@ -140,9 +107,6 @@ interface FilteredContentsMviModel :
     sealed interface Effect {
         data object BackToTop : Effect
 
-        data class OpenDetail(
-            val postId: Long,
-            val commentId: Long? = null,
-        ) : Effect
+        data class OpenDetail(val postId: Long, val commentId: Long? = null) : Effect
     }
 }

@@ -16,6 +16,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
+import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsMviModel.Effect
+import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsMviModel.Intent
+import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsMviModel.UiState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -36,9 +39,9 @@ class ManageSubscriptionsViewModel(
     private val communityPaginationManager: CommunityPaginationManager,
     private val hapticFeedback: HapticFeedback,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<ManageSubscriptionsMviModel.Intent, ManageSubscriptionsMviModel.UiState, ManageSubscriptionsMviModel.Effect>(
-        initialState = ManageSubscriptionsMviModel.UiState(),
-    ),
+) : DefaultMviModel<Intent, UiState, Effect>(
+    initialState = UiState(),
+),
     ManageSubscriptionsMviModel {
     init {
         screenModelScope.launch {
@@ -69,7 +72,7 @@ class ManageSubscriptionsViewModel(
                 .debounce(1_000)
                 .onEach {
                     if (!uiState.value.initial) {
-                        emitEffect(ManageSubscriptionsMviModel.Effect.BackToTop)
+                        emitEffect(Effect.BackToTop)
                         refresh()
                     }
                 }.launchIn(this)
@@ -79,17 +82,17 @@ class ManageSubscriptionsViewModel(
         }
     }
 
-    override fun reduce(intent: ManageSubscriptionsMviModel.Intent) {
+    override fun reduce(intent: Intent) {
         when (intent) {
-            ManageSubscriptionsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
-            ManageSubscriptionsMviModel.Intent.Refresh -> screenModelScope.launch { refresh() }
-            is ManageSubscriptionsMviModel.Intent.Unsubscribe -> {
+            Intent.HapticIndication -> hapticFeedback.vibrate()
+            Intent.Refresh -> screenModelScope.launch { refresh() }
+            is Intent.Unsubscribe -> {
                 uiState.value.communities.firstOrNull { it.id == intent.id }?.also { community ->
                     unsubscribe(community)
                 }
             }
 
-            is ManageSubscriptionsMviModel.Intent.DeleteMultiCommunity -> {
+            is Intent.DeleteMultiCommunity -> {
                 uiState.value.multiCommunities
                     .firstOrNull {
                         (it.id ?: 0L) == intent.id
@@ -98,15 +101,15 @@ class ManageSubscriptionsViewModel(
                     }
             }
 
-            is ManageSubscriptionsMviModel.Intent.ToggleFavorite -> {
+            is Intent.ToggleFavorite -> {
                 uiState.value.communities.firstOrNull { it.id == intent.id }?.also { community ->
                     toggleFavorite(community)
                 }
             }
 
-            is ManageSubscriptionsMviModel.Intent.SetSearch -> updateSearchText(intent.value)
+            is Intent.SetSearch -> updateSearchText(intent.value)
 
-            ManageSubscriptionsMviModel.Intent.LoadNextPage ->
+            Intent.LoadNextPage ->
                 screenModelScope.launch {
                     loadNextPage()
                 }
@@ -204,7 +207,7 @@ class ManageSubscriptionsViewModel(
             }
             val newCommunity = community.copy(favorite = newValue)
             handleCommunityUpdate(newCommunity)
-            emitEffect(ManageSubscriptionsMviModel.Effect.Success)
+            emitEffect(Effect.Success)
         }
     }
 
@@ -213,13 +216,13 @@ class ManageSubscriptionsViewModel(
             updateState {
                 it.copy(
                     communities =
-                        it.communities.map { c ->
-                            if (c.id == community.id) {
-                                community
-                            } else {
-                                c
-                            }
-                        },
+                    it.communities.map { c ->
+                        if (c.id == community.id) {
+                            community
+                        } else {
+                            c
+                        }
+                    },
                 )
             }
         }

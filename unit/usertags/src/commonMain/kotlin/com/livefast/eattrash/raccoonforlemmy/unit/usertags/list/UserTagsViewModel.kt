@@ -16,8 +16,8 @@ internal class UserTagsViewModel(
     private val userTagRepository: UserTagRepository,
     private val userTagHelper: UserTagHelper,
 ) : DefaultMviModel<UserTagsMviModel.Intent, UserTagsMviModel.UiState, UserTagsMviModel.Effect>(
-        initialState = UserTagsMviModel.UiState(),
-    ),
+    initialState = UserTagsMviModel.UiState(),
+),
     UserTagsMviModel {
     init {
         screenModelScope.launch {
@@ -70,10 +70,7 @@ internal class UserTagsViewModel(
         }
     }
 
-    private fun addTag(
-        name: String,
-        color: Int?,
-    ) {
+    private fun addTag(name: String, color: Int?) {
         screenModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val tag = UserTagModel(name = name, color = color)
@@ -83,12 +80,7 @@ internal class UserTagsViewModel(
         }
     }
 
-    private fun editTag(
-        id: Long,
-        name: String,
-        color: Int?,
-        type: UserTagType,
-    ) {
+    private fun editTag(id: Long, name: String, color: Int?, type: UserTagType) {
         screenModelScope.launch {
             userTagRepository.update(
                 id = id,

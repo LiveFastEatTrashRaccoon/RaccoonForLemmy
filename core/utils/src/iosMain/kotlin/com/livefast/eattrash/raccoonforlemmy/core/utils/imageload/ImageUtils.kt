@@ -27,11 +27,13 @@ actual fun IntArray.toComposeImageBitmap(
     return bmp.asComposeImageBitmap()
 }
 
-actual fun getNativeDecoders(): List<Decoder.Factory> = buildList {
-    add(SkiaImageDecoder.Factory())
-}
+actual fun getNativeDecoders(): List<Decoder.Factory> =
+    buildList {
+        add(SkiaImageDecoder.Factory())
+    }
 
-actual fun getNativeFetchers(): List<NetworkFetcher.Factory> = buildList {
-    val httpClient = HttpClient(provideHttpClientEngineFactory())
-    add(KtorNetworkFetcherFactory(httpClient))
-}
+actual fun getNativeFetchers(): List<NetworkFetcher.Factory> =
+    buildList {
+        val httpClient = HttpClient(provideHttpClientEngineFactory())
+        add(KtorNetworkFetcherFactory(httpClient))
+    }

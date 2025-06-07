@@ -39,18 +39,18 @@ internal fun HideCommunityItem(
         innerContent = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                            val name = item.community?.readableName(preferNicknames).orEmpty()
-                            append(name)
-                        }
-                        append(" ")
-                        if (item.hidden) {
-                            append(LocalStrings.current.modlogItemHidden)
-                        } else {
-                            append(LocalStrings.current.modlogItemUnhidden)
-                        }
-                    },
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        val name = item.community?.readableName(preferNicknames).orEmpty()
+                        append(name)
+                    }
+                    append(" ")
+                    if (item.hidden) {
+                        append(LocalStrings.current.modlogItemHidden)
+                    } else {
+                        append(LocalStrings.current.modlogItemUnhidden)
+                    }
+                },
                 style = MaterialTheme.typography.bodySmall,
             )
         },

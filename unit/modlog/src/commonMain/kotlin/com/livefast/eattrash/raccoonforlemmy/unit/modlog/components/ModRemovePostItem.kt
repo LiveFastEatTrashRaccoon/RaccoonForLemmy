@@ -34,17 +34,17 @@ internal fun ModRemovePostItem(
         innerContent = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                            append(item.post?.title.ellipsize())
-                        }
-                        append(" ")
-                        if (item.removed) {
-                            append(LocalStrings.current.modlogItemPostRemoved)
-                        } else {
-                            append(LocalStrings.current.modlogItemPostRestored)
-                        }
-                    },
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        append(item.post?.title.ellipsize())
+                    }
+                    append(" ")
+                    if (item.removed) {
+                        append(LocalStrings.current.modlogItemPostRemoved)
+                    } else {
+                        append(LocalStrings.current.modlogItemPostRestored)
+                    }
+                },
                 style = MaterialTheme.typography.bodySmall,
             )
         },

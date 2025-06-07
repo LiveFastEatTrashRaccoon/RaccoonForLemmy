@@ -69,13 +69,13 @@ class BanUserScreen(
         val model: BanUserMviModel =
             rememberScreenModel(
                 arg =
-                    BanUserMviModelParams(
-                        userId = userId,
-                        communityId = communityId,
-                        newValue = newValue,
-                        postId = postId ?: 0L,
-                        commentId = commentId ?: 0L,
-                    ),
+                BanUserMviModelParams(
+                    userId = userId,
+                    communityId = communityId,
+                    newValue = newValue,
+                    postId = postId ?: 0L,
+                    commentId = commentId ?: 0L,
+                ),
             )
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
@@ -160,36 +160,36 @@ class BanUserScreen(
         ) { padding ->
             Column(
                 modifier =
-                    Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
-                        .safeImePadding(),
+                Modifier
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .safeImePadding(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 val focusRequester = remember { FocusRequester() }
                 TextField(
                     modifier =
-                        Modifier
-                            .focusRequester(focusRequester)
-                            .heightIn(min = 300.dp, max = 500.dp)
-                            .fillMaxWidth(),
+                    Modifier
+                        .focusRequester(focusRequester)
+                        .heightIn(min = 300.dp, max = 500.dp)
+                        .fillMaxWidth(),
                     colors =
-                        TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                        ),
+                    TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                    ),
                     label = {
                         Text(text = LocalStrings.current.banReasonPlaceholder)
                     },
                     textStyle = MaterialTheme.typography.bodyMedium,
                     value = uiState.text,
                     keyboardOptions =
-                        KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            autoCorrectEnabled = true,
-                        ),
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        autoCorrectEnabled = true,
+                    ),
                     onValueChange = { value ->
                         model.reduce(BanUserMviModel.Intent.SetText(value))
                     },
@@ -210,7 +210,7 @@ class BanUserScreen(
                     SettingsSwitchRow(
                         title = LocalStrings.current.banItemPermanent,
                         value = uiState.permanent,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(BanUserMviModel.Intent.ChangePermanent(value))
                         },
                     )
@@ -231,7 +231,7 @@ class BanUserScreen(
                     SettingsSwitchRow(
                         title = LocalStrings.current.banItemRemoveData,
                         value = uiState.removeData,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(BanUserMviModel.Intent.ChangeRemoveData(value))
                         },
                     )

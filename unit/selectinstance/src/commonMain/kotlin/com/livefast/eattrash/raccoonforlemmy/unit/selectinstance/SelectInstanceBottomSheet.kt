@@ -58,10 +58,11 @@ import sh.calvin.reorderable.rememberReorderableLazyListState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectInstanceBottomSheet(
+    parent: Screen,
+    modifier: Modifier = Modifier,
     sheetScope: CoroutineScope = rememberCoroutineScope(),
     state: SheetState = rememberModalBottomSheetState(),
-    parent: Screen,
-    onSelected: ((String?) -> Unit)? = null,
+    onSelect: ((String?) -> Unit)? = null,
 ) {
     val model: SelectInstanceMviModel = parent.rememberScreenModel()
     val uiState by model.uiState.collectAsState()
@@ -94,7 +95,7 @@ fun SelectInstanceBottomSheet(
                             .launch {
                                 state.hide()
                             }.invokeOnCompletion {
-                                onSelected?.invoke(evt.instance)
+                                onSelect?.invoke(evt.instance)
                             }
                     }
                 }
@@ -102,10 +103,11 @@ fun SelectInstanceBottomSheet(
     }
 
     ModalBottomSheet(
+        modifier = modifier,
         contentWindowInsets = { WindowInsets.navigationBars },
         sheetState = state,
         onDismissRequest = {
-            onSelected?.invoke(null)
+            onSelect?.invoke(null)
         },
     ) {
         Column(
@@ -179,7 +181,7 @@ fun SelectInstanceBottomSheet(
                             SelectInstanceItem(
                                 instance = instance,
                                 isActive = isActive,
-                                onDragStarted = {
+                                onStartDrag = {
                                     model.reduce(SelectInstanceMviModel.Intent.HapticIndication)
                                 },
                                 onClick = {
@@ -189,16 +191,16 @@ fun SelectInstanceBottomSheet(
                                 },
                                 reorderableScope = this,
                                 options =
-                                    buildList {
-                                        if (!isActive) {
-                                            this +=
-                                                Option(
-                                                    OptionId.Delete,
-                                                    LocalStrings.current.commentActionDelete,
-                                                )
-                                        }
-                                    },
-                                onOptionSelected = { optionId ->
+                                buildList {
+                                    if (!isActive) {
+                                        this +=
+                                            Option(
+                                                OptionId.Delete,
+                                                LocalStrings.current.commentActionDelete,
+                                            )
+                                    }
+                                },
+                                onSelectOption = { optionId ->
                                     when (optionId) {
                                         OptionId.Delete -> {
                                             instanceToDelete = instance

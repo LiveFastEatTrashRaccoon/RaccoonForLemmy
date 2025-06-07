@@ -17,11 +17,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.shimmerEffect
 internal fun MessageCardPlaceholder() {
     Box(
         modifier =
-            Modifier
-                .height(100.dp)
-                .fillMaxWidth()
-                .padding(horizontal = Spacing.xs, vertical = Spacing.xs)
-                .clip(RoundedCornerShape(CornerSize.s))
-                .shimmerEffect(),
+        Modifier
+            .height(100.dp)
+            .fillMaxWidth()
+            .padding(horizontal = Spacing.xs, vertical = Spacing.xs)
+            .clip(RoundedCornerShape(CornerSize.s))
+            .shimmerEffect(),
     )
 }

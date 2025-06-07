@@ -53,9 +53,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class InstanceInfoScreen(
-    private val url: String,
-) : Screen {
+class InstanceInfoScreen(private val url: String) : Screen {
     override val key: ScreenKey
         get() = super.key + instanceName
 
@@ -108,11 +106,11 @@ class InstanceInfoScreen(
                     title = {
                         Text(
                             text =
-                                buildString {
-                                    append(LocalStrings.current.instanceDetailTitle)
-                                    append(" ")
-                                    append(instanceName)
-                                },
+                            buildString {
+                                append(LocalStrings.current.instanceDetailTitle)
+                                append(" ")
+                                append(instanceName)
+                            },
                             color = MaterialTheme.colorScheme.onBackground,
                             style = MaterialTheme.typography.titleMedium,
                         )
@@ -122,11 +120,11 @@ class InstanceInfoScreen(
                         if (additionalLabel.isNotEmpty()) {
                             Text(
                                 text =
-                                    buildString {
-                                        append("(")
-                                        append(additionalLabel)
-                                        append(")")
-                                    },
+                                buildString {
+                                    append("(")
+                                    append(additionalLabel)
+                                    append(")")
+                                },
                             )
                             Spacer(modifier = Modifier.width(Spacing.xs))
                         }
@@ -146,16 +144,16 @@ class InstanceInfoScreen(
         ) { padding ->
             PullToRefreshBox(
                 modifier =
-                    Modifier
-                        .then(
-                            if (settings.hideNavigationBarWhileScrolling) {
-                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                            } else {
-                                Modifier
-                            },
-                        ).padding(
-                            top = padding.calculateTopPadding(),
-                        ),
+                Modifier
+                    .then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        },
+                    ).padding(
+                        top = padding.calculateTopPadding(),
+                    ),
                 isRefreshing = uiState.refreshing,
                 onRefresh = {
                     model.reduce(InstanceInfoMviModel.Intent.Refresh)
@@ -208,11 +206,11 @@ class InstanceInfoScreen(
                     items(uiState.communities) { community ->
                         CommunityItem(
                             modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        detailOpener.openCommunityDetail(community, instanceName)
-                                    },
-                                ),
+                            Modifier.onClick(
+                                onClick = {
+                                    detailOpener.openCommunityDetail(community, instanceName)
+                                },
+                            ),
                             community = community,
                             autoLoadImages = uiState.autoLoadImages,
                             preferNicknames = uiState.preferNicknames,
@@ -234,7 +232,7 @@ class InstanceInfoScreen(
             SortBottomSheet(
                 values = uiState.availableSortTypes,
                 expandTop = true,
-                onSelected = { value ->
+                onSelect = { value ->
                     sortBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(

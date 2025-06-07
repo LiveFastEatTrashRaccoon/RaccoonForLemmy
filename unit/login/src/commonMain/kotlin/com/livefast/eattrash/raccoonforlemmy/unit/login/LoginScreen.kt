@@ -157,15 +157,15 @@ class LoginScreen : Screen {
             content = { padding ->
                 Column(
                     modifier =
-                        Modifier
-                            .padding(
-                                top = padding.calculateTopPadding(),
-                                start = Spacing.l,
-                                end = Spacing.l,
-                            ).consumeWindowInsets(padding)
-                            .safeImePadding()
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState()),
+                    Modifier
+                        .padding(
+                            top = padding.calculateTopPadding(),
+                            start = Spacing.l,
+                            end = Spacing.l,
+                        ).consumeWindowInsets(padding)
+                        .safeImePadding()
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Spacer(modifier = Modifier.height(Spacing.m))
@@ -173,9 +173,9 @@ class LoginScreen : Screen {
                     // instance name
                     TextField(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .focusRequester(instanceFocusRequester),
+                        Modifier
+                            .fillMaxWidth()
+                            .focusRequester(instanceFocusRequester),
                         label = {
                             Text(text = LocalStrings.current.loginFieldInstanceName)
                         },
@@ -183,16 +183,16 @@ class LoginScreen : Screen {
                         value = uiState.instanceName,
                         isError = uiState.instanceNameError != null,
                         keyboardActions =
-                            KeyboardActions(
-                                onNext = {
-                                    usernameFocusRequester.requestFocus()
-                                },
-                            ),
+                        KeyboardActions(
+                            onNext = {
+                                usernameFocusRequester.requestFocus()
+                            },
+                        ),
                         keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Email,
-                                imeAction = ImeAction.Next,
-                            ),
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next,
+                        ),
                         onValueChange = { value ->
                             model.reduce(LoginMviModel.Intent.SetInstanceName(value))
                         },
@@ -209,13 +209,13 @@ class LoginScreen : Screen {
                             if (uiState.instanceName.isNotEmpty()) {
                                 Icon(
                                     modifier =
-                                        Modifier.onClick(
-                                            onClick = {
-                                                model.reduce(
-                                                    LoginMviModel.Intent.SetInstanceName(""),
-                                                )
-                                            },
-                                        ),
+                                    Modifier.onClick(
+                                        onClick = {
+                                            model.reduce(
+                                                LoginMviModel.Intent.SetInstanceName(""),
+                                            )
+                                        },
+                                    ),
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = LocalStrings.current.actionClear,
                                 )
@@ -226,18 +226,18 @@ class LoginScreen : Screen {
                     // user name
                     TextField(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .autofill(
-                                    autofillTypes =
-                                        listOf(
-                                            AutofillType.Username,
-                                            AutofillType.EmailAddress,
-                                        ),
-                                    onFill = { value ->
-                                        model.reduce(LoginMviModel.Intent.SetUsername(value))
-                                    },
-                                ).focusRequester(usernameFocusRequester),
+                        Modifier
+                            .fillMaxWidth()
+                            .autofill(
+                                autofillTypes =
+                                listOf(
+                                    AutofillType.Username,
+                                    AutofillType.EmailAddress,
+                                ),
+                                onFill = { value ->
+                                    model.reduce(LoginMviModel.Intent.SetUsername(value))
+                                },
+                            ).focusRequester(usernameFocusRequester),
                         label = {
                             Text(text = LocalStrings.current.loginFieldUserName)
                         },
@@ -245,16 +245,16 @@ class LoginScreen : Screen {
                         value = uiState.username,
                         isError = uiState.usernameError != null,
                         keyboardActions =
-                            KeyboardActions(
-                                onNext = {
-                                    passwordFocusRequester.requestFocus()
-                                },
-                            ),
+                        KeyboardActions(
+                            onNext = {
+                                passwordFocusRequester.requestFocus()
+                            },
+                        ),
                         keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Email,
-                                imeAction = ImeAction.Next,
-                            ),
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next,
+                        ),
                         onValueChange = { value ->
                             model.reduce(LoginMviModel.Intent.SetUsername(value))
                         },
@@ -275,14 +275,14 @@ class LoginScreen : Screen {
                     }
                     TextField(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .autofill(
-                                    autofillTypes = listOf(AutofillType.Password),
-                                    onFill = { value ->
-                                        model.reduce(LoginMviModel.Intent.SetPassword(value))
-                                    },
-                                ).focusRequester(passwordFocusRequester),
+                        Modifier
+                            .fillMaxWidth()
+                            .autofill(
+                                autofillTypes = listOf(AutofillType.Password),
+                                onFill = { value ->
+                                    model.reduce(LoginMviModel.Intent.SetPassword(value))
+                                },
+                            ).focusRequester(passwordFocusRequester),
                         label = {
                             Text(text = LocalStrings.current.loginFieldPassword)
                         },
@@ -290,16 +290,16 @@ class LoginScreen : Screen {
                         value = uiState.password,
                         isError = uiState.passwordError != null,
                         keyboardActions =
-                            KeyboardActions(
-                                onNext = {
-                                    tokenFocusRequester.requestFocus()
-                                },
-                            ),
+                        KeyboardActions(
+                            onNext = {
+                                tokenFocusRequester.requestFocus()
+                            },
+                        ),
                         keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Password,
-                                imeAction = ImeAction.Next,
-                            ),
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Next,
+                        ),
                         onValueChange = { value ->
                             model.reduce(LoginMviModel.Intent.SetPassword(value))
                         },
@@ -317,11 +317,11 @@ class LoginScreen : Screen {
                             ) {
                                 Icon(
                                     imageVector =
-                                        if (transformation == VisualTransformation.None) {
-                                            Icons.Default.VisibilityOff
-                                        } else {
-                                            Icons.Default.Visibility
-                                        },
+                                    if (transformation == VisualTransformation.None) {
+                                        Icons.Default.VisibilityOff
+                                    } else {
+                                        Icons.Default.Visibility
+                                    },
                                     contentDescription = LocalStrings.current.actionToggleVisibility,
                                 )
                             }
@@ -340,9 +340,9 @@ class LoginScreen : Screen {
                     // TOTP 2FA token
                     TextField(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .focusRequester(tokenFocusRequester),
+                        Modifier
+                            .fillMaxWidth()
+                            .focusRequester(tokenFocusRequester),
                         label = {
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(Spacing.s),
@@ -358,10 +358,10 @@ class LoginScreen : Screen {
                         singleLine = true,
                         value = uiState.totp2faToken,
                         keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Password,
-                                imeAction = ImeAction.Done,
-                            ),
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done,
+                        ),
                         onValueChange = { value ->
                             model.reduce(LoginMviModel.Intent.SetTotp2faToken(value))
                         },

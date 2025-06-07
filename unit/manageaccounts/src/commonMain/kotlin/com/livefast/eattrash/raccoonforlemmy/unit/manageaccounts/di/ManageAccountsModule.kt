@@ -18,7 +18,7 @@ val manageAccountsModule =
                     logout = instance(),
                     deleteAccount = instance(),
                     notificationCenter = instance(),
-            )
+                )
+            }
         }
     }
-}

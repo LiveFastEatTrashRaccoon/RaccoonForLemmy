@@ -82,11 +82,11 @@ class AcknowledgementsScreen : Screen {
         ) { padding ->
             PullToRefreshBox(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .fillMaxSize(),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .fillMaxSize(),
                 isRefreshing = uiState.refreshing,
                 onRefresh = {
                     model.reduce(AcknowledgementsMviModel.Intent.Refresh)
@@ -94,7 +94,7 @@ class AcknowledgementsScreen : Screen {
             ) {
                 LazyColumn(
                     modifier =
-                        Modifier.fillMaxSize(),
+                    Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     if (uiState.initial) {
@@ -105,15 +105,15 @@ class AcknowledgementsScreen : Screen {
                     items(uiState.items) { item ->
                         AcknowledgementItem(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .onClick(
-                                        onClick = {
-                                            if (!item.url.isNullOrEmpty()) {
-                                                uriHandler.openUri(item.url)
-                                            }
-                                        },
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .onClick(
+                                    onClick = {
+                                        if (!item.url.isNullOrEmpty()) {
+                                            uriHandler.openUri(item.url)
+                                        }
+                                    },
+                                ),
                             item = item,
                         )
                     }

@@ -7,10 +7,7 @@ import org.kodein.di.bind
 import org.kodein.di.factory
 import org.kodein.di.instance
 
-internal data class UserDetailMviModelParams(
-    val userId: Long,
-    val otherInstance: String,
-)
+internal data class UserDetailMviModelParams(val userId: Long, val otherInstance: String)
 
 val userDetailModule =
     DI.Module("UserDetailModule") {

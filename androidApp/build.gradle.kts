@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinx.kover)
+    id("com.livefast.eattrash.spotless")
 }
 
 android {

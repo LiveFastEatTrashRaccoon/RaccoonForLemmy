@@ -22,10 +22,7 @@ internal class DefaultUserSortRepository(
         return map[handle]
     }
 
-    override suspend fun saveForPosts(
-        handle: String,
-        value: Int,
-    ) {
+    override suspend fun saveForPosts(handle: String, value: Int) {
         val map =
             keyStore.get(POST_SETTINGS_KEY, listOf()).let {
                 serializer.deserializeMap(it)
@@ -35,10 +32,7 @@ internal class DefaultUserSortRepository(
         keyStore.save(POST_SETTINGS_KEY, newValue)
     }
 
-    override suspend fun saveForComments(
-        handle: String,
-        value: Int,
-    ) {
+    override suspend fun saveForComments(handle: String, value: Int) {
         val map =
             keyStore.get(COMMENT_SETTINGS_KEY, listOf()).let {
                 serializer.deserializeMap(it)

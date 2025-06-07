@@ -10,6 +10,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
+import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Effect
+import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Intent
+import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.UiState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -19,9 +22,9 @@ class ConfigureSwipeActionsViewModel(
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<ConfigureSwipeActionsMviModel.Intent, ConfigureSwipeActionsMviModel.UiState, ConfigureSwipeActionsMviModel.Effect>(
-        initialState = ConfigureSwipeActionsMviModel.UiState(),
-    ),
+) : DefaultMviModel<Intent, UiState, Effect>(
+    initialState = UiState(),
+),
     ConfigureSwipeActionsMviModel {
     init {
         screenModelScope.launch {
@@ -60,29 +63,29 @@ class ConfigureSwipeActionsViewModel(
         }
     }
 
-    override fun reduce(intent: ConfigureSwipeActionsMviModel.Intent) {
+    override fun reduce(intent: Intent) {
         when (intent) {
-            is ConfigureSwipeActionsMviModel.Intent.DeleteActionComments ->
+            is Intent.DeleteActionComments ->
                 removeActionComments(
                     action = intent.value,
                     direction = intent.direction,
                 )
 
-            is ConfigureSwipeActionsMviModel.Intent.DeleteActionInbox ->
+            is Intent.DeleteActionInbox ->
                 removeActionInbox(
                     action = intent.value,
                     direction = intent.direction,
                 )
 
-            is ConfigureSwipeActionsMviModel.Intent.DeleteActionPosts ->
+            is Intent.DeleteActionPosts ->
                 removeActionPosts(
                     action = intent.value,
                     direction = intent.direction,
                 )
 
-            ConfigureSwipeActionsMviModel.Intent.ResetActionsComments -> resetActionsComments()
-            ConfigureSwipeActionsMviModel.Intent.ResetActionsInbox -> resetActionsInbox()
-            ConfigureSwipeActionsMviModel.Intent.ResetActionsPosts -> resetActionsPosts()
+            Intent.ResetActionsComments -> resetActionsComments()
+            Intent.ResetActionsInbox -> resetActionsInbox()
+            Intent.ResetActionsPosts -> resetActionsPosts()
         }
     }
 
@@ -101,10 +104,7 @@ class ConfigureSwipeActionsViewModel(
         updateAvailableOptions()
     }
 
-    private fun addActionPosts(
-        action: ActionOnSwipe,
-        direction: ActionOnSwipeDirection,
-    ) {
+    private fun addActionPosts(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
         screenModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
@@ -151,10 +151,7 @@ class ConfigureSwipeActionsViewModel(
         }
     }
 
-    private fun removeActionPosts(
-        action: ActionOnSwipe,
-        direction: ActionOnSwipeDirection,
-    ) {
+    private fun removeActionPosts(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
         screenModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
@@ -201,10 +198,7 @@ class ConfigureSwipeActionsViewModel(
         }
     }
 
-    private fun addActionComments(
-        action: ActionOnSwipe,
-        direction: ActionOnSwipeDirection,
-    ) {
+    private fun addActionComments(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
         screenModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
@@ -251,10 +245,7 @@ class ConfigureSwipeActionsViewModel(
         }
     }
 
-    private fun removeActionComments(
-        action: ActionOnSwipe,
-        direction: ActionOnSwipeDirection,
-    ) {
+    private fun removeActionComments(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
         screenModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
@@ -301,10 +292,7 @@ class ConfigureSwipeActionsViewModel(
         }
     }
 
-    private fun addActionInbox(
-        action: ActionOnSwipe,
-        direction: ActionOnSwipeDirection,
-    ) {
+    private fun addActionInbox(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
         screenModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
@@ -351,10 +339,7 @@ class ConfigureSwipeActionsViewModel(
         }
     }
 
-    private fun removeActionInbox(
-        action: ActionOnSwipe,
-        direction: ActionOnSwipeDirection,
-    ) {
+    private fun removeActionInbox(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
         screenModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
@@ -406,21 +391,21 @@ class ConfigureSwipeActionsViewModel(
         val newSettings =
             settings.copy(
                 actionsOnSwipeToStartPosts =
-                    ActionOnSwipe.DEFAULT_SWIPE_TO_START_POSTS.filter {
-                        if (uiState.value.downVoteEnabled) {
-                            true
-                        } else {
-                            it != ActionOnSwipe.DownVote
-                        }
-                    },
+                ActionOnSwipe.DEFAULT_SWIPE_TO_START_POSTS.filter {
+                    if (uiState.value.downVoteEnabled) {
+                        true
+                    } else {
+                        it != ActionOnSwipe.DownVote
+                    }
+                },
                 actionsOnSwipeToEndPosts =
-                    ActionOnSwipe.DEFAULT_SWIPE_TO_END_POSTS.filter {
-                        if (uiState.value.downVoteEnabled) {
-                            true
-                        } else {
-                            it != ActionOnSwipe.DownVote
-                        }
-                    },
+                ActionOnSwipe.DEFAULT_SWIPE_TO_END_POSTS.filter {
+                    if (uiState.value.downVoteEnabled) {
+                        true
+                    } else {
+                        it != ActionOnSwipe.DownVote
+                    }
+                },
             )
         screenModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
@@ -436,21 +421,21 @@ class ConfigureSwipeActionsViewModel(
         val newSettings =
             settings.copy(
                 actionsOnSwipeToStartComments =
-                    ActionOnSwipe.DEFAULT_SWIPE_TO_START_COMMENTS.filter {
-                        if (uiState.value.downVoteEnabled) {
-                            true
-                        } else {
-                            it != ActionOnSwipe.DownVote
-                        }
-                    },
+                ActionOnSwipe.DEFAULT_SWIPE_TO_START_COMMENTS.filter {
+                    if (uiState.value.downVoteEnabled) {
+                        true
+                    } else {
+                        it != ActionOnSwipe.DownVote
+                    }
+                },
                 actionsOnSwipeToEndComments =
-                    ActionOnSwipe.DEFAULT_SWIPE_TO_END_COMMENTS.filter {
-                        if (uiState.value.downVoteEnabled) {
-                            true
-                        } else {
-                            it != ActionOnSwipe.DownVote
-                        }
-                    },
+                ActionOnSwipe.DEFAULT_SWIPE_TO_END_COMMENTS.filter {
+                    if (uiState.value.downVoteEnabled) {
+                        true
+                    } else {
+                        it != ActionOnSwipe.DownVote
+                    }
+                },
             )
         screenModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
@@ -466,21 +451,21 @@ class ConfigureSwipeActionsViewModel(
         val newSettings =
             settings.copy(
                 actionsOnSwipeToStartInbox =
-                    ActionOnSwipe.DEFAULT_SWIPE_TO_START_INBOX.filter {
-                        if (uiState.value.downVoteEnabled) {
-                            true
-                        } else {
-                            it != ActionOnSwipe.DownVote
-                        }
-                    },
+                ActionOnSwipe.DEFAULT_SWIPE_TO_START_INBOX.filter {
+                    if (uiState.value.downVoteEnabled) {
+                        true
+                    } else {
+                        it != ActionOnSwipe.DownVote
+                    }
+                },
                 actionsOnSwipeToEndInbox =
-                    ActionOnSwipe.DEFAULT_SWIPE_TO_END_INBOX.filter {
-                        if (uiState.value.downVoteEnabled) {
-                            true
-                        } else {
-                            it != ActionOnSwipe.DownVote
-                        }
-                    },
+                ActionOnSwipe.DEFAULT_SWIPE_TO_END_INBOX.filter {
+                    if (uiState.value.downVoteEnabled) {
+                        true
+                    } else {
+                        it != ActionOnSwipe.DownVote
+                    }
+                },
             )
         screenModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch

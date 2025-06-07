@@ -16,6 +16,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
+import com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview.ConfigureContentViewMviModel.Effect
+import com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview.ConfigureContentViewMviModel.Intent
+import com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview.ConfigureContentViewMviModel.UiState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -29,9 +32,7 @@ class ConfigureContentViewViewModel(
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<ConfigureContentViewMviModel.Intent, ConfigureContentViewMviModel.State, ConfigureContentViewMviModel.Effect>(
-        initialState = ConfigureContentViewMviModel.State(),
-    ),
+) : DefaultMviModel<Intent, UiState, Effect>(initialState = UiState()),
     ConfigureContentViewMviModel {
     init {
         screenModelScope.launch {
@@ -97,42 +98,42 @@ class ConfigureContentViewViewModel(
         }
     }
 
-    override fun reduce(intent: ConfigureContentViewMviModel.Intent) {
+    override fun reduce(intent: Intent) {
         when (intent) {
-            is ConfigureContentViewMviModel.Intent.ChangeFullHeightImages -> {
+            is Intent.ChangeFullHeightImages -> {
                 changeFullHeightImages(
                     intent.value,
                 )
             }
 
-            is ConfigureContentViewMviModel.Intent.ChangeFullWidthImages -> {
+            is Intent.ChangeFullWidthImages -> {
                 changeFullWidthImages(
                     intent.value,
                 )
             }
 
-            is ConfigureContentViewMviModel.Intent.ChangePreferUserNicknames -> {
+            is Intent.ChangePreferUserNicknames -> {
                 changePreferUserNicknames(
                     intent.value,
                 )
             }
 
-            ConfigureContentViewMviModel.Intent.IncrementCommentBarThickness -> {
+            Intent.IncrementCommentBarThickness -> {
                 val value = (uiState.value.commentBarThickness + 1).coerceIn(COMMENT_BAR_THICKNESS_RANGE)
                 changeCommentBarThickness(value)
             }
 
-            ConfigureContentViewMviModel.Intent.DecrementCommentBarThickness -> {
+            Intent.DecrementCommentBarThickness -> {
                 val value = (uiState.value.commentBarThickness - 1).coerceIn(COMMENT_BAR_THICKNESS_RANGE)
                 changeCommentBarThickness(value)
             }
 
-            ConfigureContentViewMviModel.Intent.IncrementCommentIndentAmount -> {
+            Intent.IncrementCommentIndentAmount -> {
                 val value = (uiState.value.commentIndentAmount + 1).coerceIn(COMMENT_INDENT_AMOUNT_RANGE)
                 changeCommentIndentAmount(value)
             }
 
-            ConfigureContentViewMviModel.Intent.DecrementCommentIndentAmount -> {
+            Intent.DecrementCommentIndentAmount -> {
                 val value = (uiState.value.commentIndentAmount - 1).coerceIn(COMMENT_INDENT_AMOUNT_RANGE)
                 changeCommentIndentAmount(value)
             }
@@ -212,10 +213,7 @@ class ConfigureContentViewViewModel(
         }
     }
 
-    private fun changeContentFontScale(
-        value: Float,
-        contentClass: ContentFontClass,
-    ) {
+    private fun changeContentFontScale(value: Float, contentClass: ContentFontClass) {
         val contentFontScale =
             themeRepository.contentFontScale.value.let {
                 when (contentClass) {

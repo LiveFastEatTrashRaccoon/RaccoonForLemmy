@@ -21,24 +21,20 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
-fun PostLinkBanner(
-    modifier: Modifier = Modifier,
-    url: String,
-    onClick: (() -> Unit)? = null,
-) {
+fun PostLinkBanner(url: String, modifier: Modifier = Modifier, onClick: (() -> Unit)? = null) {
     if (url.isNotEmpty()) {
         Row(
             modifier =
-                modifier
-                    .clip(RoundedCornerShape(CornerSize.l))
-                    .onClick(onClick = { onClick?.invoke() })
-                    .background(
-                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f),
-                        shape = RoundedCornerShape(CornerSize.l),
-                    ).padding(
-                        horizontal = Spacing.m,
-                        vertical = Spacing.s,
-                    ),
+            modifier
+                .clip(RoundedCornerShape(CornerSize.l))
+                .onClick(onClick = { onClick?.invoke() })
+                .background(
+                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f),
+                    shape = RoundedCornerShape(CornerSize.l),
+                ).padding(
+                    horizontal = Spacing.m,
+                    vertical = Spacing.s,
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.m),
         ) {

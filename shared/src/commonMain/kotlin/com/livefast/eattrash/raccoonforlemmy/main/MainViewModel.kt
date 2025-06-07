@@ -25,11 +25,11 @@ class MainViewModel(
     private val lemmyValueCache: LemmyValueCache,
     private val createSpecialTagsUseCase: CreateSpecialTagsUseCase,
 ) : DefaultMviModel<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect>(
-        initialState =
-            MainMviModel.UiState(
-                bottomBarSections = settingRepository.currentBottomBarSections.value.toTabNavigationSections(),
-            ),
-    ),
+    initialState =
+        MainMviModel.UiState(
+            bottomBarSections = settingRepository.currentBottomBarSections.value.toTabNavigationSections(),
+        ),
+),
     MainMviModel {
     init {
         screenModelScope.launch {

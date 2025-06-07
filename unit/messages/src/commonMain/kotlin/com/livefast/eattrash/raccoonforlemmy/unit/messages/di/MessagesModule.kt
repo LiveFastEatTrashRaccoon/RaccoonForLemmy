@@ -18,7 +18,7 @@ val messagesModule =
                     settingsRepository = instance(),
                     coordinator = instance(),
                     notificationCenter = instance(),
-            )
+                )
+            }
         }
     }
-}

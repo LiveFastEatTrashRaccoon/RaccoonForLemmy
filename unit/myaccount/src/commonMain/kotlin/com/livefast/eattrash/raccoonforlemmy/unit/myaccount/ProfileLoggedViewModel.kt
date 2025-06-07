@@ -52,8 +52,8 @@ class ProfileLoggedViewModel(
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<ProfileLoggedMviModel.Intent, ProfileLoggedMviModel.UiState, ProfileLoggedMviModel.Effect>(
-        initialState = ProfileLoggedMviModel.UiState(),
-    ),
+    initialState = ProfileLoggedMviModel.UiState(),
+),
     ProfileLoggedMviModel {
     init {
         screenModelScope.launch {
@@ -496,13 +496,13 @@ class ProfileLoggedViewModel(
             updateState {
                 it.copy(
                     posts =
-                        it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
+                    it.posts.map { p ->
+                        if (p.id == post.id) {
+                            post
+                        } else {
+                            p
+                        }
+                    },
                 )
             }
         }
@@ -513,13 +513,13 @@ class ProfileLoggedViewModel(
             updateState {
                 it.copy(
                     comments =
-                        it.comments.map { c ->
-                            if (c.id == comment.id) {
-                                comment
-                            } else {
-                                c
-                            }
-                        },
+                    it.comments.map { c ->
+                        if (c.id == comment.id) {
+                            comment
+                        } else {
+                            c
+                        }
+                    },
                 )
             }
         }

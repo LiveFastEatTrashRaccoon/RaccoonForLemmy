@@ -60,55 +60,54 @@ class DefaultSwitchAccountUseCaseTest {
         )
 
     @Test
-    fun whenExecute_thenInteractionsAreAsExpected() =
-        runTest {
-            val accountId = 2L
-            val oldAccountId = 1L
-            val newAccount =
-                AccountModel(
-                    id = accountId,
-                    username = "new-username",
-                    instance = "new-instance",
-                    jwt = "new-token",
-                )
-            val oldAccount =
-                AccountModel(
-                    id = oldAccountId,
-                    username = "old-username",
-                    instance = "old-instance",
-                    jwt = "old-token",
-                )
-            val oldSettings = SettingsModel(id = 1)
-            val newSettings = SettingsModel(id = 2)
-            coEvery {
-                accountRepository.getBy(any(), any())
-            } returns null
-            coEvery {
-                accountRepository.getActive()
-            } returns oldAccount
-            coEvery {
-                settingsRepository.getSettings(oldAccountId)
-            } returns oldSettings
-            coEvery {
-                settingsRepository.getSettings(accountId)
-            } returns newSettings
+    fun whenExecute_thenInteractionsAreAsExpected() = runTest {
+        val accountId = 2L
+        val oldAccountId = 1L
+        val newAccount =
+            AccountModel(
+                id = accountId,
+                username = "new-username",
+                instance = "new-instance",
+                jwt = "new-token",
+            )
+        val oldAccount =
+            AccountModel(
+                id = oldAccountId,
+                username = "old-username",
+                instance = "old-instance",
+                jwt = "old-token",
+            )
+        val oldSettings = SettingsModel(id = 1)
+        val newSettings = SettingsModel(id = 2)
+        coEvery {
+            accountRepository.getBy(any(), any())
+        } returns null
+        coEvery {
+            accountRepository.getActive()
+        } returns oldAccount
+        coEvery {
+            settingsRepository.getSettings(oldAccountId)
+        } returns oldSettings
+        coEvery {
+            settingsRepository.getSettings(accountId)
+        } returns newSettings
 
-            sut(newAccount)
+        sut(newAccount)
 
-            coVerify {
-                accountRepository.setActive(oldAccountId, false)
-                accountRepository.setActive(accountId, true)
-                settingsRepository.getSettings(accountId)
-                settingsRepository.changeCurrentSettings(newSettings)
-                communitySortRepository.clear()
-                communityPreferredLanguageRepository.clear()
-                notificationCenter.send(ofType(NotificationCenterEvent.Logout::class))
-                identityRepository.storeToken("new-token")
-                identityRepository.refreshLoggedState()
-                serviceProvider.changeInstance("new-instance")
-                userTagHelper.clear()
-                userSortRepository.clear()
-                postLastSeenDateRepository.clear()
-            }
+        coVerify {
+            accountRepository.setActive(oldAccountId, false)
+            accountRepository.setActive(accountId, true)
+            settingsRepository.getSettings(accountId)
+            settingsRepository.changeCurrentSettings(newSettings)
+            communitySortRepository.clear()
+            communityPreferredLanguageRepository.clear()
+            notificationCenter.send(ofType(NotificationCenterEvent.Logout::class))
+            identityRepository.storeToken("new-token")
+            identityRepository.refreshLoggedState()
+            serviceProvider.changeInstance("new-instance")
+            userTagHelper.clear()
+            userSortRepository.clear()
+            postLastSeenDateRepository.clear()
         }
+    }
 }

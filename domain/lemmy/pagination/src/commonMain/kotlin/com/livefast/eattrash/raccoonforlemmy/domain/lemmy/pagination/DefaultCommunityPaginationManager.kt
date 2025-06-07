@@ -86,9 +86,8 @@ internal class DefaultCommunityPaginationManager(
         return history.map { it }
     }
 
-    private fun List<CommunityModel>.deduplicate(): List<CommunityModel> =
-        filter { p1 ->
-            // prevents accidental duplication
-            history.none { p2 -> p2.id == p1.id }
-        }
+    private fun List<CommunityModel>.deduplicate(): List<CommunityModel> = filter { p1 ->
+        // prevents accidental duplication
+        history.none { p2 -> p2.id == p1.id }
+    }
 }

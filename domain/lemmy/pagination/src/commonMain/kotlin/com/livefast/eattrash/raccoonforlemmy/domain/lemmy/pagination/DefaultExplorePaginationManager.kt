@@ -44,216 +44,212 @@ class DefaultExplorePaginationManager(
         stopWords = null
     }
 
-    override suspend fun loadNextPage(): List<SearchResult>  {
-            val specification = specification ?: return emptyList()
-            val auth = identityRepository.authToken.value.orEmpty()
-            val accountId = accountRepository.getActive()?.id
-            if (blockedDomains == null) {
-                blockedDomains = domainBlocklistRepository.get(accountId)
-            }
-            if (stopWords == null) {
-                stopWords = stopWordRepository.get(accountId)
-            }
+    override suspend fun loadNextPage(): List<SearchResult> {
+        val specification = specification ?: return emptyList()
+        val auth = identityRepository.authToken.value.orEmpty()
+        val accountId = accountRepository.getActive()?.id
+        if (blockedDomains == null) {
+            blockedDomains = domainBlocklistRepository.get(accountId)
+        }
+        if (stopWords == null) {
+            stopWords = stopWordRepository.get(accountId)
+        }
 
-            val searchText = specification.query.orEmpty()
-            val type = specification.resultType
-            val itemList: List<SearchResult> =
-                communityRepository.search(
-                    query = searchText,
-                    auth = auth,
-                    resultType = type,
-                    page = currentPage,
-                    listingType = specification.listingType,
-                    sortType = specification.sortType,
-                    instance = specification.otherInstance,
-                )
-            val resolveResults =
-                buildList {
-                    if (currentPage == 1 && searchText.isNotEmpty()) {
-                        if (type in listOf(SearchResultType.All, SearchResultType.Communities)) {
-                            communityRepository
-                                .getResolved(
-                                    query = searchText,
-                                    auth = auth,
-                                )?.also {
-                                    add(SearchResult.Community(it))
-                                }
-                        }
-
-                        if (type in listOf(SearchResultType.All, SearchResultType.Users)) {
-                            userRepository
-                                .getResolved(
-                                    query = searchText,
-                                    auth = auth,
-                                )?.also {
-                                    add(SearchResult.User(it))
-                                }
-                        }
-
-                        if (type in listOf(SearchResultType.All, SearchResultType.Posts)) {
-                            postRepository
-                                .getResolved(
-                                    query = searchText,
-                                    auth = auth,
-                                )?.also {
-                                    add(SearchResult.Post(it))
-                                }
-                        }
-
-                        if (type in listOf(SearchResultType.All, SearchResultType.Comments)) {
-                            commentRepository
-                                .getResolved(
-                                    query = searchText,
-                                    auth = auth,
-                                )?.also {
-                                    add(SearchResult.Comment(it))
-                                }
-                        }
-                    }
-                }
-
-            if (itemList.isNotEmpty()) {
-                currentPage++
-            }
-            canFetchMore = itemList.isNotEmpty()
-
-            val result =
-                (resolveResults + itemList)
-                    .let {
-                        when (type) {
-                            SearchResultType.Posts -> {
-                                if (specification.searchPostTitleOnly && searchText.isNotEmpty()) {
-                                    // apply the more restrictive title-only search
-                                    it.filterIsInstance<SearchResult.Post>().filter { res ->
-                                        res.model.title.contains(
-                                            other = searchText,
-                                            ignoreCase = true,
-                                        )
-                                    }
-                                } else {
-                                    it
-                                }
+        val searchText = specification.query.orEmpty()
+        val type = specification.resultType
+        val itemList: List<SearchResult> =
+            communityRepository.search(
+                query = searchText,
+                auth = auth,
+                resultType = type,
+                page = currentPage,
+                listingType = specification.listingType,
+                sortType = specification.sortType,
+                instance = specification.otherInstance,
+            )
+        val resolveResults =
+            buildList {
+                if (currentPage == 1 && searchText.isNotEmpty()) {
+                    if (type in listOf(SearchResultType.All, SearchResultType.Communities)) {
+                        communityRepository
+                            .getResolved(
+                                query = searchText,
+                                auth = auth,
+                            )?.also {
+                                add(SearchResult.Community(it))
                             }
+                    }
 
-                            SearchResultType.Users -> {
-                                if (specification.listingType == ListingType.Local && specification.restrictLocalUserSearch) {
-                                    val referenceHost =
-                                        specification.otherInstance?.takeIf { s -> s.isNotEmpty() }
-                                            ?: apiConfigurationRepository.instance.value
-                                    it.filterIsInstance<SearchResult.User>().filter { res ->
-                                        res.model.host == referenceHost
-                                    }
-                                } else {
-                                    it
-                                }
+                    if (type in listOf(SearchResultType.All, SearchResultType.Users)) {
+                        userRepository
+                            .getResolved(
+                                query = searchText,
+                                auth = auth,
+                            )?.also {
+                                add(SearchResult.User(it))
                             }
+                    }
 
-                            else -> it
+                    if (type in listOf(SearchResultType.All, SearchResultType.Posts)) {
+                        postRepository
+                            .getResolved(
+                                query = searchText,
+                                auth = auth,
+                            )?.also {
+                                add(SearchResult.Post(it))
+                            }
+                    }
+
+                    if (type in listOf(SearchResultType.All, SearchResultType.Comments)) {
+                        commentRepository
+                            .getResolved(
+                                query = searchText,
+                                auth = auth,
+                            )?.also {
+                                add(SearchResult.Comment(it))
+                            }
+                    }
+                }
+            }
+
+        if (itemList.isNotEmpty()) {
+            currentPage++
+        }
+        canFetchMore = itemList.isNotEmpty()
+
+        val result =
+            (resolveResults + itemList)
+                .let {
+                    when (type) {
+                        SearchResultType.Posts -> {
+                            if (specification.searchPostTitleOnly && searchText.isNotEmpty()) {
+                                // apply the more restrictive title-only search
+                                it.filterIsInstance<SearchResult.Post>().filter { res ->
+                                    res.model.title.contains(
+                                        other = searchText,
+                                        ignoreCase = true,
+                                    )
+                                }
+                            } else {
+                                it
+                            }
                         }
-                    }.deduplicate()
-                    .filterNsfw(specification.includeNsfw)
-                    .filterDeleted()
-                    .filterByUrlDomain()
-                    .filterByStopWords()
-                    .withUserTags()
 
-            history.addAll(result)
-            // returns a copy of the whole history
-            return history.map { it }
-        }
-
-    private fun List<SearchResult>.deduplicate(): List<SearchResult> =
-        filter { c1 ->
-            // prevents accidental duplication
-            history.none { c2 -> c2.uniqueIdentifier == c1.uniqueIdentifier }
-        }
-
-    private fun List<SearchResult>.filterNsfw(includeNsfw: Boolean): List<SearchResult> =
-        if (includeNsfw) {
-            this
-        } else {
-            filter { res ->
-                when (res) {
-                    is SearchResult.Community -> !res.model.nsfw
-                    is SearchResult.Post -> !res.model.nsfw
-                    is SearchResult.Comment -> true
-                    is SearchResult.User -> true
-                    else -> false
-                }
-            }
-        }
-
-    private fun List<SearchResult>.filterDeleted(): List<SearchResult> =
-        filter {
-            when (it) {
-                is SearchResult.Post -> !it.model.deleted
-                is SearchResult.Comment -> !it.model.deleted
-                else -> true
-            }
-        }
-
-    private fun List<SearchResult>.filterByUrlDomain(): List<SearchResult> =
-        filter {
-            when (it) {
-                is SearchResult.Post -> {
-                    blockedDomains?.takeIf { l -> l.isNotEmpty() }?.let { blockList ->
-                        blockList.none { domain -> it.model.url?.contains(domain) ?: true }
-                    } ?: true
-                }
-
-                else -> true
-            }
-        }
-
-    private fun List<SearchResult>.filterByStopWords(): List<SearchResult> =
-        filter {
-            when (it) {
-                is SearchResult.Post -> {
-                    stopWords?.takeIf { l -> l.isNotEmpty() }?.let { stopWordList ->
-                        stopWordList.none { domain ->
-                            it.model.title.contains(
-                                other = domain,
-                                ignoreCase = true,
-                            )
+                        SearchResultType.Users -> {
+                            if (specification.listingType == ListingType.Local &&
+                                specification.restrictLocalUserSearch
+                            ) {
+                                val referenceHost =
+                                    specification.otherInstance?.takeIf { s -> s.isNotEmpty() }
+                                        ?: apiConfigurationRepository.instance.value
+                                it.filterIsInstance<SearchResult.User>().filter { res ->
+                                    res.model.host == referenceHost
+                                }
+                            } else {
+                                it
+                            }
                         }
-                    } ?: true
+
+                        else -> it
+                    }
+                }.deduplicate()
+                .filterNsfw(specification.includeNsfw)
+                .filterDeleted()
+                .filterByUrlDomain()
+                .filterByStopWords()
+                .withUserTags()
+
+        history.addAll(result)
+        // returns a copy of the whole history
+        return history.map { it }
+    }
+
+    private fun List<SearchResult>.deduplicate(): List<SearchResult> = filter { c1 ->
+        // prevents accidental duplication
+        history.none { c2 -> c2.uniqueIdentifier == c1.uniqueIdentifier }
+    }
+
+    private fun List<SearchResult>.filterNsfw(includeNsfw: Boolean): List<SearchResult> = if (includeNsfw) {
+        this
+    } else {
+        filter { res ->
+            when (res) {
+                is SearchResult.Community -> !res.model.nsfw
+                is SearchResult.Post -> !res.model.nsfw
+                is SearchResult.Comment -> true
+                is SearchResult.User -> true
+                else -> false
+            }
+        }
+    }
+
+    private fun List<SearchResult>.filterDeleted(): List<SearchResult> = filter {
+        when (it) {
+            is SearchResult.Post -> !it.model.deleted
+            is SearchResult.Comment -> !it.model.deleted
+            else -> true
+        }
+    }
+
+    private fun List<SearchResult>.filterByUrlDomain(): List<SearchResult> = filter {
+        when (it) {
+            is SearchResult.Post -> {
+                blockedDomains?.takeIf { l -> l.isNotEmpty() }?.let { blockList ->
+                    blockList.none { domain -> it.model.url?.contains(domain) ?: true }
+                } ?: true
+            }
+
+            else -> true
+        }
+    }
+
+    private fun List<SearchResult>.filterByStopWords(): List<SearchResult> = filter {
+        when (it) {
+            is SearchResult.Post -> {
+                stopWords?.takeIf { l -> l.isNotEmpty() }?.let { stopWordList ->
+                    stopWordList.none { domain ->
+                        it.model.title.contains(
+                            other = domain,
+                            ignoreCase = true,
+                        )
+                    }
+                } ?: true
+            }
+
+            else -> true
+        }
+    }
+
+    private suspend fun List<SearchResult>.withUserTags(): List<SearchResult> = map {
+        when (it) {
+            is SearchResult.Post ->
+                with(userTagHelper) {
+                    it.copy(
+                        model =
+                        it.model.let { post ->
+                            post.copy(creator = post.creator.withTags())
+                        },
+                    )
                 }
 
-                else -> true
-            }
+            is SearchResult.Comment ->
+                with(userTagHelper) {
+                    it.copy(
+                        model =
+                        it.model.let { comment ->
+                            comment.copy(creator = comment.creator.withTags())
+                        },
+                    )
+                }
+
+            is SearchResult.User ->
+                with(userTagHelper) {
+                    it.copy(
+                        model = it.model.withTags() ?: it.model,
+                    )
+                }
+
+            else -> it
         }
-
-    private suspend fun List<SearchResult>.withUserTags(): List<SearchResult> =
-        map {
-            when (it) {
-                is SearchResult.Post ->
-                    with(userTagHelper) {
-                        it.copy(
-                            model =
-                                it.model.let { post ->
-                                    post.copy(creator = post.creator.withTags())
-                                },
-                        )
-                    }
-
-                is SearchResult.Comment ->
-                    with(userTagHelper) {
-                        it.copy(
-                            model =
-                                it.model.let { comment ->
-                                    comment.copy(creator = comment.creator.withTags())
-                                },
-                        )
-                    }
-
-                is SearchResult.User ->
-                    with(userTagHelper) {
-                        it.copy(
-                            model = it.model.withTags() ?: it.model,
-                        )
-                    }
-
-                else -> it
-            }
-        }
+    }
 }

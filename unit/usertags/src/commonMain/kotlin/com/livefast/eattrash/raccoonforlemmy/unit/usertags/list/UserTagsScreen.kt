@@ -126,52 +126,52 @@ class UserTagsScreen : Screen {
                 AnimatedVisibility(
                     visible = isFabVisible,
                     enter =
-                        slideInVertically(
-                            initialOffsetY = { it * 2 },
-                        ),
+                    slideInVertically(
+                        initialOffsetY = { it * 2 },
+                    ),
                     exit =
-                        slideOutVertically(
-                            targetOffsetY = { it * 2 },
-                        ),
+                    slideOutVertically(
+                        targetOffsetY = { it * 2 },
+                    ),
                 ) {
                     FloatingActionButtonMenu(
                         items =
-                            buildList {
-                                this +=
-                                    FloatingActionButtonMenuItem(
-                                        icon = Icons.Default.ExpandLess,
-                                        text = LocalStrings.current.actionBackToTop,
-                                        onSelected = {
-                                            scope.launch {
-                                                runCatching {
-                                                    lazyListState.scrollToItem(0)
-                                                    topAppBarState.heightOffset = 0f
-                                                    topAppBarState.contentOffset = 0f
-                                                }
+                        buildList {
+                            this +=
+                                FloatingActionButtonMenuItem(
+                                    icon = Icons.Default.ExpandLess,
+                                    text = LocalStrings.current.actionBackToTop,
+                                    onSelected = {
+                                        scope.launch {
+                                            runCatching {
+                                                lazyListState.scrollToItem(0)
+                                                topAppBarState.heightOffset = 0f
+                                                topAppBarState.contentOffset = 0f
                                             }
-                                        },
-                                    )
-                                this +=
-                                    FloatingActionButtonMenuItem(
-                                        icon = Icons.Default.Add,
-                                        text = LocalStrings.current.buttonAdd,
-                                        onSelected = {
-                                            addTagDialogOpen = true
-                                        },
-                                    )
-                            },
+                                        }
+                                    },
+                                )
+                            this +=
+                                FloatingActionButtonMenuItem(
+                                    icon = Icons.Default.Add,
+                                    text = LocalStrings.current.buttonAdd,
+                                    onSelected = {
+                                        addTagDialogOpen = true
+                                    },
+                                )
+                        },
                     )
                 }
             },
         ) { padding ->
             PullToRefreshBox(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).fillMaxSize()
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .nestedScroll(fabNestedScrollConnection),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).fillMaxSize()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .nestedScroll(fabNestedScrollConnection),
                 isRefreshing = uiState.refreshing,
                 onRefresh = {
                     model.reduce(UserTagsMviModel.Intent.Refresh)
@@ -200,14 +200,14 @@ class UserTagsScreen : Screen {
                             modifier = Modifier.fillMaxWidth(),
                             tag = tag,
                             options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            id = OptionId.Edit,
-                                            text = LocalStrings.current.postActionEdit,
-                                        )
-                                },
-                            onOptionSelected = { optionId ->
+                            buildList {
+                                this +=
+                                    Option(
+                                        id = OptionId.Edit,
+                                        text = LocalStrings.current.postActionEdit,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
                                 when (optionId) {
                                     OptionId.Edit -> tagToEdit = tag
                                     else -> Unit
@@ -226,29 +226,29 @@ class UserTagsScreen : Screen {
                     items(uiState.regularTags) { tag ->
                         UserTagItem(
                             modifier =
-                                Modifier.fillMaxWidth().onClick(
-                                    onClick = {
-                                        tag.id?.also {
-                                            val screen = UserTagDetailScreen(it)
-                                            navigatorCoordinator.pushScreen(screen)
-                                        }
-                                    },
-                                ),
+                            Modifier.fillMaxWidth().onClick(
+                                onClick = {
+                                    tag.id?.also {
+                                        val screen = UserTagDetailScreen(it)
+                                        navigatorCoordinator.pushScreen(screen)
+                                    }
+                                },
+                            ),
                             tag = tag,
                             options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            id = OptionId.Edit,
-                                            text = LocalStrings.current.postActionEdit,
-                                        )
-                                    this +=
-                                        Option(
-                                            id = OptionId.Delete,
-                                            text = LocalStrings.current.commentActionDelete,
-                                        )
-                                },
-                            onOptionSelected = { optionId ->
+                            buildList {
+                                this +=
+                                    Option(
+                                        id = OptionId.Edit,
+                                        text = LocalStrings.current.postActionEdit,
+                                    )
+                                this +=
+                                    Option(
+                                        id = OptionId.Delete,
+                                        text = LocalStrings.current.commentActionDelete,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
                                 when (optionId) {
                                     OptionId.Edit -> tagToEdit = tag
 
@@ -266,9 +266,9 @@ class UserTagsScreen : Screen {
                         item {
                             Text(
                                 modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .padding(top = Spacing.xs),
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = Spacing.xs),
                                 textAlign = TextAlign.Center,
                                 text = LocalStrings.current.messageEmptyList,
                                 style = MaterialTheme.typography.bodyLarge,

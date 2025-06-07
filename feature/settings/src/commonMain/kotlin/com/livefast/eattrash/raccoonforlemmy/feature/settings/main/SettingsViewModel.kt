@@ -40,8 +40,8 @@ class SettingsViewModel(
     private val siteSupportsHiddenPosts: GetSiteSupportsHiddenPostsUseCase,
     private val siteSupportsMediaListUseCase: GetSiteSupportsMediaListUseCase,
 ) : DefaultMviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect>(
-        initialState = SettingsMviModel.UiState(),
-    ),
+    initialState = SettingsMviModel.UiState(),
+),
     SettingsMviModel {
     init {
         screenModelScope.launch {

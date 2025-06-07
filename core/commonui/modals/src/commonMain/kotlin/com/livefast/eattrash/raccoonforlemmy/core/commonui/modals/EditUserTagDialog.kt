@@ -38,6 +38,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 @Composable
 fun EditUserTagDialog(
     title: String,
+    modifier: Modifier = Modifier,
     titleError: ValidationError? = null,
     value: String = "",
     canEditName: Boolean = true,
@@ -52,15 +53,16 @@ fun EditUserTagDialog(
     var selectedColor by remember { mutableStateOf(color) }
 
     BasicAlertDialog(
+        modifier = modifier,
         onDismissRequest = {
             onClose?.invoke(null, null)
         },
     ) {
         Column(
             modifier =
-                Modifier
-                    .background(color = MaterialTheme.colorScheme.surface)
-                    .padding(Spacing.s),
+            Modifier
+                .background(color = MaterialTheme.colorScheme.surface)
+                .padding(Spacing.s),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
@@ -86,11 +88,11 @@ fun EditUserTagDialog(
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     colors =
-                        TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                        ),
+                    TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                    ),
                     label = {
                         Text(
                             text = LocalStrings.current.multiCommunityEditorName,
@@ -109,10 +111,10 @@ fun EditUserTagDialog(
                         }
                     },
                     keyboardOptions =
-                        KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            autoCorrectEnabled = true,
-                        ),
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        autoCorrectEnabled = true,
+                    ),
                     onValueChange = { value ->
                         textFieldValue = value
                     },

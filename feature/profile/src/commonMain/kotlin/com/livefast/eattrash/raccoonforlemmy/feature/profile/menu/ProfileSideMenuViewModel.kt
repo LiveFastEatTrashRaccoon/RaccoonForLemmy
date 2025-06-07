@@ -15,8 +15,8 @@ class ProfileSideMenuViewModel(
     private val settingsRepository: SettingsRepository,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<ProfileSideMenuMviModel.Intent, ProfileSideMenuMviModel.State, ProfileSideMenuMviModel.Effect>(
-        ProfileSideMenuMviModel.State(),
-    ),
+    ProfileSideMenuMviModel.State(),
+),
     ProfileSideMenuMviModel {
     init {
         screenModelScope.launch {
@@ -35,11 +35,11 @@ class ProfileSideMenuViewModel(
                 updateState {
                     it.copy(
                         canCreateCommunity =
-                            if (isCommunityCreationAdminOnly) {
-                                isAdmin
-                            } else {
-                                true
-                            },
+                        if (isCommunityCreationAdminOnly) {
+                            isAdmin
+                        } else {
+                            true
+                        },
                     )
                 }
             }.launchIn(this)

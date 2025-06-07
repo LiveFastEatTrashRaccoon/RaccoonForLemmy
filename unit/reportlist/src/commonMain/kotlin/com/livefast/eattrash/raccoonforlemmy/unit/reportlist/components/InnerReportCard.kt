@@ -64,8 +64,8 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 
 @Composable
 internal fun InnerReportCard(
-    modifier: Modifier = Modifier,
     reason: String,
+    modifier: Modifier = Modifier,
     autoLoadImages: Boolean = true,
     preferNicknames: Boolean = true,
     date: String? = null,
@@ -75,7 +75,7 @@ internal fun InnerReportCard(
     onOpenCreator: ((UserModel) -> Unit)? = null,
     onOpen: (() -> Unit)? = null,
     originalContent: (@Composable () -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     var optionsMenuOpen by remember { mutableStateOf(false) }
     val optionsActionLabel = LocalStrings.current.actionOpenOptionMenu
@@ -92,50 +92,50 @@ internal fun InnerReportCard(
 
     Box(
         modifier =
-            modifier.then(
-                if (postLayout == PostLayout.Card) {
-                    Modifier
-                        .padding(horizontal = Spacing.xs)
-                        .shadow(
-                            elevation = 5.dp,
-                            shape = RoundedCornerShape(CornerSize.l),
-                        ).clip(RoundedCornerShape(CornerSize.l))
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
-                            shape = RoundedCornerShape(CornerSize.l),
-                        ).padding(vertical = Spacing.xs)
-                } else {
-                    Modifier.background(MaterialTheme.colorScheme.background)
-                },
-            ).semantics {
-                val helperActions =
-                    buildList {
-                        if (creator != null && onOpenCreator != null) {
-                            this +=
-                                CustomAccessibilityAction(openUserActionLabel) {
-                                    onOpenCreator(creator)
-                                    true
-                                }
-                        }
-                        if (onOpen != null) {
-                            this +=
-                                CustomAccessibilityAction(openResolveActionLabel) {
-                                    onOpen()
-                                    true
-                                }
-                        }
-                        if (options.isNotEmpty()) {
-                            this +=
-                                CustomAccessibilityAction(optionsActionLabel) {
-                                    optionsMenuOpen = true
-                                    true
-                                }
-                        }
-                    }
-                if (helperActions.isNotEmpty()) {
-                    customActions = helperActions
-                }
+        modifier.then(
+            if (postLayout == PostLayout.Card) {
+                Modifier
+                    .padding(horizontal = Spacing.xs)
+                    .shadow(
+                        elevation = 5.dp,
+                        shape = RoundedCornerShape(CornerSize.l),
+                    ).clip(RoundedCornerShape(CornerSize.l))
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp),
+                        shape = RoundedCornerShape(CornerSize.l),
+                    ).padding(vertical = Spacing.xs)
+            } else {
+                Modifier.background(MaterialTheme.colorScheme.background)
             },
+        ).semantics {
+            val helperActions =
+                buildList {
+                    if (creator != null && onOpenCreator != null) {
+                        this +=
+                            CustomAccessibilityAction(openUserActionLabel) {
+                                onOpenCreator(creator)
+                                true
+                            }
+                    }
+                    if (onOpen != null) {
+                        this +=
+                            CustomAccessibilityAction(openResolveActionLabel) {
+                                onOpen()
+                                true
+                            }
+                    }
+                    if (options.isNotEmpty()) {
+                        this +=
+                            CustomAccessibilityAction(optionsActionLabel) {
+                                optionsMenuOpen = true
+                                true
+                            }
+                    }
+                }
+            if (helperActions.isNotEmpty()) {
+                customActions = helperActions
+            }
+        },
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
@@ -155,13 +155,13 @@ internal fun InnerReportCard(
                 if (originalContent != null) {
                     Box(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .border(
-                                    width = 1.dp,
-                                    color = MaterialTheme.colorScheme.secondary,
-                                    shape = RoundedCornerShape(CornerSize.l),
-                                ).padding(all = Spacing.s),
+                        Modifier
+                            .fillMaxWidth()
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.secondary,
+                                shape = RoundedCornerShape(CornerSize.l),
+                            ).padding(all = Spacing.s),
                     ) {
                         originalContent()
                     }
@@ -169,18 +169,18 @@ internal fun InnerReportCard(
             }
             ReportFooter(
                 modifier =
-                    Modifier.padding(
-                        vertical = Spacing.xs,
-                        horizontal = Spacing.s,
-                    ),
+                Modifier.padding(
+                    vertical = Spacing.xs,
+                    horizontal = Spacing.s,
+                ),
                 date = date,
                 onOpenResolve = onOpen,
                 options = options,
                 optionsMenuOpen = optionsMenuOpen,
-                onOptionsMenuToggled = {
+                onToggleOptionsMenu = {
                     optionsMenuOpen = it
                 },
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
             )
         }
     }
@@ -200,24 +200,24 @@ private fun ReportHeader(
     if (creatorName.isNotEmpty()) {
         Row(
             modifier =
-                modifier
-                    .onClick(
-                        onClick = {
-                            if (creator != null) {
-                                onOpenCreator?.invoke(creator)
-                            }
-                        },
-                    ).clearAndSetSemantics { },
+            modifier
+                .onClick(
+                    onClick = {
+                        if (creator != null) {
+                            onOpenCreator?.invoke(creator)
+                        }
+                    },
+                ).clearAndSetSemantics { },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
         ) {
             if (creatorAvatar.isNotEmpty() && autoLoadImages) {
                 CustomImage(
                     modifier =
-                        Modifier
-                            .padding(Spacing.xxxs)
-                            .size(iconSize)
-                            .clip(RoundedCornerShape(iconSize / 2)),
+                    Modifier
+                        .padding(Spacing.xxxs)
+                        .size(iconSize)
+                        .clip(RoundedCornerShape(iconSize / 2)),
                     url = creatorAvatar,
                     quality = FilterQuality.Low,
                     contentScale = ContentScale.FillBounds,
@@ -243,8 +243,8 @@ private fun ReportFooter(
     optionsMenuOpen: Boolean = false,
     options: List<Option> = emptyList(),
     onOpenResolve: (() -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
-    onOptionsMenuToggled: ((Boolean) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
+    onToggleOptionsMenu: ((Boolean) -> Unit)? = null,
 ) {
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
@@ -275,15 +275,15 @@ private fun ReportFooter(
             if (options.isNotEmpty()) {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .padding(top = Spacing.xxs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            }.clearAndSetSemantics { },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .padding(top = Spacing.xxs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        }.clearAndSetSemantics { },
                     onClick = {
-                        onOptionsMenuToggled?.invoke(true)
+                        onToggleOptionsMenu?.invoke(true)
                     },
                 ) {
                     Icon(
@@ -311,13 +311,13 @@ private fun ReportFooter(
         CustomDropDown(
             expanded = optionsMenuOpen,
             onDismiss = {
-                onOptionsMenuToggled?.invoke(false)
+                onToggleOptionsMenu?.invoke(false)
             },
             offset =
-                DpOffset(
-                    x = optionsOffset.x.toLocalDp(),
-                    y = optionsOffset.y.toLocalDp(),
-                ),
+            DpOffset(
+                x = optionsOffset.x.toLocalDp(),
+                y = optionsOffset.y.toLocalDp(),
+            ),
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
@@ -325,8 +325,8 @@ private fun ReportFooter(
                         Text(option.text)
                     },
                     onClick = {
-                        onOptionsMenuToggled?.invoke(false)
-                        onOptionSelected?.invoke(option.id)
+                        onToggleOptionsMenu?.invoke(false)
+                        onSelectOption?.invoke(option.id)
                     },
                 )
             }

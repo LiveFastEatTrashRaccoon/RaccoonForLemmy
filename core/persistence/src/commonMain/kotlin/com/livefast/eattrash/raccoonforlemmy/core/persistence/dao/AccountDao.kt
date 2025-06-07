@@ -10,23 +10,13 @@ interface AccountDao {
 
     fun getActive(): Query<AccountEntity>
 
-    fun create(
-        username: String,
-        instance: String,
-        jwt: String?,
-        avatar: String?,
-    )
+    fun create(username: String, instance: String, jwt: String?, avatar: String?)
 
     fun setActive(id: Long)
 
     fun setInactive(id: Long)
 
-    fun update(
-        jwt: String?,
-        avatar: String?,
-        id: Long,
-    )
+    fun update(jwt: String?, avatar: String?, id: Long)
 
     fun delete(id: Long)
 }
-

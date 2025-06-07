@@ -135,10 +135,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class CommunityDetailScreen(
-    private val communityId: Long,
-    private val otherInstance: String = "",
-) : Screen {
+class CommunityDetailScreen(private val communityId: Long, private val otherInstance: String = "") : Screen {
     override val key: ScreenKey
         get() = super.key + communityId.toString()
 
@@ -148,10 +145,10 @@ class CommunityDetailScreen(
         val model: CommunityDetailMviModel =
             rememberScreenModel(
                 arg =
-                    CommunityDetailMviModelParams(
-                        communityId = communityId,
-                        otherInstance = otherInstance,
-                    ),
+                CommunityDetailMviModelParams(
+                    communityId = communityId,
+                    otherInstance = otherInstance,
+                ),
             )
         val uiState by model.uiState.collectAsState()
         val lazyListState = rememberLazyListState()
@@ -186,10 +183,7 @@ class CommunityDetailScreen(
         val keyboardScrollConnection =
             remember {
                 object : NestedScrollConnection {
-                    override fun onPreScroll(
-                        available: Offset,
-                        source: NestedScrollSource,
-                    ): Offset {
+                    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                         focusManager.clearFocus()
                         return Offset.Zero
                     }
@@ -291,17 +285,17 @@ class CommunityDetailScreen(
                             ) {
                                 Icon(
                                     imageVector =
-                                        when (uiState.community.subscribed) {
-                                            true -> Icons.Outlined.CheckCircle
-                                            false -> Icons.Outlined.AddCircleOutline
-                                            else -> Icons.Outlined.Pending
-                                        },
+                                    when (uiState.community.subscribed) {
+                                        true -> Icons.Outlined.CheckCircle
+                                        false -> Icons.Outlined.AddCircleOutline
+                                        else -> Icons.Outlined.Pending
+                                    },
                                     contentDescription =
-                                        when (uiState.community.subscribed) {
-                                            true -> LocalStrings.current.communityStatusSubscribed
-                                            false -> LocalStrings.current.communityStatusNotSubscribed
-                                            else -> LocalStrings.current.communityStatusPending
-                                        },
+                                    when (uiState.community.subscribed) {
+                                        true -> LocalStrings.current.communityStatusSubscribed
+                                        false -> LocalStrings.current.communityStatusNotSubscribed
+                                        else -> LocalStrings.current.communityStatusPending
+                                    },
                                 )
                             }
                         }
@@ -441,10 +435,10 @@ class CommunityDetailScreen(
                             var optionsOffset by remember { mutableStateOf(Offset.Zero) }
                             IconButton(
                                 modifier =
-                                    Modifier
-                                        .onGloballyPositioned {
-                                            optionsOffset = it.positionInParent()
-                                        },
+                                Modifier
+                                    .onGloballyPositioned {
+                                        optionsOffset = it.positionInParent()
+                                    },
                                 onClick = {
                                     optionsExpanded = true
                                 },
@@ -461,10 +455,10 @@ class CommunityDetailScreen(
                                     optionsExpanded = false
                                 },
                                 offset =
-                                    DpOffset(
-                                        x = optionsOffset.x.toLocalDp(),
-                                        y = optionsOffset.y.toLocalDp(),
-                                    ),
+                                DpOffset(
+                                    x = optionsOffset.x.toLocalDp(),
+                                    y = optionsOffset.y.toLocalDp(),
+                                ),
                             ) {
                                 options.forEach { option ->
                                     DropdownMenuItem(
@@ -518,9 +512,23 @@ class CommunityDetailScreen(
                                                     val urls =
                                                         buildList {
                                                             if (uiState.community.host != uiState.instance) {
-                                                                this += "https://${uiState.instance}/c/${uiState.community.readableHandle}"
+                                                                add(
+                                                                    buildString {
+                                                                        append("https://")
+                                                                        append(uiState.instance)
+                                                                        append("/c/")
+                                                                        append(uiState.community.readableHandle)
+                                                                    },
+                                                                )
                                                             }
-                                                            this += "https://${uiState.community.host}/c/${uiState.community.name}"
+                                                            add(
+                                                                buildString {
+                                                                    append("https://")
+                                                                    append(uiState.community.host)
+                                                                    append("/c/")
+                                                                    append(uiState.community.name)
+                                                                },
+                                                            )
                                                         }
                                                     if (urls.size == 1) {
                                                         model.reduce(
@@ -567,7 +575,8 @@ class CommunityDetailScreen(
                                                     } else {
                                                         val screen =
                                                             ModerateWithReasonScreen(
-                                                                actionId = ModerateWithReasonAction.HideCommunity.toInt(),
+                                                                actionId =
+                                                                ModerateWithReasonAction.HideCommunity.toInt(),
                                                                 contentId = uiState.community.id,
                                                             )
                                                         navigationCoordinator.pushScreen(screen)
@@ -615,43 +624,59 @@ class CommunityDetailScreen(
                 AnimatedVisibility(
                     visible = isFabVisible,
                     enter =
-                        slideInVertically(
-                            initialOffsetY = { it * 2 },
-                        ),
+                    slideInVertically(
+                        initialOffsetY = { it * 2 },
+                    ),
                     exit =
-                        slideOutVertically(
-                            targetOffsetY = { it * 2 },
-                        ),
+                    slideOutVertically(
+                        targetOffsetY = { it * 2 },
+                    ),
                 ) {
                     FloatingActionButtonMenu(
                         items =
-                            buildList {
-                                if (uiState.zombieModeActive) {
-                                    this +=
-                                        FloatingActionButtonMenuItem(
-                                            icon = Icons.Default.SyncDisabled,
-                                            text = LocalStrings.current.actionDeactivateZombieMode,
-                                            onSelected = {
-                                                model.reduce(CommunityDetailMviModel.Intent.PauseZombieMode)
-                                            },
-                                        )
-                                } else {
-                                    this +=
-                                        FloatingActionButtonMenuItem(
-                                            icon = Icons.Default.Sync,
-                                            text = LocalStrings.current.actionActivateZombieMode,
-                                            onSelected = {
-                                                model.reduce(
-                                                    CommunityDetailMviModel.Intent.StartZombieMode(-1),
-                                                )
-                                            },
-                                        )
-                                }
+                        buildList {
+                            if (uiState.zombieModeActive) {
                                 this +=
                                     FloatingActionButtonMenuItem(
-                                        icon = Icons.Default.ExpandLess,
-                                        text = LocalStrings.current.actionBackToTop,
+                                        icon = Icons.Default.SyncDisabled,
+                                        text = LocalStrings.current.actionDeactivateZombieMode,
                                         onSelected = {
+                                            model.reduce(CommunityDetailMviModel.Intent.PauseZombieMode)
+                                        },
+                                    )
+                            } else {
+                                this +=
+                                    FloatingActionButtonMenuItem(
+                                        icon = Icons.Default.Sync,
+                                        text = LocalStrings.current.actionActivateZombieMode,
+                                        onSelected = {
+                                            model.reduce(
+                                                CommunityDetailMviModel.Intent.StartZombieMode(-1),
+                                            )
+                                        },
+                                    )
+                            }
+                            this +=
+                                FloatingActionButtonMenuItem(
+                                    icon = Icons.Default.ExpandLess,
+                                    text = LocalStrings.current.actionBackToTop,
+                                    onSelected = {
+                                        scope.launch {
+                                            runCatching {
+                                                lazyListState.scrollToItem(0)
+                                                topAppBarState.heightOffset = 0f
+                                                topAppBarState.contentOffset = 0f
+                                            }
+                                        }
+                                    },
+                                )
+                            if (uiState.isLogged && !isOnOtherInstance) {
+                                this +=
+                                    FloatingActionButtonMenuItem(
+                                        icon = Icons.Default.ClearAll,
+                                        text = LocalStrings.current.actionClearRead,
+                                        onSelected = {
+                                            model.reduce(CommunityDetailMviModel.Intent.ClearRead)
                                             scope.launch {
                                                 runCatching {
                                                     lazyListState.scrollToItem(0)
@@ -661,34 +686,18 @@ class CommunityDetailScreen(
                                             }
                                         },
                                     )
-                                if (uiState.isLogged && !isOnOtherInstance) {
-                                    this +=
-                                        FloatingActionButtonMenuItem(
-                                            icon = Icons.Default.ClearAll,
-                                            text = LocalStrings.current.actionClearRead,
-                                            onSelected = {
-                                                model.reduce(CommunityDetailMviModel.Intent.ClearRead)
-                                                scope.launch {
-                                                    runCatching {
-                                                        lazyListState.scrollToItem(0)
-                                                        topAppBarState.heightOffset = 0f
-                                                        topAppBarState.contentOffset = 0f
-                                                    }
-                                                }
-                                            },
-                                        )
-                                    this +=
-                                        FloatingActionButtonMenuItem(
-                                            icon = Icons.Default.Create,
-                                            text = LocalStrings.current.actionCreatePost,
-                                            onSelected = {
-                                                detailOpener.openCreatePost(
-                                                    communityId = uiState.community.id,
-                                                )
-                                            },
-                                        )
-                                }
-                            },
+                                this +=
+                                    FloatingActionButtonMenuItem(
+                                        icon = Icons.Default.Create,
+                                        text = LocalStrings.current.actionCreatePost,
+                                        onSelected = {
+                                            detailOpener.openCreatePost(
+                                                communityId = uiState.community.id,
+                                            )
+                                        },
+                                    )
+                            }
+                        },
                     )
                 }
             },
@@ -705,18 +714,18 @@ class CommunityDetailScreen(
             if (uiState.currentUserId != null) {
                 Column(
                     modifier =
-                        Modifier.padding(
-                            top = padding.calculateTopPadding(),
-                        ),
+                    Modifier.padding(
+                        top = padding.calculateTopPadding(),
+                    ),
                 ) {
                     if (uiState.searching) {
                         SearchField(
                             modifier =
-                                Modifier
-                                    .padding(
-                                        horizontal = Spacing.xs,
-                                        vertical = Spacing.s,
-                                    ).fillMaxWidth(),
+                            Modifier
+                                .padding(
+                                    horizontal = Spacing.xs,
+                                    vertical = Spacing.s,
+                                ).fillMaxWidth(),
                             hint = LocalStrings.current.exploreSearchPlaceholder,
                             value = uiState.searchText,
                             onValueChange = { value ->
@@ -730,16 +739,16 @@ class CommunityDetailScreen(
 
                     PullToRefreshBox(
                         modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .then(
-                                    if (settings.hideNavigationBarWhileScrolling) {
-                                        Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                                    } else {
-                                        Modifier
-                                    },
-                                ).nestedScroll(fabNestedScrollConnection)
-                                .nestedScroll(keyboardScrollConnection),
+                        Modifier
+                            .fillMaxSize()
+                            .then(
+                                if (settings.hideNavigationBarWhileScrolling) {
+                                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                                } else {
+                                    Modifier
+                                },
+                            ).nestedScroll(fabNestedScrollConnection)
+                            .nestedScroll(keyboardScrollConnection),
                         isRefreshing = uiState.refreshing,
                         onRefresh = {
                             model.reduce(CommunityDetailMviModel.Intent.Refresh)
@@ -780,23 +789,24 @@ class CommunityDetailScreen(
                                 if (!uiState.searching && uiState.notices.isNotEmpty()) {
                                     Column(
                                         modifier =
-                                            Modifier.padding(
-                                                start = Spacing.s,
-                                                end = Spacing.s,
-                                                bottom = Spacing.s,
-                                            ),
+                                        Modifier.padding(
+                                            start = Spacing.s,
+                                            end = Spacing.s,
+                                            bottom = Spacing.s,
+                                        ),
                                         verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                                     ) {
                                         for (notice in uiState.notices) {
                                             IndicatorCallout(
                                                 modifier = Modifier.fillMaxWidth(),
                                                 text =
-                                                    when (notice) {
-                                                        CommunityNotices.LocalOnlyVisibility ->
-                                                            LocalStrings.current.noticeCommunityLocalOnly
+                                                when (notice) {
+                                                    CommunityNotices.LocalOnlyVisibility ->
+                                                        LocalStrings.current.noticeCommunityLocalOnly
 
-                                                        CommunityNotices.BannedUser -> LocalStrings.current.noticeBannedUser
-                                                    },
+                                                    CommunityNotices.BannedUser ->
+                                                        LocalStrings.current.noticeBannedUser
+                                                },
                                             )
                                         }
                                     }
@@ -842,8 +852,8 @@ class CommunityDetailScreen(
                                                         )
                                                     },
                                                     backgroundColor =
-                                                        upVoteColor
-                                                            ?: defaultUpvoteColor,
+                                                    upVoteColor
+                                                        ?: defaultUpvoteColor,
                                                     onTriggered = {
                                                         model.reduce(
                                                             CommunityDetailMviModel.Intent.UpVotePost(
@@ -864,8 +874,8 @@ class CommunityDetailScreen(
                                                         )
                                                     },
                                                     backgroundColor =
-                                                        downVoteColor
-                                                            ?: defaultDownVoteColor,
+                                                    downVoteColor
+                                                        ?: defaultDownVoteColor,
                                                     onTriggered = {
                                                         model.reduce(
                                                             CommunityDetailMviModel.Intent.DownVotePost(
@@ -885,8 +895,8 @@ class CommunityDetailScreen(
                                                         )
                                                     },
                                                     backgroundColor =
-                                                        replyColor
-                                                            ?: defaultReplyColor,
+                                                    replyColor
+                                                        ?: defaultReplyColor,
                                                     onTriggered = {
                                                         detailOpener.openReply(originalPost = post)
                                                     },
@@ -897,7 +907,8 @@ class CommunityDetailScreen(
                                                     swipeContent = {
                                                         Icon(
                                                             imageVector = Icons.Default.Bookmark,
-                                                            contentDescription = LocalStrings.current.actionAddToBookmarks,
+                                                            contentDescription =
+                                                            LocalStrings.current.actionAddToBookmarks,
                                                             tint = Color.White,
                                                         )
                                                     },
@@ -937,13 +948,13 @@ class CommunityDetailScreen(
                                         model.reduce(CommunityDetailMviModel.Intent.HapticIndication)
                                     },
                                     swipeToStartActions =
-                                        uiState.actionsOnSwipeToStartPosts.toSwipeActions(
-                                            canEdit = post.creator?.id == uiState.currentUserId,
-                                        ),
+                                    uiState.actionsOnSwipeToStartPosts.toSwipeActions(
+                                        canEdit = post.creator?.id == uiState.currentUserId,
+                                    ),
                                     swipeToEndActions =
-                                        uiState.actionsOnSwipeToEndPosts.toSwipeActions(
-                                            canEdit = post.creator?.id == uiState.currentUserId,
-                                        ),
+                                    uiState.actionsOnSwipeToEndPosts.toSwipeActions(
+                                        canEdit = post.creator?.id == uiState.currentUserId,
+                                    ),
                                     content = {
                                         PostCard(
                                             modifier = Modifier.padding(horizontal = Spacing.xs),
@@ -963,10 +974,10 @@ class CommunityDetailScreen(
                                             downVoteEnabled = uiState.downVoteEnabled,
                                             highlightText = uiState.searchText,
                                             blurNsfw =
-                                                when {
-                                                    uiState.community.nsfw -> false
-                                                    else -> uiState.blurNsfw
-                                                },
+                                            when {
+                                                uiState.community.nsfw -> false
+                                                else -> uiState.blurNsfw
+                                            },
                                             fadeRead = uiState.fadeReadPosts,
                                             showUnreadComments = uiState.showUnreadComments,
                                             botTagColor = uiState.botTagColor,
@@ -984,50 +995,54 @@ class CommunityDetailScreen(
                                                 )
                                             },
                                             onDoubleClick =
-                                                {
-                                                    model.reduce(
-                                                        CommunityDetailMviModel.Intent.UpVotePost(
-                                                            id = post.id,
-                                                            feedback = true,
-                                                        ),
-                                                    )
-                                                }.takeIf { uiState.doubleTapActionEnabled && uiState.isLogged && !isOnOtherInstance },
+                                            {
+                                                model.reduce(
+                                                    CommunityDetailMviModel.Intent.UpVotePost(
+                                                        id = post.id,
+                                                        feedback = true,
+                                                    ),
+                                                )
+                                            }.takeIf {
+                                                uiState.doubleTapActionEnabled &&
+                                                    uiState.isLogged &&
+                                                    !isOnOtherInstance
+                                            },
                                             onOpenCreator = { user, instance ->
                                                 detailOpener.openUserDetail(user, instance)
                                             },
                                             onUpVote =
-                                                {
-                                                    model.reduce(
-                                                        CommunityDetailMviModel.Intent.UpVotePost(
-                                                            id = post.id,
-                                                        ),
-                                                    )
-                                                }.takeIf { uiState.isLogged && !isOnOtherInstance },
+                                            {
+                                                model.reduce(
+                                                    CommunityDetailMviModel.Intent.UpVotePost(
+                                                        id = post.id,
+                                                    ),
+                                                )
+                                            }.takeIf { uiState.isLogged && !isOnOtherInstance },
                                             onDownVote =
-                                                {
-                                                    model.reduce(
-                                                        CommunityDetailMviModel.Intent.DownVotePost(
-                                                            id = post.id,
-                                                        ),
-                                                    )
-                                                }.takeIf { uiState.isLogged && !isOnOtherInstance },
+                                            {
+                                                model.reduce(
+                                                    CommunityDetailMviModel.Intent.DownVotePost(
+                                                        id = post.id,
+                                                    ),
+                                                )
+                                            }.takeIf { uiState.isLogged && !isOnOtherInstance },
                                             onSave =
-                                                {
-                                                    model.reduce(
-                                                        CommunityDetailMviModel.Intent.SavePost(
-                                                            id = post.id,
-                                                        ),
-                                                    )
-                                                }.takeIf { uiState.isLogged && !isOnOtherInstance },
+                                            {
+                                                model.reduce(
+                                                    CommunityDetailMviModel.Intent.SavePost(
+                                                        id = post.id,
+                                                    ),
+                                                )
+                                            }.takeIf { uiState.isLogged && !isOnOtherInstance },
                                             onReply =
-                                                {
-                                                    model.reduce(
-                                                        CommunityDetailMviModel.Intent.WillOpenDetail(
-                                                            post.id,
-                                                        ),
-                                                    )
-                                                    detailOpener.openPostDetail(post)
-                                                }.takeIf { uiState.isLogged && !isOnOtherInstance },
+                                            {
+                                                model.reduce(
+                                                    CommunityDetailMviModel.Intent.WillOpenDetail(
+                                                        post.id,
+                                                    ),
+                                                )
+                                                detailOpener.openPostDetail(post)
+                                            }.takeIf { uiState.isLogged && !isOnOtherInstance },
                                             onOpenImage = { url ->
                                                 model.reduce(
                                                     CommunityDetailMviModel.Intent.MarkAsRead(
@@ -1051,149 +1066,151 @@ class CommunityDetailScreen(
                                                 )
                                             },
                                             options =
-                                                buildList {
+                                            buildList {
+                                                this +=
+                                                    Option(
+                                                        OptionId.Share,
+                                                        LocalStrings.current.postActionShare,
+                                                    )
+                                                this +=
+                                                    Option(
+                                                        OptionId.Copy,
+                                                        LocalStrings.current.actionCopyClipboard,
+                                                    )
+                                                if (uiState.isLogged && !isOnOtherInstance) {
                                                     this +=
                                                         Option(
-                                                            OptionId.Share,
-                                                            LocalStrings.current.postActionShare,
+                                                            OptionId.ToggleRead,
+                                                            LocalStrings.current.actionToggleRead,
                                                         )
                                                     this +=
                                                         Option(
-                                                            OptionId.Copy,
-                                                            LocalStrings.current.actionCopyClipboard,
+                                                            OptionId.Hide,
+                                                            LocalStrings.current.postActionHide,
                                                         )
-                                                    if (uiState.isLogged && !isOnOtherInstance) {
-                                                        this +=
-                                                            Option(
-                                                                OptionId.ToggleRead,
-                                                                LocalStrings.current.actionToggleRead,
-                                                            )
-                                                        this +=
-                                                            Option(
-                                                                OptionId.Hide,
-                                                                LocalStrings.current.postActionHide,
-                                                            )
-                                                    }
+                                                }
+                                                this +=
+                                                    Option(
+                                                        OptionId.SeeRaw,
+                                                        LocalStrings.current.postActionSeeRaw,
+                                                    )
+                                                if (uiState.isLogged && !isOnOtherInstance) {
                                                     this +=
                                                         Option(
-                                                            OptionId.SeeRaw,
-                                                            LocalStrings.current.postActionSeeRaw,
+                                                            OptionId.CrossPost,
+                                                            LocalStrings.current.postActionCrossPost,
                                                         )
-                                                    if (uiState.isLogged && !isOnOtherInstance) {
+                                                    this +=
+                                                        Option(
+                                                            OptionId.Report,
+                                                            LocalStrings.current.postActionReport,
+                                                        )
+                                                }
+                                                if (post.creator?.id == uiState.currentUserId &&
+                                                    !isOnOtherInstance
+                                                ) {
+                                                    this +=
+                                                        Option(
+                                                            OptionId.Edit,
+                                                            LocalStrings.current.postActionEdit,
+                                                        )
+                                                    if (post.deleted) {
                                                         this +=
                                                             Option(
-                                                                OptionId.CrossPost,
-                                                                LocalStrings.current.postActionCrossPost,
+                                                                OptionId.Restore,
+                                                                LocalStrings.current.actionRestore,
                                                             )
+                                                    } else {
                                                         this +=
                                                             Option(
-                                                                OptionId.Report,
-                                                                LocalStrings.current.postActionReport,
+                                                                OptionId.Delete,
+                                                                LocalStrings.current.commentActionDelete,
                                                             )
                                                     }
-                                                    if (post.creator?.id == uiState.currentUserId && !isOnOtherInstance) {
-                                                        this +=
-                                                            Option(
-                                                                OptionId.Edit,
-                                                                LocalStrings.current.postActionEdit,
-                                                            )
-                                                        if (post.deleted) {
+                                                }
+                                                if (uiState.moderators.containsId(uiState.currentUserId)) {
+                                                    this +=
+                                                        Option(
+                                                            OptionId.FeaturePost,
+                                                            if (post.featuredCommunity) {
+                                                                LocalStrings.current.modActionUnmarkAsFeatured
+                                                            } else {
+                                                                LocalStrings.current.modActionMarkAsFeatured
+                                                            },
+                                                        )
+                                                    this +=
+                                                        Option(
+                                                            OptionId.LockPost,
+                                                            if (post.locked) {
+                                                                LocalStrings.current.modActionUnlock
+                                                            } else {
+                                                                LocalStrings.current.modActionLock
+                                                            },
+                                                        )
+                                                    this +=
+                                                        Option(
+                                                            OptionId.Remove,
+                                                            LocalStrings.current.modActionRemove,
+                                                        )
+                                                    this +=
+                                                        Option(
+                                                            OptionId.BanUser,
+                                                            if (post.creator?.banned == true) {
+                                                                LocalStrings.current.modActionAllow
+                                                            } else {
+                                                                LocalStrings.current.modActionBan
+                                                            },
+                                                        )
+                                                    post.creator?.id?.also { creatorId ->
+                                                        if (uiState.currentUserId != creatorId) {
                                                             this +=
                                                                 Option(
-                                                                    OptionId.Restore,
-                                                                    LocalStrings.current.actionRestore,
-                                                                )
-                                                        } else {
-                                                            this +=
-                                                                Option(
-                                                                    OptionId.Delete,
-                                                                    LocalStrings.current.commentActionDelete,
-                                                                )
-                                                        }
-                                                    }
-                                                    if (uiState.moderators.containsId(uiState.currentUserId)) {
-                                                        this +=
-                                                            Option(
-                                                                OptionId.FeaturePost,
-                                                                if (post.featuredCommunity) {
-                                                                    LocalStrings.current.modActionUnmarkAsFeatured
-                                                                } else {
-                                                                    LocalStrings.current.modActionMarkAsFeatured
-                                                                },
-                                                            )
-                                                        this +=
-                                                            Option(
-                                                                OptionId.LockPost,
-                                                                if (post.locked) {
-                                                                    LocalStrings.current.modActionUnlock
-                                                                } else {
-                                                                    LocalStrings.current.modActionLock
-                                                                },
-                                                            )
-                                                        this +=
-                                                            Option(
-                                                                OptionId.Remove,
-                                                                LocalStrings.current.modActionRemove,
-                                                            )
-                                                        this +=
-                                                            Option(
-                                                                OptionId.BanUser,
-                                                                if (post.creator?.banned == true) {
-                                                                    LocalStrings.current.modActionAllow
-                                                                } else {
-                                                                    LocalStrings.current.modActionBan
-                                                                },
-                                                            )
-                                                        post.creator?.id?.also { creatorId ->
-                                                            if (uiState.currentUserId != creatorId) {
-                                                                this +=
-                                                                    Option(
-                                                                        OptionId.AddMod,
-                                                                        if (uiState.moderators.containsId(
-                                                                                creatorId,
-                                                                            )
-                                                                        ) {
-                                                                            LocalStrings.current.modActionRemoveMod
-                                                                        } else {
-                                                                            LocalStrings.current.modActionAddMod
-                                                                        },
-                                                                    )
-                                                            }
-                                                        }
-                                                    }
-                                                    if (uiState.isAdmin) {
-                                                        this +=
-                                                            Option(
-                                                                OptionId.Purge,
-                                                                LocalStrings.current.adminActionPurge,
-                                                            )
-                                                        post.creator?.also { creator ->
-                                                            this +=
-                                                                Option(
-                                                                    OptionId.PurgeCreator,
-                                                                    buildString {
-                                                                        append(LocalStrings.current.adminActionPurge)
-                                                                        append(" ")
-                                                                        append(
-                                                                            creator.readableName(
-                                                                                uiState.preferNicknames,
-                                                                            ),
+                                                                    OptionId.AddMod,
+                                                                    if (uiState.moderators.containsId(
+                                                                            creatorId,
                                                                         )
+                                                                    ) {
+                                                                        LocalStrings.current.modActionRemoveMod
+                                                                    } else {
+                                                                        LocalStrings.current.modActionAddMod
                                                                     },
                                                                 )
                                                         }
+                                                    }
+                                                }
+                                                if (uiState.isAdmin) {
+                                                    this +=
+                                                        Option(
+                                                            OptionId.Purge,
+                                                            LocalStrings.current.adminActionPurge,
+                                                        )
+                                                    post.creator?.also { creator ->
                                                         this +=
                                                             Option(
-                                                                OptionId.AdminFeaturePost,
-                                                                if (post.featuredLocal) {
-                                                                    LocalStrings.current.adminActionUnmarkAsFeatured
-                                                                } else {
-                                                                    LocalStrings.current.adminActionMarkAsFeatured
+                                                                OptionId.PurgeCreator,
+                                                                buildString {
+                                                                    append(LocalStrings.current.adminActionPurge)
+                                                                    append(" ")
+                                                                    append(
+                                                                        creator.readableName(
+                                                                            uiState.preferNicknames,
+                                                                        ),
+                                                                    )
                                                                 },
                                                             )
                                                     }
-                                                },
-                                            onOptionSelected = { optionId ->
+                                                    this +=
+                                                        Option(
+                                                            OptionId.AdminFeaturePost,
+                                                            if (post.featuredLocal) {
+                                                                LocalStrings.current.adminActionUnmarkAsFeatured
+                                                            } else {
+                                                                LocalStrings.current.adminActionMarkAsFeatured
+                                                            },
+                                                        )
+                                                }
+                                            },
+                                            onSelectOption = { optionId ->
                                                 when (optionId) {
                                                     OptionId.Delete -> {
                                                         itemIdToDelete = post.id
@@ -1324,7 +1341,8 @@ class CommunityDetailScreen(
                                                         post.creator?.id?.also { userId ->
                                                             val screen =
                                                                 ModerateWithReasonScreen(
-                                                                    actionId = ModerateWithReasonAction.PurgeUser.toInt(),
+                                                                    actionId =
+                                                                    ModerateWithReasonAction.PurgeUser.toInt(),
                                                                     contentId = userId,
                                                                 )
                                                             navigationCoordinator.pushScreen(screen)
@@ -1360,15 +1378,19 @@ class CommunityDetailScreen(
                                 }
                             }
                             item {
-                                if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                                if (!uiState.initial &&
+                                    !uiState.loading &&
+                                    !uiState.refreshing &&
+                                    uiState.canFetchMore
+                                ) {
                                     if (settings.infiniteScrollEnabled) {
                                         model.reduce(CommunityDetailMviModel.Intent.LoadNextPage)
                                     } else {
                                         Row(
                                             modifier =
-                                                Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(top = Spacing.s),
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .padding(top = Spacing.s),
                                             horizontalArrangement = Arrangement.Center,
                                             verticalAlignment = Alignment.CenterVertically,
                                         ) {
@@ -1431,11 +1453,11 @@ class CommunityDetailScreen(
                                 detailOpener.openReply(
                                     originalPost = content,
                                     initialText =
-                                        buildString {
-                                            append("> ")
-                                            append(quotation)
-                                            append("\n\n")
-                                        },
+                                    buildString {
+                                        append("> ")
+                                        append(quotation)
+                                        append("\n\n")
+                                    },
                                 )
                             }
                         },
@@ -1460,11 +1482,11 @@ class CommunityDetailScreen(
                                     originalComment = content,
                                     originalPost = PostModel(id = content.postId),
                                     initialText =
-                                        buildString {
-                                            append("> ")
-                                            append(quotation)
-                                            append("\n\n")
-                                        },
+                                    buildString {
+                                        append("> ")
+                                        append(quotation)
+                                        append("\n\n")
+                                    },
                                 )
                             }
                         },
@@ -1593,10 +1615,10 @@ class CommunityDetailScreen(
             CustomModalBottomSheet(
                 title = LocalStrings.current.postActionShare,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(label = value)
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(label = value)
+                },
+                onSelect = { index ->
                     shareBottomSheetUrls = null
                     if (index != null) {
                         notificationCenter.send(
@@ -1611,7 +1633,7 @@ class CommunityDetailScreen(
             SortBottomSheet(
                 values = uiState.availableSortTypes,
                 expandTop = true,
-                onSelected = { value ->
+                onSelect = { value ->
                     val wasDefaultSortBottomSheetOpened = defaultSortBottomSheetOpened
                     sortBottomSheetOpened = false
                     defaultSortBottomSheetOpened = false
@@ -1653,7 +1675,7 @@ class CommunityDetailScreen(
             CustomModalBottomSheet(
                 title = LocalStrings.current.actionCopyClipboard,
                 items = values,
-                onSelected = { index ->
+                onSelect = { index ->
                     copyPostBottomSheet = null
                     if (index != null) {
                         val text = texts[index]

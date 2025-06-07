@@ -102,30 +102,30 @@ class DraftsScreen : Screen {
         ) { padding ->
             Column(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).then(
-                            if (settings.hideNavigationBarWhileScrolling) {
-                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                            } else {
-                                Modifier
-                            },
-                        ),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        },
+                    ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
                 SectionSelector(
                     modifier = Modifier.padding(vertical = Spacing.xs),
                     titles =
-                        listOf(
-                            LocalStrings.current.profileSectionPosts,
-                            LocalStrings.current.profileSectionComments,
-                        ),
+                    listOf(
+                        LocalStrings.current.profileSectionPosts,
+                        LocalStrings.current.profileSectionComments,
+                    ),
                     currentSection =
-                        when (uiState.section) {
-                            DraftsSection.Comments -> 1
-                            else -> 0
-                        },
+                    when (uiState.section) {
+                        DraftsSection.Comments -> 1
+                        else -> 0
+                    },
                     onSectionSelected = {
                         val section =
                             when (it) {
@@ -138,14 +138,14 @@ class DraftsScreen : Screen {
 
                 PullToRefreshBox(
                     modifier =
-                        Modifier
-                            .then(
-                                if (settings.hideNavigationBarWhileScrolling) {
-                                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                                } else {
-                                    Modifier
-                                },
-                            ),
+                    Modifier
+                        .then(
+                            if (settings.hideNavigationBarWhileScrolling) {
+                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                            } else {
+                                Modifier
+                            },
+                        ),
                     isRefreshing = uiState.refreshing,
                     onRefresh = {
                         model.reduce(DraftsMviModel.Intent.Refresh)
@@ -153,7 +153,7 @@ class DraftsScreen : Screen {
                 ) {
                     LazyColumn(
                         modifier =
-                            Modifier.fillMaxSize(),
+                        Modifier.fillMaxSize(),
                         state = lazyListState,
                     ) {
                         if (uiState.section == DraftsSection.Posts) {
@@ -197,14 +197,14 @@ class DraftsScreen : Screen {
                                         )
                                     },
                                     options =
-                                        buildList {
-                                            this +=
-                                                Option(
-                                                    OptionId.Delete,
-                                                    LocalStrings.current.commentActionDelete,
-                                                )
-                                        },
-                                    onOptionSelected = { optionId ->
+                                    buildList {
+                                        this +=
+                                            Option(
+                                                OptionId.Delete,
+                                                LocalStrings.current.commentActionDelete,
+                                            )
+                                    },
+                                    onSelectOption = { optionId ->
                                         when (optionId) {
                                             OptionId.Delete -> {
                                                 draft.id?.also {
@@ -255,25 +255,25 @@ class DraftsScreen : Screen {
                                         detailOpener.openReply(
                                             draftId = draft.id,
                                             originalPost =
-                                                PostModel(
-                                                    id = draft.postId ?: 0,
-                                                ),
+                                            PostModel(
+                                                id = draft.postId ?: 0,
+                                            ),
                                             originalComment =
-                                                draft.parentId?.let {
-                                                    CommentModel(id = it, text = "")
-                                                },
+                                            draft.parentId?.let {
+                                                CommentModel(id = it, text = "")
+                                            },
                                             initialText = draft.body,
                                         )
                                     },
                                     options =
-                                        buildList {
-                                            this +=
-                                                Option(
-                                                    OptionId.Delete,
-                                                    LocalStrings.current.commentActionDelete,
-                                                )
-                                        },
-                                    onOptionSelected = { optionId ->
+                                    buildList {
+                                        this +=
+                                            Option(
+                                                OptionId.Delete,
+                                                LocalStrings.current.commentActionDelete,
+                                            )
+                                    },
+                                    onSelectOption = { optionId ->
                                         when (optionId) {
                                             OptionId.Delete -> {
                                                 draft.id?.also {
@@ -346,25 +346,24 @@ class DraftsScreen : Screen {
     }
 }
 
-private fun DraftModel.toKey(): String =
-    buildString {
-        append(date)
-        if (communityId != null) {
-            append("&community=")
-            append(communityId)
-        } else {
-            if (postId != null) {
-                append("&post=")
-                append(postId)
-            } else if (parentId != null) {
-                append("&comment=")
-                append(parentId)
-            }
+private fun DraftModel.toKey(): String = buildString {
+    append(date)
+    if (communityId != null) {
+        append("&community=")
+        append(communityId)
+    } else {
+        if (postId != null) {
+            append("&post=")
+            append(postId)
+        } else if (parentId != null) {
+            append("&comment=")
+            append(parentId)
         }
-        if (!title.isNullOrEmpty()) {
-            append("&title=")
-            append(title)
-        }
-        append("&body=")
-        append(body)
     }
+    if (!title.isNullOrEmpty()) {
+        append("&title=")
+        append(title)
+    }
+    append("&body=")
+    append(body)
+}

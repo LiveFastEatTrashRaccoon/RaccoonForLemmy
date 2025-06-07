@@ -8,9 +8,7 @@ interface AboutDialogMviModel :
     ScreenModel {
     sealed interface Intent
 
-    data class UiState(
-        val version: String = "",
-    )
+    data class UiState(val version: String = "")
 
     sealed interface Effect
 }

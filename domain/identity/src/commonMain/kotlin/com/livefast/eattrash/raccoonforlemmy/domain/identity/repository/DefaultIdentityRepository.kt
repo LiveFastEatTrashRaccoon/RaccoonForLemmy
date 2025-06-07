@@ -17,14 +17,14 @@ internal class DefaultIdentityRepository(
         private set
 
     override suspend fun startup() {
-            val account = accountRepository.getActive()
-            if (account != null) {
-                authToken.value = account.jwt
-            } else {
-                authToken.value = ""
-            }
-            refreshLoggedState()
+        val account = accountRepository.getActive()
+        if (account != null) {
+            authToken.value = account.jwt
+        } else {
+            authToken.value = ""
         }
+        refreshLoggedState()
+    }
 
     override fun storeToken(jwt: String) {
         authToken.value = jwt
@@ -37,21 +37,21 @@ internal class DefaultIdentityRepository(
     }
 
     override suspend fun refreshLoggedState() {
-            val auth = authToken.value.orEmpty()
-            isLogged.value = null
-            if (auth.isNotEmpty()) {
-                val newIsLogged =
-                    if (networkManager.isNetworkAvailable()) {
-                        refreshCachedUser(auth)
-                        cachedUser != null
-                    } else {
-                        null
-                    }
-                isLogged.value = newIsLogged
-            } else {
-                isLogged.value = false
-            }
+        val auth = authToken.value.orEmpty()
+        isLogged.value = null
+        if (auth.isNotEmpty()) {
+            val newIsLogged =
+                if (networkManager.isNetworkAvailable()) {
+                    refreshCachedUser(auth)
+                    cachedUser != null
+                } else {
+                    null
+                }
+            isLogged.value = newIsLogged
+        } else {
+            isLogged.value = false
         }
+    }
 
     private suspend fun refreshCachedUser(auth: String) {
         val remoteUser = siteRepository.getCurrentUser(auth)

@@ -25,8 +25,8 @@ import com.mohamedrejeb.calf.ui.web.rememberWebViewState
 
 @Composable
 fun PostCardEmbeddedWebView(
-    modifier: Modifier = Modifier,
     url: String,
+    modifier: Modifier = Modifier,
     blurred: Boolean = false,
     autoLoadImages: Boolean = true,
     onOpen: (() -> Unit)? = null,

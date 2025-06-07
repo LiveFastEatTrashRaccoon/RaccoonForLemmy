@@ -5,9 +5,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 
-internal class DefaultMultiCommunityPaginator(
-    private val postRepository: PostRepository,
-) : MultiCommunityPaginator {
+internal class DefaultMultiCommunityPaginator(private val postRepository: PostRepository) : MultiCommunityPaginator {
     private var paginators = emptyList<Paginator>()
 
     override val canFetchMore: Boolean
@@ -27,28 +25,21 @@ internal class DefaultMultiCommunityPaginator(
         paginators.forEach { it.reset() }
     }
 
-    override suspend fun loadNextPage(
-        auth: String?,
-        sort: SortType,
-    ): List<PostModel> =
-        buildList {
-            for (paginator in paginators) {
-                if (paginator.canFetchMore) {
-                    val elements =
-                        paginator.loadNextPage(
-                            auth = auth,
-                            sort = sort,
-                        )
-                    addAll(elements)
-                }
+    override suspend fun loadNextPage(auth: String?, sort: SortType): List<PostModel> = buildList {
+        for (paginator in paginators) {
+            if (paginator.canFetchMore) {
+                val elements =
+                    paginator.loadNextPage(
+                        auth = auth,
+                        sort = sort,
+                    )
+                addAll(elements)
             }
-        }.sortedByDescending { it.publishDate }
+        }
+    }.sortedByDescending { it.publishDate }
 }
 
-private class Paginator(
-    private val communityId: Long,
-    private val postRepository: PostRepository,
-) {
+private class Paginator(private val communityId: Long, private val postRepository: PostRepository) {
     private var currentPage: Int = 1
     private var pageCursor: String? = null
     var canFetchMore: Boolean = true
@@ -60,10 +51,7 @@ private class Paginator(
         canFetchMore = true
     }
 
-    suspend fun loadNextPage(
-        auth: String?,
-        sort: SortType,
-    ): List<PostModel> {
+    suspend fun loadNextPage(auth: String?, sort: SortType): List<PostModel> {
         val (result, nextPage) =
             postRepository.getAll(
                 auth = auth,

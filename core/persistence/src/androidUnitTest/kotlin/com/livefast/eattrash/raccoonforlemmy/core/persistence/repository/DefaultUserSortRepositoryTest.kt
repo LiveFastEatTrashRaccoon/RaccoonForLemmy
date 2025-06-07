@@ -42,162 +42,150 @@ class DefaultUserSortRepositoryTest {
 
     // region Posts
     @Test
-    fun givenEmptyInitialState_whenSaveForPosts_thenValueIsStored() =
-        runTest {
-            coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf()
-            sut.saveForPosts(HANDLE, 1)
+    fun givenEmptyInitialState_whenSaveForPosts_thenValueIsStored() = runTest {
+        coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf()
+        sut.saveForPosts(HANDLE, 1)
 
-            coVerify {
-                keyStore.save(KEY_POSTS, listOf("$HANDLE:1"))
-            }
+        coVerify {
+            keyStore.save(KEY_POSTS, listOf("$HANDLE:1"))
         }
+    }
 
     @Test
-    fun givenUserAlreadyExisting_whenSaveForPosts_thenValueIsStored() =
-        runTest {
-            coEvery {
-                keyStore.get(
-                    KEY_POSTS,
-                    listOf(),
-                )
-            } returns listOf("$HANDLE:0")
+    fun givenUserAlreadyExisting_whenSaveForPosts_thenValueIsStored() = runTest {
+        coEvery {
+            keyStore.get(
+                KEY_POSTS,
+                listOf(),
+            )
+        } returns listOf("$HANDLE:0")
 
-            sut.saveForPosts(HANDLE, 1)
+        sut.saveForPosts(HANDLE, 1)
 
-            coVerify {
-                keyStore.save(KEY_POSTS, listOf("$HANDLE:1"))
-            }
+        coVerify {
+            keyStore.save(KEY_POSTS, listOf("$HANDLE:1"))
         }
+    }
 
     @Test
-    fun givenOtherUserAlreadyExisting_whenSaveForPosts_thenBothValuesAreStored() =
-        runTest {
-            coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf("test@lemmy.world:1")
+    fun givenOtherUserAlreadyExisting_whenSaveForPosts_thenBothValuesAreStored() = runTest {
+        coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf("test@lemmy.world:1")
 
-            sut.saveForPosts(HANDLE, 1)
+        sut.saveForPosts(HANDLE, 1)
 
-            coVerify {
-                keyStore.save(
-                    KEY_POSTS,
-                    listOf("test@lemmy.world:1", "$HANDLE:1"),
-                )
-            }
+        coVerify {
+            keyStore.save(
+                KEY_POSTS,
+                listOf("test@lemmy.world:1", "$HANDLE:1"),
+            )
         }
+    }
 
     @Test
-    fun givenEmptyInitialState_whenGetForPosts_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf()
+    fun givenEmptyInitialState_whenGetForPosts_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf()
 
-            val res = sut.getForPosts(HANDLE)
+        val res = sut.getForPosts(HANDLE)
 
-            assertNull(res)
-        }
-
-    @Test
-    fun givenUserExists_whenGetForPosts_thenResultIsAsExpected() =
-        runTest {
-            coEvery {
-                keyStore.get(
-                    KEY_POSTS,
-                    listOf(),
-                )
-            } returns listOf("$HANDLE:2")
-
-            val res = sut.getForPosts(HANDLE)
-
-            assertEquals(2, res)
-        }
+        assertNull(res)
+    }
 
     @Test
-    fun givenUserDoesNotExist_whenGetForPosts_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf("test@lemmy.world:2")
+    fun givenUserExists_whenGetForPosts_thenResultIsAsExpected() = runTest {
+        coEvery {
+            keyStore.get(
+                KEY_POSTS,
+                listOf(),
+            )
+        } returns listOf("$HANDLE:2")
 
-            val res = sut.getForPosts(HANDLE)
+        val res = sut.getForPosts(HANDLE)
 
-            assertNull(res)
-        }
+        assertEquals(2, res)
+    }
+
+    @Test
+    fun givenUserDoesNotExist_whenGetForPosts_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get(KEY_POSTS, listOf()) } returns listOf("test@lemmy.world:2")
+
+        val res = sut.getForPosts(HANDLE)
+
+        assertNull(res)
+    }
     // endregion
 
     // region Comments
     @Test
-    fun givenEmptyInitialState_whenSaveForComments_thenValueIsStored() =
-        runTest {
-            coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf()
-            sut.saveForComments(HANDLE, 1)
+    fun givenEmptyInitialState_whenSaveForComments_thenValueIsStored() = runTest {
+        coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf()
+        sut.saveForComments(HANDLE, 1)
 
-            coVerify {
-                keyStore.save(KEY_COMMENTS, listOf("$HANDLE:1"))
-            }
+        coVerify {
+            keyStore.save(KEY_COMMENTS, listOf("$HANDLE:1"))
         }
+    }
 
     @Test
-    fun givenUserAlreadyExisting_whenSaveForComments_thenValueIsStored() =
-        runTest {
-            coEvery {
-                keyStore.get(
-                    KEY_COMMENTS,
-                    listOf(),
-                )
-            } returns listOf("$HANDLE:0")
+    fun givenUserAlreadyExisting_whenSaveForComments_thenValueIsStored() = runTest {
+        coEvery {
+            keyStore.get(
+                KEY_COMMENTS,
+                listOf(),
+            )
+        } returns listOf("$HANDLE:0")
 
-            sut.saveForComments(HANDLE, 1)
+        sut.saveForComments(HANDLE, 1)
 
-            coVerify {
-                keyStore.save(KEY_COMMENTS, listOf("$HANDLE:1"))
-            }
+        coVerify {
+            keyStore.save(KEY_COMMENTS, listOf("$HANDLE:1"))
         }
+    }
 
     @Test
-    fun givenOtherUserAlreadyExisting_whenSaveForComments_thenBothValuesAreStored() =
-        runTest {
-            coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf("test@lemmy.world:1")
+    fun givenOtherUserAlreadyExisting_whenSaveForComments_thenBothValuesAreStored() = runTest {
+        coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf("test@lemmy.world:1")
 
-            sut.saveForComments(HANDLE, 1)
+        sut.saveForComments(HANDLE, 1)
 
-            coVerify {
-                keyStore.save(
-                    KEY_COMMENTS,
-                    listOf("test@lemmy.world:1", "$HANDLE:1"),
-                )
-            }
+        coVerify {
+            keyStore.save(
+                KEY_COMMENTS,
+                listOf("test@lemmy.world:1", "$HANDLE:1"),
+            )
         }
+    }
 
     @Test
-    fun givenEmptyInitialState_whenGetForComments_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf()
+    fun givenEmptyInitialState_whenGetForComments_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf()
 
-            val res = sut.getForComments(HANDLE)
+        val res = sut.getForComments(HANDLE)
 
-            assertNull(res)
-        }
-
-    @Test
-    fun givenUserExists_whenGetForComments_thenResultIsAsExpected() =
-        runTest {
-            coEvery {
-                keyStore.get(
-                    KEY_COMMENTS,
-                    listOf(),
-                )
-            } returns listOf("$HANDLE:2")
-
-            val res = sut.getForComments(HANDLE)
-
-            assertEquals(2, res)
-        }
+        assertNull(res)
+    }
 
     @Test
-    fun givenUserDoesNotExist_whenGetForComments_thenResultIsAsExpected() =
-        runTest {
-            coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf("test@lemmy.world:2")
+    fun givenUserExists_whenGetForComments_thenResultIsAsExpected() = runTest {
+        coEvery {
+            keyStore.get(
+                KEY_COMMENTS,
+                listOf(),
+            )
+        } returns listOf("$HANDLE:2")
 
-            val res = sut.getForComments(HANDLE)
+        val res = sut.getForComments(HANDLE)
 
-            assertNull(res)
-        }
+        assertEquals(2, res)
+    }
+
+    @Test
+    fun givenUserDoesNotExist_whenGetForComments_thenResultIsAsExpected() = runTest {
+        coEvery { keyStore.get(KEY_COMMENTS, listOf()) } returns listOf("test@lemmy.world:2")
+
+        val res = sut.getForComments(HANDLE)
+
+        assertNull(res)
+    }
     // endregion
 
     companion object {

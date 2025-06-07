@@ -19,6 +19,7 @@ kotlinx-coroutines = "1.10.2"
 kotlinx-serialization-json = "1.8.1"
 kover = "0.9.1"
 ksp = "2.1.21-2.0.1"
+ktlint = "1.6.0"
 ktor = "3.1.3"
 ktorfit = "2.5.2"
 materialKolor = "2.1.1"
@@ -26,6 +27,7 @@ mockk = "1.14.2"
 multiplatform-markdown-renderer = "0.35.0"
 multiplatform-settings = "1.3.0"
 reorderable = "2.4.3"
+spotless = "7.0.4"
 stately = "2.1.0"
 sqlcipher = "4.9.0"
 sqldelight = "2.1.0"
@@ -90,12 +92,13 @@ materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "ma
 
 multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "multiplatform-markdown-renderer" }
 multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatform-markdown-renderer" }
-multiplatform-markdown-renderer-coil3= { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "multiplatform-markdown-renderer" }
+multiplatform-markdown-renderer-coil3 = { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "multiplatform-markdown-renderer" }
 
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
 
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 
+spotless-gradlePlugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
 stately-common = { module = "co.touchlab:stately-common", version.ref = "stately" }
 
 sqlcipher = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipher" }
@@ -126,5 +129,5 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
-
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

@@ -39,58 +39,55 @@ class DefaultCommunityProcessorTest {
         )
 
     @Test
-    fun givenResolve_whenProcess_thenResultIsAsExpected() =
-        runTest {
-            val item = CommunityModel(id = 1)
-            coEvery { communityRepository.getResolved(any(), any()) } returns item
+    fun givenResolve_whenProcess_thenResultIsAsExpected() = runTest {
+        val item = CommunityModel(id = 1)
+        coEvery { communityRepository.getResolved(any(), any()) } returns item
 
-            val res = sut.process(URL)
+        val res = sut.process(URL)
 
-            assertTrue(res)
-            coVerify {
-                communityRepository.getResolved(URL, FAKE_AUTH)
-            }
-            verify {
-                identityRepository.authToken
-                urlDecoder wasNot Called
-                detailOpener.openCommunityDetail(item)
-            }
+        assertTrue(res)
+        coVerify {
+            communityRepository.getResolved(URL, FAKE_AUTH)
         }
+        verify {
+            identityRepository.authToken
+            urlDecoder wasNot Called
+            detailOpener.openCommunityDetail(item)
+        }
+    }
 
     @Test
-    fun givenNotResolveAndValidUrl_whenProcess_thenResultIsAsExpected() =
-        runTest {
-            val item = CommunityModel(id = 1)
-            coEvery { urlDecoder.getCommunity(any()) } returns item
+    fun givenNotResolveAndValidUrl_whenProcess_thenResultIsAsExpected() = runTest {
+        val item = CommunityModel(id = 1)
+        coEvery { urlDecoder.getCommunity(any()) } returns item
 
-            val res = sut.process(URL)
+        val res = sut.process(URL)
 
-            assertTrue(res)
-            coVerify {
-                communityRepository.getResolved(URL, FAKE_AUTH)
-                urlDecoder.getCommunity(URL)
-            }
-            verify {
-                identityRepository.authToken
-                detailOpener.openCommunityDetail(item)
-            }
+        assertTrue(res)
+        coVerify {
+            communityRepository.getResolved(URL, FAKE_AUTH)
+            urlDecoder.getCommunity(URL)
         }
+        verify {
+            identityRepository.authToken
+            detailOpener.openCommunityDetail(item)
+        }
+    }
 
     @Test
-    fun givenNotResolveAndInvalidUrl_whenProcess_thenResultIsAsExpected() =
-        runTest {
-            val res = sut.process(URL)
+    fun givenNotResolveAndInvalidUrl_whenProcess_thenResultIsAsExpected() = runTest {
+        val res = sut.process(URL)
 
-            assertFalse(res)
-            coVerify {
-                communityRepository.getResolved(URL, FAKE_AUTH)
-                urlDecoder.getCommunity(URL)
-            }
-            verify {
-                identityRepository.authToken
-                detailOpener wasNot Called
-            }
+        assertFalse(res)
+        coVerify {
+            communityRepository.getResolved(URL, FAKE_AUTH)
+            urlDecoder.getCommunity(URL)
         }
+        verify {
+            identityRepository.authToken
+            detailOpener wasNot Called
+        }
+    }
 
     companion object {
         private const val URL = "https://example.com"

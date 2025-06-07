@@ -8,15 +8,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 @Stable
 interface DetailOpener {
-    fun openCommunityDetail(
-        community: CommunityModel,
-        otherInstance: String = "",
-    )
+    fun openCommunityDetail(community: CommunityModel, otherInstance: String = "")
 
-    fun openUserDetail(
-        user: UserModel,
-        otherInstance: String = "",
-    )
+    fun openUserDetail(user: UserModel, otherInstance: String = "")
 
     fun openPostDetail(
         post: PostModel,

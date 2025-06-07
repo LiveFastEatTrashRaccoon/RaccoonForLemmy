@@ -44,19 +44,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
-data class FloatingActionButtonMenuItem(
-    val icon: ImageVector,
-    val text: String,
-    val onSelected: (() -> Unit)? = null,
-)
+data class FloatingActionButtonMenuItem(val icon: ImageVector, val text: String, val onSelected: (() -> Unit)? = null)
 
 private const val ANIMATION_DURATION = 50
 
 @Composable
-fun FloatingActionButtonMenu(
-    modifier: Modifier = Modifier,
-    items: List<FloatingActionButtonMenuItem> = emptyList(),
-) {
+fun FloatingActionButtonMenu(modifier: Modifier = Modifier, items: List<FloatingActionButtonMenuItem> = emptyList()) {
     val themeRepository = remember { getThemeRepository() }
     val schemeProvider = remember { getColorSchemeProvider() }
     val seedColor by themeRepository.customSeedColor.collectAsState()
@@ -80,10 +73,10 @@ fun FloatingActionButtonMenu(
     val numberOfItems by animateIntAsState(
         targetValue = if (fabExpanded) items.size else 0,
         animationSpec =
-            tween(
-                durationMillis = ANIMATION_DURATION * items.size,
-                easing = LinearEasing,
-            ),
+        tween(
+            durationMillis = ANIMATION_DURATION * items.size,
+            easing = LinearEasing,
+        ),
     )
     val indices: List<Int> =
         if (numberOfItems == 0) {
@@ -117,37 +110,37 @@ fun FloatingActionButtonMenu(
                     }
                     Row(
                         modifier =
-                            Modifier.padding(end = 6.dp),
+                        Modifier.padding(end = 6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
                     ) {
                         Text(
                             modifier =
-                                Modifier
-                                    .padding(horizontal = Spacing.xs)
-                                    .clip(RoundedCornerShape(CornerSize.s))
-                                    .onClick(onClick = onClickAction)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.surfaceVariant,
-                                        shape = RoundedCornerShape(CornerSize.s),
-                                    ).padding(
-                                        vertical = Spacing.s,
-                                        horizontal = Spacing.m,
-                                    ),
+                            Modifier
+                                .padding(horizontal = Spacing.xs)
+                                .clip(RoundedCornerShape(CornerSize.s))
+                                .onClick(onClick = onClickAction)
+                                .background(
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                    shape = RoundedCornerShape(CornerSize.s),
+                                ).padding(
+                                    vertical = Spacing.s,
+                                    horizontal = Spacing.m,
+                                ),
                             text = item.text,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onBackground,
                         )
                         Icon(
                             modifier =
-                                Modifier
-                                    .size(42.dp)
-                                    .clip(CircleShape)
-                                    .onClick(onClick = onClickAction)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.primaryContainer,
-                                        shape = CircleShape,
-                                    ).padding(10.dp),
+                            Modifier
+                                .size(42.dp)
+                                .clip(CircleShape)
+                                .onClick(onClick = onClickAction)
+                                .background(
+                                    color = MaterialTheme.colorScheme.primaryContainer,
+                                    shape = CircleShape,
+                                ).padding(10.dp),
                             imageVector = item.icon,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onPrimaryContainer,

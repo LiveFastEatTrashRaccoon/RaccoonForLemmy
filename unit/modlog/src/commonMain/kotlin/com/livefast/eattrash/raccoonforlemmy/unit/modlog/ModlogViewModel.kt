@@ -17,8 +17,8 @@ class ModlogViewModel(
     private val modlogRepository: ModlogRepository,
     private val settingsRepository: SettingsRepository,
 ) : DefaultMviModel<ModlogMviModel.Intent, ModlogMviModel.UiState, ModlogMviModel.Effect>(
-        initialState = ModlogMviModel.UiState(),
-    ),
+    initialState = ModlogMviModel.UiState(),
+),
     ModlogMviModel {
     private var currentPage: Int = 1
 

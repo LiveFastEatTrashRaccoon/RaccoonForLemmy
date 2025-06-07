@@ -7,10 +7,7 @@ import org.kodein.di.bind
 import org.kodein.di.factory
 import org.kodein.di.instance
 
-internal data class ModerateWithReasonMviModelParams(
-    val actionId: Int,
-    val contentId: Long,
-)
+internal data class ModerateWithReasonMviModelParams(val actionId: Int, val contentId: Long)
 
 val moderateWithReasonModule =
     DI.Module("ModerateWithReasonModule") {

@@ -37,76 +37,73 @@ class DefaultIdentityRepositoryTest {
         )
 
     @Test
-    fun givenNetworkAvailableAndUserLogged_whenStartup_thenResultIsAsExpected() =
-        runTest {
-            val fakeToken = "fake-token"
-            val fakeAccount =
-                mockk<AccountModel> {
-                    every { jwt } returns fakeToken
-                }
-            val fakeUser = UserModel(id = 1)
-            coEvery { accountRepository.getActive() } returns fakeAccount
-            coEvery { siteRepository.getCurrentUser(any()) } returns fakeUser
-
-            sut.startup()
-
-            val token = sut.authToken.value
-            assertEquals(fakeToken, token)
-            val isLogged = sut.isLogged.value
-            assertTrue(isLogged == true)
-            assertEquals(fakeUser, sut.cachedUser)
-
-            coVerify {
-                accountRepository.getActive()
-                networkManager.isNetworkAvailable()
-                siteRepository.getCurrentUser("fake-token")
+    fun givenNetworkAvailableAndUserLogged_whenStartup_thenResultIsAsExpected() = runTest {
+        val fakeToken = "fake-token"
+        val fakeAccount =
+            mockk<AccountModel> {
+                every { jwt } returns fakeToken
             }
+        val fakeUser = UserModel(id = 1)
+        coEvery { accountRepository.getActive() } returns fakeAccount
+        coEvery { siteRepository.getCurrentUser(any()) } returns fakeUser
+
+        sut.startup()
+
+        val token = sut.authToken.value
+        assertEquals(fakeToken, token)
+        val isLogged = sut.isLogged.value
+        assertTrue(isLogged == true)
+        assertEquals(fakeUser, sut.cachedUser)
+
+        coVerify {
+            accountRepository.getActive()
+            networkManager.isNetworkAvailable()
+            siteRepository.getCurrentUser("fake-token")
         }
+    }
 
     @Test
-    fun givenNetworkUnavailable_whenStartup_thenResultIsAsExpected() =
-        runTest {
-            coEvery { networkManager.isNetworkAvailable() } returns false
-            val fakeToken = "fake-token"
-            val fakeAccount =
-                mockk<AccountModel> {
-                    every { jwt } returns fakeToken
-                }
-            val fakeUser = UserModel(id = 1)
-            coEvery { accountRepository.getActive() } returns fakeAccount
-            coEvery { siteRepository.getCurrentUser(any()) } returns fakeUser
-
-            sut.startup()
-
-            val token = sut.authToken.value
-            assertEquals(fakeToken, token)
-            val isLogged = sut.isLogged.value
-            assertNull(isLogged)
-
-            coVerify {
-                accountRepository.getActive()
-                networkManager.isNetworkAvailable()
-                siteRepository wasNot Called
+    fun givenNetworkUnavailable_whenStartup_thenResultIsAsExpected() = runTest {
+        coEvery { networkManager.isNetworkAvailable() } returns false
+        val fakeToken = "fake-token"
+        val fakeAccount =
+            mockk<AccountModel> {
+                every { jwt } returns fakeToken
             }
+        val fakeUser = UserModel(id = 1)
+        coEvery { accountRepository.getActive() } returns fakeAccount
+        coEvery { siteRepository.getCurrentUser(any()) } returns fakeUser
+
+        sut.startup()
+
+        val token = sut.authToken.value
+        assertEquals(fakeToken, token)
+        val isLogged = sut.isLogged.value
+        assertNull(isLogged)
+
+        coVerify {
+            accountRepository.getActive()
+            networkManager.isNetworkAvailable()
+            siteRepository wasNot Called
         }
+    }
 
     @Test
-    fun givenNotUserLogged_whenStartup_thenResultIsAsExpected() =
-        runTest {
-            coEvery { accountRepository.getActive() } returns null
+    fun givenNotUserLogged_whenStartup_thenResultIsAsExpected() = runTest {
+        coEvery { accountRepository.getActive() } returns null
 
-            sut.startup()
+        sut.startup()
 
-            val token = sut.authToken.value
-            assertEquals("", token)
-            val isLogged = sut.isLogged.value
-            assertTrue(isLogged == false)
-            assertNull(sut.cachedUser)
+        val token = sut.authToken.value
+        assertEquals("", token)
+        val isLogged = sut.isLogged.value
+        assertTrue(isLogged == false)
+        assertNull(sut.cachedUser)
 
-            coVerify {
-                accountRepository.getActive()
-                networkManager wasNot Called
-                siteRepository wasNot Called
-            }
+        coVerify {
+            accountRepository.getActive()
+            networkManager wasNot Called
+            siteRepository wasNot Called
         }
+    }
 }

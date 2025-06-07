@@ -23,26 +23,25 @@ class DefaultAppConfigStoreTest {
         )
 
     @Test
-    fun whenInitialize_thenResultAndInteractionsAreAsExpected() =
-        runTest {
-            val initialConfig = AppConfig()
-            val remoteConfig = AppConfig(alternateMarkdownRenderingSettingsItemEnabled = true)
-            coEvery {
-                localDataSource.get()
-            } returns initialConfig
-            coEvery {
-                remoteDataSource.get()
-            } returns remoteConfig
+    fun whenInitialize_thenResultAndInteractionsAreAsExpected() = runTest {
+        val initialConfig = AppConfig()
+        val remoteConfig = AppConfig(alternateMarkdownRenderingSettingsItemEnabled = true)
+        coEvery {
+            localDataSource.get()
+        } returns initialConfig
+        coEvery {
+            remoteDataSource.get()
+        } returns remoteConfig
 
-            sut.initialize()
+        sut.initialize()
 
-            val res = sut.appConfig.value
-            assertEquals(remoteConfig, res)
+        val res = sut.appConfig.value
+        assertEquals(remoteConfig, res)
 
-            coVerifySequence {
-                localDataSource.get()
-                remoteDataSource.get()
-                localDataSource.update(remoteConfig)
-            }
+        coVerifySequence {
+            localDataSource.get()
+            remoteDataSource.get()
+            localDataSource.update(remoteConfig)
         }
+    }
 }

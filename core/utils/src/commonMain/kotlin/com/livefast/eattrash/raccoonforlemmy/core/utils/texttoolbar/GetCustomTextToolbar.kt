@@ -8,7 +8,7 @@ expect fun getCustomTextToolbar(
     shareActionLabel: String,
     quoteActionLabel: String? = null,
     cancelActionLabel: String? = null,
-    onShare: () -> Unit,
+    onShare: (() -> Unit)? = null,
     onQuote: (() -> Unit)? = null,
     onCancel: (() -> Unit)? = null,
 ): TextToolbar

@@ -81,8 +81,8 @@ fun InboxReplySubtitle(
     onOpenCreator: ((UserModel) -> Unit)? = null,
     onUpVote: (() -> Unit)? = null,
     onDownVote: (() -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
-    onOptionsMenuToggled: ((Boolean) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
+    onToggleOptionsMenu: ((Boolean) -> Unit)? = null,
     onReply: (() -> Unit)? = null,
 ) {
     val buttonModifier = Modifier.size(IconSize.l).clearAndSetSemantics { }
@@ -112,25 +112,25 @@ fun InboxReplySubtitle(
                     if (creatorName.isNotEmpty()) {
                         Row(
                             modifier =
-                                Modifier
-                                    .weight(1f)
-                                    .onClick(
-                                        onClick = {
-                                            if (creator != null) {
-                                                onOpenCreator?.invoke(creator)
-                                            }
-                                        },
-                                    ).clearAndSetSemantics { },
+                            Modifier
+                                .weight(1f)
+                                .onClick(
+                                    onClick = {
+                                        if (creator != null) {
+                                            onOpenCreator?.invoke(creator)
+                                        }
+                                    },
+                                ).clearAndSetSemantics { },
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
                         ) {
                             if (creatorAvatar.isNotEmpty() && autoLoadImages) {
                                 CustomImage(
                                     modifier =
-                                        Modifier
-                                            .padding(Spacing.xxxs)
-                                            .size(iconSize)
-                                            .clip(RoundedCornerShape(iconSize / 2)),
+                                    Modifier
+                                        .padding(Spacing.xxxs)
+                                        .size(iconSize)
+                                        .clip(RoundedCornerShape(iconSize / 2)),
                                     url = creatorAvatar,
                                     autoload = autoLoadImages,
                                     quality = FilterQuality.Low,
@@ -150,15 +150,15 @@ fun InboxReplySubtitle(
                     if (communityName.isNotEmpty()) {
                         Row(
                             modifier =
-                                Modifier
-                                    .weight(1f)
-                                    .onClick(
-                                        onClick = {
-                                            if (community != null) {
-                                                onOpenCommunity?.invoke(community)
-                                            }
-                                        },
-                                    ).clearAndSetSemantics { },
+                            Modifier
+                                .weight(1f)
+                                .onClick(
+                                    onClick = {
+                                        if (community != null) {
+                                            onOpenCommunity?.invoke(community)
+                                        }
+                                    },
+                                ).clearAndSetSemantics { },
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                         ) {
@@ -166,10 +166,10 @@ fun InboxReplySubtitle(
                             if (communityIcon.isNotEmpty() && autoLoadImages) {
                                 CustomImage(
                                     modifier =
-                                        Modifier
-                                            .padding(Spacing.xxxs)
-                                            .size(iconSize)
-                                            .clip(RoundedCornerShape(iconSize / 2)),
+                                    Modifier
+                                        .padding(Spacing.xxxs)
+                                        .size(iconSize)
+                                        .clip(RoundedCornerShape(iconSize / 2)),
                                     url = communityIcon,
                                     autoload = autoLoadImages,
                                     quality = FilterQuality.Low,
@@ -197,12 +197,12 @@ fun InboxReplySubtitle(
                     ) {
                         IconButton(
                             modifier =
-                                buttonModifier
-                                    .padding(
-                                        top = 3.5.dp,
-                                        bottom = 3.5.dp,
-                                        end = 3.5.dp,
-                                    ),
+                            buttonModifier
+                                .padding(
+                                    top = 3.5.dp,
+                                    bottom = 3.5.dp,
+                                    end = 3.5.dp,
+                                ),
                             onClick = {
                                 onReply?.invoke()
                             },
@@ -232,14 +232,14 @@ fun InboxReplySubtitle(
                         if (options.isNotEmpty()) {
                             IconButton(
                                 modifier =
-                                    Modifier
-                                        .size(IconSize.m)
-                                        .padding(Spacing.xs)
-                                        .onGloballyPositioned {
-                                            optionsOffset = it.positionInParent()
-                                        },
+                                Modifier
+                                    .size(IconSize.m)
+                                    .padding(Spacing.xs)
+                                    .onGloballyPositioned {
+                                        optionsOffset = it.positionInParent()
+                                    },
                                 onClick = {
-                                    onOptionsMenuToggled?.invoke(true)
+                                    onToggleOptionsMenu?.invoke(true)
                                 },
                             ) {
                                 Icon(
@@ -253,19 +253,19 @@ fun InboxReplySubtitle(
                         Spacer(modifier = Modifier.weight(1f))
                         FeedbackButton(
                             modifier =
-                                buttonModifier
-                                    .padding(
-                                        top = 2.5.dp,
-                                        bottom = 2.5.dp,
-                                        end = 2.5.dp,
-                                    ).then(VoteAction.UpVote.toModifier()),
+                            buttonModifier
+                                .padding(
+                                    top = 2.5.dp,
+                                    bottom = 2.5.dp,
+                                    end = 2.5.dp,
+                                ).then(VoteAction.UpVote.toModifier()),
                             imageVector = VoteAction.UpVote.toIcon(),
                             tintColor =
-                                if (upVoted) {
-                                    upVoteColor ?: defaultUpvoteColor
-                                } else {
-                                    ancillaryColor
-                                },
+                            if (upVoted) {
+                                upVoteColor ?: defaultUpvoteColor
+                            } else {
+                                ancillaryColor
+                            },
                             contentDescription = LocalStrings.current.actionUpvote,
                             onClick = {
                                 onUpVote?.invoke()
@@ -274,16 +274,16 @@ fun InboxReplySubtitle(
                         if (showScores) {
                             Text(
                                 text =
-                                    formatToReadableValue(
-                                        voteFormat = voteFormat,
-                                        score = score,
-                                        upVotes = upVotes,
-                                        downVotes = downVotes,
-                                        upVoteColor = upVoteColor ?: defaultUpvoteColor,
-                                        downVoteColor = downVoteColor ?: defaultDownVoteColor,
-                                        upVoted = upVoted,
-                                        downVoted = downVoted,
-                                    ),
+                                formatToReadableValue(
+                                    voteFormat = voteFormat,
+                                    score = score,
+                                    upVotes = upVotes,
+                                    downVotes = downVotes,
+                                    upVoteColor = upVoteColor ?: defaultUpvoteColor,
+                                    downVoteColor = downVoteColor ?: defaultDownVoteColor,
+                                    upVoted = upVoted,
+                                    downVoted = downVoted,
+                                ),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = ancillaryColor,
                             )
@@ -291,19 +291,19 @@ fun InboxReplySubtitle(
                         if (downVoteEnabled) {
                             FeedbackButton(
                                 modifier =
-                                    buttonModifier
-                                        .padding(
-                                            top = 2.5.dp,
-                                            bottom = 2.5.dp,
-                                            start = 2.5.dp,
-                                        ).then(VoteAction.DownVote.toModifier()),
+                                buttonModifier
+                                    .padding(
+                                        top = 2.5.dp,
+                                        bottom = 2.5.dp,
+                                        start = 2.5.dp,
+                                    ).then(VoteAction.DownVote.toModifier()),
                                 imageVector = VoteAction.DownVote.toIcon(),
                                 tintColor =
-                                    if (downVoted) {
-                                        downVoteColor ?: defaultDownVoteColor
-                                    } else {
-                                        ancillaryColor
-                                    },
+                                if (downVoted) {
+                                    downVoteColor ?: defaultDownVoteColor
+                                } else {
+                                    ancillaryColor
+                                },
                                 contentDescription = LocalStrings.current.actionDownvote,
                                 onClick = {
                                     onDownVote?.invoke()
@@ -314,13 +314,13 @@ fun InboxReplySubtitle(
                     CustomDropDown(
                         expanded = optionsMenuOpen,
                         onDismiss = {
-                            onOptionsMenuToggled?.invoke(false)
+                            onToggleOptionsMenu?.invoke(false)
                         },
                         offset =
-                            DpOffset(
-                                x = optionsOffset.x.toLocalDp(),
-                                y = optionsOffset.y.toLocalDp(),
-                            ),
+                        DpOffset(
+                            x = optionsOffset.x.toLocalDp(),
+                            y = optionsOffset.y.toLocalDp(),
+                        ),
                     ) {
                         options.forEach { option ->
                             DropdownMenuItem(
@@ -328,8 +328,8 @@ fun InboxReplySubtitle(
                                     Text(option.text)
                                 },
                                 onClick = {
-                                    onOptionsMenuToggled?.invoke(false)
-                                    onOptionSelected?.invoke(option.id)
+                                    onToggleOptionsMenu?.invoke(false)
+                                    onSelectOption?.invoke(option.id)
                                 },
                             )
                         }

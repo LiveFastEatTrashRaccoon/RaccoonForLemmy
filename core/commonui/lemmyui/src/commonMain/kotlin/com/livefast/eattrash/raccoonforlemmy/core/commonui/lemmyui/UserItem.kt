@@ -51,7 +51,7 @@ fun UserItem(
     autoLoadImages: Boolean = true,
     preferNicknames: Boolean = true,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
     highlightText: String? = null,
 ) {
     val displayName = user.readableName(true)
@@ -66,20 +66,20 @@ fun UserItem(
 
     Row(
         modifier =
-            modifier.padding(
-                vertical = Spacing.xs,
-                horizontal = Spacing.s,
-            ),
+        modifier.padding(
+            vertical = Spacing.xs,
+            horizontal = Spacing.s,
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
         if (avatar.isNotEmpty() && autoLoadImages) {
             CustomImage(
                 modifier =
-                    Modifier
-                        .padding(Spacing.xxxs)
-                        .size(iconSize)
-                        .clip(RoundedCornerShape(iconSize / 2)),
+                Modifier
+                    .padding(Spacing.xxxs)
+                    .size(iconSize)
+                    .clip(RoundedCornerShape(iconSize / 2)),
                 url = avatar,
                 autoload = autoLoadImages,
                 quality = FilterQuality.Low,
@@ -97,11 +97,11 @@ fun UserItem(
         ) {
             Text(
                 text =
-                    buildAnnotatedStringWithHighlights(
-                        text = displayName,
-                        highlightText = highlightText,
-                        highlightColor = highlightColor,
-                    ),
+                buildAnnotatedStringWithHighlights(
+                    text = displayName,
+                    highlightText = highlightText,
+                    highlightColor = highlightColor,
+                ),
                 style = MaterialTheme.typography.bodyLarge,
                 color = fullColor,
                 maxLines = 1,
@@ -109,15 +109,15 @@ fun UserItem(
             )
             Text(
                 text =
-                    buildAnnotatedStringWithHighlights(
-                        text =
-                            buildString {
-                                append("!")
-                                append(userHandle)
-                            },
-                        highlightText = highlightText,
-                        highlightColor = highlightColor,
-                    ),
+                buildAnnotatedStringWithHighlights(
+                    text =
+                    buildString {
+                        append("!")
+                        append(userHandle)
+                    },
+                    highlightText = highlightText,
+                    highlightColor = highlightColor,
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = ancillaryColor,
             )
@@ -127,12 +127,12 @@ fun UserItem(
             Box {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        },
                     onClick = {
                         optionsMenuOpen = true
                     },
@@ -150,10 +150,10 @@ fun UserItem(
                         optionsMenuOpen = false
                     },
                     offset =
-                        DpOffset(
-                            x = optionsOffset.x.toLocalDp(),
-                            y = optionsOffset.y.toLocalDp(),
-                        ),
+                    DpOffset(
+                        x = optionsOffset.x.toLocalDp(),
+                        y = optionsOffset.y.toLocalDp(),
+                    ),
                 ) {
                     options.forEach { option ->
                         DropdownMenuItem(
@@ -162,7 +162,7 @@ fun UserItem(
                             },
                             onClick = {
                                 optionsMenuOpen = false
-                                onOptionSelected?.invoke(option.id)
+                                onSelectOption?.invoke(option.id)
                             },
                         )
                     }

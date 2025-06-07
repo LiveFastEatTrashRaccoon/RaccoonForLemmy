@@ -18,11 +18,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 
 @Composable
 fun SectionSelector(
+    currentSection: Int,
     modifier: Modifier = Modifier,
     draggable: Boolean = true,
     scrollable: Boolean = false,
     titles: List<String> = emptyList(),
-    currentSection: Int,
     onSectionSelected: (Int) -> Unit,
 ) {
     var isTowardsStart by remember { mutableStateOf(false) }

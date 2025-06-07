@@ -190,21 +190,21 @@ class AccountSettingsScreen : Screen {
                             initialValue = 0f,
                             targetValue = 360f,
                             animationSpec =
-                                InfiniteRepeatableSpec(
-                                    animation = tween(1000),
-                                ),
+                            InfiniteRepeatableSpec(
+                                animation = tween(1000),
+                            ),
                         )
                         Icon(
                             modifier =
-                                Modifier
-                                    .padding(horizontal = Spacing.xs)
-                                    .then(
-                                        if (!uiState.loading) {
-                                            Modifier
-                                        } else {
-                                            Modifier.rotate(iconRotate)
-                                        },
-                                    ),
+                            Modifier
+                                .padding(horizontal = Spacing.xs)
+                                .then(
+                                    if (!uiState.loading) {
+                                        Modifier
+                                    } else {
+                                        Modifier.rotate(iconRotate)
+                                    },
+                                ),
                             imageVector = Icons.Default.Sync,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onBackground,
@@ -224,16 +224,16 @@ class AccountSettingsScreen : Screen {
         ) { padding ->
             Column(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).then(
-                            if (settings.hideNavigationBarWhileScrolling) {
-                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                            } else {
-                                Modifier
-                            },
-                        ),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        },
+                    ),
             ) {
                 Column(
                     modifier = Modifier.weight(1f).verticalScroll(scrollState),
@@ -248,9 +248,9 @@ class AccountSettingsScreen : Screen {
                     SettingsImageInfo(
                         title = LocalStrings.current.settingsWebAvatar,
                         imageModifier =
-                            Modifier
-                                .size(avatarSize)
-                                .clip(RoundedCornerShape(avatarSize / 2)),
+                        Modifier
+                            .size(avatarSize)
+                            .clip(RoundedCornerShape(avatarSize / 2)),
                         url = uiState.avatar,
                         onEdit = {
                             openAvatarPicker = true
@@ -293,9 +293,9 @@ class AccountSettingsScreen : Screen {
                         title = LocalStrings.current.settingsWebMatrix,
                         value = uiState.matrixUserId,
                         valueStyle =
-                            contentTypography.bodyMedium.copy(
-                                fontFamily = FontFamily.Monospace,
-                            ),
+                        contentTypography.bodyMedium.copy(
+                            fontFamily = FontFamily.Monospace,
+                        ),
                         onEdit = {
                             openMatrixUserIdEditDialog = true
                         },
@@ -314,7 +314,7 @@ class AccountSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsWebBot,
                         value = uiState.bot,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(AccountSettingsMviModel.Intent.ChangeBot(value))
                         },
                     )
@@ -346,7 +346,7 @@ class AccountSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsWebShowBot,
                         value = uiState.showBotAccounts,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(AccountSettingsMviModel.Intent.ChangeShowBotAccounts(value))
                         },
                     )
@@ -355,7 +355,7 @@ class AccountSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsWebShowNsfw,
                         value = uiState.showNsfw,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(AccountSettingsMviModel.Intent.ChangeShowNsfw(value))
                         },
                     )
@@ -364,7 +364,7 @@ class AccountSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsWebShowRead,
                         value = uiState.showReadPosts,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(AccountSettingsMviModel.Intent.ChangeShowReadPosts(value))
                         },
                     )
@@ -378,7 +378,7 @@ class AccountSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsShowScores,
                         value = uiState.showScores,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(AccountSettingsMviModel.Intent.ChangeShowScores(value))
                         },
                     )
@@ -387,7 +387,7 @@ class AccountSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.actionUpvote,
                         value = uiState.showUpVotes,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(AccountSettingsMviModel.Intent.ChangeShowUpVotes(value))
                         },
                     )
@@ -396,7 +396,7 @@ class AccountSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.actionDownvote,
                         value = uiState.showDownVotes,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(AccountSettingsMviModel.Intent.ChangeShowDownVotes(value))
                         },
                     )
@@ -405,7 +405,7 @@ class AccountSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsVoteFormatPercentage,
                         value = uiState.showUpVotePercentage,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AccountSettingsMviModel.Intent.ChangeShowUpVotePercentage(
                                     value,
@@ -423,7 +423,7 @@ class AccountSettingsScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsWebEmailNotifications,
                         value = uiState.sendNotificationsToEmail,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 AccountSettingsMviModel.Intent.ChangeSendNotificationsToEmail(
                                     value,
@@ -582,20 +582,20 @@ class AccountSettingsScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.inboxListingTypeTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            label = value.toReadableName(),
-                            trailingContent = {
-                                Icon(
-                                    modifier = Modifier.size(IconSize.m),
-                                    imageVector = value.toIcon(),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            },
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        label = value.toReadableName(),
+                        trailingContent = {
+                            Icon(
+                                modifier = Modifier.size(IconSize.m),
+                                imageVector = value.toIcon(),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        },
+                    )
+                },
+                onSelect = { index ->
                     defaultListingTypeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -613,7 +613,7 @@ class AccountSettingsScreen : Screen {
             SortBottomSheet(
                 values = uiState.availableSortTypes,
                 expandTop = true,
-                onSelected = { value ->
+                onSelect = { value ->
                     sortBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(

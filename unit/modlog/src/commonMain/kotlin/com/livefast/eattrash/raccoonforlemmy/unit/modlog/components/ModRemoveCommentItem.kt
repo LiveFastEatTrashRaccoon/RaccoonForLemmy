@@ -34,23 +34,23 @@ internal fun ModRemoveCommentItem(
         innerContent = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                            append(item.comment?.text.ellipsize())
-                        }
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        append(item.comment?.text.ellipsize())
+                    }
+                    append(" ")
+                    if (item.removed) {
+                        append(LocalStrings.current.modlogItemCommentRemoved)
+                    } else {
+                        append(LocalStrings.current.modlogItemCommentRestored)
+                    }
+                    if (item.post != null) {
                         append(" ")
-                        if (item.removed) {
-                            append(LocalStrings.current.modlogItemCommentRemoved)
-                        } else {
-                            append(LocalStrings.current.modlogItemCommentRestored)
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                            append(item.post?.title.ellipsize())
                         }
-                        if (item.post != null) {
-                            append(" ")
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                                append(item.post?.title.ellipsize())
-                            }
-                        }
-                    },
+                    }
+                },
                 style = MaterialTheme.typography.bodySmall,
             )
         },

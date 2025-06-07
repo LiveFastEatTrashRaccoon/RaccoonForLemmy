@@ -44,8 +44,8 @@ class CreateCommentViewModel(
     private val communityPreferredLanguageRepository: CommunityPreferredLanguageRepository,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect>(
-        initialState = CreateCommentMviModel.UiState(),
-    ),
+    initialState = CreateCommentMviModel.UiState(),
+),
     CreateCommentMviModel {
     init {
         screenModelScope.launch {
@@ -278,11 +278,11 @@ class CreateCommentViewModel(
                     languageId = languageId,
                     date = epochMillis(),
                     reference =
-                        if (currentState.originalComment != null) {
-                            currentState.originalComment.text
-                        } else {
-                            currentState.originalPost?.title
-                        },
+                    if (currentState.originalComment != null) {
+                        currentState.originalComment.text
+                    } else {
+                        currentState.originalPost?.title
+                    },
                 )
             if (draftId == 0L) {
                 draftRepository.create(

@@ -55,15 +55,15 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 @Composable
 internal fun ChatCard(
     user: UserModel?,
+    lastMessage: String,
+    modifier: Modifier = Modifier,
     autoLoadImages: Boolean = true,
     preferNicknames: Boolean = true,
-    lastMessage: String,
     lastMessageDate: String? = null,
-    modifier: Modifier = Modifier,
     options: List<Option> = emptyList(),
     onOpenUser: ((UserModel) -> Unit)? = null,
     onOpen: (() -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     var optionsMenuOpen by remember { mutableStateOf(false) }
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
@@ -85,58 +85,58 @@ internal fun ChatCard(
 
     Row(
         modifier =
-            modifier
-                .padding(horizontal = Spacing.xs)
-                .onClick(
-                    onClick = {
-                        onOpen?.invoke()
-                    },
-                ).semantics {
-                    val helperActions =
-                        buildList {
-                            if (user != null && onOpenUser != null) {
-                                this +=
-                                    CustomAccessibilityAction(openUserActionLabel) {
-                                        onOpenUser(user)
-                                        true
-                                    }
-                            }
-                            if (onOpen != null) {
-                                this +=
-                                    CustomAccessibilityAction(openActionLabel) {
-                                        onOpen()
-                                        true
-                                    }
-                            }
-                            if (options.isNotEmpty()) {
-                                this +=
-                                    CustomAccessibilityAction(optionsActionLabel) {
-                                        optionsMenuOpen = true
-                                        true
-                                    }
-                            }
-                        }
-                    if (helperActions.isNotEmpty()) {
-                        customActions = helperActions
-                    }
+        modifier
+            .padding(horizontal = Spacing.xs)
+            .onClick(
+                onClick = {
+                    onOpen?.invoke()
                 },
+            ).semantics {
+                val helperActions =
+                    buildList {
+                        if (user != null && onOpenUser != null) {
+                            this +=
+                                CustomAccessibilityAction(openUserActionLabel) {
+                                    onOpenUser(user)
+                                    true
+                                }
+                        }
+                        if (onOpen != null) {
+                            this +=
+                                CustomAccessibilityAction(openActionLabel) {
+                                    onOpen()
+                                    true
+                                }
+                        }
+                        if (options.isNotEmpty()) {
+                            this +=
+                                CustomAccessibilityAction(optionsActionLabel) {
+                                    optionsMenuOpen = true
+                                    true
+                                }
+                        }
+                    }
+                if (helperActions.isNotEmpty()) {
+                    customActions = helperActions
+                }
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
     ) {
         if (creatorAvatar.isNotEmpty()) {
             CustomImage(
                 modifier =
-                    Modifier
-                        .padding(Spacing.xxxs)
-                        .size(iconSize)
-                        .clip(RoundedCornerShape(iconSize / 2))
-                        .onClick(
-                            onClick = {
-                                if (user != null) {
-                                    onOpenUser?.invoke(user)
-                                }
-                            },
-                        ).clearAndSetSemantics { },
+                Modifier
+                    .padding(Spacing.xxxs)
+                    .size(iconSize)
+                    .clip(RoundedCornerShape(iconSize / 2))
+                    .onClick(
+                        onClick = {
+                            if (user != null) {
+                                onOpenUser?.invoke(user)
+                            }
+                        },
+                    ).clearAndSetSemantics { },
                 quality = FilterQuality.Low,
                 url = creatorAvatar,
                 autoload = autoLoadImages,
@@ -203,12 +203,12 @@ internal fun ChatCard(
                         if (options.isNotEmpty()) {
                             IconButton(
                                 modifier =
-                                    Modifier
-                                        .size(IconSize.m)
-                                        .padding(Spacing.xs)
-                                        .onGloballyPositioned {
-                                            optionsOffset = it.positionInParent()
-                                        }.clearAndSetSemantics { },
+                                Modifier
+                                    .size(IconSize.m)
+                                    .padding(Spacing.xs)
+                                    .onGloballyPositioned {
+                                        optionsOffset = it.positionInParent()
+                                    }.clearAndSetSemantics { },
                                 onClick = {
                                     optionsMenuOpen = true
                                 },
@@ -228,10 +228,10 @@ internal fun ChatCard(
                             optionsMenuOpen = false
                         },
                         offset =
-                            DpOffset(
-                                x = optionsOffset.x.toLocalDp(),
-                                y = optionsOffset.y.toLocalDp(),
-                            ),
+                        DpOffset(
+                            x = optionsOffset.x.toLocalDp(),
+                            y = optionsOffset.y.toLocalDp(),
+                        ),
                     ) {
                         options.forEach { option ->
                             DropdownMenuItem(
@@ -240,7 +240,7 @@ internal fun ChatCard(
                                 },
                                 onClick = {
                                     optionsMenuOpen = false
-                                    onOptionSelected?.invoke(option.id)
+                                    onSelectOption?.invoke(option.id)
                                 },
                             )
                         }

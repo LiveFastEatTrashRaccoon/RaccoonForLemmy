@@ -1,13 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
-data class Option(
-    val id: OptionId,
-    val text: String,
-)
+data class Option(val id: OptionId, val text: String)
 
-sealed class OptionId(
-    val value: Int,
-) {
+sealed class OptionId(val value: Int) {
     data object Share : OptionId(0)
 
     data object Hide : OptionId(1)

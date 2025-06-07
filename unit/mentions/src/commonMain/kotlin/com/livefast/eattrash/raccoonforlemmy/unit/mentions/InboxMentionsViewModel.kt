@@ -29,8 +29,8 @@ class InboxMentionsViewModel(
     private val notificationCenter: NotificationCenter,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect>(
-        initialState = InboxMentionsMviModel.UiState(),
-    ),
+    initialState = InboxMentionsMviModel.UiState(),
+),
     InboxMentionsMviModel {
     private var currentPage: Int = 1
 
@@ -209,22 +209,19 @@ class InboxMentionsViewModel(
             updateState {
                 it.copy(
                     mentions =
-                        it.mentions.map { i ->
-                            if (i.id == item.id) {
-                                item
-                            } else {
-                                i
-                            }
-                        },
+                    it.mentions.map { i ->
+                        if (i.id == item.id) {
+                            item
+                        } else {
+                            i
+                        }
+                    },
                 )
             }
         }
     }
 
-    private suspend fun markAsRead(
-        read: Boolean,
-        mention: PersonMentionModel,
-    ) {
+    private suspend fun markAsRead(read: Boolean, mention: PersonMentionModel) {
         val auth = identityRepository.authToken.value
         userRepository.setMentionRead(
             read = read,
@@ -236,9 +233,9 @@ class InboxMentionsViewModel(
             updateState {
                 it.copy(
                     mentions =
-                        currentState.mentions.filter { m ->
-                            m.id != mention.id
-                        },
+                    currentState.mentions.filter { m ->
+                        m.id != mention.id
+                    },
                 )
             }
         } else {

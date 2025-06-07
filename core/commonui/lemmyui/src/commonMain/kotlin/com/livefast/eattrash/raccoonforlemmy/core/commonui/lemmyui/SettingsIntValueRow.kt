@@ -23,21 +23,22 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 fun SettingsIntValueRow(
     title: String,
     value: Int,
-    subtitle: String? = null,
     onIncrement: () -> Unit,
     onDecrement: () -> Unit,
+    modifier: Modifier = Modifier,
+    subtitle: String? = null,
 ) {
     val fullColor = MaterialTheme.colorScheme.onBackground
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
     Row(
-        modifier = Modifier.padding(horizontal = Spacing.m),
+        modifier = modifier.padding(horizontal = Spacing.m),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
             modifier =
-                Modifier
-                    .weight(1f)
-                    .padding(vertical = Spacing.s),
+            Modifier
+                .weight(1f)
+                .padding(vertical = Spacing.s),
         ) {
             Text(
                 text = title,
@@ -63,9 +64,9 @@ fun SettingsIntValueRow(
             )
             Text(
                 modifier =
-                    Modifier
-                        .sizeIn(minWidth = 40.dp)
-                        .padding(horizontal = Spacing.s),
+                Modifier
+                    .sizeIn(minWidth = 40.dp)
+                    .padding(horizontal = Spacing.s),
                 textAlign = TextAlign.Center,
                 text = value.toString(),
                 style = MaterialTheme.typography.bodyMedium,

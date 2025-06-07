@@ -209,22 +209,22 @@ object ProfileLoggedScreen : Tab {
                                 }
                             Box(
                                 modifier =
-                                    Modifier
-                                        .padding(
-                                            vertical = Spacing.m,
-                                            horizontal = Spacing.s,
-                                        ).border(
-                                            width = 1.dp,
-                                            color = MaterialTheme.colorScheme.onBackground,
-                                            shape = RoundedCornerShape(CornerSize.l),
-                                        ).padding(
-                                            vertical = Spacing.s,
-                                            horizontal = Spacing.m,
-                                        ),
+                                Modifier
+                                    .padding(
+                                        vertical = Spacing.m,
+                                        horizontal = Spacing.s,
+                                    ).border(
+                                        width = 1.dp,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        shape = RoundedCornerShape(CornerSize.l),
+                                    ).padding(
+                                        vertical = Spacing.s,
+                                        horizontal = Spacing.m,
+                                    ),
                             ) {
                                 Text(
                                     modifier =
-                                        Modifier.fillMaxWidth(),
+                                    Modifier.fillMaxWidth(),
                                     text = annotatedString,
                                     style = MaterialTheme.typography.bodyLarge,
                                 )
@@ -251,15 +251,15 @@ object ProfileLoggedScreen : Tab {
                             SectionSelector(
                                 modifier = Modifier.padding(bottom = Spacing.s),
                                 titles =
-                                    listOf(
-                                        LocalStrings.current.profileSectionPosts,
-                                        LocalStrings.current.profileSectionComments,
-                                    ),
+                                listOf(
+                                    LocalStrings.current.profileSectionPosts,
+                                    LocalStrings.current.profileSectionComments,
+                                ),
                                 currentSection =
-                                    when (uiState.section) {
-                                        ProfileLoggedSection.Comments -> 1
-                                        else -> 0
-                                    },
+                                when (uiState.section) {
+                                    ProfileLoggedSection.Comments -> 1
+                                    else -> 0
+                                },
                                 onSectionSelected = { idx ->
                                     val section =
                                         when (idx) {
@@ -365,42 +365,42 @@ object ProfileLoggedScreen : Tab {
                                         )
                                     },
                                     options =
-                                        buildList {
+                                    buildList {
+                                        this +=
+                                            Option(
+                                                OptionId.Share,
+                                                LocalStrings.current.postActionShare,
+                                            )
+                                        this +=
+                                            Option(
+                                                OptionId.CrossPost,
+                                                LocalStrings.current.postActionCrossPost,
+                                            )
+                                        this +=
+                                            Option(
+                                                OptionId.SeeRaw,
+                                                LocalStrings.current.postActionSeeRaw,
+                                            )
+                                        this +=
+                                            Option(
+                                                OptionId.Edit,
+                                                LocalStrings.current.postActionEdit,
+                                            )
+                                        if (post.deleted) {
                                             this +=
                                                 Option(
-                                                    OptionId.Share,
-                                                    LocalStrings.current.postActionShare,
+                                                    OptionId.Restore,
+                                                    LocalStrings.current.actionRestore,
                                                 )
+                                        } else {
                                             this +=
                                                 Option(
-                                                    OptionId.CrossPost,
-                                                    LocalStrings.current.postActionCrossPost,
+                                                    OptionId.Delete,
+                                                    LocalStrings.current.commentActionDelete,
                                                 )
-                                            this +=
-                                                Option(
-                                                    OptionId.SeeRaw,
-                                                    LocalStrings.current.postActionSeeRaw,
-                                                )
-                                            this +=
-                                                Option(
-                                                    OptionId.Edit,
-                                                    LocalStrings.current.postActionEdit,
-                                                )
-                                            if (post.deleted) {
-                                                this +=
-                                                    Option(
-                                                        OptionId.Restore,
-                                                        LocalStrings.current.actionRestore,
-                                                    )
-                                            } else {
-                                                this +=
-                                                    Option(
-                                                        OptionId.Delete,
-                                                        LocalStrings.current.commentActionDelete,
-                                                    )
-                                            }
-                                        },
-                                    onOptionSelected = { optionId ->
+                                        }
+                                    },
+                                    onSelectOption = { optionId ->
                                         when (optionId) {
                                             OptionId.Delete -> {
                                                 postIdToDelete = post.id
@@ -463,9 +463,9 @@ object ProfileLoggedScreen : Tab {
                                 item {
                                     Text(
                                         modifier =
-                                            Modifier
-                                                .fillMaxWidth()
-                                                .padding(top = Spacing.xs),
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(top = Spacing.xs),
                                         textAlign = TextAlign.Center,
                                         text = LocalStrings.current.messageEmptyList,
                                         style = MaterialTheme.typography.bodyLarge,
@@ -547,37 +547,37 @@ object ProfileLoggedScreen : Tab {
                                         )
                                     },
                                     options =
-                                        buildList {
+                                    buildList {
+                                        this +=
+                                            Option(
+                                                OptionId.SeeRaw,
+                                                LocalStrings.current.postActionSeeRaw,
+                                            )
+                                        this +=
+                                            Option(
+                                                OptionId.SeeRaw,
+                                                LocalStrings.current.postActionSeeRaw,
+                                            )
+                                        this +=
+                                            Option(
+                                                OptionId.Edit,
+                                                LocalStrings.current.postActionEdit,
+                                            )
+                                        if (comment.deleted) {
                                             this +=
                                                 Option(
-                                                    OptionId.SeeRaw,
-                                                    LocalStrings.current.postActionSeeRaw,
+                                                    OptionId.Restore,
+                                                    LocalStrings.current.actionRestore,
                                                 )
+                                        } else {
                                             this +=
                                                 Option(
-                                                    OptionId.SeeRaw,
-                                                    LocalStrings.current.postActionSeeRaw,
+                                                    OptionId.Delete,
+                                                    LocalStrings.current.commentActionDelete,
                                                 )
-                                            this +=
-                                                Option(
-                                                    OptionId.Edit,
-                                                    LocalStrings.current.postActionEdit,
-                                                )
-                                            if (comment.deleted) {
-                                                this +=
-                                                    Option(
-                                                        OptionId.Restore,
-                                                        LocalStrings.current.actionRestore,
-                                                    )
-                                            } else {
-                                                this +=
-                                                    Option(
-                                                        OptionId.Delete,
-                                                        LocalStrings.current.commentActionDelete,
-                                                    )
-                                            }
-                                        },
-                                    onOptionSelected = { optionId ->
+                                        }
+                                    },
+                                    onSelectOption = { optionId ->
                                         when (optionId) {
                                             OptionId.Delete -> {
                                                 commentIdToDelete = comment.id
@@ -633,9 +633,9 @@ object ProfileLoggedScreen : Tab {
                                 item {
                                     Text(
                                         modifier =
-                                            Modifier
-                                                .fillMaxWidth()
-                                                .padding(top = Spacing.xs),
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(top = Spacing.xs),
                                         textAlign = TextAlign.Center,
                                         text = LocalStrings.current.messageEmptyList,
                                         style = MaterialTheme.typography.bodyLarge,
@@ -660,11 +660,11 @@ object ProfileLoggedScreen : Tab {
                                         ) {
                                             Text(
                                                 text =
-                                                    if (uiState.section == ProfileLoggedSection.Posts) {
-                                                        LocalStrings.current.postListLoadMorePosts
-                                                    } else {
-                                                        LocalStrings.current.postDetailLoadMoreComments
-                                                    },
+                                                if (uiState.section == ProfileLoggedSection.Posts) {
+                                                    LocalStrings.current.postListLoadMorePosts
+                                                } else {
+                                                    LocalStrings.current.postDetailLoadMoreComments
+                                                },
                                                 style = MaterialTheme.typography.labelSmall,
                                             )
                                         }
@@ -711,11 +711,11 @@ object ProfileLoggedScreen : Tab {
                                 detailOpener.openReply(
                                     originalPost = content,
                                     initialText =
-                                        buildString {
-                                            append("> ")
-                                            append(quotation)
-                                            append("\n\n")
-                                        },
+                                    buildString {
+                                        append("> ")
+                                        append(quotation)
+                                        append("\n\n")
+                                    },
                                 )
                             }
                         },
@@ -739,11 +739,11 @@ object ProfileLoggedScreen : Tab {
                                     originalPost = PostModel(id = content.postId),
                                     originalComment = content,
                                     initialText =
-                                        buildString {
-                                            append("> ")
-                                            append(quotation)
-                                            append("\n\n")
-                                        },
+                                    buildString {
+                                        append("> ")
+                                        append(quotation)
+                                        append("\n\n")
+                                    },
                                 )
                             }
                         },
@@ -815,10 +815,10 @@ object ProfileLoggedScreen : Tab {
             CustomModalBottomSheet(
                 title = LocalStrings.current.postActionShare,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(label = value)
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(label = value)
+                },
+                onSelect = { index ->
                     shareBottomSheetUrls = null
                     if (index != null) {
                         notificationCenter.send(

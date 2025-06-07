@@ -22,8 +22,8 @@ class LoginViewModel(
     private val login: LoginUseCase,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<LoginMviModel.Intent, LoginMviModel.UiState, LoginMviModel.Effect>(
-        initialState = LoginMviModel.UiState(),
-    ),
+    initialState = LoginMviModel.UiState(),
+),
     LoginMviModel {
     init {
         val instance = apiConfigurationRepository.instance.value
