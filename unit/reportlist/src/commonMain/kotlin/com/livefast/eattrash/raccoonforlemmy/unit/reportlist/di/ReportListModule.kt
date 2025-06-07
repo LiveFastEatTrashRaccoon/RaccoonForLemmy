@@ -20,7 +20,7 @@ val reportListModule =
                     settingsRepository = instance(),
                     hapticFeedback = instance(),
                     notificationCenter = instance(),
-            )
+                )
+            }
         }
     }
-}

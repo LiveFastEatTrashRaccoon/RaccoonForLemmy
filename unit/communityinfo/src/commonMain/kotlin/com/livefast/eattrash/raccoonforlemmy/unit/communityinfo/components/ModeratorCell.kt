@@ -45,15 +45,15 @@ internal fun ModeratorCell(
         if (creatorAvatar.isNotEmpty()) {
             CustomImage(
                 modifier =
-                    Modifier
-                        .padding(Spacing.xxxs)
-                        .size(iconSize)
-                        .clip(RoundedCornerShape(iconSize / 2))
-                        .onClick(
-                            onClick = {
-                                onOpenUser?.invoke(user)
-                            },
-                        ),
+                Modifier
+                    .padding(Spacing.xxxs)
+                    .size(iconSize)
+                    .clip(RoundedCornerShape(iconSize / 2))
+                    .onClick(
+                        onClick = {
+                            onOpenUser?.invoke(user)
+                        },
+                    ),
                 quality = FilterQuality.Low,
                 url = creatorAvatar,
                 autoload = autoLoadImages,

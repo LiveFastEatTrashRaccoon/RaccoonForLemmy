@@ -13,9 +13,7 @@ interface MediaListMviModel :
 
         data object LoadNextPage : Intent
 
-        data class Delete(
-            val media: MediaModel,
-        ) : Intent
+        data class Delete(val media: MediaModel) : Intent
     }
 
     data class State(
@@ -34,8 +32,6 @@ interface MediaListMviModel :
     sealed interface Effect {
         data object Success : Effect
 
-        data class Failure(
-            val message: String?,
-        ) : Effect
+        data class Failure(val message: String?) : Effect
     }
 }

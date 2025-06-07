@@ -48,9 +48,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManageAccountsBottomSheet(
+    parent: Screen,
+    modifier: Modifier = Modifier,
     sheetScope: CoroutineScope = rememberCoroutineScope(),
     state: SheetState = rememberModalBottomSheetState(),
-    parent: Screen,
     onDismiss: ((Boolean) -> Unit)? = null,
 ) {
     val model: ManageAccountsMviModel = parent.rememberScreenModel()
@@ -74,6 +75,7 @@ fun ManageAccountsBottomSheet(
     }
 
     ModalBottomSheet(
+        modifier = modifier,
         contentWindowInsets = { WindowInsets.navigationBars },
         sheetState = state,
         onDismissRequest = {
@@ -105,14 +107,14 @@ fun ManageAccountsBottomSheet(
                             model.reduce(ManageAccountsMviModel.Intent.SwitchAccount(idx))
                         },
                         options =
-                            buildList {
-                                this +=
-                                    Option(
-                                        OptionId.Delete,
-                                        LocalStrings.current.commentActionDelete,
-                                    )
-                            },
-                        onOptionSelected = { optionId ->
+                        buildList {
+                            this +=
+                                Option(
+                                    OptionId.Delete,
+                                    LocalStrings.current.commentActionDelete,
+                                )
+                        },
+                        onSelectOption = { optionId ->
                             when (optionId) {
                                 OptionId.Delete -> {
                                     indexToDelete = idx
@@ -127,9 +129,9 @@ fun ManageAccountsBottomSheet(
 
             Button(
                 modifier =
-                    Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(vertical = Spacing.m),
+                Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = Spacing.m),
                 onClick = {
                     sheetScope
                         .launch {

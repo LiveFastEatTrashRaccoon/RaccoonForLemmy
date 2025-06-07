@@ -18,19 +18,16 @@ import com.livefast.eattrash.raccoonforlemmy.unit.licences.models.LicenceItem
 import com.livefast.eattrash.raccoonforlemmy.unit.licences.models.toIcon
 
 @Composable
-internal fun LicenceItem(
-    item: LicenceItem,
-    modifier: Modifier = Modifier,
-) {
+internal fun LicenceItem(item: LicenceItem, modifier: Modifier = Modifier) {
     val fullColor = MaterialTheme.colorScheme.onBackground
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
 
     Row(
         modifier =
-            modifier.padding(
-                vertical = Spacing.xs,
-                horizontal = Spacing.s,
-            ),
+        modifier.padding(
+            vertical = Spacing.xs,
+            horizontal = Spacing.s,
+        ),
         horizontalArrangement = Arrangement.spacedBy(Spacing.m),
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -23,29 +23,29 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.shimmerEffect
 internal fun ManageBanItemPlaceholder() {
     Row(
         modifier =
-            Modifier.padding(
-                vertical = Spacing.xs,
-                horizontal = Spacing.s,
-            ),
+        Modifier.padding(
+            vertical = Spacing.xs,
+            horizontal = Spacing.s,
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
     ) {
         Box(
             modifier =
-                Modifier
-                    .padding(Spacing.xxxs)
-                    .size(IconSize.l)
-                    .clip(CircleShape)
-                    .shimmerEffect(),
+            Modifier
+                .padding(Spacing.xxxs)
+                .size(IconSize.l)
+                .clip(CircleShape)
+                .shimmerEffect(),
         )
         Box(
             modifier =
-                Modifier
-                    .padding(start = Spacing.xs)
-                    .height(40.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(CornerSize.s))
-                    .shimmerEffect(),
+            Modifier
+                .padding(start = Spacing.xs)
+                .height(40.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(CornerSize.s))
+                .shimmerEffect(),
         )
     }
 }

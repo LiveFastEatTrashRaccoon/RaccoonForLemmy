@@ -45,15 +45,15 @@ internal fun ModeratedCommunityCell(
         if (icon.isNotEmpty()) {
             CustomImage(
                 modifier =
-                    Modifier
-                        .padding(Spacing.xxxs)
-                        .size(iconSize)
-                        .clip(RoundedCornerShape(iconSize / 2))
-                        .onClick(
-                            onClick = {
-                                onOpenCommunity?.invoke(community)
-                            },
-                        ),
+                Modifier
+                    .padding(Spacing.xxxs)
+                    .size(iconSize)
+                    .clip(RoundedCornerShape(iconSize / 2))
+                    .onClick(
+                        onClick = {
+                            onOpenCommunity?.invoke(community)
+                        },
+                    ),
                 quality = FilterQuality.Low,
                 url = icon,
                 autoload = autoLoadImages,

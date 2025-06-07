@@ -46,12 +46,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 
 @Composable
 internal fun AccountItem(
-    modifier: Modifier = Modifier,
     account: AccountModel,
+    modifier: Modifier = Modifier,
     autoLoadImages: Boolean = true,
     onClick: (() -> Unit)? = null,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     var optionsMenuOpen by remember { mutableStateOf(false) }
@@ -60,16 +60,16 @@ internal fun AccountItem(
 
     Row(
         modifier =
-            modifier
-                .clip(RoundedCornerShape(CornerSize.xxl))
-                .onClick(
-                    onClick = {
-                        onClick?.invoke()
-                    },
-                ).padding(
-                    horizontal = Spacing.s,
-                    vertical = Spacing.s,
-                ),
+        modifier
+            .clip(RoundedCornerShape(CornerSize.xxl))
+            .onClick(
+                onClick = {
+                    onClick?.invoke()
+                },
+            ).padding(
+                horizontal = Spacing.s,
+                vertical = Spacing.s,
+            ),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -77,9 +77,9 @@ internal fun AccountItem(
         if (avatar.isNotEmpty()) {
             CustomImage(
                 modifier =
-                    Modifier
-                        .size(IconSize.l)
-                        .clip(RoundedCornerShape(IconSize.l / 2)),
+                Modifier
+                    .size(IconSize.l)
+                    .clip(RoundedCornerShape(IconSize.l / 2)),
                 url = avatar,
                 autoload = autoLoadImages,
                 quality = FilterQuality.Low,
@@ -93,11 +93,11 @@ internal fun AccountItem(
             modifier = Modifier.fillMaxWidth(0.8f),
             maxLines = 1,
             text =
-                buildString {
-                    append(account.username)
-                    append("@")
-                    append(account.instance)
-                },
+            buildString {
+                append(account.username)
+                append("@")
+                append(account.instance)
+            },
             color = fullColor,
             style = MaterialTheme.typography.bodyMedium,
             overflow = TextOverflow.Ellipsis,
@@ -116,12 +116,12 @@ internal fun AccountItem(
             Box {
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(IconSize.m)
-                            .padding(Spacing.xs)
-                            .onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
-                            },
+                    Modifier
+                        .size(IconSize.m)
+                        .padding(Spacing.xs)
+                        .onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        },
                     onClick = {
                         optionsMenuOpen = true
                     },
@@ -139,10 +139,10 @@ internal fun AccountItem(
                         optionsMenuOpen = false
                     },
                     offset =
-                        DpOffset(
-                            x = optionsOffset.x.toLocalDp(),
-                            y = optionsOffset.y.toLocalDp(),
-                        ),
+                    DpOffset(
+                        x = optionsOffset.x.toLocalDp(),
+                        y = optionsOffset.y.toLocalDp(),
+                    ),
                 ) {
                     options.forEach { option ->
                         DropdownMenuItem(
@@ -151,7 +151,7 @@ internal fun AccountItem(
                             },
                             onClick = {
                                 optionsMenuOpen = false
-                                onOptionSelected?.invoke(option.id)
+                                onSelectOption?.invoke(option.id)
                             },
                         )
                     }

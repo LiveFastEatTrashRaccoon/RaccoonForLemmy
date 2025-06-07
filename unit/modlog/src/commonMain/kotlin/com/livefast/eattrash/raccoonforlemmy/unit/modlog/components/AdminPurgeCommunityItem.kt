@@ -30,9 +30,9 @@ internal fun AdminPurgeCommunityItem(
         innerContent = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        append(LocalStrings.current.modlogItemCommunityPurged)
-                    },
+                buildAnnotatedString {
+                    append(LocalStrings.current.modlogItemCommunityPurged)
+                },
                 style = MaterialTheme.typography.bodySmall,
             )
         },

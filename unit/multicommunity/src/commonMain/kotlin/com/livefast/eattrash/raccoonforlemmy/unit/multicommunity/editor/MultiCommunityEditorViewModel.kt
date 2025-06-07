@@ -11,6 +11,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Setting
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
+import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorMviModel.Effect
+import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorMviModel.Intent
+import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorMviModel.UiState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -28,9 +31,9 @@ class MultiCommunityEditorViewModel(
     private val accountRepository: AccountRepository,
     private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<MultiCommunityEditorMviModel.Intent, MultiCommunityEditorMviModel.UiState, MultiCommunityEditorMviModel.Effect>(
-        initialState = MultiCommunityEditorMviModel.UiState(),
-    ),
+) : DefaultMviModel<Intent, UiState, Effect>(
+    initialState = UiState(),
+),
     MultiCommunityEditorMviModel {
     init {
         screenModelScope.launch {
@@ -66,22 +69,22 @@ class MultiCommunityEditorViewModel(
         }
     }
 
-    override fun reduce(intent: MultiCommunityEditorMviModel.Intent) {
+    override fun reduce(intent: Intent) {
         when (intent) {
-            is MultiCommunityEditorMviModel.Intent.SelectImage -> selectImage(intent.index)
-            is MultiCommunityEditorMviModel.Intent.SetName ->
+            is Intent.SelectImage -> selectImage(intent.index)
+            is Intent.SetName ->
                 screenModelScope.launch {
                     updateState { it.copy(name = intent.value) }
                 }
 
-            is MultiCommunityEditorMviModel.Intent.ToggleCommunity -> toggleCommunity(intent.id)
-            is MultiCommunityEditorMviModel.Intent.SetSearch -> setSearch(intent.value)
-            MultiCommunityEditorMviModel.Intent.LoadNextPage ->
+            is Intent.ToggleCommunity -> toggleCommunity(intent.id)
+            is Intent.SetSearch -> setSearch(intent.value)
+            Intent.LoadNextPage ->
                 screenModelScope.launch {
                     loadNextPage()
                 }
 
-            MultiCommunityEditorMviModel.Intent.Submit -> submit()
+            Intent.Submit -> submit()
         }
     }
 
@@ -163,11 +166,11 @@ class MultiCommunityEditorViewModel(
                     it.copy(
                         selectedCommunityIds = currentCommunityIds + communityId,
                         availableIcons =
-                            if (iconUrl != null) {
-                                it.availableIcons + iconUrl
-                            } else {
-                                it.availableIcons
-                            },
+                        if (iconUrl != null) {
+                            it.availableIcons + iconUrl
+                        } else {
+                            it.availableIcons
+                        },
                     )
                 }
             }
@@ -218,7 +221,7 @@ class MultiCommunityEditorViewModel(
                 multiCommunityRepository.update(multiCommunity)
                 notificationCenter.send(NotificationCenterEvent.MultiCommunityCreated(multiCommunity))
             }
-            emitEffect(MultiCommunityEditorMviModel.Effect.Close)
+            emitEffect(Effect.Close)
         }
     }
 }

@@ -14,14 +14,14 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentReportMode
 @Composable
 internal fun CommentReportCard(
     report: CommentReportModel,
-    postLayout: PostLayout = PostLayout.Card,
     modifier: Modifier = Modifier,
+    postLayout: PostLayout = PostLayout.Card,
     options: List<Option> = emptyList(),
     autoLoadImages: Boolean = true,
     preferNicknames: Boolean = true,
     onOpen: (() -> Unit)? = null,
     onOpenImage: ((String) -> Unit)? = null,
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     InnerReportCard(
         modifier = modifier,
@@ -32,17 +32,17 @@ internal fun CommentReportCard(
         autoLoadImages = autoLoadImages,
         preferNicknames = preferNicknames,
         options = options,
-        onOptionSelected = onOptionSelected,
+        onSelectOption = onSelectOption,
         onOpen = onOpen,
         originalContent = {
             Column {
                 report.originalText?.also { text ->
                     PostCardBody(
                         modifier =
-                            Modifier.padding(
-                                vertical = Spacing.xs,
-                                horizontal = Spacing.xs,
-                            ),
+                        Modifier.padding(
+                            vertical = Spacing.xs,
+                            horizontal = Spacing.xs,
+                        ),
                         text = text,
                         autoLoadImages = autoLoadImages,
                         onOpenImage = onOpenImage,

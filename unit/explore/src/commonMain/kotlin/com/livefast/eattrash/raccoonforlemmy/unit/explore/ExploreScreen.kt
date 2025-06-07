@@ -95,9 +95,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ExploreScreen(
-    private val otherInstance: String = "",
-) : Screen {
+class ExploreScreen(private val otherInstance: String = "") : Screen {
     override val key: ScreenKey
         get() = super.key + otherInstance
 
@@ -114,10 +112,7 @@ class ExploreScreen(
         val keyboardScrollConnection =
             remember {
                 object : NestedScrollConnection {
-                    override fun onPreScroll(
-                        available: Offset,
-                        source: NestedScrollSource,
-                    ): Offset {
+                    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                         focusManager.clearFocus()
                         return Offset.Zero
                     }
@@ -212,7 +207,7 @@ class ExploreScreen(
                     onSelectResultTypeType = {
                         resultTypeBottomSheetOpened = true
                     },
-                    onHamburgerTapped = {
+                    onTapHamburger = {
                         scope.launch {
                             drawerCoordinator.toggleDrawer()
                         }
@@ -234,20 +229,20 @@ class ExploreScreen(
         ) { padding ->
             Column(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 SearchField(
                     modifier =
-                        Modifier
-                            .focusRequester(searchFocusRequester)
-                            .padding(
-                                horizontal = Spacing.s,
-                                vertical = Spacing.s,
-                            ).fillMaxWidth(),
+                    Modifier
+                        .focusRequester(searchFocusRequester)
+                        .padding(
+                            horizontal = Spacing.s,
+                            vertical = Spacing.s,
+                        ).fillMaxWidth(),
                     hint = LocalStrings.current.exploreSearchPlaceholder,
                     value = uiState.searchText,
                     onValueChange = { value ->
@@ -260,21 +255,21 @@ class ExploreScreen(
 
                 PullToRefreshBox(
                     modifier =
-                        Modifier
-                            .padding(top = Spacing.xs)
-                            .then(
-                                if (connection != null && settings.hideNavigationBarWhileScrolling) {
-                                    Modifier.nestedScroll(connection)
-                                } else {
-                                    Modifier
-                                },
-                            ).then(
-                                if (settings.hideNavigationBarWhileScrolling) {
-                                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                                } else {
-                                    Modifier
-                                },
-                            ).nestedScroll(keyboardScrollConnection),
+                    Modifier
+                        .padding(top = Spacing.xs)
+                        .then(
+                            if (connection != null && settings.hideNavigationBarWhileScrolling) {
+                                Modifier.nestedScroll(connection)
+                            } else {
+                                Modifier
+                            },
+                        ).then(
+                            if (settings.hideNavigationBarWhileScrolling) {
+                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                            } else {
+                                Modifier
+                            },
+                        ).nestedScroll(keyboardScrollConnection),
                     isRefreshing = uiState.refreshing,
                     onRefresh = { model.reduce(ExploreMviModel.Intent.Refresh) },
                 ) {
@@ -299,14 +294,14 @@ class ExploreScreen(
                                 is SearchResult.Community -> {
                                     CommunityItem(
                                         modifier =
-                                            Modifier.fillMaxWidth().onClick(
-                                                onClick = {
-                                                    detailOpener.openCommunityDetail(
-                                                        community = result.model,
-                                                        otherInstance = otherInstanceName,
-                                                    )
-                                                },
-                                            ),
+                                        Modifier.fillMaxWidth().onClick(
+                                            onClick = {
+                                                detailOpener.openCommunityDetail(
+                                                    community = result.model,
+                                                    otherInstance = otherInstanceName,
+                                                )
+                                            },
+                                        ),
                                         community = result.model,
                                         autoLoadImages = uiState.autoLoadImages,
                                         preferNicknames = uiState.preferNicknames,
@@ -324,99 +319,99 @@ class ExploreScreen(
 
                                 is SearchResult.Post -> {
                                     @Composable
-                                    fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> =
-                                        mapNotNull {
-                                            when (it) {
-                                                ActionOnSwipe.UpVote ->
-                                                    SwipeAction(
-                                                        swipeContent = {
-                                                            Icon(
-                                                                modifier =
-                                                                    Modifier.then(
-                                                                        VoteAction.UpVote.toModifier(),
-                                                                    ),
-                                                                imageVector = VoteAction.UpVote.toIcon(),
-                                                                contentDescription = LocalStrings.current.actionUpvote,
-                                                                tint = Color.White,
-                                                            )
-                                                        },
-                                                        backgroundColor =
-                                                            upVoteColor
-                                                                ?: defaultUpvoteColor,
-                                                        onTriggered = {
-                                                            model.reduce(
-                                                                ExploreMviModel.Intent.UpVotePost(
-                                                                    result.model.id,
-                                                                ),
-                                                            )
-                                                        },
-                                                    )
+                                    fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> = mapNotNull {
+                                        when (it) {
+                                            ActionOnSwipe.UpVote ->
+                                                SwipeAction(
+                                                    swipeContent = {
+                                                        Icon(
+                                                            modifier =
+                                                            Modifier.then(
+                                                                VoteAction.UpVote.toModifier(),
+                                                            ),
+                                                            imageVector = VoteAction.UpVote.toIcon(),
+                                                            contentDescription = LocalStrings.current.actionUpvote,
+                                                            tint = Color.White,
+                                                        )
+                                                    },
+                                                    backgroundColor =
+                                                    upVoteColor
+                                                        ?: defaultUpvoteColor,
+                                                    onTriggered = {
+                                                        model.reduce(
+                                                            ExploreMviModel.Intent.UpVotePost(
+                                                                result.model.id,
+                                                            ),
+                                                        )
+                                                    },
+                                                )
 
-                                                ActionOnSwipe.DownVote ->
-                                                    SwipeAction(
-                                                        swipeContent = {
-                                                            Icon(
-                                                                modifier = VoteAction.DownVote.toModifier(),
-                                                                imageVector = VoteAction.DownVote.toIcon(),
-                                                                contentDescription = LocalStrings.current.actionDownvote,
-                                                                tint = Color.White,
-                                                            )
-                                                        },
-                                                        backgroundColor =
-                                                            downVoteColor
-                                                                ?: defaultDownVoteColor,
-                                                        onTriggered = {
-                                                            model.reduce(
-                                                                ExploreMviModel.Intent.DownVotePost(
-                                                                    result.model.id,
-                                                                ),
-                                                            )
-                                                        },
-                                                    ).takeIf { uiState.downVoteEnabled }
+                                            ActionOnSwipe.DownVote ->
+                                                SwipeAction(
+                                                    swipeContent = {
+                                                        Icon(
+                                                            modifier = VoteAction.DownVote.toModifier(),
+                                                            imageVector = VoteAction.DownVote.toIcon(),
+                                                            contentDescription = LocalStrings.current.actionDownvote,
+                                                            tint = Color.White,
+                                                        )
+                                                    },
+                                                    backgroundColor =
+                                                    downVoteColor
+                                                        ?: defaultDownVoteColor,
+                                                    onTriggered = {
+                                                        model.reduce(
+                                                            ExploreMviModel.Intent.DownVotePost(
+                                                                result.model.id,
+                                                            ),
+                                                        )
+                                                    },
+                                                ).takeIf { uiState.downVoteEnabled }
 
-                                                ActionOnSwipe.Reply ->
-                                                    SwipeAction(
-                                                        swipeContent = {
-                                                            Icon(
-                                                                imageVector = Icons.AutoMirrored.Default.Reply,
-                                                                contentDescription = LocalStrings.current.actionReply,
-                                                                tint = Color.White,
-                                                            )
-                                                        },
-                                                        backgroundColor =
-                                                            replyColor
-                                                                ?: defaultReplyColor,
-                                                        onTriggered = {
-                                                            detailOpener.openReply(
-                                                                originalPost = result.model,
-                                                            )
-                                                        },
-                                                    )
+                                            ActionOnSwipe.Reply ->
+                                                SwipeAction(
+                                                    swipeContent = {
+                                                        Icon(
+                                                            imageVector = Icons.AutoMirrored.Default.Reply,
+                                                            contentDescription = LocalStrings.current.actionReply,
+                                                            tint = Color.White,
+                                                        )
+                                                    },
+                                                    backgroundColor =
+                                                    replyColor
+                                                        ?: defaultReplyColor,
+                                                    onTriggered = {
+                                                        detailOpener.openReply(
+                                                            originalPost = result.model,
+                                                        )
+                                                    },
+                                                )
 
-                                                ActionOnSwipe.Save ->
-                                                    SwipeAction(
-                                                        swipeContent = {
-                                                            Icon(
-                                                                imageVector = Icons.Default.Bookmark,
-                                                                contentDescription = LocalStrings.current.actionAddToBookmarks,
-                                                                tint = Color.White,
-                                                            )
-                                                        },
-                                                        backgroundColor =
-                                                            saveColor
-                                                                ?: defaultSaveColor,
-                                                        onTriggered = {
-                                                            model.reduce(
-                                                                ExploreMviModel.Intent.SavePost(
-                                                                    id = result.model.id,
-                                                                ),
-                                                            )
-                                                        },
-                                                    )
+                                            ActionOnSwipe.Save ->
+                                                SwipeAction(
+                                                    swipeContent = {
+                                                        Icon(
+                                                            imageVector = Icons.Default.Bookmark,
+                                                            contentDescription =
+                                                            LocalStrings.current.actionAddToBookmarks,
+                                                            tint = Color.White,
+                                                        )
+                                                    },
+                                                    backgroundColor =
+                                                    saveColor
+                                                        ?: defaultSaveColor,
+                                                    onTriggered = {
+                                                        model.reduce(
+                                                            ExploreMviModel.Intent.SavePost(
+                                                                id = result.model.id,
+                                                            ),
+                                                        )
+                                                    },
+                                                )
 
-                                                else -> null
-                                            }
+                                            else -> null
                                         }
+                                    }
 
                                     SwipeActionCard(
                                         modifier = Modifier.fillMaxWidth(),
@@ -426,11 +421,11 @@ class ExploreScreen(
                                         },
                                         swipeToStartActions = uiState.actionsOnSwipeToStartPosts.toSwipeActions(),
                                         swipeToEndActions =
-                                            if (uiState.isLogged) {
-                                                uiState.actionsOnSwipeToEndPosts.toSwipeActions()
-                                            } else {
-                                                emptyList()
-                                            },
+                                        if (uiState.isLogged) {
+                                            uiState.actionsOnSwipeToEndPosts.toSwipeActions()
+                                        } else {
+                                            emptyList()
+                                        },
                                         content = {
                                             PostCard(
                                                 post = result.model,
@@ -457,60 +452,64 @@ class ExploreScreen(
                                                     )
                                                 },
                                                 onDoubleClick =
-                                                    {
-                                                        model.reduce(
-                                                            ExploreMviModel.Intent.UpVotePost(
-                                                                id = result.model.id,
-                                                                feedback = true,
-                                                            ),
-                                                        )
-                                                    }.takeIf { uiState.downVoteEnabled && uiState.isLogged && !isOnOtherInstance },
+                                                {
+                                                    model.reduce(
+                                                        ExploreMviModel.Intent.UpVotePost(
+                                                            id = result.model.id,
+                                                            feedback = true,
+                                                        ),
+                                                    )
+                                                }.takeIf {
+                                                    uiState.downVoteEnabled &&
+                                                        uiState.isLogged &&
+                                                        !isOnOtherInstance
+                                                },
                                                 onOpenCommunity = { community, instance ->
                                                     detailOpener.openCommunityDetail(
                                                         community = community,
                                                         otherInstance =
-                                                            instance.takeIf {
-                                                                it.isNotEmpty()
-                                                            } ?: otherInstanceName,
+                                                        instance.takeIf {
+                                                            it.isNotEmpty()
+                                                        } ?: otherInstanceName,
                                                     )
                                                 },
                                                 onOpenCreator = { user, instance ->
                                                     detailOpener.openUserDetail(
                                                         user = user,
                                                         otherInstance =
-                                                            instance.takeIf {
-                                                                it.isNotEmpty()
-                                                            } ?: otherInstanceName,
+                                                        instance.takeIf {
+                                                            it.isNotEmpty()
+                                                        } ?: otherInstanceName,
                                                     )
                                                 },
                                                 onUpVote =
-                                                    {
-                                                        model.reduce(
-                                                            ExploreMviModel.Intent.UpVotePost(result.model.id),
-                                                        )
-                                                    }.takeIf { uiState.isLogged },
+                                                {
+                                                    model.reduce(
+                                                        ExploreMviModel.Intent.UpVotePost(result.model.id),
+                                                    )
+                                                }.takeIf { uiState.isLogged },
                                                 onDownVote =
-                                                    {
-                                                        model.reduce(
-                                                            ExploreMviModel.Intent.DownVotePost(
-                                                                result.model.id,
-                                                            ),
-                                                        )
-                                                    }.takeIf { uiState.isLogged },
+                                                {
+                                                    model.reduce(
+                                                        ExploreMviModel.Intent.DownVotePost(
+                                                            result.model.id,
+                                                        ),
+                                                    )
+                                                }.takeIf { uiState.isLogged },
                                                 onSave =
-                                                    {
-                                                        model.reduce(
-                                                            ExploreMviModel.Intent.SavePost(result.model.id),
-                                                        )
-                                                    }.takeIf { uiState.isLogged },
+                                                {
+                                                    model.reduce(
+                                                        ExploreMviModel.Intent.SavePost(result.model.id),
+                                                    )
+                                                }.takeIf { uiState.isLogged },
                                                 onOpenImage = { url ->
                                                     navigationCoordinator.pushScreen(
                                                         ZoomableImageScreen(
                                                             url = url,
                                                             source =
-                                                                result.model.community
-                                                                    ?.readableHandle
-                                                                    .orEmpty(),
+                                                            result.model.community
+                                                                ?.readableHandle
+                                                                .orEmpty(),
                                                         ),
                                                     )
                                                 },
@@ -520,9 +519,9 @@ class ExploreScreen(
                                                             url = url,
                                                             isVideo = true,
                                                             source =
-                                                                result.model.community
-                                                                    ?.readableHandle
-                                                                    .orEmpty(),
+                                                            result.model.community
+                                                                ?.readableHandle
+                                                                .orEmpty(),
                                                         ),
                                                     )
                                                 },
@@ -538,98 +537,99 @@ class ExploreScreen(
 
                                 is SearchResult.Comment -> {
                                     @Composable
-                                    fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> =
-                                        mapNotNull {
-                                            when (it) {
-                                                ActionOnSwipe.UpVote ->
-                                                    SwipeAction(
-                                                        swipeContent = {
-                                                            Icon(
-                                                                modifier = VoteAction.UpVote.toModifier(),
-                                                                imageVector = VoteAction.UpVote.toIcon(),
-                                                                contentDescription = LocalStrings.current.actionUpvote,
-                                                                tint = Color.White,
-                                                            )
-                                                        },
-                                                        backgroundColor =
-                                                            upVoteColor
-                                                                ?: defaultUpvoteColor,
-                                                        onTriggered = {
-                                                            model.reduce(
-                                                                ExploreMviModel.Intent.UpVoteComment(
-                                                                    result.model.id,
-                                                                ),
-                                                            )
-                                                        },
-                                                    )
+                                    fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> = mapNotNull {
+                                        when (it) {
+                                            ActionOnSwipe.UpVote ->
+                                                SwipeAction(
+                                                    swipeContent = {
+                                                        Icon(
+                                                            modifier = VoteAction.UpVote.toModifier(),
+                                                            imageVector = VoteAction.UpVote.toIcon(),
+                                                            contentDescription = LocalStrings.current.actionUpvote,
+                                                            tint = Color.White,
+                                                        )
+                                                    },
+                                                    backgroundColor =
+                                                    upVoteColor
+                                                        ?: defaultUpvoteColor,
+                                                    onTriggered = {
+                                                        model.reduce(
+                                                            ExploreMviModel.Intent.UpVoteComment(
+                                                                result.model.id,
+                                                            ),
+                                                        )
+                                                    },
+                                                )
 
-                                                ActionOnSwipe.DownVote ->
-                                                    SwipeAction(
-                                                        swipeContent = {
-                                                            Icon(
-                                                                modifier = VoteAction.DownVote.toModifier(),
-                                                                imageVector = VoteAction.DownVote.toIcon(),
-                                                                contentDescription = LocalStrings.current.actionDownvote,
-                                                                tint = Color.White,
-                                                            )
-                                                        },
-                                                        backgroundColor =
-                                                            downVoteColor
-                                                                ?: defaultDownVoteColor,
-                                                        onTriggered = {
-                                                            model.reduce(
-                                                                ExploreMviModel.Intent.DownVoteComment(
-                                                                    result.model.id,
-                                                                ),
-                                                            )
-                                                        },
-                                                    ).takeIf { uiState.downVoteEnabled }
+                                            ActionOnSwipe.DownVote ->
+                                                SwipeAction(
+                                                    swipeContent = {
+                                                        Icon(
+                                                            modifier = VoteAction.DownVote.toModifier(),
+                                                            imageVector = VoteAction.DownVote.toIcon(),
+                                                            contentDescription =
+                                                            LocalStrings.current.actionDownvote,
+                                                            tint = Color.White,
+                                                        )
+                                                    },
+                                                    backgroundColor =
+                                                    downVoteColor
+                                                        ?: defaultDownVoteColor,
+                                                    onTriggered = {
+                                                        model.reduce(
+                                                            ExploreMviModel.Intent.DownVoteComment(
+                                                                result.model.id,
+                                                            ),
+                                                        )
+                                                    },
+                                                ).takeIf { uiState.downVoteEnabled }
 
-                                                ActionOnSwipe.Reply ->
-                                                    SwipeAction(
-                                                        swipeContent = {
-                                                            Icon(
-                                                                imageVector = Icons.AutoMirrored.Default.Reply,
-                                                                contentDescription = LocalStrings.current.actionReply,
-                                                                tint = Color.White,
-                                                            )
-                                                        },
-                                                        backgroundColor =
-                                                            replyColor
-                                                                ?: defaultReplyColor,
-                                                        onTriggered = {
-                                                            detailOpener.openPostDetail(
-                                                                post = PostModel(id = result.model.postId),
-                                                                highlightCommentId = result.model.id,
-                                                                otherInstance = otherInstanceName,
-                                                            )
-                                                        },
-                                                    )
+                                            ActionOnSwipe.Reply ->
+                                                SwipeAction(
+                                                    swipeContent = {
+                                                        Icon(
+                                                            imageVector = Icons.AutoMirrored.Default.Reply,
+                                                            contentDescription = LocalStrings.current.actionReply,
+                                                            tint = Color.White,
+                                                        )
+                                                    },
+                                                    backgroundColor =
+                                                    replyColor
+                                                        ?: defaultReplyColor,
+                                                    onTriggered = {
+                                                        detailOpener.openPostDetail(
+                                                            post = PostModel(id = result.model.postId),
+                                                            highlightCommentId = result.model.id,
+                                                            otherInstance = otherInstanceName,
+                                                        )
+                                                    },
+                                                )
 
-                                                ActionOnSwipe.Save ->
-                                                    SwipeAction(
-                                                        swipeContent = {
-                                                            Icon(
-                                                                imageVector = Icons.Default.Bookmark,
-                                                                contentDescription = LocalStrings.current.actionAddToBookmarks,
-                                                                tint = Color.White,
-                                                            )
-                                                        },
-                                                        backgroundColor =
-                                                            saveColor
-                                                                ?: defaultSaveColor,
-                                                        onTriggered = {
-                                                            model.reduce(
-                                                                ExploreMviModel.Intent.SaveComment(
-                                                                    result.model.id,
-                                                                ),
-                                                            )
-                                                        },
-                                                    )
+                                            ActionOnSwipe.Save ->
+                                                SwipeAction(
+                                                    swipeContent = {
+                                                        Icon(
+                                                            imageVector = Icons.Default.Bookmark,
+                                                            contentDescription =
+                                                            LocalStrings.current.actionAddToBookmarks,
+                                                            tint = Color.White,
+                                                        )
+                                                    },
+                                                    backgroundColor =
+                                                    saveColor
+                                                        ?: defaultSaveColor,
+                                                    onTriggered = {
+                                                        model.reduce(
+                                                            ExploreMviModel.Intent.SaveComment(
+                                                                result.model.id,
+                                                            ),
+                                                        )
+                                                    },
+                                                )
 
-                                                else -> null
-                                            }
+                                            else -> null
                                         }
+                                    }
 
                                     SwipeActionCard(
                                         modifier = Modifier.fillMaxWidth(),
@@ -639,11 +639,11 @@ class ExploreScreen(
                                         },
                                         swipeToStartActions = uiState.actionsOnSwipeToStartComments.toSwipeActions(),
                                         swipeToEndActions =
-                                            if (uiState.isLogged) {
-                                                uiState.actionsOnSwipeToEndComments.toSwipeActions()
-                                            } else {
-                                                emptyList()
-                                            },
+                                        if (uiState.isLogged) {
+                                            uiState.actionsOnSwipeToEndComments.toSwipeActions()
+                                        } else {
+                                            emptyList()
+                                        },
                                         content = {
                                             CommentCard(
                                                 modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -669,56 +669,56 @@ class ExploreScreen(
                                                     )
                                                 },
                                                 onDoubleClick =
-                                                    {
-                                                        if (uiState.isLogged) {
-                                                            model.reduce(
-                                                                ExploreMviModel.Intent.UpVoteComment(
-                                                                    id = result.model.id,
-                                                                    feedback = true,
-                                                                ),
-                                                            )
-                                                        }
-                                                    }.takeIf { uiState.doubleTapActionEnabled },
-                                                onUpVote =
-                                                    {
+                                                {
+                                                    if (uiState.isLogged) {
                                                         model.reduce(
                                                             ExploreMviModel.Intent.UpVoteComment(
                                                                 id = result.model.id,
+                                                                feedback = true,
                                                             ),
                                                         )
-                                                    }.takeIf { uiState.isLogged },
+                                                    }
+                                                }.takeIf { uiState.doubleTapActionEnabled },
+                                                onUpVote =
+                                                {
+                                                    model.reduce(
+                                                        ExploreMviModel.Intent.UpVoteComment(
+                                                            id = result.model.id,
+                                                        ),
+                                                    )
+                                                }.takeIf { uiState.isLogged },
                                                 onDownVote =
-                                                    {
-                                                        model.reduce(
-                                                            ExploreMviModel.Intent.DownVoteComment(
-                                                                id = result.model.id,
-                                                            ),
-                                                        )
-                                                    }.takeIf { uiState.isLogged },
+                                                {
+                                                    model.reduce(
+                                                        ExploreMviModel.Intent.DownVoteComment(
+                                                            id = result.model.id,
+                                                        ),
+                                                    )
+                                                }.takeIf { uiState.isLogged },
                                                 onSave =
-                                                    {
-                                                        model.reduce(
-                                                            ExploreMviModel.Intent.SaveComment(
-                                                                id = result.model.id,
-                                                            ),
-                                                        )
-                                                    }.takeIf { uiState.isLogged },
+                                                {
+                                                    model.reduce(
+                                                        ExploreMviModel.Intent.SaveComment(
+                                                            id = result.model.id,
+                                                        ),
+                                                    )
+                                                }.takeIf { uiState.isLogged },
                                                 onOpenCommunity = { community, instance ->
                                                     detailOpener.openCommunityDetail(
                                                         community = community,
                                                         otherInstance =
-                                                            instance.takeIf {
-                                                                it.isNotEmpty()
-                                                            } ?: otherInstanceName,
+                                                        instance.takeIf {
+                                                            it.isNotEmpty()
+                                                        } ?: otherInstanceName,
                                                     )
                                                 },
                                                 onOpenCreator = { user, instance ->
                                                     detailOpener.openUserDetail(
                                                         user = user,
                                                         otherInstance =
-                                                            instance.takeIf {
-                                                                it.isNotEmpty()
-                                                            } ?: otherInstanceName,
+                                                        instance.takeIf {
+                                                            it.isNotEmpty()
+                                                        } ?: otherInstanceName,
                                                     )
                                                 },
                                             )
@@ -733,14 +733,14 @@ class ExploreScreen(
                                 is SearchResult.User -> {
                                     UserItem(
                                         modifier =
-                                            Modifier.fillMaxWidth().onClick(
-                                                onClick = {
-                                                    detailOpener.openUserDetail(
-                                                        user = result.model,
-                                                        otherInstance = otherInstanceName,
-                                                    )
-                                                },
-                                            ),
+                                        Modifier.fillMaxWidth().onClick(
+                                            onClick = {
+                                                detailOpener.openUserDetail(
+                                                    user = result.model,
+                                                    otherInstance = otherInstanceName,
+                                                )
+                                            },
+                                        ),
                                         user = result.model,
                                         preferNicknames = uiState.preferNicknames,
                                         highlightText = uiState.searchText,
@@ -797,20 +797,20 @@ class ExploreScreen(
             CustomModalBottomSheet(
                 title = LocalStrings.current.homeListingTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            label = value.toReadableName(),
-                            trailingContent = {
-                                Icon(
-                                    modifier = Modifier.size(IconSize.m),
-                                    imageVector = value.toIcon(),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            },
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        label = value.toReadableName(),
+                        trailingContent = {
+                            Icon(
+                                modifier = Modifier.size(IconSize.m),
+                                imageVector = value.toIcon(),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        },
+                    )
+                },
+                onSelect = { index ->
                     listingTypeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -836,20 +836,20 @@ class ExploreScreen(
             CustomModalBottomSheet(
                 title = LocalStrings.current.exploreResultTypeTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(
-                            label = value.toReadableName(),
-                            trailingContent = {
-                                Icon(
-                                    modifier = Modifier.size(IconSize.m),
-                                    imageVector = value.toIcon(),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            },
-                        )
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(
+                        label = value.toReadableName(),
+                        trailingContent = {
+                            Icon(
+                                modifier = Modifier.size(IconSize.m),
+                                imageVector = value.toIcon(),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        },
+                    )
+                },
+                onSelect = { index ->
                     resultTypeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -867,7 +867,7 @@ class ExploreScreen(
             SortBottomSheet(
                 values = uiState.availableSortTypes,
                 expandTop = uiState.resultType != SearchResultType.Comments,
-                onSelected = { value ->
+                onSelect = { value ->
                     sortBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(

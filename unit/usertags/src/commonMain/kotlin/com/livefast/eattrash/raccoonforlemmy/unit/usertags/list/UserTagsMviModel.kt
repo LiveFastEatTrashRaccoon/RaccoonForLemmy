@@ -13,21 +13,11 @@ interface UserTagsMviModel :
     sealed interface Intent {
         data object Refresh : Intent
 
-        data class Delete(
-            val id: Long,
-        ) : Intent
+        data class Delete(val id: Long) : Intent
 
-        data class Add(
-            val name: String,
-            val color: Int? = null,
-        ) : Intent
+        data class Add(val name: String, val color: Int? = null) : Intent
 
-        data class Edit(
-            val id: Long,
-            val name: String,
-            val type: UserTagType,
-            val color: Int? = null,
-        ) : Intent
+        data class Edit(val id: Long, val name: String, val type: UserTagType, val color: Int? = null) : Intent
     }
 
     data class UiState(

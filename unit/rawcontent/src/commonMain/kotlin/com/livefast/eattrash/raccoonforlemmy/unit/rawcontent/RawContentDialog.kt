@@ -44,6 +44,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RawContentDialog(
+    modifier: Modifier = Modifier,
     publishDate: String? = null,
     updateDate: String? = null,
     title: String? = null,
@@ -77,6 +78,7 @@ fun RawContentDialog(
     val focusManager = LocalFocusManager.current
 
     BasicAlertDialog(
+        modifier = modifier,
         onDismissRequest = { onDismiss?.invoke() },
     ) {
         CompositionLocalProvider(
@@ -94,9 +96,9 @@ fun RawContentDialog(
         ) {
             Column(
                 modifier =
-                    Modifier
-                        .background(color = MaterialTheme.colorScheme.surface)
-                        .padding(vertical = Spacing.s),
+                Modifier
+                    .background(color = MaterialTheme.colorScheme.surface)
+                    .padding(vertical = Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
@@ -107,9 +109,9 @@ fun RawContentDialog(
                 Spacer(modifier = Modifier.height(Spacing.s))
                 LazyColumn(
                     modifier =
-                        Modifier
-                            .padding(vertical = Spacing.s, horizontal = Spacing.m)
-                            .heightIn(max = 400.dp),
+                    Modifier
+                        .padding(vertical = Spacing.s, horizontal = Spacing.m)
+                        .heightIn(max = 400.dp),
                     verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                 ) {
                     title?.takeIf { it.trim().isNotEmpty() }?.also {
@@ -126,9 +128,9 @@ fun RawContentDialog(
                                         modifier = Modifier.fillMaxWidth(),
                                         text = it,
                                         style =
-                                            MaterialTheme.typography.bodyLarge.copy(
-                                                fontFamily = FontFamily.Monospace,
-                                            ),
+                                        MaterialTheme.typography.bodyLarge.copy(
+                                            fontFamily = FontFamily.Monospace,
+                                        ),
                                         color = fullColor,
                                     )
                                 }
@@ -149,9 +151,9 @@ fun RawContentDialog(
                                         modifier = Modifier.fillMaxWidth(),
                                         text = it,
                                         style =
-                                            MaterialTheme.typography.bodyMedium.copy(
-                                                fontFamily = FontFamily.Monospace,
-                                            ),
+                                        MaterialTheme.typography.bodyMedium.copy(
+                                            fontFamily = FontFamily.Monospace,
+                                        ),
                                         color = fullColor,
                                     )
                                 }
@@ -172,9 +174,9 @@ fun RawContentDialog(
                                         modifier = Modifier.fillMaxWidth(),
                                         text = it,
                                         style =
-                                            MaterialTheme.typography.bodyMedium.copy(
-                                                fontFamily = FontFamily.Monospace,
-                                            ),
+                                        MaterialTheme.typography.bodyMedium.copy(
+                                            fontFamily = FontFamily.Monospace,
+                                        ),
                                         color = fullColor,
                                     )
                                 }
@@ -201,9 +203,9 @@ fun RawContentDialog(
                                         modifier = Modifier.weight(1f).padding(start = Spacing.xxs),
                                         text = it,
                                         style =
-                                            MaterialTheme.typography.bodyMedium.copy(
-                                                fontFamily = FontFamily.Monospace,
-                                            ),
+                                        MaterialTheme.typography.bodyMedium.copy(
+                                            fontFamily = FontFamily.Monospace,
+                                        ),
                                         color = fullColor,
                                     )
                                 }
@@ -226,9 +228,9 @@ fun RawContentDialog(
                                     modifier = Modifier.weight(1f),
                                     text = it,
                                     style =
-                                        MaterialTheme.typography.bodyMedium.copy(
-                                            fontFamily = FontFamily.Monospace,
-                                        ),
+                                    MaterialTheme.typography.bodyMedium.copy(
+                                        fontFamily = FontFamily.Monospace,
+                                    ),
                                     color = fullColor,
                                 )
                             }
@@ -242,10 +244,10 @@ fun RawContentDialog(
                             ) {
                                 Icon(
                                     modifier =
-                                        Modifier
-                                            .size(IconSize.m)
-                                            .padding(end = 3.5.dp)
-                                            .then(VoteAction.UpVote.toModifier()),
+                                    Modifier
+                                        .size(IconSize.m)
+                                        .padding(end = 3.5.dp)
+                                        .then(VoteAction.UpVote.toModifier()),
                                     imageVector = VoteAction.UpVote.toIcon(),
                                     contentDescription = LocalStrings.current.actionUpvote,
                                     tint = fullColor,
@@ -260,10 +262,10 @@ fun RawContentDialog(
 
                                 Icon(
                                     modifier =
-                                        Modifier
-                                            .size(IconSize.m)
-                                            .padding(end = 3.5.dp)
-                                            .then(VoteAction.DownVote.toModifier()),
+                                    Modifier
+                                        .size(IconSize.m)
+                                        .padding(end = 3.5.dp)
+                                        .then(VoteAction.DownVote.toModifier()),
                                     imageVector = VoteAction.DownVote.toIcon(),
                                     contentDescription = LocalStrings.current.actionDownvote,
                                     tint = fullColor,

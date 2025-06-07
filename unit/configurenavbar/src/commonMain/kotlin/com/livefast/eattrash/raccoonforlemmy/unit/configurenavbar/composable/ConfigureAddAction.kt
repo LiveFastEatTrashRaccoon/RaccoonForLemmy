@@ -25,11 +25,11 @@ internal fun ConfigureAddAction(onAdd: () -> Unit) {
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
     Row(
         modifier =
-            Modifier
-                .padding(
-                    horizontal = Spacing.s,
-                    vertical = Spacing.xs,
-                ).onClick(onClick = onAdd),
+        Modifier
+            .padding(
+                horizontal = Spacing.s,
+                vertical = Spacing.xs,
+            ).onClick(onClick = onAdd),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {

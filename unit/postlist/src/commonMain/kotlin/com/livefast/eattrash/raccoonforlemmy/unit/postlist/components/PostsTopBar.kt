@@ -40,21 +40,23 @@ internal fun PostsTopBar(
     currentInstance: String,
     listingType: ListingType?,
     sortType: SortType?,
+    modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     onSelectListingType: (() -> Unit)? = null,
     onSelectInstance: (() -> Unit)? = null,
     onSelectSortType: (() -> Unit)? = null,
-    onHamburgerTapped: (() -> Unit)? = null,
+    onTapHamburger: (() -> Unit)? = null,
 ) {
     TopAppBar(
+        modifier = modifier,
         windowInsets = topAppBarState.toWindowInsets(),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
             when {
-                onHamburgerTapped != null -> {
+                onTapHamburger != null -> {
                     IconButton(
                         onClick = {
-                            onHamburgerTapped()
+                            onTapHamburger()
                         },
                     ) {
                         Icon(
@@ -86,34 +88,34 @@ internal fun PostsTopBar(
             Column {
                 Text(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(CornerSize.xl))
-                            .clickable {
-                                onSelectListingType?.invoke()
-                            }.padding(horizontal = Spacing.s),
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(CornerSize.xl))
+                        .clickable {
+                            onSelectListingType?.invoke()
+                        }.padding(horizontal = Spacing.s),
                     text = listingType?.toReadableName().orEmpty(),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(CornerSize.xl))
-                            .clickable {
-                                if (onSelectInstance != null) {
-                                    onSelectInstance.invoke()
-                                } else {
-                                    onSelectListingType?.invoke()
-                                }
-                            }.padding(horizontal = Spacing.s),
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(CornerSize.xl))
+                        .clickable {
+                            if (onSelectInstance != null) {
+                                onSelectInstance.invoke()
+                            } else {
+                                onSelectListingType?.invoke()
+                            }
+                        }.padding(horizontal = Spacing.s),
                     text =
-                        buildString {
-                            append(LocalStrings.current.homeInstanceVia)
-                            append(" ")
-                            append(currentInstance)
-                        },
+                    buildString {
+                        append(LocalStrings.current.homeInstanceVia)
+                        append(" ")
+                        append(currentInstance)
+                    },
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
@@ -124,11 +126,11 @@ internal fun PostsTopBar(
             if (additionalLabel.isNotEmpty()) {
                 Text(
                     text =
-                        buildString {
-                            append("(")
-                            append(additionalLabel)
-                            append(")")
-                        },
+                    buildString {
+                        append("(")
+                        append(additionalLabel)
+                        append(")")
+                    },
                 )
                 Spacer(modifier = Modifier.width(Spacing.xs))
             }

@@ -29,8 +29,8 @@ class InboxRepliesViewModel(
     private val settingsRepository: SettingsRepository,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<InboxRepliesMviModel.Intent, InboxRepliesMviModel.UiState, InboxRepliesMviModel.Effect>(
-        initialState = InboxRepliesMviModel.UiState(),
-    ),
+    initialState = InboxRepliesMviModel.UiState(),
+),
     InboxRepliesMviModel {
     private var currentPage: Int = 1
 
@@ -206,22 +206,19 @@ class InboxRepliesViewModel(
             updateState {
                 it.copy(
                     replies =
-                        it.replies.map { i ->
-                            if (i.id == item.id) {
-                                item
-                            } else {
-                                i
-                            }
-                        },
+                    it.replies.map { i ->
+                        if (i.id == item.id) {
+                            item
+                        } else {
+                            i
+                        }
+                    },
                 )
             }
         }
     }
 
-    private suspend fun markAsRead(
-        read: Boolean,
-        reply: PersonMentionModel,
-    ) {
+    private suspend fun markAsRead(read: Boolean, reply: PersonMentionModel) {
         val auth = identityRepository.authToken.value
         userRepository.setReplyRead(
             read = read,
@@ -233,9 +230,9 @@ class InboxRepliesViewModel(
             updateState {
                 it.copy(
                     replies =
-                        currentState.replies.filter { r ->
-                            r.id != reply.id
-                        },
+                    currentState.replies.filter { r ->
+                        r.id != reply.id
+                    },
                 )
             }
         } else {

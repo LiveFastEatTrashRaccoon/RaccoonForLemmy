@@ -21,8 +21,8 @@ class SelectInstanceViewModel(
     private val apiConfigurationRepository: ApiConfigurationRepository,
     private val hapticFeedback: HapticFeedback,
 ) : DefaultMviModel<SelectInstanceMviModel.Intent, SelectInstanceMviModel.State, SelectInstanceMviModel.Effect>(
-        initialState = SelectInstanceMviModel.State(),
-    ),
+    initialState = SelectInstanceMviModel.State(),
+),
     SelectInstanceMviModel {
     private val saveOperationChannel = Channel<List<String>>()
 
@@ -126,10 +126,7 @@ class SelectInstanceViewModel(
         }
     }
 
-    private fun swapInstances(
-        from: Int,
-        to: Int,
-    ) {
+    private fun swapInstances(from: Int, to: Int) {
         val newInstances =
             uiState.value.instances.toMutableList().apply {
                 val element = removeAt(from)

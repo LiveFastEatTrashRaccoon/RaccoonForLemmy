@@ -38,18 +38,18 @@ internal fun ModBanFromCommunityItem(
         innerContent = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                            val name = item.user?.readableName(preferNicknames).orEmpty()
-                            append(name)
-                        }
-                        append(" ")
-                        if (item.banned) {
-                            append(LocalStrings.current.modlogItemUserBanned)
-                        } else {
-                            append(LocalStrings.current.modlogItemUserUnbanned)
-                        }
-                    },
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        val name = item.user?.readableName(preferNicknames).orEmpty()
+                        append(name)
+                    }
+                    append(" ")
+                    if (item.banned) {
+                        append(LocalStrings.current.modlogItemUserBanned)
+                    } else {
+                        append(LocalStrings.current.modlogItemUserUnbanned)
+                    }
+                },
                 style = MaterialTheme.typography.bodySmall,
             )
         },

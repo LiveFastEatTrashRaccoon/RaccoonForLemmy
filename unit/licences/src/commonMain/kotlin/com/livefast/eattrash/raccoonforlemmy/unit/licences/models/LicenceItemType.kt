@@ -11,8 +11,7 @@ sealed interface LicenceItemType {
     data object Resource : LicenceItemType
 }
 
-internal fun LicenceItemType.toIcon(): ImageVector =
-    when (this) {
-        LicenceItemType.Library -> Icons.Default.Api
-        LicenceItemType.Resource -> Icons.Default.Brush
-    }
+internal fun LicenceItemType.toIcon(): ImageVector = when (this) {
+    LicenceItemType.Library -> Icons.Default.Api
+    LicenceItemType.Resource -> Icons.Default.Brush
+}

@@ -22,8 +22,8 @@ class InboxMessagesViewModel(
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect>(
-        initialState = InboxMessagesMviModel.UiState(),
-    ),
+    initialState = InboxMessagesMviModel.UiState(),
+),
     InboxMessagesMviModel {
     private var currentPage: Int = 1
 

@@ -34,14 +34,14 @@ internal fun AdminPurgeCommentItem(
         innerContent = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        append(LocalStrings.current.modlogItemCommentPurged)
-                        if (item.post != null) {
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                                append(item.post?.title.ellipsize())
-                            }
+                buildAnnotatedString {
+                    append(LocalStrings.current.modlogItemCommentPurged)
+                    if (item.post != null) {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                            append(item.post?.title.ellipsize())
                         }
-                    },
+                    }
+                },
                 style = MaterialTheme.typography.bodySmall,
             )
         },

@@ -19,42 +19,23 @@ interface MultiCommunityMviModel :
 
         data object HapticIndication : Intent
 
-        data class UpVotePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class UpVotePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class DownVotePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class DownVotePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class SavePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class SavePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class MarkAsRead(
-            val id: Long,
-        ) : Intent
+        data class MarkAsRead(val id: Long) : Intent
 
-        data class Hide(
-            val id: Long,
-        ) : Intent
+        data class Hide(val id: Long) : Intent
 
         data object ClearRead : Intent
 
-        data class Share(
-            val url: String,
-        ) : Intent
+        data class Share(val url: String) : Intent
 
-        data class WillOpenDetail(
-            val id: Long,
-        ) : Intent
+        data class WillOpenDetail(val id: Long) : Intent
 
-        data class ToggleRead(
-            val id: Long,
-        ) : Intent
+        data class ToggleRead(val id: Long) : Intent
     }
 
     data class UiState(
@@ -90,8 +71,6 @@ interface MultiCommunityMviModel :
     sealed interface Effect {
         data object BackToTop : Effect
 
-        data class OpenDetail(
-            val post: PostModel,
-        ) : Effect
+        data class OpenDetail(val post: PostModel) : Effect
     }
 }

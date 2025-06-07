@@ -130,10 +130,10 @@ class ConfigureNavBarScreen : Screen {
                     actions = {
                         TextButton(
                             contentPadding =
-                                PaddingValues(
-                                    horizontal = Spacing.xs,
-                                    vertical = Spacing.xxs,
-                                ),
+                            PaddingValues(
+                                horizontal = Spacing.xs,
+                                vertical = Spacing.xxs,
+                            ),
                             onClick = {
                                 model.reduce(ConfigureNavBarMviModel.Intent.Reset)
                             },
@@ -149,16 +149,16 @@ class ConfigureNavBarScreen : Screen {
         ) { padding ->
             Column(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).then(
-                            if (settings.hideNavigationBarWhileScrolling) {
-                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                            } else {
-                                Modifier
-                            },
-                        ),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        },
+                    ),
             ) {
                 LazyColumn(
                     modifier = Modifier.weight(1f).fillMaxWidth(),
@@ -201,7 +201,7 @@ class ConfigureNavBarScreen : Screen {
                                 ConfigureNavBarItem(
                                     reorderableScope = this,
                                     title = section.toReadableName(),
-                                    onDragStarted = {
+                                    onStartDrag = {
                                         model.reduce(ConfigureNavBarMviModel.Intent.HapticFeedback)
                                     },
                                     onDelete = {
@@ -273,10 +273,10 @@ class ConfigureNavBarScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.inboxListingTypeTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(label = value.toReadableName())
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(label = value.toReadableName())
+                },
+                onSelect = { index ->
                     selectTabNavigationSectionBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(

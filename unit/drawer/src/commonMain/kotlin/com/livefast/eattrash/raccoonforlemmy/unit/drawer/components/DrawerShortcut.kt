@@ -15,7 +15,7 @@ internal fun DrawerShortcut(
     title: String,
     icon: ImageVector,
     modifier: Modifier = Modifier,
-    onSelected: (() -> Unit)? = null,
+    onSelect: (() -> Unit)? = null,
 ) {
     NavigationDrawerItem(
         modifier = modifier,
@@ -36,7 +36,7 @@ internal fun DrawerShortcut(
             )
         },
         onClick = {
-            onSelected?.invoke()
+            onSelect?.invoke()
         },
     )
 }

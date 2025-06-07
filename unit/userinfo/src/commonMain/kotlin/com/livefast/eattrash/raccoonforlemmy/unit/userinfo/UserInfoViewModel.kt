@@ -20,8 +20,8 @@ class UserInfoViewModel(
     private val itemCache: LemmyItemCache,
     private val siteRepository: SiteRepository,
 ) : DefaultMviModel<UserInfoMviModel.Intent, UserInfoMviModel.UiState, UserInfoMviModel.Effect>(
-        initialState = UserInfoMviModel.UiState(),
-    ),
+    initialState = UserInfoMviModel.UiState(),
+),
     UserInfoMviModel {
     init {
         screenModelScope.launch {

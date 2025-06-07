@@ -67,11 +67,11 @@ class CommunityInfoScreen(
         val model: CommunityInfoMviModel =
             rememberScreenModel(
                 arg =
-                    CommunityInfoMviModelParams(
-                        communityId = communityId,
-                        communityName = communityName,
-                        otherInstance = otherInstance,
-                    ),
+                CommunityInfoMviModelParams(
+                    communityId = communityId,
+                    communityName = communityName,
+                    otherInstance = otherInstance,
+                ),
             )
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
@@ -84,9 +84,9 @@ class CommunityInfoScreen(
                 val title = uiState.community.readableName(uiState.preferNicknames)
                 TopAppBar(
                     colors =
-                        TopAppBarDefaults.topAppBarColors().copy(
-                            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-                        ),
+                    TopAppBarDefaults.topAppBarColors().copy(
+                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+                    ),
                     title = {
                         Text(
                             text = title,
@@ -111,13 +111,13 @@ class CommunityInfoScreen(
         ) { padding ->
             LazyColumn(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                            start = Spacing.m,
-                            end = Spacing.m,
-                        ),
+                Modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                        start = Spacing.m,
+                        end = Spacing.m,
+                    ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -136,69 +136,69 @@ class CommunityInfoScreen(
                             modifier = Modifier.fillMaxWidth(),
                             icon = Icons.Default.Cake,
                             title =
-                                uiState.community.creationDate
-                                    ?.prettifyDate()
-                                    .orEmpty(),
+                            uiState.community.creationDate
+                                ?.prettifyDate()
+                                .orEmpty(),
                         )
                         DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),
                             icon = Icons.AutoMirrored.Default.Article,
                             title = LocalStrings.current.communityInfoPosts,
                             value =
-                                uiState.community.posts.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
+                            uiState.community.posts.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
                         )
                         DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),
                             icon = Icons.AutoMirrored.Default.Reply,
                             title = LocalStrings.current.communityInfoComments,
                             value =
-                                uiState.community.comments.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
+                            uiState.community.comments.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
                         )
                         DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),
                             icon = Icons.Default.Group,
                             title = LocalStrings.current.communityInfoSubscribers,
                             value =
-                                uiState.community.subscribers.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
+                            uiState.community.subscribers.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
                         )
                         DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),
                             icon = Icons.Default.CalendarViewMonth,
                             title = LocalStrings.current.communityInfoMonthlyActiveUsers,
                             value =
-                                uiState.community.monthlyActiveUsers.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
+                            uiState.community.monthlyActiveUsers.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
                         )
                         DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),
                             icon = Icons.Default.CalendarViewWeek,
                             title = LocalStrings.current.communityInfoWeeklyActiveUsers,
                             value =
-                                uiState.community.weeklyActiveUsers.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
+                            uiState.community.weeklyActiveUsers.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
                         )
                         DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),
                             icon = Icons.Default.CalendarViewDay,
                             title = LocalStrings.current.communityInfoDailyActiveUsers,
                             value =
-                                uiState.community.dailyActiveUsers.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
+                            uiState.community.dailyActiveUsers.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
                         )
                     }
                 }
@@ -206,12 +206,12 @@ class CommunityInfoScreen(
                     item {
                         Text(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        top = Spacing.s,
-                                        bottom = Spacing.xs,
-                                    ),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    top = Spacing.s,
+                                    bottom = Spacing.xs,
+                                ),
                             text = LocalStrings.current.communityInfoModerators,
                         )
                         LazyRow(

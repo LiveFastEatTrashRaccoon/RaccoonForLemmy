@@ -18,8 +18,8 @@ class BanUserViewModel(
     private val communityRepository: CommunityRepository,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<BanUserMviModel.Intent, BanUserMviModel.UiState, BanUserMviModel.Effect>(
-        initialState = BanUserMviModel.UiState(),
-    ),
+    initialState = BanUserMviModel.UiState(),
+),
     BanUserMviModel {
     init {
         screenModelScope.launch {

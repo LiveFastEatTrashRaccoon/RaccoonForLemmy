@@ -38,8 +38,8 @@ class ManageBanViewModel(
     private val blocklistRepository: DomainBlocklistRepository,
     private val stopWordRepository: StopWordRepository,
 ) : DefaultMviModel<ManageBanMviModel.Intent, ManageBanMviModel.UiState, ManageBanMviModel.Effect>(
-        initialState = ManageBanMviModel.UiState(),
-    ),
+    initialState = ManageBanMviModel.UiState(),
+),
     ManageBanMviModel {
     private var originalBans: AccountBansModel? = null
     private var originalBlockedDomains: List<String> = emptyList()
@@ -264,30 +264,26 @@ class ManageBanViewModel(
     }
 }
 
-private fun List<UserModel>.filterUsersBy(query: String): List<UserModel> =
-    if (query.isEmpty()) {
-        this
-    } else {
-        filter { it.readableHandle.contains(query, ignoreCase = true) }
-    }
+private fun List<UserModel>.filterUsersBy(query: String): List<UserModel> = if (query.isEmpty()) {
+    this
+} else {
+    filter { it.readableHandle.contains(query, ignoreCase = true) }
+}
 
-private fun List<CommunityModel>.filterCommunitiesBy(query: String): List<CommunityModel> =
-    if (query.isEmpty()) {
-        this
-    } else {
-        filter { it.readableHandle.contains(query, ignoreCase = true) }
-    }
+private fun List<CommunityModel>.filterCommunitiesBy(query: String): List<CommunityModel> = if (query.isEmpty()) {
+    this
+} else {
+    filter { it.readableHandle.contains(query, ignoreCase = true) }
+}
 
-private fun List<InstanceModel>.filterInstancesBy(query: String): List<InstanceModel> =
-    if (query.isEmpty()) {
-        this
-    } else {
-        filter { it.domain.contains(query, ignoreCase = true) }
-    }
+private fun List<InstanceModel>.filterInstancesBy(query: String): List<InstanceModel> = if (query.isEmpty()) {
+    this
+} else {
+    filter { it.domain.contains(query, ignoreCase = true) }
+}
 
-private fun List<String>.filterBy(query: String): List<String> =
-    if (query.isEmpty()) {
-        this
-    } else {
-        filter { it.contains(query, ignoreCase = true) }
-    }
+private fun List<String>.filterBy(query: String): List<String> = if (query.isEmpty()) {
+    this
+} else {
+    filter { it.contains(query, ignoreCase = true) }
+}

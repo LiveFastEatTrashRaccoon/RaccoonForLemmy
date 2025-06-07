@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview
 
 import cafe.adriel.voyager.core.model.ScreenModel
@@ -7,9 +9,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontScales
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
-
 interface ConfigureContentViewMviModel :
-    MviModel<ConfigureContentViewMviModel.Intent, ConfigureContentViewMviModel.State, ConfigureContentViewMviModel.Effect>,
+    MviModel<ConfigureContentViewMviModel.Intent, ConfigureContentViewMviModel.UiState, ConfigureContentViewMviModel.Effect>,
     ScreenModel {
     sealed interface Intent {
         data class ChangePreferUserNicknames(val value: Boolean) : Intent
@@ -27,7 +28,7 @@ interface ConfigureContentViewMviModel :
         data object DecrementCommentIndentAmount : Intent
     }
 
-    data class State(
+    data class UiState(
         val postLayout: PostLayout = PostLayout.Card,
         val commentBarTheme: CommentBarTheme = CommentBarTheme.Blue,
         val commentBarThickness: Int = 1,

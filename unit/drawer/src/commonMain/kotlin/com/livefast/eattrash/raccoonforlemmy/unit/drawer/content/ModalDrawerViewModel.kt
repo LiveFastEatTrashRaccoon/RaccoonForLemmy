@@ -52,8 +52,8 @@ class ModalDrawerViewModel(
     private val notificationCenter: NotificationCenter,
     private val subscriptionsCache: SubscriptionsCache,
 ) : DefaultMviModel<ModalDrawerMviModel.Intent, ModalDrawerMviModel.UiState, ModalDrawerMviModel.Effect>(
-        initialState = ModalDrawerMviModel.UiState(),
-    ),
+    initialState = ModalDrawerMviModel.UiState(),
+),
     ModalDrawerMviModel {
     init {
         screenModelScope.launch {

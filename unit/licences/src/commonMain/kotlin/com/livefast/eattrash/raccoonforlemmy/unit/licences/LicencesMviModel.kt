@@ -9,9 +9,7 @@ interface LicencesMviModel :
     MviModel<LicencesMviModel.Intent, LicencesMviModel.State, LicencesMviModel.Effect> {
     sealed interface Intent
 
-    data class State(
-        val items: List<LicenceItem> = emptyList(),
-    )
+    data class State(val items: List<LicenceItem> = emptyList())
 
     sealed interface Effect
 }

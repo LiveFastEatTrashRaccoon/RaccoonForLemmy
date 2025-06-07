@@ -12,5 +12,5 @@ val licenceModule =
             provider {
                 LicencesViewModel()
             }
+        }
     }
-}

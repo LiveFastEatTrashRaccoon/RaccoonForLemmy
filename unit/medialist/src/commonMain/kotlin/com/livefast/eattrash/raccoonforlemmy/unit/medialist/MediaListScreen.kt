@@ -124,11 +124,11 @@ class MediaListScreen : Screen {
         ) { padding ->
             PullToRefreshBox(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .fillMaxSize(),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .fillMaxSize(),
                 isRefreshing = uiState.refreshing,
                 onRefresh = {
                     model.reduce(MediaListMviModel.Intent.Refresh)
@@ -162,14 +162,14 @@ class MediaListScreen : Screen {
                                 )
                             },
                             options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            OptionId.Delete,
-                                            LocalStrings.current.commentActionDelete,
-                                        )
-                                },
-                            onOptionSelected = { optionId ->
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.Delete,
+                                        LocalStrings.current.commentActionDelete,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
                                 when (optionId) {
                                     OptionId.Delete -> {
                                         itemToDelete = media

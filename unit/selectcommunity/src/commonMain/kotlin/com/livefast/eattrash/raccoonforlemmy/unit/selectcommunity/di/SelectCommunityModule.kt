@@ -15,6 +15,6 @@ val selectCommunityModule =
                     settingsRepository = instance(),
                     communityPaginationManager = instance(),
                 )
+            }
         }
     }
-}

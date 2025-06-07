@@ -27,20 +27,11 @@ interface CommunityDetailMviModel :
 
         data object LoadNextPage : Intent
 
-        data class UpVotePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class UpVotePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class DownVotePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class DownVotePost(val id: Long, val feedback: Boolean = false) : Intent
 
-        data class SavePost(
-            val id: Long,
-            val feedback: Boolean = false,
-        ) : Intent
+        data class SavePost(val id: Long, val feedback: Boolean = false) : Intent
 
         data object HapticIndication : Intent
 
@@ -48,17 +39,11 @@ interface CommunityDetailMviModel :
 
         data object Unsubscribe : Intent
 
-        data class DeletePost(
-            val id: Long,
-        ) : Intent
+        data class DeletePost(val id: Long) : Intent
 
-        data class MarkAsRead(
-            val id: Long,
-        ) : Intent
+        data class MarkAsRead(val id: Long) : Intent
 
-        data class Hide(
-            val id: Long,
-        ) : Intent
+        data class Hide(val id: Long) : Intent
 
         data object Block : Intent
 
@@ -66,61 +51,37 @@ interface CommunityDetailMviModel :
 
         data object ClearRead : Intent
 
-        data class StartZombieMode(
-            val index: Int,
-        ) : Intent
+        data class StartZombieMode(val index: Int) : Intent
 
         data object PauseZombieMode : Intent
 
-        data class ModFeaturePost(
-            val id: Long,
-        ) : Intent
+        data class ModFeaturePost(val id: Long) : Intent
 
-        data class AdminFeaturePost(
-            val id: Long,
-        ) : Intent
+        data class AdminFeaturePost(val id: Long) : Intent
 
-        data class ModLockPost(
-            val id: Long,
-        ) : Intent
+        data class ModLockPost(val id: Long) : Intent
 
-        data class ModToggleModUser(
-            val id: Long,
-        ) : Intent
+        data class ModToggleModUser(val id: Long) : Intent
 
         data object ToggleFavorite : Intent
 
-        data class Share(
-            val url: String,
-        ) : Intent
+        data class Share(val url: String) : Intent
 
-        data class SetSearch(
-            val value: String,
-        ) : Intent
+        data class SetSearch(val value: String) : Intent
 
-        data class ChangeSearching(
-            val value: Boolean,
-        ) : Intent
+        data class ChangeSearching(val value: Boolean) : Intent
 
-        data class WillOpenDetail(
-            val id: Long,
-        ) : Intent
+        data class WillOpenDetail(val id: Long) : Intent
 
         data object UnhideCommunity : Intent
 
-        data class SelectPreferredLanguage(
-            val languageId: Long?,
-        ) : Intent
+        data class SelectPreferredLanguage(val languageId: Long?) : Intent
 
         data object DeleteCommunity : Intent
 
-        data class RestorePost(
-            val id: Long,
-        ) : Intent
+        data class RestorePost(val id: Long) : Intent
 
-        data class ToggleRead(
-            val id: Long,
-        ) : Intent
+        data class ToggleRead(val id: Long) : Intent
     }
 
     data class UiState(
@@ -166,24 +127,16 @@ interface CommunityDetailMviModel :
     sealed interface Effect {
         data object Success : Effect
 
-        data class Failure(
-            val message: String?,
-        ) : Effect
+        data class Failure(val message: String?) : Effect
 
-        data class Error(
-            val message: String?,
-        ) : Effect
+        data class Error(val message: String?) : Effect
 
         data object BackToTop : Effect
 
-        data class ZombieModeTick(
-            val index: Int,
-        ) : Effect
+        data class ZombieModeTick(val index: Int) : Effect
 
         data object Back : Effect
 
-        data class OpenDetail(
-            val post: PostModel,
-        ) : Effect
+        data class OpenDetail(val post: PostModel) : Effect
     }
 }

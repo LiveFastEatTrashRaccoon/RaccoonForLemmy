@@ -34,17 +34,17 @@ internal fun ModFeaturePostItem(
         innerContent = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                            append(item.post?.title.ellipsize())
-                        }
-                        append(" ")
-                        if (item.featured) {
-                            append(LocalStrings.current.modlogItemPostFeatured)
-                        } else {
-                            append(LocalStrings.current.modlogItemPostUnfeatured)
-                        }
-                    },
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        append(item.post?.title.ellipsize())
+                    }
+                    append(" ")
+                    if (item.featured) {
+                        append(LocalStrings.current.modlogItemPostFeatured)
+                    } else {
+                        append(LocalStrings.current.modlogItemPostUnfeatured)
+                    }
+                },
                 style = MaterialTheme.typography.bodySmall,
             )
         },

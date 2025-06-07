@@ -148,77 +148,76 @@ class InboxRepliesScreen : Tab {
                 ) { reply ->
 
                     @Composable
-                    fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> =
-                        mapNotNull {
-                            when (it) {
-                                ActionOnSwipe.UpVote ->
-                                    SwipeAction(
-                                        swipeContent = {
-                                            Icon(
-                                                modifier = VoteAction.UpVote.toModifier(),
-                                                imageVector = VoteAction.UpVote.toIcon(),
-                                                contentDescription = LocalStrings.current.actionUpvote,
-                                                tint = Color.White,
-                                            )
-                                        },
-                                        backgroundColor = upVoteColor ?: defaultUpvoteColor,
-                                        onTriggered = {
-                                            model.reduce(
-                                                InboxRepliesMviModel.Intent.UpVoteComment(
-                                                    reply.id,
-                                                ),
-                                            )
-                                        },
-                                    )
+                    fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> = mapNotNull {
+                        when (it) {
+                            ActionOnSwipe.UpVote ->
+                                SwipeAction(
+                                    swipeContent = {
+                                        Icon(
+                                            modifier = VoteAction.UpVote.toModifier(),
+                                            imageVector = VoteAction.UpVote.toIcon(),
+                                            contentDescription = LocalStrings.current.actionUpvote,
+                                            tint = Color.White,
+                                        )
+                                    },
+                                    backgroundColor = upVoteColor ?: defaultUpvoteColor,
+                                    onTriggered = {
+                                        model.reduce(
+                                            InboxRepliesMviModel.Intent.UpVoteComment(
+                                                reply.id,
+                                            ),
+                                        )
+                                    },
+                                )
 
-                                ActionOnSwipe.DownVote ->
-                                    SwipeAction(
-                                        swipeContent = {
-                                            Icon(
-                                                modifier = VoteAction.DownVote.toModifier(),
-                                                imageVector = VoteAction.DownVote.toIcon(),
-                                                contentDescription = LocalStrings.current.actionDownvote,
-                                                tint = Color.White,
-                                            )
-                                        },
-                                        backgroundColor = downVoteColor ?: defaultDownVoteColor,
-                                        onTriggered = {
-                                            model.reduce(
-                                                InboxRepliesMviModel.Intent.DownVoteComment(
-                                                    reply.id,
-                                                ),
-                                            )
-                                        },
-                                    ).takeIf { uiState.downVoteEnabled }
+                            ActionOnSwipe.DownVote ->
+                                SwipeAction(
+                                    swipeContent = {
+                                        Icon(
+                                            modifier = VoteAction.DownVote.toModifier(),
+                                            imageVector = VoteAction.DownVote.toIcon(),
+                                            contentDescription = LocalStrings.current.actionDownvote,
+                                            tint = Color.White,
+                                        )
+                                    },
+                                    backgroundColor = downVoteColor ?: defaultDownVoteColor,
+                                    onTriggered = {
+                                        model.reduce(
+                                            InboxRepliesMviModel.Intent.DownVoteComment(
+                                                reply.id,
+                                            ),
+                                        )
+                                    },
+                                ).takeIf { uiState.downVoteEnabled }
 
-                                ActionOnSwipe.ToggleRead ->
-                                    SwipeAction(
-                                        swipeContent = {
-                                            val icon =
-                                                when {
-                                                    reply.read -> Icons.Default.MarkChatUnread
-                                                    else -> Icons.Default.MarkChatRead
-                                                }
-                                            Icon(
-                                                imageVector = icon,
-                                                contentDescription = LocalStrings.current.actionMarkAsRead,
-                                                tint = Color.White,
-                                            )
-                                        },
-                                        backgroundColor = toggleReadColor ?: defaultToggleReadColor,
-                                        onTriggered = {
-                                            model.reduce(
-                                                InboxRepliesMviModel.Intent.MarkAsRead(
-                                                    read = !reply.read,
-                                                    id = reply.id,
-                                                ),
-                                            )
-                                        },
-                                    )
+                            ActionOnSwipe.ToggleRead ->
+                                SwipeAction(
+                                    swipeContent = {
+                                        val icon =
+                                            when {
+                                                reply.read -> Icons.Default.MarkChatUnread
+                                                else -> Icons.Default.MarkChatRead
+                                            }
+                                        Icon(
+                                            imageVector = icon,
+                                            contentDescription = LocalStrings.current.actionMarkAsRead,
+                                            tint = Color.White,
+                                        )
+                                    },
+                                    backgroundColor = toggleReadColor ?: defaultToggleReadColor,
+                                    onTriggered = {
+                                        model.reduce(
+                                            InboxRepliesMviModel.Intent.MarkAsRead(
+                                                read = !reply.read,
+                                                id = reply.id,
+                                            ),
+                                        )
+                                    },
+                                )
 
-                                else -> null
-                            }
+                            else -> null
                         }
+                    }
 
                     SwipeActionCard(
                         modifier = Modifier.fillMaxWidth(),
@@ -262,9 +261,9 @@ class InboxRepliesScreen : Tab {
                                         ZoomableImageScreen(
                                             url = url,
                                             source =
-                                                reply.post.community
-                                                    ?.readableHandle
-                                                    .orEmpty(),
+                                            reply.post.community
+                                                ?.readableHandle
+                                                .orEmpty(),
                                         ),
                                     )
                                 },

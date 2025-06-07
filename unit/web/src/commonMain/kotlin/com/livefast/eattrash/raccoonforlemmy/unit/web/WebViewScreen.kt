@@ -29,9 +29,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.md5
 import com.mohamedrejeb.calf.ui.web.WebView
 import com.mohamedrejeb.calf.ui.web.rememberWebViewState
 
-class WebViewScreen(
-    private val url: String,
-) : Screen {
+class WebViewScreen(private val url: String) : Screen {
     override val key: ScreenKey
         get() = super.key + url.md5()
 
@@ -80,13 +78,13 @@ class WebViewScreen(
                     actions = {
                         Icon(
                             modifier =
-                                Modifier
-                                    .padding(horizontal = Spacing.xs)
-                                    .onClick(
-                                        onClick = {
-                                            shareHelper.share(url)
-                                        },
-                                    ),
+                            Modifier
+                                .padding(horizontal = Spacing.xs)
+                                .onClick(
+                                    onClick = {
+                                        shareHelper.share(url)
+                                    },
+                                ),
                             imageVector = Icons.Default.Share,
                             contentDescription = LocalStrings.current.postActionShare,
                             tint = MaterialTheme.colorScheme.onBackground,

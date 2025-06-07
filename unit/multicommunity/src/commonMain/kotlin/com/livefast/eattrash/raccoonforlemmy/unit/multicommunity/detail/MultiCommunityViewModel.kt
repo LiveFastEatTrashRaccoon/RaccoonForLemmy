@@ -52,8 +52,8 @@ class MultiCommunityViewModel(
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<MultiCommunityMviModel.Intent, MultiCommunityMviModel.UiState, MultiCommunityMviModel.Effect>(
-        initialState = MultiCommunityMviModel.UiState(),
-    ),
+    initialState = MultiCommunityMviModel.UiState(),
+),
     MultiCommunityMviModel {
     private var hideReadPosts = false
 
@@ -337,10 +337,7 @@ class MultiCommunityViewModel(
         setRead(post = post, read = true)
     }
 
-    private suspend fun setRead(
-        post: PostModel,
-        read: Boolean,
-    ) {
+    private suspend fun setRead(post: PostModel, read: Boolean) {
         val newPost = post.copy(read = read)
         try {
             val auth = identityRepository.authToken.value.orEmpty()
@@ -419,13 +416,13 @@ class MultiCommunityViewModel(
             updateState {
                 it.copy(
                     posts =
-                        it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
+                    it.posts.map { p ->
+                        if (p.id == post.id) {
+                            post
+                        } else {
+                            p
+                        }
+                    },
                 )
             }
         }

@@ -63,9 +63,9 @@ class AboutDialog : Screen {
             Surface {
                 Column(
                     modifier =
-                        Modifier
-                            .background(color = MaterialTheme.colorScheme.surface)
-                            .padding(vertical = Spacing.s),
+                    Modifier
+                        .background(color = MaterialTheme.colorScheme.surface)
+                        .padding(vertical = Spacing.s),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
@@ -76,9 +76,9 @@ class AboutDialog : Screen {
                     Spacer(modifier = Modifier.height(Spacing.s))
                     LazyColumn(
                         modifier =
-                            Modifier
-                                .padding(vertical = Spacing.s, horizontal = Spacing.m)
-                                .heightIn(max = 500.dp),
+                        Modifier
+                            .padding(vertical = Spacing.s, horizontal = Spacing.m)
+                            .heightIn(max = 500.dp),
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
                     ) {
                         item {

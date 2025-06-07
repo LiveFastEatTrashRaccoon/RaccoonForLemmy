@@ -79,26 +79,26 @@ class LicencesScreen : Screen {
         ) { padding ->
             LazyColumn(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .fillMaxSize(),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             ) {
                 items(uiState.items) { item ->
                     LicenceItem(
                         item = item,
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .onClick(
-                                    onClick = {
-                                        if (item.url.isNotBlank()) {
-                                            uriHandler.openUri(item.url)
-                                        }
-                                    },
-                                ),
+                        Modifier
+                            .fillMaxWidth()
+                            .onClick(
+                                onClick = {
+                                    if (item.url.isNotBlank()) {
+                                        uriHandler.openUri(item.url)
+                                    }
+                                },
+                            ),
                     )
                 }
                 item {

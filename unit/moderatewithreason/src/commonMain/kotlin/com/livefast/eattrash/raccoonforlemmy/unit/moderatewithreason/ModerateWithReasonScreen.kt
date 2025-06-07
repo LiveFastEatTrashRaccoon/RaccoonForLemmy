@@ -55,10 +55,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.time.Duration.Companion.seconds
 
-class ModerateWithReasonScreen(
-    private val actionId: Int,
-    private val contentId: Long,
-) : Screen {
+class ModerateWithReasonScreen(private val actionId: Int, private val contentId: Long) : Screen {
     override val key: ScreenKey
         get() = super.key + "$actionId-$contentId"
 
@@ -68,10 +65,10 @@ class ModerateWithReasonScreen(
         val model: ModerateWithReasonMviModel =
             rememberScreenModel(
                 arg =
-                    ModerateWithReasonMviModelParams(
-                        actionId = actionId,
-                        contentId = contentId,
-                    ),
+                ModerateWithReasonMviModelParams(
+                    actionId = actionId,
+                    contentId = contentId,
+                ),
             )
         val uiState by model.uiState.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
@@ -126,7 +123,8 @@ class ModerateWithReasonScreen(
                                 is ModerateWithReasonAction.PurgeUser -> LocalStrings.current.adminActionPurge
                                 is ModerateWithReasonAction.RemoveComment -> LocalStrings.current.modActionRemove
                                 is ModerateWithReasonAction.RemovePost -> LocalStrings.current.modActionRemove
-                                is ModerateWithReasonAction.ReportComment -> LocalStrings.current.createReportTitleComment
+                                is ModerateWithReasonAction.ReportComment ->
+                                    LocalStrings.current.createReportTitleComment
                                 is ModerateWithReasonAction.ReportPost -> LocalStrings.current.createReportTitlePost
                             }
                         Text(
@@ -163,37 +161,37 @@ class ModerateWithReasonScreen(
         ) { padding ->
             Column(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).consumeWindowInsets(padding)
-                        .safeImePadding(),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).consumeWindowInsets(padding)
+                    .safeImePadding(),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 val commentFocusRequester = remember { FocusRequester() }
                 TextField(
                     modifier =
-                        Modifier
-                            .focusRequester(commentFocusRequester)
-                            .heightIn(min = 300.dp, max = 500.dp)
-                            .fillMaxWidth(),
+                    Modifier
+                        .focusRequester(commentFocusRequester)
+                        .heightIn(min = 300.dp, max = 500.dp)
+                        .fillMaxWidth(),
                     colors =
-                        TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                        ),
+                    TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                    ),
                     label = {
                         Text(text = LocalStrings.current.createReportPlaceholder)
                     },
                     textStyle = MaterialTheme.typography.bodyMedium,
                     value = uiState.text,
                     keyboardOptions =
-                        KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            autoCorrectEnabled = true,
-                        ),
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        autoCorrectEnabled = true,
+                    ),
                     onValueChange = { value ->
                         model.reduce(ModerateWithReasonMviModel.Intent.SetText(value))
                     },

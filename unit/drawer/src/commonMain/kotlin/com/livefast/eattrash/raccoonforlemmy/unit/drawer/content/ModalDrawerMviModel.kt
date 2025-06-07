@@ -14,13 +14,9 @@ interface ModalDrawerMviModel :
     sealed interface Intent {
         data object Refresh : Intent
 
-        data class SetSearch(
-            val value: String,
-        ) : Intent
+        data class SetSearch(val value: String) : Intent
 
-        data class ToggleFavorite(
-            val id: Long,
-        ) : Intent
+        data class ToggleFavorite(val id: Long) : Intent
     }
 
     data class UiState(

@@ -16,7 +16,7 @@ val draftsModule =
                     accountRepository = instance(),
                     draftRepository = instance(),
                     notificationCenter = instance(),
-            )
+                )
+            }
         }
     }
-}

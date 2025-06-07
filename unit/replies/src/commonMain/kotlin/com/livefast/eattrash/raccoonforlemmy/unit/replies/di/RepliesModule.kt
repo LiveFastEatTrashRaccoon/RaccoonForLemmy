@@ -21,7 +21,7 @@ val repliesModule =
                     notificationCenter = instance(),
                     settingsRepository = instance(),
                     lemmyValueCache = instance(),
-            )
+                )
+            }
         }
     }
-}

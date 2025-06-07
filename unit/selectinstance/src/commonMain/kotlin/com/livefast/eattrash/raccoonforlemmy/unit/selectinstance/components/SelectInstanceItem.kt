@@ -40,14 +40,14 @@ import sh.calvin.reorderable.ReorderableCollectionItemScope
 
 @Composable
 internal fun SelectInstanceItem(
-    modifier: Modifier = Modifier,
     reorderableScope: ReorderableCollectionItemScope,
     instance: String,
+    modifier: Modifier = Modifier,
     isActive: Boolean = false,
     onClick: (() -> Unit)? = null,
-    onDragStarted: (() -> Unit)? = null,
+    onStartDrag: (() -> Unit)? = null,
     options: List<Option> = emptyList(),
-    onOptionSelected: ((OptionId) -> Unit)? = null,
+    onSelectOption: ((OptionId) -> Unit)? = null,
 ) {
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
     var optionsMenuOpen by remember { mutableStateOf(false) }
@@ -56,17 +56,17 @@ internal fun SelectInstanceItem(
 
     Row(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .onClick(
-                    onClick = {
-                        onClick?.invoke()
-                    },
-                ).padding(
-                    top = Spacing.s,
-                    bottom = Spacing.s,
-                    start = Spacing.m,
-                ),
+        modifier
+            .fillMaxWidth()
+            .onClick(
+                onClick = {
+                    onClick?.invoke()
+                },
+            ).padding(
+                top = Spacing.s,
+                bottom = Spacing.s,
+                start = Spacing.m,
+            ),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -80,11 +80,11 @@ internal fun SelectInstanceItem(
         if (isActive) {
             RadioButton(
                 modifier =
-                    Modifier.padding(
-                        top = Spacing.s,
-                        bottom = Spacing.s,
-                        end = 10.dp,
-                    ),
+                Modifier.padding(
+                    top = Spacing.s,
+                    bottom = Spacing.s,
+                    end = 10.dp,
+                ),
                 selected = true,
                 onClick = null,
             )
@@ -94,27 +94,27 @@ internal fun SelectInstanceItem(
             Box {
                 IconButton(
                     modifier =
-                        Modifier
-                            .then(
-                                with(reorderableScope) {
-                                    Modifier.draggableHandle(
-                                        onDragStarted = {
-                                            onDragStarted?.invoke()
-                                        },
-                                    )
-                                },
-                            ).onGloballyPositioned {
-                                optionsOffset = it.positionInParent()
+                    Modifier
+                        .then(
+                            with(reorderableScope) {
+                                Modifier.draggableHandle(
+                                    onDragStarted = {
+                                        onStartDrag?.invoke()
+                                    },
+                                )
                             },
+                        ).onGloballyPositioned {
+                            optionsOffset = it.positionInParent()
+                        },
                     onClick = {
                         optionsMenuOpen = true
                     },
                 ) {
                     Icon(
                         modifier =
-                            Modifier
-                                .size(IconSize.m)
-                                .padding(Spacing.xs),
+                        Modifier
+                            .size(IconSize.m)
+                            .padding(Spacing.xs),
                         imageVector = Icons.Default.MoreVert,
                         contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
@@ -127,10 +127,10 @@ internal fun SelectInstanceItem(
                         optionsMenuOpen = false
                     },
                     offset =
-                        DpOffset(
-                            x = optionsOffset.x.toLocalDp(),
-                            y = optionsOffset.y.toLocalDp(),
-                        ),
+                    DpOffset(
+                        x = optionsOffset.x.toLocalDp(),
+                        y = optionsOffset.y.toLocalDp(),
+                    ),
                 ) {
                     options.forEach { option ->
                         DropdownMenuItem(
@@ -139,7 +139,7 @@ internal fun SelectInstanceItem(
                             },
                             onClick = {
                                 optionsMenuOpen = false
-                                onOptionSelected?.invoke(option.id)
+                                onSelectOption?.invoke(option.id)
                             },
                         )
                     }

@@ -29,14 +29,14 @@ internal fun ConfigureAddAction(onAdd: () -> Unit) {
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
     Row(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(CornerSize.xxl))
-                .onClick(onClick = onAdd)
-                .padding(
-                    horizontal = Spacing.s,
-                    vertical = Spacing.xs,
-                ),
+        Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(CornerSize.xxl))
+            .onClick(onClick = onAdd)
+            .padding(
+                horizontal = Spacing.s,
+                vertical = Spacing.xs,
+            ),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {

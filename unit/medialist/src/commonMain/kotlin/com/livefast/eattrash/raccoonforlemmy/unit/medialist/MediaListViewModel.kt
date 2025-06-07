@@ -19,8 +19,8 @@ class MediaListViewModel(
     private val settingsRepository: SettingsRepository,
     private val themeRepository: ThemeRepository,
 ) : DefaultMviModel<MediaListMviModel.Intent, MediaListMviModel.State, MediaListMviModel.Effect>(
-        initialState = MediaListMviModel.State(),
-    ),
+    initialState = MediaListMviModel.State(),
+),
     MediaListMviModel {
     private var currentPage = 1
 

@@ -80,9 +80,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class EditCommunityScreen(
-    private val communityId: Long? = null,
-) : Screen {
+class EditCommunityScreen(private val communityId: Long? = null) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
@@ -150,15 +148,15 @@ class EditCommunityScreen(
                         Text(
                             modifier = Modifier.padding(horizontal = Spacing.s),
                             text =
-                                if (communityId == null) {
-                                    LocalStrings.current.actionCreateCommunity
-                                } else {
-                                    buildString {
-                                        append(LocalStrings.current.postActionEdit)
-                                        append(" ")
-                                        append(uiState.title)
-                                    }
-                                },
+                            if (communityId == null) {
+                                LocalStrings.current.actionCreateCommunity
+                            } else {
+                                buildString {
+                                    append(LocalStrings.current.postActionEdit)
+                                    append(" ")
+                                    append(uiState.title)
+                                }
+                            },
                             style = MaterialTheme.typography.titleMedium,
                         )
                     },
@@ -186,21 +184,21 @@ class EditCommunityScreen(
                             initialValue = 0f,
                             targetValue = 360f,
                             animationSpec =
-                                InfiniteRepeatableSpec(
-                                    animation = tween(1000),
-                                ),
+                            InfiniteRepeatableSpec(
+                                animation = tween(1000),
+                            ),
                         )
                         Icon(
                             modifier =
-                                Modifier
-                                    .padding(horizontal = Spacing.xs)
-                                    .then(
-                                        if (!uiState.loading) {
-                                            Modifier
-                                        } else {
-                                            Modifier.rotate(iconRotate)
-                                        },
-                                    ),
+                            Modifier
+                                .padding(horizontal = Spacing.xs)
+                                .then(
+                                    if (!uiState.loading) {
+                                        Modifier
+                                    } else {
+                                        Modifier.rotate(iconRotate)
+                                    },
+                                ),
                             imageVector = Icons.Default.Sync,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onBackground,
@@ -220,23 +218,23 @@ class EditCommunityScreen(
         ) { padding ->
             Column(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                            bottom = Spacing.m,
-                        ).then(
-                            if (settings.hideNavigationBarWhileScrolling) {
-                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                            } else {
-                                Modifier
-                            },
-                        ),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                        bottom = Spacing.m,
+                    ).then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        },
+                    ),
             ) {
                 Column(
                     modifier =
-                        Modifier
-                            .weight(1f)
-                            .verticalScroll(scrollState),
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(scrollState),
                 ) {
                     if (communityId == null) {
                         SettingsHeader(
@@ -265,9 +263,9 @@ class EditCommunityScreen(
                     SettingsImageInfo(
                         title = LocalStrings.current.multiCommunityEditorIcon,
                         imageModifier =
-                            Modifier
-                                .size(avatarSize)
-                                .clip(RoundedCornerShape(avatarSize / 2)),
+                        Modifier
+                            .size(avatarSize)
+                            .clip(RoundedCornerShape(avatarSize / 2)),
                         url = uiState.icon,
                         onEdit = {
                             openIconPicker = true
@@ -316,14 +314,14 @@ class EditCommunityScreen(
                     SettingsSwitchRow(
                         title = LocalStrings.current.createPostNsfw,
                         value = uiState.nsfw,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(EditCommunityMviModel.Intent.ChangeNsfw(value))
                         },
                     )
                     SettingsSwitchRow(
                         title = LocalStrings.current.editCommunityItemPostingRestrictedToMods,
                         value = uiState.postingRestrictedToMods,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 EditCommunityMviModel.Intent.ChangePostingRestrictedToMods(
                                     value,
@@ -456,20 +454,20 @@ class EditCommunityScreen(
             CustomModalBottomSheet(
                 title = LocalStrings.current.editCommunityItemVisibility,
                 items =
-                    values.map {
-                        CustomModalBottomSheetItem(
-                            label = it.toReadableName(),
-                            trailingContent = {
-                                Icon(
-                                    modifier = Modifier.size(IconSize.m),
-                                    imageVector = it.toIcon(),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            },
-                        )
-                    },
-                onSelected = { index ->
+                values.map {
+                    CustomModalBottomSheetItem(
+                        label = it.toReadableName(),
+                        trailingContent = {
+                            Icon(
+                                modifier = Modifier.size(IconSize.m),
+                                imageVector = it.toIcon(),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        },
+                    )
+                },
+                onSelect = { index ->
                     visibilityBottomSheetOpened = false
                     if (index != null) {
                         val value = values[index]

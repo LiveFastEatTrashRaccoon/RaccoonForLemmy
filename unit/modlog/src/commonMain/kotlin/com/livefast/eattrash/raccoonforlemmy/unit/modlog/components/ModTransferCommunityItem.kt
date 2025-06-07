@@ -38,14 +38,14 @@ internal fun ModTransferCommunityItem(
         innerContent = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        append(LocalStrings.current.modlogItemCommunityTransfer)
-                        append(" ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                            val name = item.user?.readableName(preferNicknames).orEmpty()
-                            append(name)
-                        }
-                    },
+                buildAnnotatedString {
+                    append(LocalStrings.current.modlogItemCommunityTransfer)
+                    append(" ")
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        val name = item.user?.readableName(preferNicknames).orEmpty()
+                        append(name)
+                    }
+                },
                 style = MaterialTheme.typography.bodySmall,
             )
         },

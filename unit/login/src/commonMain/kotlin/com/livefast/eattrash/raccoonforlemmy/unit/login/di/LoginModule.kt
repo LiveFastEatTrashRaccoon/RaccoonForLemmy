@@ -19,7 +19,7 @@ val loginModule =
                     communityRepository = instance(),
                     login = instance(),
                     notificationCenter = instance(),
-            )
+                )
+            }
         }
     }
-}

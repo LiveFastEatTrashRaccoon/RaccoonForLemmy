@@ -35,45 +35,43 @@ class DefaultSubscriptionsCacheTest {
         )
 
     @Test
-    fun whenInitial_thenStateIsAsExpected() =
-        runTest {
-            val state = sut.state.value
+    fun whenInitial_thenStateIsAsExpected() = runTest {
+        val state = sut.state.value
 
-            assertEquals(SubscriptionsCacheState.Loading, state)
-        }
+        assertEquals(SubscriptionsCacheState.Loading, state)
+    }
 
     @Test
-    fun whenInitialized_thenStateIsAsExpected() =
-        runTest {
-            val communityId = 1L
-            every { identityRepository.isLogged } returns MutableStateFlow(true)
-            coEvery {
-                communityPaginationManager.reset(any())
-            } returns Unit
-            coEvery {
-                communityPaginationManager.fetchAll()
-            } returns listOf(CommunityModel(id = communityId))
+    fun whenInitialized_thenStateIsAsExpected() = runTest {
+        val communityId = 1L
+        every { identityRepository.isLogged } returns MutableStateFlow(true)
+        coEvery {
+            communityPaginationManager.reset(any())
+        } returns Unit
+        coEvery {
+            communityPaginationManager.fetchAll()
+        } returns listOf(CommunityModel(id = communityId))
 
-            launch {
-                delay(DELAY)
-                sut.initialize()
-            }
-
-            sut.state.filterIsInstance<SubscriptionsCacheState.Loaded>().test {
-                val item = awaitItem()
-                assertEquals(1, item.communities.size)
-                assertEquals(communityId, item.communities.first().id)
-            }
-
-            coVerify {
-                communityPaginationManager.reset(
-                    withArg {
-                        assertIs<CommunityPaginationSpecification.Subscribed>(it)
-                    },
-                )
-                communityPaginationManager.fetchAll()
-            }
+        launch {
+            delay(DELAY)
+            sut.initialize()
         }
+
+        sut.state.filterIsInstance<SubscriptionsCacheState.Loaded>().test {
+            val item = awaitItem()
+            assertEquals(1, item.communities.size)
+            assertEquals(communityId, item.communities.first().id)
+        }
+
+        coVerify {
+            communityPaginationManager.reset(
+                withArg {
+                    assertIs<CommunityPaginationSpecification.Subscribed>(it)
+                },
+            )
+            communityPaginationManager.fetchAll()
+        }
+    }
 
     companion object {
         private const val DELAY = 250L

@@ -74,16 +74,16 @@ class UserDetailViewModel(
     private val lemmyValueCache: LemmyValueCache,
     private val userSortRepository: UserSortRepository,
 ) : DefaultMviModel<UserDetailMviModel.Intent, UserDetailMviModel.UiState, UserDetailMviModel.Effect>(
-        initialState = UserDetailMviModel.UiState(),
-    ),
+    initialState = UserDetailMviModel.UiState(),
+),
     UserDetailMviModel {
     init {
         screenModelScope.launch {
             updateState {
                 it.copy(
                     instance =
-                        otherInstance.takeIf { n -> n.isNotEmpty() }
-                            ?: apiConfigurationRepository.instance.value,
+                    otherInstance.takeIf { n -> n.isNotEmpty() }
+                        ?: apiConfigurationRepository.instance.value,
                 )
             }
 
@@ -326,10 +326,7 @@ class UserDetailViewModel(
         }
     }
 
-    private fun applySortType(
-        value: SortType,
-        section: UserDetailSection,
-    ) {
+    private fun applySortType(value: SortType, section: UserDetailSection) {
         if (uiState.value.postSortType == value && section == UserDetailSection.Posts) {
             return
         }
@@ -603,13 +600,13 @@ class UserDetailViewModel(
             updateState {
                 it.copy(
                     posts =
-                        it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
+                    it.posts.map { p ->
+                        if (p.id == post.id) {
+                            post
+                        } else {
+                            p
+                        }
+                    },
                 )
             }
         }
@@ -620,13 +617,13 @@ class UserDetailViewModel(
             updateState {
                 it.copy(
                     comments =
-                        it.comments.map { c ->
-                            if (c.id == comment.id) {
-                                comment
-                            } else {
-                                c
-                            }
-                        },
+                    it.comments.map { c ->
+                        if (c.id == comment.id) {
+                            comment
+                        } else {
+                            c
+                        }
+                    },
                 )
             }
         }
@@ -687,10 +684,7 @@ class UserDetailViewModel(
         }
     }
 
-    private fun addUserTag(
-        name: String,
-        color: Int?,
-    ) {
+    private fun addUserTag(name: String, color: Int?) {
         screenModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val model = UserTagModel(name = name, color = color)

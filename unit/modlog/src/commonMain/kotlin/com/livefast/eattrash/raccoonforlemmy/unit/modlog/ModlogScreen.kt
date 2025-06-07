@@ -61,9 +61,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.modlog.components.RemoveCommun
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class ModlogScreen(
-    private val communityId: Long? = null,
-) : Screen {
+class ModlogScreen(private val communityId: Long? = null) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
@@ -122,28 +120,28 @@ class ModlogScreen(
         ) { padding ->
             Column(
                 modifier =
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        },
+                    ),
+                verticalArrangement = Arrangement.spacedBy(Spacing.s),
+            ) {
+                PullToRefreshBox(
+                    modifier =
                     Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).then(
+                        .then(
                             if (settings.hideNavigationBarWhileScrolling) {
                                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                             } else {
                                 Modifier
                             },
                         ),
-                verticalArrangement = Arrangement.spacedBy(Spacing.s),
-            ) {
-                PullToRefreshBox(
-                    modifier =
-                        Modifier
-                            .then(
-                                if (settings.hideNavigationBarWhileScrolling) {
-                                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                                } else {
-                                    Modifier
-                                },
-                            ),
                     isRefreshing = uiState.refreshing,
                     onRefresh = {
                         model.reduce(ModlogMviModel.Intent.Refresh)

@@ -72,8 +72,8 @@ class PostDetailViewModel(
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect>(
-        initialState = PostDetailMviModel.UiState(),
-    ),
+    initialState = PostDetailMviModel.UiState(),
+),
     PostDetailMviModel {
     private var highlightCommentPath: String? = null
     private var commentWasHighlighted = false
@@ -92,8 +92,8 @@ class PostDetailViewModel(
             updateState {
                 it.copy(
                     instance =
-                        otherInstance.takeIf { n -> n.isNotEmpty() }
-                            ?: apiConfigurationRepository.instance.value,
+                    otherInstance.takeIf { n -> n.isNotEmpty() }
+                        ?: apiConfigurationRepository.instance.value,
                 )
             }
             if (uiState.value.post.id == 0L) {
@@ -175,16 +175,16 @@ class PostDetailViewModel(
                     updateState {
                         it.copy(
                             comments =
-                                it.comments.map { c ->
-                                    if (c.id == commentId) {
-                                        c.copy(
-                                            creator = newUser,
-                                            updateDate = newUser.updateDate,
-                                        )
-                                    } else {
-                                        c
-                                    }
-                                },
+                            it.comments.map { c ->
+                                if (c.id == commentId) {
+                                    c.copy(
+                                        creator = newUser,
+                                        updateDate = newUser.updateDate,
+                                    )
+                                } else {
+                                    c
+                                }
+                            },
                         )
                     }
                 }.launchIn(this)
@@ -252,9 +252,9 @@ class PostDetailViewModel(
                 // reset unread comments
                 notificationCenter.send(
                     event =
-                        NotificationCenterEvent.PostUpdated(
-                            updatedPost.copy(unreadComments = 0),
-                        ),
+                    NotificationCenterEvent.PostUpdated(
+                        updatedPost.copy(unreadComments = 0),
+                    ),
                 )
             }
 
@@ -627,10 +627,7 @@ class PostDetailViewModel(
         }
     }
 
-    private fun loadMoreComments(
-        parentId: Long,
-        loadUntilHighlight: Boolean = false,
-    ) {
+    private fun loadMoreComments(parentId: Long, loadUntilHighlight: Boolean = false) {
         val currentState = uiState.value
         val sort = currentState.sortType ?: return
         screenModelScope.launch {
@@ -767,13 +764,13 @@ class PostDetailViewModel(
             updateState {
                 it.copy(
                     comments =
-                        it.comments.map { c ->
-                            if (c.id == comment.id) {
-                                comment
-                            } else {
-                                c
-                            }
-                        },
+                    it.comments.map { c ->
+                        if (c.id == comment.id) {
+                            comment
+                        } else {
+                            c
+                        }
+                    },
                 )
             }
         }

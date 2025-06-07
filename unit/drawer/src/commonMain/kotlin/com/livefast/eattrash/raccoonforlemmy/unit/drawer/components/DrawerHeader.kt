@@ -42,12 +42,12 @@ internal fun DrawerHeader(
     val ancillaryColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha)
     Row(
         modifier =
-            modifier.padding(
-                top = Spacing.m,
-                start = Spacing.s,
-                end = Spacing.s,
-                bottom = Spacing.s,
-            ),
+        modifier.padding(
+            top = Spacing.m,
+            start = Spacing.s,
+            end = Spacing.s,
+            bottom = Spacing.s,
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.m),
     ) {
@@ -57,10 +57,10 @@ internal fun DrawerHeader(
             if (userAvatar.isNotEmpty()) {
                 CustomImage(
                     modifier =
-                        Modifier
-                            .padding(Spacing.xxxs)
-                            .size(avatarSize)
-                            .clip(RoundedCornerShape(avatarSize / 2)),
+                    Modifier
+                        .padding(Spacing.xxxs)
+                        .size(avatarSize)
+                        .clip(RoundedCornerShape(avatarSize / 2)),
                     url = userAvatar,
                     autoload = autoLoadImages,
                     quality = FilterQuality.Low,
@@ -79,23 +79,23 @@ internal fun DrawerHeader(
                 ) {
                     Text(
                         text =
-                            buildString {
-                                if (user.displayName.isNotEmpty()) {
-                                    append(user.displayName)
-                                } else {
-                                    append(user.name)
-                                }
-                            },
+                        buildString {
+                            if (user.displayName.isNotEmpty()) {
+                                append(user.displayName)
+                            } else {
+                                append(user.name)
+                            }
+                        },
                         style = MaterialTheme.typography.titleMedium,
                         color = fullColor,
                     )
                     Text(
                         text =
-                            buildString {
-                                append(user.name)
-                                append("@")
-                                append(user.host)
-                            },
+                        buildString {
+                            append(user.name)
+                            append("@")
+                            append(user.host)
+                        },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.titleSmall,

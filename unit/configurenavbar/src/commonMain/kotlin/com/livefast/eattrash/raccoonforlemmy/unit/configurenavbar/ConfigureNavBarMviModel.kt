@@ -14,14 +14,9 @@ interface ConfigureNavBarMviModel :
 
         data object HapticFeedback : Intent
 
-        data class SwapItems(
-            val from: Int,
-            val to: Int,
-        ) : Intent
+        data class SwapItems(val from: Int, val to: Int) : Intent
 
-        data class Delete(
-            val section: TabNavigationSection,
-        ) : Intent
+        data class Delete(val section: TabNavigationSection) : Intent
 
         data object Save : Intent
     }

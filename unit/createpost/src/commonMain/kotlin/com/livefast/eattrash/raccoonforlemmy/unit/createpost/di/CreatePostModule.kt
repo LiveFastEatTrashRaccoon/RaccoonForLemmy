@@ -7,11 +7,7 @@ import org.kodein.di.bind
 import org.kodein.di.factory
 import org.kodein.di.instance
 
-internal data class CreatePostMviModelParams(
-    val editedPostId: Long,
-    val crossPostId: Long,
-    val draftId: Long,
-)
+internal data class CreatePostMviModelParams(val editedPostId: Long, val crossPostId: Long, val draftId: Long)
 
 val createPostModule =
     DI.Module("CreatePostModule") {

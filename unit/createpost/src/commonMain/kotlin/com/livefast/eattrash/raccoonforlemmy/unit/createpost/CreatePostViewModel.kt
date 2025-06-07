@@ -46,8 +46,8 @@ class CreatePostViewModel(
     private val communityPreferredLanguageRepository: CommunityPreferredLanguageRepository,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect>(
-        initialState = CreatePostMviModel.UiState(),
-    ),
+    initialState = CreatePostMviModel.UiState(),
+),
     CreatePostMviModel {
     init {
         screenModelScope.launch {

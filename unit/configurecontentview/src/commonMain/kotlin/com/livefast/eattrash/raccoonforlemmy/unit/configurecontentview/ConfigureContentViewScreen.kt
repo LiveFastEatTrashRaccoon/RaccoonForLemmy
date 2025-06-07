@@ -109,10 +109,10 @@ class ConfigureContentViewScreen : Screen {
         ) { padding ->
             Box(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).nestedScroll(scrollBehavior.nestedScrollConnection),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).nestedScroll(scrollBehavior.nestedScrollConnection),
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
@@ -135,9 +135,9 @@ class ConfigureContentViewScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.settingsTitleFontScale,
                         value =
-                            uiState.contentFontScale.title
-                                .toFontScale()
-                                .toReadableName(),
+                        uiState.contentFontScale.title
+                            .toFontScale()
+                            .toReadableName(),
                         onTap = {
                             fontScaleClassBottomSheet = ContentFontClass.Title
                         },
@@ -145,9 +145,9 @@ class ConfigureContentViewScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.settingsContentFontScale,
                         value =
-                            uiState.contentFontScale.body
-                                .toFontScale()
-                                .toReadableName(),
+                        uiState.contentFontScale.body
+                            .toFontScale()
+                            .toReadableName(),
                         onTap = {
                             fontScaleClassBottomSheet = ContentFontClass.Body
                         },
@@ -155,9 +155,9 @@ class ConfigureContentViewScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.settingsCommentFontScale,
                         value =
-                            uiState.contentFontScale.comment
-                                .toFontScale()
-                                .toReadableName(),
+                        uiState.contentFontScale.comment
+                            .toFontScale()
+                            .toReadableName(),
                         onTap = {
                             fontScaleClassBottomSheet = ContentFontClass.Comment
                         },
@@ -165,9 +165,9 @@ class ConfigureContentViewScreen : Screen {
                     SettingsRow(
                         title = LocalStrings.current.settingsAncillaryFontScale,
                         value =
-                            uiState.contentFontScale.ancillary
-                                .toFontScale()
-                                .toReadableName(),
+                        uiState.contentFontScale.ancillary
+                            .toFontScale()
+                            .toReadableName(),
                         onTap = {
                             fontScaleClassBottomSheet = ContentFontClass.AncillaryText
                         },
@@ -192,11 +192,11 @@ class ConfigureContentViewScreen : Screen {
                         SettingsRow(
                             title = LocalStrings.current.settingsPostBodyMaxLines,
                             value =
-                                if (uiState.postBodyMaxLines == null) {
-                                    LocalStrings.current.settingsPostBodyMaxLinesUnlimited
-                                } else {
-                                    uiState.postBodyMaxLines.toString()
-                                },
+                            if (uiState.postBodyMaxLines == null) {
+                                LocalStrings.current.settingsPostBodyMaxLinesUnlimited
+                            } else {
+                                uiState.postBodyMaxLines.toString()
+                            },
                             onTap = {
                                 selectPostBodyMaxLinesBottomSheetOpened = true
                             },
@@ -207,7 +207,7 @@ class ConfigureContentViewScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsPreferUserNicknames,
                         value = uiState.preferUserNicknames,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 ConfigureContentViewMviModel.Intent.ChangePreferUserNicknames(value),
                             )
@@ -218,7 +218,7 @@ class ConfigureContentViewScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsFullHeightImages,
                         value = uiState.fullHeightImages,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 ConfigureContentViewMviModel.Intent.ChangeFullHeightImages(value),
                             )
@@ -229,7 +229,7 @@ class ConfigureContentViewScreen : Screen {
                     SettingsSwitchRow(
                         title = LocalStrings.current.settingsFullWidthImages,
                         value = uiState.fullWidthImages,
-                        onValueChanged = { value ->
+                        onChangeValue = { value ->
                             model.reduce(
                                 ConfigureContentViewMviModel.Intent.ChangeFullWidthImages(value),
                             )
@@ -303,10 +303,10 @@ class ConfigureContentViewScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsVoteFormat,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(label = value.toReadableName())
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(label = value.toReadableName())
+                },
+                onSelect = { index ->
                     voteFormatBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -327,10 +327,10 @@ class ConfigureContentViewScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsPostLayout,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(label = value.toReadableName())
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(label = value.toReadableName())
+                },
+                onSelect = { index ->
                     postLayoutBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -352,17 +352,17 @@ class ConfigureContentViewScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsUiFontFamily,
                 items =
-                    items.map { fontFamily ->
-                        CustomModalBottomSheetItem(
-                            label = fontFamily.toUiFontFamily().toReadableName(),
-                            customLabelStyle =
-                                fontFamily
-                                    .toUiFontFamily()
-                                    .toTypography()
-                                    .titleMedium,
-                        )
-                    },
-                onSelected = { index ->
+                items.map { fontFamily ->
+                    CustomModalBottomSheetItem(
+                        label = fontFamily.toUiFontFamily().toReadableName(),
+                        customLabelStyle =
+                        fontFamily
+                            .toUiFontFamily()
+                            .toTypography()
+                            .titleMedium,
+                    )
+                },
+                onSelect = { index ->
                     fontFamilyBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(
@@ -387,16 +387,16 @@ class ConfigureContentViewScreen : Screen {
             CustomModalBottomSheet(
                 title = LocalStrings.current.settingsUiFontScale,
                 items =
-                    items.map { font ->
-                        CustomModalBottomSheetItem(
-                            label = font.toFontScale().toReadableName(),
-                            customLabelStyle =
-                                MaterialTheme.typography.titleMedium.let {
-                                    it.copy(fontSize = it.fontSize * font)
-                                },
-                        )
-                    },
-                onSelected = { index ->
+                items.map { font ->
+                    CustomModalBottomSheetItem(
+                        label = font.toFontScale().toReadableName(),
+                        customLabelStyle =
+                        MaterialTheme.typography.titleMedium.let {
+                            it.copy(fontSize = it.fontSize * font)
+                        },
+                    )
+                },
+                onSelect = { index ->
                     fontScaleClassBottomSheet = null
                     if (index != null) {
                         notificationCenter.send(
@@ -414,7 +414,7 @@ class ConfigureContentViewScreen : Screen {
             SelectNumberBottomSheet(
                 type = SelectNumberBottomSheetType.PostBodyMaxLines,
                 initialValue = uiState.postBodyMaxLines,
-                onSelected = { value ->
+                onSelect = { value ->
                     selectPostBodyMaxLinesBottomSheetOpened = false
                     if (value != null) {
                         notificationCenter.send(

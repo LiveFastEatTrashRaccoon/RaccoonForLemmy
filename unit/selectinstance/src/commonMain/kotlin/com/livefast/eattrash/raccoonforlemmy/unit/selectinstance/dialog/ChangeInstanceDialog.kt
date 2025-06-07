@@ -48,9 +48,9 @@ internal fun ChangeInstanceDialog(
     ) {
         Column(
             modifier =
-                Modifier
-                    .background(color = MaterialTheme.colorScheme.surface)
-                    .padding(Spacing.s),
+            Modifier
+                .background(color = MaterialTheme.colorScheme.surface)
+                .padding(Spacing.s),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
         ) {
@@ -61,11 +61,11 @@ internal fun ChangeInstanceDialog(
             )
             TextField(
                 colors =
-                    TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                    ),
+                TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                ),
                 label = {
                     Text(text = LocalStrings.current.loginFieldInstanceName)
                 },
@@ -73,10 +73,10 @@ internal fun ChangeInstanceDialog(
                 value = instanceName,
                 isError = instanceNameError != null,
                 keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next,
-                    ),
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next,
+                ),
                 onValueChange = { value ->
                     onChangeInstanceName?.invoke(value)
                 },
@@ -92,11 +92,11 @@ internal fun ChangeInstanceDialog(
                     if (instanceName.isNotEmpty()) {
                         Icon(
                             modifier =
-                                Modifier.onClick(
-                                    onClick = {
-                                        onChangeInstanceName?.invoke("")
-                                    },
-                                ),
+                            Modifier.onClick(
+                                onClick = {
+                                    onChangeInstanceName?.invoke("")
+                                },
+                            ),
                             imageVector = Icons.Default.Clear,
                             contentDescription = LocalStrings.current.actionClear,
                         )

@@ -79,10 +79,7 @@ object ModalDrawerContent : Tab {
         val keyboardScrollConnection =
             remember {
                 object : NestedScrollConnection {
-                    override fun onPreScroll(
-                        available: Offset,
-                        source: NestedScrollSource,
-                    ): Offset {
+                    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                         focusManager.clearFocus()
                         return Offset.Zero
                     }
@@ -129,19 +126,19 @@ object ModalDrawerContent : Tab {
 
             HorizontalDivider(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = Spacing.s,
-                            bottom = Spacing.s,
-                        ),
+                Modifier
+                    .padding(
+                        top = Spacing.s,
+                        bottom = Spacing.s,
+                    ),
             )
 
             if (uiState.user != null) {
                 PullToRefreshBox(
                     modifier =
-                        Modifier
-                            .weight(1f)
-                            .nestedScroll(keyboardScrollConnection),
+                    Modifier
+                        .weight(1f)
+                        .nestedScroll(keyboardScrollConnection),
                     isRefreshing = uiState.refreshing,
                     onRefresh = {
                         model.reduce(ModalDrawerMviModel.Intent.Refresh)
@@ -153,12 +150,12 @@ object ModalDrawerContent : Tab {
                         item {
                             SearchField(
                                 modifier =
-                                    Modifier
-                                        .scale(0.95f)
-                                        .padding(
-                                            horizontal = Spacing.xxs,
-                                            vertical = Spacing.xxs,
-                                        ).fillMaxWidth(),
+                                Modifier
+                                    .scale(0.95f)
+                                    .padding(
+                                        horizontal = Spacing.xxs,
+                                        vertical = Spacing.xxs,
+                                    ).fillMaxWidth(),
                                 hint = LocalStrings.current.exploreSearchPlaceholder,
                                 value = uiState.searchText,
                                 onValueChange = { value ->
@@ -182,7 +179,7 @@ object ModalDrawerContent : Tab {
                                     DrawerShortcut(
                                         title = listingType.toReadableName(),
                                         icon = listingType.toIcon(),
-                                        onSelected = {
+                                        onSelect = {
                                             scope.launch {
                                                 focusManager.clearFocus()
                                                 navigationCoordinator.popUntilRoot()
@@ -201,7 +198,7 @@ object ModalDrawerContent : Tab {
                                     DrawerShortcut(
                                         title = LocalStrings.current.navigationSettings,
                                         icon = Icons.Default.Settings,
-                                        onSelected = {
+                                        onSelect = {
                                             scope.launch {
                                                 focusManager.clearFocus()
                                                 navigationCoordinator.popUntilRoot()
@@ -224,7 +221,7 @@ object ModalDrawerContent : Tab {
                                 title = community.name,
                                 url = community.icon,
                                 autoLoadImages = uiState.autoLoadImages,
-                                onSelected = {
+                                onSelect = {
                                     focusManager.clearFocus()
                                     scope.launch {
                                         coordinator.sendEvent(
@@ -246,7 +243,7 @@ object ModalDrawerContent : Tab {
                                 url = community.icon,
                                 favorite = true,
                                 autoLoadImages = uiState.autoLoadImages,
-                                onSelected = {
+                                onSelect = {
                                     scope.launch {
                                         focusManager.clearFocus()
                                         coordinator.toggleDrawer()
@@ -256,11 +253,11 @@ object ModalDrawerContent : Tab {
                                     }
                                 },
                                 onToggleFavorite =
-                                    {
-                                        model.reduce(
-                                            ModalDrawerMviModel.Intent.ToggleFavorite(community.id),
-                                        )
-                                    }.takeIf { uiState.enableToggleFavorite },
+                                {
+                                    model.reduce(
+                                        ModalDrawerMviModel.Intent.ToggleFavorite(community.id),
+                                    )
+                                }.takeIf { uiState.enableToggleFavorite },
                             )
                         }
 
@@ -274,7 +271,7 @@ object ModalDrawerContent : Tab {
                                 url = community.icon,
                                 favorite = false,
                                 autoLoadImages = uiState.autoLoadImages,
-                                onSelected = {
+                                onSelect = {
                                     scope.launch {
                                         focusManager.clearFocus()
                                         coordinator.toggleDrawer()
@@ -284,11 +281,11 @@ object ModalDrawerContent : Tab {
                                     }
                                 },
                                 onToggleFavorite =
-                                    {
-                                        model.reduce(
-                                            ModalDrawerMviModel.Intent.ToggleFavorite(community.id),
-                                        )
-                                    }.takeIf { uiState.enableToggleFavorite },
+                                {
+                                    model.reduce(
+                                        ModalDrawerMviModel.Intent.ToggleFavorite(community.id),
+                                    )
+                                }.takeIf { uiState.enableToggleFavorite },
                             )
                         }
                     }
@@ -318,7 +315,7 @@ object ModalDrawerContent : Tab {
                             DrawerShortcut(
                                 title = listingType.toReadableName(),
                                 icon = listingType.toIcon(),
-                                onSelected = {
+                                onSelect = {
                                     scope.launch {
                                         coordinator.toggleDrawer()
                                         navigationCoordinator.popUntilRoot()
@@ -337,7 +334,7 @@ object ModalDrawerContent : Tab {
                         DrawerShortcut(
                             title = LocalStrings.current.navigationSettings,
                             icon = Icons.Default.Settings,
-                            onSelected = {
+                            onSelect = {
                                 scope.launch {
                                     focusManager.clearFocus()
                                     navigationCoordinator.popUntilRoot()
@@ -357,7 +354,7 @@ object ModalDrawerContent : Tab {
             SelectInstanceBottomSheet(
                 parent = this,
                 state = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-                onSelected = { instance ->
+                onSelect = { instance ->
                     selectInstanceBottomSheetOpened = false
                     if (instance != null) {
                         notificationCenter.send(NotificationCenterEvent.InstanceSelected(instance))

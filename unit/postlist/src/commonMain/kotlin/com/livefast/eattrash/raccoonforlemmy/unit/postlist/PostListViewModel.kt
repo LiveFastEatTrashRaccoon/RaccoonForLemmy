@@ -58,8 +58,8 @@ class PostListViewModel(
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
 ) : DefaultMviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect>(
-        initialState = PostListMviModel.UiState(),
-    ),
+    initialState = PostListMviModel.UiState(),
+),
     PostListMviModel {
     private var hideReadPosts = false
 
@@ -445,10 +445,7 @@ class PostListViewModel(
         setRead(post = post, read = true)
     }
 
-    private suspend fun setRead(
-        post: PostModel,
-        read: Boolean,
-    ) {
+    private suspend fun setRead(post: PostModel, read: Boolean) {
         val newPost = post.copy(read = read)
         try {
             val auth = identityRepository.authToken.value.orEmpty()
@@ -527,13 +524,13 @@ class PostListViewModel(
             updateState {
                 it.copy(
                     posts =
-                        it.posts.map { p ->
-                            if (p.id == post.id) {
-                                post
-                            } else {
-                                p
-                            }
-                        },
+                    it.posts.map { p ->
+                        if (p.id == post.id) {
+                            post
+                        } else {
+                            p
+                        }
+                    },
                 )
             }
         }

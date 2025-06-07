@@ -147,77 +147,76 @@ class InboxMentionsScreen : Tab {
                     key = { it.id.toString() + uiState.unreadOnly },
                 ) { mention ->
                     @Composable
-                    fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> =
-                        mapNotNull {
-                            when (it) {
-                                ActionOnSwipe.UpVote ->
-                                    SwipeAction(
-                                        swipeContent = {
-                                            Icon(
-                                                modifier = VoteAction.UpVote.toModifier(),
-                                                imageVector = VoteAction.UpVote.toIcon(),
-                                                contentDescription = LocalStrings.current.actionUpvote,
-                                                tint = Color.White,
-                                            )
-                                        },
-                                        backgroundColor = upVoteColor ?: defaultUpvoteColor,
-                                        onTriggered = {
-                                            model.reduce(
-                                                InboxMentionsMviModel.Intent.UpVoteComment(
-                                                    mention.id,
-                                                ),
-                                            )
-                                        },
-                                    )
+                    fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> = mapNotNull {
+                        when (it) {
+                            ActionOnSwipe.UpVote ->
+                                SwipeAction(
+                                    swipeContent = {
+                                        Icon(
+                                            modifier = VoteAction.UpVote.toModifier(),
+                                            imageVector = VoteAction.UpVote.toIcon(),
+                                            contentDescription = LocalStrings.current.actionUpvote,
+                                            tint = Color.White,
+                                        )
+                                    },
+                                    backgroundColor = upVoteColor ?: defaultUpvoteColor,
+                                    onTriggered = {
+                                        model.reduce(
+                                            InboxMentionsMviModel.Intent.UpVoteComment(
+                                                mention.id,
+                                            ),
+                                        )
+                                    },
+                                )
 
-                                ActionOnSwipe.DownVote ->
-                                    SwipeAction(
-                                        swipeContent = {
-                                            Icon(
-                                                modifier = VoteAction.DownVote.toModifier(),
-                                                imageVector = VoteAction.DownVote.toIcon(),
-                                                contentDescription = LocalStrings.current.actionDownvote,
-                                                tint = Color.White,
-                                            )
-                                        },
-                                        backgroundColor = downVoteColor ?: defaultDownVoteColor,
-                                        onTriggered = {
-                                            model.reduce(
-                                                InboxMentionsMviModel.Intent.DownVoteComment(
-                                                    mention.id,
-                                                ),
-                                            )
-                                        },
-                                    ).takeIf { uiState.downVoteEnabled }
+                            ActionOnSwipe.DownVote ->
+                                SwipeAction(
+                                    swipeContent = {
+                                        Icon(
+                                            modifier = VoteAction.DownVote.toModifier(),
+                                            imageVector = VoteAction.DownVote.toIcon(),
+                                            contentDescription = LocalStrings.current.actionDownvote,
+                                            tint = Color.White,
+                                        )
+                                    },
+                                    backgroundColor = downVoteColor ?: defaultDownVoteColor,
+                                    onTriggered = {
+                                        model.reduce(
+                                            InboxMentionsMviModel.Intent.DownVoteComment(
+                                                mention.id,
+                                            ),
+                                        )
+                                    },
+                                ).takeIf { uiState.downVoteEnabled }
 
-                                ActionOnSwipe.ToggleRead ->
-                                    SwipeAction(
-                                        swipeContent = {
-                                            val icon =
-                                                when {
-                                                    mention.read -> Icons.Default.MarkChatUnread
-                                                    else -> Icons.Default.MarkChatRead
-                                                }
-                                            Icon(
-                                                imageVector = icon,
-                                                contentDescription = LocalStrings.current.actionMarkAsRead,
-                                                tint = Color.White,
-                                            )
-                                        },
-                                        backgroundColor = toggleReadColor ?: defaultToggleReadColor,
-                                        onTriggered = {
-                                            model.reduce(
-                                                InboxMentionsMviModel.Intent.MarkAsRead(
-                                                    read = !mention.read,
-                                                    id = mention.id,
-                                                ),
-                                            )
-                                        },
-                                    )
+                            ActionOnSwipe.ToggleRead ->
+                                SwipeAction(
+                                    swipeContent = {
+                                        val icon =
+                                            when {
+                                                mention.read -> Icons.Default.MarkChatUnread
+                                                else -> Icons.Default.MarkChatRead
+                                            }
+                                        Icon(
+                                            imageVector = icon,
+                                            contentDescription = LocalStrings.current.actionMarkAsRead,
+                                            tint = Color.White,
+                                        )
+                                    },
+                                    backgroundColor = toggleReadColor ?: defaultToggleReadColor,
+                                    onTriggered = {
+                                        model.reduce(
+                                            InboxMentionsMviModel.Intent.MarkAsRead(
+                                                read = !mention.read,
+                                                id = mention.id,
+                                            ),
+                                        )
+                                    },
+                                )
 
-                                else -> null
-                            }
+                            else -> null
                         }
+                    }
 
                     SwipeActionCard(
                         modifier = Modifier.fillMaxWidth(),
@@ -261,9 +260,9 @@ class InboxMentionsScreen : Tab {
                                         ZoomableImageScreen(
                                             url = url,
                                             source =
-                                                mention.post.community
-                                                    ?.readableHandle
-                                                    .orEmpty(),
+                                            mention.post.community
+                                                ?.readableHandle
+                                                .orEmpty(),
                                         ),
                                     )
                                 },

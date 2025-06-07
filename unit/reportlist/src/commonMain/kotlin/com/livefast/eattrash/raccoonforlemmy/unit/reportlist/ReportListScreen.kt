@@ -75,9 +75,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.reportlist.components.ReportCa
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class ReportListScreen(
-    private val communityId: Long? = null,
-) : Screen {
+class ReportListScreen(private val communityId: Long? = null) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
@@ -141,12 +139,12 @@ class ReportListScreen(
                                 }
                             Text(
                                 modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .clip(RoundedCornerShape(CornerSize.xl))
-                                        .clickable {
-                                            reportTypeBottomSheetOpened = true
-                                        }.padding(horizontal = Spacing.s),
+                                Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(CornerSize.xl))
+                                    .clickable {
+                                        reportTypeBottomSheetOpened = true
+                                    }.padding(horizontal = Spacing.s),
                                 text = text,
                                 style = MaterialTheme.typography.titleSmall,
                             )
@@ -157,29 +155,29 @@ class ReportListScreen(
         ) { padding ->
             Column(
                 modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                        ).then(
-                            if (settings.hideNavigationBarWhileScrolling) {
-                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                            } else {
-                                Modifier
-                            },
-                        ),
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                    ).then(
+                        if (settings.hideNavigationBarWhileScrolling) {
+                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                        } else {
+                            Modifier
+                        },
+                    ),
                 verticalArrangement = Arrangement.spacedBy(Spacing.s),
             ) {
                 SectionSelector(
                     titles =
-                        listOf(
-                            LocalStrings.current.profileSectionPosts,
-                            LocalStrings.current.profileSectionComments,
-                        ),
+                    listOf(
+                        LocalStrings.current.profileSectionPosts,
+                        LocalStrings.current.profileSectionComments,
+                    ),
                     currentSection =
-                        when (uiState.section) {
-                            ReportListSection.Comments -> 1
-                            else -> 0
-                        },
+                    when (uiState.section) {
+                        ReportListSection.Comments -> 1
+                        else -> 0
+                    },
                     onSectionSelected = {
                         val section =
                             when (it) {
@@ -192,14 +190,14 @@ class ReportListScreen(
 
                 PullToRefreshBox(
                     modifier =
-                        Modifier
-                            .then(
-                                if (settings.hideNavigationBarWhileScrolling) {
-                                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                                } else {
-                                    Modifier
-                                },
-                            ),
+                    Modifier
+                        .then(
+                            if (settings.hideNavigationBarWhileScrolling) {
+                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                            } else {
+                                Modifier
+                            },
+                        ),
                     isRefreshing = uiState.refreshing,
                     onRefresh = {
                         model.reduce(ReportListMviModel.Intent.Refresh)
@@ -236,7 +234,7 @@ class ReportListScreen(
                                 key = {
                                     it.id.toString() + (
                                         it.updateDate ?: it.publishDate
-                                    ) + it.resolved + uiState.unresolvedOnly
+                                        ) + it.resolved + uiState.unresolvedOnly
                                 },
                             ) { report ->
                                 SwipeActionCard(
@@ -246,29 +244,29 @@ class ReportListScreen(
                                         model.reduce(ReportListMviModel.Intent.HapticIndication)
                                     },
                                     swipeToStartActions =
-                                        buildList {
-                                            this +=
-                                                SwipeAction(
-                                                    swipeContent = {
-                                                        val icon =
-                                                            when {
-                                                                report.resolved -> Icons.Default.Report
-                                                                else -> Icons.Default.ReportOff
-                                                            }
-                                                        Icon(
-                                                            imageVector = icon,
-                                                            contentDescription = LocalStrings.current.actionMarkAsResolved,
-                                                            tint = Color.White,
-                                                        )
-                                                    },
-                                                    backgroundColor = defaultResolveColor,
-                                                    onTriggered = {
-                                                        model.reduce(
-                                                            ReportListMviModel.Intent.ResolvePost(report.id),
-                                                        )
-                                                    },
-                                                )
-                                        },
+                                    buildList {
+                                        this +=
+                                            SwipeAction(
+                                                swipeContent = {
+                                                    val icon =
+                                                        when {
+                                                            report.resolved -> Icons.Default.Report
+                                                            else -> Icons.Default.ReportOff
+                                                        }
+                                                    Icon(
+                                                        imageVector = icon,
+                                                        contentDescription = LocalStrings.current.actionMarkAsResolved,
+                                                        tint = Color.White,
+                                                    )
+                                                },
+                                                backgroundColor = defaultResolveColor,
+                                                onTriggered = {
+                                                    model.reduce(
+                                                        ReportListMviModel.Intent.ResolvePost(report.id),
+                                                    )
+                                                },
+                                            )
+                                    },
                                     content = {
                                         PostReportCard(
                                             report = report,
@@ -282,23 +280,23 @@ class ReportListScreen(
                                                 )
                                             },
                                             options =
-                                                buildList {
-                                                    this +=
-                                                        Option(
-                                                            OptionId.SeeRaw,
-                                                            LocalStrings.current.postActionSeeRaw,
-                                                        )
-                                                    this +=
-                                                        Option(
-                                                            OptionId.ResolveReport,
-                                                            if (report.resolved) {
-                                                                LocalStrings.current.reportActionUnresolve
-                                                            } else {
-                                                                LocalStrings.current.reportActionResolve
-                                                            },
-                                                        )
-                                                },
-                                            onOptionSelected = { optionId ->
+                                            buildList {
+                                                this +=
+                                                    Option(
+                                                        OptionId.SeeRaw,
+                                                        LocalStrings.current.postActionSeeRaw,
+                                                    )
+                                                this +=
+                                                    Option(
+                                                        OptionId.ResolveReport,
+                                                        if (report.resolved) {
+                                                            LocalStrings.current.reportActionUnresolve
+                                                        } else {
+                                                            LocalStrings.current.reportActionResolve
+                                                        },
+                                                    )
+                                            },
+                                            onSelectOption = { optionId ->
                                                 when (optionId) {
                                                     OptionId.SeeRaw -> {
                                                         rawContent = report
@@ -351,7 +349,7 @@ class ReportListScreen(
                                 key = {
                                     it.id.toString() + (
                                         it.updateDate ?: it.publishDate
-                                    ) + it.resolved
+                                        ) + it.resolved
                                 },
                             ) { report ->
                                 SwipeActionCard(
@@ -361,29 +359,29 @@ class ReportListScreen(
                                         model.reduce(ReportListMviModel.Intent.HapticIndication)
                                     },
                                     swipeToStartActions =
-                                        buildList {
-                                            this +=
-                                                SwipeAction(
-                                                    swipeContent = {
-                                                        val icon =
-                                                            when {
-                                                                report.resolved -> Icons.Default.Report
-                                                                else -> Icons.Default.ReportOff
-                                                            }
-                                                        Icon(
-                                                            imageVector = icon,
-                                                            contentDescription = LocalStrings.current.actionMarkAsResolved,
-                                                            tint = Color.White,
-                                                        )
-                                                    },
-                                                    backgroundColor = defaultResolveColor,
-                                                    onTriggered = {
-                                                        model.reduce(
-                                                            ReportListMviModel.Intent.ResolveComment(report.id),
-                                                        )
-                                                    },
-                                                )
-                                        },
+                                    buildList {
+                                        this +=
+                                            SwipeAction(
+                                                swipeContent = {
+                                                    val icon =
+                                                        when {
+                                                            report.resolved -> Icons.Default.Report
+                                                            else -> Icons.Default.ReportOff
+                                                        }
+                                                    Icon(
+                                                        imageVector = icon,
+                                                        contentDescription = LocalStrings.current.actionMarkAsResolved,
+                                                        tint = Color.White,
+                                                    )
+                                                },
+                                                backgroundColor = defaultResolveColor,
+                                                onTriggered = {
+                                                    model.reduce(
+                                                        ReportListMviModel.Intent.ResolveComment(report.id),
+                                                    )
+                                                },
+                                            )
+                                    },
                                     content = {
                                         CommentReportCard(
                                             report = report,
@@ -398,23 +396,23 @@ class ReportListScreen(
                                                 )
                                             },
                                             options =
-                                                buildList {
-                                                    this +=
-                                                        Option(
-                                                            OptionId.SeeRaw,
-                                                            LocalStrings.current.postActionSeeRaw,
-                                                        )
-                                                    this +=
-                                                        Option(
-                                                            OptionId.ResolveReport,
-                                                            if (report.resolved) {
-                                                                LocalStrings.current.reportActionUnresolve
-                                                            } else {
-                                                                LocalStrings.current.reportActionResolve
-                                                            },
-                                                        )
-                                                },
-                                            onOptionSelected = { optionId ->
+                                            buildList {
+                                                this +=
+                                                    Option(
+                                                        OptionId.SeeRaw,
+                                                        LocalStrings.current.postActionSeeRaw,
+                                                    )
+                                                this +=
+                                                    Option(
+                                                        OptionId.ResolveReport,
+                                                        if (report.resolved) {
+                                                            LocalStrings.current.reportActionUnresolve
+                                                        } else {
+                                                            LocalStrings.current.reportActionResolve
+                                                        },
+                                                    )
+                                            },
+                                            onSelectOption = { optionId ->
                                                 when (optionId) {
                                                     OptionId.SeeRaw -> {
                                                         rawContent = report
@@ -507,10 +505,10 @@ class ReportListScreen(
             CustomModalBottomSheet(
                 title = LocalStrings.current.reportListTypeTitle,
                 items =
-                    values.map { value ->
-                        CustomModalBottomSheetItem(label = value)
-                    },
-                onSelected = { index ->
+                values.map { value ->
+                    CustomModalBottomSheetItem(label = value)
+                },
+                onSelect = { index ->
                     reportTypeBottomSheetOpened = false
                     if (index != null) {
                         notificationCenter.send(

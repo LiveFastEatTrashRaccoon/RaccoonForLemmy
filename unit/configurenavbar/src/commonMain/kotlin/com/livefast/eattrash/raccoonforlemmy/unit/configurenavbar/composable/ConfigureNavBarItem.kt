@@ -35,10 +35,10 @@ import sh.calvin.reorderable.ReorderableCollectionItemScope
 
 @Composable
 internal fun ConfigureNavBarItem(
-    modifier: Modifier = Modifier,
     reorderableScope: ReorderableCollectionItemScope,
     title: String,
-    onDragStarted: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    onStartDrag: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
 ) {
     var optionsOffset by remember { mutableStateOf(Offset.Zero) }
@@ -48,12 +48,12 @@ internal fun ConfigureNavBarItem(
 
     Row(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = Spacing.m,
-                    vertical = Spacing.s,
-                ),
+        modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = Spacing.m,
+                vertical = Spacing.s,
+            ),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -66,20 +66,20 @@ internal fun ConfigureNavBarItem(
         Box {
             IconButton(
                 modifier =
-                    Modifier
-                        .size(IconSize.m)
-                        .padding(Spacing.xs)
-                        .then(
-                            with(reorderableScope) {
-                                Modifier.draggableHandle(
-                                    onDragStarted = {
-                                        onDragStarted?.invoke()
-                                    },
-                                )
-                            },
-                        ).onGloballyPositioned {
-                            optionsOffset = it.positionInParent()
+                Modifier
+                    .size(IconSize.m)
+                    .padding(Spacing.xs)
+                    .then(
+                        with(reorderableScope) {
+                            Modifier.draggableHandle(
+                                onDragStarted = {
+                                    onStartDrag?.invoke()
+                                },
+                            )
                         },
+                    ).onGloballyPositioned {
+                        optionsOffset = it.positionInParent()
+                    },
                 onClick = {
                     optionsMenuOpen = true
                 },
@@ -97,10 +97,10 @@ internal fun ConfigureNavBarItem(
                     optionsMenuOpen = false
                 },
                 offset =
-                    DpOffset(
-                        x = optionsOffset.x.toLocalDp(),
-                        y = optionsOffset.y.toLocalDp(),
-                    ),
+                DpOffset(
+                    x = optionsOffset.x.toLocalDp(),
+                    y = optionsOffset.y.toLocalDp(),
+                ),
             ) {
                 DropdownMenuItem(
                     text = {

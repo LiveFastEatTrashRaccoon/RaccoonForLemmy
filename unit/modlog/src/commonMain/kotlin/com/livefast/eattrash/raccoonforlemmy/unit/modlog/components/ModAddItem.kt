@@ -39,18 +39,18 @@ internal fun ModAddItem(
         innerContent = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                            val name = item.user?.readableName(preferNicknames).orEmpty()
-                            append(name)
-                        }
-                        append(" ")
-                        if (item.removed) {
-                            append(LocalStrings.current.modlogItemModRemoved)
-                        } else {
-                            append(LocalStrings.current.modlogItemModAdded)
-                        }
-                    },
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        val name = item.user?.readableName(preferNicknames).orEmpty()
+                        append(name)
+                    }
+                    append(" ")
+                    if (item.removed) {
+                        append(LocalStrings.current.modlogItemModRemoved)
+                    } else {
+                        append(LocalStrings.current.modlogItemModAdded)
+                    }
+                },
                 style = MaterialTheme.typography.bodySmall,
             )
         },

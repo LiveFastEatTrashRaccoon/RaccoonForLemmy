@@ -18,26 +18,15 @@ interface InboxRepliesMviModel :
 
         data object LoadNextPage : Intent
 
-        data class MarkAsRead(
-            val read: Boolean,
-            val id: Long,
-        ) : Intent
+        data class MarkAsRead(val read: Boolean, val id: Long) : Intent
 
         data object HapticIndication : Intent
 
-        data class UpVoteComment(
-            val id: Long,
-        ) : Intent
+        data class UpVoteComment(val id: Long) : Intent
 
-        data class DownVoteComment(
-            val id: Long,
-        ) : Intent
+        data class DownVoteComment(val id: Long) : Intent
 
-        data class WillOpenDetail(
-            val id: Long,
-            val post: PostModel,
-            val commentId: Long,
-        ) : Intent
+        data class WillOpenDetail(val id: Long, val post: PostModel, val commentId: Long) : Intent
     }
 
     data class UiState(
@@ -60,15 +49,10 @@ interface InboxRepliesMviModel :
     )
 
     sealed interface Effect {
-        data class UpdateUnreadItems(
-            val value: Int,
-        ) : Effect
+        data class UpdateUnreadItems(val value: Int) : Effect
 
         data object BackToTop : Effect
 
-        data class OpenDetail(
-            val post: PostModel,
-            val commentId: Long,
-        ) : Effect
+        data class OpenDetail(val post: PostModel, val commentId: Long) : Effect
     }
 }

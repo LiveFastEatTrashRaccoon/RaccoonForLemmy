@@ -22,8 +22,8 @@ class EditCommunityViewModel(
     private val mediaRepository: MediaRepository,
     private val notificationCenter: NotificationCenter,
 ) : DefaultMviModel<EditCommunityMviModel.Intent, EditCommunityMviModel.UiState, EditCommunityMviModel.Effect>(
-        initialState = EditCommunityMviModel.UiState(),
-    ),
+    initialState = EditCommunityMviModel.UiState(),
+),
     EditCommunityMviModel {
     private var originalCommunity: CommunityModel? = null
 

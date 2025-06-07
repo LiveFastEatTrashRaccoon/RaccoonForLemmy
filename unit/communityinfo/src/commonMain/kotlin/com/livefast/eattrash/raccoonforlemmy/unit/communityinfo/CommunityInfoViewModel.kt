@@ -18,8 +18,8 @@ class CommunityInfoViewModel(
     private val settingsRepository: SettingsRepository,
     private val itemCache: LemmyItemCache,
 ) : DefaultMviModel<CommunityInfoMviModel.Intent, CommunityInfoMviModel.UiState, CommunityInfoMviModel.Effect>(
-        initialState = CommunityInfoMviModel.UiState(),
-    ),
+    initialState = CommunityInfoMviModel.UiState(),
+),
     CommunityInfoMviModel {
     init {
         screenModelScope.launch {

@@ -20,7 +20,7 @@ val manageBanModule =
                     communityRepository = instance(),
                     blocklistRepository = instance(),
                     stopWordRepository = instance(),
-            )
+                )
+            }
         }
     }
-}

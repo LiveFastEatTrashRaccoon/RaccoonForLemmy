@@ -7,6 +7,9 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepo
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
+import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonMviModel.Effect
+import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonMviModel.Intent
+import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonMviModel.UiState
 import kotlinx.coroutines.launch
 
 class ModerateWithReasonViewModel(
@@ -17,9 +20,9 @@ class ModerateWithReasonViewModel(
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
     private val communityRepository: CommunityRepository,
-) : DefaultMviModel<ModerateWithReasonMviModel.Intent, ModerateWithReasonMviModel.UiState, ModerateWithReasonMviModel.Effect>(
-        initialState = ModerateWithReasonMviModel.UiState(),
-    ),
+) : DefaultMviModel<Intent, UiState, Effect>(
+    initialState = UiState(),
+),
     ModerateWithReasonMviModel {
     init {
         screenModelScope.launch {
@@ -27,9 +30,9 @@ class ModerateWithReasonViewModel(
         }
     }
 
-    override fun reduce(intent: ModerateWithReasonMviModel.Intent) {
+    override fun reduce(intent: Intent) {
         when (intent) {
-            is ModerateWithReasonMviModel.Intent.SetText -> {
+            is Intent.SetText -> {
                 screenModelScope.launch {
                     updateState {
                         it.copy(text = intent.value)
@@ -37,7 +40,7 @@ class ModerateWithReasonViewModel(
                 }
             }
 
-            ModerateWithReasonMviModel.Intent.Submit -> submit()
+            Intent.Submit -> submit()
         }
     }
 
@@ -127,10 +130,10 @@ class ModerateWithReasonViewModel(
                         )
                     }
                 }
-                emitEffect(ModerateWithReasonMviModel.Effect.Success)
+                emitEffect(Effect.Success)
             } catch (e: Throwable) {
                 val message = e.message
-                emitEffect(ModerateWithReasonMviModel.Effect.Failure(message))
+                emitEffect(Effect.Failure(message))
             } finally {
                 updateState { it.copy(loading = false) }
             }

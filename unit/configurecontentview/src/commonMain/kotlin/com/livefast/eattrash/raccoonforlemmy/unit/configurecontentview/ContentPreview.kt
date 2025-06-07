@@ -20,7 +20,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 @Composable
 internal fun ContentPreview(
-    modifier: Modifier = Modifier,
     postLayout: PostLayout,
     preferNicknames: Boolean,
     showScores: Boolean,
@@ -30,10 +29,10 @@ internal fun ContentPreview(
     downVoteEnabled: Boolean,
     commentBarThickness: Int,
     commentIndentAmount: Int,
+    modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(modifier = modifier) {
         PostCard(
-            modifier = modifier,
             post = ContentPreviewData.post,
             preferNicknames = preferNicknames,
             showScores = showScores,
@@ -95,7 +94,7 @@ private object ContentPreviewData {
         PostModel(
             title = "Post title",
             text =
-                """
+            """
                 Lorem ipsum **dolor** sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
                 Ut enim ad minim veniam, quis *nostrud* exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat:
@@ -103,7 +102,7 @@ private object ContentPreviewData {
                 - in reprehenderit in voluptate
 
                 velit esse cillum dolore eu fugiat nulla pariatur.
-                """.trimIndent(),
+            """.trimIndent(),
             thumbnailUrl = "https://feddit.it/pictrs/image/f677007a-166a-43b0-aea8-4c41ae1a35e8.webp?format=webp",
             url = "https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy",
             publishDate = "2024-01-01T12:00:00Z",
@@ -112,17 +111,17 @@ private object ContentPreviewData {
             score = 1,
             comments = 1,
             community =
-                CommunityModel(
-                    name = "somecommunity",
-                    title = "Some Community",
-                    host = "example.com",
-                ),
+            CommunityModel(
+                name = "somecommunity",
+                title = "Some Community",
+                host = "example.com",
+            ),
             creator =
-                UserModel(
-                    name = "johndoe",
-                    host = "example.com",
-                    displayName = "John Doe",
-                ),
+            UserModel(
+                name = "johndoe",
+                host = "example.com",
+                displayName = "John Doe",
+            ),
         )
 
     val comment1 =
@@ -131,11 +130,11 @@ private object ContentPreviewData {
             publishDate = "2024-01-02T12:00:00Z",
             path = "0.1",
             creator =
-                UserModel(
-                    name = "marysmith",
-                    host = "example.com",
-                    displayName = "Mary Smith",
-                ),
+            UserModel(
+                name = "marysmith",
+                host = "example.com",
+                displayName = "Mary Smith",
+            ),
             upvotes = 2,
             downvotes = 1,
             score = 1,
@@ -148,11 +147,11 @@ private object ContentPreviewData {
             publishDate = "2024-01-03T12:00:00Z",
             path = "0.1.2",
             creator =
-                UserModel(
-                    name = "johndoe",
-                    host = "example.com",
-                    displayName = "John Doe",
-                ),
+            UserModel(
+                name = "johndoe",
+                host = "example.com",
+                displayName = "John Doe",
+            ),
             upvotes = 2,
             downvotes = 1,
             score = 1,
@@ -164,11 +163,11 @@ private object ContentPreviewData {
             publishDate = "2024-01-03T12:00:00Z",
             path = "0.1.2.3",
             creator =
-                UserModel(
-                    name = "marysmith",
-                    host = "example.com",
-                    displayName = "Mary Smith",
-                ),
+            UserModel(
+                name = "marysmith",
+                host = "example.com",
+                displayName = "Mary Smith",
+            ),
             upvotes = 1,
             downvotes = -2,
             score = -1,

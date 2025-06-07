@@ -23,8 +23,8 @@ class ZoomableImageViewModel(
     private val galleryHelper: GalleryHelper,
     private val imagePreloadManager: ImagePreloadManager,
 ) : DefaultMviModel<ZoomableImageMviModel.Intent, ZoomableImageMviModel.UiState, ZoomableImageMviModel.Effect>(
-        initialState = ZoomableImageMviModel.UiState(),
-    ),
+    initialState = ZoomableImageMviModel.UiState(),
+),
     ZoomableImageMviModel {
     init {
         screenModelScope.launch {
@@ -82,10 +82,7 @@ class ZoomableImageViewModel(
         }
     }
 
-    private fun shareFile(
-        url: String,
-        folder: String,
-    ) {
+    private fun shareFile(url: String, folder: String) {
         if (uiState.value.loading) {
             return
         }
@@ -127,8 +124,7 @@ class ZoomableImageViewModel(
     }
 }
 
-private fun String.extractExtension(): String =
-    let { s ->
-        val idx = s.lastIndexOf(".").takeIf { it >= 0 } ?: s.length
-        s.substring(idx).takeIf { it.isNotEmpty() } ?: ".jpeg"
-    }
+private fun String.extractExtension(): String = let { s ->
+    val idx = s.lastIndexOf(".").takeIf { it >= 0 } ?: s.length
+    s.substring(idx).takeIf { it.isNotEmpty() } ?: ".jpeg"
+}
