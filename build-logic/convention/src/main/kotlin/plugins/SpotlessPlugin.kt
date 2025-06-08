@@ -27,7 +27,9 @@ class SpotlessPlugin : Plugin<Project> {
                         )
                         .customRuleSets(
                             listOf(
-                                "io.nlopez.compose.rules:ktlint:0.4.22",
+                                libs.findLibrary("ktlint-compose-rules").dependency.let { dep ->
+                                    "${dep.group}:${dep.name}:${dep.version}"
+                                },
                             ),
                         )
                     trimTrailingWhitespace()
