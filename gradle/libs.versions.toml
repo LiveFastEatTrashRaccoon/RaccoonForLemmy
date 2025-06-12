@@ -32,7 +32,7 @@ spotless = "7.0.4"
 stately = "2.1.0"
 sqlcipher = "4.9.0"
 sqldelight = "2.1.0"
-turbine = "1.2.0"
+turbine = "1.2.1"
 voyager = "1.0.1"
 
 android-targetSdk = "35"
