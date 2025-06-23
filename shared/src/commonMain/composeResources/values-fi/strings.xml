@@ -91,7 +91,7 @@
     <string name="dialog_raw_content_title">Otsikko</string>
     <string name="dialog_raw_content_url">URL</string>
     <string name="dialog_title_add_instance">Lisää esiintymä</string>
-    <string name="dialog_title_change_instance">Vaihda esimerkkiä</string>
+    <string name="dialog_title_change_instance">Vaihda instanssia</string>
     <string name="dialog_title_raw_content">Raakapitoisuus</string>
     <string name="dialog_title_select_community">Valitse yhteisö</string>
     <string name="edit_comment_title">Muokkaa kommenttia</string>
@@ -117,7 +117,7 @@
     <string name="home_sort_type_active">Aktiivinen</string>
     <string name="home_sort_type_controversial">Kiistanalainen</string>
     <string name="home_sort_type_hot">Suosittu</string>
-    <string name="home_sort_type_most_comments">Useimmat kommentit</string>
+    <string name="home_sort_type_most_comments">Eniten kommentteja</string>
     <string name="home_sort_type_new">Uusi</string>
     <string name="home_sort_type_new_comments">Uudet kommentit</string>
     <string name="home_sort_type_old">Vanhat</string>
@@ -374,9 +374,9 @@
     <string name="settings_save_color">Tallennustoiminnon väri</string>
     <string name="settings_search_posts_title_only">Hae viestejä vain otsikosta</string>
     <string name="settings_section_account">Tilin asetukset</string>
-    <string name="settings_section_appearance">käyttötuntuma</string>
-    <string name="settings_section_debug">Testaa</string>
-    <string name="settings_section_general">Kenraali</string>
+    <string name="settings_section_appearance">Käyttöliittymä</string>
+    <string name="settings_section_debug">Vianmääritys</string>
+    <string name="settings_section_general">Yleinen</string>
     <string name="settings_section_nsfw">NSFW</string>
     <string name="settings_show_scores">Näytä pisteet</string>
     <string name="settings_show_unread_comments">Näytä lukemattomien kommenttien määrä</string>
@@ -424,7 +424,7 @@
     <string name="settings_zombie_mode_scroll_amount">Zombitilan vieritysmäärä</string>
     <string name="share_mode_file">Jaa tiedostona</string>
     <string name="share_mode_url">Jaa URL-osoitteena</string>
-    <string name="sidebar_not_logged_message">Tervetuloa Raccoonlle!\n\nNimetttömässä tilassa, käytä yllä olevaa pudotusvalikkopainiketta (▼) vaihtaaksesi ilmentymää.\n\nVoit kirjautua sisään tapahtumaasi osoitteessa milloin tahansa profiilinäytöstä.\n\nNauti Lemmystä!</string>
+    <string name="sidebar_not_logged_message">Tervetuloa Raccoonille!\n\nKäyttäessäsi nimetöntä tilaa, voit vaihtaa instanssia painamalla yllä olevaa pudotusvalikkopainiketta(▼)\n\nVoit kirjautua sisään instanssiisi milloin tahansa profiilinäytöstä.\n\nNauti Lemmystä!</string>
     <string name="undetermined">Määrittämätön</string>
     <string name="user_detail_info">Käyttäjän tiedot</string>
     <string name="user_info_admin">järjestelmänvalvoja</string>
