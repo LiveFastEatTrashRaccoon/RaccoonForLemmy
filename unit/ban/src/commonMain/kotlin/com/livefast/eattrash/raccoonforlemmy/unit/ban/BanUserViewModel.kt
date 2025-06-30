@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.ban
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -17,12 +19,12 @@ class BanUserViewModel(
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<BanUserMviModel.Intent, BanUserMviModel.UiState, BanUserMviModel.Effect>(
-    initialState = BanUserMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<BanUserMviModel.Intent, BanUserMviModel.UiState, BanUserMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = BanUserMviModel.UiState()),
     BanUserMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(targetBanValue = newValue)
             }
@@ -34,32 +36,33 @@ class BanUserViewModel(
             BanUserMviModel.Intent.IncrementDays -> incrementDays()
             BanUserMviModel.Intent.DecrementDays -> decrementDays()
             is BanUserMviModel.Intent.ChangePermanent ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(permanent = intent.value) }
                 }
 
             is BanUserMviModel.Intent.ChangeRemoveData ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(removeData = intent.value) }
                 }
 
             is BanUserMviModel.Intent.SetText ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(text = intent.value) }
                 }
+
             BanUserMviModel.Intent.Submit -> submit()
         }
     }
 
     private fun incrementDays() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val newValue = uiState.value.days + 1
             updateState { it.copy(days = newValue) }
         }
     }
 
     private fun decrementDays() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val newValue = (uiState.value.days - 1).coerceAtLeast(1)
             updateState { it.copy(days = newValue) }
         }
@@ -74,7 +77,7 @@ class BanUserViewModel(
         val removeData = currentState.removeData.takeIf { newValue } ?: false
         val days = currentState.days.toLong().takeIf { newValue }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
