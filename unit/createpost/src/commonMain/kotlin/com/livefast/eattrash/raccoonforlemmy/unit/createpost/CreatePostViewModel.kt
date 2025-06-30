@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.createpost
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
@@ -45,12 +47,12 @@ class CreatePostViewModel(
     private val notificationCenter: NotificationCenter,
     private val communityPreferredLanguageRepository: CommunityPreferredLanguageRepository,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect>(
-    initialState = CreatePostMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = CreatePostMviModel.UiState()),
     CreatePostMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val editedPost =
                 editedPostId.takeIf { it != 0L }?.let {
                     itemCache.getPost(it)
@@ -109,7 +111,7 @@ class CreatePostViewModel(
             }
 
             is CreatePostMviModel.Intent.SetTitle -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(title = intent.value)
                     }
@@ -117,7 +119,7 @@ class CreatePostViewModel(
             }
 
             is CreatePostMviModel.Intent.ChangeNsfw -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(nsfw = intent.value)
                     }
@@ -125,7 +127,7 @@ class CreatePostViewModel(
             }
 
             is CreatePostMviModel.Intent.SetUrl -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(url = intent.value)
                     }
@@ -141,21 +143,21 @@ class CreatePostViewModel(
             }
 
             is CreatePostMviModel.Intent.ChangeSection ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(section = intent.value)
                     }
                 }
 
             is CreatePostMviModel.Intent.ChangeLanguage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(currentLanguageId = intent.value)
                     }
                 }
 
             is CreatePostMviModel.Intent.ChangeBodyValue ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(bodyValue = intent.value)
                     }
@@ -173,7 +175,7 @@ class CreatePostViewModel(
         val communityId = community.id
         val name = community.readableName(preferNicknames)
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             val (actualName, actualHandle) =
                 if (name.isEmpty()) {
                     val auth = identityRepository.authToken.value.orEmpty()
@@ -201,7 +203,7 @@ class CreatePostViewModel(
         if (bytes.isEmpty()) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val url = mediaRepository.uploadImage(auth, bytes)
@@ -218,7 +220,7 @@ class CreatePostViewModel(
         if (bytes.isEmpty()) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val url = mediaRepository.uploadImage(auth, bytes)
@@ -247,7 +249,7 @@ class CreatePostViewModel(
             return
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     titleError = null,
@@ -268,7 +270,7 @@ class CreatePostViewModel(
         val languageId = currentState.currentLanguageId
         var valid = true
         if (title.isEmpty()) {
-            screenModelScope.launch {
+            viewModelScope.launch {
                 updateState {
                     it.copy(titleError = ValidationError.MissingField)
                 }
@@ -276,7 +278,7 @@ class CreatePostViewModel(
             valid = false
         }
         if (!url.isNullOrEmpty() && !url.isValidUrl()) {
-            screenModelScope.launch {
+            viewModelScope.launch {
                 updateState {
                     it.copy(urlError = ValidationError.InvalidField)
                 }
@@ -284,7 +286,7 @@ class CreatePostViewModel(
             valid = false
         }
         if (communityId == null) {
-            screenModelScope.launch {
+            viewModelScope.launch {
                 updateState {
                     it.copy(communityError = ValidationError.MissingField)
                 }
@@ -296,7 +298,7 @@ class CreatePostViewModel(
             return
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -350,7 +352,7 @@ class CreatePostViewModel(
         val nsfw = currentState.nsfw
         val languageId = currentState.currentLanguageId
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value
@@ -393,7 +395,7 @@ class CreatePostViewModel(
 
     private fun autofillTitle() {
         val url = uiState.value.url.takeUnless { it.isBlank() } ?: return
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             val metadata = siteRepository.getMetadata(url)
             updateState { it.copy(loading = false) }
