@@ -12,7 +12,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.kodein)
-                implementation(libs.voyager.navigator)
+                implementation(libs.voyager.core)
 
                 implementation(projects.core.navigation)
                 implementation(projects.core.commonui.detailopener.api)

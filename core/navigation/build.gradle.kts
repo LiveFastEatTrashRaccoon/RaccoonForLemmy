@@ -13,8 +13,6 @@ kotlin {
             implementation(libs.stately.common)
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tab)
-            implementation(libs.voyager.screenmodel)
-            implementation(libs.voyager.kodein)
 
             implementation(projects.core.di)
             implementation(projects.core.l10n)
