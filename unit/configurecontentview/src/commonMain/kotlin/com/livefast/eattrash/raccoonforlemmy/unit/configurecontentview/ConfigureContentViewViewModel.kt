@@ -1,13 +1,15 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.toSelectNumberBottomSheetType
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
@@ -16,9 +18,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
-import com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview.ConfigureContentViewMviModel.Effect
-import com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview.ConfigureContentViewMviModel.Intent
-import com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview.ConfigureContentViewMviModel.UiState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -32,10 +31,16 @@ class ConfigureContentViewViewModel(
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<Intent, UiState, Effect>(initialState = UiState()),
+) : ViewModel(),
+    MviModelDelegate<
+        ConfigureContentViewMviModel.Intent,
+        ConfigureContentViewMviModel.UiState,
+        ConfigureContentViewMviModel.Effect,
+        >
+    by DefaultMviModelDelegate(initialState = ConfigureContentViewMviModel.UiState()),
     ConfigureContentViewMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             themeRepository.postLayout
                 .onEach { value ->
                     updateState { it.copy(postLayout = value) }
@@ -98,42 +103,42 @@ class ConfigureContentViewViewModel(
         }
     }
 
-    override fun reduce(intent: Intent) {
+    override fun reduce(intent: ConfigureContentViewMviModel.Intent) {
         when (intent) {
-            is Intent.ChangeFullHeightImages -> {
+            is ConfigureContentViewMviModel.Intent.ChangeFullHeightImages -> {
                 changeFullHeightImages(
                     intent.value,
                 )
             }
 
-            is Intent.ChangeFullWidthImages -> {
+            is ConfigureContentViewMviModel.Intent.ChangeFullWidthImages -> {
                 changeFullWidthImages(
                     intent.value,
                 )
             }
 
-            is Intent.ChangePreferUserNicknames -> {
+            is ConfigureContentViewMviModel.Intent.ChangePreferUserNicknames -> {
                 changePreferUserNicknames(
                     intent.value,
                 )
             }
 
-            Intent.IncrementCommentBarThickness -> {
+            ConfigureContentViewMviModel.Intent.IncrementCommentBarThickness -> {
                 val value = (uiState.value.commentBarThickness + 1).coerceIn(COMMENT_BAR_THICKNESS_RANGE)
                 changeCommentBarThickness(value)
             }
 
-            Intent.DecrementCommentBarThickness -> {
+            ConfigureContentViewMviModel.Intent.DecrementCommentBarThickness -> {
                 val value = (uiState.value.commentBarThickness - 1).coerceIn(COMMENT_BAR_THICKNESS_RANGE)
                 changeCommentBarThickness(value)
             }
 
-            Intent.IncrementCommentIndentAmount -> {
+            ConfigureContentViewMviModel.Intent.IncrementCommentIndentAmount -> {
                 val value = (uiState.value.commentIndentAmount + 1).coerceIn(COMMENT_INDENT_AMOUNT_RANGE)
                 changeCommentIndentAmount(value)
             }
 
-            Intent.DecrementCommentIndentAmount -> {
+            ConfigureContentViewMviModel.Intent.DecrementCommentIndentAmount -> {
                 val value = (uiState.value.commentIndentAmount - 1).coerceIn(COMMENT_INDENT_AMOUNT_RANGE)
                 changeCommentIndentAmount(value)
             }
@@ -142,7 +147,7 @@ class ConfigureContentViewViewModel(
 
     private fun changePostLayout(value: PostLayout) {
         themeRepository.changePostLayout(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     postLayout = value.toInt(),
@@ -152,7 +157,7 @@ class ConfigureContentViewViewModel(
     }
 
     private fun changeVoteFormat(value: VoteFormat) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(voteFormat = value) }
             val settings =
                 settingsRepository.currentSettings.value.let {
@@ -170,7 +175,7 @@ class ConfigureContentViewViewModel(
     }
 
     private fun changeFullHeightImages(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(fullHeightImages = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -181,7 +186,7 @@ class ConfigureContentViewViewModel(
     }
 
     private fun changeFullWidthImages(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(fullWidthImages = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -192,7 +197,7 @@ class ConfigureContentViewViewModel(
     }
 
     private fun changePreferUserNicknames(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(preferUserNicknames = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -203,7 +208,7 @@ class ConfigureContentViewViewModel(
     }
 
     private fun changePostBodyMaxLines(value: Int?) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(postBodyMaxLines = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -223,7 +228,7 @@ class ConfigureContentViewViewModel(
                     ContentFontClass.AncillaryText -> it.copy(ancillary = value)
                 }
             }
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     contentFontScale = contentFontScale,
@@ -234,7 +239,7 @@ class ConfigureContentViewViewModel(
 
     private fun changeContentFontFamily(value: UiFontFamily) {
         themeRepository.changeContentFontFamily(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     contentFontFamily = value.toInt(),
@@ -244,7 +249,7 @@ class ConfigureContentViewViewModel(
     }
 
     private fun changeCommentBarThickness(value: Int) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(commentBarThickness = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -255,7 +260,7 @@ class ConfigureContentViewViewModel(
     }
 
     private fun changeCommentIndentAmount(value: Int) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(commentIndentAmount = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
