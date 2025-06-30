@@ -1,18 +1,15 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeDirection
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Effect
-import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Intent as Intent
-import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.UiState as UiState
+import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Intent
+import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.UiState
 
 @Stable
-interface ConfigureSwipeActionsMviModel :
-    MviModel<Intent, UiState, Effect>,
-    ScreenModel {
+interface ConfigureSwipeActionsMviModel : MviModel<Intent, UiState, Effect> {
     sealed interface Intent {
         data object ResetActionsPosts : Intent
 

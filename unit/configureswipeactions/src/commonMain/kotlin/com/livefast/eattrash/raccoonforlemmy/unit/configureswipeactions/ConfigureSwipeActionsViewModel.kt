@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
@@ -10,9 +12,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
-import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Effect
-import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Intent
-import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.UiState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -22,12 +21,16 @@ class ConfigureSwipeActionsViewModel(
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<Intent, UiState, Effect>(
-    initialState = UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<
+        ConfigureSwipeActionsMviModel.Intent,
+        ConfigureSwipeActionsMviModel.UiState,
+        ConfigureSwipeActionsMviModel.Effect,
+        >
+    by DefaultMviModelDelegate(initialState = ConfigureSwipeActionsMviModel.UiState()),
     ConfigureSwipeActionsMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             lemmyValueCache.isDownVoteEnabled
                 .onEach { value ->
                     updateState {
@@ -63,29 +66,29 @@ class ConfigureSwipeActionsViewModel(
         }
     }
 
-    override fun reduce(intent: Intent) {
+    override fun reduce(intent: ConfigureSwipeActionsMviModel.Intent) {
         when (intent) {
-            is Intent.DeleteActionComments ->
+            is ConfigureSwipeActionsMviModel.Intent.DeleteActionComments ->
                 removeActionComments(
                     action = intent.value,
                     direction = intent.direction,
                 )
 
-            is Intent.DeleteActionInbox ->
+            is ConfigureSwipeActionsMviModel.Intent.DeleteActionInbox ->
                 removeActionInbox(
                     action = intent.value,
                     direction = intent.direction,
                 )
 
-            is Intent.DeleteActionPosts ->
+            is ConfigureSwipeActionsMviModel.Intent.DeleteActionPosts ->
                 removeActionPosts(
                     action = intent.value,
                     direction = intent.direction,
                 )
 
-            Intent.ResetActionsComments -> resetActionsComments()
-            Intent.ResetActionsInbox -> resetActionsInbox()
-            Intent.ResetActionsPosts -> resetActionsPosts()
+            ConfigureSwipeActionsMviModel.Intent.ResetActionsComments -> resetActionsComments()
+            ConfigureSwipeActionsMviModel.Intent.ResetActionsInbox -> resetActionsInbox()
+            ConfigureSwipeActionsMviModel.Intent.ResetActionsPosts -> resetActionsPosts()
         }
     }
 
@@ -105,7 +108,7 @@ class ConfigureSwipeActionsViewModel(
     }
 
     private fun addActionPosts(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val newActions =
@@ -152,7 +155,7 @@ class ConfigureSwipeActionsViewModel(
     }
 
     private fun removeActionPosts(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val newActions =
@@ -199,7 +202,7 @@ class ConfigureSwipeActionsViewModel(
     }
 
     private fun addActionComments(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val newActions =
@@ -246,7 +249,7 @@ class ConfigureSwipeActionsViewModel(
     }
 
     private fun removeActionComments(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val newActions =
@@ -293,7 +296,7 @@ class ConfigureSwipeActionsViewModel(
     }
 
     private fun addActionInbox(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val newActions =
@@ -340,7 +343,7 @@ class ConfigureSwipeActionsViewModel(
     }
 
     private fun removeActionInbox(action: ActionOnSwipe, direction: ActionOnSwipeDirection) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val newActions =
@@ -407,7 +410,7 @@ class ConfigureSwipeActionsViewModel(
                     }
                 },
             )
-        screenModelScope.launch {
+        viewModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
             settingsRepository.updateSettings(newSettings, accountId)
             settingsRepository.changeCurrentSettings(newSettings)
@@ -437,7 +440,7 @@ class ConfigureSwipeActionsViewModel(
                     }
                 },
             )
-        screenModelScope.launch {
+        viewModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
             settingsRepository.updateSettings(newSettings, accountId)
             settingsRepository.changeCurrentSettings(newSettings)
@@ -467,7 +470,7 @@ class ConfigureSwipeActionsViewModel(
                     }
                 },
             )
-        screenModelScope.launch {
+        viewModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
             settingsRepository.updateSettings(newSettings, accountId)
             settingsRepository.changeCurrentSettings(newSettings)
@@ -507,7 +510,7 @@ class ConfigureSwipeActionsViewModel(
                     this -= currentState.actionsOnSwipeToEndInbox.toSet()
                 }
             }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     availableOptionsPosts = actionsPosts.toList(),
