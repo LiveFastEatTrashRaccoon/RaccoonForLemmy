@@ -1,12 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.profile.main
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 interface ProfileMainMviModel :
-    MviModel<ProfileMainMviModel.Intent, ProfileMainMviModel.UiState, ProfileMainMviModel.Effect>,
-    ScreenModel {
+    MviModel<ProfileMainMviModel.Intent, ProfileMainMviModel.UiState, ProfileMainMviModel.Effect> {
     sealed interface Intent {
         data object Logout : Intent
     }

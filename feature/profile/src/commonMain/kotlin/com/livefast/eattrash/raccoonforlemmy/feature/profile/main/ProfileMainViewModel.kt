@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.profile.main
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.usecase.LogoutUseCase
 import kotlinx.coroutines.flow.launchIn
@@ -9,12 +11,14 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ProfileMainViewModel(private val identityRepository: IdentityRepository, private val logout: LogoutUseCase) :
-    DefaultMviModel<ProfileMainMviModel.Intent, ProfileMainMviModel.UiState, ProfileMainMviModel.Effect>(
+    ViewModel(),
+    MviModelDelegate<ProfileMainMviModel.Intent, ProfileMainMviModel.UiState, ProfileMainMviModel.Effect>
+    by DefaultMviModelDelegate(
         initialState = ProfileMainMviModel.UiState(),
     ),
     ProfileMainMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             identityRepository.isLogged
                 .onEach { logged ->
                     updateState { it.copy(logged = logged) }
@@ -35,7 +39,7 @@ class ProfileMainViewModel(private val identityRepository: IdentityRepository, p
     }
 
     private fun handleLogout() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             logout()
         }
     }

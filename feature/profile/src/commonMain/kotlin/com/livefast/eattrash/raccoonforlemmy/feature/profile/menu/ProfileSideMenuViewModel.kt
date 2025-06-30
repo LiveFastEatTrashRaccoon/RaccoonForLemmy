@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.profile.menu
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toTabNavigationSections
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -14,12 +16,12 @@ import kotlinx.coroutines.launch
 class ProfileSideMenuViewModel(
     private val settingsRepository: SettingsRepository,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<ProfileSideMenuMviModel.Intent, ProfileSideMenuMviModel.State, ProfileSideMenuMviModel.Effect>(
-    ProfileSideMenuMviModel.State(),
-),
+) : ViewModel(),
+    MviModelDelegate<ProfileSideMenuMviModel.Intent, ProfileSideMenuMviModel.State, ProfileSideMenuMviModel.Effect>
+    by DefaultMviModelDelegate(ProfileSideMenuMviModel.State()),
     ProfileSideMenuMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             lemmyValueCache.isCurrentUserModerator
                 .onEach { isModerator ->
                     updateState {
