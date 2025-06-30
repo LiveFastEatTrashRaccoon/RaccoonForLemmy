@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.main
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.L10nManager
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -39,12 +41,12 @@ class SettingsViewModel(
     private val customTabsHelper: CustomTabsHelper,
     private val siteSupportsHiddenPosts: GetSiteSupportsHiddenPostsUseCase,
     private val siteSupportsMediaListUseCase: GetSiteSupportsMediaListUseCase,
-) : DefaultMviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect>(
-    initialState = SettingsMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = SettingsMviModel.UiState()),
     SettingsMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             themeRepository.uiTheme
                 .onEach { value ->
                     updateState { it.copy(uiTheme = value) }
@@ -138,7 +140,7 @@ class SettingsViewModel(
 
     private fun changeLanguage(value: String) {
         l10nManager.changeLanguage(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     locale = value,
@@ -148,7 +150,7 @@ class SettingsViewModel(
     }
 
     private fun changeDefaultListingType(value: ListingType) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(defaultListingType = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -160,7 +162,7 @@ class SettingsViewModel(
     }
 
     private fun changeDefaultPostSortType(value: SortType) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(defaultPostSortType = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -172,7 +174,7 @@ class SettingsViewModel(
     }
 
     private fun changeDefaultCommentSortType(value: SortType) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(defaultCommentSortType = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -183,7 +185,7 @@ class SettingsViewModel(
     }
 
     private fun changeIncludeNsfw(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(includeNsfw = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -196,7 +198,7 @@ class SettingsViewModel(
     }
 
     private fun changeBlurNsfw(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(blurNsfw = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -207,7 +209,7 @@ class SettingsViewModel(
     }
 
     private fun changeUrlOpeningMode(value: UrlOpeningMode) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(urlOpeningMode = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -218,7 +220,7 @@ class SettingsViewModel(
     }
 
     private fun changeEnableSwipeActions(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(enableSwipeActions = value) }
             val settings =
                 settingsRepository.currentSettings.value.copy(
@@ -229,7 +231,7 @@ class SettingsViewModel(
     }
 
     private fun changeCrashReportEnabled(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             crashReportConfiguration.setEnabled(value)
             updateState { it.copy(crashReportEnabled = value) }
         }
@@ -242,7 +244,7 @@ class SettingsViewModel(
     }
 
     private fun handleLogout() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings = settingsRepository.getSettings(null)
             updateState {
                 it.copy(

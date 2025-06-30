@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.colors
 
 import androidx.compose.ui.graphics.Color
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.CommentBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
@@ -10,9 +9,7 @@ import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsCol
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsColorAndFontMviModel.Intent
 import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsColorAndFontMviModel.UiState
 
-interface SettingsColorAndFontMviModel :
-    MviModel<Intent, UiState, Effect>,
-    ScreenModel {
+interface SettingsColorAndFontMviModel : MviModel<Intent, UiState, Effect> {
     sealed interface Intent {
         data class ChangeDynamicColors(val value: Boolean) : Intent
 
