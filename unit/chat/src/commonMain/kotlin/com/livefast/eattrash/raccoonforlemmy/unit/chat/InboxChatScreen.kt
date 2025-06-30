@@ -57,12 +57,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
@@ -75,6 +75,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PrivateMessageMod
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.unit.chat.components.MessageCard
 import com.livefast.eattrash.raccoonforlemmy.unit.chat.components.MessageCardPlaceholder
+import com.livefast.eattrash.raccoonforlemmy.unit.chat.di.InboxChatMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
@@ -84,7 +85,7 @@ class InboxChatScreen(private val otherUserId: Long) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: InboxChatMviModel = rememberScreenModel(arg = otherUserId)
+        val model: InboxChatMviModel = getViewModel<InboxChatViewModel>(InboxChatMviModelParams(otherUserId))
         val uiState by model.uiState.collectAsState()
         val topAppBarState = rememberTopAppBarState()
         val navigationCoordinator = remember { getNavigationCoordinator() }

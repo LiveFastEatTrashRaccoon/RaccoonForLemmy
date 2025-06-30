@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.chat
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -24,14 +26,14 @@ class InboxChatViewModel(
     private val settingsRepository: SettingsRepository,
     private val mediaRepository: MediaRepository,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.Effect>(
-    initialState = InboxChatMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<InboxChatMviModel.Intent, InboxChatMviModel.UiState, InboxChatMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = InboxChatMviModel.UiState()),
     InboxChatMviModel {
     private var currentPage: Int = 1
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             launch {
                 val auth = identityRepository.authToken.value.orEmpty()
 
@@ -75,7 +77,7 @@ class InboxChatViewModel(
     override fun reduce(intent: InboxChatMviModel.Intent) {
         when (intent) {
             InboxChatMviModel.Intent.LoadNextPage -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
             }
@@ -180,7 +182,7 @@ class InboxChatViewModel(
     }
 
     private fun handleMessageUpdate(newMessage: PrivateMessageModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     messages =
@@ -200,7 +202,7 @@ class InboxChatViewModel(
         if (bytes.isEmpty()) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val url = mediaRepository.uploadImage(auth, bytes)
@@ -216,7 +218,7 @@ class InboxChatViewModel(
     }
 
     private fun startEditingMessage(message: PrivateMessageModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     editedMessageId = message.id,
@@ -229,7 +231,7 @@ class InboxChatViewModel(
         val editedMessageId = uiState.value.editedMessageId
         val isEditing = editedMessageId != null
         if (text.isNotEmpty()) {
-            screenModelScope.launch {
+            viewModelScope.launch {
                 val auth = identityRepository.authToken.value
                 val newMessage =
                     if (isEditing) {
@@ -271,13 +273,13 @@ class InboxChatViewModel(
     }
 
     private fun handleLogout() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(messages = emptyList()) }
         }
     }
 
     private fun deleteMessage(message: PrivateMessageModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value
             runCatching {
                 messageRepository.delete(
