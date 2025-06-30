@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.inbox.main
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -19,12 +21,12 @@ class InboxViewModel(
     private val coordinator: InboxCoordinator,
     private val settingsRepository: SettingsRepository,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect>(
-    initialState = InboxMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = InboxMviModel.UiState()),
     InboxMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             identityRepository.isLogged
                 .onEach { logged ->
                     updateState { it.copy(isLogged = logged) }
@@ -69,7 +71,7 @@ class InboxViewModel(
     override fun reduce(intent: InboxMviModel.Intent) {
         when (intent) {
             is InboxMviModel.Intent.ChangeSection ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(section = intent.value)
                     }
@@ -80,7 +82,7 @@ class InboxViewModel(
     }
 
     private fun changeUnreadOnly(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(unreadOnly = value)
             }
@@ -93,7 +95,7 @@ class InboxViewModel(
             return
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value
             userRepository.readAll(auth)
             emitEffect(InboxMviModel.Effect.Refresh)
