@@ -34,9 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
@@ -48,13 +47,12 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManageAccountsBottomSheet(
-    parent: Screen,
     modifier: Modifier = Modifier,
     sheetScope: CoroutineScope = rememberCoroutineScope(),
     state: SheetState = rememberModalBottomSheetState(),
     onDismiss: ((Boolean) -> Unit)? = null,
 ) {
-    val model: ManageAccountsMviModel = parent.rememberScreenModel()
+    val model: ManageAccountsMviModel = getViewModel<ManageAccountsViewModel>()
     val uiState by model.uiState.collectAsState()
     var indexToDelete by remember { mutableStateOf<Int?>(null) }
 
