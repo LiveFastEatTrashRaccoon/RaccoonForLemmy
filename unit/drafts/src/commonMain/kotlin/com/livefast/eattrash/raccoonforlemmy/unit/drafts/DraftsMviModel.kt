@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.drafts
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
@@ -11,9 +10,7 @@ sealed interface DraftsSection {
     data object Comments : DraftsSection
 }
 
-interface DraftsMviModel :
-    ScreenModel,
-    MviModel<DraftsMviModel.Intent, DraftsMviModel.State, DraftsMviModel.Effect> {
+interface DraftsMviModel : MviModel<DraftsMviModel.Intent, DraftsMviModel.State, DraftsMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 
