@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.explore
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
@@ -12,9 +11,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 
 @Stable
-interface ExploreMviModel :
-    MviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect>,
-    ScreenModel {
+interface ExploreMviModel : MviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 
